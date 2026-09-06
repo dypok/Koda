@@ -15,6 +15,14 @@ Cada épica cuenta con su propio archivo independiente para lectura ergonómica 
 
 1. [**EPIC 1 — Montado de Documentación, Arquitectura y Gobernanza Técnica**](EPIC-01-montado-documentacion-y-gobernanza.md) (`Sprint 0 · 5 Stories · 18 SP`)
 2. [**EPIC 2 — Landing Page Informativa y Modo Próximamente para Despliegue**](EPIC-02-landing-page-informativa-proximamente.md) (`Sprint 1 · 7 Stories · 22 SP`)
+3. [**EPIC 3 — Autenticación, Perfiles de Usuario y Onboarding**](EPIC-03-autenticacion-perfiles-onboarding.md) (`Sprint 2 · 4 Stories · 16 SP`)
+4. [**EPIC 4 — Motor de Aprendizaje y Hoja de Ruta (Roadmap) Python 3.12**](EPIC-04-motor-aprendizaje-roadmap-python.md) (`Sprint 2 · 5 Stories · 21 SP`)
+5. [**EPIC 5 — Workspace de Lección Atómica y Práctica Interactiva**](EPIC-05-workspace-leccion-practica-interactiva.md) (`Sprint 3 · 5 Stories · 20 SP`)
+6. [**EPIC 6 — Sistema de Evaluación: Quizzes y Exámenes Finales**](EPIC-06-sistema-evaluacion-quizzes-examenes.md) (`Sprint 3 · 4 Stories · 15 SP`)
+7. [**EPIC 7 — Cuaderno de Errores Persistente y Repaso Adaptativo**](EPIC-07-cuaderno-errores-repaso-adaptativo.md) (`Sprint 3 · 3 Stories · 13 SP`)
+8. [**EPIC 8 — Gamificación, Economía XP, Rachas y Mascota Koda 🦊**](EPIC-08-gamificacion-rachas-mascota-koda.md) (`Sprint 4 · 4 Stories · 18 SP`)
+9. [**EPIC 9 — Pipeline de Certificación, Generación PDF, QR y Google Drive**](EPIC-09-certificacion-pdf-qr-google-drive.md) (`Sprint 4 · 4 Stories · 18 SP`)
+10. [**EPIC 10 — Monetización, Consola de Administración y Despliegue Cloud**](EPIC-10-monetizacion-admin-despliegue.md) (`Sprint 5 · 4 Stories · 16 SP`)
 
 ---
 
@@ -37,16 +45,18 @@ Antes de mover cualquier Story a **"Done"** en el tablero de Jira, se deben cump
 
 ---
 
-## 📊 Matriz Resumen del Backlog
+## 📊 Matriz Resumen del Backlog Koda
 
 | Épica | Código | Sprint | Stories | SP Total | Estado | Archivo Detallado |
 |---|:---:|:---:|:---:|:---:|:---:|---|
 | **Épica 1 — Documentación y Gobernanza** | `DOCS` | Sprint 0 | 5 | 18 | 🟢 Completada | [`EPIC-01-montado-documentacion-y-gobernanza.md`](EPIC-01-montado-documentacion-y-gobernanza.md) |
 | **Épica 2 — Landing Page & Próximamente** | `LAND` | Sprint 1 | 7 | 22 | 🟡 Lista para Sprint | [`EPIC-02-landing-page-informativa-proximamente.md`](EPIC-02-landing-page-informativa-proximamente.md) |
-| **Épica 3 — Autenticación y Perfiles** | `AUTH` | Sprint 2 | 4 | 14 | ⚪ Backlog | *En refinamiento* |
-| **Épica 4 — Motor Educativo y Roadmap** | `LEARN` | Sprint 2 | 6 | 21 | ⚪ Backlog | *En refinamiento* |
-| **Épica 5 — Cuaderno de Errores & Repaso** | `NOTE` | Sprint 3 | 3 | 9 | ⚪ Backlog | *En refinamiento* |
-| **Épica 6 — Gamificación & Mascota Koda** | `GAMI` | Sprint 3 | 5 | 15 | ⚪ Backlog | *En refinamiento* |
-| **Épica 7 — Motor de Certificados y QR** | `CERT` | Sprint 4 | 4 | 12 | ⚪ Backlog | *En refinamiento* |
-| **Épica 8 — Despliegue Cloud y CI/CD** | `DEPL` | Sprint 4 | 4 | 11 | ⚪ Backlog | *En refinamiento* |
-| **TOTAL INICIAL (Épicas 1 y 2)** | | | **12** | **40** | | |
+| **Épica 3 — Autenticación y Perfiles** | `AUTH` | Sprint 2 | 4 | 16 | ⚪ Refinada | [`EPIC-03-autenticacion-perfiles-onboarding.md`](EPIC-03-autenticacion-perfiles-onboarding.md) |
+| **Épica 4 — Motor de Aprendizaje & Roadmap** | `LEARN` | Sprint 2 | 5 | 21 | ⚪ Refinada | [`EPIC-04-motor-aprendizaje-roadmap-python.md`](EPIC-04-motor-aprendizaje-roadmap-python.md) |
+| **Épica 5 — Workspace de Lección Atómica** | `LESS` | Sprint 3 | 5 | 20 | ⚪ Refinada | [`EPIC-05-workspace-leccion-practica-interactiva.md`](EPIC-05-workspace-leccion-practica-interactiva.md) |
+| **Épica 6 — Sistema de Evaluación & Quizzes** | `EVAL` | Sprint 3 | 4 | 15 | ⚪ Refinada | [`EPIC-06-sistema-evaluacion-quizzes-examenes.md`](EPIC-06-sistema-evaluacion-quizzes-examenes.md) |
+| **Épica 7 — Cuaderno de Errores & Repaso** | `NOTE` | Sprint 3 | 3 | 13 | ⚪ Refinada | [`EPIC-07-cuaderno-errores-repaso-adaptativo.md`](EPIC-07-cuaderno-errores-repaso-adaptativo.md) |
+| **Épica 8 — Gamificación & Mascota Koda 🦊** | `GAMI` | Sprint 4 | 4 | 18 | ⚪ Refinada | [`EPIC-08-gamificacion-rachas-mascota-koda.md`](EPIC-08-gamificacion-rachas-mascota-koda.md) |
+| **Épica 9 — Certificación, PDF & Drive Storage** | `CERT` | Sprint 4 | 4 | 18 | ⚪ Refinada | [`EPIC-09-certificacion-pdf-qr-google-drive.md`](EPIC-09-certificacion-pdf-qr-google-drive.md) |
+| **Épica 10 — Monetización, Admin & Despliegue** | `MONA` | Sprint 5 | 4 | 16 | ⚪ Refinada | [`EPIC-10-monetizacion-admin-despliegue.md`](EPIC-10-monetizacion-admin-despliegue.md) |
+| **TOTAL PLANIFICADO** | | | **45** | **177** | | |
