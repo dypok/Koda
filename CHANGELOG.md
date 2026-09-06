@@ -22,10 +22,18 @@ Zona horaria: America/Bogota (UTC-5)
 - [2026-09-03 11:26] [Fixed] Se corrigió el script de ejecución concurrente `pnpm dev` agregando `"dev": "nest start --watch"` en `apps/api/package.json` y asegurando la pre-compilación de `@koda/types`. Causa: `apps/api` solo tenía definido `"start:dev"`, por lo que el comando paralelo `pnpm --parallel --filter "./apps/*" dev` ignoraba el backend y levantaba únicamente el frontend Next.js. Fix: estandarizar el script `"dev"` en ambas aplicaciones.
 
 ### Added
-- [2026-09-06 16:57] [Docs] Se creó el backlog estructurado Jira-Ready en `documentation/UserHistories/`:
-  - **`README.md`:** Definition of Done (DoD) global de 12 puntos y matriz resumen de épicas y Story Points.
-  - **`EPIC-01-montado-documentacion-y-gobernanza.md`:** 5 historias de usuario (DOCS-01 a DOCS-05, 18 SP) que formalizan todo el trabajo de especificación, arquitectura, ADRs y contenido declarativo.
-  - **`EPIC-02-landing-page-informativa-proximamente.md`:** 7 historias de usuario (LAND-01 a LAND-07, 22 SP) detallando el Hero con PixiJS Koda 🦊, filosofía pedagógica, roadmap showcase de Python 3.12, captura de waitlist, modo próximamente (`COMING_SOON_MODE`), FAQ y optimización SEO/Lighthouse.
+- [2026-09-06 17:01] [Docs] Se completó el Backlog Jira-Ready integral de la plataforma Koda en `documentation/UserHistories/` (10 Épicas, 45 Stories, 177 Story Points):
+  - **`README.md`:** Definition of Done (DoD) global de 12 puntos y matriz del backlog por Sprint.
+  - **`EPIC-01-montado-documentacion-y-gobernanza.md`:** 5 stories (DOCS-01..05, 18 SP) de especificación y arquitectura.
+  - **`EPIC-02-landing-page-informativa-proximamente.md`:** 7 stories (LAND-01..07, 22 SP) de landing y modo próximamente.
+  - **`EPIC-03-autenticacion-perfiles-onboarding.md`:** 4 stories (AUTH-01..04, 16 SP) de JWT rotativo, diagnóstico y perfiles.
+  - **`EPIC-04-motor-aprendizaje-roadmap-python.md`:** 5 stories (LEARN-01..05, 21 SP) de roadmap, candados y estrellas.
+  - **`EPIC-05-workspace-leccion-practica-interactiva.md`:** 5 stories (LESS-01..05, 20 SP) de split 50/50, stepper y atajos.
+  - **`EPIC-06-sistema-evaluacion-quizzes-examenes.md`:** 4 stories (EVAL-01..04, 15 SP) de quizzes (70%) y exámenes (80%).
+  - **`EPIC-07-cuaderno-errores-repaso-adaptativo.md`:** 3 stories (NOTE-01..03, 13 SP) de remediación y repaso espaciado.
+  - **`EPIC-08-gamificacion-rachas-mascota-koda.md`:** 4 stories (GAMI-01..04, 18 SP) de economía XP, rachas y PixiJS Koda 🦊.
+  - **`EPIC-09-certificacion-pdf-qr-google-drive.md`:** 4 stories (CERT-01..04, 18 SP) de PDF vectorial, QR y Drive API v3.
+  - **`EPIC-10-monetizacion-admin-despliegue.md`:** 4 stories (MONA-01..04, 16 SP) de Free/Premium, Admin y CI/CD Cloud.
 - [2026-09-02 18:15] [Docs] Se completó la auditoría y modernización integral de la documentación del proyecto Koda:
   - **Hub Central de Documentación:** Se creó `docs/README.md` como índice maestro estructurado en 5 dominios y rutas de lectura sugeridas por rol (Frontend, Backend, Diseñador Instruccional, DevOps/QA).
   - **Sistema de ADRs (`docs/adr/`):** Se formalizó el sistema de Architectural Decision Records con `docs/adr/README.md`, symlink `09-decisions` y los 6 ADRs fundacionales (ADR-001 Monorepo PNPM, ADR-002 Supabase PG15, ADR-003 Certificados Google Drive Storage, ADR-004 PixiJS v7 para Koda 🦊, ADR-005 Lua como curso piloto de validación pedagógica, ADR-006 Motor híbrido ICodeRunner).
