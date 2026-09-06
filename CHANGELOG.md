@@ -22,6 +22,16 @@ Zona horaria: America/Bogota (UTC-5)
 - [2026-09-03 11:26] [Fixed] Se corrigió el script de ejecución concurrente `pnpm dev` agregando `"dev": "nest start --watch"` en `apps/api/package.json` y asegurando la pre-compilación de `@koda/types`. Causa: `apps/api` solo tenía definido `"start:dev"`, por lo que el comando paralelo `pnpm --parallel --filter "./apps/*" dev` ignoraba el backend y levantaba únicamente el frontend Next.js. Fix: estandarizar el script `"dev"` en ambas aplicaciones.
 
 ### Added
+- [2026-09-06 17:11] [Feat] Se implementó y programó la Landing Page oficial de Koda y el modo "Próximamente" en `apps/web` (Next.js 15 App Router, React 19, Tailwind CSS, PixiJS v7):
+  - **Mascota Koda WebGL (`KodaMascot.tsx`):** Renderizado procedural con físicas de flotación continua a 60 FPS, seguimiento de cursor con pupilas reactivas, parpadeo de ojos y emisor de partículas de confeti en WebGL.
+  - **Hero Section (`HeroSection.tsx`):** Propuesta de valor, badge oficial de Python 3.12, CTAs duales y prueba social.
+  - **Terminal Interactiva en Vivo (`InteractivePreview.tsx`):** Sandbox interactivo con 3 snippets ejecutables en tiempo real y retroalimentación conceptual.
+  - **Metodología Pedagógica (`MethodologySection.tsx`):** Grid de los 4 pilares formativos y comparador visual vs. cursos tradicionales.
+  - **Showcase de Currículo (`CurriculumSection.tsx`):** Vista previa de los 12 módulos canónicos de Python 3.12 y certificado digital con código QR.
+  - **Captura de Lista de Espera (`WaitlistSection.tsx`):** Formulario de correo con validación RFC 5322, persistencia local y celebración con confeti.
+  - **FAQ y Footer (`FaqSection.tsx`, `Footer.tsx`):** Acordeón interactivo con 6 preguntas clave, enlaces a GitHub, verificación y estándares de privacidad.
+  - **Modo Próximamente (`middleware.ts`, `ComingSoonBanner.tsx`):** Interceptor de rutas privadas (`/app`, `/dashboard`, `/learn`) redirigiendo a la landing informativa con aviso modal amigable.
+  - **SEO & Assets:** Metadatos completos OpenGraph, Twitter Cards, SVG favicon (`icon.svg`) y build de producción optimizado (0 errores, 0 advertencias).
 - [2026-09-06 17:01] [Docs] Se completó el Backlog Jira-Ready integral de la plataforma Koda en `documentation/UserHistories/` (10 Épicas, 45 Stories, 177 Story Points):
   - **`README.md`:** Definition of Done (DoD) global de 12 puntos y matriz del backlog por Sprint.
   - **`EPIC-01-montado-documentacion-y-gobernanza.md`:** 5 stories (DOCS-01..05, 18 SP) de especificación y arquitectura.
