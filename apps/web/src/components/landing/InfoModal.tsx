@@ -8,7 +8,6 @@ import {
   IconHelp,
   IconSchool,
   IconAward,
-  IconActivity,
   IconUsers,
   IconFileText,
   IconShieldLock,
@@ -18,7 +17,6 @@ import {
   IconBrandX,
   IconBrandYoutube,
   IconBrandLinkedin,
-  IconBrandGithub,
   IconArticle,
   IconExternalLink,
   IconCheck,
@@ -31,7 +29,6 @@ export type InfoModalTab =
   | 'faqs'
   | 'schools'
   | 'tests'
-  | 'status'
   | 'guidelines'
   | 'terms'
   | 'privacy'
@@ -82,7 +79,6 @@ export const InfoModal: React.FC<InfoModalProps> = ({
         { id: 'faqs' as InfoModalTab, label: 'Preguntas Frecuentes', icon: IconHelp },
         { id: 'schools' as InfoModalTab, label: 'Koda para Escuelas', icon: IconSchool },
         { id: 'tests' as InfoModalTab, label: 'Certificación & Evaluaciones', icon: IconAward },
-        { id: 'status' as InfoModalTab, label: 'Estado del Servicio', icon: IconActivity },
       ],
     },
     {
@@ -319,51 +315,6 @@ export const InfoModal: React.FC<InfoModalProps> = ({
                 </div>
               )}
 
-              {/* TAB: ESTADO DEL SERVICIO (STATUS) */}
-              {activeTab === 'status' && (
-                <div className="space-y-6 animate-fadeIn">
-                  <div>
-                    <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 mb-2 font-sans">
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_8px_#34d399]" />
-                      Todos los Sistemas Operativos
-                    </div>
-                    <h4 className="font-display text-2xl font-bold text-white tracking-tight">
-                      Estado del Servicio (System Status)
-                    </h4>
-                    <p className="text-xs text-slate-400 mt-1">
-                      Monitoreo en tiempo real de la infraestructura de KodaAcademy.
-                    </p>
-                  </div>
-
-                  <div className="space-y-2.5">
-                    {[
-                      { service: 'Plataforma Web (Next.js Edge)', status: 'Operativo', latency: '24ms' },
-                      { service: 'Entorno de Ejecución de Código (REPL Sandbox)', status: 'Operativo', latency: '42ms' },
-                      { service: 'Base de Datos y Sincronización de Progreso', status: 'Operativo', latency: '18ms' },
-                      { service: 'Servicio de Verificación de Certificados QR', status: 'Operativo', latency: '31ms' },
-                      { service: 'Sistema de Pistas Pedagógicas Socráticas', status: 'Operativo', latency: '35ms' },
-                    ].map((item) => (
-                      <div
-                        key={item.service}
-                        className="flex items-center justify-between p-3.5 rounded-xl border border-slate-800/80 bg-slate-900/40 text-xs font-sans"
-                      >
-                        <span className="font-medium text-white">{item.service}</span>
-                        <div className="flex items-center gap-3">
-                          <span className="text-[11px] text-slate-500">{item.latency}</span>
-                          <span className="inline-flex items-center gap-1 text-emerald-400 font-semibold text-xs">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                            {item.status}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <p className="text-[11px] text-slate-500 font-sans">
-                    Tiempo de actividad global durante los últimos 90 días: <span className="text-emerald-400 font-bold">99.98%</span>
-                  </p>
-                </div>
-              )}
 
               {/* TAB: NORMAS DE LA COMUNIDAD */}
               {activeTab === 'guidelines' && (
@@ -530,9 +481,7 @@ export const InfoModal: React.FC<InfoModalProps> = ({
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                     {/* Blog */}
                     <a
-                      href="https://github.com/nastex123/DuolingoProgramacion"
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      href="#blog"
                       className="group flex items-center justify-between p-4 rounded-2xl border border-slate-800 bg-slate-900/40 hover:border-amber-500/40 hover:bg-slate-900/80 transition-all cursor-pointer"
                     >
                       <div className="flex items-center gap-3">
@@ -640,25 +589,6 @@ export const InfoModal: React.FC<InfoModalProps> = ({
                         </div>
                       </div>
                       <IconExternalLink className="w-4 h-4 text-slate-600 group-hover:text-blue-400 transition-colors" />
-                    </a>
-
-                    {/* GitHub */}
-                    <a
-                      href="https://github.com/nastex123/DuolingoProgramacion"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="group flex items-center justify-between p-4 rounded-2xl border border-slate-800 bg-slate-900/40 hover:border-amber-500/40 hover:bg-slate-900/80 transition-all cursor-pointer sm:col-span-2"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-400 group-hover:scale-105 transition-transform">
-                          <IconBrandGithub className="w-5 h-5" />
-                        </div>
-                        <div>
-                          <span className="font-display font-bold text-white text-sm block">Repositorio GitHub</span>
-                          <span className="text-[11px] text-slate-400 font-sans">Código abierto, issues y contribuciones comunitarias</span>
-                        </div>
-                      </div>
-                      <IconExternalLink className="w-4 h-4 text-slate-600 group-hover:text-amber-400 transition-colors" />
                     </a>
                   </div>
                 </div>
