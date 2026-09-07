@@ -54,6 +54,8 @@
 - [Monday]-[07/09/2026]-[15:03] : Calibración geométrica y depuración del mini árbol de habilidades (<MiniSkillTree />): eliminación de la barra superior HUD ('SECTOR ALPHA: FUNDAMENTOS [3/3]', '100%', 'BRANCH TRACKS') y de la leyenda inferior ('Completado', 'Activo', 'Disponible', 'Bloqueado', 'Apex Gate'). Realineación geométrica y simétrica de todos los nodos, splines bézier, iconos centrados al subpíxel y tipografías uniformes dentro del lienzo SVG.
 - [Monday]-[07/09/2026]-[15:05] : Corrección de desalineación en los iconos del mini árbol de habilidades (<MiniSkillTree />): sustitución de componentes React de iconos anidados con conflictos de viewBox por rutas vectoriales SVG nativas (<path>) normalizadas a escala e interpoladas con transformaciones exactas al centro matemático (cx, cy) de cada círculo, garantizando alineación visual perfecta y homogénea en todos los navegadores.
 - [Monday]-[07/09/2026]-[15:07] : Eliminación del badge flotante 'PASO 3/4' sobre el nodo activo de Control de Flujo en <MiniSkillTree /> para lograr una visualización aún más limpia, enfocada y sin pastillas flotantes sobrepuestas.
+- [Monday]-[07/09/2026]-[15:09] : Eliminación de la caja/card contenedora en <MiniSkillTree /> (fondo, bordes de tarjeta y sombras removidos), integrando el lienzo SVG de la constelación y sus resplandores cósmicos directamente sobre el fondo oscuro de la sección sin delimitación artificial.
+
 
 
 
