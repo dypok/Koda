@@ -250,16 +250,10 @@ export const MethodologySection: React.FC = () => {
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-            {/* Visual Skill Tree Teaser Izquierda */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92, y: 20 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: false, margin: '-40px' }}
-              transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-5 order-2 lg:order-1 flex justify-center lg:justify-start w-full"
-            >
+            {/* Visual Skill Tree Teaser Izquierda (Estático para rendimiento óptimo) */}
+            <div className="lg:col-span-5 order-2 lg:order-1 flex justify-center lg:justify-start w-full">
               <MiniSkillTree />
-            </motion.div>
+            </div>
 
             {/* Texto Derecha */}
             <motion.div
