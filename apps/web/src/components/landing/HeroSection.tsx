@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { IconArrowRight, IconCircleCheck, IconTerminal2 } from '@tabler/icons-react';
+import { IconArrowRight } from '@tabler/icons-react';
 import { LightRays } from './LightRays';
 
 interface HeroSectionProps {
@@ -10,11 +10,6 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
-  const scrollTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <section className="relative isolate overflow-hidden min-h-[80vh] flex flex-col justify-center py-12 md:py-20">
       {/* Ambient Light Rays from top center */}
@@ -54,38 +49,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
               Domina el pensamiento computacional y escribe código real con micro-lecciones interactivas, práctica inmediata en tu navegador y acompañamiento paso a paso. Comienza hoy con nuestro track oficial de <strong>Python 3.12</strong>, la puerta de entrada a nuestro ecosistema formativo.
             </p>
 
-            {/* Value Proposition Bullets */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-xl text-left pt-2">
-              <div className="flex items-center gap-2.5 bg-slate-900/70 border border-slate-800 rounded-xl p-3">
-                <IconCircleCheck className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="text-xs font-medium text-slate-200">1 Concepto = 1 Reto en vivo</span>
-              </div>
-              <div className="flex items-center gap-2.5 bg-slate-900/70 border border-slate-800 rounded-xl p-3">
-                <IconCircleCheck className="w-4 h-4 text-amber-400 shrink-0" />
-                <span className="text-xs font-medium text-slate-200">Pistas inteligentes guiadas</span>
-              </div>
-              <div className="flex items-center gap-2.5 bg-slate-900/70 border border-slate-800 rounded-xl p-3">
-                <IconCircleCheck className="w-4 h-4 text-indigo-400 shrink-0" />
-                <span className="text-xs font-medium text-slate-200">Certificación oficial con QR</span>
-              </div>
-            </div>
-
             {/* Call to Actions */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 pt-2 w-full sm:w-auto">
+            <div className="pt-2 w-full sm:w-auto">
               <button
                 onClick={onOpenLogin}
                 className="w-full sm:w-auto flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 px-8 py-4 text-base font-extrabold text-slate-950 hover:opacity-95 hover:scale-[1.01] active:scale-[0.98] transition-all"
               >
                 Comenzar Ahora
                 <IconArrowRight className="w-5 h-5 text-slate-950" />
-              </button>
-
-              <button
-                onClick={() => scrollTo('temario')}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/70 px-7 py-4 text-base font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition-all"
-              >
-                <IconTerminal2 className="w-5 h-5 text-amber-400" />
-                Explorar Tracks & Temario
               </button>
             </div>
           </div>
@@ -113,11 +84,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
                 <p className="text-sm font-semibold text-slate-100 leading-snug">
                   «¡Hola! Soy Koda. Te guiaré paso a paso para dominar la lógica de programación y escribir código real sin miedo a equivocarte.»
                 </p>
-                <div className="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-center gap-2">
-                  <span className="text-[11px] text-amber-300/90 font-medium">
-                    Práctica interactiva · En tu navegador · Ecosistema en expansión
-                  </span>
-                </div>
               </div>
             </div>
           </div>
