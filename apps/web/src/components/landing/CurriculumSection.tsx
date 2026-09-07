@@ -9,7 +9,6 @@ import {
   IconChevronRight,
   IconQrcode,
   IconBook2,
-  IconStack2,
   IconArrowRight,
 } from '@tabler/icons-react';
 
@@ -25,10 +24,6 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1 text-xs font-semibold text-amber-400">
-            <IconStack2 className="w-3.5 h-3.5" />
-            Catálogo Formativo · Track Inaugural
-          </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
             Track Oficial: Fundamentos con Python 3.12
           </h2>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { IconChevronDown, IconHelpCircle } from '@tabler/icons-react';
+import { IconChevronDown } from '@tabler/icons-react';
 
 interface FaqItem {
   question: string;
@@ -53,10 +53,6 @@ export const FaqSection: React.FC = () => {
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center space-y-4 mb-14">
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1 text-xs font-semibold text-amber-400">
-            <IconHelpCircle className="w-3.5 h-3.5" />
-            Resolvemos tus Dudas
-          </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
             Preguntas Frecuentes
           </h2>
