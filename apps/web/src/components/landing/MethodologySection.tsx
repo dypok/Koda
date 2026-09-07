@@ -92,28 +92,11 @@ export const MethodologySection: React.FC = () => {
       {/* =========================================================
           SECCIÓN 02: Roadmap (Invertido: Mini Skill Tree Izquierda / Texto Derecha)
           ========================================================= */}
-      <section id="roadmap" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0a0e1a] to-slate-950">
-        {/* Nebulosas duales: Cian espacial a la izquierda y Ámbar a la derecha */}
-        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.12),rgba(2,132,199,0.05),transparent_70%)] blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 right-10 -translate-y-1/2 w-[420px] h-[300px] bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.09),transparent_70%)] blur-3xl pointer-events-none" />
-
-        {/* Retícula ortogonal de coordenadas Blueprint técnica */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-15 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
-          style={{
-            backgroundImage:
-              'linear-gradient(to right, rgba(56, 189, 248, 0.15) 1px, transparent 1px), linear-gradient(to bottom, rgba(56, 189, 248, 0.15) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
-
-        {/* Anillo de trayectoria orbital celestial tenue */}
-        <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[580px] h-[580px] pointer-events-none opacity-20 select-none">
-          <svg viewBox="0 0 580 580" className="w-full h-full animate-[spin_90s_linear_infinite]">
-            <circle cx="290" cy="290" r="270" fill="none" stroke="#38bdf8" strokeWidth="1" strokeDasharray="6 8" />
-            <circle cx="290" cy="290" r="210" fill="none" stroke="#f59e0b" strokeWidth="0.8" strokeDasharray="3 6" />
-          </svg>
-        </div>
+      <section id="roadmap" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0a0d16] to-slate-950">
+        {/* Foco cenital de estudio fotográfico suave sobre el árbol (Estilo Apple / Linear) */}
+        <div className="absolute -top-24 left-1/4 -translate-x-1/2 w-[650px] h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.14),rgba(245,158,11,0.03),transparent_70%)] blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/4 -translate-x-1/2 w-80 h-[1px] bg-gradient-to-r from-transparent via-amber-400/50 to-transparent pointer-events-none" />
+        <div className="absolute top-1/2 right-12 -translate-y-1/2 w-[450px] h-[350px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.05),transparent_70%)] blur-3xl pointer-events-none" />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
