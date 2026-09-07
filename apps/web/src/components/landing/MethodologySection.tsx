@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { MiniSkillTree } from './MiniSkillTree';
+import { AnimatedCounter } from '@/components/ui/animated-counter';
 
 export const MethodologySection: React.FC = () => {
   return (
@@ -66,9 +67,13 @@ export const MethodologySection: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-5 flex flex-col items-start lg:items-end justify-center text-left lg:text-right space-y-2"
             >
-              <span className="font-display text-7xl sm:text-8xl lg:text-9xl font-black bg-gradient-to-br from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent leading-none select-none">
-                15m
-              </span>
+              <AnimatedCounter
+                to={15}
+                suffix="m"
+                duration={1.6}
+                delay={0.2}
+                className="font-display text-7xl sm:text-8xl lg:text-9xl font-black bg-gradient-to-br from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent leading-none select-none"
+              />
               <span className="text-sm sm:text-base font-display font-bold text-white uppercase tracking-wider">
                 Al día para crear el hábito
               </span>
@@ -160,9 +165,13 @@ export const MethodologySection: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-5 flex flex-col items-start lg:items-end justify-center text-left lg:text-right space-y-2"
             >
-              <span className="font-display text-7xl sm:text-8xl lg:text-9xl font-black bg-gradient-to-br from-amber-400 via-orange-400 to-orange-600 bg-clip-text text-transparent leading-none select-none">
-                4x
-              </span>
+              <AnimatedCounter
+                to={4}
+                suffix="x"
+                duration={1.2}
+                delay={0.2}
+                className="font-display text-7xl sm:text-8xl lg:text-9xl font-black bg-gradient-to-br from-amber-400 via-orange-400 to-orange-600 bg-clip-text text-transparent leading-none select-none"
+              />
               <span className="text-sm sm:text-base font-display font-bold text-white uppercase tracking-wider">
                 Mayor retención activa
               </span>
