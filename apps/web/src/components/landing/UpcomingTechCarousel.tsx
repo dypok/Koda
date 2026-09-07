@@ -20,7 +20,7 @@ export const UpcomingTechCarousel: React.FC = () => {
 
       {/* Carrusel a ancho completo (100% viewport horizontal) */}
       <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)]">
-        <div className="animate-marquee flex items-center gap-8 sm:gap-10 py-2">
+        <div className="flex w-max animate-marquee hover:[animation-play-state:paused] items-center gap-8 sm:gap-10 py-2">
           {/* Duplicamos la lista para crear un bucle visual continuo e infinito */}
           {[...UPCOMING_TECHNOLOGIES, ...UPCOMING_TECHNOLOGIES].map((tech, idx) => {
             const Icon = tech.icon;
