@@ -3,8 +3,8 @@ import React from 'react';
 export const MiniSkillTree: React.FC = () => {
   return (
     <div className="relative w-full max-w-lg mx-auto select-none pointer-events-none">
-      {/* Resplandor ambiental cósmico sutil */}
-      <div className="absolute -inset-6 bg-gradient-to-r from-cyan-500/10 via-amber-500/15 to-rose-500/10 rounded-full blur-3xl opacity-60 pointer-events-none" />
+      {/* Resplandor ambiental cósmico sutil (GPU Layer) */}
+      <div className="absolute -inset-6 bg-gradient-to-r from-cyan-500/10 via-amber-500/15 to-rose-500/10 rounded-full blur-xl opacity-60 pointer-events-none transform-gpu contain-paint" />
 
       {/* Canvas SVG de la Constelación integrado directamente */}
       <div className="relative aspect-[580/260] w-full">

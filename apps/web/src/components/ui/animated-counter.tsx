@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useInView, animate } from 'framer-motion';
 
 interface AnimatedCounterProps {
@@ -22,11 +22,13 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
 }) => {
   const ref = useRef<HTMLSpanElement>(null);
   const isInView = useInView(ref, { once: false, margin: '-20px' });
-  const [value, setValue] = useState(from);
 
   useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+
     if (!isInView) {
-      setValue(from);
+      node.textContent = `${from}${suffix}`;
       return;
     }
 
@@ -35,17 +37,18 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
       delay,
       ease: [0.16, 1, 0.3, 1],
       onUpdate: (latest) => {
-        setValue(Math.round(latest));
+        if (ref.current) {
+          ref.current.textContent = `${Math.round(latest)}${suffix}`;
+        }
       },
     });
 
     return () => controls.stop();
-  }, [isInView, from, to, duration, delay]);
+  }, [isInView, from, to, duration, delay, suffix]);
 
   return (
     <span ref={ref} className={className}>
-      {value}
-      {suffix}
+      {from}{suffix}
     </span>
   );
 };

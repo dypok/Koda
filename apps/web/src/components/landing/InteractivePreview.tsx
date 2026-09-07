@@ -17,8 +17,8 @@ export const InteractivePreview: React.FC = () => {
         id="propuesta-valor"
         className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0a0d18] to-slate-950"
       >
-        {/* Resplandor ambiental de fondo cálido */}
-        <div className="absolute top-1/2 right-6 lg:right-24 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.15),rgba(245,158,11,0.05),transparent_70%)] blur-3xl pointer-events-none" />
+        {/* Resplandor ambiental de fondo cálido (GPU Layer) */}
+        <div className="absolute top-1/2 right-6 lg:right-24 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.14)_0%,rgba(245,158,11,0.04)_45%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
         <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-amber-400/40 to-transparent pointer-events-none" />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
@@ -54,7 +54,7 @@ export const InteractivePreview: React.FC = () => {
             >
               <div className="relative">
                 {/* Resplandor cálido ambiental integrado */}
-                <div className="absolute -inset-6 bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.22),transparent_70%)] blur-2xl pointer-events-none" />
+                <div className="absolute -inset-6 bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.2)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
                 <span className="relative font-display text-8xl sm:text-9xl font-black bg-gradient-to-br from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent leading-none select-none tracking-tight">
                   $0
                 </span>
@@ -80,8 +80,8 @@ export const InteractivePreview: React.FC = () => {
         id="codigo-en-vivo"
         className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0e0c18] to-slate-950"
       >
-        {/* Resplandor ambiental de fondo */}
-        <div className="absolute top-1/2 right-6 lg:right-24 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(234,88,12,0.14),rgba(168,85,247,0.04),transparent_70%)] blur-3xl pointer-events-none" />
+        {/* Resplandor ambiental de fondo (GPU Layer) */}
+        <div className="absolute top-1/2 right-6 lg:right-24 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(234,88,12,0.14)_0%,rgba(168,85,247,0.04)_45%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
