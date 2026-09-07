@@ -1,17 +1,21 @@
 'use client';
 
 import React from 'react';
-import { ArrowRight, CheckCircle2, Flame, Sparkles, Terminal } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Code2, Terminal } from 'lucide-react';
 import { KodaMascot } from '../mascot/KodaMascot';
 
-export const HeroSection: React.FC = () => {
+interface HeroSectionProps {
+  onOpenLogin?: () => void;
+}
+
+export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section className="relative overflow-hidden pt-8 pb-16 md:pt-14 md:pb-24">
+    <section className="relative overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24">
       {/* Background Gradients */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-amber-500/10 via-orange-500/15 to-purple-600/10 rounded-full blur-3xl pointer-events-none -z-10" />
 
@@ -19,13 +23,10 @@ export const HeroSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Headlines & CTAs */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
-            {/* Pill Tag */}
+            {/* Tag */}
             <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-gradient-to-r from-amber-500/10 to-orange-500/10 px-4 py-1.5 text-xs font-semibold text-amber-400 shadow-sm backdrop-blur-sm">
-              <span className="flex h-2 w-2 rounded-full bg-amber-400 animate-ping" />
-              <span className="flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 text-orange-400" />
-                La forma más divertida de aprender a programar
-              </span>
+              <Code2 className="w-4 h-4 text-amber-400" />
+              <span>Python 3.12 · Aprendizaje Interactivo y Gamificado</span>
             </div>
 
             {/* Main Headline */}
@@ -61,31 +62,20 @@ export const HeroSection: React.FC = () => {
             {/* Call to Actions */}
             <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 w-full sm:w-auto">
               <button
-                onClick={() => scrollTo('waitlist')}
+                onClick={onOpenLogin}
                 className="w-full sm:w-auto flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 px-7 py-4 text-base font-extrabold text-slate-950 shadow-xl shadow-orange-500/25 hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all bg-[length:200%_auto] hover:bg-right"
               >
-                <Sparkles className="w-5 h-5 text-slate-950" />
-                Reservar Mi Lugar Gratis
+                Comenzar Ahora
                 <ArrowRight className="w-5 h-5 text-slate-950" />
               </button>
 
               <button
-                onClick={() => scrollTo('demo-interactiva')}
+                onClick={() => scrollTo('temario')}
                 className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/60 px-6 py-4 text-base font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition-all backdrop-blur-sm"
               >
                 <Terminal className="w-5 h-5 text-amber-400" />
-                Probar Demo en Vivo
+                Explorar Temario Oficial
               </button>
-            </div>
-
-            {/* Social Proof / Early Adopters counter */}
-            <div className="flex items-center gap-3 pt-2 text-xs text-slate-400">
-              <div className="flex -space-x-2 overflow-hidden">
-                <div className="inline-block h-7 w-7 rounded-full ring-2 ring-slate-950 bg-amber-500 flex items-center justify-center text-[11px] font-bold text-slate-950">🦊</div>
-                <div className="inline-block h-7 w-7 rounded-full ring-2 ring-slate-950 bg-indigo-500 flex items-center justify-center text-[11px] font-bold text-white">🐍</div>
-                <div className="inline-block h-7 w-7 rounded-full ring-2 ring-slate-950 bg-emerald-500 flex items-center justify-center text-[11px] font-bold text-slate-950">⭐</div>
-              </div>
-              <span>Únete a más de <strong>500+ estudiantes</strong> esperando el lanzamiento oficial</span>
             </div>
           </div>
 
@@ -101,9 +91,9 @@ export const HeroSection: React.FC = () => {
                 <div className="w-full flex items-center justify-between text-xs pb-2 border-b border-slate-800/60">
                   <div className="flex items-center gap-2 text-slate-400">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>Koda WebGL Engine</span>
+                    <span>Mascota Koda 🦊</span>
                   </div>
-                  <span className="text-amber-400 font-mono text-[11px] font-semibold">60 FPS</span>
+                  <span className="text-amber-400 font-mono text-[11px] font-semibold">WebGL 2D</span>
                 </div>
 
                 {/* PixiJS Fox Canvas */}
@@ -117,7 +107,7 @@ export const HeroSection: React.FC = () => {
                     «¡Hola! Soy Koda. Te acompañaré paso a paso para que domines Python sin miedo a equivocarte.»
                   </p>
                   <p className="text-[11px] text-amber-300/90 mt-1 font-medium">
-                    100% interactivo · En tu navegador · Sin instalar nada
+                    100% interactivo · En tu navegador · Código real de Python 3.12
                   </p>
                 </div>
               </div>

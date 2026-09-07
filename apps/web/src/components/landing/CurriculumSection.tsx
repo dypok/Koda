@@ -2,9 +2,13 @@
 
 import React, { useState } from 'react';
 import { PYTHON_MODULES, PythonModuleInfo } from '../../lib/python-modules';
-import { CheckCircle2, Lock, Award, ChevronRight, QrCode, Sparkles, BookOpen, Layers } from 'lucide-react';
+import { CheckCircle2, Lock, Award, ChevronRight, QrCode, BookOpen, Layers, ArrowRight } from 'lucide-react';
 
-export const CurriculumSection: React.FC = () => {
+interface CurriculumSectionProps {
+  onOpenLogin?: () => void;
+}
+
+export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogin }) => {
   const [activeModule, setActiveModule] = useState<PythonModuleInfo>(PYTHON_MODULES[0]);
 
   return (
@@ -20,7 +24,7 @@ export const CurriculumSection: React.FC = () => {
             Los 12 Módulos de Python 3.12
           </h2>
           <p className="text-slate-400 text-base sm:text-lg">
-            Una ruta formativa progresiva desde tu primer <code className="text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded font-mono text-sm">print()</code> hasta la construcción de un proyecto completo y la obtención de tu certificado.
+            Una ruta formativa estructurada desde tu primer <code className="text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded font-mono text-sm">print()</code> hasta la construcción de un proyecto completo y la obtención de tu certificado.
           </p>
         </div>
 
@@ -49,12 +53,12 @@ export const CurriculumSection: React.FC = () => {
                     {isReady ? (
                       <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full border border-emerald-400/30">
                         <CheckCircle2 className="w-3 h-3" />
-                        Listo
+                        Disponible
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 text-[10px] font-medium text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full">
                         <Lock className="w-2.5 h-2.5" />
-                        Roadmap
+                        Planificado
                       </span>
                     )}
                   </div>
@@ -105,9 +109,9 @@ export const CurriculumSection: React.FC = () => {
               </div>
 
               {/* Key Topics List */}
-              <div className="space-y-2">
+              <div className="space-y-2 mb-6">
                 <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block">
-                  Conceptos clave que dominarás:
+                  Conceptos que aprenderás:
                 </span>
                 <ul className="space-y-1.5">
                   {activeModule.topics.map((t, idx) => (
@@ -118,6 +122,15 @@ export const CurriculumSection: React.FC = () => {
                   ))}
                 </ul>
               </div>
+
+              {/* Start Module CTA */}
+              <button
+                onClick={onOpenLogin}
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 py-3 text-sm font-bold text-slate-950 shadow-md shadow-orange-500/20 hover:shadow-orange-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all"
+              >
+                Comenzar con este Módulo
+                <ArrowRight className="w-4 h-4" />
+              </button>
             </div>
 
             {/* Official Certificate Preview Card */}
@@ -133,7 +146,7 @@ export const CurriculumSection: React.FC = () => {
               </div>
 
               <p className="text-xs text-slate-300 leading-relaxed mb-4">
-                Al completar los 12 módulos y aprobar el Proyecto Integrador, obtendrás tu diploma oficial con identificador correlativo <code className="text-amber-400 font-mono">KODA-PY-000001</code> y enlace de verificación pública para tu CV y LinkedIn.
+                Al completar los 12 módulos y aprobar el Proyecto Integrador, obtendrás tu diploma oficial con identificador correlativo <code className="text-amber-400 font-mono">KODA-PY-{'{SEQ}'}</code> y enlace de verificación pública para tu CV y LinkedIn.
               </p>
 
               <div className="flex items-center justify-between bg-slate-900/80 border border-indigo-500/20 rounded-2xl p-3">
@@ -144,8 +157,8 @@ export const CurriculumSection: React.FC = () => {
                     <span className="text-slate-400">Verificable en koda.app/verificar</span>
                   </div>
                 </div>
-                <span className="text-xs font-bold text-emerald-400 bg-emerald-400/10 px-2 py-1 rounded-lg border border-emerald-400/20">
-                  Incluido Gratis
+                <span className="text-xs font-bold text-indigo-300 bg-indigo-400/10 px-2.5 py-1 rounded-lg border border-indigo-400/30">
+                  Diploma Digital
                 </span>
               </div>
             </div>

@@ -10,6 +10,11 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Changed
+- [2026-09-07 07:07] [Changed] **Profesionalización de la Landing Page y Desincorporación del Modo Próximamente en Código:**
+  - Se eliminó el banner superior de prelanzamiento (`ComingSoonBanner`) con textos de "Acceso Anticipado / Lista de espera".
+  - Se removió la variable `NEXT_PUBLIC_COMING_SOON_MODE` de `.env.example` y la lógica de intercepción forzada de `apps/web/src/middleware.ts`.
+  - Se eliminaron métricas simuladas y pruebas sociales no auténticas en `HeroSection` e `InteractivePreview`.
+  - Se estandarizó el flujo de "Iniciar Sesión" en `Navbar`, `HeroSection`, `CurriculumSection` y `CtaSection`, conectándolo al componente `LoginModal` y a la ruta `/login` con mensaje formal de disponibilidad próxima.
 - [2026-09-03 11:41] [Changed] **Transición definitiva a Python 3.12 como único lenguaje oficial de lanzamiento del MVP:**
   - Se eliminó todo el contenido y archivos relacionados con Lua (`content/languages/lua/`, `test_m01.html`, `test_m02.html`, `docs/28_LUA_CURRICULUM.md`).
   - Se creó la estructura declarativa oficial en `content/languages/python/` (`manifest.json` con los 12 módulos canónicos, `config/thresholds.json`, `config/xp.json`, `config/compositions.json`, `modules/01_fundamentos/module.json` y `bank.json`).

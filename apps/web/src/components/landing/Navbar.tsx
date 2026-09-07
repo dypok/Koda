@@ -2,9 +2,13 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Sparkles, Menu, X, BookOpen, Layers, HelpCircle, ArrowRight } from 'lucide-react';
+import { Menu, X, BookOpen, Layers, HelpCircle, Terminal, LogIn } from 'lucide-react';
 
-export const Navbar: React.FC = () => {
+interface NavbarProps {
+  onOpenLogin?: () => void;
+}
+
+export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollTo = (id: string) => {
@@ -13,8 +17,15 @@ export const Navbar: React.FC = () => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const handleLoginClick = () => {
+    setMobileMenuOpen(false);
+    if (onOpenLogin) {
+      onOpenLogin();
+    }
+  };
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-md transition-all">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-md transition-all">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
@@ -54,7 +65,7 @@ export const Navbar: React.FC = () => {
             onClick={() => scrollTo('demo-interactiva')}
             className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
           >
-            <Sparkles className="w-4 h-4 text-amber-400" />
+            <Terminal className="w-4 h-4 text-slate-400" />
             Demo en Vivo
           </button>
           <button
@@ -66,15 +77,14 @@ export const Navbar: React.FC = () => {
           </button>
         </nav>
 
-        {/* Desktop CTA */}
+        {/* Desktop CTA: Iniciar Sesión */}
         <div className="hidden md:flex items-center gap-3">
           <button
-            onClick={() => scrollTo('waitlist')}
-            className="relative inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 px-5 py-2.5 text-sm font-bold text-slate-950 shadow-lg shadow-orange-500/25 hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all bg-[length:200%_auto] hover:bg-right"
+            onClick={handleLoginClick}
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 shadow-md shadow-orange-500/20 hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
-            <Sparkles className="w-4 h-4 text-slate-950" />
-            Acceso Anticipado
-            <ArrowRight className="w-4 h-4 text-slate-950" />
+            <LogIn className="w-4 h-4 text-slate-950" />
+            Iniciar Sesión
           </button>
         </div>
 
@@ -113,7 +123,7 @@ export const Navbar: React.FC = () => {
               onClick={() => scrollTo('demo-interactiva')}
               className="flex items-center gap-2.5 py-2 text-left hover:text-amber-400"
             >
-              <Sparkles className="w-5 h-5 text-amber-400" />
+              <Terminal className="w-5 h-5 text-amber-400" />
               Demo Interactiva
             </button>
             <button
@@ -126,11 +136,11 @@ export const Navbar: React.FC = () => {
           </nav>
           <div className="pt-2">
             <button
-              onClick={() => scrollTo('waitlist')}
+              onClick={handleLoginClick}
               className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 py-3 text-sm font-bold text-slate-950 shadow-md shadow-orange-500/20"
             >
-              <Sparkles className="w-4 h-4" />
-              Unirme a la Lista de Espera
+              <LogIn className="w-4 h-4" />
+              Iniciar Sesión
             </button>
           </div>
         </div>
