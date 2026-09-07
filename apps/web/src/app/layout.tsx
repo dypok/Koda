@@ -27,9 +27,11 @@ export const metadata: Metadata = {
   authors: [{ name: 'Equipo KodaAcademy' }],
   creator: 'KodaAcademy',
   icons: {
-    icon: '/logo.png',
-    shortcut: '/logo.png',
-    apple: '/logo.png',
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/icon.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: '/apple-icon.png',
   },
   openGraph: {
     type: 'website',
@@ -41,19 +43,19 @@ export const metadata: Metadata = {
     siteName: 'KodaAcademy',
     images: [
       {
-        url: '/logo.png',
-        width: 680,
-        height: 680,
-        alt: 'Logo Oficial KodaAcademy',
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'KodaAcademy — Plataforma Gamificada de Python 3.12',
       },
     ],
   },
   twitter: {
-    card: 'summary',
+    card: 'summary_large_image',
     title: 'KodaAcademy — Aprende Python 3.12 como juegas',
     description:
       'Micro-lecciones de 2 minutos, práctica interactiva en tu navegador y cero frustración.',
-    images: ['/logo.png'],
+    images: ['/og-image.png'],
   },
 };
 
