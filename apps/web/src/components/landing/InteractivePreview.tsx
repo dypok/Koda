@@ -6,7 +6,6 @@ import {
   IconX,
   IconCheck,
 } from '@tabler/icons-react';
-import { BorderGlow } from '@/components/ui/border-glow';
 
 export const InteractivePreview: React.FC = () => {
   return (
@@ -106,66 +105,64 @@ export const InteractivePreview: React.FC = () => {
               </p>
             </motion.div>
 
-            {/* Elemento Visual Derecha: Tarjeta Comparativa Setup vs Koda */}
+            {/* Elemento Visual Derecha: Comparativa integrada directamente a la web (sin card) */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.92, y: 20 }}
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: false, margin: '-40px' }}
               transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-5 flex justify-center w-full"
+              className="lg:col-span-5 flex flex-col justify-center space-y-6 w-full max-w-md mx-auto lg:mx-0"
             >
-              <BorderGlow
-                borderRadius={24}
-                backgroundColor="#0B0F19"
-                glowColor="15 95 60"
-                colors={['#EA580C', '#F97316', '#FB923C']}
-                className="w-full max-w-md shadow-2xl"
-                contentClassName="rounded-[23px] p-6 sm:p-8 space-y-5"
-              >
-                {/* Lo Tradicional */}
-                <div className="rounded-xl border border-rose-500/20 bg-rose-500/5 p-4 space-y-2">
-                  <div className="flex items-center gap-2 text-rose-400 font-display font-bold text-xs uppercase tracking-wider">
-                    <IconX className="w-4 h-4" />
+              {/* El Método Tradicional */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-rose-500/80" />
+                  <p className="text-xs sm:text-sm font-display font-bold uppercase tracking-wider text-rose-400">
                     El Método Tradicional
-                  </div>
-                  <ul className="space-y-1.5 text-xs text-slate-400 font-sans">
-                    <li className="flex items-center gap-2">
-                      <IconX className="w-3.5 h-3.5 text-rose-500 shrink-0" />
-                      Instalar compiladores y paquetes pesados
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <IconX className="w-3.5 h-3.5 text-rose-500 shrink-0" />
-                      Errores de configuración en terminal y PATH
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <IconX className="w-3.5 h-3.5 text-rose-500 shrink-0" />
-                      Horas perdidas antes de escribir código
-                    </li>
-                  </ul>
+                  </p>
                 </div>
+                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-400 font-sans">
+                  <li className="flex items-start gap-2.5">
+                    <IconX className="w-4 h-4 text-rose-500/80 shrink-0 mt-0.5" />
+                    <span>Instalar compiladores y paquetes pesados</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <IconX className="w-4 h-4 text-rose-500/80 shrink-0 mt-0.5" />
+                    <span>Errores de configuración en terminal y PATH</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <IconX className="w-4 h-4 text-rose-500/80 shrink-0 mt-0.5" />
+                    <span>Horas perdidas antes de escribir código</span>
+                  </li>
+                </ul>
+              </div>
 
-                {/* Con Koda */}
-                <div className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 space-y-2">
-                  <div className="flex items-center gap-2 text-emerald-400 font-display font-bold text-xs uppercase tracking-wider">
-                    <IconCheck className="w-4 h-4" />
+              {/* Divisor sutil integrado */}
+              <div className="h-[1px] w-full bg-gradient-to-r from-slate-800 via-slate-700/40 to-transparent" />
+
+              {/* Con KodaAcademy */}
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
+                  <p className="text-xs sm:text-sm font-display font-bold uppercase tracking-wider text-emerald-400">
                     Con KodaAcademy
-                  </div>
-                  <ul className="space-y-1.5 text-xs text-slate-300 font-sans">
-                    <li className="flex items-center gap-2">
-                      <IconCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      Abre el navegador en cualquier computadora
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <IconCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      Ejecución instantánea y segura en la web
-                    </li>
-                    <li className="flex items-center gap-2">
-                      <IconCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
-                      Escribe y prueba código desde el primer segundo
-                    </li>
-                  </ul>
+                  </p>
                 </div>
-              </BorderGlow>
+                <ul className="space-y-2.5 text-xs sm:text-sm text-slate-200 font-sans">
+                  <li className="flex items-start gap-2.5">
+                    <IconCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <span>Abre el navegador en cualquier computadora</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <IconCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <span>Ejecución instantánea y segura en la web</span>
+                  </li>
+                  <li className="flex items-start gap-2.5">
+                    <IconCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <span>Escribe y prueba código desde el primer segundo</span>
+                  </li>
+                </ul>
+              </div>
             </motion.div>
           </div>
         </div>
