@@ -11,6 +11,61 @@ import {
 } from '@tabler/icons-react';
 import { MiniSkillTree } from './MiniSkillTree';
 import { AnimatedCounter } from '@/components/ui/animated-counter';
+import { cn } from '@/lib/utils';
+
+interface Pillar {
+  id: string;
+  title: string;
+  subtitle: string;
+  icon: React.ElementType;
+  badgeBorder: string;
+  badgeText: string;
+  hoverBorder: string;
+  hoverShadow: string;
+}
+
+const PILLARS: Pillar[] = [
+  {
+    id: 'rachas',
+    title: 'Rachas Diarias',
+    subtitle: '15 min al día',
+    icon: IconFlame,
+    badgeBorder: 'border-orange-500/30',
+    badgeText: 'text-orange-400',
+    hoverBorder: 'group-hover:border-orange-400',
+    hoverShadow: 'group-hover:shadow-[0_0_20px_rgba(249,115,22,0.35)]',
+  },
+  {
+    id: 'roadmap',
+    title: 'Roadmap Claro',
+    subtitle: 'Paso a paso',
+    icon: IconRoute,
+    badgeBorder: 'border-amber-500/30',
+    badgeText: 'text-amber-400',
+    hoverBorder: 'group-hover:border-amber-400',
+    hoverShadow: 'group-hover:shadow-[0_0_20px_rgba(245,158,11,0.35)]',
+  },
+  {
+    id: 'codigo-real',
+    title: 'Código Real',
+    subtitle: 'Retención 4x',
+    icon: IconTerminal2,
+    badgeBorder: 'border-orange-500/30',
+    badgeText: 'text-orange-400',
+    hoverBorder: 'group-hover:border-orange-400',
+    hoverShadow: 'group-hover:shadow-[0_0_20px_rgba(249,115,22,0.35)]',
+  },
+  {
+    id: 'pistas',
+    title: 'Pistas Guiadas',
+    subtitle: 'Sin spoilers',
+    icon: IconBulb,
+    badgeBorder: 'border-amber-500/30',
+    badgeText: 'text-amber-400',
+    hoverBorder: 'group-hover:border-amber-400',
+    hoverShadow: 'group-hover:shadow-[0_0_20px_rgba(245,158,11,0.35)]',
+  },
+];
 
 export const MethodologySection: React.FC = () => {
   const scrollTo = (id: string) => {
@@ -60,73 +115,48 @@ export const MethodologySection: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="relative max-w-4xl mx-auto"
           >
-            {/* Línea conectora horizontal sutil detrás de los 4 hitos en pantallas medianas/grandes */}
-            <div className="hidden md:block absolute top-7 inset-x-16 h-[1px] border-t border-dashed border-slate-800 -z-10" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+              {PILLARS.map((pillar, index) => {
+                const Icon = pillar.icon;
+                return (
+                  <button
+                    key={pillar.id}
+                    onClick={() => scrollTo(pillar.id)}
+                    className="group relative flex flex-col items-center text-center cursor-pointer transition-all duration-300 focus:outline-none"
+                  >
+                    {/* Contenedor del Icono centrado: la línea conectora pasa exactamente por el centro geométrico (50% X / 50% Y) */}
+                    <div className="relative w-full flex items-center justify-center mb-3.5">
+                      {/* Línea conectora hacia el siguiente pilar (sólo desktop, matemáticamente alineada de centro a centro) */}
+                      {index < PILLARS.length - 1 && (
+                        <div
+                          className="hidden md:block absolute left-1/2 w-[calc(100%+2rem)] top-1/2 -translate-y-1/2 h-[1px] border-t border-dashed border-slate-700/80 z-0 pointer-events-none"
+                          aria-hidden="true"
+                        />
+                      )}
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
-              {/* Pilar 1: Rachas */}
-              <button
-                onClick={() => scrollTo('rachas')}
-                className="group flex flex-col items-center text-center p-2 rounded-xl transition-all duration-300 cursor-pointer"
-              >
-                <div className="w-13 h-13 rounded-2xl bg-orange-500/10 border border-orange-500/25 flex items-center justify-center text-orange-400 group-hover:scale-110 group-hover:border-orange-400 group-hover:bg-orange-500/20 group-hover:shadow-[0_0_20px_rgba(249,115,22,0.3)] transition-all duration-300 mb-2.5">
-                  <IconFlame className="w-6 h-6" />
-                </div>
-                <span className="font-display text-base font-bold text-white group-hover:text-amber-400 transition-colors">
-                  Rachas Diarias
-                </span>
-                <span className="text-xs text-slate-400 mt-0.5 font-sans">
-                  15 min al día
-                </span>
-              </button>
+                      {/* Badge del Icono con fondo oscuro sólido que ocluye la línea al pasar por detrás */}
+                      <div
+                        className={cn(
+                          'relative z-10 w-14 h-14 rounded-2xl bg-slate-950 border bg-gradient-to-b from-slate-900/90 to-slate-950 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:bg-slate-900',
+                          pillar.badgeBorder,
+                          pillar.badgeText,
+                          pillar.hoverBorder,
+                          pillar.hoverShadow
+                        )}
+                      >
+                        <Icon className="w-6 h-6" />
+                      </div>
+                    </div>
 
-              {/* Pilar 2: Roadmap */}
-              <button
-                onClick={() => scrollTo('roadmap')}
-                className="group flex flex-col items-center text-center p-2 rounded-xl transition-all duration-300 cursor-pointer"
-              >
-                <div className="w-13 h-13 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:border-amber-400 group-hover:bg-amber-500/20 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all duration-300 mb-2.5">
-                  <IconRoute className="w-6 h-6" />
-                </div>
-                <span className="font-display text-base font-bold text-white group-hover:text-amber-400 transition-colors">
-                  Roadmap Claro
-                </span>
-                <span className="text-xs text-slate-400 mt-0.5 font-sans">
-                  Paso a paso
-                </span>
-              </button>
-
-              {/* Pilar 3: Código Real */}
-              <button
-                onClick={() => scrollTo('codigo-real')}
-                className="group flex flex-col items-center text-center p-2 rounded-xl transition-all duration-300 cursor-pointer"
-              >
-                <div className="w-13 h-13 rounded-2xl bg-orange-500/10 border border-orange-500/25 flex items-center justify-center text-orange-400 group-hover:scale-110 group-hover:border-orange-400 group-hover:bg-orange-500/20 group-hover:shadow-[0_0_20px_rgba(249,115,22,0.3)] transition-all duration-300 mb-2.5">
-                  <IconTerminal2 className="w-6 h-6" />
-                </div>
-                <span className="font-display text-base font-bold text-white group-hover:text-amber-400 transition-colors">
-                  Código Real
-                </span>
-                <span className="text-xs text-slate-400 mt-0.5 font-sans">
-                  Retención 4x
-                </span>
-              </button>
-
-              {/* Pilar 4: Pistas */}
-              <button
-                onClick={() => scrollTo('pistas')}
-                className="group flex flex-col items-center text-center p-2 rounded-xl transition-all duration-300 cursor-pointer"
-              >
-                <div className="w-13 h-13 rounded-2xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-400 group-hover:scale-110 group-hover:border-amber-400 group-hover:bg-amber-500/20 group-hover:shadow-[0_0_20px_rgba(245,158,11,0.3)] transition-all duration-300 mb-2.5">
-                  <IconBulb className="w-6 h-6" />
-                </div>
-                <span className="font-display text-base font-bold text-white group-hover:text-amber-400 transition-colors">
-                  Pistas Guiadas
-                </span>
-                <span className="text-xs text-slate-400 mt-0.5 font-sans">
-                  Sin spoilers
-                </span>
-              </button>
+                    <span className="font-display text-base font-bold text-white group-hover:text-amber-400 transition-colors">
+                      {pillar.title}
+                    </span>
+                    <span className="text-xs text-slate-400 mt-0.5 font-sans">
+                      {pillar.subtitle}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
           </motion.div>
 
