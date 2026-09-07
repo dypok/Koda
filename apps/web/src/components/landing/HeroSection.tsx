@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { IconArrowRight, IconLogin } from '@tabler/icons-react';
 import { HeroSkyBackground } from './HeroSkyBackground';
 import { GradientButton } from '@/components/ui/gradient-button';
+import { UpcomingTechCarousel } from './UpcomingTechCarousel';
 
 interface HeroSectionProps {
   onOpenLogin?: () => void;
@@ -12,7 +13,7 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
   return (
-    <section className="relative isolate overflow-hidden min-h-[calc(100vh-4rem)] min-h-[calc(100dvh-4rem)] flex flex-col justify-center py-8 md:py-12">
+    <section className="relative isolate overflow-hidden min-h-[calc(100vh-4rem)] min-h-[calc(100dvh-4rem)] flex flex-col justify-between pt-6 pb-4 md:pt-10 md:pb-6">
       {/* Interactive Starry Night Sky Background */}
       <HeroSkyBackground starCount={260} interactive={true} />
 
@@ -67,6 +68,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Próximamente: Carrusel de Tecnologías */}
+      <div className="relative z-10 w-full mt-auto pt-6 pb-2">
+        <UpcomingTechCarousel />
       </div>
     </section>
   );
