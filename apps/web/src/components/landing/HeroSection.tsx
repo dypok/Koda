@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { ArrowRight, CheckCircle2, Code2, Terminal, Sparkles } from 'lucide-react';
 import { KodaMascot } from '../mascot/KodaMascot';
+import { LightRays } from './LightRays';
 
 interface HeroSectionProps {
   onOpenLogin?: () => void;
@@ -19,6 +20,24 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
 
   return (
     <section className="relative overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24">
+      {/* Ambient Light Rays from top center */}
+      <div className="absolute inset-x-0 top-0 h-[640px] pointer-events-none overflow-hidden -z-10 opacity-70">
+        <LightRays
+          raysOrigin="top-center"
+          raysColor="#f59e0b"
+          raysSpeed={0.8}
+          lightSpread={1.4}
+          rayLength={2.2}
+          pulsating={true}
+          fadeDistance={1.1}
+          saturation={1.2}
+          followMouse={true}
+          mouseInfluence={0.12}
+          noiseAmount={0.03}
+          distortion={0.04}
+        />
+      </div>
+
       {/* Background Gradients */}
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-amber-500/10 via-orange-500/15 to-purple-600/10 rounded-full blur-3xl pointer-events-none -z-10" />
 

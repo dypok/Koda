@@ -10,6 +10,10 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-07 08:17] [Added] **Integración del Componente WebGL LightRays en HeroSection:**
+  - Se portó el componente `<LightRays />` de Svelte Bits a React 19/TypeScript con la biblioteca `ogl` en `apps/web/src/components/landing/LightRays.tsx`.
+  - Se configuraron shaders WebGL con efecto volumétrico de rayos de luz ámbar (`#f59e0b`) de emisión `top-center`, soporte de dispersión, desvanecimiento, grano cinematográfico y seguimiento orgánico al cursor del mouse.
+  - Se integró en el fondo de `HeroSection.tsx` detrás del contenido principal sin afectar la interactividad (`pointer-events-none`).
 - [2026-09-07 08:06] [Added] **Aislamiento de la Mascota Oficial Koda y Generación de Recursos Visuales:**
   - Se aisló la mascota Koda en fondo transparente (`apps/web/public/brand/koda-mascot.png` y `apps/web/public/mascot.png`) eliminando el escenario mediante segmentación de alta precisión (GrabCut con prior de U2-Net y preservación de curvas de llama).
   - Se generaron variantes cuadradas transparentes de 512px, 256px y 128px (`apps/web/public/brand/koda-mascot-{512,256,128}.png`).
