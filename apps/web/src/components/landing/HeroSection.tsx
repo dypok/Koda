@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { IconArrowRight } from '@tabler/icons-react';
-import { LightRays } from './LightRays';
+import { FloatingLines } from './FloatingLines';
 
 interface HeroSectionProps {
   onOpenLogin?: () => void;
@@ -12,21 +12,17 @@ interface HeroSectionProps {
 export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
   return (
     <section className="relative isolate overflow-hidden min-h-[80vh] flex flex-col justify-center py-12 md:py-20">
-      {/* Ambient Light Rays from top center */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-        <LightRays
-          raysOrigin="top-center"
-          raysColor="#f59e0b"
-          raysSpeed={0.8}
-          lightSpread={1.2}
-          rayLength={3.0}
-          pulsating={true}
-          fadeDistance={1.2}
-          saturation={1.3}
-          followMouse={true}
-          mouseInfluence={0.12}
-          noiseAmount={0.02}
-          distortion={0.03}
+      {/* Background Floating Lines */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-85">
+        <FloatingLines
+          linesGradient={['#ea580c', '#f97316', '#f59e0b', '#fbbf24']}
+          animationSpeed={1}
+          interactive={true}
+          bendRadius={5}
+          bendStrength={-0.5}
+          parallax={true}
+          parallaxStrength={0.2}
+          mixBlendMode="screen"
         />
       </div>
 
