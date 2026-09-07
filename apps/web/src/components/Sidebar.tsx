@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import {
   Map,
   BookOpen,
@@ -30,15 +31,18 @@ export const Sidebar: React.FC = () => {
       <div>
         {/* Brand Header */}
         <div className="flex items-center gap-3 px-2 py-3 mb-6">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-400 flex items-center justify-center text-slate-950 font-black text-xl shadow-lg shadow-orange-500/20">
-            🦊
+          <div className="relative w-10 h-10 rounded-xl bg-[#182030] border border-slate-800 flex items-center justify-center shadow-lg shadow-orange-500/10 overflow-hidden shrink-0">
+            <Image
+              src="/logo.png"
+              alt="KodaAcademy Logo"
+              width={40}
+              height={40}
+              className="object-contain"
+            />
           </div>
           <div>
-            <h1 className="font-extrabold text-xl tracking-tight text-white flex items-center gap-1.5">
-              Koda
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-orange-500/20 text-orange-400 border border-orange-500/30">
-                PRO
-              </span>
+            <h1 className="font-extrabold text-lg tracking-tight text-white flex items-center gap-1">
+              Koda<span className="text-amber-400">Academy</span>
             </h1>
             <p className="text-xs text-slate-400">Aprende programando</p>
           </div>

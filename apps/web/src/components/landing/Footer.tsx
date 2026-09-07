@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Heart, Github, BookOpen, QrCode, ShieldCheck } from 'lucide-react';
 
 export const Footer: React.FC = () => {
@@ -16,11 +17,19 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Col 1: Brand Info */}
           <div className="md:col-span-2 space-y-4">
-            <Link href="/" className="flex items-center gap-2.5">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 text-lg shadow-md shadow-orange-500/20">
-                🦊
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 shadow-md shadow-orange-500/10 overflow-hidden">
+                <Image
+                  src="/logo.png"
+                  alt="KodaAcademy Logo"
+                  width={36}
+                  height={36}
+                  className="object-contain"
+                />
               </div>
-              <span className="text-xl font-extrabold text-white tracking-tight">Koda</span>
+              <span className="text-xl font-extrabold text-white tracking-tight">
+                Koda<span className="text-amber-400">Academy</span>
+              </span>
             </Link>
             <p className="text-slate-400 text-xs sm:text-sm max-w-sm leading-relaxed">
               La plataforma gamificada que transforma el aprendizaje de programación en un juego diario sin frustraciones ni barreras cognitivas.
@@ -55,8 +64,8 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
               <li>
-                <button onClick={() => scrollTo('waitlist')} className="hover:text-amber-400 transition-colors">
-                  Lista de Espera
+                <button onClick={() => scrollTo('faq')} className="hover:text-amber-400 transition-colors">
+                  Preguntas Frecuentes
                 </button>
               </li>
             </ul>
@@ -95,7 +104,7 @@ export const Footer: React.FC = () => {
 
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} Koda. Todos los derechos reservados.</p>
+          <p>© {new Date().getFullYear()} KodaAcademy. Todos los derechos reservados.</p>
           <p className="flex items-center gap-1">
             Hecho con <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> para la comunidad de programadores.
           </p>

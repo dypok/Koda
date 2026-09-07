@@ -9,6 +9,12 @@ Zona horaria: America/Bogota (UTC-5)
 
 ## [Unreleased]
 
+### Added
+- [2026-09-07 07:26] [Added] **Integración del Logo Oficial e Identidad de Marca KodaAcademy:**
+  - Se incorporó el logotipo oficial `{ 🔥 }` de **KodaAcademy** en `apps/web/public/logo.png` y `apps/web/public/brand/koda-academy-logo.png`.
+  - Se actualizaron los metadatos de Next.js (`title`, `description`, `icons: { icon: '/logo.png' }`, OpenGraph y Twitter Cards) en `apps/web/src/app/layout.tsx`.
+  - Se estandarizó la tipografía y marca `KodaAcademy` en `Navbar`, `HeroSection`, `InteractivePreview`, `MethodologySection`, `CurriculumSection`, `LoginModal`, `/login`, `Sidebar` y `Footer`.
+
 ### Changed
 - [2026-09-07 07:07] [Changed] **Profesionalización de la Landing Page y Desincorporación del Modo Próximamente en Código:**
   - Se eliminó el banner superior de prelanzamiento (`ComingSoonBanner`) con textos de "Acceso Anticipado / Lista de espera".

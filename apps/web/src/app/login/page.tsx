@@ -38,12 +38,12 @@ export default function LoginPage() {
               Inicio de Sesión
             </h1>
             <p className="text-xs text-slate-400">
-              Campus Educativo de Koda · Python 3.12
+              Campus Oficial de KodaAcademy · Python 3.12
             </p>
           </div>
 
           <p className="text-sm text-slate-300 leading-relaxed text-left sm:text-center">
-            El sistema de autenticación de estudiantes se encuentra en su fase final de integración técnica y aseguramiento de calidad. Estará habilitado próximamente para el acceso oficial a la plataforma.
+            El sistema de autenticación de estudiantes de KodaAcademy se encuentra en su fase final de integración técnica y aseguramiento de calidad. Estará habilitado próximamente para el acceso oficial a la plataforma.
           </p>
 
           <div className="bg-slate-950/60 border border-slate-800/80 rounded-2xl p-4 text-left space-y-2.5 text-xs text-slate-300">

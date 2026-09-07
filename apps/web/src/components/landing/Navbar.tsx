@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X, BookOpen, Layers, HelpCircle, Terminal, LogIn } from 'lucide-react';
 
 interface NavbarProps {
@@ -29,13 +30,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg shadow-orange-500/20 group-hover:scale-105 transition-transform">
-            <span className="text-xl select-none" role="img" aria-label="Zorro Koda">🦊</span>
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 shadow-md shadow-orange-500/10 group-hover:scale-105 group-hover:border-amber-500/40 transition-all overflow-hidden">
+            <Image
+              src="/logo.png"
+              alt="KodaAcademy Logo"
+              width={40}
+              height={40}
+              className="object-contain"
+              priority
+            />
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
               <span className="text-xl font-extrabold tracking-tight text-white group-hover:text-amber-400 transition-colors">
-                Koda
+                Koda<span className="text-amber-400">Academy</span>
               </span>
               <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded border border-amber-400/30">
                 Python 3.12

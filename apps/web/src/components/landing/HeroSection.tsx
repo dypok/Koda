@@ -40,7 +40,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
 
             {/* Subheading */}
             <p className="max-w-2xl text-base sm:text-lg text-slate-300 leading-relaxed">
-              Olvida los videos pasivos de 40 minutos y los muros de texto aburridos. En <strong>Koda</strong> dominas <strong>Python 3.12</strong> con micro-lecciones atómicas de 2 minutos, práctica inmediata con cero configuración y la compañía de Koda 🦊.
+              Olvida los videos pasivos de 40 minutos y los muros de texto aburridos. En <strong>KodaAcademy</strong> dominas <strong>Python 3.12</strong> con micro-lecciones atómicas de 2 minutos, práctica inmediata con cero configuración y la compañía de Koda.
             </p>
 
             {/* Value Proposition Bullets */}
@@ -91,7 +91,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
                 <div className="w-full flex items-center justify-between text-xs pb-2 border-b border-slate-800/60">
                   <div className="flex items-center gap-2 text-slate-400">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>Mascota Koda 🦊</span>
+                    <span>Mascota Oficial Koda</span>
                   </div>
                   <span className="text-amber-400 font-mono text-[11px] font-semibold">WebGL 2D</span>
                 </div>
@@ -104,7 +104,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
                 {/* Speech Bubble / Mascot Message */}
                 <div className="relative -mt-2 rounded-2xl bg-gradient-to-r from-amber-500/15 via-orange-500/15 to-purple-500/15 border border-amber-500/30 p-3.5 shadow-inner">
                   <p className="text-sm font-semibold text-slate-100">
-                    «¡Hola! Soy Koda. Te acompañaré paso a paso para que domines Python sin miedo a equivocarte.»
+                    «¡Hola! Soy Koda. Te acompañaré paso a paso en KodaAcademy para que domines Python sin miedo a equivocarte.»
                   </p>
                   <p className="text-[11px] text-amber-300/90 mt-1 font-medium">
                     100% interactivo · En tu navegador · Código real de Python 3.12

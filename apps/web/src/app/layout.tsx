@@ -9,10 +9,12 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://koda.app'),
-  title: 'Koda 🦊 — Aprende a Programar en Python 3.12 como juegas',
+  title: 'KodaAcademy — Aprende a Programar en Python 3.12 como juegas',
   description:
-    'La plataforma gamificada que transforma el aprendizaje de programación en un hábito diario. Domina Python 3.12 con micro-lecciones de 2 minutos, práctica inmediata en vivo y certificación oficial con código QR.',
+    'La plataforma interactiva que transforma el aprendizaje de programación en un hábito diario. Domina Python 3.12 con micro-lecciones de 2 minutos, práctica inmediata en vivo y certificación oficial con código QR.',
   keywords: [
+    'kodaacademy',
+    'koda academy',
     'aprender python',
     'python 3.12',
     'duolingo programacion',
@@ -22,36 +24,36 @@ export const metadata: Metadata = {
     'gamificacion',
     'aprender a programar',
   ],
-  authors: [{ name: 'Equipo Koda' }],
-  creator: 'Koda',
+  authors: [{ name: 'Equipo KodaAcademy' }],
+  creator: 'KodaAcademy',
   icons: {
-    icon: '/icon.svg',
-    shortcut: '/icon.svg',
-    apple: '/icon.svg',
+    icon: '/logo.png',
+    shortcut: '/logo.png',
+    apple: '/logo.png',
   },
   openGraph: {
     type: 'website',
     locale: 'es_LA',
     url: 'https://koda.app',
-    title: 'Koda 🦊 — Aprende a Programar en Python 3.12 como juegas',
+    title: 'KodaAcademy — Aprende a Programar en Python 3.12 como juegas',
     description:
-      'Micro-lecciones de 2 minutos, práctica interactiva en tu navegador y cero frustración. Únete a la lista de espera.',
-    siteName: 'Koda',
+      'Micro-lecciones de 2 minutos, práctica interactiva en tu navegador y cero frustración. Certificación oficial con código QR.',
+    siteName: 'KodaAcademy',
     images: [
       {
-        url: '/icon.svg',
-        width: 512,
-        height: 512,
-        alt: 'Mascota Koda el Zorro',
+        url: '/logo.png',
+        width: 680,
+        height: 680,
+        alt: 'Logo Oficial KodaAcademy',
       },
     ],
   },
   twitter: {
     card: 'summary',
-    title: 'Koda 🦊 — Aprende Python 3.12 como juegas',
+    title: 'KodaAcademy — Aprende Python 3.12 como juegas',
     description:
-      'Micro-lecciones de 2 minutos, práctica interactiva en tu navegador y cero frustración. Acceso anticipado gratuito.',
-    images: ['/icon.svg'],
+      'Micro-lecciones de 2 minutos, práctica interactiva en tu navegador y cero frustración.',
+    images: ['/logo.png'],
   },
 };
 

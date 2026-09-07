@@ -12,10 +12,10 @@ const FAQS: FaqItem[] = [
   {
     question: '¿Necesito saber matemáticas o tener experiencia previa en programación?',
     answer:
-      '¡En absoluto! Koda está diseñado desde cero absoluto para personas sin ningún conocimiento previo. No necesitas ser bueno en matemáticas complejas; si sabes sumar y leer, puedes aprender a programar en Python con nuestro método paso a paso.',
+      '¡En absoluto! KodaAcademy está diseñado desde cero absoluto para personas sin ningún conocimiento previo. No necesitas ser bueno en matemáticas complejas; si sabes sumar y leer, puedes aprender a programar en Python con nuestro método paso a paso.',
   },
   {
-    question: '¿Por qué Python 3.12 es el lenguaje de lanzamiento de Koda?',
+    question: '¿Por qué Python 3.12 es el lenguaje de lanzamiento de KodaAcademy?',
     answer:
       'Python es actualmente el lenguaje más demandado del mundo en desarrollo de software, ciencia de datos e Inteligencia Artificial. Su sintaxis es limpia y cercana al lenguaje natural (parecido al inglés cotidiano), lo que elimina la frustración de aprender sintaxis engorrosa al comenzar.',
   },
@@ -32,12 +32,12 @@ const FAQS: FaqItem[] = [
   {
     question: '¿Cuánto tiempo necesito dedicarle al día para ver resultados?',
     answer:
-      'Recomendamos entre 10 y 15 minutos al día (lo que equivale a unas 3 a 5 micro-lecciones). La constancia diaria es infinitamente más efectiva que estudiar 4 horas seguidas una vez al mes. Koda te ayuda a mantener tu racha diaria activa para consolidar el hábito.',
+      'Recomendamos entre 10 y 15 minutos al día (lo que equivale a unas 3 a 5 micro-lecciones). La constancia diaria es infinitamente más efectiva que estudiar 4 horas seguidas una vez al mes. KodaAcademy te ayuda a mantener tu racha diaria activa para consolidar el hábito.',
   },
   {
     question: '¿Cómo evitan que simplemente adivine las respuestas de las opciones?',
     answer:
-      'Nuestras opciones de respuesta se barajan aleatoriamente en cada intento y cuentan con distractores basados en los errores reales de principiantes. Además, si fallas una pregunta, Koda la envía a tu Cuaderno de Errores y te pedirá remediarla en la ronda de repaso final con opciones mezcladas antes de dar por aprobada la sección.',
+      'Nuestras opciones de respuesta se barajan aleatoriamente en cada intento y cuentan con distractores basados en los errores reales de principiantes. Además, si fallas una pregunta, KodaAcademy la envía a tu Cuaderno de Errores y te pedirá remediarla en la ronda de repaso final con opciones mezcladas antes de dar por aprobada la sección.',
   },
 ];
 
@@ -61,7 +61,7 @@ export const FaqSection: React.FC = () => {
             Preguntas Frecuentes
           </h2>
           <p className="text-slate-400 text-sm sm:text-base">
-            Todo lo que necesitas saber sobre el método Koda, Python 3.12 y nuestro lanzamiento.
+            Todo lo que necesitas saber sobre el método KodaAcademy, Python 3.12 y nuestro lanzamiento.
           </p>
         </div>
 

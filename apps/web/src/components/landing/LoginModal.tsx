@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { X, Lock, Sparkles, CheckCircle2 } from 'lucide-react';
+import Image from 'next/image';
+import { X, Sparkles, CheckCircle2 } from 'lucide-react';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -23,9 +24,15 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
           <X className="w-5 h-5" />
         </button>
 
-        {/* Icon & Badge */}
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400 shadow-inner">
-          <Lock className="w-7 h-7" />
+        {/* Brand Logo Badge */}
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#182030] border border-slate-800 shadow-xl shadow-orange-500/10 overflow-hidden">
+          <Image
+            src="/logo.png"
+            alt="KodaAcademy Logo"
+            width={64}
+            height={64}
+            className="object-contain"
+          />
         </div>
 
         <div>
@@ -37,12 +44,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             Inicio de Sesión
           </h3>
           <p className="text-xs text-slate-400 mt-1">
-            Campus Educativo de Koda
+            Campus Oficial de KodaAcademy · Python 3.12
           </p>
         </div>
 
         <p className="text-sm text-slate-300 leading-relaxed text-left sm:text-center">
-          El módulo de autenticación y acceso a cuentas de usuario se encuentra en su fase final de pruebas técnicas y de seguridad. Estará habilitado próximamente para el inicio del curso de Python 3.12.
+          El módulo de autenticación y acceso de estudiantes se encuentra en su fase final de pruebas técnicas y de seguridad. Estará habilitado próximamente para el inicio del programa de Python 3.12.
         </p>
 
         {/* Features Checklist */}

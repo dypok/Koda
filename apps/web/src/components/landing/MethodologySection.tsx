@@ -52,7 +52,7 @@ export const MethodologySection: React.FC = () => {
             La Ciencia de Aprender Sin Frustración
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            El Método Koda 🦊
+            El Método KodaAcademy
           </h2>
           <p className="text-slate-400 text-base sm:text-lg">
             Diseñado especialmente para personas que intentaron aprender a programar y lo abandonaron por aburrimiento o complejidad innecesaria.
@@ -92,7 +92,7 @@ export const MethodologySection: React.FC = () => {
         {/* Comparison Table / Box: Traditional vs Koda */}
         <div className="max-w-4xl mx-auto rounded-3xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8 backdrop-blur-xl shadow-2xl">
           <h3 className="text-xl sm:text-2xl font-bold text-white text-center mb-8">
-            ¿Por qué Koda funciona cuando otros cursos fallan?
+            ¿Por qué KodaAcademy funciona cuando otros cursos fallan?
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -126,7 +126,7 @@ export const MethodologySection: React.FC = () => {
             <div className="rounded-2xl border border-emerald-500/30 bg-emerald-950/15 p-5 space-y-4 shadow-lg shadow-emerald-500/5">
               <div className="flex items-center gap-2 text-emerald-400 font-bold text-base pb-2 border-b border-emerald-500/20">
                 <Check className="w-5 h-5 text-emerald-400" />
-                <span>La Experiencia Koda 🦊</span>
+                <span>La Experiencia KodaAcademy</span>
               </div>
               <ul className="space-y-3 text-xs sm:text-sm text-slate-200">
                 <li className="flex items-start gap-2">
