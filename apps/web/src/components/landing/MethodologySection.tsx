@@ -47,11 +47,6 @@ export const MethodologySection: React.FC = () => {
           <span className="absolute bottom-5 left-36 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-[emberRise_4.8s_ease-out_infinite]" style={{ animationDelay: '3.3s' }} />
         </div>
 
-        {/* Marcador técnico de cuadrante */}
-        <div className="hidden lg:block absolute top-6 left-8 text-orange-500/35 text-[11px] font-mono select-none pointer-events-none">
-          + STREAK_IGNITION // 15MIN_HABIT_LOOP
-        </div>
-
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             {/* Texto Izquierda */}
@@ -68,10 +63,6 @@ export const MethodologySection: React.FC = () => {
 
               <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed font-sans max-w-xl">
                 15 minutos al día son suficientes. La constancia diaria vence a cualquier maratón de fin de semana y convierte la programación en una segunda naturaleza.
-              </p>
-
-              <p className="text-xs font-mono text-slate-500 pt-1">
-                Constancia diaria · 15 min al día para avanzar sin quemarte
               </p>
             </motion.div>
 
@@ -92,9 +83,6 @@ export const MethodologySection: React.FC = () => {
               />
               <span className="text-sm sm:text-base font-display font-bold text-white uppercase tracking-wider">
                 Al día para crear el hábito
-              </span>
-              <span className="text-xs font-mono text-slate-500">
-                Micro-sesiones progresivas diseñadas para no abandonar
               </span>
             </motion.div>
           </div>
@@ -127,11 +115,6 @@ export const MethodologySection: React.FC = () => {
           </svg>
         </div>
 
-        {/* Marcador técnico */}
-        <div className="hidden lg:block absolute top-6 left-8 text-cyan-500/35 text-[11px] font-mono select-none pointer-events-none">
-          + SECTOR_NAV // CONSTELLATION_TOPOLOGY
-        </div>
-
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             {/* Visual Skill Tree Teaser Izquierda */}
@@ -159,10 +142,6 @@ export const MethodologySection: React.FC = () => {
 
               <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed font-sans max-w-xl">
                 Sabes exactamente qué aprender hoy y qué sigue mañana. Una ruta secuencial estructurada desde las bases hasta escribir tus propios programas sin perderte en tutoriales infinitos.
-              </p>
-
-              <p className="text-xs font-mono text-slate-500 pt-1">
-                Ruta progresiva · Sin saltos al vacío ni parálisis por análisis
               </p>
             </motion.div>
           </div>
@@ -207,11 +186,6 @@ export const MethodologySection: React.FC = () => {
           </div>
         </div>
 
-        {/* Marcador técnico */}
-        <div className="hidden lg:block absolute top-6 left-8 text-amber-500/35 text-[11px] font-mono select-none pointer-events-none">
-          + REPL_RUNTIME // LIVE_BYTECODE_VM
-        </div>
-
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             {/* Texto Izquierda */}
@@ -228,10 +202,6 @@ export const MethodologySection: React.FC = () => {
 
               <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed font-sans max-w-xl">
                 Nadie aprende a programar mirando videos pasivamente. Cada explicación dura 2 minutos y te reta a escribir y ejecutar código en vivo directamente en tu navegador.
-              </p>
-
-              <p className="text-xs font-mono text-slate-500 pt-1">
-                Aprendizaje activo · Escribiendo y ejecutando en tu navegador
               </p>
             </motion.div>
 
@@ -252,9 +222,6 @@ export const MethodologySection: React.FC = () => {
               />
               <span className="text-sm sm:text-base font-display font-bold text-white uppercase tracking-wider">
                 Mayor retención activa
-              </span>
-              <span className="text-xs font-mono text-slate-500">
-                Frente al consumo pasivo de tutoriales en video
               </span>
             </motion.div>
           </div>
@@ -283,11 +250,6 @@ export const MethodologySection: React.FC = () => {
           <span className="absolute bottom-1/4 right-1/3 w-2 h-2 rounded-full bg-amber-400/25 blur-[1px] animate-pulse" style={{ animationDuration: '5s' }} />
         </div>
 
-        {/* Marcador técnico */}
-        <div className="hidden lg:block absolute top-6 left-8 text-amber-400/35 text-[11px] font-mono select-none pointer-events-none">
-          + SOCRATIC_GUIDE // COGNITIVE_PIPELINE
-        </div>
-
         <motion.div
           initial={{ opacity: 0, y: 32, scale: 0.98 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -304,7 +266,7 @@ export const MethodologySection: React.FC = () => {
           </p>
 
           <div className="pt-4 max-w-md mx-auto">
-            <p className="text-xs sm:text-sm font-mono text-slate-500 border-t border-slate-900 pt-4">
+            <p className="text-xs sm:text-sm font-sans italic text-slate-400/80 border-t border-slate-900 pt-4">
               "El objetivo no es que copies código, es que entiendas cómo resolverlo."
             </p>
           </div>
