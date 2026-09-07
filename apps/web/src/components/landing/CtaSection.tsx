@@ -3,8 +3,8 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { IconLogin, IconRocket, IconCheck } from '@tabler/icons-react';
-import { GradientButton } from '@/components/ui/gradient-button';
+import { CtaActions } from '@/views/landing/cta/CtaActions';
+import { CtaTrustPoints } from '@/views/landing/cta/CtaTrustPoints';
 
 interface CtaSectionProps {
   onOpenLogin?: () => void;
@@ -13,14 +13,12 @@ interface CtaSectionProps {
 export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
   return (
     <section className="py-24 md:py-36 bg-gradient-to-b from-slate-950 via-[#120e17] to-slate-950 relative overflow-hidden border-t border-slate-800/80">
-      {/* Resplandor ambiental de ignición de fondo integrado (GPU Layer) */}
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[480px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.18)_0%,rgba(234,88,12,0.06)_45%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[450px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.12)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
       <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-orange-950/20 via-transparent to-transparent pointer-events-none" />
 
-
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-8">
-        {/* Mascota oficial Koda flotando directamente en la página */}
+        {/* Mascota oficial Koda */}
         <motion.div
           initial={{ opacity: 0, scale: 0.85, y: 30 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
@@ -41,7 +39,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
           </div>
         </motion.div>
 
-        {/* Textos y encabezados principales */}
+        {/* Encabezado Principal */}
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -55,61 +53,13 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
               hoy mismo
             </span>
           </h2>
-
           <p className="text-slate-400 text-base sm:text-lg leading-relaxed font-sans">
             Construye bases lógicas universales y domina la programación paso a paso. Sin configuraciones complejas, a tu propio ritmo y con práctica directa en tu navegador.
           </p>
         </motion.div>
 
-        {/* Acciones principales */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: false, margin: '-40px' }}
-          transition={{ duration: 0.65, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
-          className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4"
-        >
-          <GradientButton
-            onClick={onOpenLogin}
-            size="lg"
-            className="w-full sm:w-auto px-8 py-3.5 text-base font-bold gap-2.5 shadow-[0_0_30px_rgba(249,115,22,0.25)]"
-          >
-            <IconRocket className="w-5 h-5" />
-            Comenzar Ahora — Es Gratis
-          </GradientButton>
-
-          <GradientButton
-            variant="secondary"
-            size="lg"
-            onClick={onOpenLogin}
-            className="w-full sm:w-auto px-8 py-3.5 text-base font-bold gap-2.5"
-          >
-            <IconLogin className="w-5 h-5 text-amber-400" />
-            Ya tengo una cuenta
-          </GradientButton>
-        </motion.div>
-
-        {/* Micro-puntos de confianza */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: false, margin: '-30px' }}
-          transition={{ duration: 0.6, delay: 0.35 }}
-          className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 font-sans font-medium"
-        >
-          <span className="flex items-center gap-1.5">
-            <IconCheck className="w-4 h-4 text-orange-400" />
-            100% Gratuito
-          </span>
-          <span className="flex items-center gap-1.5">
-            <IconCheck className="w-4 h-4 text-orange-400" />
-            Sin tarjeta ni suscripción
-          </span>
-          <span className="flex items-center gap-1.5">
-            <IconCheck className="w-4 h-4 text-orange-400" />
-            Práctica en navegador
-          </span>
-        </motion.div>
+        <CtaActions onOpenLogin={onOpenLogin} />
+        <CtaTrustPoints />
       </div>
     </section>
   );
