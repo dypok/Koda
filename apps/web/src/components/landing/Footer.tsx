@@ -10,7 +10,6 @@ import {
   IconBrandX,
   IconBrandYoutube,
   IconBrandLinkedin,
-  IconBrandGithub,
   IconArticle,
   IconSparkles,
 } from '@tabler/icons-react';
@@ -97,14 +96,6 @@ export const Footer: React.FC = () => {
                   className="hover:text-amber-400 transition-colors cursor-pointer text-left"
                 >
                   Certificación & Evaluaciones
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => openModal('status')}
-                  className="hover:text-amber-400 transition-colors cursor-pointer text-left"
-                >
-                  Estado del Servicio (Status)
                 </button>
               </li>
             </ul>
@@ -209,15 +200,6 @@ export const Footer: React.FC = () => {
                 >
                   <IconBrandLinkedin className="w-3.5 h-3.5 text-slate-500" />
                   <span>LinkedIn</span>
-                </button>
-              </li>
-              <li>
-                <button
-                  onClick={() => openModal('social')}
-                  className="inline-flex items-center gap-2 hover:text-amber-400 transition-colors cursor-pointer"
-                >
-                  <IconBrandGithub className="w-3.5 h-3.5 text-slate-500" />
-                  <span>GitHub</span>
                 </button>
               </li>
             </ul>
