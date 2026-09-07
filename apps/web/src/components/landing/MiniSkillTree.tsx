@@ -337,16 +337,6 @@ export const MiniSkillTree: React.FC = () => {
                 NODO 04: CONTROL DE FLUJO (ACTIVO · ÁMBAR)
                 ========================================================= */}
             <g>
-              {/* Badge flotante superior */}
-              <g transform="translate(310, 75)">
-                <rect x="-34" y="-8" width="68" height="16" rx="8" fill="#1c1917" stroke="#f59e0b" strokeWidth="1" />
-                <circle cx="-23" cy="0" r="2.5" fill="#f59e0b" className="animate-ping" />
-                <circle cx="-23" cy="0" r="2.5" fill="#f59e0b" />
-                <text x="5" y="2.5" textAnchor="middle" className="font-mono text-[7px] font-bold fill-amber-300 tracking-wider">
-                  PASO 3/4
-                </text>
-              </g>
-
               {/* Círculo Principal Activo */}
               <circle
                 cx="310"
