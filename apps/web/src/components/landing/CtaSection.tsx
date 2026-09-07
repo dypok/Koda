@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { IconLogin, IconBook2 } from '@tabler/icons-react';
 import { GradientButton } from '@/components/ui/gradient-button';
+import { BorderGlow } from '@/components/ui/border-glow';
 
 interface CtaSectionProps {
   onOpenLogin?: () => void;
@@ -18,7 +19,14 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
   return (
     <section className="py-20 md:py-28 bg-slate-950 relative overflow-hidden">
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
-        <div className="rounded-3xl border border-slate-800 bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950 p-8 sm:p-14 shadow-2xl backdrop-blur-2xl text-center relative">
+        <BorderGlow
+          borderRadius={28}
+          backgroundColor="#090d16"
+          glowColor="40 80 80"
+          colors={['#FF8A4C', '#FFC18A', '#FF6B2C']}
+          className="relative text-center"
+          contentClassName="p-8 sm:p-14 text-center items-center overflow-visible"
+        >
           {/* Mascot in Official 3D Form */}
           <div className="flex justify-center -mt-8 mb-4 relative">
             <Image
@@ -57,7 +65,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
               </button>
             </div>
           </div>
-        </div>
+        </BorderGlow>
       </div>
     </section>
   );

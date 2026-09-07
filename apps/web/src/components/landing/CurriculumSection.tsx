@@ -12,6 +12,7 @@ import {
   IconArrowRight,
 } from '@tabler/icons-react';
 import { GradientButton } from '@/components/ui/gradient-button';
+import { BorderGlow } from '@/components/ui/border-glow';
 
 interface CurriculumSectionProps {
   onOpenLogin?: () => void;
@@ -96,7 +97,13 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
           {/* Right Column: Module Inspector & Final Certificate Card (5 cols) */}
           <div className="lg:col-span-5 space-y-6 sticky top-24">
             {/* Selected Module Detail Card */}
-            <div className="rounded-3xl border border-amber-500/30 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 p-6 shadow-2xl backdrop-blur-xl relative overflow-hidden">
+            <BorderGlow
+              borderRadius={24}
+              backgroundColor="#0b0f19"
+              glowColor="40 80 80"
+              colors={['#FF8A4C', '#FFC18A', '#FF6B2C']}
+              contentClassName="p-6"
+            >
               <div className="flex items-center justify-between pb-4 border-b border-slate-800">
                 <div>
                   <span className="text-xs font-mono text-amber-400 font-bold tracking-wider uppercase">
@@ -150,10 +157,16 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
                 Comenzar con este Módulo
                 <IconArrowRight className="w-4 h-4" />
               </GradientButton>
-            </div>
+            </BorderGlow>
 
             {/* Official Certificate Preview Card */}
-            <div className="rounded-3xl border border-indigo-500/30 bg-gradient-to-br from-slate-950 via-indigo-950/20 to-slate-900 p-6 shadow-xl relative overflow-hidden">
+            <BorderGlow
+              borderRadius={24}
+              backgroundColor="#090d19"
+              glowColor="240 70 70"
+              colors={['#6366f1', '#a855f7', '#ec4899']}
+              contentClassName="p-6"
+            >
               <div className="flex items-center gap-3 mb-3">
                 <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">
                   <IconAward className="w-6 h-6" />
@@ -180,7 +193,7 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
                   Diploma Digital
                 </span>
               </div>
-            </div>
+            </BorderGlow>
           </div>
         </div>
       </div>

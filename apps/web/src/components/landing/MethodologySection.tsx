@@ -10,6 +10,8 @@ import {
   IconX,
 } from '@tabler/icons-react';
 
+import { BorderGlow } from '@/components/ui/border-glow';
+
 export const MethodologySection: React.FC = () => {
   const pillars = [
     {
@@ -64,9 +66,14 @@ export const MethodologySection: React.FC = () => {
           {pillars.map((pillar, idx) => {
             const Icon = pillar.icon;
             return (
-              <div
+              <BorderGlow
                 key={idx}
-                className="group relative rounded-3xl border border-slate-800 bg-gradient-to-b from-slate-900/80 to-slate-950 p-6 hover:border-amber-500/40 transition-all hover:-translate-y-1 flex flex-col justify-between"
+                borderRadius={24}
+                backgroundColor="#0b0f19"
+                glowColor="40 80 80"
+                colors={['#FF8A4C', '#FFC18A', '#FF6B2C']}
+                className="group transition-all hover:-translate-y-1 h-full"
+                contentClassName="p-6 justify-between"
               >
                 <div>
                   <div
@@ -84,13 +91,20 @@ export const MethodologySection: React.FC = () => {
                     {pillar.description}
                   </p>
                 </div>
-              </div>
+              </BorderGlow>
             );
           })}
         </div>
 
         {/* Comparison Table / Box: Traditional vs Koda */}
-        <div className="max-w-4xl mx-auto rounded-3xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8 backdrop-blur-xl">
+        <BorderGlow
+          borderRadius={24}
+          backgroundColor="#0b0f19"
+          glowColor="40 80 80"
+          colors={['#FF8A4C', '#FFC18A', '#FF6B2C']}
+          className="max-w-4xl mx-auto"
+          contentClassName="p-6 sm:p-8"
+        >
           <h3 className="text-xl sm:text-2xl font-bold text-white text-center mb-8">
             Diferencias con la enseñanza tradicional de programación
           </h3>
@@ -148,7 +162,7 @@ export const MethodologySection: React.FC = () => {
               </ul>
             </div>
           </div>
-        </div>
+        </BorderGlow>
       </div>
     </section>
   );
