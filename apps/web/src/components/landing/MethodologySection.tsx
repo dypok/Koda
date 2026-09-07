@@ -358,23 +358,32 @@ export const MethodologySection: React.FC = () => {
       {/* =========================================================
           SECCIÓN 04: Pistas Inteligentes (Centrado Amplio y Contundente)
           ========================================================= */}
-      <section id="pistas" className="py-28 md:py-36 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#110e14] to-slate-950">
-        {/* Resplandor solar dorado de claridad mental (Aura of Insight) */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[480px] bg-[radial-gradient(ellipse_at_center,rgba(251,191,36,0.16),rgba(245,158,11,0.06),transparent_70%)] blur-3xl pointer-events-none" />
+      <section id="pistas" className="py-28 md:py-36 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0a0d18] to-slate-950">
+        {/* Haz cenital difuso de iluminación y claridad mental */}
+        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.14),rgba(99,102,241,0.05),transparent_70%)] blur-3xl pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-[1px] bg-gradient-to-r from-transparent via-amber-400/50 to-transparent pointer-events-none" />
 
-        {/* Ondas concéntricas de pensamiento e insight (Synaptic Ripples) */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[340px] pointer-events-none select-none">
-          <div className="absolute top-1/2 left-1/2 w-[280px] h-[160px] rounded-full border border-amber-400/25 animate-[ripplePulse_4s_ease-out_infinite]" style={{ animationDelay: '0s' }} />
-          <div className="absolute top-1/2 left-1/2 w-[440px] h-[240px] rounded-full border border-amber-400/20 animate-[ripplePulse_4s_ease-out_infinite]" style={{ animationDelay: '1.3s' }} />
-          <div className="absolute top-1/2 left-1/2 w-[600px] h-[320px] rounded-full border border-amber-400/15 animate-[ripplePulse_4s_ease-out_infinite]" style={{ animationDelay: '2.6s' }} />
-        </div>
+        {/* Núcleo cálido de comprensión en el centro */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.1),rgba(234,88,12,0.03),transparent_70%)] blur-3xl pointer-events-none" />
 
-        {/* Partículas de polvo estelar / bokeh dorado flotando */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
-          <span className="absolute top-1/4 left-1/5 w-1.5 h-1.5 rounded-full bg-amber-400/40 blur-[0.5px] animate-pulse" />
-          <span className="absolute top-3/4 left-1/3 w-1 h-1 rounded-full bg-amber-300/35 animate-pulse" style={{ animationDuration: '3s' }} />
-          <span className="absolute top-1/3 right-1/4 w-1.5 h-1.5 rounded-full bg-yellow-400/35 animate-pulse" style={{ animationDuration: '4s' }} />
-          <span className="absolute bottom-1/4 right-1/3 w-2 h-2 rounded-full bg-amber-400/25 blur-[1px] animate-pulse" style={{ animationDuration: '5s' }} />
+        {/* Red geométrica sutil de convergencia lógica hacia el razonamiento */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-80 pointer-events-none select-none opacity-20 hidden sm:block">
+          <svg className="w-full h-full" viewBox="0 0 800 300" fill="none">
+            <defs>
+              <linearGradient id="pistaGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#f59e0b" stopOpacity="0" />
+                <stop offset="50%" stopColor="#f59e0b" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+            <path d="M 120 80 Q 280 150 400 150" stroke="url(#pistaGrad1)" strokeWidth="1" strokeDasharray="6 6" />
+            <path d="M 680 80 Q 520 150 400 150" stroke="url(#pistaGrad1)" strokeWidth="1" strokeDasharray="6 6" />
+            <path d="M 400 30 L 400 150" stroke="url(#pistaGrad1)" strokeWidth="1" strokeDasharray="6 6" />
+            <circle cx="120" cy="80" r="3" fill="#f59e0b" fillOpacity="0.7" />
+            <circle cx="680" cy="80" r="3" fill="#f59e0b" fillOpacity="0.7" />
+            <circle cx="400" cy="30" r="3" fill="#fbbf24" fillOpacity="0.8" />
+            <circle cx="400" cy="150" r="4" fill="#fbbf24" />
+          </svg>
         </div>
 
         <motion.div
@@ -385,7 +394,11 @@ export const MethodologySection: React.FC = () => {
           className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-6 relative"
         >
           <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] max-w-3xl mx-auto">
-            Pistas que te enseñan a pensar, no spoilers
+            Pistas que te enseñan a{' '}
+            <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400 bg-clip-text text-transparent">
+              pensar
+            </span>
+            , no spoilers
           </h3>
 
           <p className="text-slate-400 text-base sm:text-xl leading-relaxed font-sans max-w-2xl mx-auto">

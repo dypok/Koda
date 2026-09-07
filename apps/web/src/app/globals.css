@@ -310,20 +310,6 @@ body {
     }
   }
 
-  @keyframes ripplePulse {
-    0% {
-      transform: translate(-50%, -50%) scale(0.7);
-      opacity: 0.7;
-    }
-    70% {
-      opacity: 0.25;
-    }
-    100% {
-      transform: translate(-50%, -50%) scale(1.35);
-      opacity: 0;
-    }
-  }
-
   @keyframes codeStream {
     0% {
       transform: translateY(0);
