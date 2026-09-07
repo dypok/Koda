@@ -18,7 +18,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
       <HeroSkyBackground starCount={260} interactive={true} />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full my-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           {/* Left Column: Headlines & CTA */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-8">
             {/* Main Headline */}
@@ -35,7 +35,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
               <GradientButton
                 onClick={onOpenLogin}
                 size="lg"
-                className="w-full sm:w-72 gap-2.5 px-8 py-4 text-base shadow-none justify-center font-black"
+                className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base shadow-none justify-center font-black"
               >
                 Comenzar Ahora
                 <IconArrowRight className="w-5 h-5" />
@@ -45,7 +45,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
                 onClick={onOpenLogin}
                 variant="secondary"
                 size="lg"
-                className="w-full sm:w-72 gap-2.5 px-8 py-4 text-base shadow-none justify-center font-bold border border-slate-700/80 hover:border-slate-500"
+                className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base shadow-none justify-center font-bold border border-slate-700/80 hover:border-slate-500"
               >
                 <IconLogin className="w-5 h-5 text-amber-400/90" />
                 Ya tengo una cuenta
@@ -55,14 +55,14 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
 
           {/* Right Column: Mascota Oficial Koda */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center">
-            <div className="relative w-full max-w-md flex items-center justify-center">
+            <div className="relative w-full max-w-sm sm:max-w-md flex items-center justify-center">
               {/* Koda Mascot Image */}
               <Image
                 src="/brand/koda-mascot.png"
                 alt="Koda — Mascota Oficial KodaAcademy"
-                width={380}
-                height={280}
-                className="relative z-10 object-contain animate-float select-none"
+                width={420}
+                height={302}
+                className="relative z-10 w-auto h-auto max-h-[220px] sm:max-h-[260px] lg:max-h-[300px] object-contain animate-float select-none"
                 priority
               />
             </div>
