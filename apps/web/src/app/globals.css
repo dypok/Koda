@@ -153,10 +153,19 @@ body {
     isolation: isolate;
     border-radius: 0.75rem;
     background: linear-gradient(135deg, #ea580c 0%, #f97316 45%, #f59e0b 100%);
-    box-shadow: none !important;
+    box-shadow: 0 2px 8px -2px rgba(234, 88, 12, 0.3) !important;
     transform: translateZ(0);
-    will-change: transform;
-    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform, box-shadow;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .gradient-button:hover {
+    box-shadow: 0 8px 30px -4px rgba(249, 115, 22, 0.5) !important;
+  }
+
+  .gradient-button:active {
+    transform: scale(0.975) translateZ(0) !important;
+    box-shadow: 0 2px 10px -2px rgba(249, 115, 22, 0.35) !important;
   }
 
   /* Capa de degradado radiante animada por hardware (GPU compositor) */
@@ -178,7 +187,29 @@ body {
     opacity: 1;
   }
 
-  /* Borde de 1px nítido con degradado fino, sin blur */
+  /* Shimmer de luz que cruza suavemente al hacer hover */
+  .gradient-button-shimmer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      105deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.32) 50%,
+      transparent 80%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .gradient-button:hover .gradient-button-shimmer {
+    transform: translateX(100%);
+  }
+
+  /* Borde de 1px nítido con degradado fino */
   .gradient-button::before {
     content: '';
     position: absolute;
@@ -201,8 +232,8 @@ body {
   .gradient-button:hover::before {
     background: linear-gradient(
       135deg,
-      rgba(255, 255, 255, 0.9) 0%,
-      rgba(254, 240, 138, 0.8) 40%,
+      rgba(255, 255, 255, 0.95) 0%,
+      rgba(254, 240, 138, 0.85) 40%,
       rgba(249, 115, 22, 0.95) 100%
     );
   }
@@ -211,7 +242,11 @@ body {
   .gradient-button-variant {
     @apply text-slate-100 font-bold;
     background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #0b0f19 100%);
-    box-shadow: none !important;
+    box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.5) !important;
+  }
+
+  .gradient-button-variant:hover {
+    box-shadow: 0 8px 25px -4px rgba(245, 158, 11, 0.25) !important;
   }
 
   .gradient-button-variant::after {
@@ -221,7 +256,7 @@ body {
   .gradient-button-variant::before {
     background: linear-gradient(
       135deg,
-      rgba(245, 158, 11, 0.4) 0%,
+      rgba(245, 158, 11, 0.3) 0%,
       rgba(100, 116, 139, 0.3) 50%,
       rgba(15, 23, 42, 0.8) 100%
     );

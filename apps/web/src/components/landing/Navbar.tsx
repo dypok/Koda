@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { LanguageSelector } from './LanguageSelector';
 import { cn } from '@/lib/utils';
 
@@ -24,7 +25,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
   }, []);
 
   return (
-    <header
+    <motion.header
+      initial={{ opacity: 0, y: -16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className={cn(
         'sticky top-0 z-40 w-full transition-all duration-300 ease-out -mb-16',
         isScrolled
@@ -59,7 +63,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
           <LanguageSelector />
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 };
 
