@@ -9,10 +9,19 @@ import {
   IconBrandGolang,
   IconBrandCpp,
   IconBrandCSharp,
+  IconBrandSwift,
+  IconBrandKotlin,
+  IconBrandPhp,
+  IconBrandNodejs,
   IconBrandReact,
+  IconBrandVue,
+  IconBrandAngular,
+  IconBrandSvelte,
   IconBrandDocker,
   IconBrandMysql,
-  IconBrandKotlin,
+  IconBrandGit,
+  IconBrandGraphql,
+  IconBrandMongodb,
   IconCoffee,
 } from '@tabler/icons-react';
 
@@ -64,9 +73,44 @@ const UPCOMING_TECHNOLOGIES: TechItem[] = [
     color: '#C084FC',
   },
   {
+    name: 'Swift',
+    icon: IconBrandSwift,
+    color: '#F97316',
+  },
+  {
+    name: 'Kotlin',
+    icon: IconBrandKotlin,
+    color: '#A855F7',
+  },
+  {
+    name: 'PHP',
+    icon: IconBrandPhp,
+    color: '#818CF8',
+  },
+  {
+    name: 'Node.js',
+    icon: IconBrandNodejs,
+    color: '#4ADE80',
+  },
+  {
     name: 'React',
     icon: IconBrandReact,
     color: '#67E8F9',
+  },
+  {
+    name: 'Vue.js',
+    icon: IconBrandVue,
+    color: '#4ADE80',
+  },
+  {
+    name: 'Angular',
+    icon: IconBrandAngular,
+    color: '#F43F5E',
+  },
+  {
+    name: 'Svelte',
+    icon: IconBrandSvelte,
+    color: '#FB923C',
   },
   {
     name: 'Docker',
@@ -79,17 +123,27 @@ const UPCOMING_TECHNOLOGIES: TechItem[] = [
     color: '#FBBF24',
   },
   {
-    name: 'Kotlin',
-    icon: IconBrandKotlin,
-    color: '#A855F7',
+    name: 'Git',
+    icon: IconBrandGit,
+    color: '#F87171',
+  },
+  {
+    name: 'GraphQL',
+    icon: IconBrandGraphql,
+    color: '#E879F9',
+  },
+  {
+    name: 'MongoDB',
+    icon: IconBrandMongodb,
+    color: '#34D399',
   },
 ];
 
 export const UpcomingTechCarousel: React.FC = () => {
   return (
-    <div className="w-full flex flex-col items-center select-none">
-      {/* Indicador integrado sin bordes ni contenedor de tarjeta */}
-      <div className="flex items-center gap-2 mb-3">
+    <div className="w-full flex flex-col items-center select-none overflow-hidden">
+      {/* Indicador integrado sin bordes */}
+      <div className="flex items-center gap-2 mb-3 px-4">
         <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
         <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-slate-400">
           Próximamente
@@ -100,22 +154,22 @@ export const UpcomingTechCarousel: React.FC = () => {
         </span>
       </div>
 
-      {/* Carrusel integrado directamente con el fondo (sin burbujas ni cajas) */}
-      <div className="relative w-full max-w-6xl overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
-        <div className="animate-marquee flex items-center gap-6 sm:gap-8 py-2">
-          {/* Duplicamos la lista para crear un bucle visual infinito continuo */}
+      {/* Carrusel a ancho completo (100% viewport horizontal) */}
+      <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)]">
+        <div className="animate-marquee flex items-center gap-8 sm:gap-10 py-2">
+          {/* Duplicamos la lista para crear un bucle visual continuo e infinito */}
           {[...UPCOMING_TECHNOLOGIES, ...UPCOMING_TECHNOLOGIES].map((tech, idx) => {
             const Icon = tech.icon;
             return (
               <div
                 key={`${tech.name}-${idx}`}
-                className="group flex items-center gap-2.5 px-3 py-1.5 transition-all duration-300 cursor-default flex-shrink-0 select-none opacity-65 hover:opacity-100"
+                className="group flex items-center gap-2.5 px-2 py-1 transition-all duration-300 cursor-default flex-shrink-0 select-none opacity-65 hover:opacity-100"
               >
                 <Icon
                   className="w-5 h-5 transition-transform duration-300 group-hover:scale-120"
                   style={{ color: tech.color }}
                 />
-                <span className="text-sm font-semibold tracking-tight text-slate-300 group-hover:text-white transition-colors duration-300">
+                <span className="text-sm font-semibold tracking-tight text-slate-300 group-hover:text-white transition-colors duration-300 whitespace-nowrap">
                   {tech.name}
                 </span>
               </div>
