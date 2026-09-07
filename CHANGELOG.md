@@ -10,6 +10,19 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-07 08:06] [Added] **Aislamiento de la Mascota Oficial Koda y Generación de Recursos Visuales:**
+  - Se aisló la mascota Koda en fondo transparente (`apps/web/public/brand/koda-mascot.png` y `apps/web/public/mascot.png`) eliminando el escenario mediante segmentación de alta precisión (GrabCut con prior de U2-Net y preservación de curvas de llama).
+  - Se generaron variantes cuadradas transparentes de 512px, 256px y 128px (`apps/web/public/brand/koda-mascot-{512,256,128}.png`).
+  - Se crearon avatares de perfil con fondo circular oscuro `#0B0F19` y transparente (`apps/web/public/brand/koda-avatar.png`).
+  - Se generaron iconos del sistema: `favicon.ico` multirresolución (16, 32, 48px), `icon.png` (192px) para PWA, y `apple-icon.png` (180px) para dispositivos Apple.
+  - Se generó la imagen de portada y redes sociales `og-image.png` (1200x630) y `koda-scene.png`.
+  - Se implementó un selector de modo visual en `HeroSection` permitiendo alternar entre el "Render 3D Oficial" flotante y la animación interactiva "WebGL 2D" que sigue el cursor.
+
+### Fixed
+- [2026-09-07 08:06] [Fixed] **Resolución del error 500 en servidor de desarrollo Next.js:**
+  - Se eliminó el conflicto de colisión entre `next dev` y `next build` en `apps/web/.next` que provocaba errores `MODULE_NOT_FOUND` y `ENOENT` en vendor-chunks de Webpack.
+  - Se limpió el caché `.next` y se verificó la compilación limpia en producción y desarrollo con respuesta `200 OK`.
+
 - [2026-09-07 07:26] [Added] **Integración del Logo Oficial e Identidad de Marca KodaAcademy:**
   - Se incorporó el logotipo oficial `{ 🔥 }` de **KodaAcademy** en `apps/web/public/logo.png` y `apps/web/public/brand/koda-academy-logo.png`.
   - Se actualizaron los metadatos de Next.js (`title`, `description`, `icons: { icon: '/logo.png' }`, OpenGraph y Twitter Cards) en `apps/web/src/app/layout.tsx`.

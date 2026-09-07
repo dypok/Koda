@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
-import { ArrowRight, CheckCircle2, Code2, Terminal } from 'lucide-react';
+import React, { useState } from 'react';
+import Image from 'next/image';
+import { ArrowRight, CheckCircle2, Code2, Terminal, Sparkles } from 'lucide-react';
 import { KodaMascot } from '../mascot/KodaMascot';
 
 interface HeroSectionProps {
@@ -9,6 +10,8 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
+  const [viewMode, setViewMode] = useState<'3d' | '2d'>('3d');
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -87,19 +90,56 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
 
               {/* Card Container */}
               <div className="relative w-full max-w-sm rounded-3xl border border-slate-800/80 bg-gradient-to-b from-slate-900/90 via-slate-900/70 to-slate-950/90 p-6 shadow-2xl backdrop-blur-xl flex flex-col items-center text-center">
-                {/* Status Indicator */}
+                {/* Status Indicator & View Mode Selector */}
                 <div className="w-full flex items-center justify-between text-xs pb-2 border-b border-slate-800/60">
                   <div className="flex items-center gap-2 text-slate-400">
                     <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
                     <span>Mascota Oficial Koda</span>
                   </div>
-                  <span className="text-amber-400 font-mono text-[11px] font-semibold">WebGL 2D</span>
+                  <div className="flex items-center gap-1 bg-slate-950/80 p-0.5 rounded-lg border border-slate-800">
+                    <button
+                      type="button"
+                      onClick={() => setViewMode('3d')}
+                      className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
+                        viewMode === '3d'
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      3D Oficial
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setViewMode('2d')}
+                      className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
+                        viewMode === '2d'
+                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
+                          : 'text-slate-400 hover:text-white'
+                      }`}
+                    >
+                      WebGL 2D
+                    </button>
+                  </div>
                 </div>
 
-                {/* PixiJS Fox Canvas */}
-                <div className="py-2 cursor-pointer transition-transform hover:scale-105 active:scale-95" title="¡Mueve el cursor para que Koda te siga con la mirada!">
-                  <KodaMascot size={260} mood="idle" interactive={true} />
-                </div>
+                {/* Mascot Visual Display */}
+                {viewMode === '3d' ? (
+                  <div className="relative py-3 flex items-center justify-center min-h-[250px] w-full">
+                    <div className="absolute inset-0 bg-gradient-to-t from-orange-500/15 via-amber-500/10 to-transparent rounded-2xl blur-xl pointer-events-none" />
+                    <Image
+                      src="/brand/koda-mascot.png"
+                      alt="Koda — Mascota Oficial KodaAcademy"
+                      width={280}
+                      height={200}
+                      className="relative z-10 object-contain drop-shadow-[0_15px_25px_rgba(245,158,11,0.3)] animate-float"
+                      priority
+                    />
+                  </div>
+                ) : (
+                  <div className="py-2 cursor-pointer transition-transform hover:scale-105 active:scale-95" title="¡Mueve el cursor para que Koda te siga con la mirada!">
+                    <KodaMascot size={260} mood="idle" interactive={true} />
+                  </div>
+                )}
 
                 {/* Speech Bubble / Mascot Message */}
                 <div className="relative -mt-2 rounded-2xl bg-gradient-to-r from-amber-500/15 via-orange-500/15 to-purple-500/15 border border-amber-500/30 p-3.5 shadow-inner">
