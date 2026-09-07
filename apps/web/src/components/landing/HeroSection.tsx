@@ -40,12 +40,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
           {/* Left Column: Headlines & CTAs */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
 
-            {/* Platform Track Badge */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-400">
-              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              Plataforma Interactiva · Track Inaugural: Python 3.12
-            </div>
-
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15]">
               Aprende a programar{' '}
@@ -99,12 +93,6 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
           {/* Right Column: Mascota Oficial Koda integrada orgánicamente sin card */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center">
             <div className="relative w-full max-w-md flex flex-col items-center">
-              {/* Floating Badge above Mascot */}
-              <div className="relative z-10 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-900/80 border border-slate-700/80 text-xs font-medium text-slate-300 backdrop-blur-md mb-2">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Mascota Oficial · Koda</span>
-              </div>
-
               {/* Koda Mascot 3D Image */}
               <div className="relative z-10 py-2 flex items-center justify-center w-full">
                 <Image

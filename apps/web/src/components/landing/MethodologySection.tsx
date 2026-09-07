@@ -8,7 +8,6 @@ import {
   IconBookmark,
   IconCheck,
   IconX,
-  IconShieldCheck,
 } from '@tabler/icons-react';
 
 export const MethodologySection: React.FC = () => {
@@ -52,10 +51,6 @@ export const MethodologySection: React.FC = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1 text-xs font-semibold text-amber-400">
-            <IconShieldCheck className="w-3.5 h-3.5" />
-            Aprendizaje Activo
-          </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
             El Método KodaAcademy
           </h2>

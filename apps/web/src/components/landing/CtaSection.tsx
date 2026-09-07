@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { IconLogin, IconBook2, IconSparkles } from '@tabler/icons-react';
+import { IconLogin, IconBook2 } from '@tabler/icons-react';
 
 interface CtaSectionProps {
   onOpenLogin?: () => void;
@@ -30,11 +30,6 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
           </div>
 
           <div className="max-w-2xl mx-auto space-y-4">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1 text-xs font-semibold text-amber-400">
-              <IconSparkles className="w-3.5 h-3.5" />
-              Formación Activa en Programación
-            </span>
-
             <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
               Comienza a programar hoy mismo
             </h2>
