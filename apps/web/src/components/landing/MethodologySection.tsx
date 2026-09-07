@@ -36,7 +36,7 @@ export const MethodologySection: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 28 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
+            viewport={{ once: false, margin: '-40px' }}
             transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
             className="space-y-4 max-w-3xl mx-auto"
           >
@@ -56,7 +56,7 @@ export const MethodologySection: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
+            viewport={{ once: false, margin: '-30px' }}
             transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="relative max-w-4xl mx-auto"
           >
@@ -134,8 +134,8 @@ export const MethodologySection: React.FC = () => {
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+            viewport={{ once: false }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             className="flex flex-col items-center pt-4"
           >
             <button
@@ -173,7 +173,7 @@ export const MethodologySection: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, x: -35 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
+              viewport={{ once: false, margin: '-40px' }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-7 space-y-5 text-left"
             >
@@ -190,7 +190,7 @@ export const MethodologySection: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
+              viewport={{ once: false, margin: '-40px' }}
               transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-5 flex flex-col items-start lg:items-end justify-center text-left lg:text-right space-y-2"
             >
@@ -224,7 +224,7 @@ export const MethodologySection: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.92, y: 20 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
+              viewport={{ once: false, margin: '-40px' }}
               transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-5 order-2 lg:order-1 flex justify-center lg:justify-start w-full"
             >
@@ -235,7 +235,7 @@ export const MethodologySection: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, x: 35 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
+              viewport={{ once: false, margin: '-40px' }}
               transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-7 order-1 lg:order-2 space-y-5 text-left"
             >
@@ -295,7 +295,7 @@ export const MethodologySection: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, x: -35 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
+              viewport={{ once: false, margin: '-40px' }}
               transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-7 space-y-5 text-left"
             >
@@ -312,7 +312,7 @@ export const MethodologySection: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
+              viewport={{ once: false, margin: '-40px' }}
               transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="lg:col-span-5 flex flex-col items-start lg:items-end justify-center text-left lg:text-right space-y-2"
             >
@@ -356,7 +356,7 @@ export const MethodologySection: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 32, scale: 0.98 }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true, margin: '-60px' }}
+          viewport={{ once: false, margin: '-40px' }}
           transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
           className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-6 relative"
         >

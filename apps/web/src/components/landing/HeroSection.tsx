@@ -25,7 +25,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
             {/* Main Headline with Entrance Animation */}
             <motion.h1
               initial={{ opacity: 0, y: 32 }}
-              animate={{ opacity: 1, y: 0 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
               transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
               className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.12]"
             >
@@ -39,8 +40,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
             {/* Call to Action: Comenzar Ahora & Ya tengo una cuenta */}
             <motion.div
               initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.2 }}
+              transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
               className="pt-2 flex flex-col items-center lg:items-start gap-3.5 w-full sm:w-auto"
             >
               <GradientButton
@@ -67,8 +69,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
           {/* Right Column: Mascota Oficial Koda with Smooth Entrance */}
           <motion.div
             initial={{ opacity: 0, scale: 0.88, y: 25 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            whileInView={{ opacity: 1, scale: 1, y: 0 }}
+            viewport={{ once: false, amount: 0.2 }}
+            transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-5 flex flex-col items-center justify-center"
           >
             <div className="relative w-full max-w-sm sm:max-w-md flex items-center justify-center">
@@ -89,8 +92,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
       {/* Próximamente: Carrusel de Tecnologías with Fade Entrance */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: false, amount: 0.2 }}
+        transition={{ duration: 0.8, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-10 w-full mt-auto pt-6 pb-2"
       >
         <UpcomingTechCarousel />
