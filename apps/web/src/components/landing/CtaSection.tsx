@@ -57,7 +57,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
           </h2>
 
           <p className="text-slate-400 text-base sm:text-lg leading-relaxed font-sans">
-            Inicia con el track oficial de Python 3.12 y sienta las bases lógicas universales. Sin configuraciones complejas, a tu propio ritmo y con práctica directa en tu navegador.
+            Construye bases lógicas universales y domina la programación paso a paso. Sin configuraciones complejas, a tu propio ritmo y con práctica directa en tu navegador.
           </p>
         </motion.div>
 

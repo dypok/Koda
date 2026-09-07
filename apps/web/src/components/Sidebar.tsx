@@ -107,7 +107,7 @@ export const Sidebar: React.FC = () => {
           <KodaMascot size={100} mood="idle" />
         </div>
         <p className="text-xs font-semibold text-slate-200 mt-1">¡Hola, programador!</p>
-        <p className="text-[11px] text-slate-400">¿Listo para dominar Python hoy?</p>
+        <p className="text-[11px] text-slate-400">¿Listo para programar hoy?</p>
       </div>
     </aside>
   );
