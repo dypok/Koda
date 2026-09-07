@@ -11,8 +11,29 @@ import { BorderGlow } from '@/components/ui/border-glow';
 
 export const InteractivePreview: React.FC = () => {
   return (
-    <section id="propuesta-valor" className="py-20 md:py-28 border-y border-slate-800/80 bg-slate-950/80 relative overflow-hidden">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <section id="propuesta-valor" className="py-20 md:py-28 border-y border-slate-800/80 bg-slate-950/90 relative overflow-hidden">
+      {/* Fondo de Matriz Digital con Máscara Radial Suave */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-35 [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_80%)]"
+        style={{
+          backgroundImage: 'radial-gradient(rgba(245, 158, 11, 0.2) 1px, transparent 1px)',
+          backgroundSize: '32px 32px',
+        }}
+      />
+
+      {/* Haz de horizonte de energía lumínica sutil */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-[1px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent pointer-events-none animate-[beamShimmer_6s_ease-in-out_infinite]" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 max-w-2xl h-16 bg-gradient-to-b from-amber-500/10 via-orange-500/5 to-transparent blur-2xl pointer-events-none" />
+
+      {/* Marcadores tácticos de precisión en esquinas */}
+      <div className="hidden lg:block absolute top-6 left-8 text-slate-700/70 text-[11px] font-mono select-none pointer-events-none">
+        + SYS.01 // ACCESS_FREE
+      </div>
+      <div className="hidden lg:block absolute top-6 right-8 text-slate-700/70 text-[11px] font-mono select-none pointer-events-none">
+        [ZERO_PAYWALL] +
+      </div>
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Principal con Rajdhani Display y tonos Naranja/Ámbar oficiales */}
         <motion.div
           initial={{ opacity: 0, y: 28 }}

@@ -33,10 +33,26 @@ export const MethodologySection: React.FC = () => {
       {/* =========================================================
           SECCIÓN 01: Rachas (Texto a la Izquierda / Stat a la Derecha)
           ========================================================= */}
-      <section id="rachas" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80">
-        <div className="absolute top-1/2 right-10 -translate-y-1/2 w-96 h-96 bg-orange-500/5 rounded-full blur-3xl pointer-events-none" />
+      <section id="rachas" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0d0f17] to-slate-950">
+        {/* Resplandor ígneo ambiental de fondo */}
+        <div className="absolute top-1/2 right-4 lg:right-20 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(234,88,12,0.16),rgba(249,115,22,0.06),transparent_70%)] blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 inset-x-0 h-36 bg-gradient-to-t from-orange-950/15 via-transparent to-transparent pointer-events-none" />
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Ascuas vivas de fuego flotantes (Living Embers) */}
+        <div className="absolute right-8 lg:right-28 bottom-6 w-72 h-72 pointer-events-none overflow-hidden select-none">
+          <span className="absolute bottom-4 left-8 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-[emberRise_4.5s_ease-out_infinite]" style={{ animationDelay: '0s' }} />
+          <span className="absolute bottom-2 left-24 w-2 h-2 rounded-full bg-orange-400 shadow-[0_0_10px_#f97316] animate-[emberRise_5.2s_ease-out_infinite]" style={{ animationDelay: '1.2s' }} />
+          <span className="absolute bottom-6 left-44 w-1 h-1 rounded-full bg-amber-300 shadow-[0_0_6px_#fbbf24] animate-[emberRise_3.8s_ease-out_infinite]" style={{ animationDelay: '2.1s' }} />
+          <span className="absolute bottom-0 left-16 w-1.5 h-1.5 rounded-full bg-orange-500 shadow-[0_0_8px_#ea580c] animate-[emberRise_6s_ease-out_infinite]" style={{ animationDelay: '0.8s' }} />
+          <span className="absolute bottom-5 left-36 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-[emberRise_4.8s_ease-out_infinite]" style={{ animationDelay: '3.3s' }} />
+        </div>
+
+        {/* Marcador técnico de cuadrante */}
+        <div className="hidden lg:block absolute top-6 left-8 text-orange-500/35 text-[11px] font-mono select-none pointer-events-none">
+          + STREAK_IGNITION // 15MIN_HABIT_LOOP
+        </div>
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             {/* Texto Izquierda */}
             <motion.div
@@ -88,10 +104,35 @@ export const MethodologySection: React.FC = () => {
       {/* =========================================================
           SECCIÓN 02: Roadmap (Invertido: Mini Skill Tree Izquierda / Texto Derecha)
           ========================================================= */}
-      <section id="roadmap" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80">
-        <div className="absolute top-1/2 left-10 -translate-y-1/2 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+      <section id="roadmap" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0a0e1a] to-slate-950">
+        {/* Nebulosas duales: Cian espacial a la izquierda y Ámbar a la derecha */}
+        <div className="absolute top-1/2 left-0 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(6,182,212,0.12),rgba(2,132,199,0.05),transparent_70%)] blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 right-10 -translate-y-1/2 w-[420px] h-[300px] bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.09),transparent_70%)] blur-3xl pointer-events-none" />
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Retícula ortogonal de coordenadas Blueprint técnica */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-15 [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_75%)]"
+          style={{
+            backgroundImage:
+              'linear-gradient(to right, rgba(56, 189, 248, 0.15) 1px, transparent 1px), linear-gradient(to bottom, rgba(56, 189, 248, 0.15) 1px, transparent 1px)',
+            backgroundSize: '48px 48px',
+          }}
+        />
+
+        {/* Anillo de trayectoria orbital celestial tenue */}
+        <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[580px] h-[580px] pointer-events-none opacity-20 select-none">
+          <svg viewBox="0 0 580 580" className="w-full h-full animate-[spin_90s_linear_infinite]">
+            <circle cx="290" cy="290" r="270" fill="none" stroke="#38bdf8" strokeWidth="1" strokeDasharray="6 8" />
+            <circle cx="290" cy="290" r="210" fill="none" stroke="#f59e0b" strokeWidth="0.8" strokeDasharray="3 6" />
+          </svg>
+        </div>
+
+        {/* Marcador técnico */}
+        <div className="hidden lg:block absolute top-6 left-8 text-cyan-500/35 text-[11px] font-mono select-none pointer-events-none">
+          + SECTOR_NAV // CONSTELLATION_TOPOLOGY
+        </div>
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             {/* Visual Skill Tree Teaser Izquierda */}
             <motion.div
@@ -131,10 +172,47 @@ export const MethodologySection: React.FC = () => {
       {/* =========================================================
           SECCIÓN 03: Código Real (Texto a la Izquierda / Stat 4X a la Derecha)
           ========================================================= */}
-      <section id="codigo-real" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80">
-        <div className="absolute top-1/2 right-10 -translate-y-1/2 w-96 h-96 bg-orange-600/5 rounded-full blur-3xl pointer-events-none" />
+      <section id="codigo-real" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#100c19] to-slate-950">
+        {/* Resplandor de compilador dual: Ámbar cálido y Violeta profundo */}
+        <div className="absolute top-1/2 right-4 lg:right-20 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.15),rgba(168,85,247,0.06),transparent_70%)] blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-10 -translate-y-1/2 w-[400px] h-[280px] bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.08),transparent_70%)] blur-3xl pointer-events-none" />
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Flujo de código de terminal continuo en segundo plano */}
+        <div className="absolute inset-y-0 right-0 w-full sm:w-1/2 max-w-xl pointer-events-none overflow-hidden select-none opacity-[0.04] [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]">
+          <div className="font-mono text-[11px] text-amber-200 leading-6 space-y-1 animate-[codeStream_30s_linear_infinite]">
+            <p>def solve_challenge(data: list) -&gt; bool:</p>
+            <p>&nbsp;&nbsp;pivot = partition(data)</p>
+            <p>&nbsp;&nbsp;return verify_runtime(pivot)</p>
+            <p>async fn execute_sandbox() -&gt; Result:</p>
+            <p>&nbsp;&nbsp;let mem = allocate(256);</p>
+            <p>&nbsp;&nbsp;compile_and_run(mem).await</p>
+            <p>const buffer = new Uint8Array(4096);</p>
+            <p>while (pointer &lt; buffer.length) &#123;</p>
+            <p>&nbsp;&nbsp;eval_bytecode(pointer++);</p>
+            <p>&#125;</p>
+            <p>// RETENCIÓN ACTIVA 4X</p>
+            <p>assert(output.is_valid() === true);</p>
+            <p>def solve_challenge(data: list) -&gt; bool:</p>
+            <p>&nbsp;&nbsp;pivot = partition(data)</p>
+            <p>&nbsp;&nbsp;return verify_runtime(pivot)</p>
+            <p>async fn execute_sandbox() -&gt; Result:</p>
+            <p>&nbsp;&nbsp;let mem = allocate(256);</p>
+            <p>&nbsp;&nbsp;compile_and_run(mem).await</p>
+            <p>const buffer = new Uint8Array(4096);</p>
+            <p>while (pointer &lt; buffer.length) &#123;</p>
+            <p>&nbsp;&nbsp;eval_bytecode(pointer++);</p>
+            <p>&#125;</p>
+            <p>// RETENCIÓN ACTIVA 4X</p>
+            <p>assert(output.is_valid() === true);</p>
+          </div>
+        </div>
+
+        {/* Marcador técnico */}
+        <div className="hidden lg:block absolute top-6 left-8 text-amber-500/35 text-[11px] font-mono select-none pointer-events-none">
+          + REPL_RUNTIME // LIVE_BYTECODE_VM
+        </div>
+
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             {/* Texto Izquierda */}
             <motion.div
@@ -186,8 +264,29 @@ export const MethodologySection: React.FC = () => {
       {/* =========================================================
           SECCIÓN 04: Pistas Inteligentes (Centrado Amplio y Contundente)
           ========================================================= */}
-      <section id="pistas" className="py-28 md:py-36 relative overflow-hidden border-t border-slate-900/80">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[radial-gradient(ellipse_at_center,rgba(251,191,36,0.08),transparent_70%)] blur-3xl pointer-events-none" />
+      <section id="pistas" className="py-28 md:py-36 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#110e14] to-slate-950">
+        {/* Resplandor solar dorado de claridad mental (Aura of Insight) */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[480px] bg-[radial-gradient(ellipse_at_center,rgba(251,191,36,0.16),rgba(245,158,11,0.06),transparent_70%)] blur-3xl pointer-events-none" />
+
+        {/* Ondas concéntricas de pensamiento e insight (Synaptic Ripples) */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[340px] pointer-events-none select-none">
+          <div className="absolute top-1/2 left-1/2 w-[280px] h-[160px] rounded-full border border-amber-400/25 animate-[ripplePulse_4s_ease-out_infinite]" style={{ animationDelay: '0s' }} />
+          <div className="absolute top-1/2 left-1/2 w-[440px] h-[240px] rounded-full border border-amber-400/20 animate-[ripplePulse_4s_ease-out_infinite]" style={{ animationDelay: '1.3s' }} />
+          <div className="absolute top-1/2 left-1/2 w-[600px] h-[320px] rounded-full border border-amber-400/15 animate-[ripplePulse_4s_ease-out_infinite]" style={{ animationDelay: '2.6s' }} />
+        </div>
+
+        {/* Partículas de polvo estelar / bokeh dorado flotando */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+          <span className="absolute top-1/4 left-1/5 w-1.5 h-1.5 rounded-full bg-amber-400/40 blur-[0.5px] animate-pulse" />
+          <span className="absolute top-3/4 left-1/3 w-1 h-1 rounded-full bg-amber-300/35 animate-pulse" style={{ animationDuration: '3s' }} />
+          <span className="absolute top-1/3 right-1/4 w-1.5 h-1.5 rounded-full bg-yellow-400/35 animate-pulse" style={{ animationDuration: '4s' }} />
+          <span className="absolute bottom-1/4 right-1/3 w-2 h-2 rounded-full bg-amber-400/25 blur-[1px] animate-pulse" style={{ animationDuration: '5s' }} />
+        </div>
+
+        {/* Marcador técnico */}
+        <div className="hidden lg:block absolute top-6 left-8 text-amber-400/35 text-[11px] font-mono select-none pointer-events-none">
+          + SOCRATIC_GUIDE // COGNITIVE_PIPELINE
+        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 32, scale: 0.98 }}
