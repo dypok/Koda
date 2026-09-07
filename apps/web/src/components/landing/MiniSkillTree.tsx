@@ -8,10 +8,6 @@ import {
   IconBinaryTree,
   IconAtom2,
   IconRoute,
-  IconShieldCheck,
-  IconGitFork,
-  IconPlus,
-  IconMinus,
 } from '@tabler/icons-react';
 
 export const MiniSkillTree: React.FC = () => {
@@ -20,32 +16,12 @@ export const MiniSkillTree: React.FC = () => {
       {/* Resplandor ambiental cósmico */}
       <div className="absolute -inset-3 bg-gradient-to-r from-cyan-500/10 via-amber-500/15 to-rose-500/10 rounded-3xl blur-2xl opacity-70" />
 
-      {/* Marco de visualización puramente gráfico */}
-      <div className="relative rounded-2xl bg-slate-950/80 border border-slate-800/90 p-3 sm:p-4 backdrop-blur-md overflow-hidden shadow-2xl shadow-black/90">
-        {/* Barra superior HUD (gráfica) */}
-        <div className="flex items-center justify-between text-[10px] font-mono pb-2 border-b border-slate-900">
-          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-300">
-            <IconShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="font-semibold tracking-wider">SECTOR ALPHA: FUNDAMENTOS [3/3]</span>
-          </div>
-
-          <div className="flex items-center gap-1.5 text-slate-400">
-            <div className="flex items-center bg-slate-900 border border-slate-800 rounded px-1.5 py-0.5 text-[9px] gap-1 text-slate-400">
-              <IconMinus className="w-2.5 h-2.5" />
-              <span className="text-amber-400 font-bold px-0.5">100%</span>
-              <IconPlus className="w-2.5 h-2.5" />
-            </div>
-            <div className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[9px] text-cyan-400">
-              <IconGitFork className="w-3 h-3" />
-              <span>BRANCH TRACKS</span>
-            </div>
-          </div>
-        </div>
-
+      {/* Contenedor visual integrado */}
+      <div className="relative rounded-2xl bg-slate-950/80 border border-slate-800/90 p-4 sm:p-5 backdrop-blur-md overflow-hidden shadow-2xl shadow-black/90">
         {/* Canvas SVG de la Constelación */}
-        <div className="relative mt-2 aspect-[540/290] w-full">
+        <div className="relative aspect-[580/260] w-full">
           <svg
-            viewBox="0 0 540 290"
+            viewBox="0 0 580 260"
             className="w-full h-full overflow-visible"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -118,14 +94,14 @@ export const MiniSkillTree: React.FC = () => {
 
             {/* Estrellas y marcas de coordenadas tenues */}
             <g className="opacity-25 text-slate-400">
-              <circle cx="35" cy="35" r="1" fill="currentColor" />
-              <circle cx="95" cy="210" r="1" fill="currentColor" />
-              <circle cx="260" cy="45" r="1" fill="currentColor" />
-              <circle cx="330" cy="235" r="1.5" fill="currentColor" />
-              <circle cx="460" cy="40" r="1" fill="currentColor" />
-              <circle cx="510" cy="210" r="1" fill="currentColor" />
-              <path d="M 75 55 L 81 55 M 78 52 L 78 58" stroke="currentColor" strokeWidth="0.8" />
-              <path d="M 450 245 L 456 245 M 453 242 L 453 248" stroke="currentColor" strokeWidth="0.8" />
+              <circle cx="30" cy="30" r="1" fill="currentColor" />
+              <circle cx="90" cy="195" r="1" fill="currentColor" />
+              <circle cx="260" cy="35" r="1" fill="currentColor" />
+              <circle cx="320" cy="225" r="1.5" fill="currentColor" />
+              <circle cx="470" cy="30" r="1" fill="currentColor" />
+              <circle cx="530" cy="195" r="1" fill="currentColor" />
+              <path d="M 65 45 L 71 45 M 68 42 L 68 48" stroke="currentColor" strokeWidth="0.8" />
+              <path d="M 480 220 L 486 220 M 483 217 L 483 223" stroke="currentColor" strokeWidth="0.8" />
             </g>
 
             {/* =========================================================
@@ -133,7 +109,7 @@ export const MiniSkillTree: React.FC = () => {
                 ========================================================= */}
             {/* 01 -> 02 (Cian) */}
             <path
-              d="M 55 130 C 95 130, 95 85, 135 85"
+              d="M 50 115 C 90 115, 95 65, 135 65"
               stroke="#06b6d4"
               strokeWidth="2.5"
               strokeLinecap="round"
@@ -142,7 +118,7 @@ export const MiniSkillTree: React.FC = () => {
 
             {/* 02 -> 03 (Cian) */}
             <path
-              d="M 135 85 C 175 85, 175 155, 215 155"
+              d="M 135 65 C 180 65, 175 135, 220 135"
               stroke="#06b6d4"
               strokeWidth="2.5"
               strokeLinecap="round"
@@ -151,7 +127,7 @@ export const MiniSkillTree: React.FC = () => {
 
             {/* 03 -> 04 (Cian a Ámbar) */}
             <path
-              d="M 215 155 C 255 155, 265 125, 305 125"
+              d="M 220 135 C 265 135, 265 105, 310 105"
               stroke="url(#grad-cyan-to-amber)"
               strokeWidth="2.5"
               strokeLinecap="round"
@@ -160,7 +136,7 @@ export const MiniSkillTree: React.FC = () => {
 
             {/* Rama A: 04 -> 05A (Ámbar a Púrpura) */}
             <path
-              d="M 305 125 C 348 125, 350 65, 395 65"
+              d="M 310 105 C 360 105, 355 55, 405 55"
               stroke="url(#grad-amber-to-purple)"
               strokeWidth="2"
               strokeDasharray="4 3"
@@ -171,16 +147,16 @@ export const MiniSkillTree: React.FC = () => {
 
             {/* Rama B: 04 -> 05B (Ámbar a Verde) */}
             <path
-              d="M 305 125 C 348 125, 350 180, 395 180"
+              d="M 310 105 C 360 105, 355 155, 405 155"
               stroke="url(#grad-amber-to-green)"
               strokeWidth="2"
               strokeLinecap="round"
               filter="url(#glow-green)"
             />
 
-            {/* Conector a Cofre Bonus */}
+            {/* Conector Vertical a Cofre Bonus */}
             <path
-              d="M 395 195 L 395 235"
+              d="M 405 170 L 405 206"
               stroke="#f59e0b"
               strokeWidth="1.5"
               strokeDasharray="3 3"
@@ -189,7 +165,7 @@ export const MiniSkillTree: React.FC = () => {
 
             {/* Convergencia: 05A -> Boss (Púrpura a Rojo) */}
             <path
-              d="M 395 65 C 440 65, 440 125, 480 125"
+              d="M 405 55 C 460 55, 460 105, 510 105"
               stroke="url(#grad-purple-to-red)"
               strokeWidth="2"
               strokeDasharray="4 3"
@@ -199,7 +175,7 @@ export const MiniSkillTree: React.FC = () => {
 
             {/* Convergencia: 05B -> Boss (Verde a Rojo) */}
             <path
-              d="M 395 180 C 440 180, 440 125, 480 125"
+              d="M 405 155 C 460 155, 460 105, 510 105"
               stroke="url(#grad-green-to-red)"
               strokeWidth="2"
               strokeLinecap="round"
@@ -212,29 +188,29 @@ export const MiniSkillTree: React.FC = () => {
                 ========================================================= */}
             <g>
               <circle
-                cx="305"
-                cy="125"
-                r="28"
+                cx="310"
+                cy="105"
+                r="30"
                 stroke="#f59e0b"
                 strokeWidth="1"
                 strokeOpacity="0.45"
                 strokeDasharray="4 4"
-                className="animate-[spin_12s_linear_infinite] origin-[305px_125px]"
+                className="animate-[spin_12s_linear_infinite] origin-[310px_105px]"
               />
               <circle
-                cx="305"
-                cy="125"
-                r="44"
+                cx="310"
+                cy="105"
+                r="46"
                 stroke="#f97316"
                 strokeWidth="0.8"
                 strokeOpacity="0.25"
                 strokeDasharray="5 5"
-                className="animate-[spin_20s_linear_infinite_reverse] origin-[305px_125px]"
+                className="animate-[spin_20s_linear_infinite_reverse] origin-[310px_105px]"
               />
               <circle
-                cx="305"
-                cy="125"
-                r="58"
+                cx="310"
+                cy="105"
+                r="60"
                 stroke="#ea580c"
                 strokeWidth="0.5"
                 strokeOpacity="0.15"
@@ -242,118 +218,118 @@ export const MiniSkillTree: React.FC = () => {
             </g>
 
             {/* =========================================================
-                NODO 01: SINTAXIS (DOMINADO)
+                NODO 01: SINTAXIS (DOMINADO · CIAN)
                 ========================================================= */}
             <g>
               <circle
-                cx="55"
-                cy="130"
-                r="15"
+                cx="50"
+                cy="115"
+                r="16"
                 fill="#0c4a6e"
                 stroke="#06b6d4"
                 strokeWidth="2"
                 filter="url(#glow-cyan)"
               />
-              <g transform="translate(47, 122)">
+              <g transform="translate(42, 107)">
                 <IconBracketsContain className="w-4 h-4" stroke="#38bdf8" strokeWidth={2.2} />
               </g>
-              <text x="55" y="153" textAnchor="middle" fill="#fbbf24" fontSize="6.5" letterSpacing="1.5">
+              <text x="50" y="143" textAnchor="middle" fill="#fbbf24" fontSize="7" letterSpacing="1.5">
                 ★★★
               </text>
-              <text x="55" y="163" textAnchor="middle" className="font-mono text-[7.5px] font-bold tracking-tight uppercase" fill="#ffffff">
+              <text x="50" y="154" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#ffffff">
                 01 · SINTAXIS
               </text>
-              <text x="55" y="171" textAnchor="middle" className="font-mono text-[6.5px] font-semibold" fill="#38bdf8">
+              <text x="50" y="163" textAnchor="middle" className="font-mono text-[7px] font-semibold" fill="#38bdf8">
                 DOMINADO · +200 XP
               </text>
             </g>
 
             {/* =========================================================
-                NODO 02: SCOPE & VARIABLES (DOMINADO)
+                NODO 02: SCOPE & VARIABLES (DOMINADO · CIAN)
                 ========================================================= */}
             <g>
               <circle
                 cx="135"
-                cy="85"
-                r="15"
+                cy="65"
+                r="16"
                 fill="#0c4a6e"
                 stroke="#06b6d4"
                 strokeWidth="2"
                 filter="url(#glow-cyan)"
               />
-              <g transform="translate(127, 77)">
+              <g transform="translate(127, 57)">
                 <IconBinaryTree className="w-4 h-4" stroke="#38bdf8" strokeWidth={2.2} />
               </g>
-              <text x="135" y="108" textAnchor="middle" fill="#fbbf24" fontSize="6.5" letterSpacing="1.5">
+              <text x="135" y="93" textAnchor="middle" fill="#fbbf24" fontSize="7" letterSpacing="1.5">
                 ★★★
               </text>
-              <text x="135" y="118" textAnchor="middle" className="font-mono text-[7.5px] font-bold tracking-tight uppercase" fill="#ffffff">
+              <text x="135" y="104" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#ffffff">
                 02 · SCOPE
               </text>
-              <text x="135" y="126" textAnchor="middle" className="font-mono text-[6.5px] font-semibold" fill="#38bdf8">
+              <text x="135" y="113" textAnchor="middle" className="font-mono text-[7px] font-semibold" fill="#38bdf8">
                 DOMINADO · +250 XP
               </text>
             </g>
 
             {/* =========================================================
-                NODO 03: FUNCIONES PURAS (DOMINADO)
+                NODO 03: FUNCIONES PURAS (DOMINADO · CIAN)
                 ========================================================= */}
             <g>
               <circle
-                cx="215"
-                cy="155"
-                r="15"
+                cx="220"
+                cy="135"
+                r="16"
                 fill="#0c4a6e"
                 stroke="#06b6d4"
                 strokeWidth="2"
                 filter="url(#glow-cyan)"
               />
-              <g transform="translate(207, 147)">
+              <g transform="translate(212, 127)">
                 <IconAtom2 className="w-4 h-4" stroke="#38bdf8" strokeWidth={2.2} />
               </g>
-              <text x="215" y="178" textAnchor="middle" fill="#fbbf24" fontSize="6.5" letterSpacing="1.5">
+              <text x="220" y="163" textAnchor="middle" fill="#fbbf24" fontSize="7" letterSpacing="1.5">
                 ★★★
               </text>
-              <text x="215" y="188" textAnchor="middle" className="font-mono text-[7.5px] font-bold tracking-tight uppercase" fill="#ffffff">
+              <text x="220" y="174" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#ffffff">
                 03 · FUNCIONES
               </text>
-              <text x="215" y="196" textAnchor="middle" className="font-mono text-[6.5px] font-semibold" fill="#38bdf8">
+              <text x="220" y="183" textAnchor="middle" className="font-mono text-[7px] font-semibold" fill="#38bdf8">
                 DOMINADO · +300 XP
               </text>
             </g>
 
             {/* =========================================================
-                NODO 04: CONTROL DE FLUJO (ACTIVO · EN PROGRESO)
+                NODO 04: CONTROL DE FLUJO (ACTIVO · ÁMBAR)
                 ========================================================= */}
             <g>
               {/* Badge flotante superior */}
-              <g transform="translate(305, 92)">
+              <g transform="translate(310, 75)">
                 <rect x="-34" y="-8" width="68" height="16" rx="8" fill="#1c1917" stroke="#f59e0b" strokeWidth="1" />
                 <circle cx="-23" cy="0" r="2.5" fill="#f59e0b" className="animate-ping" />
                 <circle cx="-23" cy="0" r="2.5" fill="#f59e0b" />
-                <text x="5" y="2.5" textAnchor="middle" className="font-mono text-[6.5px] font-bold fill-amber-300 tracking-wider">
+                <text x="5" y="2.5" textAnchor="middle" className="font-mono text-[7px] font-bold fill-amber-300 tracking-wider">
                   PASO 3/4
                 </text>
               </g>
 
               {/* Círculo Principal Activo */}
               <circle
-                cx="305"
-                cy="125"
-                r="18"
+                cx="310"
+                cy="105"
+                r="19"
                 fill="#ea580c"
                 stroke="#fbbf24"
                 strokeWidth="2.5"
                 filter="url(#glow-amber)"
               />
-              <g transform="translate(297, 117)">
+              <g transform="translate(301, 96)">
                 <IconRoute className="w-4 h-4" stroke="#ffffff" strokeWidth={2.5} />
               </g>
 
-              <text x="305" y="152" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#fbbf24">
+              <text x="310" y="139" textAnchor="middle" className="font-mono text-[8.5px] font-bold tracking-tight uppercase" fill="#fbbf24">
                 04 · CONTROL FLOW
               </text>
-              <text x="305" y="160" textAnchor="middle" className="font-mono text-[6.5px] font-semibold" fill="#fef3c7">
+              <text x="310" y="149" textAnchor="middle" className="font-mono text-[7px] font-semibold" fill="#fef3c7">
                 EN PROGRESO · +250 XP
               </text>
             </g>
@@ -363,22 +339,22 @@ export const MiniSkillTree: React.FC = () => {
                 ========================================================= */}
             <g>
               <circle
-                cx="395"
-                cy="65"
-                r="14"
+                cx="405"
+                cy="55"
+                r="15"
                 fill="#3b0764"
                 stroke="#a855f7"
                 strokeWidth="1.8"
                 filter="url(#glow-purple)"
                 strokeDasharray="3 2"
               />
-              <g transform="translate(387, 57)">
+              <g transform="translate(397, 47)">
                 <IconLock className="w-4 h-4" stroke="#c084fc" strokeWidth={2.2} />
               </g>
-              <text x="395" y="88" textAnchor="middle" className="font-mono text-[7.5px] font-bold tracking-tight uppercase" fill="#c084fc">
+              <text x="405" y="83" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#c084fc">
                 05A · POO
               </text>
-              <text x="395" y="96" textAnchor="middle" className="font-mono text-[6.5px] font-medium" fill="#9333ea">
+              <text x="405" y="92" textAnchor="middle" className="font-mono text-[7px] font-medium" fill="#9333ea">
                 BLOQUEADO · LVL 4
               </text>
             </g>
@@ -388,21 +364,21 @@ export const MiniSkillTree: React.FC = () => {
                 ========================================================= */}
             <g>
               <circle
-                cx="395"
-                cy="180"
-                r="14"
+                cx="405"
+                cy="155"
+                r="15"
                 fill="#064e3b"
                 stroke="#10b981"
                 strokeWidth="2"
                 filter="url(#glow-green)"
               />
-              <g transform="translate(387, 172)">
+              <g transform="translate(397, 147)">
                 <IconCpu className="w-4 h-4" stroke="#34d399" strokeWidth={2.2} />
               </g>
-              <text x="395" y="202" textAnchor="middle" className="font-mono text-[7.5px] font-bold tracking-tight uppercase" fill="#34d399">
+              <text x="405" y="183" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#34d399">
                 05B · MEMORIA
               </text>
-              <text x="395" y="210" textAnchor="middle" className="font-mono text-[6.5px] font-medium" fill="#10b981">
+              <text x="405" y="192" textAnchor="middle" className="font-mono text-[7px] font-medium" fill="#10b981">
                 DISPONIBLE · +350 XP
               </text>
             </g>
@@ -412,21 +388,21 @@ export const MiniSkillTree: React.FC = () => {
                 ========================================================= */}
             <g>
               <circle
-                cx="395"
-                cy="245"
-                r="11"
+                cx="405"
+                cy="218"
+                r="12"
                 fill="#78350f"
                 stroke="#f59e0b"
                 strokeWidth="1.8"
                 filter="url(#glow-amber)"
               />
-              <g transform="translate(388, 238)">
+              <g transform="translate(398, 211)">
                 <IconGift className="w-3.5 h-3.5" stroke="#fbbf24" strokeWidth={2} />
               </g>
-              <text x="395" y="264" textAnchor="middle" className="font-mono text-[6.5px] font-bold tracking-tight uppercase" fill="#fbbf24">
+              <text x="405" y="242" textAnchor="middle" className="font-mono text-[7.5px] font-bold tracking-tight uppercase" fill="#fbbf24">
                 COFRE BONUS
               </text>
-              <text x="395" y="271" textAnchor="middle" className="font-mono text-[5.5px] font-medium" fill="#d97706">
+              <text x="405" y="250" textAnchor="middle" className="font-mono text-[6.5px] font-medium" fill="#d97706">
                 +150 XP & CYBER THEME
               </text>
             </g>
@@ -436,49 +412,25 @@ export const MiniSkillTree: React.FC = () => {
                 ========================================================= */}
             <g>
               <circle
-                cx="480"
-                cy="125"
-                r="17"
+                cx="510"
+                cy="105"
+                r="18"
                 fill="#450a0a"
                 stroke="#ef4444"
                 strokeWidth="2.2"
                 filter="url(#glow-red)"
               />
-              <g transform="translate(472, 117)">
+              <g transform="translate(501, 96)">
                 <IconSkull className="w-4 h-4" stroke="#f87171" strokeWidth={2.2} />
               </g>
-              <text x="480" y="152" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#f87171">
+              <text x="510" y="138" textAnchor="middle" className="font-mono text-[8.5px] font-bold tracking-tight uppercase" fill="#f87171">
                 Ω · APEX GATE
               </text>
-              <text x="480" y="160" textAnchor="middle" className="font-mono text-[6.5px] font-semibold" fill="#ef4444">
+              <text x="510" y="148" textAnchor="middle" className="font-mono text-[7px] font-semibold" fill="#ef4444">
                 RETO FINAL · 3 FASES
               </text>
             </g>
           </svg>
-        </div>
-
-        {/* Leyenda Inferior Fija (estilo HUD) */}
-        <div className="mt-2.5 pt-2 border-t border-slate-900/90 flex flex-wrap items-center justify-between gap-1.5 text-[8.5px] font-mono text-slate-400">
-          <div className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_5px_rgba(6,182,212,0.8)]" />
-            <span>Completado (3)</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_5px_rgba(245,158,11,0.8)]" />
-            <span className="text-amber-300">Activo (1)</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span>Disponible (1)</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-            <span>Bloqueado (1)</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-400 shadow-[0_0_5px_rgba(239,68,68,0.8)]" />
-            <span>Apex Gate (1)</span>
-          </div>
         </div>
       </div>
     </div>
