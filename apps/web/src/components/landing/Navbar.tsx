@@ -11,7 +11,7 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
   return (
-    <header className="sticky top-0 z-40 w-full bg-transparent border-b border-transparent -mb-16">
+    <header className="sticky top-0 z-40 w-full bg-slate-950 border-b border-slate-800 shadow-md shadow-black/50">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left: Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">

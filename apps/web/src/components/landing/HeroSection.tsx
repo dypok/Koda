@@ -12,7 +12,7 @@ interface HeroSectionProps {
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
   return (
-    <section className="relative isolate overflow-hidden min-h-screen min-h-[100dvh] flex flex-col justify-center pt-20 pb-8 md:pt-24 md:pb-12">
+    <section className="relative isolate overflow-hidden min-h-[calc(100vh-4rem)] min-h-[calc(100dvh-4rem)] flex flex-col justify-center py-8 md:py-12">
       {/* Interactive Starry Night Sky Background */}
       <HeroSkyBackground starCount={260} interactive={true} />
 
