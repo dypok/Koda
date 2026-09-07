@@ -11,7 +11,6 @@ import {
   IconBrandYoutube,
   IconBrandLinkedin,
   IconArticle,
-  IconSparkles,
 } from '@tabler/icons-react';
 import { InfoModal, InfoModalTab } from './InfoModal';
 
@@ -60,7 +59,7 @@ export const Footer: React.FC = () => {
             </Link>
 
             <p className="text-slate-400 text-xs sm:text-sm max-w-sm leading-relaxed font-sans">
-              La plataforma interactiva y gratuita diseñada para aprender a programar como juegas. Sin frustración, a tu propio ritmo y con código real en tu navegador.
+              Plataforma interactiva y gratuita para aprender a programar paso a paso. Sin frustración, a tu propio ritmo y con práctica directa en tu navegador.
             </p>
 
             <div className="text-[11px] text-slate-500 font-sans pt-1">
@@ -209,12 +208,6 @@ export const Footer: React.FC = () => {
         {/* Barra Inferior */}
         <div className="pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-sans">
           <p>© {new Date().getFullYear()} KodaAcademy. Todos los derechos reservados.</p>
-          <div className="flex items-center gap-4 text-xs">
-            <span className="inline-flex items-center gap-1.5 text-slate-400">
-              <IconSparkles className="w-3.5 h-3.5 text-amber-400" />
-              Aprende a programar como juegas
-            </span>
-          </div>
         </div>
       </motion.div>
 
