@@ -3,8 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { IconLogin } from '@tabler/icons-react';
-import { GradientButton } from '@/components/ui/gradient-button';
+import { LanguageSelector } from './LanguageSelector';
 
 interface NavbarProps {
   onOpenLogin?: () => void;
@@ -35,16 +34,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
           </div>
         </Link>
 
-        {/* Right: CTA Iniciar Sesión */}
+        {/* Right: Selector de idioma desplegable */}
         <div className="flex items-center gap-3">
-          <GradientButton
-            onClick={onOpenLogin}
-            size="sm"
-            className="gap-2 shadow-none"
-          >
-            <IconLogin className="w-4 h-4" />
-            Iniciar Sesión
-          </GradientButton>
+          <LanguageSelector />
         </div>
       </div>
     </header>
