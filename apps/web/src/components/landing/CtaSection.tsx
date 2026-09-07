@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import { IconLogin, IconRocket, IconCheck } from '@tabler/icons-react';
 import { GradientButton } from '@/components/ui/gradient-button';
 
@@ -17,9 +18,15 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
 
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 relative text-center space-y-8">
         {/* Mascota oficial Koda flotando directamente en la página */}
-        <div className="flex justify-center relative">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.85, y: 30 }}
+          whileInView={{ opacity: 1, scale: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          className="flex justify-center relative"
+        >
           <div className="relative">
-            <div className="absolute inset-0 bg-orange-500/20 blur-2xl rounded-full -z-10 transform scale-75" />
+            <div className="absolute inset-0 bg-orange-500/20 blur-2xl rounded-full -z-10 transform scale-75 animate-pulse" />
             <Image
               src="/brand/koda-mascot.png"
               alt="Mascota Koda"
@@ -29,10 +36,16 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
               priority
             />
           </div>
-        </div>
+        </motion.div>
 
         {/* Textos y encabezados principales */}
-        <div className="space-y-4 max-w-2xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.65, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+          className="space-y-4 max-w-2xl mx-auto"
+        >
           <h2 className="font-display text-4xl sm:text-6xl font-bold text-white tracking-tight leading-[1.1]">
             Comienza a programar{' '}
             <span className="bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
@@ -43,10 +56,16 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
           <p className="text-slate-400 text-base sm:text-lg leading-relaxed font-sans">
             Inicia con el track oficial de Python 3.12 y sienta las bases lógicas universales. Sin configuraciones complejas, a tu propio ritmo y con práctica directa en tu navegador.
           </p>
-        </div>
+        </motion.div>
 
         {/* Acciones principales */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-60px' }}
+          transition={{ duration: 0.65, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
+          className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4"
+        >
           <GradientButton
             onClick={onOpenLogin}
             size="lg"
@@ -65,10 +84,16 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
             <IconLogin className="w-5 h-5 text-amber-400" />
             Ya tengo una cuenta
           </GradientButton>
-        </div>
+        </motion.div>
 
         {/* Micro-puntos de confianza */}
-        <div className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 font-mono">
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: '-40px' }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 font-mono"
+        >
           <span className="flex items-center gap-1.5">
             <IconCheck className="w-4 h-4 text-orange-400" />
             100% Gratuito
@@ -81,7 +106,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
             <IconCheck className="w-4 h-4 text-orange-400" />
             Práctica en navegador
           </span>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

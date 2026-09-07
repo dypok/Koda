@@ -8,6 +8,7 @@ import { cn } from "@/lib/utils"
 const gradientButtonVariants = cva(
   [
     "gradient-button",
+    "group",
     "inline-flex items-center justify-center",
     "rounded-xl font-bold tracking-tight select-none",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500",
@@ -40,17 +41,33 @@ export interface GradientButtonProps
 }
 
 const GradientButton = React.forwardRef<HTMLButtonElement, GradientButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button"
+  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
+    if (asChild) {
+      return (
+        <Slot
+          className={cn(gradientButtonVariants({ variant, size, className }))}
+          ref={ref}
+          {...props}
+        >
+          {children}
+        </Slot>
+      );
+    }
+
     return (
-      <Comp
+      <button
         className={cn(gradientButtonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
-      />
-    )
+      >
+        <span className="gradient-button-shimmer" aria-hidden="true" />
+        <span className="relative z-10 inline-flex items-center justify-center gap-2.5">
+          {children}
+        </span>
+      </button>
+    );
   }
-)
+);
 GradientButton.displayName = "GradientButton"
 
 export { GradientButton, gradientButtonVariants }

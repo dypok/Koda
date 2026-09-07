@@ -172,9 +172,75 @@ export const MiniSkillTree: React.FC = () => {
             />
 
             {/* =========================================================
+                PAQUETES DE ENERGÍA VIVA (TRAVELING PHOTONS)
+                ========================================================= */}
+            <g className="pointer-events-none">
+              {/* 01 -> 02 */}
+              <circle r="2.5" fill="#38bdf8" filter="url(#glow-cyan)">
+                <animateMotion
+                  path="M 50 115 C 90 115, 95 65, 135 65"
+                  dur="2.4s"
+                  repeatCount="indefinite"
+                />
+              </circle>
+
+              {/* 02 -> 03 */}
+              <circle r="2.5" fill="#38bdf8" filter="url(#glow-cyan)">
+                <animateMotion
+                  path="M 135 65 C 180 65, 175 135, 220 135"
+                  dur="2.4s"
+                  repeatCount="indefinite"
+                  begin="0.8s"
+                />
+              </circle>
+
+              {/* 03 -> 04 (Pulso principal hacia nodo activo) */}
+              <circle r="3" fill="#fbbf24" filter="url(#glow-amber)">
+                <animateMotion
+                  path="M 220 135 C 265 135, 265 105, 310 105"
+                  dur="1.8s"
+                  repeatCount="indefinite"
+                  begin="0.3s"
+                />
+              </circle>
+
+              {/* 04 -> 05B */}
+              <circle r="2.5" fill="#34d399" filter="url(#glow-green)">
+                <animateMotion
+                  path="M 310 105 C 360 105, 355 155, 405 155"
+                  dur="2.6s"
+                  repeatCount="indefinite"
+                  begin="0.5s"
+                />
+              </circle>
+
+              {/* 05B -> Boss */}
+              <circle r="2.5" fill="#f87171" filter="url(#glow-red)">
+                <animateMotion
+                  path="M 405 155 C 460 155, 460 105, 510 105"
+                  dur="2.2s"
+                  repeatCount="indefinite"
+                  begin="1s"
+                />
+              </circle>
+            </g>
+
+            {/* =========================================================
                 ANILLOS ORBITALES CONCÉNTRICOS DEL NODO ACTIVO 04
                 ========================================================= */}
             <g>
+              {/* Onda expansiva de energía viva (pulse wave) */}
+              <circle
+                cx="310"
+                cy="105"
+                r="20"
+                fill="none"
+                stroke="#f59e0b"
+                strokeWidth="1.5"
+              >
+                <animate attributeName="r" values="20;38;20" dur="2.8s" repeatCount="indefinite" />
+                <animate attributeName="stroke-opacity" values="0.7;0;0.7" dur="2.8s" repeatCount="indefinite" />
+              </circle>
               <circle
                 cx="310"
                 cy="105"

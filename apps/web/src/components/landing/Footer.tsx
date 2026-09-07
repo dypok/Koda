@@ -3,6 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion } from 'framer-motion';
 import {
   IconBrandGithub,
   IconQrcode,
@@ -17,7 +18,13 @@ export const Footer: React.FC = () => {
 
   return (
     <footer className="border-t border-slate-800/80 bg-slate-950 text-slate-400 text-xs sm:text-sm">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 md:py-16"
+      >
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Col 1: Brand Info */}
           <div className="md:col-span-2 space-y-4">
@@ -100,7 +107,7 @@ export const Footer: React.FC = () => {
         <div className="pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} KodaAcademy. Todos los derechos reservados.</p>
         </div>
-      </div>
+      </motion.div>
     </footer>
   );
 };
