@@ -10,34 +10,34 @@ interface FaqItem {
 
 const FAQS: FaqItem[] = [
   {
-    question: '¿Necesito saber matemáticas o tener experiencia previa en programación?',
+    question: '¿Necesito conocimientos previos o matemáticas avanzadas para comenzar?',
     answer:
-      '¡En absoluto! KodaAcademy está diseñado desde cero absoluto para personas sin ningún conocimiento previo. No necesitas ser bueno en matemáticas complejas; si sabes sumar y leer, puedes aprender a programar en Python con nuestro método paso a paso.',
+      'No. KodaAcademy está estructurada para quienes inician desde cero. Solo necesitas razonamiento lógico básico y lectura; cada lección introduce los conceptos paso a paso con ejemplos interactivos.',
   },
   {
-    question: '¿Por qué Python 3.12 es el lenguaje de lanzamiento de KodaAcademy?',
+    question: '¿Por qué Python 3.12 es el track piloto y qué otros lenguajes se incluirán?',
     answer:
-      'Python es actualmente el lenguaje más demandado del mundo en desarrollo de software, ciencia de datos e Inteligencia Artificial. Su sintaxis es limpia y cercana al lenguaje natural (parecido al inglés cotidiano), lo que elimina la frustración de aprender sintaxis engorrosa al comenzar.',
+      'Python 3.12 fue seleccionado como track inaugural por su sintaxis clara y alta relevancia en la industria. KodaAcademy es una plataforma concebida para múltiples lenguajes: nuestro roadmap incluye tracks de JavaScript / TypeScript, Go y Rust, manteniendo la misma metodología interactiva.',
   },
   {
-    question: '¿La plataforma es gratuita o tiene costos ocultos?',
+    question: '¿Debo instalar programas o configuraciones en mi computadora?',
     answer:
-      'El acceso a todas las lecciones, desafíos prácticos, quizzes, exámenes de módulo y la emisión de tu certificado oficial digital es 100% gratuito. Creemos firmemente que la educación en programación de alta calidad debe ser accesible para todos.',
+      'No. Todo el código se ejecuta directamente en la plataforma a través de tu navegador web. No requieres instalar compiladores, terminales locales ni paquetes adicionales.',
   },
   {
-    question: '¿Cómo funcionan los certificados oficiales con código QR?',
+    question: '¿Cómo funciona la certificación oficial con código QR?',
     answer:
-      'Al completar los 12 módulos y aprobar el examen del Proyecto Integrador con al menos 80%, el sistema genera un diploma oficial con un código correlativo único (ej. KODA-PY-000001) y un código QR ISO 18004. Cualquier persona o reclutador puede escanear el QR o ingresar a koda.app/verificar para comprobar al instante la validez de tu diploma.',
+      'Al completar los 12 módulos y aprobar el Proyecto Integrador de un track, se emite un diploma digital con identificador correlativo único y código QR ISO 18004 verificable en línea por reclutadores o instituciones.',
   },
   {
-    question: '¿Cuánto tiempo necesito dedicarle al día para ver resultados?',
+    question: '¿Cuánto tiempo se recomienda dedicar al día?',
     answer:
-      'Recomendamos entre 10 y 15 minutos al día (lo que equivale a unas 3 a 5 micro-lecciones). La constancia diaria es infinitamente más efectiva que estudiar 4 horas seguidas una vez al mes. KodaAcademy te ayuda a mantener tu racha diaria activa para consolidar el hábito.',
+      'Entre 10 y 15 minutos diarios son suficientes para completar de 3 a 5 micro-lecciones. La metodología prioriza la constancia diaria y la retención activa por encima de sesiones extensas y esporádicas.',
   },
   {
-    question: '¿Cómo evitan que simplemente adivine las respuestas de las opciones?',
+    question: '¿Cómo garantiza la plataforma la asimilación real de los temas?',
     answer:
-      'Nuestras opciones de respuesta se barajan aleatoriamente en cada intento y cuentan con distractores basados en los errores reales de principiantes. Además, si fallas una pregunta, KodaAcademy la envía a tu Cuaderno de Errores y te pedirá remediarla en la ronda de repaso final con opciones mezcladas antes de dar por aprobada la sección.',
+      'A través de retos prácticos inmediatos, opciones estructuradas para evitar el acierto por descarte, y el Cuaderno de Errores, que recopila los conceptos donde tuviste dudas para reforzarlos antes de certificar el track.',
   },
 ];
 
@@ -61,7 +61,7 @@ export const FaqSection: React.FC = () => {
             Preguntas Frecuentes
           </h2>
           <p className="text-slate-400 text-sm sm:text-base">
-            Todo lo que necesitas saber sobre el método KodaAcademy, Python 3.12 y nuestro lanzamiento.
+            Aspectos clave sobre la metodología de KodaAcademy, el track inaugural y el ecosistema formativo.
           </p>
         </div>
 

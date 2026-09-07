@@ -9,33 +9,33 @@ export const MethodologySection: React.FC = () => {
       icon: Zap,
       color: 'from-amber-500 to-orange-500',
       tag: 'Micro-Lecciones Atómicas',
-      title: 'Dosis de 40 a 70 palabras',
+      title: 'Unidades de 1 a 2 Minutos',
       description:
-        'Cero muros de texto intimidantes. Cada lección enseña exactamente una sola idea conceptual que puedes leer y entender en menos de 90 segundos.',
+        'Cada lección aborda un único concepto clave sin explicaciones redundantes, facilitando un aprendizaje progresivo y digerible.',
     },
     {
       icon: Target,
       color: 'from-emerald-500 to-teal-500',
-      tag: 'Práctica Instantánea',
-      title: '1 Concepto = 1 Desafío en Vivo',
+      tag: 'Práctica Inmediata',
+      title: '1 Concepto = 1 Reto en Vivo',
       description:
-        'Nunca te dejamos solo con teoría abstracta. Inmediatamente después de cada concepto, resuelves un reto interactivo para consolidar la memoria muscular.',
+        'Inmediatamente después de cada concepto, resuelves un ejercicio interactivo para consolidar la comprensión con código real.',
     },
     {
       icon: Lightbulb,
       color: 'from-blue-500 to-indigo-500',
       tag: 'Pedagogía Constructiva',
-      title: 'Pistas Inteligentes Sin Spoilers',
+      title: 'Asistencia Guiada',
       description:
-        'Si te equivocas, no te regalamos la respuesta ni te castigamos. Koda te da una pista analógica que estimula tu razonamiento para que descubras la solución.',
+        'Si cometes un error, Koda te orienta con pistas conceptuales que estimulan tu razonamiento sin darte la respuesta directamente.',
     },
     {
       icon: BookMarked,
       color: 'from-purple-500 to-pink-500',
       tag: 'Práctica Deliberada',
-      title: 'Cuaderno de Errores Persistente',
+      title: 'Cuaderno de Errores',
       description:
-        'Tus fallos se guardan en un cuaderno de laboratorio personal. Puedes repasarlos cuando quieras y ganar +5 XP extra al demostrar que ya dominas el concepto.',
+        'Los conceptos no superados se guardan en tu cuaderno de laboratorio para repasarlos y afianzar el dominio antes de avanzar.',
     },
   ];
 
@@ -49,13 +49,13 @@ export const MethodologySection: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1 text-xs font-semibold text-amber-400">
             <ShieldCheck className="w-3.5 h-3.5" />
-            La Ciencia de Aprender Sin Frustración
+            Aprendizaje Activo
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
             El Método KodaAcademy
           </h2>
           <p className="text-slate-400 text-base sm:text-lg">
-            Diseñado especialmente para personas que intentaron aprender a programar y lo abandonaron por aburrimiento o complejidad innecesaria.
+            Estructura pedagógica diseñada para retener conceptos mediante la práctica continua y el razonamiento lógico guiado.
           </p>
         </div>
 
@@ -92,7 +92,7 @@ export const MethodologySection: React.FC = () => {
         {/* Comparison Table / Box: Traditional vs Koda */}
         <div className="max-w-4xl mx-auto rounded-3xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8 backdrop-blur-xl shadow-2xl">
           <h3 className="text-xl sm:text-2xl font-bold text-white text-center mb-8">
-            ¿Por qué KodaAcademy funciona cuando otros cursos fallan?
+            Diferencias con la enseñanza tradicional de programación
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -100,24 +100,24 @@ export const MethodologySection: React.FC = () => {
             <div className="rounded-2xl border border-rose-500/20 bg-rose-950/10 p-5 space-y-4">
               <div className="flex items-center gap-2 text-rose-400 font-bold text-base pb-2 border-b border-rose-500/20">
                 <X className="w-5 h-5 text-rose-500" />
-                <span>Cursos Tradicionales</span>
+                <span>Enseñanza Convencional</span>
               </div>
               <ul className="space-y-3 text-xs sm:text-sm text-slate-300">
                 <li className="flex items-start gap-2">
                   <X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                  <span>Videos pasivos de 45 minutos donde solo miras a alguien más tipear.</span>
+                  <span>Tutoriales en video donde el estudiante permanece como espectador pasivo.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                  <span>Instalaciones complejas de terminal y entornos que fallan el primer día.</span>
+                  <span>Fricción técnica inicial: configuración compleja de compiladores y dependencias.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                  <span>Errores crípticos que te dejan atascado durante horas sin saber qué hiciste mal.</span>
+                  <span>Mensajes de error crípticos que generan dudas sin orientación didáctica.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
-                  <span>Tasa de abandono superior al 90% antes del segundo módulo.</span>
+                  <span>Falta de retroalimentación inmediata sobre la lógica aplicada.</span>
                 </li>
               </ul>
             </div>
@@ -126,24 +126,24 @@ export const MethodologySection: React.FC = () => {
             <div className="rounded-2xl border border-emerald-500/30 bg-emerald-950/15 p-5 space-y-4 shadow-lg shadow-emerald-500/5">
               <div className="flex items-center gap-2 text-emerald-400 font-bold text-base pb-2 border-b border-emerald-500/20">
                 <Check className="w-5 h-5 text-emerald-400" />
-                <span>La Experiencia KodaAcademy</span>
+                <span>Metodología KodaAcademy</span>
               </div>
               <ul className="space-y-3 text-xs sm:text-sm text-slate-200">
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Micro-lecciones de 2 minutos donde tú eres quien escribe y prueba código.</span>
+                  <span>Aprendizaje activo: escribes y pruebas código en cada lección.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Cero instalaciones: todo corre en tu navegador con latencia instantánea.</span>
+                  <span>Entorno web instantáneo sin requerir configuraciones locales.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Koda te acompaña con pistas constructivas y celebración a cada paso.</span>
+                  <span>Pistas pedagógicas que te enseñan a razonar y corregir el error.</span>
                 </li>
                 <li className="flex items-start gap-2">
                   <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                  <span>Gamificación con rachas diarias, estrellas y un certificado final verificable.</span>
+                  <span>Progresión estructurada por módulos con evaluación y certificación oficial.</span>
                 </li>
               </ul>
             </div>

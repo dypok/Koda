@@ -15,17 +15,31 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
     <section id="temario" className="py-20 md:py-28 bg-slate-900/40 relative">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+        <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
           <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1 text-xs font-semibold text-amber-400">
             <Layers className="w-3.5 h-3.5" />
-            Ruta Troncal Oficial
+            Catálogo Formativo · Track Inaugural
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
-            Los 12 Módulos de Python 3.12
+            Track Oficial: Fundamentos con Python 3.12
           </h2>
           <p className="text-slate-400 text-base sm:text-lg">
-            Una ruta formativa estructurada desde tu primer <code className="text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded font-mono text-sm">print()</code> hasta la construcción de un proyecto completo y la obtención de tu certificado.
+            Iniciamos con Python 3.12 como track piloto: 12 módulos progresivos que enseñan desde el primer <code className="text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded font-mono text-sm">print()</code> hasta proyectos estructurados, sentando las bases lógicas para los futuros tracks de la plataforma.
           </p>
+        </div>
+
+        {/* Multi-language Platform Roadmap Notice */}
+        <div className="mb-10 p-4 rounded-2xl bg-slate-900/60 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+          <div className="flex items-center gap-2.5 text-slate-300">
+            <span className="flex h-2 w-2 rounded-full bg-amber-400 shrink-0" />
+            <span>
+              <strong className="text-white font-semibold">Plataforma Multi-Lenguaje: </strong>
+              <span className="text-slate-400">Track 01 (Python 3.12) disponible. Próximos tracks en preparación: JavaScript / TypeScript, Go y Rust.</span>
+            </span>
+          </div>
+          <span className="shrink-0 px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 font-mono text-[10px] uppercase font-bold border border-slate-700">
+            Roadmap 2026
+          </span>
         </div>
 
         {/* 12 Modules Grid + Interactive Detail Drawer */}

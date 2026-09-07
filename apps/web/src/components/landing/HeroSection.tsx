@@ -43,6 +43,12 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
           {/* Left Column: Headlines & CTAs */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
 
+            {/* Platform Track Badge */}
+            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-400">
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              Plataforma Interactiva · Track Inaugural: Python 3.12
+            </div>
+
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15]">
               Aprende a programar{' '}
@@ -54,22 +60,22 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
 
             {/* Subheading */}
             <p className="max-w-2xl text-base sm:text-lg text-slate-300 leading-relaxed">
-              Olvida los videos pasivos de 40 minutos y los muros de texto aburridos. En <strong>KodaAcademy</strong> dominas <strong>Python 3.12</strong> con micro-lecciones atómicas de 2 minutos, práctica inmediata con cero configuración y la compañía de Koda.
+              Domina el pensamiento computacional y escribe código real con micro-lecciones interactivas, práctica inmediata en tu navegador y acompañamiento paso a paso. Comienza hoy con nuestro track oficial de <strong>Python 3.12</strong>, la puerta de entrada a nuestro ecosistema formativo.
             </p>
 
             {/* Value Proposition Bullets */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-xl text-left pt-2">
               <div className="flex items-center gap-2.5 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 backdrop-blur-sm">
                 <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                <span className="text-xs font-medium text-slate-200">1 Concepto = 1 Práctica inmediata</span>
+                <span className="text-xs font-medium text-slate-200">1 Concepto = 1 Reto en vivo</span>
               </div>
               <div className="flex items-center gap-2.5 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 backdrop-blur-sm">
                 <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
-                <span className="text-xs font-medium text-slate-200">Pistas inteligentes sin spoilers</span>
+                <span className="text-xs font-medium text-slate-200">Pistas inteligentes guiadas</span>
               </div>
               <div className="flex items-center gap-2.5 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 backdrop-blur-sm">
                 <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0" />
-                <span className="text-xs font-medium text-slate-200">Certificado con código QR</span>
+                <span className="text-xs font-medium text-slate-200">Certificación oficial con QR</span>
               </div>
             </div>
 
@@ -88,7 +94,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
                 className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/60 px-6 py-4 text-base font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition-all backdrop-blur-sm"
               >
                 <Terminal className="w-5 h-5 text-amber-400" />
-                Explorar Temario Oficial
+                Explorar Tracks & Temario
               </button>
             </div>
           </div>
@@ -123,11 +129,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
                 <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-slate-900 border-t border-l border-amber-500/30 rotate-45" />
 
                 <p className="text-sm font-semibold text-slate-100 leading-snug">
-                  «¡Hola! Soy Koda. Te acompañaré paso a paso en KodaAcademy para que domines Python sin miedo a equivocarte.»
+                  «¡Hola! Soy Koda. Te guiaré paso a paso para dominar la lógica de programación y escribir código real sin miedo a equivocarte.»
                 </p>
                 <div className="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-center gap-2">
                   <span className="text-[11px] text-amber-300/90 font-medium">
-                    100% interactivo · En tu navegador · Código real de Python 3.12
+                    Práctica interactiva · En tu navegador · Ecosistema en expansión
                   </span>
                 </div>
               </div>

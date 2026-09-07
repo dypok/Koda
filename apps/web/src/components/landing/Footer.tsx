@@ -32,15 +32,15 @@ export const Footer: React.FC = () => {
               </span>
             </Link>
             <p className="text-slate-400 text-xs sm:text-sm max-w-sm leading-relaxed">
-              La plataforma gamificada que transforma el aprendizaje de programación en un juego diario sin frustraciones ni barreras cognitivas.
+              Plataforma interactiva de programación estructurada en micro-lecciones prácticas, razonamiento guiado y certificación digital verificable.
             </p>
             <div className="flex items-center gap-4 text-xs text-slate-500 pt-1">
               <span className="inline-flex items-center gap-1">
                 <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                Python 3.12 Oficial
+                Track Inaugural: Python 3.12
               </span>
               <span>•</span>
-              <span>Open Source Friendly</span>
+              <span>Plataforma Multi-Lenguaje</span>
             </div>
           </div>
 
@@ -50,17 +50,17 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2 text-xs">
               <li>
                 <button onClick={() => scrollTo('metodologia')} className="hover:text-amber-400 transition-colors">
-                  Método Pedagógico
+                  Metodología Activa
                 </button>
               </li>
               <li>
                 <button onClick={() => scrollTo('temario')} className="hover:text-amber-400 transition-colors">
-                  12 Módulos de Python
+                  Tracks & Temario
                 </button>
               </li>
               <li>
                 <button onClick={() => scrollTo('demo-interactiva')} className="hover:text-amber-400 transition-colors">
-                  Demo Interactiva en Vivo
+                  Práctica en Vivo
                 </button>
               </li>
               <li>
