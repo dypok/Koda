@@ -3,7 +3,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import {
-  IconShieldCheck,
   IconX,
   IconCheck,
 } from '@tabler/icons-react';
@@ -13,7 +12,7 @@ export const InteractivePreview: React.FC = () => {
   return (
     <div className="relative">
       {/* =========================================================
-          SECCIÓN 01: 100% Gratuito (Texto Izquierda / Card $0 Derecha)
+          SECCIÓN 01: 100% Gratuito (Texto Izquierda / Métrica $0 Integrada Derecha)
           ========================================================= */}
       <section
         id="propuesta-valor"
@@ -46,38 +45,30 @@ export const InteractivePreview: React.FC = () => {
               </p>
             </motion.div>
 
-            {/* Elemento Visual Derecha: Card $0 de Acceso Total */}
+            {/* Elemento Visual Derecha: Integrado directamente a la página (sin card, sin icono) */}
             <motion.div
-              initial={{ opacity: 0, scale: 0.92, y: 20 }}
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
               whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: false, margin: '-40px' }}
               transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-5 flex justify-center w-full"
+              className="lg:col-span-5 flex flex-col items-start lg:items-end justify-center text-left lg:text-right space-y-3 w-full"
             >
-              <BorderGlow
-                borderRadius={24}
-                backgroundColor="#0B0F19"
-                glowColor="28 95 60"
-                colors={['#F97316', '#F59E0B', '#EA580C']}
-                className="w-full max-w-md shadow-2xl"
-                contentClassName="rounded-[23px] p-8 sm:p-10 flex flex-col items-center text-center space-y-5"
-              >
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/20 to-orange-500/10 border border-amber-500/30 flex items-center justify-center shadow-inner">
-                  <IconShieldCheck className="w-8 h-8 text-amber-400" />
-                </div>
+              <div className="relative">
+                {/* Resplandor cálido ambiental integrado */}
+                <div className="absolute -inset-6 bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.22),transparent_70%)] blur-2xl pointer-events-none" />
+                <span className="relative font-display text-8xl sm:text-9xl font-black bg-gradient-to-br from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent leading-none select-none tracking-tight">
+                  $0
+                </span>
+              </div>
 
-                <div className="space-y-2">
-                  <span className="font-display text-7xl sm:text-8xl font-black bg-gradient-to-br from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent leading-none select-none">
-                    $0
-                  </span>
-                  <p className="text-base sm:text-lg font-display font-bold text-white uppercase tracking-wider">
-                    Acceso Libre Permanente
-                  </p>
-                  <p className="text-xs sm:text-sm text-slate-400 font-sans max-w-xs mx-auto">
-                    Aprende programación desde cero con el temario completo, sin membresías ni cobros sorpresa.
-                  </p>
-                </div>
-              </BorderGlow>
+              <div className="space-y-2 max-w-sm">
+                <p className="text-base sm:text-lg font-display font-bold text-white uppercase tracking-wider">
+                  Acceso Libre Permanente
+                </p>
+                <p className="text-xs sm:text-sm text-slate-400 font-sans leading-relaxed">
+                  Aprende programación desde cero con el temario completo, sin membresías ni cobros sorpresa.
+                </p>
+              </div>
             </motion.div>
           </div>
         </div>
