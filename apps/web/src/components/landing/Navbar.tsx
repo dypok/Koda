@@ -13,6 +13,7 @@ import {
   IconLogin,
 } from '@tabler/icons-react';
 import { GradientButton } from '@/components/ui/gradient-button';
+import { GooeyNav, GooeyNavItem } from '@/components/ui/gooey-nav';
 
 interface NavbarProps {
   onOpenLogin?: () => void;
@@ -26,6 +27,29 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
     setMobileMenuOpen(false);
   };
+
+  const navItems: GooeyNavItem[] = [
+    {
+      label: 'Metodología',
+      href: '#metodologia',
+      icon: <IconBook2 className="w-4 h-4" />,
+    },
+    {
+      label: 'Tracks & Temario',
+      href: '#temario',
+      icon: <IconStack2 className="w-4 h-4" />,
+    },
+    {
+      label: 'Práctica en Vivo',
+      href: '#demo-interactiva',
+      icon: <IconTerminal2 className="w-4 h-4" />,
+    },
+    {
+      label: 'Preguntas Frecuentes',
+      href: '#faq',
+      icon: <IconHelpCircle className="w-4 h-4" />,
+    },
+  ];
 
   const handleLoginClick = () => {
     setMobileMenuOpen(false);
@@ -58,37 +82,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
           </div>
         </Link>
 
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
-          <button
-            onClick={() => scrollTo('metodologia')}
-            className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
-          >
-            <IconBook2 className="w-4 h-4 text-slate-400" />
-            Metodología
-          </button>
-          <button
-            onClick={() => scrollTo('temario')}
-            className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
-          >
-            <IconStack2 className="w-4 h-4 text-slate-400" />
-            Tracks & Temario
-          </button>
-          <button
-            onClick={() => scrollTo('demo-interactiva')}
-            className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
-          >
-            <IconTerminal2 className="w-4 h-4 text-slate-400" />
-            Práctica en Vivo
-          </button>
-          <button
-            onClick={() => scrollTo('faq')}
-            className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
-          >
-            <IconHelpCircle className="w-4 h-4 text-slate-400" />
-            Preguntas Frecuentes
-          </button>
-        </nav>
+        {/* Desktop Gooey Navigation */}
+        <div className="hidden md:flex items-center">
+          <GooeyNav
+            items={navItems}
+            animationTime={500}
+            particleCount={15}
+            particleDistances={[90, 0]}
+            particleR={100}
+            timeVariance={300}
+            initialActiveIndex={0}
+          />
+        </div>
 
         {/* Desktop CTA: Iniciar Sesión */}
         <div className="hidden md:flex items-center gap-3">
