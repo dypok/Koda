@@ -35,6 +35,35 @@ const config: Config = {
         code: ['var(--font-code)', 'monospace'],
         jetbrains: ['var(--font-jetbrains)', 'monospace'],
       },
+      keyframes: {
+        float: {
+          '0%, 100%': { transform: 'translateY(0px)' },
+          '50%': { transform: 'translateY(-8px)' },
+        },
+        marquee: {
+          '0%': { transform: 'translateX(0%)' },
+          '100%': { transform: 'translateX(-50%)' },
+        },
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(4px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        emberRise: {
+          '0%': { transform: 'translateY(0) translateX(0) scale(0.7)', opacity: '0' },
+          '15%': { opacity: '0.85' },
+          '75%': { opacity: '0.5' },
+          '100%': { transform: 'translateY(-140px) translateX(20px) scale(0.25)', opacity: '0' },
+        },
+        codeStream: {
+          '0%': { transform: 'translateY(0)' },
+          '100%': { transform: 'translateY(-50%)' },
+        },
+      },
+      animation: {
+        float: 'float 4s ease-in-out infinite',
+        marquee: 'marquee 48s linear infinite',
+        fadeIn: 'fadeIn 0.25s ease-out forwards',
+      },
     },
   },
   plugins: [],
