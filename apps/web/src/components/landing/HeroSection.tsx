@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { IconArrowRight } from '@tabler/icons-react';
-import { FloatingLines } from './FloatingLines';
+import { HeroSkyBackground } from './HeroSkyBackground';
 import { GradientButton } from '@/components/ui/gradient-button';
 
 interface HeroSectionProps {
@@ -13,19 +13,8 @@ interface HeroSectionProps {
 export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
   return (
     <section className="relative isolate overflow-hidden min-h-[80vh] flex flex-col justify-center py-12 md:py-20">
-      {/* Background Floating Lines */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0 opacity-85">
-        <FloatingLines
-          linesGradient={['#ea580c', '#f97316', '#f59e0b', '#fbbf24']}
-          animationSpeed={1}
-          interactive={true}
-          bendRadius={5}
-          bendStrength={-0.5}
-          parallax={true}
-          parallaxStrength={0.2}
-          mixBlendMode="screen"
-        />
-      </div>
+      {/* Interactive Starry Night Sky Background */}
+      <HeroSkyBackground starCount={260} interactive={true} />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full my-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
