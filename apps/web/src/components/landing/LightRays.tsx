@@ -142,8 +142,9 @@ export const LightRays: React.FC<LightRaysProps> = ({
     const updatePlacement = () => {
       if (!renderer || !container) return;
       renderer.dpr = Math.min(window.devicePixelRatio, 2);
-      const wCSS = container.clientWidth;
-      const hCSS = container.clientHeight;
+      const rect = container.getBoundingClientRect();
+      const wCSS = container.clientWidth || Math.round(rect.width);
+      const hCSS = container.clientHeight || Math.round(rect.height);
       if (wCSS === 0 || hCSS === 0) return;
       renderer.setSize(wCSS, hCSS);
       const dpr = renderer.dpr;
@@ -304,6 +305,11 @@ void main() {
           if (!renderer || !uniforms || !mesh) return;
           const current = propsRef.current;
 
+          const res = uniforms.iResolution as { value: [number, number] };
+          if (res && res.value[0] <= 1 && container && (container.clientWidth > 0 || container.getBoundingClientRect().width > 0)) {
+            updatePlacement();
+          }
+
           (uniforms.iTime as { value: number }).value = t * 0.001;
           (uniforms.raysColor as { value: [number, number, number] }).value = hexToRgb(current.raysColor);
           (uniforms.raysSpeed as { value: number }).value = current.raysSpeed;
@@ -332,6 +338,17 @@ void main() {
       }
     }
 
+    // Start immediately on mount
+    start();
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined') {
+      resizeObserver = new ResizeObserver(() => {
+        updatePlacement();
+      });
+      resizeObserver.observe(container);
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
@@ -340,13 +357,14 @@ void main() {
           start();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.05 }
     );
     observer.observe(container);
 
     window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
+      resizeObserver?.disconnect();
       observer.disconnect();
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('resize', updatePlacement);
@@ -366,7 +384,7 @@ void main() {
   return (
     <div
       ref={containerRef}
-      className={`pointer-events-none relative z-[3] h-full w-full overflow-hidden ${className}`}
+      className={`pointer-events-none relative h-full w-full overflow-hidden ${className}`}
     />
   );
 };

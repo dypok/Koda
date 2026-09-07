@@ -1,9 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
-import { ArrowRight, CheckCircle2, Code2, Terminal, Sparkles } from 'lucide-react';
-import { KodaMascot } from '../mascot/KodaMascot';
+import { ArrowRight, CheckCircle2, Terminal } from 'lucide-react';
 import { LightRays } from './LightRays';
 
 interface HeroSectionProps {
@@ -11,45 +10,38 @@ interface HeroSectionProps {
 }
 
 export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
-  const [viewMode, setViewMode] = useState<'3d' | '2d'>('3d');
-
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section className="relative overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24">
+    <section className="relative isolate overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24">
       {/* Ambient Light Rays from top center */}
-      <div className="absolute inset-x-0 top-0 h-[640px] pointer-events-none overflow-hidden -z-10 opacity-70">
+      <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
         <LightRays
           raysOrigin="top-center"
           raysColor="#f59e0b"
           raysSpeed={0.8}
-          lightSpread={1.4}
-          rayLength={2.2}
+          lightSpread={1.2}
+          rayLength={2.5}
           pulsating={true}
-          fadeDistance={1.1}
-          saturation={1.2}
+          fadeDistance={1.2}
+          saturation={1.3}
           followMouse={true}
           mouseInfluence={0.12}
-          noiseAmount={0.03}
-          distortion={0.04}
+          noiseAmount={0.02}
+          distortion={0.03}
         />
       </div>
 
       {/* Background Gradients */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-amber-500/10 via-orange-500/15 to-purple-600/10 rounded-full blur-3xl pointer-events-none -z-10" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-amber-500/15 via-orange-500/10 to-purple-600/10 rounded-full blur-3xl pointer-events-none z-0" />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Headlines & CTAs */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
-            {/* Tag */}
-            <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-gradient-to-r from-amber-500/10 to-orange-500/10 px-4 py-1.5 text-xs font-semibold text-amber-400 shadow-sm backdrop-blur-sm">
-              <Code2 className="w-4 h-4 text-amber-400" />
-              <span>Python 3.12 · Aprendizaje Interactivo y Gamificado</span>
-            </div>
 
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15]">
@@ -101,73 +93,42 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
             </div>
           </div>
 
-          {/* Right Column: PixiJS Mascot & Visual Card */}
+          {/* Right Column: Mascota Oficial Koda integrada orgánicamente sin card */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center">
-            <div className="relative flex flex-col items-center">
-              {/* Outer decorative ring */}
-              <div className="absolute inset-0 -m-6 rounded-full bg-gradient-to-b from-amber-500/20 via-orange-500/10 to-transparent blur-xl pointer-events-none" />
+            <div className="relative w-full max-w-md flex flex-col items-center">
+              {/* Ambient Backlight Glow for Koda */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[340px] bg-gradient-to-b from-amber-500/25 via-orange-500/15 to-transparent rounded-full blur-3xl pointer-events-none" />
 
-              {/* Card Container */}
-              <div className="relative w-full max-w-sm rounded-3xl border border-slate-800/80 bg-gradient-to-b from-slate-900/90 via-slate-900/70 to-slate-950/90 p-6 shadow-2xl backdrop-blur-xl flex flex-col items-center text-center">
-                {/* Status Indicator & View Mode Selector */}
-                <div className="w-full flex items-center justify-between text-xs pb-2 border-b border-slate-800/60">
-                  <div className="flex items-center gap-2 text-slate-400">
-                    <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                    <span>Mascota Oficial Koda</span>
-                  </div>
-                  <div className="flex items-center gap-1 bg-slate-950/80 p-0.5 rounded-lg border border-slate-800">
-                    <button
-                      type="button"
-                      onClick={() => setViewMode('3d')}
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
-                        viewMode === '3d'
-                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
-                          : 'text-slate-400 hover:text-white'
-                      }`}
-                    >
-                      3D Oficial
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setViewMode('2d')}
-                      className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
-                        viewMode === '2d'
-                          ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm'
-                          : 'text-slate-400 hover:text-white'
-                      }`}
-                    >
-                      WebGL 2D
-                    </button>
-                  </div>
-                </div>
+              {/* Floating Badge above Mascot */}
+              <div className="relative z-10 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-900/80 border border-slate-700/80 shadow-lg text-xs font-medium text-slate-300 backdrop-blur-md mb-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Mascota Oficial Koda</span>
+              </div>
 
-                {/* Mascot Visual Display */}
-                {viewMode === '3d' ? (
-                  <div className="relative py-3 flex items-center justify-center min-h-[250px] w-full">
-                    <div className="absolute inset-0 bg-gradient-to-t from-orange-500/15 via-amber-500/10 to-transparent rounded-2xl blur-xl pointer-events-none" />
-                    <Image
-                      src="/brand/koda-mascot.png"
-                      alt="Koda — Mascota Oficial KodaAcademy"
-                      width={280}
-                      height={200}
-                      className="relative z-10 object-contain drop-shadow-[0_15px_25px_rgba(245,158,11,0.3)] animate-float"
-                      priority
-                    />
-                  </div>
-                ) : (
-                  <div className="py-2 cursor-pointer transition-transform hover:scale-105 active:scale-95" title="¡Mueve el cursor para que Koda te siga con la mirada!">
-                    <KodaMascot size={260} mood="idle" interactive={true} />
-                  </div>
-                )}
+              {/* Koda Mascot 3D Image */}
+              <div className="relative z-10 py-2 flex items-center justify-center w-full">
+                <Image
+                  src="/brand/koda-mascot.png"
+                  alt="Koda — Mascota Oficial KodaAcademy"
+                  width={340}
+                  height={240}
+                  className="relative z-10 object-contain drop-shadow-[0_20px_35px_rgba(245,158,11,0.35)] animate-float select-none"
+                  priority
+                />
+              </div>
 
-                {/* Speech Bubble / Mascot Message */}
-                <div className="relative -mt-2 rounded-2xl bg-gradient-to-r from-amber-500/15 via-orange-500/15 to-purple-500/15 border border-amber-500/30 p-3.5 shadow-inner">
-                  <p className="text-sm font-semibold text-slate-100">
-                    «¡Hola! Soy Koda. Te acompañaré paso a paso en KodaAcademy para que domines Python sin miedo a equivocarte.»
-                  </p>
-                  <p className="text-[11px] text-amber-300/90 mt-1 font-medium">
+              {/* Speech Bubble / Mascot Message */}
+              <div className="relative z-10 w-full max-w-sm rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-amber-500/30 p-4 shadow-xl backdrop-blur-md text-center">
+                {/* Speech triangle pointer towards Koda */}
+                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-slate-900 border-t border-l border-amber-500/30 rotate-45" />
+
+                <p className="text-sm font-semibold text-slate-100 leading-snug">
+                  «¡Hola! Soy Koda. Te acompañaré paso a paso en KodaAcademy para que domines Python sin miedo a equivocarte.»
+                </p>
+                <div className="mt-2.5 pt-2 border-t border-slate-800/80 flex items-center justify-center gap-2">
+                  <span className="text-[11px] text-amber-300/90 font-medium">
                     100% interactivo · En tu navegador · Código real de Python 3.12
-                  </p>
+                  </span>
                 </div>
               </div>
             </div>
