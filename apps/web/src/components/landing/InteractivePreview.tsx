@@ -39,25 +39,21 @@ export const InteractivePreview: React.FC = () => {
   const [selectedSnippet, setSelectedSnippet] = useState<CodeSnippet>(SNIPPETS[0]);
   const [isRunning, setIsRunning] = useState(false);
   const [output, setOutput] = useState<string | null>(null);
-  const [executionTime, setExecutionTime] = useState<number | null>(null);
 
   const handleRun = () => {
     setIsRunning(true);
     setOutput(null);
-    setExecutionTime(null);
 
-    // Simulate instant client execution
+    // Instant execution simulation
     setTimeout(() => {
       setIsRunning(false);
       setOutput(selectedSnippet.output);
-      setExecutionTime(Math.floor(Math.random() * 8) + 12); // ~12-20 ms
-    }, 350);
+    }, 250);
   };
 
   const handleSelect = (snippet: CodeSnippet) => {
     setSelectedSnippet(snippet);
     setOutput(null);
-    setExecutionTime(null);
   };
 
   return (
@@ -125,7 +121,7 @@ export const InteractivePreview: React.FC = () => {
             <div className="mt-auto p-4 bg-slate-950/60 border-t border-slate-800 flex items-center justify-between">
               <span className="text-xs text-slate-400 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                Haz clic en ejecutar para ver la magia
+                Haz clic en ejecutar para ver la salida
               </span>
               <button
                 onClick={handleRun}
@@ -152,11 +148,9 @@ export const InteractivePreview: React.FC = () => {
             <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3 text-xs text-slate-400 font-mono">
               <div className="flex items-center gap-1.5">
                 <Terminal className="w-4 h-4 text-emerald-400" />
-                <span>Salida de Consola</span>
+                <span>Salida Estándar (stdout)</span>
               </div>
-              {executionTime && (
-                <span className="text-emerald-400 font-semibold">{executionTime} ms</span>
-              )}
+              <span className="text-slate-500 font-mono text-[11px]">Python 3.12</span>
             </div>
 
             <div className="flex-1 font-mono text-sm min-h-[140px] flex flex-col justify-center">
@@ -167,7 +161,7 @@ export const InteractivePreview: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-1.5 text-xs text-slate-400 pt-1">
                     <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    Código ejecutado con éxito sin errores (Return code 0).
+                    Código ejecutado con éxito (Exit code 0).
                   </div>
                 </div>
               ) : (
@@ -175,14 +169,14 @@ export const InteractivePreview: React.FC = () => {
                   <div className="inline-block p-3 rounded-full bg-slate-900 border border-slate-800">
                     <Play className="w-5 h-5 text-slate-600 ml-0.5" />
                   </div>
-                  <p>Presiona el botón verde de "Ejecutar Código" para correr el programa.</p>
+                  <p>Presiona "Ejecutar Código" para ver la salida en consola.</p>
                 </div>
               )}
             </div>
 
             {/* Explanation box */}
             <div className="mt-4 pt-3 border-t border-slate-800/60 text-xs text-slate-300 bg-slate-900/50 p-3 rounded-xl">
-              <strong className="text-amber-400 font-semibold block mb-1">💡 ¿Cómo funciona?</strong>
+              <strong className="text-amber-400 font-semibold block mb-1">💡 Concepto Pedagógico:</strong>
               {selectedSnippet.explanation}
             </div>
           </div>
