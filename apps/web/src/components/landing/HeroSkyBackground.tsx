@@ -366,7 +366,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
         tabIndex={-1}
         aria-label="Cosmic Star"
         onClick={triggerStarDiscovery}
-        className="absolute z-20 -translate-x-1/2 -translate-y-1/2 rounded-full outline-none cursor-pointer group"
+        className="absolute z-0 -translate-x-1/2 -translate-y-1/2 rounded-full outline-none cursor-pointer group"
         style={{
           left: `${realStar.x * 100}%`,
           top: `${realStar.y * 100}%`,
