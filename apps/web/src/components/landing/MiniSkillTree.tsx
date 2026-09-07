@@ -303,10 +303,10 @@ export const MiniSkillTree: React.FC = () => {
               <text x="50" y="143" textAnchor="middle" fill="#fbbf24" fontSize="7" letterSpacing="1.5">
                 ★★★
               </text>
-              <text x="50" y="154" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#ffffff">
+              <text x="50" y="154" textAnchor="middle" className="font-sans text-[8px] font-bold tracking-tight uppercase" fill="#ffffff">
                 01 · SINTAXIS
               </text>
-              <text x="50" y="163" textAnchor="middle" className="font-mono text-[7px] font-semibold" fill="#38bdf8">
+              <text x="50" y="163" textAnchor="middle" className="font-sans text-[7px] font-semibold" fill="#38bdf8">
                 DOMINADO · +200 XP
               </text>
             </g>
@@ -347,10 +347,10 @@ export const MiniSkillTree: React.FC = () => {
               <text x="135" y="93" textAnchor="middle" fill="#fbbf24" fontSize="7" letterSpacing="1.5">
                 ★★★
               </text>
-              <text x="135" y="104" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#ffffff">
+              <text x="135" y="104" textAnchor="middle" className="font-sans text-[8px] font-bold tracking-tight uppercase" fill="#ffffff">
                 02 · SCOPE
               </text>
-              <text x="135" y="113" textAnchor="middle" className="font-mono text-[7px] font-semibold" fill="#38bdf8">
+              <text x="135" y="113" textAnchor="middle" className="font-sans text-[7px] font-semibold" fill="#38bdf8">
                 DOMINADO · +250 XP
               </text>
             </g>
@@ -389,10 +389,10 @@ export const MiniSkillTree: React.FC = () => {
               <text x="220" y="163" textAnchor="middle" fill="#fbbf24" fontSize="7" letterSpacing="1.5">
                 ★★★
               </text>
-              <text x="220" y="174" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#ffffff">
+              <text x="220" y="174" textAnchor="middle" className="font-sans text-[8px] font-bold tracking-tight uppercase" fill="#ffffff">
                 03 · FUNCIONES
               </text>
-              <text x="220" y="183" textAnchor="middle" className="font-mono text-[7px] font-semibold" fill="#38bdf8">
+              <text x="220" y="183" textAnchor="middle" className="font-sans text-[7px] font-semibold" fill="#38bdf8">
                 DOMINADO · +300 XP
               </text>
             </g>
@@ -425,10 +425,10 @@ export const MiniSkillTree: React.FC = () => {
                 <path d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5" />
               </g>
 
-              <text x="310" y="139" textAnchor="middle" className="font-mono text-[8.5px] font-bold tracking-tight uppercase" fill="#fbbf24">
+              <text x="310" y="139" textAnchor="middle" className="font-sans text-[8.5px] font-bold tracking-tight uppercase" fill="#fbbf24">
                 04 · CONTROL FLOW
               </text>
-              <text x="310" y="149" textAnchor="middle" className="font-mono text-[7px] font-semibold" fill="#fef3c7">
+              <text x="310" y="149" textAnchor="middle" className="font-sans text-[7px] font-semibold" fill="#fef3c7">
                 EN PROGRESO · +250 XP
               </text>
             </g>
@@ -461,10 +461,10 @@ export const MiniSkillTree: React.FC = () => {
                 <path d="M8 11v-4a4 4 0 1 1 8 0v4" />
               </g>
 
-              <text x="405" y="83" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#c084fc">
+              <text x="405" y="83" textAnchor="middle" className="font-sans text-[8px] font-bold tracking-tight uppercase" fill="#c084fc">
                 05A · POO
               </text>
-              <text x="405" y="92" textAnchor="middle" className="font-mono text-[7px] font-medium" fill="#9333ea">
+              <text x="405" y="92" textAnchor="middle" className="font-sans text-[7px] font-medium" fill="#9333ea">
                 BLOQUEADO · LVL 4
               </text>
             </g>
@@ -503,10 +503,10 @@ export const MiniSkillTree: React.FC = () => {
                 <path d="M10 21v-2" />
               </g>
 
-              <text x="405" y="183" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#34d399">
+              <text x="405" y="183" textAnchor="middle" className="font-sans text-[8px] font-bold tracking-tight uppercase" fill="#34d399">
                 05B · MEMORIA
               </text>
-              <text x="405" y="192" textAnchor="middle" className="font-mono text-[7px] font-medium" fill="#10b981">
+              <text x="405" y="192" textAnchor="middle" className="font-sans text-[7px] font-medium" fill="#10b981">
                 DISPONIBLE · +350 XP
               </text>
             </g>
@@ -539,10 +539,10 @@ export const MiniSkillTree: React.FC = () => {
                 <path d="M7.5 8a2.5 2.5 0 0 1 0 -5a4.8 8 0 0 1 4.5 5a4.8 8 0 0 1 4.5 -5a2.5 2.5 0 0 1 0 5" />
               </g>
 
-              <text x="405" y="242" textAnchor="middle" className="font-mono text-[7.5px] font-bold tracking-tight uppercase" fill="#fbbf24">
+              <text x="405" y="242" textAnchor="middle" className="font-sans text-[7.5px] font-bold tracking-tight uppercase" fill="#fbbf24">
                 COFRE BONUS
               </text>
-              <text x="405" y="250" textAnchor="middle" className="font-mono text-[6.5px] font-medium" fill="#d97706">
+              <text x="405" y="250" textAnchor="middle" className="font-sans text-[6.5px] font-medium" fill="#d97706">
                 +150 XP & CYBER THEME
               </text>
             </g>
@@ -576,10 +576,10 @@ export const MiniSkillTree: React.FC = () => {
                 <path d="M14 11a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
               </g>
 
-              <text x="510" y="138" textAnchor="middle" className="font-mono text-[8.5px] font-bold tracking-tight uppercase" fill="#f87171">
+              <text x="510" y="138" textAnchor="middle" className="font-sans text-[8.5px] font-bold tracking-tight uppercase" fill="#f87171">
                 Ω · APEX GATE
               </text>
-              <text x="510" y="148" textAnchor="middle" className="font-mono text-[7px] font-semibold" fill="#ef4444">
+              <text x="510" y="148" textAnchor="middle" className="font-sans text-[7px] font-semibold" fill="#ef4444">
                 RETO FINAL · 3 FASES
               </text>
             </g>

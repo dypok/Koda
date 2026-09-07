@@ -24,11 +24,6 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] h-[460px] rounded-full border border-amber-500/15 animate-[launchPulse_5s_ease-in-out_infinite]" style={{ animationDelay: '1.5s' }} />
       </div>
 
-      {/* Marcador técnico de cuadrante */}
-      <div className="hidden lg:block absolute top-6 left-8 text-orange-400/35 text-[11px] font-mono select-none pointer-events-none">
-        + LAUNCH_PAD // TRACK_01_PYTHON
-      </div>
-
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-8">
         {/* Mascota oficial Koda flotando directamente en la página */}
         <motion.div
@@ -105,7 +100,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 font-mono"
+          className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 font-sans font-medium"
         >
           <span className="flex items-center gap-1.5">
             <IconCheck className="w-4 h-4 text-orange-400" />

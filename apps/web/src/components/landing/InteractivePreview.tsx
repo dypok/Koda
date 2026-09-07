@@ -49,14 +49,6 @@ export const InteractivePreview: React.FC = () => {
         <span className="absolute bottom-16 right-1/3 w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_14px_#ea580c] animate-ping opacity-60" style={{ animationDuration: '5.5s', animationDelay: '0.5s' }} />
       </div>
 
-      {/* Marcadores tácticos de precisión en esquinas */}
-      <div className="hidden lg:block absolute top-6 left-8 text-amber-500/50 text-[11px] font-mono select-none pointer-events-none">
-        + SYS.01 // ACCESS_FREE_MATRIX
-      </div>
-      <div className="hidden lg:block absolute top-6 right-8 text-amber-500/50 text-[11px] font-mono select-none pointer-events-none">
-        [ZERO_PAYWALL_ACTIVE] +
-      </div>
-
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Principal con Rajdhani Display y tonos Naranja/Ámbar oficiales */}
         <motion.div
