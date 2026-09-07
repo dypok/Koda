@@ -1,12 +1,6 @@
 'use client';
 
 import React from 'react';
-import {
-  IconBatteryCharging,
-  IconHierarchy2,
-  IconDeviceDesktopCode,
-  IconPuzzle,
-} from '@tabler/icons-react';
 
 export const MethodologySection: React.FC = () => {
   return (
@@ -37,11 +31,6 @@ export const MethodologySection: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             {/* Texto Izquierda */}
             <div className="lg:col-span-7 space-y-5 text-left">
-              <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest font-semibold text-orange-400">
-                <IconBatteryCharging className="w-5 h-5 text-orange-400" />
-                <span>01 · Constancia Diaria</span>
-              </div>
-
               <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
                 Rachas que encienden tu hábito diario
               </h3>
@@ -104,11 +93,6 @@ export const MethodologySection: React.FC = () => {
 
             {/* Texto Derecha */}
             <div className="lg:col-span-7 order-1 lg:order-2 space-y-5 text-left">
-              <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest font-semibold text-amber-400">
-                <IconHierarchy2 className="w-5 h-5 text-amber-400" />
-                <span>02 · Ruta Estructurada</span>
-              </div>
-
               <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
                 Un roadmap claro, paso a paso
               </h3>
@@ -135,11 +119,6 @@ export const MethodologySection: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             {/* Texto Izquierda */}
             <div className="lg:col-span-7 space-y-5 text-left">
-              <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest font-semibold text-orange-400">
-                <IconDeviceDesktopCode className="w-5 h-5 text-orange-400" />
-                <span>03 · Aprender Haciendo</span>
-              </div>
-
               <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
                 1 concepto = 1 reto en código real
               </h3>
@@ -176,11 +155,6 @@ export const MethodologySection: React.FC = () => {
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-[radial-gradient(ellipse_at_center,rgba(251,191,36,0.08),transparent_70%)] blur-3xl pointer-events-none" />
 
         <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-6 relative">
-          <div className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-widest font-semibold text-amber-400">
-            <IconPuzzle className="w-5 h-5 text-amber-400" />
-            <span>04 · Pedagogía Guiada</span>
-          </div>
-
           <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] max-w-3xl mx-auto">
             Pistas que te enseñan a pensar, no spoilers
           </h3>
