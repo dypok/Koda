@@ -4,9 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import {
-  IconHeart,
   IconBrandGithub,
-  IconBook2,
   IconQrcode,
   IconShieldCheck,
 } from '@tabler/icons-react';
@@ -101,9 +99,6 @@ export const Footer: React.FC = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} KodaAcademy. Todos los derechos reservados.</p>
-          <p className="flex items-center gap-1">
-            Hecho con <IconHeart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> para la comunidad de programadores.
-          </p>
         </div>
       </div>
     </footer>
