@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ArrowRight, CheckCircle2, Terminal } from 'lucide-react';
+import { IconArrowRight, IconCircleCheck, IconTerminal2 } from '@tabler/icons-react';
 import { LightRays } from './LightRays';
 
 interface HeroSectionProps {
@@ -16,7 +16,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
   };
 
   return (
-    <section className="relative isolate overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24">
+    <section className="relative isolate overflow-hidden min-h-[80vh] flex flex-col justify-center py-12 md:py-20">
       {/* Ambient Light Rays from top center */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
         <LightRays
@@ -24,7 +24,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
           raysColor="#f59e0b"
           raysSpeed={0.8}
           lightSpread={1.2}
-          rayLength={2.5}
+          rayLength={3.0}
           pulsating={true}
           fadeDistance={1.2}
           saturation={1.3}
@@ -35,10 +35,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
         />
       </div>
 
-      {/* Background Gradients */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-tr from-amber-500/15 via-orange-500/10 to-purple-600/10 rounded-full blur-3xl pointer-events-none z-0" />
-
-      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full my-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           {/* Left Column: Headlines & CTAs */}
           <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
@@ -52,7 +49,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
             {/* Main Headline */}
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.15]">
               Aprende a programar{' '}
-              <span className="bg-gradient-to-r from-amber-400 via-orange-400 to-amber-200 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
                 como juegas
               </span>
               . Cero frustración.
@@ -65,35 +62,35 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
 
             {/* Value Proposition Bullets */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-xl text-left pt-2">
-              <div className="flex items-center gap-2.5 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 backdrop-blur-sm">
-                <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
+              <div className="flex items-center gap-2.5 bg-slate-900/70 border border-slate-800 rounded-xl p-3">
+                <IconCircleCheck className="w-4 h-4 text-emerald-400 shrink-0" />
                 <span className="text-xs font-medium text-slate-200">1 Concepto = 1 Reto en vivo</span>
               </div>
-              <div className="flex items-center gap-2.5 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 backdrop-blur-sm">
-                <CheckCircle2 className="w-4 h-4 text-amber-400 shrink-0" />
+              <div className="flex items-center gap-2.5 bg-slate-900/70 border border-slate-800 rounded-xl p-3">
+                <IconCircleCheck className="w-4 h-4 text-amber-400 shrink-0" />
                 <span className="text-xs font-medium text-slate-200">Pistas inteligentes guiadas</span>
               </div>
-              <div className="flex items-center gap-2.5 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 backdrop-blur-sm">
-                <CheckCircle2 className="w-4 h-4 text-indigo-400 shrink-0" />
+              <div className="flex items-center gap-2.5 bg-slate-900/70 border border-slate-800 rounded-xl p-3">
+                <IconCircleCheck className="w-4 h-4 text-indigo-400 shrink-0" />
                 <span className="text-xs font-medium text-slate-200">Certificación oficial con QR</span>
               </div>
             </div>
 
             {/* Call to Actions */}
-            <div className="flex flex-col sm:flex-row items-center gap-4 pt-4 w-full sm:w-auto">
+            <div className="flex flex-col sm:flex-row items-center gap-4 pt-2 w-full sm:w-auto">
               <button
                 onClick={onOpenLogin}
-                className="w-full sm:w-auto flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 px-7 py-4 text-base font-extrabold text-slate-950 shadow-xl shadow-orange-500/25 hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all bg-[length:200%_auto] hover:bg-right"
+                className="w-full sm:w-auto flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 px-8 py-4 text-base font-extrabold text-slate-950 hover:opacity-95 hover:scale-[1.01] active:scale-[0.98] transition-all"
               >
                 Comenzar Ahora
-                <ArrowRight className="w-5 h-5 text-slate-950" />
+                <IconArrowRight className="w-5 h-5 text-slate-950" />
               </button>
 
               <button
                 onClick={() => scrollTo('temario')}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/60 px-6 py-4 text-base font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition-all backdrop-blur-sm"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/70 px-7 py-4 text-base font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition-all"
               >
-                <Terminal className="w-5 h-5 text-amber-400" />
+                <IconTerminal2 className="w-5 h-5 text-amber-400" />
                 Explorar Tracks & Temario
               </button>
             </div>
@@ -102,13 +99,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
           {/* Right Column: Mascota Oficial Koda integrada orgánicamente sin card */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center">
             <div className="relative w-full max-w-md flex flex-col items-center">
-              {/* Ambient Backlight Glow for Koda */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[340px] bg-gradient-to-b from-amber-500/25 via-orange-500/15 to-transparent rounded-full blur-3xl pointer-events-none" />
-
               {/* Floating Badge above Mascot */}
-              <div className="relative z-10 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-900/80 border border-slate-700/80 shadow-lg text-xs font-medium text-slate-300 backdrop-blur-md mb-2">
+              <div className="relative z-10 inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-900/80 border border-slate-700/80 text-xs font-medium text-slate-300 backdrop-blur-md mb-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span>Mascota Oficial Koda</span>
+                <span>Mascota Oficial · Koda</span>
               </div>
 
               {/* Koda Mascot 3D Image */}
@@ -116,15 +110,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
                 <Image
                   src="/brand/koda-mascot.png"
                   alt="Koda — Mascota Oficial KodaAcademy"
-                  width={340}
-                  height={240}
-                  className="relative z-10 object-contain drop-shadow-[0_20px_35px_rgba(245,158,11,0.35)] animate-float select-none"
+                  width={360}
+                  height={260}
+                  className="relative z-10 object-contain animate-float select-none"
                   priority
                 />
               </div>
 
               {/* Speech Bubble / Mascot Message */}
-              <div className="relative z-10 w-full max-w-sm rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950/90 border border-amber-500/30 p-4 shadow-xl backdrop-blur-md text-center">
+              <div className="relative z-10 w-full max-w-sm rounded-2xl bg-slate-900/90 border border-amber-500/30 p-4 backdrop-blur-md text-center">
                 {/* Speech triangle pointer towards Koda */}
                 <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-slate-900 border-t border-l border-amber-500/30 rotate-45" />
 

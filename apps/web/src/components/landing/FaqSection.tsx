@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { ChevronDown, HelpCircle } from 'lucide-react';
+import { IconChevronDown, IconHelpCircle } from '@tabler/icons-react';
 
 interface FaqItem {
   question: string;
@@ -54,7 +54,7 @@ export const FaqSection: React.FC = () => {
         {/* Header */}
         <div className="text-center space-y-4 mb-14">
           <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1 text-xs font-semibold text-amber-400">
-            <HelpCircle className="w-3.5 h-3.5" />
+            <IconHelpCircle className="w-3.5 h-3.5" />
             Resolvemos tus Dudas
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
@@ -86,7 +86,7 @@ export const FaqSection: React.FC = () => {
                       isOpen ? 'rotate-180 text-amber-400 bg-amber-400/10' : ''
                     }`}
                   >
-                    <ChevronDown className="w-4 h-4" />
+                    <IconChevronDown className="w-4 h-4" />
                   </div>
                 </button>
 

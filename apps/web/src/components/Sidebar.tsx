@@ -3,15 +3,15 @@
 import React from 'react';
 import Image from 'next/image';
 import {
-  Map,
-  BookOpen,
-  Trophy,
-  Award,
-  Settings,
-  Flame,
-  Zap,
-  Shield,
-} from 'lucide-react';
+  IconMap,
+  IconBook2,
+  IconTrophy,
+  IconAward,
+  IconSettings,
+  IconFlame,
+  IconBolt,
+  IconShieldCheck,
+} from '@tabler/icons-react';
 import { useKodaStore } from '@/lib/store';
 import { KodaMascot } from './KodaMascot';
 
@@ -19,11 +19,11 @@ export const Sidebar: React.FC = () => {
   const { totalXp, level, streak } = useKodaStore();
 
   const navItems = [
-    { label: 'Ruta de Aprendizaje', icon: Map, active: true },
-    { label: 'Cuaderno de Errores', icon: BookOpen, badge: '2', active: false },
-    { label: 'Tabla de Posiciones', icon: Trophy, active: false },
-    { label: 'Certificados Oficiales', icon: Award, active: false },
-    { label: 'Configuración', icon: Settings, active: false },
+    { label: 'Ruta de Aprendizaje', icon: IconMap, active: true },
+    { label: 'Cuaderno de Errores', icon: IconBook2, badge: '2', active: false },
+    { label: 'Tabla de Posiciones', icon: IconTrophy, active: false },
+    { label: 'Certificados Oficiales', icon: IconAward, active: false },
+    { label: 'Configuración', icon: IconSettings, active: false },
   ];
 
   return (
@@ -31,7 +31,7 @@ export const Sidebar: React.FC = () => {
       <div>
         {/* Brand Header */}
         <div className="flex items-center gap-3 px-2 py-3 mb-6">
-          <div className="relative w-10 h-10 rounded-xl bg-[#182030] border border-slate-800 flex items-center justify-center shadow-lg shadow-orange-500/10 overflow-hidden shrink-0">
+          <div className="relative w-10 h-10 rounded-xl bg-[#182030] border border-slate-800 flex items-center justify-center overflow-hidden shrink-0">
             <Image
               src="/logo.png"
               alt="KodaAcademy Logo"
@@ -41,8 +41,8 @@ export const Sidebar: React.FC = () => {
             />
           </div>
           <div>
-            <h1 className="font-extrabold text-lg tracking-tight text-white flex items-center gap-1">
-              Koda<span className="text-amber-400">Academy</span>
+            <h1 className="font-black text-lg tracking-tight bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
+              KodaAcademy
             </h1>
             <p className="text-xs text-slate-400">Aprende programando</p>
           </div>
@@ -52,21 +52,21 @@ export const Sidebar: React.FC = () => {
         <div className="grid grid-cols-3 gap-2 mb-6">
           <div className="bg-slate-850 border border-slate-800 rounded-lg p-2 flex flex-col items-center">
             <span className="flex items-center gap-1 text-xs text-orange-400 font-bold">
-              <Flame size={13} className="fill-orange-400 animate-pulse" />
+              <IconFlame size={13} className="fill-orange-400 animate-pulse" />
               {streak.current_streak}d
             </span>
             <span className="text-[10px] text-slate-400">Racha</span>
           </div>
           <div className="bg-slate-850 border border-slate-800 rounded-lg p-2 flex flex-col items-center">
             <span className="flex items-center gap-1 text-xs text-amber-400 font-bold">
-              <Zap size={13} className="fill-amber-400" />
+              <IconBolt size={13} className="fill-amber-400" />
               {totalXp}
             </span>
             <span className="text-[10px] text-slate-400">XP</span>
           </div>
           <div className="bg-slate-850 border border-slate-800 rounded-lg p-2 flex flex-col items-center">
             <span className="flex items-center gap-1 text-xs text-indigo-400 font-bold">
-              <Shield size={13} />
+              <IconShieldCheck size={13} />
               Nv.{level}
             </span>
             <span className="text-[10px] text-slate-400">Nivel</span>

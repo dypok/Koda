@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { LogIn, BookOpen, Sparkles } from 'lucide-react';
+import { IconLogin, IconBook2, IconSparkles } from '@tabler/icons-react';
 
 interface CtaSectionProps {
   onOpenLogin?: () => void;
@@ -16,26 +16,22 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
 
   return (
     <section className="py-20 md:py-28 bg-slate-950 relative overflow-hidden">
-      {/* Background glow circle */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-gradient-to-r from-orange-500/15 via-amber-500/15 to-purple-600/15 rounded-full blur-3xl pointer-events-none -z-10" />
-
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-slate-800 bg-gradient-to-b from-slate-900/95 via-slate-900/90 to-slate-950 p-8 sm:p-14 shadow-2xl backdrop-blur-2xl text-center relative">
           {/* Mascot in Official 3D Form */}
           <div className="flex justify-center -mt-8 mb-4 relative">
-            <div className="absolute inset-0 bg-gradient-to-t from-amber-500/20 via-orange-500/10 to-transparent rounded-full blur-2xl pointer-events-none" />
             <Image
               src="/brand/koda-mascot.png"
               alt="Koda"
               width={220}
               height={160}
-              className="relative z-10 object-contain drop-shadow-[0_15px_30px_rgba(245,158,11,0.3)] animate-float"
+              className="relative z-10 object-contain animate-float select-none"
             />
           </div>
 
           <div className="max-w-2xl mx-auto space-y-4">
             <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1 text-xs font-semibold text-amber-400">
-              <Sparkles className="w-3.5 h-3.5" />
+              <IconSparkles className="w-3.5 h-3.5" />
               Formación Activa en Programación
             </span>
 
@@ -50,9 +46,9 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
                 onClick={onOpenLogin}
-                className="w-full sm:w-auto flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 px-8 py-4 text-base font-extrabold text-slate-950 shadow-xl shadow-orange-500/25 hover:shadow-orange-500/40 hover:scale-[1.02] active:scale-[0.98] transition-all bg-[length:200%_auto] hover:bg-right"
+                className="w-full sm:w-auto flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 px-8 py-4 text-base font-extrabold text-slate-950 hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all"
               >
-                <LogIn className="w-5 h-5 text-slate-950" />
+                <IconLogin className="w-5 h-5 text-slate-950" />
                 Iniciar Sesión
               </button>
 
@@ -60,7 +56,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
                 onClick={() => scrollTo('temario')}
                 className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/80 px-7 py-4 text-base font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition-all backdrop-blur-sm"
               >
-                <BookOpen className="w-5 h-5 text-amber-400" />
+                <IconBook2 className="w-5 h-5 text-amber-400" />
                 Explorar Tracks Formativos
               </button>
             </div>

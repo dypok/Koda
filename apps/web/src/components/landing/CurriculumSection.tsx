@@ -2,7 +2,16 @@
 
 import React, { useState } from 'react';
 import { PYTHON_MODULES, PythonModuleInfo } from '../../lib/python-modules';
-import { CheckCircle2, Lock, Award, ChevronRight, QrCode, BookOpen, Layers, ArrowRight } from 'lucide-react';
+import {
+  IconCircleCheck,
+  IconLock,
+  IconAward,
+  IconChevronRight,
+  IconQrcode,
+  IconBook2,
+  IconStack2,
+  IconArrowRight,
+} from '@tabler/icons-react';
 
 interface CurriculumSectionProps {
   onOpenLogin?: () => void;
@@ -17,7 +26,7 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
           <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1 text-xs font-semibold text-amber-400">
-            <Layers className="w-3.5 h-3.5" />
+            <IconStack2 className="w-3.5 h-3.5" />
             Catálogo Formativo · Track Inaugural
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
@@ -56,7 +65,7 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
                   onClick={() => setActiveModule(mod)}
                   className={`cursor-pointer rounded-2xl border p-4 transition-all ${
                     isSelected
-                      ? 'border-amber-500 bg-gradient-to-br from-slate-900 to-amber-950/20 shadow-xl shadow-amber-500/10 scale-[1.02]'
+                      ? 'border-amber-500 bg-gradient-to-br from-slate-900 to-amber-950/20 scale-[1.02]'
                       : 'border-slate-800 bg-slate-900/60 hover:border-slate-700 hover:bg-slate-850'
                   }`}
                 >
@@ -66,12 +75,12 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
                     </span>
                     {isReady ? (
                       <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full border border-emerald-400/30">
-                        <CheckCircle2 className="w-3 h-3" />
+                        <IconCircleCheck className="w-3 h-3" />
                         Disponible
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 text-[10px] font-medium text-slate-400 bg-slate-800 px-2 py-0.5 rounded-full">
-                        <Lock className="w-2.5 h-2.5" />
+                        <IconLock className="w-2.5 h-2.5" />
                         Planificado
                       </span>
                     )}
@@ -102,7 +111,7 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
                   </h3>
                 </div>
                 <div className="h-10 w-10 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
-                  <BookOpen className="w-5 h-5" />
+                  <IconBook2 className="w-5 h-5" />
                 </div>
               </div>
 
@@ -130,7 +139,7 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
                 <ul className="space-y-1.5">
                   {activeModule.topics.map((t, idx) => (
                     <li key={idx} className="flex items-center gap-2 text-xs text-slate-200">
-                      <ChevronRight className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                      <IconChevronRight className="w-3.5 h-3.5 text-amber-400 shrink-0" />
                       <span>{t}</span>
                     </li>
                   ))}
@@ -140,10 +149,10 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
               {/* Start Module CTA */}
               <button
                 onClick={onOpenLogin}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 py-3 text-sm font-bold text-slate-950 shadow-md shadow-orange-500/20 hover:shadow-orange-500/30 hover:scale-[1.01] active:scale-[0.99] transition-all"
+                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 py-3 text-sm font-bold text-slate-950 hover:opacity-95 hover:scale-[1.01] active:scale-[0.99] transition-all"
               >
                 Comenzar con este Módulo
-                <ArrowRight className="w-4 h-4" />
+                <IconArrowRight className="w-4 h-4" />
               </button>
             </div>
 
@@ -151,7 +160,7 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
             <div className="rounded-3xl border border-indigo-500/30 bg-gradient-to-br from-slate-950 via-indigo-950/20 to-slate-900 p-6 shadow-xl relative overflow-hidden">
               <div className="flex items-center gap-3 mb-3">
                 <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/30 text-indigo-400">
-                  <Award className="w-6 h-6" />
+                  <IconAward className="w-6 h-6" />
                 </div>
                 <div>
                   <h4 className="text-sm font-bold text-white">Certificado Oficial KodaAcademy</h4>
@@ -165,7 +174,7 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
 
               <div className="flex items-center justify-between bg-slate-900/80 border border-indigo-500/20 rounded-2xl p-3">
                 <div className="flex items-center gap-2.5">
-                  <QrCode className="w-7 h-7 text-indigo-400" />
+                  <IconQrcode className="w-7 h-7 text-indigo-400" />
                   <div className="text-[11px]">
                     <span className="font-semibold text-white block">Escaneo QR ISO 18004</span>
                     <span className="text-slate-400">Verificable en koda.app/verificar</span>
