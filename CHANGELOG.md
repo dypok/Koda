@@ -10,6 +10,10 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-07 08:46] [Changed] **Reestructuración Editorial Multi-Lenguaje de la Landing Page:**
+  - Se reformuló la narrativa y textos en todos los componentes (`layout.tsx`, `Navbar`, `HeroSection`, `InteractivePreview`, `MethodologySection`, `CurriculumSection`, `FaqSection`, `CtaSection` y `Footer`).
+  - Se reposicionó a Python 3.12 como el **Track Inaugural Piloto** de una plataforma diseñada para ser multi-lenguaje, incorporando avisos de roadmap oficial para JavaScript/TypeScript, Go y Rust.
+  - Se eliminó el tono hiperbólico y métricas no justificadas, priorizando una redacción profesional, concisa y orientada a los fundamentos universales de la programación.
 - [2026-09-07 08:37] [Changed] **Unificación Visual de Mascota y Corrección de LightRays en HeroSection:**
   - Se eliminó el selector doble de vista "3D Oficial" / "WebGL 2D" en el Hero, unificando la presencia de Koda en su modelo oficial de alta definición.
   - Se retiró el contenedor de tarjeta (`rounded-3xl border border-slate-800 bg-slate-900`), integrando a la mascota Koda directamente en la composición con un pedestal de iluminación difusa, animación flotante, badge de estado superior y burbuja de diálogo dirigida con indicador triangular hacia la mascota.

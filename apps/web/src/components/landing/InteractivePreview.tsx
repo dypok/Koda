@@ -14,24 +14,24 @@ interface CodeSnippet {
 const SNIPPETS: CodeSnippet[] = [
   {
     id: 'hello',
-    title: '1. Tu primer print',
-    code: 'print("¡Hola, KodaAcademy! 🔥")\nprint("Bienvenido al mundo de Python.")',
-    output: '¡Hola, KodaAcademy! 🔥\nBienvenido al mundo de Python.',
-    explanation: 'La función print() muestra texto en la pantalla. Solo necesitas encerrar tus palabras entre comillas.',
+    title: '1. Salida en Pantalla',
+    code: 'print("¡Hola, KodaAcademy! 🔥")\nprint("Aprende a programar paso a paso.")',
+    output: '¡Hola, KodaAcademy! 🔥\nAprende a programar paso a paso.',
+    explanation: 'La instrucción básica de salida permite al programa comunicarse con el usuario mostrando resultados en la consola.',
   },
   {
     id: 'vars',
-    title: '2. Variables y Tipos',
-    code: 'usuario = "Koda"\npuntos_xp = 100\nes_genial = True\n\nprint(f"¡{usuario} acumuló {puntos_xp} XP en KodaAcademy!")',
-    output: '¡Koda acumuló 100 XP en KodaAcademy!',
-    explanation: 'En Python no necesitas declarar tipos complejos. Creas una variable asignándole un valor con el signo igual (=).',
+    title: '2. Variables y Datos',
+    code: 'usuario = "Koda"\npuntos_xp = 100\nes_activo = True\n\nprint(f"{usuario} tiene {puntos_xp} XP acumulados.")',
+    output: 'Koda tiene 100 XP acumulados.',
+    explanation: 'Las variables almacenan información en memoria. Comprender tipos de datos (texto, enteros y booleanos) es universal en cualquier lenguaje.',
   },
   {
     id: 'logic',
-    title: '3. Toma de Decisiones',
-    code: 'nivel = 5\n\nif nivel >= 5:\n    print("⭐ ¡Felicidades! Has desbloqueado el Módulo 02.")\nelse:\n    print("Sigue practicando para subir de nivel.")',
-    output: '⭐ ¡Felicidades! Has desbloqueado el Módulo 02.',
-    explanation: 'Con if/else tu programa toma caminos lógicos. Observa la indentación de 4 espacios que hace a Python tan legible.',
+    title: '3. Control de Flujo',
+    code: 'nivel = 5\n\nif nivel >= 5:\n    print("⭐ Desafío completado con éxito.")\nelse:\n    print("Continúa practicando para avanzar.")',
+    output: '⭐ Desafío completado con éxito.',
+    explanation: 'Las estructuras condicionales permiten que tu programa tome decisiones lógicas basadas en condiciones evaluadas.',
   },
 ];
 
@@ -63,13 +63,13 @@ export const InteractivePreview: React.FC = () => {
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
           <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-400">
             <Terminal className="w-3.5 h-3.5" />
-            Experiencia en Vivo
+            Consola Interactiva
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Prueba cómo se siente aprender en KodaAcademy
+            Escribe y ejecuta código real. Sin instalar nada.
           </h2>
           <p className="text-slate-400 text-sm sm:text-base">
-            Sin consolas complejas, sin instalar Python, sin trabas. Código limpio, ejecución instantánea y explicaciones directas.
+            Experimenta el aprendizaje activo de KodaAcademy: interactividad en tu navegador, ejecución inmediata y conceptos claros. Demostración sobre el track piloto:
           </p>
         </div>
 
@@ -106,7 +106,7 @@ export const InteractivePreview: React.FC = () => {
                 <span className="text-xs font-mono text-slate-400 ml-2">main.py</span>
               </div>
               <span className="text-[11px] font-mono text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20">
-                Python 3.12
+                Track Piloto: Python 3.12
               </span>
             </div>
 
@@ -121,7 +121,7 @@ export const InteractivePreview: React.FC = () => {
             <div className="mt-auto p-4 bg-slate-950/60 border-t border-slate-800 flex items-center justify-between">
               <span className="text-xs text-slate-400 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                Haz clic en ejecutar para ver la salida
+                Presiona ejecutar para probar la salida
               </span>
               <button
                 onClick={handleRun}
@@ -150,7 +150,7 @@ export const InteractivePreview: React.FC = () => {
                 <Terminal className="w-4 h-4 text-emerald-400" />
                 <span>Salida Estándar (stdout)</span>
               </div>
-              <span className="text-slate-500 font-mono text-[11px]">Python 3.12</span>
+              <span className="text-slate-500 font-mono text-[11px]">Python 3.12 Runtime</span>
             </div>
 
             <div className="flex-1 font-mono text-sm min-h-[140px] flex flex-col justify-center">
@@ -161,7 +161,7 @@ export const InteractivePreview: React.FC = () => {
                   </div>
                   <div className="flex items-center gap-1.5 text-xs text-slate-400 pt-1">
                     <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    Código ejecutado con éxito (Exit code 0).
+                    Ejecución completada exitosamente (Exit code 0).
                   </div>
                 </div>
               ) : (
@@ -169,14 +169,14 @@ export const InteractivePreview: React.FC = () => {
                   <div className="inline-block p-3 rounded-full bg-slate-900 border border-slate-800">
                     <Play className="w-5 h-5 text-slate-600 ml-0.5" />
                   </div>
-                  <p>Presiona "Ejecutar Código" para ver la salida en consola.</p>
+                  <p>Presiona "Ejecutar Código" para ver el resultado en vivo.</p>
                 </div>
               )}
             </div>
 
             {/* Explanation box */}
             <div className="mt-4 pt-3 border-t border-slate-800/60 text-xs text-slate-300 bg-slate-900/50 p-3 rounded-xl">
-              <strong className="text-amber-400 font-semibold block mb-1">💡 Concepto Pedagógico:</strong>
+              <strong className="text-amber-400 font-semibold block mb-1">💡 Fundamento Teórico:</strong>
               {selectedSnippet.explanation}
             </div>
           </div>

@@ -56,21 +56,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
             className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
           >
             <BookOpen className="w-4 h-4 text-slate-400" />
-            Método Koda
+            Metodología
           </button>
           <button
             onClick={() => scrollTo('temario')}
             className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
           >
             <Layers className="w-4 h-4 text-slate-400" />
-            12 Módulos
+            Tracks & Temario
           </button>
           <button
             onClick={() => scrollTo('demo-interactiva')}
             className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
           >
             <Terminal className="w-4 h-4 text-slate-400" />
-            Demo en Vivo
+            Práctica en Vivo
           </button>
           <button
             onClick={() => scrollTo('faq')}
@@ -114,21 +114,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
               className="flex items-center gap-2.5 py-2 text-left hover:text-amber-400"
             >
               <BookOpen className="w-5 h-5 text-amber-400" />
-              Método Koda
+              Metodología
             </button>
             <button
               onClick={() => scrollTo('temario')}
               className="flex items-center gap-2.5 py-2 text-left hover:text-amber-400"
             >
               <Layers className="w-5 h-5 text-amber-400" />
-              Ruta de 12 Módulos
+              Tracks & Temario
             </button>
             <button
               onClick={() => scrollTo('demo-interactiva')}
               className="flex items-center gap-2.5 py-2 text-left hover:text-amber-400"
             >
               <Terminal className="w-5 h-5 text-amber-400" />
-              Demo Interactiva
+              Práctica en Vivo
             </button>
             <button
               onClick={() => scrollTo('faq')}
