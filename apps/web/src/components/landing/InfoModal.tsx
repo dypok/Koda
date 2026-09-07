@@ -211,9 +211,9 @@ export const InfoModal: React.FC<InfoModalProps> = ({
                     </div>
 
                     <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-4 space-y-2">
-                      <h5 className="font-bold text-white text-sm">¿Por qué el track inaugural es Python 3.12?</h5>
+                      <h5 className="font-bold text-white text-sm">¿Qué tecnologías y lenguajes puedo aprender?</h5>
                       <p className="text-xs text-slate-400 leading-relaxed">
-                        Python ofrece una sintaxis limpia y directa sin sobrecarga visual, permitiéndote concentrarte en asimilar la lógica universal de programación (bucles, estructuras de datos, funciones y algoritmos) aplicable luego a cualquier lenguaje.
+                        KodaAcademy enseña los fundamentos lógicos universales de la programación (estructuras de control, algoritmos, funciones y resolución de problemas) preparándote para dominar con soltura cualquier lenguaje y tecnología del mundo real.
                       </p>
                     </div>
 

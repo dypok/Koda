@@ -37,14 +37,14 @@ export const metadata: Metadata = {
   metadataBase: new URL('https://koda.app'),
   title: 'KodaAcademy — Aprende a Programar como juegas',
   description:
-    'Plataforma interactiva de aprendizaje de programación con micro-lecciones prácticas, ejecución de código en vivo y certificación oficial con código QR. Track inaugural: Python 3.12.',
+    'Plataforma interactiva de aprendizaje de programación con micro-lecciones prácticas, ejecución de código en vivo y certificación oficial con código QR. Aprende a programar desde cero a tu propio ritmo.',
   keywords: [
     'kodaacademy',
     'koda academy',
     'aprender a programar',
     'plataforma interactiva de programacion',
-    'aprender python',
-    'python 3.12',
+    'aprender a codificar',
+    'lenguajes de programacion',
     'cursos de programacion',
     'koda',
     'gamificacion educativa',
@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     url: 'https://koda.app',
     title: 'KodaAcademy — Aprende a Programar como juegas',
     description:
-      'Plataforma interactiva de programación con micro-lecciones de práctica inmediata y certificación digital. Track inaugural: Python 3.12.',
+      'Plataforma interactiva de programación con micro-lecciones de práctica inmediata y certificación digital. Aprende a programar desde cero a tu propio ritmo.',
     siteName: 'KodaAcademy',
     images: [
       {
@@ -80,7 +80,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'KodaAcademy — Aprende a Programar como juegas',
     description:
-      'Plataforma interactiva de programación con micro-lecciones de práctica inmediata y certificación digital. Track inaugural: Python 3.12.',
+      'Plataforma interactiva de programación con micro-lecciones de práctica inmediata y certificación digital. Aprende a programar desde cero a tu propio ritmo.',
     images: ['/og-image.png'],
   },
 };
