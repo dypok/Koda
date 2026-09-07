@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { CosmicRoadmap } from './CosmicRoadmap';
 
 export const MethodologySection: React.FC = () => {
   return (
@@ -61,51 +62,24 @@ export const MethodologySection: React.FC = () => {
       </section>
 
       {/* =========================================================
-          SECCIÓN 02: Roadmap (Invertido: Stepper Izquierda / Texto Derecha)
+          SECCIÓN 02: Roadmap Cósmico Gamificado (Skill Tree)
           ========================================================= */}
       <section id="roadmap" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80">
-        <div className="absolute top-1/2 left-10 -translate-y-1/2 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-            {/* Stepper Tipográfico Izquierda */}
-            <div className="lg:col-span-5 order-2 lg:order-1 space-y-4 font-mono text-sm">
-              <div className="space-y-3 max-w-sm">
-                <div className="flex items-center gap-3 text-orange-400">
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-orange-500/10 border border-orange-500/20">01</span>
-                  <span className="text-white font-semibold">Fundamentos & Sintaxis</span>
-                  <span className="ml-auto text-xs text-orange-400 font-bold">✓ Base sólida</span>
-                </div>
-                <div className="w-0.5 h-4 bg-slate-800 ml-4" />
-                <div className="flex items-center gap-3 text-amber-300">
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">02</span>
-                  <span className="text-white font-semibold">Estructuras & Lógica</span>
-                  <span className="ml-auto text-xs text-amber-400 font-bold">➔ Siguiente</span>
-                </div>
-                <div className="w-0.5 h-4 bg-slate-800 ml-4" />
-                <div className="flex items-center gap-3 text-slate-500">
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-slate-900 border border-slate-800">03</span>
-                  <span className="text-slate-400 font-semibold">Proyectos & Software</span>
-                  <span className="ml-auto text-xs text-slate-600">Meta final</span>
-                </div>
-              </div>
-            </div>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10 relative">
+          <div className="space-y-4 text-left max-w-3xl">
+            <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
+              Un roadmap claro, paso a paso
+            </h3>
 
-            {/* Texto Derecha */}
-            <div className="lg:col-span-7 order-1 lg:order-2 space-y-5 text-left">
-              <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
-                Un roadmap claro, paso a paso
-              </h3>
-
-              <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed font-sans max-w-xl">
-                Sabes exactamente qué aprender hoy y qué sigue mañana. Una ruta secuencial estructurada desde las bases hasta escribir tus propios programas sin perderte en tutoriales infinitos.
-              </p>
-
-              <p className="text-xs font-mono text-slate-500 pt-1">
-                Ruta progresiva · Sin saltos al vacío ni parálisis por análisis
-              </p>
-            </div>
+            <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed font-sans">
+              Sabes exactamente qué aprender hoy y qué sigue mañana. Una ruta estructurada inspirada en árboles de habilidades que te permite visualizar tu dominio, desbloquear nuevos sectores técnicos y avanzar con dirección sin perderte en tutoriales infinitos.
+            </p>
           </div>
+
+          {/* Canvas Cósmico Interactivo */}
+          <CosmicRoadmap />
         </div>
       </section>
 
