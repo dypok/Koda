@@ -12,11 +12,24 @@ interface CtaSectionProps {
 
 export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
   return (
-    <section className="py-24 md:py-36 bg-slate-950 relative overflow-hidden border-t border-slate-800/80">
-      {/* Resplandor ambiental de fondo integrado */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.12),transparent_70%)] blur-3xl pointer-events-none" />
+    <section className="py-24 md:py-36 bg-gradient-to-b from-slate-950 via-[#120e17] to-slate-950 relative overflow-hidden border-t border-slate-800/80">
+      {/* Resplandor ambiental de ignición de fondo integrado */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[480px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.2),rgba(234,88,12,0.08),transparent_70%)] blur-3xl pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[450px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.14),transparent_70%)] blur-2xl pointer-events-none" />
+      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-orange-950/20 via-transparent to-transparent pointer-events-none" />
 
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 relative text-center space-y-8">
+      {/* Anillos concéntricos del vórtice de lanzamiento */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none select-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full border border-orange-500/20 animate-[launchPulse_5s_ease-in-out_infinite]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] h-[460px] rounded-full border border-amber-500/15 animate-[launchPulse_5s_ease-in-out_infinite]" style={{ animationDelay: '1.5s' }} />
+      </div>
+
+      {/* Marcador técnico de cuadrante */}
+      <div className="hidden lg:block absolute top-6 left-8 text-orange-400/35 text-[11px] font-mono select-none pointer-events-none">
+        + LAUNCH_PAD // TRACK_01_PYTHON
+      </div>
+
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-8">
         {/* Mascota oficial Koda flotando directamente en la página */}
         <motion.div
           initial={{ opacity: 0, scale: 0.85, y: 30 }}
