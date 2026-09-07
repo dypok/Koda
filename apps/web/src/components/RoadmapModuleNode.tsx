@@ -1,7 +1,13 @@
 'use client';
 
 import React from 'react';
-import { Lock, Star, CheckCircle2, Play } from 'lucide-react';
+import {
+  IconLock,
+  IconStar,
+  IconStarFilled,
+  IconCircleCheck,
+  IconPlayerPlay,
+} from '@tabler/icons-react';
 import type { RoadmapModule } from '@koda/types';
 
 interface RoadmapModuleNodeProps {
@@ -17,7 +23,7 @@ export const RoadmapModuleNode: React.FC<RoadmapModuleNodeProps> = ({
     <div
       className={`relative rounded-2xl p-6 transition-all border ${
         module.is_unlocked
-          ? 'bg-slate-900 border-slate-800 hover:border-orange-500/50 shadow-lg hover:shadow-orange-500/10'
+          ? 'bg-slate-900 border-slate-800 hover:border-orange-500/50'
           : 'bg-slate-950/60 border-slate-850 opacity-60'
       }`}
     >
@@ -34,11 +40,11 @@ export const RoadmapModuleNode: React.FC<RoadmapModuleNodeProps> = ({
             }`}
           >
             {module.is_completed ? (
-              <CheckCircle2 size={28} />
+              <IconCircleCheck size={28} />
             ) : module.is_unlocked ? (
-              <Play size={24} className="fill-orange-400 translate-x-0.5" />
+              <IconPlayerPlay size={24} className="fill-orange-400 translate-x-0.5" />
             ) : (
-              <Lock size={24} />
+              <IconLock size={24} />
             )}
           </div>
 
@@ -59,13 +65,13 @@ export const RoadmapModuleNode: React.FC<RoadmapModuleNodeProps> = ({
           {module.is_unlocked ? (
             <button
               onClick={() => onSelectModule?.(module.id)}
-              className="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-slate-950 font-bold text-xs transition shadow-md shadow-orange-500/20 flex items-center gap-1.5"
+              className="px-4 py-2 rounded-xl bg-orange-500 hover:bg-orange-600 text-slate-950 font-bold text-xs transition flex items-center gap-1.5"
             >
               Continuar
             </button>
           ) : (
             <span className="text-xs text-slate-400 flex items-center gap-1 bg-slate-850 px-2.5 py-1 rounded-lg border border-slate-800">
-              <Lock size={12} /> Bloqueado
+              <IconLock size={12} /> Bloqueado
             </span>
           )}
           {module.is_unlocked && (
@@ -93,17 +99,13 @@ export const RoadmapModuleNode: React.FC<RoadmapModuleNodeProps> = ({
               <div className="flex items-center justify-between mb-1.5">
                 <span className="text-[10px] font-bold text-slate-400">{sec.code}</span>
                 <div className="flex gap-0.5">
-                  {[1, 2, 3].map((s) => (
-                    <Star
-                      key={s}
-                      size={11}
-                      className={
-                        s <= sec.stars_earned
-                          ? 'fill-amber-400 text-amber-400'
-                          : 'text-slate-700'
-                      }
-                    />
-                  ))}
+                  {[1, 2, 3].map((s) =>
+                    s <= sec.stars_earned ? (
+                      <IconStarFilled key={s} size={11} className="text-amber-400" />
+                    ) : (
+                      <IconStar key={s} size={11} className="text-slate-700" />
+                    )
+                  )}
                 </div>
               </div>
               <p className="text-xs font-semibold text-slate-200 truncate">{sec.title}</p>

@@ -3,7 +3,15 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, BookOpen, Layers, HelpCircle, Terminal, LogIn } from 'lucide-react';
+import {
+  IconMenu2,
+  IconX,
+  IconBook2,
+  IconStack2,
+  IconHelpCircle,
+  IconTerminal2,
+  IconLogin,
+} from '@tabler/icons-react';
 
 interface NavbarProps {
   onOpenLogin?: () => void;
@@ -30,7 +38,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 shadow-md shadow-orange-500/10 group-hover:scale-105 group-hover:border-amber-500/40 transition-all overflow-hidden">
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 group-hover:scale-105 group-hover:border-amber-500/40 transition-all overflow-hidden">
             <Image
               src="/logo.png"
               alt="KodaAcademy Logo"
@@ -42,8 +50,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
           </div>
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
-              <span className="text-xl font-extrabold tracking-tight text-white group-hover:text-amber-400 transition-colors">
-                Koda<span className="text-amber-400">Academy</span>
+              <span className="text-xl font-black tracking-tight bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
+                KodaAcademy
               </span>
             </div>
           </div>
@@ -55,28 +63,28 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
             onClick={() => scrollTo('metodologia')}
             className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
           >
-            <BookOpen className="w-4 h-4 text-slate-400" />
+            <IconBook2 className="w-4 h-4 text-slate-400" />
             Metodología
           </button>
           <button
             onClick={() => scrollTo('temario')}
             className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
           >
-            <Layers className="w-4 h-4 text-slate-400" />
+            <IconStack2 className="w-4 h-4 text-slate-400" />
             Tracks & Temario
           </button>
           <button
             onClick={() => scrollTo('demo-interactiva')}
             className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
           >
-            <Terminal className="w-4 h-4 text-slate-400" />
+            <IconTerminal2 className="w-4 h-4 text-slate-400" />
             Práctica en Vivo
           </button>
           <button
             onClick={() => scrollTo('faq')}
             className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
           >
-            <HelpCircle className="w-4 h-4 text-slate-400" />
+            <IconHelpCircle className="w-4 h-4 text-slate-400" />
             Preguntas Frecuentes
           </button>
         </nav>
@@ -85,9 +93,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
         <div className="hidden md:flex items-center gap-3">
           <button
             onClick={handleLoginClick}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 px-5 py-2.5 text-sm font-bold text-slate-950 shadow-md shadow-orange-500/20 hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 px-5 py-2.5 text-sm font-bold text-slate-950 hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
-            <LogIn className="w-4 h-4 text-slate-950" />
+            <IconLogin className="w-4 h-4 text-slate-950" />
             Iniciar Sesión
           </button>
         </div>
@@ -100,7 +108,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
             className="p-2 text-slate-400 hover:text-slate-100 rounded-lg hover:bg-slate-850 transition-colors"
             aria-label="Abrir menú"
           >
-            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {mobileMenuOpen ? <IconX className="w-6 h-6" /> : <IconMenu2 className="w-6 h-6" />}
           </button>
         </div>
       </div>
@@ -113,37 +121,37 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
               onClick={() => scrollTo('metodologia')}
               className="flex items-center gap-2.5 py-2 text-left hover:text-amber-400"
             >
-              <BookOpen className="w-5 h-5 text-amber-400" />
+              <IconBook2 className="w-5 h-5 text-amber-400" />
               Metodología
             </button>
             <button
               onClick={() => scrollTo('temario')}
               className="flex items-center gap-2.5 py-2 text-left hover:text-amber-400"
             >
-              <Layers className="w-5 h-5 text-amber-400" />
+              <IconStack2 className="w-5 h-5 text-amber-400" />
               Tracks & Temario
             </button>
             <button
               onClick={() => scrollTo('demo-interactiva')}
               className="flex items-center gap-2.5 py-2 text-left hover:text-amber-400"
             >
-              <Terminal className="w-5 h-5 text-amber-400" />
+              <IconTerminal2 className="w-5 h-5 text-amber-400" />
               Práctica en Vivo
             </button>
             <button
               onClick={() => scrollTo('faq')}
               className="flex items-center gap-2.5 py-2 text-left hover:text-amber-400"
             >
-              <HelpCircle className="w-5 h-5 text-amber-400" />
+              <IconHelpCircle className="w-5 h-5 text-amber-400" />
               Preguntas Frecuentes
             </button>
           </nav>
           <div className="pt-2">
             <button
               onClick={handleLoginClick}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 py-3 text-sm font-bold text-slate-950 shadow-md shadow-orange-500/20"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 py-3 text-sm font-bold text-slate-950"
             >
-              <LogIn className="w-4 h-4" />
+              <IconLogin className="w-4 h-4" />
               Iniciar Sesión
             </button>
           </div>

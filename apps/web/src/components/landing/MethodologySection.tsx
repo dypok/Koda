@@ -1,12 +1,20 @@
 'use client';
 
 import React from 'react';
-import { Zap, Target, Lightbulb, BookMarked, Check, X, ShieldCheck } from 'lucide-react';
+import {
+  IconBolt,
+  IconTarget,
+  IconBulb,
+  IconBookmark,
+  IconCheck,
+  IconX,
+  IconShieldCheck,
+} from '@tabler/icons-react';
 
 export const MethodologySection: React.FC = () => {
   const pillars = [
     {
-      icon: Zap,
+      icon: IconBolt,
       color: 'from-amber-500 to-orange-500',
       tag: 'Micro-Lecciones Atómicas',
       title: 'Unidades de 1 a 2 Minutos',
@@ -14,7 +22,7 @@ export const MethodologySection: React.FC = () => {
         'Cada lección aborda un único concepto clave sin explicaciones redundantes, facilitando un aprendizaje progresivo y digerible.',
     },
     {
-      icon: Target,
+      icon: IconTarget,
       color: 'from-emerald-500 to-teal-500',
       tag: 'Práctica Inmediata',
       title: '1 Concepto = 1 Reto en Vivo',
@@ -22,7 +30,7 @@ export const MethodologySection: React.FC = () => {
         'Inmediatamente después de cada concepto, resuelves un ejercicio interactivo para consolidar la comprensión con código real.',
     },
     {
-      icon: Lightbulb,
+      icon: IconBulb,
       color: 'from-blue-500 to-indigo-500',
       tag: 'Pedagogía Constructiva',
       title: 'Asistencia Guiada',
@@ -30,7 +38,7 @@ export const MethodologySection: React.FC = () => {
         'Si cometes un error, Koda te orienta con pistas conceptuales que estimulan tu razonamiento sin darte la respuesta directamente.',
     },
     {
-      icon: BookMarked,
+      icon: IconBookmark,
       color: 'from-purple-500 to-pink-500',
       tag: 'Práctica Deliberada',
       title: 'Cuaderno de Errores',
@@ -41,14 +49,11 @@ export const MethodologySection: React.FC = () => {
 
   return (
     <section id="metodologia" className="py-20 md:py-28 bg-slate-950 relative overflow-hidden">
-      {/* Glow effect */}
-      <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-3xl pointer-events-none -z-10" />
-
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
           <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-4 py-1 text-xs font-semibold text-amber-400">
-            <ShieldCheck className="w-3.5 h-3.5" />
+            <IconShieldCheck className="w-3.5 h-3.5" />
             Aprendizaje Activo
           </div>
           <h2 className="text-3xl sm:text-5xl font-black text-white tracking-tight">
@@ -66,11 +71,11 @@ export const MethodologySection: React.FC = () => {
             return (
               <div
                 key={idx}
-                className="group relative rounded-3xl border border-slate-800 bg-gradient-to-b from-slate-900/80 to-slate-950 p-6 hover:border-amber-500/40 transition-all hover:-translate-y-1 shadow-lg hover:shadow-amber-500/5 flex flex-col justify-between"
+                className="group relative rounded-3xl border border-slate-800 bg-gradient-to-b from-slate-900/80 to-slate-950 p-6 hover:border-amber-500/40 transition-all hover:-translate-y-1 flex flex-col justify-between"
               >
                 <div>
                   <div
-                    className={`inline-flex p-3 rounded-2xl bg-gradient-to-br ${pillar.color} shadow-lg shadow-black/40 mb-4 group-hover:scale-110 transition-transform`}
+                    className={`inline-flex p-3 rounded-2xl bg-gradient-to-br ${pillar.color} mb-4 group-hover:scale-105 transition-transform`}
                   >
                     <Icon className="w-6 h-6 text-slate-950 font-bold" />
                   </div>
@@ -90,7 +95,7 @@ export const MethodologySection: React.FC = () => {
         </div>
 
         {/* Comparison Table / Box: Traditional vs Koda */}
-        <div className="max-w-4xl mx-auto rounded-3xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8 backdrop-blur-xl shadow-2xl">
+        <div className="max-w-4xl mx-auto rounded-3xl border border-slate-800 bg-slate-900/60 p-6 sm:p-8 backdrop-blur-xl">
           <h3 className="text-xl sm:text-2xl font-bold text-white text-center mb-8">
             Diferencias con la enseñanza tradicional de programación
           </h3>
@@ -99,50 +104,50 @@ export const MethodologySection: React.FC = () => {
             {/* Traditional courses */}
             <div className="rounded-2xl border border-rose-500/20 bg-rose-950/10 p-5 space-y-4">
               <div className="flex items-center gap-2 text-rose-400 font-bold text-base pb-2 border-b border-rose-500/20">
-                <X className="w-5 h-5 text-rose-500" />
+                <IconX className="w-5 h-5 text-rose-500" />
                 <span>Enseñanza Convencional</span>
               </div>
               <ul className="space-y-3 text-xs sm:text-sm text-slate-300">
                 <li className="flex items-start gap-2">
-                  <X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                  <IconX className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                   <span>Tutoriales en video donde el estudiante permanece como espectador pasivo.</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                  <IconX className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                   <span>Fricción técnica inicial: configuración compleja de compiladores y dependencias.</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                  <IconX className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                   <span>Mensajes de error crípticos que generan dudas sin orientación didáctica.</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <X className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+                  <IconX className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
                   <span>Falta de retroalimentación inmediata sobre la lógica aplicada.</span>
                 </li>
               </ul>
             </div>
 
             {/* Koda Experience */}
-            <div className="rounded-2xl border border-emerald-500/30 bg-emerald-950/15 p-5 space-y-4 shadow-lg shadow-emerald-500/5">
+            <div className="rounded-2xl border border-emerald-500/30 bg-emerald-950/15 p-5 space-y-4">
               <div className="flex items-center gap-2 text-emerald-400 font-bold text-base pb-2 border-b border-emerald-500/20">
-                <Check className="w-5 h-5 text-emerald-400" />
+                <IconCheck className="w-5 h-5 text-emerald-400" />
                 <span>Metodología KodaAcademy</span>
               </div>
               <ul className="space-y-3 text-xs sm:text-sm text-slate-200">
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <IconCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <span>Aprendizaje activo: escribes y pruebas código en cada lección.</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <IconCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <span>Entorno web instantáneo sin requerir configuraciones locales.</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <IconCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <span>Pistas pedagógicas que te enseñan a razonar y corregir el error.</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  <IconCheck className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
                   <span>Progresión estructurada por módulos con evaluación y certificación oficial.</span>
                 </li>
               </ul>

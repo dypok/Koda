@@ -1,7 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Play, Sparkles, Check, Terminal, RotateCcw } from 'lucide-react';
+import {
+  IconPlayerPlay,
+  IconSparkles,
+  IconCheck,
+  IconTerminal2,
+  IconRotateClockwise,
+} from '@tabler/icons-react';
 
 interface CodeSnippet {
   id: string;
@@ -62,7 +68,7 @@ export const InteractivePreview: React.FC = () => {
         {/* Header */}
         <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
           <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/30 bg-amber-500/10 px-3.5 py-1 text-xs font-semibold text-amber-400">
-            <Terminal className="w-3.5 h-3.5" />
+            <IconTerminal2 className="w-3.5 h-3.5" />
             Consola Interactiva
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
@@ -83,7 +89,7 @@ export const InteractivePreview: React.FC = () => {
                 onClick={() => handleSelect(snippet)}
                 className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all ${
                   isSelected
-                    ? 'bg-amber-500 text-slate-950 shadow-lg shadow-amber-500/20 scale-105'
+                    ? 'bg-amber-500 text-slate-950 scale-[1.02]'
                     : 'bg-slate-900 border border-slate-800 text-slate-300 hover:text-white hover:bg-slate-850'
                 }`}
               >
@@ -94,7 +100,7 @@ export const InteractivePreview: React.FC = () => {
         </div>
 
         {/* Code & Terminal Split Box */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-5xl mx-auto rounded-3xl border border-slate-800 bg-slate-900/90 shadow-2xl overflow-hidden backdrop-blur-xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 max-w-5xl mx-auto rounded-3xl border border-slate-800 bg-slate-900/90 overflow-hidden backdrop-blur-xl">
           {/* Left: Code Editor (7 cols) */}
           <div className="lg:col-span-7 flex flex-col border-b lg:border-b-0 lg:border-r border-slate-800">
             {/* Editor Top Bar */}
@@ -120,22 +126,22 @@ export const InteractivePreview: React.FC = () => {
             {/* Action Bar */}
             <div className="mt-auto p-4 bg-slate-950/60 border-t border-slate-800 flex items-center justify-between">
               <span className="text-xs text-slate-400 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+                <IconSparkles className="w-3.5 h-3.5 text-amber-400" />
                 Presiona ejecutar para probar la salida
               </span>
               <button
                 onClick={handleRun}
                 disabled={isRunning}
-                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-slate-950 shadow-md shadow-emerald-500/20 hover:shadow-emerald-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
+                className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-xs sm:text-sm font-bold text-slate-950 hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all disabled:opacity-50"
               >
                 {isRunning ? (
                   <>
-                    <RotateCcw className="w-4 h-4 animate-spin text-slate-950" />
+                    <IconRotateClockwise className="w-4 h-4 animate-spin text-slate-950" />
                     Ejecutando...
                   </>
                 ) : (
                   <>
-                    <Play className="w-4 h-4 fill-slate-950 text-slate-950" />
+                    <IconPlayerPlay className="w-4 h-4 fill-slate-950 text-slate-950" />
                     Ejecutar Código
                   </>
                 )}
@@ -147,7 +153,7 @@ export const InteractivePreview: React.FC = () => {
           <div className="lg:col-span-5 flex flex-col bg-slate-950/90 p-5">
             <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3 text-xs text-slate-400 font-mono">
               <div className="flex items-center gap-1.5">
-                <Terminal className="w-4 h-4 text-emerald-400" />
+                <IconTerminal2 className="w-4 h-4 text-emerald-400" />
                 <span>Salida Estándar (stdout)</span>
               </div>
               <span className="text-slate-500 font-mono text-[11px]">Python 3.12 Runtime</span>
@@ -160,14 +166,14 @@ export const InteractivePreview: React.FC = () => {
                     {output}
                   </div>
                   <div className="flex items-center gap-1.5 text-xs text-slate-400 pt-1">
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
+                    <IconCheck className="w-3.5 h-3.5 text-emerald-400" />
                     Ejecución completada exitosamente (Exit code 0).
                   </div>
                 </div>
               ) : (
                 <div className="text-center text-slate-500 text-xs py-8 space-y-2">
                   <div className="inline-block p-3 rounded-full bg-slate-900 border border-slate-800">
-                    <Play className="w-5 h-5 text-slate-600 ml-0.5" />
+                    <IconPlayerPlay className="w-5 h-5 text-slate-600 ml-0.5" />
                   </div>
                   <p>Presiona "Ejecutar Código" para ver el resultado en vivo.</p>
                 </div>

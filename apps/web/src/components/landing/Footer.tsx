@@ -3,7 +3,13 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart, Github, BookOpen, QrCode, ShieldCheck } from 'lucide-react';
+import {
+  IconHeart,
+  IconBrandGithub,
+  IconBook2,
+  IconQrcode,
+  IconShieldCheck,
+} from '@tabler/icons-react';
 
 export const Footer: React.FC = () => {
   const scrollTo = (id: string) => {
@@ -18,7 +24,7 @@ export const Footer: React.FC = () => {
           {/* Col 1: Brand Info */}
           <div className="md:col-span-2 space-y-4">
             <Link href="/" className="flex items-center gap-3 group">
-              <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 shadow-md shadow-orange-500/10 overflow-hidden">
+              <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 overflow-hidden">
                 <Image
                   src="/logo.png"
                   alt="KodaAcademy Logo"
@@ -27,8 +33,8 @@ export const Footer: React.FC = () => {
                   className="object-contain"
                 />
               </div>
-              <span className="text-xl font-extrabold text-white tracking-tight">
-                Koda<span className="text-amber-400">Academy</span>
+              <span className="text-xl font-black tracking-tight bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
+                KodaAcademy
               </span>
             </Link>
             <p className="text-slate-400 text-xs sm:text-sm max-w-sm leading-relaxed">
@@ -36,7 +42,7 @@ export const Footer: React.FC = () => {
             </p>
             <div className="flex items-center gap-4 text-xs text-slate-500 pt-1">
               <span className="inline-flex items-center gap-1">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                <IconShieldCheck className="w-4 h-4 text-emerald-400" />
                 Track Inaugural: Python 3.12
               </span>
               <span>•</span>
@@ -82,13 +88,13 @@ export const Footer: React.FC = () => {
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 hover:text-amber-400 transition-colors"
                 >
-                  <Github className="w-3.5 h-3.5" />
+                  <IconBrandGithub className="w-3.5 h-3.5" />
                   Repositorio en GitHub
                 </a>
               </li>
               <li>
                 <Link href="/verificar" className="flex items-center gap-1.5 hover:text-amber-400 transition-colors">
-                  <QrCode className="w-3.5 h-3.5" />
+                  <IconQrcode className="w-3.5 h-3.5" />
                   Verificación de Certificados
                 </Link>
               </li>
@@ -106,7 +112,7 @@ export const Footer: React.FC = () => {
         <div className="pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <p>© {new Date().getFullYear()} KodaAcademy. Todos los derechos reservados.</p>
           <p className="flex items-center gap-1">
-            Hecho con <Heart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> para la comunidad de programadores.
+            Hecho con <IconHeart className="w-3.5 h-3.5 text-rose-500 fill-rose-500" /> para la comunidad de programadores.
           </p>
         </div>
       </div>
