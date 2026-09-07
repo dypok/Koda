@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { CosmicRoadmap } from './CosmicRoadmap';
+import { MiniSkillTree } from './MiniSkillTree';
 
 export const MethodologySection: React.FC = () => {
   return (
@@ -62,24 +62,33 @@ export const MethodologySection: React.FC = () => {
       </section>
 
       {/* =========================================================
-          SECCIÓN 02: Roadmap Cósmico Gamificado (Skill Tree)
+          SECCIÓN 02: Roadmap (Invertido: Mini Skill Tree Izquierda / Texto Derecha)
           ========================================================= */}
       <section id="roadmap" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80">
-        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-10 -translate-y-1/2 w-96 h-96 bg-amber-500/5 rounded-full blur-3xl pointer-events-none" />
 
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-10 relative">
-          <div className="space-y-4 text-left max-w-3xl">
-            <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
-              Un roadmap claro, paso a paso
-            </h3>
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
+            {/* Visual Skill Tree Teaser Izquierda */}
+            <div className="lg:col-span-5 order-2 lg:order-1 flex justify-center lg:justify-start w-full">
+              <MiniSkillTree />
+            </div>
 
-            <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed font-sans">
-              Sabes exactamente qué aprender hoy y qué sigue mañana. Una ruta estructurada inspirada en árboles de habilidades que te permite visualizar tu dominio, desbloquear nuevos sectores técnicos y avanzar con dirección sin perderte en tutoriales infinitos.
-            </p>
+            {/* Texto Derecha */}
+            <div className="lg:col-span-7 order-1 lg:order-2 space-y-5 text-left">
+              <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
+                Un roadmap claro, paso a paso
+              </h3>
+
+              <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed font-sans max-w-xl">
+                Sabes exactamente qué aprender hoy y qué sigue mañana. Una ruta secuencial estructurada desde las bases hasta escribir tus propios programas sin perderte en tutoriales infinitos.
+              </p>
+
+              <p className="text-xs font-mono text-slate-500 pt-1">
+                Ruta progresiva · Sin saltos al vacío ni parálisis por análisis
+              </p>
+            </div>
           </div>
-
-          {/* Canvas Cósmico Interactivo */}
-          <CosmicRoadmap />
         </div>
       </section>
 
