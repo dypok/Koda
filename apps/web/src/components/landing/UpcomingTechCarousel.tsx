@@ -1,181 +1,38 @@
 'use client';
 
 import React from 'react';
-import {
-  IconBrandPython,
-  IconBrandJavascript,
-  IconBrandTypescript,
-  IconBrandRust,
-  IconBrandGolang,
-  IconBrandCpp,
-  IconBrandCSharp,
-  IconBrandSwift,
-  IconBrandKotlin,
-  IconBrandPhp,
-  IconBrandNodejs,
-  IconBrandReact,
-  IconBrandVue,
-  IconBrandAngular,
-  IconBrandSvelte,
-  IconBrandDocker,
-  IconBrandMysql,
-  IconBrandGit,
-  IconBrandGraphql,
-  IconBrandMongodb,
-  IconCoffee,
-} from '@tabler/icons-react';
-
-interface TechItem {
-  name: string;
-  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
-  color: string;
-}
-
-const UPCOMING_TECHNOLOGIES: TechItem[] = [
-  {
-    name: 'Python',
-    icon: IconBrandPython,
-    color: '#38BDF8',
-  },
-  {
-    name: 'JavaScript',
-    icon: IconBrandJavascript,
-    color: '#FACC15',
-  },
-  {
-    name: 'TypeScript',
-    icon: IconBrandTypescript,
-    color: '#60A5FA',
-  },
-  {
-    name: 'Rust',
-    icon: IconBrandRust,
-    color: '#FB923C',
-  },
-  {
-    name: 'Java',
-    icon: IconCoffee,
-    color: '#F97316',
-  },
-  {
-    name: 'Go',
-    icon: IconBrandGolang,
-    color: '#22D3EE',
-  },
-  {
-    name: 'C++',
-    icon: IconBrandCpp,
-    color: '#818CF8',
-  },
-  {
-    name: 'C#',
-    icon: IconBrandCSharp,
-    color: '#C084FC',
-  },
-  {
-    name: 'Swift',
-    icon: IconBrandSwift,
-    color: '#F97316',
-  },
-  {
-    name: 'Kotlin',
-    icon: IconBrandKotlin,
-    color: '#A855F7',
-  },
-  {
-    name: 'PHP',
-    icon: IconBrandPhp,
-    color: '#818CF8',
-  },
-  {
-    name: 'Node.js',
-    icon: IconBrandNodejs,
-    color: '#4ADE80',
-  },
-  {
-    name: 'React',
-    icon: IconBrandReact,
-    color: '#67E8F9',
-  },
-  {
-    name: 'Vue.js',
-    icon: IconBrandVue,
-    color: '#4ADE80',
-  },
-  {
-    name: 'Angular',
-    icon: IconBrandAngular,
-    color: '#F43F5E',
-  },
-  {
-    name: 'Svelte',
-    icon: IconBrandSvelte,
-    color: '#FB923C',
-  },
-  {
-    name: 'Docker',
-    icon: IconBrandDocker,
-    color: '#38BDF8',
-  },
-  {
-    name: 'SQL',
-    icon: IconBrandMysql,
-    color: '#FBBF24',
-  },
-  {
-    name: 'Git',
-    icon: IconBrandGit,
-    color: '#F87171',
-  },
-  {
-    name: 'GraphQL',
-    icon: IconBrandGraphql,
-    color: '#E879F9',
-  },
-  {
-    name: 'MongoDB',
-    icon: IconBrandMongodb,
-    color: '#34D399',
-  },
-];
+import { UPCOMING_TECHS } from '@/models/landing/technologies.model';
 
 export const UpcomingTechCarousel: React.FC = () => {
-  return (
-    <div className="w-full flex flex-col items-center select-none overflow-hidden">
-      {/* Indicador integrado sin bordes */}
-      <div className="flex items-center gap-2 mb-3 px-4">
-        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-        <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-slate-400">
-          Próximamente
-        </span>
-        <span className="text-slate-600 hidden sm:inline">•</span>
-        <span className="text-xs text-slate-500 hidden sm:inline font-medium">
-          Nuevos lenguajes y tecnologías en desarrollo
-        </span>
-      </div>
+  const duplicatedTechs = [...UPCOMING_TECHS, ...UPCOMING_TECHS];
 
-      {/* Carrusel a ancho completo (100% viewport horizontal) */}
-      <div className="relative w-full overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_3%,black_97%,transparent)]">
-        <div className="animate-marquee flex items-center gap-8 sm:gap-10 py-2">
-          {/* Duplicamos la lista para crear un bucle visual continuo e infinito */}
-          {[...UPCOMING_TECHNOLOGIES, ...UPCOMING_TECHNOLOGIES].map((tech, idx) => {
-            const Icon = tech.icon;
-            return (
+  return (
+    <div className="relative w-full overflow-hidden select-none py-4">
+      {/* Máscara de difuminado lateral suave */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent z-10" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-slate-950 via-slate-950/80 to-transparent z-10" />
+
+      {/* Riel de marquesina continua */}
+      <div className="flex w-max animate-marquee hover:[animation-play-state:paused] items-center gap-8 sm:gap-12">
+        {duplicatedTechs.map((tech, index) => {
+          const Icon = tech.icon;
+          return (
+            <div
+              key={`${tech.name}-${index}`}
+              className="flex items-center gap-2.5 opacity-75 hover:opacity-100 transition-all duration-300 transform hover:scale-105 cursor-pointer group shrink-0"
+            >
               <div
-                key={`${tech.name}-${idx}`}
-                className="group flex items-center gap-2.5 px-2 py-1 transition-all duration-300 cursor-default flex-shrink-0 select-none opacity-65 hover:opacity-100"
+                className="flex items-center justify-center w-8 h-8 rounded-lg bg-slate-900/60 border border-slate-800/80 group-hover:border-slate-700 transition-colors shadow-sm"
+                style={{ color: tech.color }}
               >
-                <Icon
-                  className="w-5 h-5 transition-transform duration-300 group-hover:scale-120"
-                  style={{ color: tech.color }}
-                />
-                <span className="text-sm font-semibold tracking-tight text-slate-300 group-hover:text-white transition-colors duration-300 whitespace-nowrap">
-                  {tech.name}
-                </span>
+                <Icon className="w-5 h-5" />
               </div>
-            );
-          })}
-        </div>
+              <span className="text-sm font-sans font-medium text-slate-300 group-hover:text-white transition-colors">
+                {tech.name}
+              </span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
