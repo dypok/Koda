@@ -9,7 +9,7 @@ export const LiveCodeSection: React.FC = () => (
 
     {/* Flujo de código de terminal continuo (GPU Layer) */}
     <div className="absolute inset-y-0 right-0 w-full sm:w-1/2 max-w-xl pointer-events-none overflow-hidden select-none opacity-[0.04] [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]">
-      <div className="font-mono text-[11px] text-amber-200 leading-6 space-y-1 animate-[codeStream_30s_linear_infinite] transform-gpu will-change-transform">
+      <div className="font-mono text-[11px] text-amber-200 leading-6 space-y-1 animate-code-stream transform-gpu will-change-transform">
         <p>def solve_challenge(data: list) -&gt; bool:</p>
         <p>&nbsp;&nbsp;pivot = partition(data)</p>
         <p>&nbsp;&nbsp;return verify_runtime(pivot)</p>
