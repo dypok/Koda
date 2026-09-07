@@ -44,28 +44,16 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
 
           {/* Right Column: Mascota Oficial Koda */}
           <div className="lg:col-span-5 flex flex-col items-center justify-center">
-            <div className="relative w-full max-w-md flex flex-col items-center">
+            <div className="relative w-full max-w-md flex items-center justify-center">
               {/* Koda Mascot Image */}
-              <div className="relative z-10 py-2 flex items-center justify-center w-full">
-                <Image
-                  src="/brand/koda-mascot.png"
-                  alt="Koda — Mascota Oficial KodaAcademy"
-                  width={360}
-                  height={260}
-                  className="relative z-10 object-contain animate-float select-none"
-                  priority
-                />
-              </div>
-
-              {/* Speech Bubble / Mascot Message */}
-              <div className="relative z-10 w-full max-w-sm rounded-2xl bg-slate-900/90 border border-amber-500/30 p-4 backdrop-blur-md text-center shadow-lg">
-                {/* Speech triangle pointer towards Koda */}
-                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-3.5 h-3.5 bg-slate-900 border-t border-l border-amber-500/30 rotate-45" />
-
-                <p className="text-sm font-semibold text-slate-100 leading-snug">
-                  «¡Hola! Soy Koda. Te guiaré paso a paso para dominar la lógica de programación y escribir código real sin miedo a equivocarte.»
-                </p>
-              </div>
+              <Image
+                src="/brand/koda-mascot.png"
+                alt="Koda — Mascota Oficial KodaAcademy"
+                width={380}
+                height={280}
+                className="relative z-10 object-contain animate-float select-none"
+                priority
+              />
             </div>
           </div>
         </div>
