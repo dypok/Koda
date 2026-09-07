@@ -60,7 +60,10 @@ const GradientButton = React.forwardRef<HTMLButtonElement, GradientButtonProps>(
         ref={ref}
         {...props}
       >
-        <span className="gradient-button-shimmer" aria-hidden="true" />
+        <span
+          className="pointer-events-none absolute inset-0 z-[2] w-full h-full -translate-x-full bg-[linear-gradient(105deg,transparent_20%,rgba(255,255,255,0.32)_50%,transparent_80%)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-full"
+          aria-hidden="true"
+        />
         <span className="relative z-10 inline-flex items-center justify-center gap-2.5">
           {children}
         </span>
