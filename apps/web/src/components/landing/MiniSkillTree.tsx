@@ -1,6 +1,4 @@
-'use client';
-
-import React, { useState } from 'react';
+import React from 'react';
 import {
   IconLock,
   IconCpu,
@@ -10,150 +8,44 @@ import {
   IconBinaryTree,
   IconAtom2,
   IconRoute,
+  IconShieldCheck,
+  IconGitFork,
+  IconPlus,
+  IconMinus,
 } from '@tabler/icons-react';
 
-interface NodeData {
-  id: string;
-  number: string;
-  name: string;
-  status: 'completed' | 'active' | 'unlocked' | 'locked' | 'bonus' | 'boss';
-  statusText: string;
-  xp: string;
-  topics: string[];
-  cx: number;
-  cy: number;
-  r: number;
-}
-
-const NODES: NodeData[] = [
-  {
-    id: 'syntax',
-    number: '01',
-    name: 'Sintaxis',
-    status: 'completed',
-    statusText: 'Completado · 3/3',
-    xp: '+200 XP',
-    topics: ['Variables primitivas', 'Tipos de datos', 'Operadores'],
-    cx: 55,
-    cy: 140,
-    r: 15,
-  },
-  {
-    id: 'scope',
-    number: '02',
-    name: 'Scope',
-    status: 'completed',
-    statusText: 'Completado · 3/3',
-    xp: '+250 XP',
-    topics: ['Ámbito léxico', 'Bloques de ejecución', 'Variables'],
-    cx: 135,
-    cy: 90,
-    r: 15,
-  },
-  {
-    id: 'functions',
-    number: '03',
-    name: 'Funciones',
-    status: 'completed',
-    statusText: 'Completado · 3/3',
-    xp: '+300 XP',
-    topics: ['Parámetros', 'Retorno múltiple', 'Lambdas'],
-    cx: 215,
-    cy: 165,
-    r: 15,
-  },
-  {
-    id: 'control-flow',
-    number: '04',
-    name: 'Control Flow',
-    status: 'active',
-    statusText: 'En Progreso · Paso 3/4',
-    xp: '+250 XP',
-    topics: ['if / elif / else', 'Bucles for & while', 'Match pattern'],
-    cx: 305,
-    cy: 130,
-    r: 18,
-  },
-  {
-    id: 'oop',
-    number: '05A',
-    name: 'POO',
-    status: 'locked',
-    statusText: 'Bloqueado · Req. Nivel 4',
-    xp: '+400 XP',
-    topics: ['Clases & Objetos', 'Herencia', 'Polimorfismo'],
-    cx: 395,
-    cy: 70,
-    r: 15,
-  },
-  {
-    id: 'datastructs',
-    number: '05B',
-    name: 'Memoria',
-    status: 'unlocked',
-    statusText: 'Disponible para iniciar',
-    xp: '+350 XP',
-    topics: ['Listas y Diccionarios', 'Comprensión de listas', 'O(n)'],
-    cx: 395,
-    cy: 190,
-    r: 15,
-  },
-  {
-    id: 'bonus',
-    number: '★',
-    name: 'Bonus Loot',
-    status: 'bonus',
-    statusText: 'Recompensa especial',
-    xp: '+150 XP',
-    topics: ['Tema Cyber Koda', 'Avatar de fuego'],
-    cx: 395,
-    cy: 250,
-    r: 12,
-  },
-  {
-    id: 'boss',
-    number: 'Ω',
-    name: 'Apex Gate',
-    status: 'boss',
-    statusText: 'Reto Final · 3 Fases',
-    xp: '+1000 XP',
-    topics: ['Proyecto terminal', 'Tests unitarios', 'Despliegue'],
-    cx: 480,
-    cy: 130,
-    r: 17,
-  },
-];
-
 export const MiniSkillTree: React.FC = () => {
-  const [hoveredNode, setHoveredNode] = useState<NodeData | null>(null);
-
   return (
-    <div className="relative w-full max-w-lg mx-auto select-none">
-      {/* Resplandor de fondo cósmico específico para el widget */}
-      <div className="absolute -inset-2 bg-gradient-to-r from-cyan-500/5 via-amber-500/10 to-rose-500/5 rounded-3xl blur-2xl pointer-events-none" />
+    <div className="relative w-full max-w-lg mx-auto select-none pointer-events-none">
+      {/* Resplandor ambiental cósmico */}
+      <div className="absolute -inset-3 bg-gradient-to-r from-cyan-500/10 via-amber-500/15 to-rose-500/10 rounded-3xl blur-2xl opacity-70" />
 
-      {/* Contenedor principal integrado */}
-      <div className="relative rounded-2xl bg-slate-950/70 border border-slate-800/80 p-3 sm:p-4 backdrop-blur-sm overflow-hidden">
-        {/* Barra superior HUD */}
-        <div className="flex items-center justify-between text-[11px] font-mono pb-2 border-b border-slate-900">
-          <div className="flex items-center gap-1.5 text-cyan-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-            <span className="font-semibold tracking-wider">SECTOR ALPHA: FUNDAMENTOS</span>
-            <span className="text-slate-500 text-[10px] hidden sm:inline">[3/3 DOMINADOS]</span>
+      {/* Marco de visualización puramente gráfico */}
+      <div className="relative rounded-2xl bg-slate-950/80 border border-slate-800/90 p-3 sm:p-4 backdrop-blur-md overflow-hidden shadow-2xl shadow-black/90">
+        {/* Barra superior HUD (gráfica) */}
+        <div className="flex items-center justify-between text-[10px] font-mono pb-2 border-b border-slate-900">
+          <div className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-cyan-300">
+            <IconShieldCheck className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="font-semibold tracking-wider">SECTOR ALPHA: FUNDAMENTOS [3/3]</span>
           </div>
 
-          <div className="flex items-center gap-2 text-slate-500">
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-amber-400 font-bold">
-              100%
-            </span>
-            <span className="text-slate-400 text-[10px] tracking-wide hidden sm:inline">VISTA DE MAPA</span>
+          <div className="flex items-center gap-1.5 text-slate-400">
+            <div className="flex items-center bg-slate-900 border border-slate-800 rounded px-1.5 py-0.5 text-[9px] gap-1 text-slate-400">
+              <IconMinus className="w-2.5 h-2.5" />
+              <span className="text-amber-400 font-bold px-0.5">100%</span>
+              <IconPlus className="w-2.5 h-2.5" />
+            </div>
+            <div className="hidden sm:flex items-center gap-1 px-1.5 py-0.5 rounded bg-slate-900 border border-slate-800 text-[9px] text-cyan-400">
+              <IconGitFork className="w-3 h-3" />
+              <span>BRANCH TRACKS</span>
+            </div>
           </div>
         </div>
 
-        {/* Canvas SVG del Árbol de Habilidades */}
-        <div className="relative mt-2 aspect-[540/280] w-full">
+        {/* Canvas SVG de la Constelación */}
+        <div className="relative mt-2 aspect-[540/290] w-full">
           <svg
-            viewBox="0 0 540 280"
+            viewBox="0 0 540 290"
             className="w-full h-full overflow-visible"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -161,42 +53,42 @@ export const MiniSkillTree: React.FC = () => {
             <defs>
               {/* Filtros de Resplandor Neón */}
               <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feGaussianBlur stdDeviation="3.5" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
               <filter id="glow-amber" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feGaussianBlur stdDeviation="4.5" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
               <filter id="glow-purple" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feGaussianBlur stdDeviation="3.5" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
               <filter id="glow-green" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feGaussianBlur stdDeviation="3.5" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
               <filter id="glow-red" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feGaussianBlur stdDeviation="5" result="blur" />
                 <feMerge>
                   <feMergeNode in="blur" />
                   <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
 
-              {/* Degradados de Conectores */}
+              {/* Degradados de Conectores Bézier */}
               <linearGradient id="grad-cyan-to-amber" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%" stopColor="#06b6d4" />
                 <stop offset="60%" stopColor="#0284c7" />
@@ -224,24 +116,24 @@ export const MiniSkillTree: React.FC = () => {
               </linearGradient>
             </defs>
 
-            {/* Puntos de referencia / estrellas de fondo tenue */}
-            <g className="opacity-20 text-slate-400">
-              <circle cx="35" cy="40" r="1" fill="currentColor" />
-              <circle cx="100" cy="220" r="1" fill="currentColor" />
-              <circle cx="260" cy="50" r="1" fill="currentColor" />
-              <circle cx="330" cy="240" r="1.5" fill="currentColor" />
-              <circle cx="460" cy="45" r="1" fill="currentColor" />
-              <circle cx="505" cy="210" r="1" fill="currentColor" />
-              <path d="M 80 60 L 84 60 M 82 58 L 82 62" stroke="currentColor" strokeWidth="0.8" />
-              <path d="M 450 250 L 454 250 M 452 248 L 452 252" stroke="currentColor" strokeWidth="0.8" />
+            {/* Estrellas y marcas de coordenadas tenues */}
+            <g className="opacity-25 text-slate-400">
+              <circle cx="35" cy="35" r="1" fill="currentColor" />
+              <circle cx="95" cy="210" r="1" fill="currentColor" />
+              <circle cx="260" cy="45" r="1" fill="currentColor" />
+              <circle cx="330" cy="235" r="1.5" fill="currentColor" />
+              <circle cx="460" cy="40" r="1" fill="currentColor" />
+              <circle cx="510" cy="210" r="1" fill="currentColor" />
+              <path d="M 75 55 L 81 55 M 78 52 L 78 58" stroke="currentColor" strokeWidth="0.8" />
+              <path d="M 450 245 L 456 245 M 453 242 L 453 248" stroke="currentColor" strokeWidth="0.8" />
             </g>
 
             {/* =========================================================
-                RUTAS / SPLINES DE CONEXIÓN
+                RUTAS / SPLINES BÉZIER CON RESPLANDOR
                 ========================================================= */}
             {/* 01 -> 02 (Cian) */}
             <path
-              d="M 55 140 C 95 140, 95 90, 135 90"
+              d="M 55 130 C 95 130, 95 85, 135 85"
               stroke="#06b6d4"
               strokeWidth="2.5"
               strokeLinecap="round"
@@ -250,7 +142,7 @@ export const MiniSkillTree: React.FC = () => {
 
             {/* 02 -> 03 (Cian) */}
             <path
-              d="M 135 90 C 175 90, 175 165, 215 165"
+              d="M 135 85 C 175 85, 175 155, 215 155"
               stroke="#06b6d4"
               strokeWidth="2.5"
               strokeLinecap="round"
@@ -259,16 +151,16 @@ export const MiniSkillTree: React.FC = () => {
 
             {/* 03 -> 04 (Cian a Ámbar) */}
             <path
-              d="M 215 165 C 255 165, 265 130, 305 130"
+              d="M 215 155 C 255 155, 265 125, 305 125"
               stroke="url(#grad-cyan-to-amber)"
               strokeWidth="2.5"
               strokeLinecap="round"
               filter="url(#glow-amber)"
             />
 
-            {/* Bifurcación Rama A: 04 -> 05A (Ámbar a Púrpura) */}
+            {/* Rama A: 04 -> 05A (Ámbar a Púrpura) */}
             <path
-              d="M 305 130 C 350 130, 350 70, 395 70"
+              d="M 305 125 C 348 125, 350 65, 395 65"
               stroke="url(#grad-amber-to-purple)"
               strokeWidth="2"
               strokeDasharray="4 3"
@@ -277,18 +169,18 @@ export const MiniSkillTree: React.FC = () => {
               className="opacity-70"
             />
 
-            {/* Bifurcación Rama B: 04 -> 05B (Ámbar a Verde) */}
+            {/* Rama B: 04 -> 05B (Ámbar a Verde) */}
             <path
-              d="M 305 130 C 350 130, 350 190, 395 190"
+              d="M 305 125 C 348 125, 350 180, 395 180"
               stroke="url(#grad-amber-to-green)"
               strokeWidth="2"
               strokeLinecap="round"
               filter="url(#glow-green)"
             />
 
-            {/* Conector Vertical hacia Cofre Bonus */}
+            {/* Conector a Cofre Bonus */}
             <path
-              d="M 395 205 L 395 238"
+              d="M 395 195 L 395 235"
               stroke="#f59e0b"
               strokeWidth="1.5"
               strokeDasharray="3 3"
@@ -297,7 +189,7 @@ export const MiniSkillTree: React.FC = () => {
 
             {/* Convergencia: 05A -> Boss (Púrpura a Rojo) */}
             <path
-              d="M 395 70 C 440 70, 440 130, 480 130"
+              d="M 395 65 C 440 65, 440 125, 480 125"
               stroke="url(#grad-purple-to-red)"
               strokeWidth="2"
               strokeDasharray="4 3"
@@ -307,42 +199,42 @@ export const MiniSkillTree: React.FC = () => {
 
             {/* Convergencia: 05B -> Boss (Verde a Rojo) */}
             <path
-              d="M 395 190 C 440 190, 440 130, 480 130"
+              d="M 395 180 C 440 180, 440 125, 480 125"
               stroke="url(#grad-green-to-red)"
               strokeWidth="2"
               strokeLinecap="round"
               filter="url(#glow-red)"
-              className="opacity-70"
+              className="opacity-75"
             />
 
             {/* =========================================================
                 ANILLOS ORBITALES CONCÉNTRICOS DEL NODO ACTIVO 04
                 ========================================================= */}
-            <g className="pointer-events-none">
+            <g>
               <circle
                 cx="305"
-                cy="130"
-                r="30"
+                cy="125"
+                r="28"
                 stroke="#f59e0b"
                 strokeWidth="1"
-                strokeOpacity="0.4"
+                strokeOpacity="0.45"
                 strokeDasharray="4 4"
-                className="animate-[spin_12s_linear_infinite] origin-[305px_130px]"
+                className="animate-[spin_12s_linear_infinite] origin-[305px_125px]"
               />
               <circle
                 cx="305"
-                cy="130"
-                r="45"
+                cy="125"
+                r="44"
                 stroke="#f97316"
                 strokeWidth="0.8"
                 strokeOpacity="0.25"
-                strokeDasharray="6 6"
-                className="animate-[spin_20s_linear_infinite_reverse] origin-[305px_130px]"
+                strokeDasharray="5 5"
+                className="animate-[spin_20s_linear_infinite_reverse] origin-[305px_125px]"
               />
               <circle
                 cx="305"
-                cy="130"
-                r="60"
+                cy="125"
+                r="58"
                 stroke="#ea580c"
                 strokeWidth="0.5"
                 strokeOpacity="0.15"
@@ -350,215 +242,242 @@ export const MiniSkillTree: React.FC = () => {
             </g>
 
             {/* =========================================================
-                NODOS VECTORIALES
+                NODO 01: SINTAXIS (DOMINADO)
                 ========================================================= */}
-            {NODES.map((node) => {
-              const isHovered = hoveredNode?.id === node.id;
-              const isActive = node.status === 'active';
-
-              // Colores según estado
-              let fillBg = '#0f172a';
-              let strokeColor = '#06b6d4';
-              let glowFilter = 'url(#glow-cyan)';
-              let textColor = '#22d3ee';
-
-              if (node.status === 'active') {
-                fillBg = '#ea580c';
-                strokeColor = '#fbbf24';
-                glowFilter = 'url(#glow-amber)';
-                textColor = '#fef3c7';
-              } else if (node.status === 'locked') {
-                fillBg = '#1e1b4b';
-                strokeColor = '#a855f7';
-                glowFilter = 'url(#glow-purple)';
-                textColor = '#c084fc';
-              } else if (node.status === 'unlocked') {
-                fillBg = '#064e3b';
-                strokeColor = '#10b981';
-                glowFilter = 'url(#glow-green)';
-                textColor = '#34d399';
-              } else if (node.status === 'bonus') {
-                fillBg = '#78350f';
-                strokeColor = '#f59e0b';
-                glowFilter = 'url(#glow-amber)';
-                textColor = '#fbbf24';
-              } else if (node.status === 'boss') {
-                fillBg = '#450a0a';
-                strokeColor = '#ef4444';
-                glowFilter = 'url(#glow-red)';
-                textColor = '#f87171';
-              }
-
-              return (
-                <g
-                  key={node.id}
-                  className="cursor-pointer transition-transform duration-200"
-                  onMouseEnter={() => setHoveredNode(node)}
-                  onMouseLeave={() => setHoveredNode(null)}
-                >
-                  {/* Halo de selección en hover */}
-                  {isHovered && (
-                    <circle
-                      cx={node.cx}
-                      cy={node.cy}
-                      r={node.r + 6}
-                      fill="none"
-                      stroke={strokeColor}
-                      strokeWidth="1.5"
-                      strokeDasharray="3 3"
-                      className="animate-spin origin-center"
-                      style={{ transformOrigin: `${node.cx}px ${node.cy}px` }}
-                    />
-                  )}
-
-                  {/* Círculo Principal del Nodo */}
-                  <circle
-                    cx={node.cx}
-                    cy={node.cy}
-                    r={node.r}
-                    fill={fillBg}
-                    stroke={strokeColor}
-                    strokeWidth={isActive ? 2.5 : 2}
-                    filter={glowFilter}
-                  />
-
-                  {/* Icono vectorial dentro del nodo */}
-                  <g
-                    transform={`translate(${node.cx - 8}, ${node.cy - 8})`}
-                    className="pointer-events-none"
-                  >
-                    {node.id === 'syntax' && (
-                      <IconBracketsContain className="w-4 h-4" stroke={textColor} strokeWidth={2.2} />
-                    )}
-                    {node.id === 'scope' && (
-                      <IconBinaryTree className="w-4 h-4" stroke={textColor} strokeWidth={2.2} />
-                    )}
-                    {node.id === 'functions' && (
-                      <IconAtom2 className="w-4 h-4" stroke={textColor} strokeWidth={2.2} />
-                    )}
-                    {node.id === 'control-flow' && (
-                      <IconRoute className="w-4 h-4" stroke="#ffffff" strokeWidth={2.5} />
-                    )}
-                    {node.id === 'oop' && (
-                      <IconLock className="w-4 h-4" stroke={textColor} strokeWidth={2.2} />
-                    )}
-                    {node.id === 'datastructs' && (
-                      <IconCpu className="w-4 h-4" stroke={textColor} strokeWidth={2.2} />
-                    )}
-                    {node.id === 'bonus' && (
-                      <IconGift className="w-4 h-4" stroke={textColor} strokeWidth={2.2} />
-                    )}
-                    {node.id === 'boss' && (
-                      <IconSkull className="w-4 h-4" stroke={textColor} strokeWidth={2.5} />
-                    )}
-                  </g>
-
-                  {/* Micro-etiquetas debajo de los nodos */}
-                  <text
-                    x={node.cx}
-                    y={node.cy + node.r + 12}
-                    textAnchor="middle"
-                    className="font-mono text-[8px] font-bold tracking-tight uppercase"
-                    fill={isActive ? '#f59e0b' : '#94a3b8'}
-                  >
-                    {node.number} · {node.name}
-                  </text>
-                  <text
-                    x={node.cx}
-                    y={node.cy + node.r + 20}
-                    textAnchor="middle"
-                    className="font-mono text-[7px] font-medium"
-                    fill={
-                      node.status === 'completed'
-                        ? '#22d3ee'
-                        : node.status === 'active'
-                        ? '#fbbf24'
-                        : '#64748b'
-                    }
-                  >
-                    {node.xp}
-                  </text>
-                </g>
-              );
-            })}
-
-            {/* Badge flotante "ACTIVO" sobre el nodo 04 */}
-            <g transform="translate(305, 95)" className="pointer-events-none">
-              <rect
-                x="-36"
-                y="-9"
-                width="72"
-                height="18"
-                rx="9"
-                fill="#1c1917"
-                stroke="#f59e0b"
-                strokeWidth="1"
+            <g>
+              <circle
+                cx="55"
+                cy="130"
+                r="15"
+                fill="#0c4a6e"
+                stroke="#06b6d4"
+                strokeWidth="2"
+                filter="url(#glow-cyan)"
               />
-              <circle cx="-25" cy="0" r="2.5" fill="#f59e0b" className="animate-ping" />
-              <circle cx="-25" cy="0" r="2.5" fill="#f59e0b" />
-              <text
-                x="4"
-                y="3"
-                textAnchor="middle"
-                className="font-mono text-[7px] font-bold fill-amber-300 tracking-wider"
-              >
-                PASO 3/4
+              <g transform="translate(47, 122)">
+                <IconBracketsContain className="w-4 h-4" stroke="#38bdf8" strokeWidth={2.2} />
+              </g>
+              <text x="55" y="153" textAnchor="middle" fill="#fbbf24" fontSize="6.5" letterSpacing="1.5">
+                ★★★
+              </text>
+              <text x="55" y="163" textAnchor="middle" className="font-mono text-[7.5px] font-bold tracking-tight uppercase" fill="#ffffff">
+                01 · SINTAXIS
+              </text>
+              <text x="55" y="171" textAnchor="middle" className="font-mono text-[6.5px] font-semibold" fill="#38bdf8">
+                DOMINADO · +200 XP
+              </text>
+            </g>
+
+            {/* =========================================================
+                NODO 02: SCOPE & VARIABLES (DOMINADO)
+                ========================================================= */}
+            <g>
+              <circle
+                cx="135"
+                cy="85"
+                r="15"
+                fill="#0c4a6e"
+                stroke="#06b6d4"
+                strokeWidth="2"
+                filter="url(#glow-cyan)"
+              />
+              <g transform="translate(127, 77)">
+                <IconBinaryTree className="w-4 h-4" stroke="#38bdf8" strokeWidth={2.2} />
+              </g>
+              <text x="135" y="108" textAnchor="middle" fill="#fbbf24" fontSize="6.5" letterSpacing="1.5">
+                ★★★
+              </text>
+              <text x="135" y="118" textAnchor="middle" className="font-mono text-[7.5px] font-bold tracking-tight uppercase" fill="#ffffff">
+                02 · SCOPE
+              </text>
+              <text x="135" y="126" textAnchor="middle" className="font-mono text-[6.5px] font-semibold" fill="#38bdf8">
+                DOMINADO · +250 XP
+              </text>
+            </g>
+
+            {/* =========================================================
+                NODO 03: FUNCIONES PURAS (DOMINADO)
+                ========================================================= */}
+            <g>
+              <circle
+                cx="215"
+                cy="155"
+                r="15"
+                fill="#0c4a6e"
+                stroke="#06b6d4"
+                strokeWidth="2"
+                filter="url(#glow-cyan)"
+              />
+              <g transform="translate(207, 147)">
+                <IconAtom2 className="w-4 h-4" stroke="#38bdf8" strokeWidth={2.2} />
+              </g>
+              <text x="215" y="178" textAnchor="middle" fill="#fbbf24" fontSize="6.5" letterSpacing="1.5">
+                ★★★
+              </text>
+              <text x="215" y="188" textAnchor="middle" className="font-mono text-[7.5px] font-bold tracking-tight uppercase" fill="#ffffff">
+                03 · FUNCIONES
+              </text>
+              <text x="215" y="196" textAnchor="middle" className="font-mono text-[6.5px] font-semibold" fill="#38bdf8">
+                DOMINADO · +300 XP
+              </text>
+            </g>
+
+            {/* =========================================================
+                NODO 04: CONTROL DE FLUJO (ACTIVO · EN PROGRESO)
+                ========================================================= */}
+            <g>
+              {/* Badge flotante superior */}
+              <g transform="translate(305, 92)">
+                <rect x="-34" y="-8" width="68" height="16" rx="8" fill="#1c1917" stroke="#f59e0b" strokeWidth="1" />
+                <circle cx="-23" cy="0" r="2.5" fill="#f59e0b" className="animate-ping" />
+                <circle cx="-23" cy="0" r="2.5" fill="#f59e0b" />
+                <text x="5" y="2.5" textAnchor="middle" className="font-mono text-[6.5px] font-bold fill-amber-300 tracking-wider">
+                  PASO 3/4
+                </text>
+              </g>
+
+              {/* Círculo Principal Activo */}
+              <circle
+                cx="305"
+                cy="125"
+                r="18"
+                fill="#ea580c"
+                stroke="#fbbf24"
+                strokeWidth="2.5"
+                filter="url(#glow-amber)"
+              />
+              <g transform="translate(297, 117)">
+                <IconRoute className="w-4 h-4" stroke="#ffffff" strokeWidth={2.5} />
+              </g>
+
+              <text x="305" y="152" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#fbbf24">
+                04 · CONTROL FLOW
+              </text>
+              <text x="305" y="160" textAnchor="middle" className="font-mono text-[6.5px] font-semibold" fill="#fef3c7">
+                EN PROGRESO · +250 XP
+              </text>
+            </g>
+
+            {/* =========================================================
+                NODO 05A: POO & CLASES (BLOQUEADO · PÚRPURA)
+                ========================================================= */}
+            <g>
+              <circle
+                cx="395"
+                cy="65"
+                r="14"
+                fill="#3b0764"
+                stroke="#a855f7"
+                strokeWidth="1.8"
+                filter="url(#glow-purple)"
+                strokeDasharray="3 2"
+              />
+              <g transform="translate(387, 57)">
+                <IconLock className="w-4 h-4" stroke="#c084fc" strokeWidth={2.2} />
+              </g>
+              <text x="395" y="88" textAnchor="middle" className="font-mono text-[7.5px] font-bold tracking-tight uppercase" fill="#c084fc">
+                05A · POO
+              </text>
+              <text x="395" y="96" textAnchor="middle" className="font-mono text-[6.5px] font-medium" fill="#9333ea">
+                BLOQUEADO · LVL 4
+              </text>
+            </g>
+
+            {/* =========================================================
+                NODO 05B: MEMORIA & ESTRUCTURAS (DISPONIBLE · VERDE)
+                ========================================================= */}
+            <g>
+              <circle
+                cx="395"
+                cy="180"
+                r="14"
+                fill="#064e3b"
+                stroke="#10b981"
+                strokeWidth="2"
+                filter="url(#glow-green)"
+              />
+              <g transform="translate(387, 172)">
+                <IconCpu className="w-4 h-4" stroke="#34d399" strokeWidth={2.2} />
+              </g>
+              <text x="395" y="202" textAnchor="middle" className="font-mono text-[7.5px] font-bold tracking-tight uppercase" fill="#34d399">
+                05B · MEMORIA
+              </text>
+              <text x="395" y="210" textAnchor="middle" className="font-mono text-[6.5px] font-medium" fill="#10b981">
+                DISPONIBLE · +350 XP
+              </text>
+            </g>
+
+            {/* =========================================================
+                COFRE BONUS (DORADO / ÁMBAR)
+                ========================================================= */}
+            <g>
+              <circle
+                cx="395"
+                cy="245"
+                r="11"
+                fill="#78350f"
+                stroke="#f59e0b"
+                strokeWidth="1.8"
+                filter="url(#glow-amber)"
+              />
+              <g transform="translate(388, 238)">
+                <IconGift className="w-3.5 h-3.5" stroke="#fbbf24" strokeWidth={2} />
+              </g>
+              <text x="395" y="264" textAnchor="middle" className="font-mono text-[6.5px] font-bold tracking-tight uppercase" fill="#fbbf24">
+                COFRE BONUS
+              </text>
+              <text x="395" y="271" textAnchor="middle" className="font-mono text-[5.5px] font-medium" fill="#d97706">
+                +150 XP & CYBER THEME
+              </text>
+            </g>
+
+            {/* =========================================================
+                NODO 06: APEX BOSS GATE (ROJO NEÓN)
+                ========================================================= */}
+            <g>
+              <circle
+                cx="480"
+                cy="125"
+                r="17"
+                fill="#450a0a"
+                stroke="#ef4444"
+                strokeWidth="2.2"
+                filter="url(#glow-red)"
+              />
+              <g transform="translate(472, 117)">
+                <IconSkull className="w-4 h-4" stroke="#f87171" strokeWidth={2.2} />
+              </g>
+              <text x="480" y="152" textAnchor="middle" className="font-mono text-[8px] font-bold tracking-tight uppercase" fill="#f87171">
+                Ω · APEX GATE
+              </text>
+              <text x="480" y="160" textAnchor="middle" className="font-mono text-[6.5px] font-semibold" fill="#ef4444">
+                RETO FINAL · 3 FASES
               </text>
             </g>
           </svg>
         </div>
 
-        {/* Tooltip táctico interactivo en Hover */}
-        {hoveredNode && (
-          <div className="absolute top-12 left-1/2 -translate-x-1/2 z-20 w-64 bg-slate-900/95 border border-slate-700/80 rounded-xl p-3 shadow-xl shadow-black/80 backdrop-blur-md pointer-events-none animate-in fade-in duration-150">
-            <div className="flex items-center justify-between text-[11px] font-mono border-b border-slate-800 pb-1.5 mb-1.5">
-              <span className="font-bold text-white">
-                {hoveredNode.number} · {hoveredNode.name}
-              </span>
-              <span className="text-amber-400 font-bold">{hoveredNode.xp}</span>
-            </div>
-            <p className="text-[10px] font-sans text-slate-300 mb-2">
-              Estado: <span className="font-semibold text-white">{hoveredNode.statusText}</span>
-            </p>
-            <div className="space-y-1">
-              <span className="text-[9px] font-mono uppercase text-slate-500 tracking-wider">
-                Conceptos clave:
-              </span>
-              <div className="flex flex-wrap gap-1">
-                {hoveredNode.topics.map((topic, i) => (
-                  <span
-                    key={i}
-                    className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-800/80 text-slate-300 border border-slate-700/50"
-                  >
-                    {topic}
-                  </span>
-                ))}
-              </div>
-            </div>
+        {/* Leyenda Inferior Fija (estilo HUD) */}
+        <div className="mt-2.5 pt-2 border-t border-slate-900/90 flex flex-wrap items-center justify-between gap-1.5 text-[8.5px] font-mono text-slate-400">
+          <div className="flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_5px_rgba(6,182,212,0.8)]" />
+            <span>Completado (3)</span>
           </div>
-        )}
-
-        {/* Leyenda Inferior */}
-        <div className="mt-3 pt-2.5 border-t border-slate-900 flex flex-wrap items-center justify-between gap-2 text-[9px] font-mono text-slate-400">
-          <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.8)]" />
-            <span>Dominado</span>
+          <div className="flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_5px_rgba(245,158,11,0.8)]" />
+            <span className="text-amber-300">Activo (1)</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_6px_rgba(245,158,11,0.8)]" />
-            <span className="text-amber-300">Activo</span>
-          </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-            <span>Disponible</span>
+            <span>Disponible (1)</span>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-1">
             <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-            <span>Bloqueado</span>
+            <span>Bloqueado (1)</span>
           </div>
-          <div className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-red-400 shadow-[0_0_6px_rgba(239,68,68,0.8)]" />
-            <span>Boss Gate</span>
+          <div className="flex items-center gap-1">
+            <span className="w-1.5 h-1.5 rounded-full bg-red-400 shadow-[0_0_5px_rgba(239,68,68,0.8)]" />
+            <span>Apex Gate (1)</span>
           </div>
         </div>
       </div>
