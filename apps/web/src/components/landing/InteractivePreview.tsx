@@ -84,70 +84,7 @@ export const InteractivePreview: React.FC = () => {
       </section>
 
       {/* =========================================================
-          SECCIÓN 02: Los Mejores Resultados (Invertido: Card 4X Izquierda / Texto Derecha)
-          ========================================================= */}
-      <section
-        id="resultados"
-        className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0d0f1c] to-slate-950"
-      >
-        {/* Resplandor ambiental de fondo */}
-        <div className="absolute top-1/2 left-6 lg:left-24 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.12),rgba(56,189,248,0.04),transparent_70%)] blur-3xl pointer-events-none" />
-
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-            {/* Elemento Visual Izquierda: Card 4X */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.92, y: 20 }}
-              whileInView={{ opacity: 1, scale: 1, y: 0 }}
-              viewport={{ once: false, margin: '-40px' }}
-              transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-5 order-2 lg:order-1 flex justify-center w-full"
-            >
-              <BorderGlow
-                borderRadius={24}
-                backgroundColor="#0B0F19"
-                glowColor="45 95 60"
-                colors={['#F59E0B', '#FBBF24', '#D97706']}
-                className="w-full max-w-md shadow-2xl"
-                contentClassName="rounded-[23px] p-8 sm:p-10 flex flex-col items-center text-center space-y-4"
-              >
-                <span className="font-display text-7xl sm:text-8xl font-black bg-gradient-to-br from-amber-300 via-amber-400 to-orange-500 bg-clip-text text-transparent leading-none select-none">
-                  4x
-                </span>
-                <p className="text-base sm:text-lg font-display font-bold text-white uppercase tracking-wider">
-                  Mayor Retención Activa
-                </p>
-                <p className="text-xs sm:text-sm text-slate-400 font-sans max-w-xs mx-auto">
-                  La práctica deliberada con código real genera una retención superior a mirar tutoriales pasivos.
-                </p>
-              </BorderGlow>
-            </motion.div>
-
-            {/* Texto Derecha */}
-            <motion.div
-              initial={{ opacity: 0, x: 35 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: false, margin: '-40px' }}
-              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              className="lg:col-span-7 order-1 lg:order-2 space-y-5 text-left"
-            >
-              <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
-                Los Mejores{' '}
-                <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400 bg-clip-text text-transparent">
-                  Resultados
-                </span>
-              </h2>
-
-              <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed font-sans max-w-xl">
-                La práctica deliberada con código real genera una retención hasta 4x superior a mirar tutoriales pasivos en video.
-              </p>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================
-          SECCIÓN 03: Código Real en Vivo (Texto Izquierda / Comparativa Setup Derecha)
+          SECCIÓN 02: Código Real en Vivo (Texto Izquierda / Comparativa Setup Derecha)
           ========================================================= */}
       <section
         id="codigo-en-vivo"
