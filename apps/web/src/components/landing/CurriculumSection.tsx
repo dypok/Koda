@@ -140,13 +140,13 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
                   <Award className="w-6 h-6" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-bold text-white">Certificado Oficial Koda 🦊</h4>
+                  <h4 className="text-sm font-bold text-white">Certificado Oficial KodaAcademy</h4>
                   <span className="text-[11px] text-indigo-300">Emisión digital verificable con código QR</span>
                 </div>
               </div>
 
               <p className="text-xs text-slate-300 leading-relaxed mb-4">
-                Al completar los 12 módulos y aprobar el Proyecto Integrador, obtendrás tu diploma oficial con identificador correlativo <code className="text-amber-400 font-mono">KODA-PY-{'{SEQ}'}</code> y enlace de verificación pública para tu CV y LinkedIn.
+                Al completar los 12 módulos y aprobar el Proyecto Integrador, obtendrás tu diploma oficial de KodaAcademy con identificador correlativo <code className="text-amber-400 font-mono">KODA-PY-{'{SEQ}'}</code> y enlace de verificación pública para tu CV y LinkedIn.
               </p>
 
               <div className="flex items-center justify-between bg-slate-900/80 border border-indigo-500/20 rounded-2xl p-3">

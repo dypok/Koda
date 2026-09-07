@@ -15,15 +15,15 @@ const SNIPPETS: CodeSnippet[] = [
   {
     id: 'hello',
     title: '1. Tu primer print',
-    code: 'print("¡Hola, Koda! 🦊")\nprint("Bienvenido al mundo de Python.")',
-    output: '¡Hola, Koda! 🦊\nBienvenido al mundo de Python.',
+    code: 'print("¡Hola, KodaAcademy! 🔥")\nprint("Bienvenido al mundo de Python.")',
+    output: '¡Hola, KodaAcademy! 🔥\nBienvenido al mundo de Python.',
     explanation: 'La función print() muestra texto en la pantalla. Solo necesitas encerrar tus palabras entre comillas.',
   },
   {
     id: 'vars',
     title: '2. Variables y Tipos',
-    code: 'nombre = "Koda"\npuntos_xp = 100\nes_genial = True\n\nprint(f"El zorro {nombre} tiene {puntos_xp} XP!")',
-    output: 'El zorro Koda tiene 100 XP!',
+    code: 'usuario = "Koda"\npuntos_xp = 100\nes_genial = True\n\nprint(f"¡{usuario} acumuló {puntos_xp} XP en KodaAcademy!")',
+    output: '¡Koda acumuló 100 XP en KodaAcademy!',
     explanation: 'En Python no necesitas declarar tipos complejos. Creas una variable asignándole un valor con el signo igual (=).',
   },
   {
@@ -66,7 +66,7 @@ export const InteractivePreview: React.FC = () => {
             Experiencia en Vivo
           </div>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Prueba cómo se siente aprender con Koda
+            Prueba cómo se siente aprender en KodaAcademy
           </h2>
           <p className="text-slate-400 text-sm sm:text-base">
             Sin consolas complejas, sin instalar Python, sin trabas. Código limpio, ejecución instantánea y explicaciones directas.
