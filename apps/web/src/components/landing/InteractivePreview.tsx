@@ -54,7 +54,7 @@ export const InteractivePreview: React.FC = () => {
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
+          viewport={{ once: false, margin: '-40px' }}
           transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
           className="text-center max-w-3xl mx-auto space-y-4 mb-16"
         >
@@ -76,7 +76,7 @@ export const InteractivePreview: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
+            viewport={{ once: false, margin: '-30px' }}
             transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             className="h-full"
           >
@@ -104,7 +104,7 @@ export const InteractivePreview: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
+            viewport={{ once: false, margin: '-30px' }}
             transition={{ duration: 0.7, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
             className="h-full"
           >
@@ -132,7 +132,7 @@ export const InteractivePreview: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, y: 32 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
+            viewport={{ once: false, margin: '-30px' }}
             transition={{ duration: 0.7, delay: 0.34, ease: [0.16, 1, 0.3, 1] }}
             className="h-full"
           >

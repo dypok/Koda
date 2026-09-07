@@ -21,11 +21,14 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   className,
 }) => {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: '-40px' });
+  const isInView = useInView(ref, { once: false, margin: '-20px' });
   const [value, setValue] = useState(from);
 
   useEffect(() => {
-    if (!isInView) return;
+    if (!isInView) {
+      setValue(from);
+      return;
+    }
 
     const controls = animate(from, to, {
       duration,

@@ -24,7 +24,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
         <motion.div
           initial={{ opacity: 0, scale: 0.85, y: 30 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
+          viewport={{ once: false, margin: '-40px' }}
           transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
           className="flex justify-center relative"
         >
@@ -45,7 +45,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
         <motion.div
           initial={{ opacity: 0, y: 25 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
+          viewport={{ once: false, margin: '-40px' }}
           transition={{ duration: 0.65, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
           className="space-y-4 max-w-2xl mx-auto"
         >
@@ -65,7 +65,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-60px' }}
+          viewport={{ once: false, margin: '-40px' }}
           transition={{ duration: 0.65, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
           className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
@@ -93,8 +93,8 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.6, delay: 0.4 }}
+          viewport={{ once: false, margin: '-30px' }}
+          transition={{ duration: 0.6, delay: 0.35 }}
           className="pt-6 flex flex-wrap items-center justify-center gap-6 text-xs text-slate-500 font-sans font-medium"
         >
           <span className="flex items-center gap-1.5">
