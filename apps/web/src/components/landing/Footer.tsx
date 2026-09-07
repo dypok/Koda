@@ -56,7 +56,7 @@ export const Footer: React.FC = () => {
             <ul className="space-y-2 text-xs">
               <li>
                 <button onClick={() => scrollTo('metodologia')} className="hover:text-amber-400 transition-colors">
-                  Metodología Activa
+                  ¿Por qué Koda?
                 </button>
               </li>
               <li>
@@ -65,8 +65,8 @@ export const Footer: React.FC = () => {
                 </button>
               </li>
               <li>
-                <button onClick={() => scrollTo('demo-interactiva')} className="hover:text-amber-400 transition-colors">
-                  Práctica en Vivo
+                <button onClick={() => scrollTo('propuesta-valor')} className="hover:text-amber-400 transition-colors">
+                  Propuesta de Valor
                 </button>
               </li>
               <li>
