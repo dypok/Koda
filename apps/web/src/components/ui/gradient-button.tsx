@@ -9,16 +9,16 @@ const gradientButtonVariants = cva(
   [
     "gradient-button",
     "inline-flex items-center justify-center",
-    "rounded-xl font-bold tracking-tight select-none transition-all",
+    "rounded-xl font-bold tracking-tight select-none",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
   {
     variants: {
       variant: {
-        default: "text-slate-950 font-black hover:scale-[1.02] active:scale-[0.98] transition-transform duration-200",
-        secondary: "gradient-button-variant text-slate-100 hover:text-white hover:scale-[1.02] active:scale-[0.98] transition-transform duration-200",
-        variant: "gradient-button-variant text-slate-100 hover:text-white hover:scale-[1.02] active:scale-[0.98] transition-transform duration-200",
+        default: "text-slate-950 font-black hover:scale-[1.015] active:scale-[0.985] transition-transform duration-300 ease-out",
+        secondary: "gradient-button-variant text-slate-100 hover:text-white hover:scale-[1.015] active:scale-[0.985] transition-transform duration-300 ease-out",
+        variant: "gradient-button-variant text-slate-100 hover:text-white hover:scale-[1.015] active:scale-[0.985] transition-transform duration-300 ease-out",
       },
       size: {
         default: "px-7 py-3 text-sm min-h-[44px]",
