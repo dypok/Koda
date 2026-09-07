@@ -18,11 +18,6 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[450px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.14),transparent_70%)] blur-2xl pointer-events-none" />
       <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-orange-950/20 via-transparent to-transparent pointer-events-none" />
 
-      {/* Anillos concéntricos del vórtice de lanzamiento */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] pointer-events-none select-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full border border-orange-500/20 animate-[launchPulse_5s_ease-in-out_infinite]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[460px] h-[460px] rounded-full border border-amber-500/15 animate-[launchPulse_5s_ease-in-out_infinite]" style={{ animationDelay: '1.5s' }} />
-      </div>
 
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-8">
         {/* Mascota oficial Koda flotando directamente en la página */}
