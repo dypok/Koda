@@ -50,19 +50,22 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
               <GradientButton
                 onClick={onOpenLogin}
-                className="w-full sm:w-auto gap-2.5 px-8 py-4 text-base font-extrabold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-transform"
+                size="lg"
+                className="w-full sm:w-auto gap-2.5"
               >
                 <IconLogin className="w-5 h-5" />
                 Iniciar Sesión
               </GradientButton>
 
-              <button
+              <GradientButton
+                variant="secondary"
+                size="lg"
                 onClick={() => scrollTo('temario')}
-                className="w-full sm:w-auto flex items-center justify-center gap-2 rounded-xl border border-slate-700/80 bg-slate-900/80 px-7 py-4 text-base font-semibold text-slate-200 hover:bg-slate-800 hover:text-white transition-all backdrop-blur-sm"
+                className="w-full sm:w-auto gap-2.5"
               >
                 <IconBook2 className="w-5 h-5 text-amber-400" />
                 Explorar Tracks Formativos
-              </button>
+              </GradientButton>
             </div>
           </div>
         </BorderGlow>

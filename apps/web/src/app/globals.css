@@ -70,31 +70,31 @@ body {
 
   @property --color-1 {
     syntax: '<color>';
-    initial-value: #000;
+    initial-value: #f97316;
     inherits: false;
   }
 
   @property --color-2 {
     syntax: '<color>';
-    initial-value: #08012c;
+    initial-value: #ea580c;
     inherits: false;
   }
 
   @property --color-3 {
     syntax: '<color>';
-    initial-value: #4e1e40;
+    initial-value: #f59e0b;
     inherits: false;
   }
 
   @property --color-4 {
     syntax: '<color>';
-    initial-value: #70464e;
+    initial-value: #fbbf24;
     inherits: false;
   }
 
   @property --color-5 {
     syntax: '<color>';
-    initial-value: #88394c;
+    initial-value: #d97706;
     inherits: false;
   }
 
@@ -106,37 +106,37 @@ body {
 
   @property --border-color-1 {
     syntax: '<color>';
-    initial-value: hsla(340, 75%, 60%, 0.2);
+    initial-value: hsla(38, 95%, 65%, 0.6);
     inherits: true;
   }
 
   @property --border-color-2 {
     syntax: '<color>';
-    initial-value: hsla(340, 75%, 40%, 0.75);
+    initial-value: hsla(24, 95%, 50%, 0.95);
     inherits: true;
   }
 
   @property --stop-1 {
     syntax: '<percentage>';
-    initial-value: 37.35%;
+    initial-value: 0%;
     inherits: false;
   }
 
   @property --stop-2 {
     syntax: '<percentage>';
-    initial-value: 61.36%;
+    initial-value: 25%;
     inherits: false;
   }
 
   @property --stop-3 {
     syntax: '<percentage>';
-    initial-value: 78.42%;
+    initial-value: 50%;
     inherits: false;
   }
 
   @property --stop-4 {
     syntax: '<percentage>';
-    initial-value: 89.52%;
+    initial-value: 75%;
     inherits: false;
   }
 
@@ -149,7 +149,7 @@ body {
 
 @layer components {
   .gradient-button {
-    @apply relative appearance-none cursor-pointer;
+    @apply relative appearance-none cursor-pointer text-slate-950 font-black tracking-tight;
     background: radial-gradient(
       var(--spread-x) var(--spread-y) at var(--pos-x) var(--pos-y),
       var(--color-1) var(--stop-1),
@@ -158,6 +158,7 @@ body {
       var(--color-4) var(--stop-4),
       var(--color-5) var(--stop-5)
     );
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.25);
     transition:
       --pos-x 0.5s,
       --pos-y 0.5s,
@@ -175,7 +176,9 @@ body {
       --stop-2 0.5s,
       --stop-3 0.5s,
       --stop-4 0.5s,
-      --stop-5 0.5s;
+      --stop-5 0.5s,
+      box-shadow 0.3s ease,
+      transform 0.2s ease;
   }
 
   .gradient-button::before {
@@ -199,29 +202,33 @@ body {
     --pos-y: 91.51%;
     --spread-x: 120.24%;
     --spread-y: 103.18%;
-    --color-1: #c96287;
-    --color-2: #c66c64;
-    --color-3: #cc7d23;
-    --color-4: #37140a;
-    --color-5: #000;
+    --color-1: #fef08a;
+    --color-2: #fbbf24;
+    --color-3: #f59e0b;
+    --color-4: #f97316;
+    --color-5: #ea580c;
     --border-angle: 190deg;
-    --border-color-1: hsla(340, 78%, 90%, 0.1);
-    --border-color-2: hsla(340, 75%, 90%, 0.6);
+    --border-color-1: hsla(45, 100%, 75%, 0.9);
+    --border-color-2: hsla(24, 95%, 55%, 1);
     --stop-1: 0%;
-    --stop-2: 8.8%;
-    --stop-3: 21.44%;
-    --stop-4: 71.34%;
-    --stop-5: 85.76%;
+    --stop-2: 15%;
+    --stop-3: 35%;
+    --stop-4: 70%;
+    --stop-5: 100%;
+    box-shadow: 0 6px 24px rgba(245, 158, 11, 0.4);
   }
 
   .gradient-button-variant {
-    --color-1: #000022;
-    --color-2: #1f3f6d;
-    --color-3: #469396;
-    --color-4: #f1ffa5;
+    @apply text-slate-100 font-bold;
+    --color-1: #0f172a;
+    --color-2: #151d2e;
+    --color-3: #1e293b;
+    --color-4: #334155;
+    --color-5: #0b0f19;
     --border-angle: 200deg;
-    --border-color-1: hsla(320, 75%, 90%, 0.6);
-    --border-color-2: hsla(320, 50%, 90%, 0.15);
+    --border-color-1: hsla(38, 92%, 55%, 0.6);
+    --border-color-2: hsla(24, 95%, 50%, 0.3);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
   }
 
   .gradient-button-variant:hover {
@@ -229,19 +236,20 @@ body {
     --pos-y: 95.51%;
     --spread-x: 110.24%;
     --spread-y: 110.2%;
-    --color-1: #000020;
-    --color-2: #f1ffa5;
-    --color-3: #469396;
-    --color-4: #1f3f6d;
-    --color-5: #000;
+    --color-1: #1e293b;
+    --color-2: #334155;
+    --color-3: #151d2e;
+    --color-4: #0f172a;
+    --color-5: #0b0f19;
     --stop-1: 0%;
     --stop-2: 10%;
-    --stop-3: 35.44%;
-    --stop-4: 71.34%;
-    --stop-5: 90.76%;
+    --stop-3: 35%;
+    --stop-4: 70%;
+    --stop-5: 100%;
     --border-angle: 210deg;
-    --border-color-1: hsla(320, 75%, 90%, 0.2);
-    --border-color-2: hsla(320, 50%, 90%, 0.75);
+    --border-color-1: hsla(38, 95%, 65%, 0.9);
+    --border-color-2: hsla(24, 95%, 55%, 0.6);
+    box-shadow: 0 4px 18px rgba(245, 158, 11, 0.2);
   }
 
   /* GooeyNav Component Styles */
@@ -249,7 +257,7 @@ body {
     --color-1: #f59e0b;
     --color-2: #f97316;
     --color-3: #fbbf24;
-    --color-4: #ffffff;
+    --color-4: #ea580c;
   }
 
   .gooey-effect {
@@ -262,14 +270,15 @@ body {
   }
 
   .gooey-effect.gooey-text {
-    color: white;
+    color: #cbd5e1;
     transition: color 0.3s ease;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 0.875rem;
   }
 
   .gooey-effect.gooey-text.active {
-    color: #020617;
+    color: #0b0f19;
+    font-weight: 800;
   }
 
   .gooey-effect.gooey-filter {
@@ -289,7 +298,7 @@ body {
     content: '';
     position: absolute;
     inset: 0;
-    background: white;
+    background: #f59e0b;
     transform: scale(0);
     opacity: 0;
     z-index: -1;
@@ -379,14 +388,30 @@ body {
     }
   }
 
+  .gooey-nav-item {
+    color: #cbd5e1;
+    transition: color 0.25s ease;
+  }
+
+  .gooey-nav-item:hover {
+    color: #fbbf24;
+  }
+
   .gooey-nav-item.active {
-    color: #020617 !important;
+    color: #0b0f19 !important;
     text-shadow: none;
+    font-weight: 800;
+  }
+
+  .gooey-nav-item.active a {
+    color: #0b0f19 !important;
   }
 
   .gooey-nav-item.active::after {
     opacity: 1;
     transform: scale(1);
+    background: linear-gradient(135deg, #f97316 0%, #f59e0b 50%, #ea580c 100%);
+    box-shadow: 0 2px 14px rgba(245, 158, 11, 0.4);
   }
 
   .gooey-nav-item::after {
@@ -394,10 +419,10 @@ body {
     position: absolute;
     inset: 0;
     border-radius: 9999px;
-    background: white;
+    background: linear-gradient(135deg, #f97316 0%, #f59e0b 50%, #ea580c 100%);
     opacity: 0;
     transform: scale(0);
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: -1;
   }
 }

@@ -99,7 +99,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
         <div className="hidden md:flex items-center gap-3">
           <GradientButton
             onClick={handleLoginClick}
-            className="min-w-0 px-5 py-2.5 text-sm gap-2 hover:scale-[1.02] active:scale-[0.98] transition-transform"
+            size="sm"
+            className="gap-2"
           >
             <IconLogin className="w-4 h-4" />
             Iniciar Sesión

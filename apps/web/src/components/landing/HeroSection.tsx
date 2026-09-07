@@ -50,7 +50,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
             <div className="pt-2 w-full sm:w-auto">
               <GradientButton
                 onClick={onOpenLogin}
-                className="w-full sm:w-auto gap-2.5 shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-transform"
+                size="lg"
+                className="w-full sm:w-auto gap-2.5"
               >
                 Comenzar Ahora
                 <IconArrowRight className="w-5 h-5" />

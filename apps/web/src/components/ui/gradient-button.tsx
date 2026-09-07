@@ -9,21 +9,26 @@ const gradientButtonVariants = cva(
   [
     "gradient-button",
     "inline-flex items-center justify-center",
-    "rounded-[11px] min-w-[132px] px-9 py-4",
-    "text-base leading-[19px] font-[500] text-white",
-    "font-sans font-bold",
-    "focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring",
+    "rounded-xl font-bold tracking-tight select-none transition-all",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
   {
     variants: {
       variant: {
-        default: "",
-        variant: "gradient-button-variant",
+        default: "text-slate-950 font-extrabold shadow-md hover:scale-[1.02] active:scale-[0.98]",
+        secondary: "gradient-button-variant text-slate-100 hover:text-white hover:scale-[1.02] active:scale-[0.98]",
+        variant: "gradient-button-variant text-slate-100 hover:text-white hover:scale-[1.02] active:scale-[0.98]",
+      },
+      size: {
+        default: "px-7 py-3 text-sm min-h-[44px]",
+        sm: "px-5 py-2.5 text-sm min-h-[38px]",
+        lg: "px-8 py-4 text-base min-h-[52px]",
       },
     },
     defaultVariants: {
       variant: "default",
+      size: "default",
     },
   }
 )
@@ -35,11 +40,11 @@ export interface GradientButtonProps
 }
 
 const GradientButton = React.forwardRef<HTMLButtonElement, GradientButtonProps>(
-  ({ className, variant, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
-        className={cn(gradientButtonVariants({ variant, className }))}
+        className={cn(gradientButtonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
       />
