@@ -7,6 +7,9 @@ import {
   IconCheck,
   IconTerminal2,
   IconRotateClockwise,
+  IconDiscountCheck,
+  IconGift,
+  IconTrophy,
 } from '@tabler/icons-react';
 import { BorderGlow } from '@/components/ui/border-glow';
 
@@ -64,15 +67,82 @@ export const InteractivePreview: React.FC = () => {
   };
 
   return (
-    <section id="demo-interactiva" className="py-16 md:py-24 border-y border-slate-800/80 bg-slate-950/60 relative">
+    <section id="demo-interactiva" className="py-20 md:py-28 border-y border-slate-800/80 bg-slate-950/60 relative">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3 mb-12">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Escribe y ejecuta código real. Sin instalar nada.
+        {/* Badge de Confianza: 100% Gratis */}
+        <div className="flex items-center justify-center gap-2 mb-4">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 shadow-xs">
+            <IconDiscountCheck className="w-4 h-4 text-emerald-400" />
+            100% Gratuito · Máxima Efectividad
+          </span>
+        </div>
+
+        {/* Header Principal con Rajdhani Display Font */}
+        <div className="text-center max-w-3xl mx-auto space-y-4 mb-12">
+          <h2 className="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight leading-[1.15]">
+            Aprende <span className="bg-gradient-to-r from-emerald-400 via-teal-300 to-emerald-400 bg-clip-text text-transparent">100% gratis</span> con los mejores resultados
           </h2>
-          <p className="text-slate-400 text-sm sm:text-base">
-            Experimenta el aprendizaje activo de KodaAcademy: interactividad en tu navegador, ejecución inmediata y conceptos claros. Demostración sobre el track piloto:
+          <p className="text-slate-400 text-sm sm:text-base leading-relaxed max-w-2xl mx-auto">
+            Sin suscripciones ocultas ni muros de pago. Un método interactivo de micro-lecciones y práctica deliberada diseñado para que domines la lógica de programación y alcances tu máximo potencial.
+          </p>
+        </div>
+
+        {/* 3 Pilares de Valor: 100% Gratis + Mejores Resultados + Práctica Inmediata */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-5xl mx-auto mb-14">
+          {/* Pilar 1: 100% Gratis */}
+          <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm flex flex-col space-y-2 hover:border-emerald-500/40 transition-colors group">
+            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-1 group-hover:scale-105 transition-transform">
+              <IconGift className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-1.5">
+              100% Gratuito
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">
+                Sin costo
+              </span>
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              Educación tecnológica de alta calidad accesible para todos. Acceso libre a lecciones, retos y proyectos sin costo alguno.
+            </p>
+          </div>
+
+          {/* Pilar 2: Los Mejores Resultados */}
+          <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm flex flex-col space-y-2 hover:border-amber-500/40 transition-colors group">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 mb-1 group-hover:scale-105 transition-transform">
+              <IconTrophy className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-1.5">
+              Los Mejores Resultados
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30">
+                Comprobado
+              </span>
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              La práctica deliberada con código real genera una retención hasta 4x superior a mirar tutoriales pasivos en video.
+            </p>
+          </div>
+
+          {/* Pilar 3: Práctica en Vivo en Navegador */}
+          <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-sm flex flex-col space-y-2 hover:border-sky-500/40 transition-colors group">
+            <div className="w-10 h-10 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400 mb-1 group-hover:scale-105 transition-transform">
+              <IconTerminal2 className="w-5 h-5" />
+            </div>
+            <h3 className="text-base font-bold text-white tracking-tight flex items-center gap-1.5">
+              Código Real en Vivo
+              <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 border border-sky-500/30">
+                En navegador
+              </span>
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">
+              Consola y motor de ejecución en tu navegador. Comprueba de inmediato el funcionamiento de tu lógica sin instalaciones.
+            </p>
+          </div>
+        </div>
+
+        {/* Subtítulo de demostración en vivo */}
+        <div className="text-center max-w-xl mx-auto mb-6">
+          <p className="text-xs uppercase tracking-widest font-bold text-slate-400 flex items-center justify-center gap-2">
+            <IconSparkles className="w-4 h-4 text-amber-400" />
+            Prueba interactiva en vivo — Sin instalar nada
           </p>
         </div>
 
