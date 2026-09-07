@@ -30,8 +30,8 @@ export const Footer: React.FC = () => {
       {/* Línea luminosa de acento superior tenue */}
       <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-amber-500/25 to-transparent pointer-events-none" />
 
-      {/* Resplandor ambiental de fondo cálido */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[750px] h-[200px] bg-[radial-gradient(ellipse_at_bottom,rgba(249,115,22,0.05),transparent_70%)] blur-3xl pointer-events-none" />
+      {/* Resplandor ambiental de fondo cálido (GPU Layer) */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[750px] h-[200px] bg-[radial-gradient(ellipse_at_bottom,rgba(249,115,22,0.06)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
       <motion.div
         initial={{ opacity: 0, y: 20 }}

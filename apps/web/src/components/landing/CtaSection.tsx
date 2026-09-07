@@ -13,9 +13,9 @@ interface CtaSectionProps {
 export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
   return (
     <section className="py-24 md:py-36 bg-gradient-to-b from-slate-950 via-[#120e17] to-slate-950 relative overflow-hidden border-t border-slate-800/80">
-      {/* Resplandor ambiental de ignición de fondo integrado */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[480px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.2),rgba(234,88,12,0.08),transparent_70%)] blur-3xl pointer-events-none" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[450px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.14),transparent_70%)] blur-2xl pointer-events-none" />
+      {/* Resplandor ambiental de ignición de fondo integrado (GPU Layer) */}
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[480px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.18)_0%,rgba(234,88,12,0.06)_45%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[450px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.12)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
       <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-orange-950/20 via-transparent to-transparent pointer-events-none" />
 
 
@@ -29,7 +29,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
           className="flex justify-center relative"
         >
           <div className="relative">
-            <div className="absolute inset-0 bg-orange-500/20 blur-2xl rounded-full -z-10 transform scale-75 animate-pulse" />
+            <div className="absolute inset-0 bg-orange-500/20 blur-lg rounded-full -z-10 transform scale-75 animate-pulse transform-gpu" />
             <Image
               src="/brand/koda-mascot.png"
               alt="Mascota Koda"

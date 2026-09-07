@@ -15,8 +15,8 @@ interface HeroSectionProps {
 export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
   return (
     <section className="relative isolate overflow-hidden min-h-screen min-h-[100dvh] flex flex-col justify-between pt-20 pb-4 md:pt-24 md:pb-6">
-      {/* Interactive Starry Night Sky Background */}
-      <HeroSkyBackground starCount={260} interactive={true} />
+      {/* Interactive Starry Night Sky Background (GPU Canvas) */}
+      <HeroSkyBackground starCount={140} interactive={true} />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full my-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
@@ -28,7 +28,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, amount: 0.2 }}
               transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.12]"
+              className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.12] transform-gpu"
             >
               Aprende a programar{' '}
               <span className="bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
@@ -43,7 +43,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: false, amount: 0.2 }}
               transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-              className="pt-2 flex flex-col items-center lg:items-start gap-3.5 w-full sm:w-auto"
+              className="pt-2 flex flex-col items-center lg:items-start gap-3.5 w-full sm:w-auto transform-gpu"
             >
               <GradientButton
                 onClick={onOpenLogin}
@@ -72,7 +72,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
             viewport={{ once: false, amount: 0.2 }}
             transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 flex flex-col items-center justify-center"
+            className="lg:col-span-5 flex flex-col items-center justify-center transform-gpu"
           >
             <div className="relative w-full max-w-sm sm:max-w-md flex items-center justify-center">
               {/* Koda Mascot Image */}
@@ -81,7 +81,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
                 alt="Koda — Mascota Oficial KodaAcademy"
                 width={420}
                 height={302}
-                className="relative z-10 w-auto h-auto max-h-[220px] sm:max-h-[260px] lg:max-h-[300px] object-contain animate-float select-none"
+                className="relative z-10 w-auto h-auto max-h-[220px] sm:max-h-[260px] lg:max-h-[300px] object-contain animate-float select-none transform-gpu will-change-transform"
                 priority
               />
             </div>

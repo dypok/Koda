@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState, useEffect, useMemo, useCallback } from 'react';
-import { motion, useReducedMotion, AnimatePresence } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 export interface HeroSkyBackgroundProps {
@@ -35,12 +35,7 @@ type RippleState = {
   y: number;
 };
 
-type CardSize = {
-  width: number;
-  height: number;
-};
-
-const STAR_COUNT_DEFAULT = 240;
+const STAR_COUNT_DEFAULT = 140;
 const NEAR_RADIUS = 0.14;
 const HOVER_RADIUS = 0.035;
 const PARALLAX_RADIUS = 0.25;
@@ -75,7 +70,7 @@ function generateStars(count: number, seed: number) {
       id: i,
       x: margin + rand() * (1 - margin * 2),
       y: margin + rand() * (1 - margin * 2),
-      size: isReal ? 3.6 : 0.75 + rand() * 1.6,
+      size: isReal ? 3.6 : 0.8 + rand() * 1.5,
       baseOpacity: isReal ? 0.85 : 0.15 + rand() * 0.5,
       twinkleSpeed: 0.35 + rand() * 1.2,
       twinklePhase: rand() * Math.PI * 2,
@@ -100,7 +95,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
   interactive = true,
 }) => {
   const reduceMotion = useReducedMotion();
-  const count = clamp(Math.round(starCount), 120, 350);
+  const count = clamp(Math.round(starCount), 80, 200);
 
   const { stars, realStar } = useMemo(
     () => generateStars(count, seed),
@@ -108,35 +103,50 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
   );
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const atmosphereRef = useRef<HTMLDivElement>(null);
-  const skyRef = useRef<HTMLDivElement>(null);
-  const starElsRef = useRef<(HTMLSpanElement | null)[]>([]);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const realStarRef = useRef<HTMLButtonElement>(null);
   const realCoreRef = useRef<HTMLSpanElement>(null);
   const realBloomRef = useRef<HTMLSpanElement>(null);
 
   const pointerRef = useRef<PointerState>({ x: -1, y: -1, inside: false });
   const rippleRef = useRef<RippleState>({ active: false, t: 0, x: 0, y: 0 });
-  const containerSizeRef = useRef<CardSize>({ width: 1, height: 1 });
+  const containerRectRef = useRef<{ left: number; top: number; width: number; height: number }>({
+    left: 0,
+    top: 0,
+    width: 1,
+    height: 1,
+  });
   const nearAmountRef = useRef(0);
   const skyDimRef = useRef(0);
+  const isVisibleRef = useRef(true);
 
   const [discovered, setDiscovered] = useState(false);
 
+  // Resize & Bounding Rect Observer (sin getBoundingClientRect en mousemove)
   useEffect(() => {
     const el = containerRef.current;
-    if (!el) return;
-    const updateSize = () => {
+    const canvas = canvasRef.current;
+    if (!el || !canvas) return;
+
+    const updateDimensions = () => {
       const rect = el.getBoundingClientRect();
-      containerSizeRef.current = {
+      containerRectRef.current = {
+        left: rect.left,
+        top: rect.top,
         width: rect.width || 1,
         height: rect.height || 1,
       };
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round((rect.width || 1) * dpr);
+      canvas.height = Math.round((rect.height || 1) * dpr);
     };
-    updateSize();
-    const observer = new ResizeObserver(updateSize);
-    observer.observe(el);
-    return () => observer.disconnect();
+
+    updateDimensions();
+    const ro = new ResizeObserver(updateDimensions);
+    ro.observe(el);
+
+    return () => ro.disconnect();
   }, []);
 
   const triggerStarDiscovery = useCallback(() => {
@@ -150,18 +160,30 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
     skyDimRef.current = 0.6;
   }, [realStar.x, realStar.y]);
 
+  // Canvas 2D Loop con Auto-Pausa via IntersectionObserver
   useEffect(() => {
-    if (reduceMotion) return;
-    let raf = 0;
-    let last = performance.now();
-    let cancelled = false;
+    const container = containerRef.current;
+    const canvas = canvasRef.current;
+    if (!container || !canvas) return;
 
-    const tick = (now: number) => {
-      if (cancelled) return;
+    let rafId = 0;
+    let last = performance.now();
+    let isRunning = false;
+
+    const ctx = canvas.getContext('2d', { alpha: true });
+    if (!ctx) return;
+
+    const render = (now: number) => {
+      if (!isVisibleRef.current) {
+        isRunning = false;
+        return;
+      }
+
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
 
-      const { width: w, height: h } = containerSizeRef.current;
+      const { width: w, height: h } = containerRectRef.current;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
       const ptr = pointerRef.current;
       const px = ptr.inside ? ptr.x / w : -1;
       const py = ptr.inside ? ptr.y / h : -1;
@@ -193,14 +215,6 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
         skyDimRef.current = Math.max(0, skyDimRef.current - dt * 0.35);
       }
 
-      const dim = skyDimRef.current;
-      if (atmosphereRef.current) {
-        atmosphereRef.current.style.opacity = String(1 - dim * 0.25);
-      }
-      if (skyRef.current) {
-        skyRef.current.style.opacity = String(1 - dim * 0.15);
-      }
-
       if (realCoreRef.current && realBloomRef.current) {
         const glow = nearAmountRef.current;
         const scale = 1 + glow * 0.2;
@@ -210,28 +224,37 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
         realBloomRef.current.style.transform = `scale(${0.8 + glow * 0.6})`;
       }
 
+      // Limpiar lienzo
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       const nearAmt = nearAmountRef.current;
       const time = now / 1000;
-      const els = starElsRef.current;
+      const rippleActive = rippleRef.current.active;
+      const rippleTime = rippleRef.current.t;
+      const rippleX = rippleRef.current.x;
+      const rippleY = rippleRef.current.y;
+      const rippleRadius = rippleTime * 0.65;
 
       for (let i = 0; i < stars.length; i++) {
         const star = stars[i];
         if (!star || star.isReal) continue;
-        const el = els[i];
-        if (!el) continue;
 
-        const twinkle =
-          0.5 +
-          0.5 *
-            Math.sin(
-              time * star.twinkleSpeed * Math.PI * 2 + star.twinklePhase
-            );
-        let opacity = star.baseOpacity * twinkle;
-        let tx = 0;
-        let ty = 0;
-        let scale = 1;
+        let opacity = star.baseOpacity;
+        if (!reduceMotion) {
+          const twinkle =
+            0.5 +
+            0.5 *
+              Math.sin(
+                time * star.twinkleSpeed * Math.PI * 2 + star.twinklePhase
+              );
+          opacity *= twinkle;
+        }
 
-        if (ptr.inside && interactive) {
+        let sx = star.x * w;
+        let sy = star.y * h;
+        let sSize = star.size;
+
+        if (ptr.inside && interactive && !reduceMotion) {
           const dx = star.x - px;
           const dy = star.y - py;
           const dist = Math.sqrt(dx * dx + dy * dy);
@@ -239,12 +262,12 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
 
           if (dist > 0.001) {
             const parallax = influence * PARALLAX_STRENGTH;
-            tx = (dx / dist) * parallax;
-            ty = (dy / dist) * parallax;
+            sx += (dx / dist) * parallax;
+            sy += (dy / dist) * parallax;
           }
 
           opacity *= 1 + influence * 0.6;
-          scale = 1 + influence * 0.15;
+          sSize *= 1 + influence * 0.15;
 
           if (nearAmt > 0) {
             const toReal = Math.hypot(star.x - rx, star.y - ry);
@@ -254,53 +277,75 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
           }
         }
 
-        if (rippleRef.current.active) {
-          const rt = rippleRef.current.t;
-          const radius = rt * 0.65;
-          const toRipple = Math.hypot(
-            star.x - rippleRef.current.x,
-            star.y - rippleRef.current.y
-          );
-          const ring = Math.abs(toRipple - radius);
+        if (rippleActive) {
+          const toRipple = Math.hypot(star.x - rippleX, star.y - rippleY);
+          const ring = Math.abs(toRipple - rippleRadius);
           if (ring < 0.05) {
             opacity *=
-              1 + (1 - ring / 0.05) * 1.2 * (1 - rt / RIPPLE_DURATION);
-          } else if (toRipple < radius) {
-            opacity *= 0.8 + 0.2 * (rt / RIPPLE_DURATION);
+              1 + (1 - ring / 0.05) * 1.2 * (1 - rippleTime / RIPPLE_DURATION);
+          } else if (toRipple < rippleRadius) {
+            opacity *= 0.8 + 0.2 * (rippleTime / RIPPLE_DURATION);
           }
         }
 
-        el.style.opacity = String(clamp(opacity, 0.04, 1));
-        el.style.transform = `translate3d(calc(-50% + ${tx}px), calc(-50% + ${ty}px), 0) scale(${scale})`;
+        const finalOpacity = clamp(opacity, 0.04, 1);
+        const radius = (sSize / 2) * dpr;
+        const posX = sx * dpr;
+        const posY = sy * dpr;
+
+        ctx.fillStyle = `rgba(255, 255, 255, ${finalOpacity})`;
+
+        if (sSize > 1.8) {
+          // Destello cálido para estrellas más brillantes
+          ctx.beginPath();
+          ctx.arc(posX, posY, radius, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          // fillRect ultra-rápido para estrellas pequeñas de 1-2px (10x más rápido que arc)
+          ctx.fillRect(posX - radius, posY - radius, radius * 2, radius * 2);
+        }
       }
 
-      raf = requestAnimationFrame(tick);
+      rafId = requestAnimationFrame(render);
     };
 
-    raf = requestAnimationFrame(tick);
+    // Auto-Pausa inteligente con IntersectionObserver
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const wasVisible = isVisibleRef.current;
+        isVisibleRef.current = entry?.isIntersecting ?? false;
+
+        if (isVisibleRef.current && !wasVisible && !isRunning) {
+          last = performance.now();
+          isRunning = true;
+          rafId = requestAnimationFrame(render);
+        }
+      },
+      { threshold: 0.01 }
+    );
+
+    io.observe(container);
+
+    if (isVisibleRef.current) {
+      isRunning = true;
+      rafId = requestAnimationFrame(render);
+    }
+
     return () => {
-      cancelled = true;
-      cancelAnimationFrame(raf);
+      io.disconnect();
+      cancelAnimationFrame(rafId);
+      isRunning = false;
     };
   }, [stars, realStar, reduceMotion, interactive, discovered, triggerStarDiscovery]);
 
-  const onPointerMove = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
-      const el = containerRef.current;
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      containerSizeRef.current = {
-        width: rect.width || 1,
-        height: rect.height || 1,
-      };
-      pointerRef.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-        inside: true,
-      };
-    },
-    []
-  );
+  const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const rect = containerRectRef.current;
+    pointerRef.current = {
+      x: e.clientX - rect.left,
+      y: e.clientY - rect.top,
+      inside: true,
+    };
+  }, []);
 
   const onPointerLeave = useCallback(() => {
     pointerRef.current = { x: -1, y: -1, inside: false };
@@ -312,7 +357,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
       onPointerMove={reduceMotion ? undefined : onPointerMove}
       onPointerLeave={reduceMotion ? undefined : onPointerLeave}
       className={cn(
-        'absolute inset-0 overflow-hidden select-none pointer-events-auto',
+        'absolute inset-0 overflow-hidden select-none pointer-events-auto transform-gpu',
         'bg-[radial-gradient(120%_80%_at_50%_-10%,rgba(245,158,11,0.08),transparent_55%),linear-gradient(165deg,rgba(11,15,25,0.98),rgba(4,5,10,1))]',
         className
       )}
@@ -320,53 +365,27 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
     >
       {/* Atmosphere Glow */}
       <div
-        ref={atmosphereRef}
-        className="pointer-events-none absolute inset-0 transition-opacity duration-700"
+        className="pointer-events-none absolute inset-0 transition-opacity duration-700 contain-paint"
         style={{
           background:
             'radial-gradient(ellipse 70% 50% at 50% 100%, rgba(234,88,12,0.06), transparent 70%), radial-gradient(ellipse 60% 40% at 80% 20%, rgba(245,158,11,0.04), transparent 60%)',
         }}
       />
 
-      {/* Background Starfield */}
-      <div
-        ref={skyRef}
-        className="pointer-events-none absolute inset-0"
-      >
-        {stars.map((star, i) => {
-          if (star.isReal) return null;
-          return (
-            <span
-              key={star.id}
-              ref={(el) => {
-                starElsRef.current[i] = el;
-              }}
-              className="absolute rounded-full bg-white will-change-transform"
-              style={{
-                left: `${star.x * 100}%`,
-                top: `${star.y * 100}%`,
-                width: star.size,
-                height: star.size,
-                opacity: reduceMotion ? star.baseOpacity : star.baseOpacity * 0.7,
-                transform: 'translate3d(-50%, -50%, 0)',
-                boxShadow:
-                  star.size > 1.8
-                    ? `0 0 ${star.size * 1.8}px rgba(254,240,138,0.4)`
-                    : undefined,
-              }}
-            />
-          );
-        })}
-      </div>
+      {/* Canvas Starfield (Cero elementos DOM, 60 FPS nativo) */}
+      <canvas
+        ref={canvasRef}
+        className="pointer-events-none absolute inset-0 w-full h-full block"
+      />
 
-      {/* Real Cosmic Star (Pulsing Golden Star) */}
+      {/* Real Cosmic Star (Pulsing Golden Star Interactive) */}
       <button
         ref={realStarRef}
         type="button"
         tabIndex={-1}
         aria-label="Cosmic Star"
         onClick={triggerStarDiscovery}
-        className="absolute z-0 -translate-x-1/2 -translate-y-1/2 rounded-full outline-none cursor-pointer group"
+        className="absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full outline-none cursor-pointer group transform-gpu"
         style={{
           left: `${realStar.x * 100}%`,
           top: `${realStar.y * 100}%`,
@@ -406,7 +425,6 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
             height: 44,
             background:
               'radial-gradient(circle, rgba(251,191,36,0.4) 0%, rgba(234,88,12,0.15) 50%, transparent 70%)',
-            filter: 'blur(4px)',
           }}
           animate={
             reduceMotion

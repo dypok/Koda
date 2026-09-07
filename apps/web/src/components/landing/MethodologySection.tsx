@@ -77,8 +77,8 @@ export const MethodologySection: React.FC = () => {
     <div id="metodologia" className="bg-slate-950">
       {/* Cabecera Principal de Metodología: Hub de Transición Conectado */}
       <section className="pt-24 pb-20 md:pt-32 md:pb-28 relative overflow-hidden border-t border-slate-800/80 bg-gradient-to-b from-[#070b14] via-slate-950 to-slate-950">
-        {/* Resplandor ambiental cálido de transición */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[450px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.14),rgba(245,158,11,0.05),transparent_70%)] blur-3xl pointer-events-none" />
+        {/* Resplandor ambiental cálido de transición (GPU Layer) */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[450px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.14)_0%,rgba(245,158,11,0.04)_45%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
         {/* Línea vertical de entrada y transición desde la sección anterior */}
         <div className="flex flex-col items-center mb-8 pointer-events-none">
@@ -184,17 +184,17 @@ export const MethodologySection: React.FC = () => {
           SECCIÓN 01: Rachas (Texto a la Izquierda / Stat a la Derecha)
           ========================================================= */}
       <section id="rachas" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0d0f17] to-slate-950">
-        {/* Resplandor ígneo ambiental de fondo */}
-        <div className="absolute top-1/2 right-4 lg:right-20 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(234,88,12,0.16),rgba(249,115,22,0.06),transparent_70%)] blur-3xl pointer-events-none" />
+        {/* Resplandor ígneo ambiental de fondo (GPU Layer) */}
+        <div className="absolute top-1/2 right-4 lg:right-20 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(234,88,12,0.16)_0%,rgba(249,115,22,0.05)_45%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
         <div className="absolute bottom-0 inset-x-0 h-36 bg-gradient-to-t from-orange-950/15 via-transparent to-transparent pointer-events-none" />
 
-        {/* Ascuas vivas de fuego flotantes (Living Embers) */}
+        {/* Ascuas vivas de fuego flotantes (Living Embers - GPU Accelerated) */}
         <div className="absolute right-8 lg:right-28 bottom-6 w-72 h-72 pointer-events-none overflow-hidden select-none">
-          <span className="absolute bottom-4 left-8 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-[emberRise_4.5s_ease-out_infinite]" style={{ animationDelay: '0s' }} />
-          <span className="absolute bottom-2 left-24 w-2 h-2 rounded-full bg-orange-400 shadow-[0_0_10px_#f97316] animate-[emberRise_5.2s_ease-out_infinite]" style={{ animationDelay: '1.2s' }} />
-          <span className="absolute bottom-6 left-44 w-1 h-1 rounded-full bg-amber-300 shadow-[0_0_6px_#fbbf24] animate-[emberRise_3.8s_ease-out_infinite]" style={{ animationDelay: '2.1s' }} />
-          <span className="absolute bottom-0 left-16 w-1.5 h-1.5 rounded-full bg-orange-500 shadow-[0_0_8px_#ea580c] animate-[emberRise_6s_ease-out_infinite]" style={{ animationDelay: '0.8s' }} />
-          <span className="absolute bottom-5 left-36 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-[emberRise_4.8s_ease-out_infinite]" style={{ animationDelay: '3.3s' }} />
+          <span className="absolute bottom-4 left-8 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-[emberRise_4.5s_ease-out_infinite] transform-gpu will-change-transform" style={{ animationDelay: '0s' }} />
+          <span className="absolute bottom-2 left-24 w-2 h-2 rounded-full bg-orange-400 shadow-[0_0_10px_#f97316] animate-[emberRise_5.2s_ease-out_infinite] transform-gpu will-change-transform" style={{ animationDelay: '1.2s' }} />
+          <span className="absolute bottom-6 left-44 w-1 h-1 rounded-full bg-amber-300 shadow-[0_0_6px_#fbbf24] animate-[emberRise_3.8s_ease-out_infinite] transform-gpu will-change-transform" style={{ animationDelay: '2.1s' }} />
+          <span className="absolute bottom-0 left-16 w-1.5 h-1.5 rounded-full bg-orange-500 shadow-[0_0_8px_#ea580c] animate-[emberRise_6s_ease-out_infinite] transform-gpu will-change-transform" style={{ animationDelay: '0.8s' }} />
+          <span className="absolute bottom-5 left-36 w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] animate-[emberRise_4.8s_ease-out_infinite] transform-gpu will-change-transform" style={{ animationDelay: '3.3s' }} />
         </div>
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
@@ -243,10 +243,10 @@ export const MethodologySection: React.FC = () => {
           SECCIÓN 02: Roadmap (Invertido: Mini Skill Tree Izquierda / Texto Derecha)
           ========================================================= */}
       <section id="roadmap" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0a0d16] to-slate-950">
-        {/* Foco cenital de estudio fotográfico suave sobre el árbol (Estilo Apple / Linear) */}
-        <div className="absolute -top-24 left-1/4 -translate-x-1/2 w-[650px] h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.14),rgba(245,158,11,0.03),transparent_70%)] blur-3xl pointer-events-none" />
+        {/* Foco cenital de estudio fotográfico suave sobre el árbol (GPU Layer) */}
+        <div className="absolute -top-24 left-1/4 -translate-x-1/2 w-[650px] h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.14)_0%,rgba(245,158,11,0.03)_45%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
         <div className="absolute top-0 left-1/4 -translate-x-1/2 w-80 h-[1px] bg-gradient-to-r from-transparent via-amber-400/50 to-transparent pointer-events-none" />
-        <div className="absolute top-1/2 right-12 -translate-y-1/2 w-[450px] h-[350px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.05),transparent_70%)] blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 right-12 -translate-y-1/2 w-[450px] h-[350px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.05)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
@@ -279,13 +279,13 @@ export const MethodologySection: React.FC = () => {
           SECCIÓN 03: Código Real (Texto a la Izquierda / Stat 4X a la Derecha)
           ========================================================= */}
       <section id="codigo-real" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#100c19] to-slate-950">
-        {/* Resplandor de compilador dual: Ámbar cálido y Violeta profundo */}
-        <div className="absolute top-1/2 right-4 lg:right-20 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.15),rgba(168,85,247,0.06),transparent_70%)] blur-3xl pointer-events-none" />
-        <div className="absolute top-1/2 left-10 -translate-y-1/2 w-[400px] h-[280px] bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.08),transparent_70%)] blur-3xl pointer-events-none" />
+        {/* Resplandor de compilador dual: Ámbar cálido y Violeta profundo (GPU Layer) */}
+        <div className="absolute top-1/2 right-4 lg:right-20 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.15)_0%,rgba(168,85,247,0.05)_45%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+        <div className="absolute top-1/2 left-10 -translate-y-1/2 w-[400px] h-[280px] bg-[radial-gradient(ellipse_at_center,rgba(168,85,247,0.08)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
-        {/* Flujo de código de terminal continuo en segundo plano */}
+        {/* Flujo de código de terminal continuo en segundo plano (GPU Layer) */}
         <div className="absolute inset-y-0 right-0 w-full sm:w-1/2 max-w-xl pointer-events-none overflow-hidden select-none opacity-[0.04] [mask-image:linear-gradient(to_bottom,transparent,black_20%,black_80%,transparent)]">
-          <div className="font-mono text-[11px] text-amber-200 leading-6 space-y-1 animate-[codeStream_30s_linear_infinite]">
+          <div className="font-mono text-[11px] text-amber-200 leading-6 space-y-1 animate-[codeStream_30s_linear_infinite] transform-gpu will-change-transform">
             <p>def solve_challenge(data: list) -&gt; bool:</p>
             <p>&nbsp;&nbsp;pivot = partition(data)</p>
             <p>&nbsp;&nbsp;return verify_runtime(pivot)</p>
@@ -359,12 +359,12 @@ export const MethodologySection: React.FC = () => {
           SECCIÓN 04: Pistas Inteligentes (Centrado Amplio y Contundente)
           ========================================================= */}
       <section id="pistas" className="py-28 md:py-36 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0a0d18] to-slate-950">
-        {/* Haz cenital difuso de iluminación y claridad mental */}
-        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.14),rgba(99,102,241,0.05),transparent_70%)] blur-3xl pointer-events-none" />
+        {/* Haz cenital difuso de iluminación y claridad mental (GPU Layer) */}
+        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.14)_0%,rgba(99,102,241,0.04)_40%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-[1px] bg-gradient-to-r from-transparent via-amber-400/50 to-transparent pointer-events-none" />
 
-        {/* Núcleo cálido de comprensión en el centro */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.1),rgba(234,88,12,0.03),transparent_70%)] blur-3xl pointer-events-none" />
+        {/* Núcleo cálido de comprensión en el centro (GPU Layer) */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.1)_0%,rgba(234,88,12,0.03)_45%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
         {/* Red geométrica sutil de convergencia lógica hacia el razonamiento */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-80 pointer-events-none select-none opacity-20 hidden sm:block">
