@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { IconX, IconSparkles, IconCircleCheck } from '@tabler/icons-react';
+import { GradientButton } from '@/components/ui/gradient-button';
 
 interface LoginModalProps {
   isOpen: boolean;
@@ -44,12 +45,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
             Inicio de Sesión
           </h3>
           <p className="text-xs text-slate-400 mt-1">
-            Campus Oficial de KodaAcademy · Python 3.12
+            Campus Oficial de KodaAcademy
           </p>
         </div>
 
         <p className="text-sm text-slate-300 leading-relaxed text-left sm:text-center">
-          El módulo de autenticación y acceso de estudiantes se encuentra en su fase final de pruebas técnicas y de seguridad. Estará habilitado próximamente para el inicio del programa de Python 3.12.
+          El módulo de autenticación y acceso de estudiantes se encuentra en su fase final de pruebas técnicas y de seguridad. Estará habilitado próximamente para el acceso a las rutas interactivas de aprendizaje.
         </p>
 
         {/* Features Checklist */}
@@ -69,12 +70,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Action Button */}
-        <button
+        <GradientButton
           onClick={onClose}
-          className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 py-3 text-sm font-bold text-slate-950 hover:opacity-95 hover:scale-[1.01] active:scale-[0.99] transition-all"
+          className="w-full text-sm py-3"
         >
           Entendido
-        </button>
+        </GradientButton>
       </div>
     </div>
   );

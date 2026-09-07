@@ -11,6 +11,7 @@ import {
   IconBook2,
   IconArrowRight,
 } from '@tabler/icons-react';
+import { GradientButton } from '@/components/ui/gradient-button';
 
 interface CurriculumSectionProps {
   onOpenLogin?: () => void;
@@ -142,13 +143,13 @@ export const CurriculumSection: React.FC<CurriculumSectionProps> = ({ onOpenLogi
               </div>
 
               {/* Start Module CTA */}
-              <button
+              <GradientButton
                 onClick={onOpenLogin}
-                className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 py-3 text-sm font-bold text-slate-950 hover:opacity-95 hover:scale-[1.01] active:scale-[0.99] transition-all"
+                className="w-full text-sm gap-2 py-3 hover:scale-[1.01] active:scale-[0.99] transition-transform"
               >
                 Comenzar con este Módulo
                 <IconArrowRight className="w-4 h-4" />
-              </button>
+              </GradientButton>
             </div>
 
             {/* Official Certificate Preview Card */}

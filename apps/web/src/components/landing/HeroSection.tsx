@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { IconArrowRight } from '@tabler/icons-react';
 import { FloatingLines } from './FloatingLines';
+import { GradientButton } from '@/components/ui/gradient-button';
 
 interface HeroSectionProps {
   onOpenLogin?: () => void;
@@ -47,13 +48,13 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
 
             {/* Call to Actions */}
             <div className="pt-2 w-full sm:w-auto">
-              <button
+              <GradientButton
                 onClick={onOpenLogin}
-                className="w-full sm:w-auto flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 px-8 py-4 text-base font-extrabold text-slate-950 hover:opacity-95 hover:scale-[1.01] active:scale-[0.98] transition-all"
+                className="w-full sm:w-auto gap-2.5 shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-transform"
               >
                 Comenzar Ahora
-                <IconArrowRight className="w-5 h-5 text-slate-950" />
-              </button>
+                <IconArrowRight className="w-5 h-5" />
+              </GradientButton>
             </div>
           </div>
 
