@@ -7,120 +7,16 @@ import {
   IconCode,
   IconSparkles,
 } from '@tabler/icons-react';
-import { BorderGlow } from '@/components/ui/border-glow';
-
-const FEATURES = [
-  {
-    id: 'rachas',
-    icon: IconFlame,
-    tag: 'Hábito & Constancia',
-    title: 'Rachas que encienden tu progreso',
-    description:
-      'Aprender a programar es como entrenar un nuevo hábito: 15 minutos al día superan a 5 horas de atracón el fin de semana. Mantén tu fuego diario encendido y avanza a paso firme.',
-    glowColor: '24 95 60',
-    colors: ['#F97316', '#FB923C', '#EA580C'],
-    iconBg: 'bg-orange-500/10 border-orange-500/25 text-orange-400',
-    visual: (
-      <div className="pt-4 border-t border-slate-800/60 mt-4 flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
-          {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, idx) => (
-            <div
-              key={idx}
-              className={`w-7 h-7 rounded-lg flex items-center justify-center text-[11px] font-mono font-bold transition-all ${
-                idx < 5
-                  ? 'bg-orange-500/20 text-orange-400 border border-orange-500/30 shadow-[0_0_8px_rgba(249,115,22,0.15)]'
-                  : 'bg-slate-900 text-slate-500 border border-slate-800'
-              }`}
-            >
-              {day}
-            </div>
-          ))}
-        </div>
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-mono font-bold">
-          <IconFlame className="w-3.5 h-3.5 fill-orange-400" />
-          <span>5 días seguidos</span>
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 'roadmap',
-    icon: IconRoute,
-    tag: 'Ruta Guiada',
-    title: 'Un roadmap claro, paso a paso',
-    description:
-      'Sin saltos imposibles ni perderte en cientos de tutoriales desordenados. Cada lección desbloquea la siguiente en el momento exacto, guiándote desde cero hasta escribir tus propios programas.',
-    glowColor: '45 95 60',
-    colors: ['#F59E0B', '#FBBF24', '#D97706'],
-    iconBg: 'bg-amber-500/10 border-amber-500/25 text-amber-400',
-    visual: (
-      <div className="pt-4 border-t border-slate-800/60 mt-4 flex items-center gap-2 overflow-x-auto text-[11px] font-mono">
-        <div className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold whitespace-nowrap">
-          <span>01</span>
-          <span>Bases</span>
-        </div>
-        <span className="text-slate-600">→</span>
-        <div className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-amber-500/10 text-amber-400/80 border border-amber-500/20 whitespace-nowrap">
-          <span>02</span>
-          <span>Lógica</span>
-        </div>
-        <span className="text-slate-600">→</span>
-        <div className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-slate-900 text-slate-400 border border-slate-800 whitespace-nowrap">
-          <span>03</span>
-          <span>Proyectos</span>
-        </div>
-      </div>
-    ),
-  },
-  {
-    id: 'practica',
-    icon: IconCode,
-    tag: 'Aprender Haciendo',
-    title: '1 concepto = 1 reto interactivo',
-    description:
-      'Nadie aprende a programar mirando a otros. Cada explicación dura 2 minutos y te pone a resolver retos de inmediato con código real directamente en el navegador.',
-    glowColor: '15 95 60',
-    colors: ['#EA580C', '#F97316', '#FB923C'],
-    iconBg: 'bg-orange-600/10 border-orange-600/25 text-orange-400',
-    visual: (
-      <div className="pt-4 border-t border-slate-800/60 mt-4 flex items-center justify-between font-mono text-xs">
-        <div className="flex items-center gap-2 text-slate-300 bg-slate-950 px-3 py-1.5 rounded-lg border border-slate-800">
-          <span className="text-orange-400 font-bold">&gt;</span>
-          <span className="text-amber-300">koda.run()</span>
-          <span className="text-slate-500">→</span>
-          <span className="text-orange-400 font-bold">✓ 100% OK</span>
-        </div>
-        <span className="text-[11px] text-slate-400 font-sans">Retención 4x superior</span>
-      </div>
-    ),
-  },
-  {
-    id: 'pistas',
-    icon: IconSparkles,
-    tag: 'Sin Frustración',
-    title: 'Pistas inteligentes que te orientan',
-    description:
-      'Si te equivocas, Koda no te regala la respuesta ni te deja solo. Te ofrece pistas que estimulan tu razonamiento para que descubras el error y aprendas a pensar como programador.',
-    glowColor: '38 95 60',
-    colors: ['#FBBF24', '#F59E0B', '#EA580C'],
-    iconBg: 'bg-amber-400/10 border-amber-400/25 text-amber-400',
-    visual: (
-      <div className="pt-4 border-t border-slate-800/60 mt-4 flex items-center gap-2.5 text-xs text-slate-300 bg-slate-950 p-2.5 rounded-xl border border-slate-800">
-        <IconSparkles className="w-4 h-4 text-amber-400 shrink-0" />
-        <span className="font-sans text-[12px] text-slate-300 line-clamp-1">
-          <strong className="text-amber-400 font-semibold">Pista:</strong> Comprueba el tipo de dato antes de concatenar.
-        </span>
-      </div>
-    ),
-  },
-];
 
 export const MethodologySection: React.FC = () => {
   return (
-    <section id="metodologia" className="py-20 md:py-28 bg-slate-950 relative overflow-hidden">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16">
+    <section id="metodologia" className="py-24 md:py-32 bg-slate-950 relative overflow-hidden">
+      {/* Resplandor ambiental de fondo integrado */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[550px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.05),transparent_70%)] pointer-events-none" />
+
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative">
+        {/* Encabezado Principal */}
+        <div className="text-center max-w-3xl mx-auto space-y-4 mb-16 md:mb-20">
           <h2 className="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight leading-[1.15]">
             ¿Por qué nuestro método{' '}
             <span className="bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
@@ -133,46 +29,168 @@ export const MethodologySection: React.FC = () => {
           </p>
         </div>
 
-        {/* 4 Cards Grid with Individual BorderGlow */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-          {FEATURES.map((item) => {
-            const Icon = item.icon;
-            return (
-              <BorderGlow
-                key={item.id}
-                borderRadius={20}
-                backgroundColor="#0B0F19"
-                glowColor={item.glowColor}
-                colors={item.colors}
-                className="h-full"
-                contentClassName="rounded-[19px] p-7 sm:p-8 h-full flex flex-col justify-between"
-              >
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div
-                      className={`w-12 h-12 rounded-xl border flex items-center justify-center transition-transform group-hover:scale-110 ${item.iconBg}`}
-                    >
-                      <Icon className="w-6 h-6" />
-                    </div>
-                    <span className="text-[11px] font-mono uppercase tracking-wider font-semibold px-2.5 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-400">
-                      {item.tag}
-                    </span>
-                  </div>
-
-                  <h3 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight">
-                    {item.title}
-                  </h3>
-
-                  <p className="text-sm sm:text-base text-slate-400 leading-relaxed font-sans">
-                    {item.description}
-                  </p>
+        {/* Distribución integrada abierta con divisores arquitectónicos tipo cruz */}
+        <div className="grid grid-cols-1 md:grid-cols-2 border-y border-slate-800/60">
+          {/* 01: Rachas y Hábito */}
+          <div className="py-10 md:py-14 md:pr-10 lg:pr-14 border-b md:border-r border-slate-800/60 flex flex-col justify-between space-y-8 group">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <IconFlame className="w-7 h-7 text-orange-400 transition-transform group-hover:scale-110" />
+                  <span className="text-xs font-mono font-semibold uppercase tracking-wider text-orange-400/90">
+                    Constancia & Hábito
+                  </span>
                 </div>
+                <span className="font-mono text-2xl font-bold text-slate-800 group-hover:text-slate-700 transition-colors select-none">
+                  01
+                </span>
+              </div>
 
-                {/* Micro-visual preview */}
-                {item.visual}
-              </BorderGlow>
-            );
-          })}
+              <h3 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight leading-snug">
+                Rachas que encienden tu progreso diario
+              </h3>
+
+              <p className="text-slate-400 text-sm sm:text-base leading-relaxed font-sans">
+                Aprender a programar es como entrenar un idioma: 15 minutos al día con práctica constante superan por completo a un atracón de fin de semana. Mantén tu fuego encendido cada día y consolida tu memoria sin agotarte.
+              </p>
+            </div>
+
+            {/* Micro-visual: Rachas semanales */}
+            <div className="pt-6 border-t border-slate-900 flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                {['L', 'M', 'M', 'J', 'V', 'S', 'D'].map((day, idx) => (
+                  <div
+                    key={idx}
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-mono font-bold transition-all ${
+                      idx < 5
+                        ? 'bg-orange-500/20 text-orange-400 border border-orange-500/40 shadow-[0_0_12px_rgba(249,115,22,0.15)]'
+                        : 'bg-slate-900/60 text-slate-600 border border-slate-800/80'
+                    }`}
+                  >
+                    {day}
+                  </div>
+                ))}
+              </div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/25 text-orange-400 text-xs font-mono font-bold">
+                <IconFlame className="w-3.5 h-3.5 fill-orange-400" />
+                <span>5 días seguidos · +15 min hoy</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 02: Roadmap Guiado */}
+          <div className="py-10 md:py-14 md:pl-10 lg:pl-14 border-b border-slate-800/60 flex flex-col justify-between space-y-8 group">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <IconRoute className="w-7 h-7 text-amber-400 transition-transform group-hover:scale-110" />
+                  <span className="text-xs font-mono font-semibold uppercase tracking-wider text-amber-400/90">
+                    Ruta Estructurada
+                  </span>
+                </div>
+                <span className="font-mono text-2xl font-bold text-slate-800 group-hover:text-slate-700 transition-colors select-none">
+                  02
+                </span>
+              </div>
+
+              <h3 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight leading-snug">
+                Un roadmap claro, sin perderte en el camino
+              </h3>
+
+              <p className="text-slate-400 text-sm sm:text-base leading-relaxed font-sans">
+                Se acabó la parálisis por análisis y los tutoriales dispersos. Sigue una ruta paso a paso donde cada lección desbloquea la siguiente en orden pedagógico, guiándote desde cero hasta escribir tus propios programas.
+              </p>
+            </div>
+
+            {/* Micro-visual: Roadmap secuencial */}
+            <div className="pt-6 border-t border-slate-900 flex items-center gap-2 overflow-x-auto text-xs font-mono pb-1">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold whitespace-nowrap">
+                <span className="text-amber-400">01</span>
+                <span>Fundamentos</span>
+              </div>
+              <span className="text-slate-600 font-bold">➔</span>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 text-amber-300/80 border border-amber-500/20 whitespace-nowrap">
+                <span className="text-amber-400/70">02</span>
+                <span>Lógica</span>
+              </div>
+              <span className="text-slate-600 font-bold">➔</span>
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900/60 text-slate-400 border border-slate-800/80 whitespace-nowrap">
+                <span className="text-slate-500">03</span>
+                <span>Proyectos</span>
+              </div>
+            </div>
+          </div>
+
+          {/* 03: Código Real y Práctica Activa */}
+          <div className="py-10 md:py-14 md:pr-10 lg:pr-14 border-b md:border-b-0 md:border-r border-slate-800/60 flex flex-col justify-between space-y-8 group">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <IconCode className="w-7 h-7 text-orange-400 transition-transform group-hover:scale-110" />
+                  <span className="text-xs font-mono font-semibold uppercase tracking-wider text-orange-400/90">
+                    Aprender Haciendo
+                  </span>
+                </div>
+                <span className="font-mono text-2xl font-bold text-slate-800 group-hover:text-slate-700 transition-colors select-none">
+                  03
+                </span>
+              </div>
+
+              <h3 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight leading-snug">
+                1 concepto = 1 reto en código real
+              </h3>
+
+              <p className="text-slate-400 text-sm sm:text-base leading-relaxed font-sans">
+                Nadie aprende a programar mirando videos pasivamente. En Koda cada lección dura menos de 2 minutos y te pide resolver un reto con código real en tu navegador. Comprobando tu lógica en vivo retienes 4 veces más.
+              </p>
+            </div>
+
+            {/* Micro-visual: Ejecución interactiva */}
+            <div className="pt-6 border-t border-slate-900 flex flex-wrap items-center justify-between gap-3 font-mono text-xs">
+              <div className="flex items-center gap-2.5 bg-slate-900/80 px-3.5 py-2 rounded-xl border border-slate-800 text-slate-300">
+                <span className="text-orange-400 font-bold">&gt;</span>
+                <span className="text-amber-300">python main.py</span>
+                <span className="text-slate-500">→</span>
+                <span className="text-orange-400 font-semibold">✓ Test superado</span>
+              </div>
+              <span className="text-xs text-slate-400 font-sans">
+                <strong className="text-white font-semibold">4x</strong> retención activa
+              </span>
+            </div>
+          </div>
+
+          {/* 04: Pistas Inteligentes */}
+          <div className="py-10 md:py-14 md:pl-10 lg:pl-14 flex flex-col justify-between space-y-8 group">
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <IconSparkles className="w-7 h-7 text-amber-400 transition-transform group-hover:scale-110" />
+                  <span className="text-xs font-mono font-semibold uppercase tracking-wider text-amber-400/90">
+                    Pedagogía Guiada
+                  </span>
+                </div>
+                <span className="font-mono text-2xl font-bold text-slate-800 group-hover:text-slate-700 transition-colors select-none">
+                  04
+                </span>
+              </div>
+
+              <h3 className="font-display text-2xl sm:text-3xl font-bold text-white tracking-tight leading-snug">
+                Pistas inteligentes que te enseñan a pensar
+              </h3>
+
+              <p className="text-slate-400 text-sm sm:text-base leading-relaxed font-sans">
+                Si te equivocas, Koda no te da la respuesta directamente ni te deja atascado. Te ofrece pistas constructivas que estimulan tu razonamiento para que descubras el error y entrenes tu pensamiento algorítmico.
+              </p>
+            </div>
+
+            {/* Micro-visual: Pista guiada */}
+            <div className="pt-6 border-t border-slate-900 flex items-center gap-3 text-xs text-slate-300 bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+              <IconSparkles className="w-4 h-4 text-amber-400 shrink-0" />
+              <span className="font-sans text-xs text-slate-300">
+                <strong className="text-amber-400 font-medium">Pista guiada:</strong> Recuerda verificar el tipo de dato antes de concatenar.
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </section>
