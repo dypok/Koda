@@ -55,18 +55,13 @@ export const Footer: React.FC = () => {
             <h4 className="text-xs font-bold text-white uppercase tracking-wider">Explorar</h4>
             <ul className="space-y-2 text-xs">
               <li>
-                <button onClick={() => scrollTo('metodologia')} className="hover:text-amber-400 transition-colors">
-                  ¿Por qué Koda?
-                </button>
-              </li>
-              <li>
-                <button onClick={() => scrollTo('temario')} className="hover:text-amber-400 transition-colors">
-                  Tracks & Temario
-                </button>
-              </li>
-              <li>
                 <button onClick={() => scrollTo('propuesta-valor')} className="hover:text-amber-400 transition-colors">
                   Propuesta de Valor
+                </button>
+              </li>
+              <li>
+                <button onClick={() => scrollTo('metodologia')} className="hover:text-amber-400 transition-colors">
+                  ¿Por qué Koda?
                 </button>
               </li>
               <li>

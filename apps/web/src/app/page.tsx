@@ -5,7 +5,6 @@ import { Navbar } from '../components/landing/Navbar';
 import { HeroSection } from '../components/landing/HeroSection';
 import { InteractivePreview } from '../components/landing/InteractivePreview';
 import { MethodologySection } from '../components/landing/MethodologySection';
-import { CurriculumSection } from '../components/landing/CurriculumSection';
 import { CtaSection } from '../components/landing/CtaSection';
 import { FaqSection } from '../components/landing/FaqSection';
 import { Footer } from '../components/landing/Footer';
@@ -33,10 +32,7 @@ export default function HomePage() {
         {/* 4. Pedagogical Methodology & Comparison */}
         <MethodologySection />
 
-        {/* 5. 12 Canonical Python Modules & Certificate Preview */}
-        <CurriculumSection onOpenLogin={openLogin} />
-
-        {/* 6. Frequently Asked Questions */}
+        {/* 5. Frequently Asked Questions */}
         <FaqSection />
 
         {/* 7. Final Call to Action */}
