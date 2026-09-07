@@ -11,26 +11,50 @@ import { BorderGlow } from '@/components/ui/border-glow';
 
 export const InteractivePreview: React.FC = () => {
   return (
-    <section id="propuesta-valor" className="py-20 md:py-28 border-y border-slate-800/80 bg-slate-950/90 relative overflow-hidden">
-      {/* Fondo de Matriz Digital con Máscara Radial Suave */}
+    <section id="propuesta-valor" className="py-20 md:py-28 border-y border-slate-800/80 bg-gradient-to-b from-[#070b14] via-[#0c1222] to-[#070b14] relative overflow-hidden">
+      {/* Resplandor ambiental cálido central de alta visibilidad */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[520px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.18),rgba(245,158,11,0.08),transparent_70%)] blur-3xl pointer-events-none" />
+      <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-[700px] h-32 bg-amber-500/20 rounded-full blur-3xl pointer-events-none" />
+
+      {/* Rejilla Cibernética Visible con Líneas de Luz */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-35 [mask-image:radial-gradient(ellipse_at_center,black_35%,transparent_80%)]"
+        className="absolute inset-0 pointer-events-none opacity-45 [mask-image:radial-gradient(ellipse_at_center,black_55%,transparent_90%)]"
         style={{
-          backgroundImage: 'radial-gradient(rgba(245, 158, 11, 0.2) 1px, transparent 1px)',
-          backgroundSize: '32px 32px',
+          backgroundImage: `
+            linear-gradient(to right, rgba(245, 158, 11, 0.13) 1px, transparent 1px),
+            linear-gradient(to bottom, rgba(245, 158, 11, 0.13) 1px, transparent 1px)
+          `,
+          backgroundSize: '48px 48px',
         }}
       />
 
-      {/* Haz de horizonte de energía lumínica sutil */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 max-w-4xl h-[1px] bg-gradient-to-r from-transparent via-amber-500/50 to-transparent pointer-events-none animate-[beamShimmer_6s_ease-in-out_infinite]" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 max-w-2xl h-16 bg-gradient-to-b from-amber-500/10 via-orange-500/5 to-transparent blur-2xl pointer-events-none" />
+      {/* Matriz de Puntos Brillantes en las Intersecciones de la Rejilla */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-65 [mask-image:radial-gradient(ellipse_at_center,black_45%,transparent_85%)]"
+        style={{
+          backgroundImage: 'radial-gradient(circle, rgba(251, 191, 36, 0.45) 1.5px, transparent 1.5px)',
+          backgroundSize: '48px 48px',
+        }}
+      />
+
+      {/* Haz superior de luz de horizonte */}
+      <div className="absolute top-0 inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-amber-400/80 to-transparent pointer-events-none shadow-[0_0_15px_rgba(245,158,11,0.6)]" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-4/5 h-[1px] bg-gradient-to-r from-transparent via-orange-500/35 to-transparent pointer-events-none animate-[beamShimmer_4s_ease-in-out_infinite]" />
+
+      {/* Nodos de energía cibernética pulsando en segundo plano */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+        <span className="absolute top-16 left-1/4 w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_14px_#fbbf24] animate-ping opacity-60" style={{ animationDuration: '4s' }} />
+        <span className="absolute top-28 right-1/4 w-2 h-2 rounded-full bg-orange-400 shadow-[0_0_14px_#f97316] animate-ping opacity-50" style={{ animationDuration: '5s', animationDelay: '1s' }} />
+        <span className="absolute bottom-20 left-1/3 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_14px_#f59e0b] animate-ping opacity-50" style={{ animationDuration: '4.5s', animationDelay: '2s' }} />
+        <span className="absolute bottom-16 right-1/3 w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_14px_#ea580c] animate-ping opacity-60" style={{ animationDuration: '5.5s', animationDelay: '0.5s' }} />
+      </div>
 
       {/* Marcadores tácticos de precisión en esquinas */}
-      <div className="hidden lg:block absolute top-6 left-8 text-slate-700/70 text-[11px] font-mono select-none pointer-events-none">
-        + SYS.01 // ACCESS_FREE
+      <div className="hidden lg:block absolute top-6 left-8 text-amber-500/50 text-[11px] font-mono select-none pointer-events-none">
+        + SYS.01 // ACCESS_FREE_MATRIX
       </div>
-      <div className="hidden lg:block absolute top-6 right-8 text-slate-700/70 text-[11px] font-mono select-none pointer-events-none">
-        [ZERO_PAYWALL] +
+      <div className="hidden lg:block absolute top-6 right-8 text-amber-500/50 text-[11px] font-mono select-none pointer-events-none">
+        [ZERO_PAYWALL_ACTIVE] +
       </div>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
