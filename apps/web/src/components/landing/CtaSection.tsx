@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { IconLogin, IconBook2 } from '@tabler/icons-react';
+import { GradientButton } from '@/components/ui/gradient-button';
 
 interface CtaSectionProps {
   onOpenLogin?: () => void;
@@ -39,13 +40,13 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
             </p>
 
             <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button
+              <GradientButton
                 onClick={onOpenLogin}
-                className="w-full sm:w-auto flex items-center justify-center gap-2.5 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 px-8 py-4 text-base font-extrabold text-slate-950 hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                className="w-full sm:w-auto gap-2.5 px-8 py-4 text-base font-extrabold shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-transform"
               >
-                <IconLogin className="w-5 h-5 text-slate-950" />
+                <IconLogin className="w-5 h-5" />
                 Iniciar Sesión
-              </button>
+              </GradientButton>
 
               <button
                 onClick={() => scrollTo('temario')}

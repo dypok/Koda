@@ -12,6 +12,7 @@ import {
   IconTerminal2,
   IconLogin,
 } from '@tabler/icons-react';
+import { GradientButton } from '@/components/ui/gradient-button';
 
 interface NavbarProps {
   onOpenLogin?: () => void;
@@ -21,9 +22,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const scrollTo = (id: string) => {
-    setMobileMenuOpen(false);
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth' });
+    setMobileMenuOpen(false);
   };
 
   const handleLoginClick = () => {
@@ -34,7 +35,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
   };
 
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/85 backdrop-blur-md transition-all">
+    <header className="sticky top-0 z-40 w-full border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
@@ -91,13 +92,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
 
         {/* Desktop CTA: Iniciar Sesión */}
         <div className="hidden md:flex items-center gap-3">
-          <button
+          <GradientButton
             onClick={handleLoginClick}
-            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 px-5 py-2.5 text-sm font-bold text-slate-950 hover:opacity-95 hover:scale-[1.02] active:scale-[0.98] transition-all"
+            className="min-w-0 px-5 py-2.5 text-sm gap-2 hover:scale-[1.02] active:scale-[0.98] transition-transform"
           >
-            <IconLogin className="w-4 h-4 text-slate-950" />
+            <IconLogin className="w-4 h-4" />
             Iniciar Sesión
-          </button>
+          </GradientButton>
         </div>
 
         {/* Mobile Menu Button */}
@@ -147,13 +148,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
             </button>
           </nav>
           <div className="pt-2">
-            <button
+            <GradientButton
               onClick={handleLoginClick}
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 py-3 text-sm font-bold text-slate-950"
+              className="w-full text-sm gap-2 py-3"
             >
               <IconLogin className="w-4 h-4" />
               Iniciar Sesión
-            </button>
+            </GradientButton>
           </div>
         </div>
       )}

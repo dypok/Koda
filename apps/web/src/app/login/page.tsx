@@ -8,6 +8,7 @@ import {
   IconCircleCheck,
   IconShieldCheck,
 } from '@tabler/icons-react';
+import { GradientButton } from '@/components/ui/gradient-button';
 import { KodaMascot } from '../../components/mascot/KodaMascot';
 
 export default function LoginPage() {
@@ -40,7 +41,7 @@ export default function LoginPage() {
               Inicio de Sesión
             </h1>
             <p className="text-xs text-slate-400">
-              Campus Oficial de KodaAcademy · Python 3.12
+              Campus Oficial de KodaAcademy
             </p>
           </div>
 
@@ -63,12 +64,11 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <Link
-            href="/"
-            className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 py-3 text-sm font-bold text-slate-950 hover:opacity-95 hover:scale-[1.01] active:scale-[0.99] transition-all"
-          >
-            Entendido, volver al inicio
-          </Link>
+          <GradientButton asChild className="w-full text-sm py-3">
+            <Link href="/">
+              Entendido, volver al inicio
+            </Link>
+          </GradientButton>
         </div>
       </div>
     </div>
