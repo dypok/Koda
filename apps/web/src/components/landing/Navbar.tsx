@@ -45,11 +45,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
               <span className="text-xl font-extrabold tracking-tight text-white group-hover:text-amber-400 transition-colors">
                 Koda<span className="text-amber-400">Academy</span>
               </span>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-1.5 py-0.5 rounded border border-amber-400/30">
-                Python 3.12
-              </span>
             </div>
-            <span className="text-[11px] text-slate-400 font-medium">Aprende programando</span>
           </div>
         </Link>
 

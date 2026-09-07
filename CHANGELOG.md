@@ -10,6 +10,10 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-07 08:37] [Changed] **Unificación Visual de Mascota y Corrección de LightRays en HeroSection:**
+  - Se eliminó el selector doble de vista "3D Oficial" / "WebGL 2D" en el Hero, unificando la presencia de Koda en su modelo oficial de alta definición.
+  - Se retiró el contenedor de tarjeta (`rounded-3xl border border-slate-800 bg-slate-900`), integrando a la mascota Koda directamente en la composición con un pedestal de iluminación difusa, animación flotante, badge de estado superior y burbuja de diálogo dirigida con indicador triangular hacia la mascota.
+  - Se solventó la invisibilidad de los rayos de luz `<LightRays />`: se corrigió el contexto de apilamiento CSS aplicando `isolate` y `z-0` sobre el fondo `#0B0F19`, y se dotó al componente WebGL (`ogl`) de un `ResizeObserver` y renderizado inmediato en montaje para evitar resoluciones `1x1` en cálculo diferido.
 - [2026-09-07 08:17] [Added] **Integración del Componente WebGL LightRays en HeroSection:**
   - Se portó el componente `<LightRays />` de Svelte Bits a React 19/TypeScript con la biblioteca `ogl` en `apps/web/src/components/landing/LightRays.tsx`.
   - Se configuraron shaders WebGL con efecto volumétrico de rayos de luz ámbar (`#f59e0b`) de emisión `top-center`, soporte de dispersión, desvanecimiento, grano cinematográfico y seguimiento orgánico al cursor del mouse.
