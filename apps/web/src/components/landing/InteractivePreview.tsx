@@ -34,13 +34,11 @@ export const InteractivePreview: React.FC = () => {
             backgroundColor="#0B0F19"
             glowColor="24 95 60"
             colors={['#F97316', '#FB923C', '#EA580C']}
-            className="h-full"
+            className="group h-full"
             contentClassName="rounded-[19px] p-7 sm:p-8 h-full flex flex-col justify-between"
           >
             <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/25 flex items-center justify-center text-orange-400 transition-transform group-hover:scale-110">
-                <IconGift className="w-6 h-6" />
-              </div>
+              <IconGift className="w-8 h-8 text-orange-400 transition-transform group-hover:scale-110" />
               <h3 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight">
                 100% Gratuito
               </h3>
@@ -56,13 +54,11 @@ export const InteractivePreview: React.FC = () => {
             backgroundColor="#0B0F19"
             glowColor="45 95 60"
             colors={['#F59E0B', '#FBBF24', '#D97706']}
-            className="h-full"
+            className="group h-full"
             contentClassName="rounded-[19px] p-7 sm:p-8 h-full flex flex-col justify-between"
           >
             <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/25 flex items-center justify-center text-amber-400 transition-transform group-hover:scale-110">
-                <IconTrophy className="w-6 h-6" />
-              </div>
+              <IconTrophy className="w-8 h-8 text-amber-400 transition-transform group-hover:scale-110" />
               <h3 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight">
                 Los Mejores Resultados
               </h3>
@@ -78,13 +74,11 @@ export const InteractivePreview: React.FC = () => {
             backgroundColor="#0B0F19"
             glowColor="15 95 60"
             colors={['#EA580C', '#F97316', '#FB923C']}
-            className="h-full"
+            className="group h-full"
             contentClassName="rounded-[19px] p-7 sm:p-8 h-full flex flex-col justify-between"
           >
             <div className="space-y-4">
-              <div className="w-12 h-12 rounded-xl bg-orange-600/10 border border-orange-600/25 flex items-center justify-center text-orange-400 transition-transform group-hover:scale-110">
-                <IconTerminal2 className="w-6 h-6" />
-              </div>
+              <IconTerminal2 className="w-8 h-8 text-orange-400 transition-transform group-hover:scale-110" />
               <h3 className="font-display text-xl sm:text-2xl font-bold text-white tracking-tight">
                 Código Real en Vivo
               </h3>
