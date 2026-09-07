@@ -6,13 +6,74 @@ import { IconWorld, IconChevronDown, IconCheck } from '@tabler/icons-react';
 import { cn } from '@/lib/utils';
 
 /**
+ * Iconos Vectoriales Nítidos para Idiomas (sin emojis del sistema)
+ */
+export const IconFlagSpain: React.FC<{ className?: string }> = ({
+  className = 'w-4 h-4',
+}) => (
+  <svg
+    viewBox="0 0 32 32"
+    className={cn('rounded-full overflow-hidden shrink-0 ring-1 ring-white/10', className)}
+    aria-hidden="true"
+  >
+    <rect width="32" height="32" fill="#c60b1e" />
+    <rect y="8" width="32" height="16" fill="#ffc400" />
+  </svg>
+);
+
+export const IconFlagUS: React.FC<{ className?: string }> = ({
+  className = 'w-4 h-4',
+}) => (
+  <svg
+    viewBox="0 0 32 32"
+    className={cn('rounded-full overflow-hidden shrink-0 ring-1 ring-white/10', className)}
+    aria-hidden="true"
+  >
+    <rect width="32" height="32" fill="#b22234" />
+    <rect y="4" width="32" height="3.5" fill="#ffffff" />
+    <rect y="11" width="32" height="3.5" fill="#ffffff" />
+    <rect y="18" width="32" height="3.5" fill="#ffffff" />
+    <rect y="25" width="32" height="3.5" fill="#ffffff" />
+    <rect width="16" height="16" fill="#3c3b6e" />
+  </svg>
+);
+
+export const IconFlagBrazil: React.FC<{ className?: string }> = ({
+  className = 'w-4 h-4',
+}) => (
+  <svg
+    viewBox="0 0 32 32"
+    className={cn('rounded-full overflow-hidden shrink-0 ring-1 ring-white/10', className)}
+    aria-hidden="true"
+  >
+    <rect width="32" height="32" fill="#009c3b" />
+    <polygon points="16,4 28,16 16,28 4,16" fill="#ffdf00" />
+    <circle cx="16" cy="16" r="6" fill="#002776" />
+  </svg>
+);
+
+export const IconFlagFrance: React.FC<{ className?: string }> = ({
+  className = 'w-4 h-4',
+}) => (
+  <svg
+    viewBox="0 0 32 32"
+    className={cn('rounded-full overflow-hidden shrink-0 ring-1 ring-white/10', className)}
+    aria-hidden="true"
+  >
+    <rect width="11" height="32" fill="#0055a5" />
+    <rect x="11" width="10" height="32" fill="#ffffff" />
+    <rect x="21" width="11" height="32" fill="#ef4135" />
+  </svg>
+);
+
+/**
  * Estructura de datos para los idiomas soportados.
  */
 export interface Language {
   code: string;
   name: string;
   nativeName: string;
-  flag: string;
+  icon: React.ComponentType<{ className?: string }>;
 }
 
 /**
@@ -25,26 +86,26 @@ export const SUPPORTED_LANGUAGES: Language[] = [
     code: 'es',
     name: 'Español',
     nativeName: 'Español',
-    flag: '🇪🇸',
+    icon: IconFlagSpain,
   },
-  // --- PLANTILLA PARA NUEVOS IDIOMAS ---
+  // --- PLANTILLA EXTENSIBLE PARA NUEVOS IDIOMAS ---
   // {
   //   code: 'en',
   //   name: 'English',
   //   nativeName: 'English',
-  //   flag: '🇺🇸',
+  //   icon: IconFlagUS,
   // },
   // {
   //   code: 'pt',
   //   name: 'Português',
   //   nativeName: 'Português',
-  //   flag: '🇧🇷',
+  //   icon: IconFlagBrazil,
   // },
   // {
   //   code: 'fr',
   //   name: 'Français',
   //   nativeName: 'Français',
-  //   flag: '🇫🇷',
+  //   icon: IconFlagFrance,
   // },
 ];
 
@@ -103,36 +164,30 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
 
   return (
     <div ref={containerRef} className={cn('relative inline-block text-left', className)}>
-      {/* Botón Disparador del Menú Desplegable */}
+      {/* Botón Disparador Integrado al Navbar (sin estilo card, sin emojis) */}
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         aria-haspopup="true"
         aria-expanded={isOpen}
         className={cn(
-          'group relative flex items-center gap-2 px-3.5 py-2 rounded-xl text-sm font-semibold transition-all duration-200 select-none cursor-pointer',
-          'bg-slate-900/80 hover:bg-slate-800/90 text-slate-200 hover:text-white',
-          'border border-slate-800 hover:border-slate-700 backdrop-blur-md shadow-sm',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/50',
-          isOpen && 'border-amber-500/50 bg-slate-800/90 text-white ring-1 ring-amber-500/20'
+          'group flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium transition-colors select-none cursor-pointer',
+          'text-slate-400 hover:text-white hover:bg-slate-900/60',
+          'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-500/40',
+          isOpen && 'text-white bg-slate-900/80'
         )}
       >
-        <IconWorld className="w-4 h-4 text-amber-400/90 transition-transform group-hover:scale-110" />
-        <span className="text-base leading-none" role="img" aria-label={selectedLanguage.name}>
-          {selectedLanguage.flag}
-        </span>
-        <span className="hidden sm:inline font-medium tracking-tight">
-          {selectedLanguage.name}
-        </span>
+        <IconWorld className="w-4 h-4 text-slate-400 transition-colors group-hover:text-amber-400" />
+        <span className="tracking-tight">{selectedLanguage.name}</span>
         <IconChevronDown
           className={cn(
-            'w-3.5 h-3.5 text-slate-400 transition-transform duration-200',
+            'w-3.5 h-3.5 text-slate-500 transition-transform duration-200 group-hover:text-slate-300',
             isOpen && 'rotate-180 text-amber-400'
           )}
         />
       </button>
 
-      {/* Menú Desplegable con Animación */}
+      {/* Menú Desplegable con Animación (aquí se muestran los iconos) */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -151,6 +206,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
             <div className="py-1">
               {SUPPORTED_LANGUAGES.map((language) => {
                 const isSelected = language.code === selectedLanguage.code;
+                const IconComponent = language.icon;
                 return (
                   <button
                     key={language.code}
@@ -158,16 +214,15 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
                     role="menuitem"
                     onClick={() => handleSelectLanguage(language)}
                     className={cn(
-                      'w-full flex items-center justify-between px-3.5 py-2.5 text-sm transition-all text-left select-none cursor-pointer',
+                      'w-full flex items-center justify-between px-3 py-2 text-sm transition-all text-left select-none cursor-pointer',
                       isSelected
                         ? 'bg-amber-500/15 text-amber-400 font-semibold'
                         : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
                     )}
                   >
                     <div className="flex items-center gap-2.5">
-                      <span className="text-base leading-none" role="img" aria-label={language.name}>
-                        {language.flag}
-                      </span>
+                      {/* Icono vectorial nítido mostrado solo en el menú desplegado */}
+                      <IconComponent className="w-4 h-4" />
                       <span>{language.name}</span>
                     </div>
 
