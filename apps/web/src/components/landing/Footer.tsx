@@ -64,11 +64,6 @@ export const Footer: React.FC = () => {
                   ¿Por qué Koda?
                 </button>
               </li>
-              <li>
-                <button onClick={() => scrollTo('faq')} className="hover:text-amber-400 transition-colors">
-                  Preguntas Frecuentes
-                </button>
-              </li>
             </ul>
           </div>
 

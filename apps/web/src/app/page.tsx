@@ -6,7 +6,6 @@ import { HeroSection } from '../components/landing/HeroSection';
 import { InteractivePreview } from '../components/landing/InteractivePreview';
 import { MethodologySection } from '../components/landing/MethodologySection';
 import { CtaSection } from '../components/landing/CtaSection';
-import { FaqSection } from '../components/landing/FaqSection';
 import { Footer } from '../components/landing/Footer';
 import { LoginModal } from '../components/landing/LoginModal';
 
@@ -32,10 +31,7 @@ export default function HomePage() {
         {/* 4. Pedagogical Methodology & Comparison */}
         <MethodologySection />
 
-        {/* 5. Frequently Asked Questions */}
-        <FaqSection />
-
-        {/* 7. Final Call to Action */}
+        {/* 5. Final Call to Action */}
         <CtaSection onOpenLogin={openLogin} />
       </main>
 
