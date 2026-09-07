@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { IconArrowRight } from '@tabler/icons-react';
+import { IconArrowRight, IconLogin } from '@tabler/icons-react';
 import { HeroSkyBackground } from './HeroSkyBackground';
 import { GradientButton } from '@/components/ui/gradient-button';
 
@@ -29,15 +29,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
               . Cero frustración.
             </h1>
 
-            {/* Call to Action */}
-            <div className="pt-2 w-full sm:w-auto">
+            {/* Call to Action: Comenzar Ahora & Ya tengo una cuenta */}
+            <div className="pt-2 flex flex-col items-center lg:items-start gap-3.5 w-full sm:w-auto">
               <GradientButton
                 onClick={onOpenLogin}
                 size="lg"
-                className="w-full sm:w-auto gap-2.5 px-9 py-4 text-base shadow-none"
+                className="w-full sm:w-72 gap-2.5 px-8 py-4 text-base shadow-none justify-center font-black"
               >
                 Comenzar Ahora
                 <IconArrowRight className="w-5 h-5" />
+              </GradientButton>
+
+              <GradientButton
+                onClick={onOpenLogin}
+                variant="secondary"
+                size="lg"
+                className="w-full sm:w-72 gap-2.5 px-8 py-4 text-base shadow-none justify-center font-bold border border-slate-700/80 hover:border-slate-500"
+              >
+                <IconLogin className="w-5 h-5 text-amber-400/90" />
+                Ya tengo una cuenta
               </GradientButton>
             </div>
           </div>
