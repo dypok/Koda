@@ -55,9 +55,4 @@
 - [Monday]-[07/09/2026]-[15:05] : Corrección de desalineación en los iconos del mini árbol de habilidades (<MiniSkillTree />): sustitución de componentes React de iconos anidados con conflictos de viewBox por rutas vectoriales SVG nativas (<path>) normalizadas a escala e interpoladas con transformaciones exactas al centro matemático (cx, cy) de cada círculo, garantizando alineación visual perfecta y homogénea en todos los navegadores.
 - [Monday]-[07/09/2026]-[15:07] : Eliminación del badge flotante 'PASO 3/4' sobre el nodo activo de Control de Flujo en <MiniSkillTree /> para lograr una visualización aún más limpia, enfocada y sin pastillas flotantes sobrepuestas.
 - [Monday]-[07/09/2026]-[15:09] : Eliminación de la caja/card contenedora en <MiniSkillTree /> (fondo, bordes de tarjeta y sombras removidos), integrando el lienzo SVG de la constelación y sus resplandores cósmicos directamente sobre el fondo oscuro de la sección sin delimitación artificial.
-
-
-
-
-
-
+- [Monday]-[07/09/2026]-[15:15] : Vectorización SVG de alta fidelidad del logotipo y mascota oficial Koda a partir del diseño 2D rasterizado: remoción del falso patrón de tablero de ajedrez (checkerboard) en la base inferior, preprocesamiento con suavizado subpíxel y vectorización con curvas Bézier cúbicas suaves (vtracer en modo cutout con transparencia 100% libre de fondo). Generación de assets vectoriales escalables en apps/web/public/mascot.svg, brand/koda-mascot.svg, logo-mascot.svg y raíz del proyecto.
