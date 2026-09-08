@@ -12,12 +12,12 @@ export const HeroMascot: React.FC = () => (
   >
     <div className="relative w-full max-w-sm sm:max-w-md flex items-center justify-center">
       <Image
-        src="/brand/koda-mascot.png"
+        src="/brand/koda-mascot-cartoon-2d-transparent.png"
         alt="Koda — Mascota Oficial KodaAcademy"
         width={420}
-        height={302}
+        height={420}
         style={{ width: 'auto', height: 'auto' }}
-        className="relative z-10 max-h-[220px] sm:max-h-[260px] lg:max-h-[300px] object-contain animate-float select-none transform-gpu will-change-transform"
+        className="relative z-10 max-h-[240px] sm:max-h-[280px] lg:max-h-[320px] object-contain animate-float select-none transform-gpu will-change-transform drop-shadow-[0_20px_45px_rgba(249,115,22,0.35)]"
         priority
       />
     </div>
