@@ -1,11 +1,11 @@
 import React from 'react';
 import {
-  IconBrandPython, IconBrandJavascript, IconBrandTypescript, IconBrandRust,
-  IconBrandGolang, IconBrandCpp, IconBrandCSharp, IconBrandSwift,
-  IconBrandKotlin, IconBrandPhp, IconBrandNodejs, IconBrandReact,
-  IconBrandNextjs, IconBrandVue, IconBrandAngular, IconBrandSvelte,
-  IconBrandTailwind, IconBrandFlutter, IconBrandDjango, IconBrandDocker,
-  IconBrandMysql, IconBrandGit, IconBrandGraphql, IconBrandMongodb, IconCoffee
+  IconBrandPython, IconBrandJavascript, IconBrandTypescript, IconBrandHtml5,
+  IconBrandCss3, IconBrandRust, IconBrandGolang, IconBrandCpp, IconBrandCSharp,
+  IconBrandSwift, IconBrandKotlin, IconBrandPhp, IconBrandNodejs, IconBrandReact,
+  IconBrandNextjs, IconBrandVue, IconBrandAngular, IconBrandSvelte, IconBrandTailwind,
+  IconBrandFlutter, IconBrandDjango, IconBrandDocker, IconBrandMysql, IconBrandGit,
+  IconBrandGraphql, IconBrandMongodb, IconCoffee
 } from '@tabler/icons-react';
 
 export interface TechItem {
@@ -16,6 +16,8 @@ export interface TechItem {
 
 export const UPCOMING_TECHS: TechItem[] = [
   { name: 'Python', icon: IconBrandPython, color: '#38BDF8' },
+  { name: 'HTML', icon: IconBrandHtml5, color: '#E34F26' },
+  { name: 'CSS', icon: IconBrandCss3, color: '#1572B6' },
   { name: 'JavaScript', icon: IconBrandJavascript, color: '#FACC15' },
   { name: 'TypeScript', icon: IconBrandTypescript, color: '#60A5FA' },
   { name: 'React', icon: IconBrandReact, color: '#67E8F9' },
