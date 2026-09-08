@@ -53,7 +53,7 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
           className={cn(
             'px-3.5 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all border',
             selectedCategory === cat.id
-              ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-[0_0_12px_rgba(245,158,11,0.25)]'
+              ? 'bg-amber-500/15 text-amber-300 border-amber-500/40'
               : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:text-white hover:border-slate-700'
           )}
         >
