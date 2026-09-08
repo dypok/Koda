@@ -1,5 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { APP_GUARD } from '@nestjs/core';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { LanguagesModule } from './modules/languages/languages.module';
 import { LearningModule } from './modules/learning/learning.module';
@@ -9,11 +11,23 @@ import { NotebookModule } from './modules/notebook/notebook.module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    ThrottlerModule.forRoot([
+      {
+        ttl: 60000, // Ventana de 1 minuto
+        limit: 100,  // Máximo 100 peticiones por IP por minuto
+      },
+    ]),
     LanguagesModule,
     LearningModule,
     CertificationModule,
     NotebookModule,
   ],
   controllers: [AppController],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
