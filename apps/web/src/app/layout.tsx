@@ -40,6 +40,7 @@ export default function RootLayout({
   return (
     <html
       lang="es"
+      data-scroll-behavior="smooth"
       className={`dark scroll-smooth ${inter.variable} ${rajdhani.variable} ${firaCode.variable} ${jetbrainsMono.variable}`}
     >
       <body className="font-sans bg-slate-950 text-slate-100 min-h-screen antialiased overflow-x-hidden selection:bg-amber-500/30 selection:text-amber-200">

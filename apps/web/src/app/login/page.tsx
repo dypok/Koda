@@ -9,7 +9,6 @@ import {
   IconShieldCheck,
 } from '@tabler/icons-react';
 import { GradientButton } from '@/components/ui/gradient-button';
-import { KodaMascot } from '@/components/mascot/KodaMascot';
 
 export default function LoginPage() {
   return (
@@ -27,10 +26,6 @@ export default function LoginPage() {
 
         {/* Card */}
         <div className="rounded-3xl border border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950 p-8 shadow-2xl backdrop-blur-xl text-center space-y-6">
-          {/* Mascot in thinking/welcoming mode */}
-          <div className="flex justify-center -my-3">
-            <KodaMascot size={150} mood="thinking" interactive={true} />
-          </div>
 
           <div className="space-y-2">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/30">
