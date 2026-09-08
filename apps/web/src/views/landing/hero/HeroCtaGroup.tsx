@@ -15,13 +15,15 @@ export const HeroCtaGroup: React.FC<{ onOpenLogin?: () => void }> = ({ onOpenLog
     <GradientButton
       asChild
       size="lg"
-      className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base shadow-none justify-center font-black group"
+      className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base shadow-none justify-center font-black !text-black text-black group"
+      style={{ color: '#000000' }}
     >
-      <Link href="/register">
+      <Link href="/register" className="!text-black text-black font-black" style={{ color: '#000000' }}>
         Comenzar Ahora
-        <IconArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1.5" />
+        <IconArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1.5 !text-black text-black" style={{ color: '#000000' }} />
       </Link>
     </GradientButton>
+
 
     <GradientButton
       onClick={onOpenLogin}
