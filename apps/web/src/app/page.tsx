@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Navbar } from '../components/landing/Navbar';
-import { HeroSection } from '../components/landing/HeroSection';
-import { InteractivePreview } from '../components/landing/InteractivePreview';
-import { MethodologySection } from '../components/landing/MethodologySection';
-import { CtaSection } from '../components/landing/CtaSection';
-import { Footer } from '../components/landing/Footer';
-import { LoginModal } from '../components/landing/LoginModal';
+import { Navbar } from '@/components/landing/Navbar';
+import { HeroSection } from '@/components/landing/HeroSection';
+import { InteractivePreview } from '@/components/landing/InteractivePreview';
+import { MethodologySection } from '@/components/landing/MethodologySection';
+import { CtaSection } from '@/components/landing/CtaSection';
+import { Footer } from '@/components/landing/Footer';
+import { LoginModal } from '@/components/landing/LoginModal';
 
 export default function HomePage() {
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
