@@ -59,11 +59,12 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <GradientButton asChild className="w-full text-sm py-3">
-            <Link href="/">
+          <GradientButton asChild className="w-full text-sm py-3 !text-black text-black font-black" style={{ color: '#000000' }}>
+            <Link href="/" className="!text-black text-black font-black" style={{ color: '#000000' }}>
               Entendido, volver al inicio
             </Link>
           </GradientButton>
+
         </div>
       </div>
     </div>

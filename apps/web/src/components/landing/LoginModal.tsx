@@ -72,10 +72,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         {/* Action Button */}
         <GradientButton
           onClick={onClose}
-          className="w-full text-sm py-3"
+          className="w-full text-sm py-3 !text-black text-black font-black"
+          style={{ color: '#000000' }}
         >
           Entendido
         </GradientButton>
+
       </div>
     </div>
   );

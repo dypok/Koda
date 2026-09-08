@@ -53,11 +53,12 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
           className={cn(
             'px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border',
             selectedCategory === cat.id
-              ? 'bg-amber-500 text-black border-amber-400 shadow-[0_0_14px_rgba(245,158,11,0.35)]'
+              ? 'bg-amber-500 !text-black text-black border-amber-400 shadow-[0_0_14px_rgba(245,158,11,0.35)]'
               : 'bg-slate-900/80 text-slate-300 border-slate-700/80 hover:text-white hover:border-slate-600'
           )}
-
+          style={selectedCategory === cat.id ? { color: '#000000' } : undefined}
         >
+
           {cat.label}
         </button>
       ))}

@@ -17,7 +17,7 @@ const gradientButtonVariants = cva(
     variants: {
       variant: {
         default: [
-          "text-black font-black",
+          "!text-black text-black font-black",
           "bg-gradient-to-br from-orange-600 via-orange-500 to-amber-500",
           "shadow-[0_2px_8px_-2px_rgba(234,88,12,0.3)] hover:shadow-[0_8px_30px_-4px_rgba(249,115,22,0.5)]",
           "before:absolute before:inset-0 before:rounded-[inherit] before:p-[1px] before:pointer-events-none before:z-[1]",
@@ -62,10 +62,13 @@ export interface GradientButtonProps
 }
 
 const GradientButton = React.forwardRef<HTMLButtonElement, GradientButtonProps>(
-  ({ className, variant, size, asChild = false, children, ...props }, ref) => {
+  ({ className, variant, size, style, asChild = false, children, ...props }, ref) => {
+    const isDark = variant === "secondary" || variant === "variant";
+    const textStyle: React.CSSProperties = isDark ? style || {} : { color: "#000000", ...style };
+
     if (asChild) {
       return (
-        <Slot className={cn(gradientButtonVariants({ variant, size, className }))} ref={ref} {...props}>
+        <Slot className={cn(gradientButtonVariants({ variant, size, className }), !isDark && "!text-black")} style={textStyle} ref={ref} {...props}>
           {children}
         </Slot>
       );
@@ -73,7 +76,8 @@ const GradientButton = React.forwardRef<HTMLButtonElement, GradientButtonProps>(
 
     return (
       <button
-        className={cn(gradientButtonVariants({ variant, size, className }))}
+        className={cn(gradientButtonVariants({ variant, size, className }), !isDark && "!text-black")}
+        style={textStyle}
         ref={ref}
         {...props}
       >
@@ -81,13 +85,14 @@ const GradientButton = React.forwardRef<HTMLButtonElement, GradientButtonProps>(
           className="pointer-events-none absolute inset-0 z-[2] w-full h-full -translate-x-full bg-[linear-gradient(105deg,transparent_20%,rgba(255,255,255,0.32)_50%,transparent_80%)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-full"
           aria-hidden="true"
         />
-        <span className="relative z-10 inline-flex items-center justify-center gap-2.5">
+        <span className={cn("relative z-10 inline-flex items-center justify-center gap-2.5", !isDark && "!text-black font-black")} style={!isDark ? { color: "#000000" } : undefined}>
           {children}
         </span>
       </button>
     );
   }
 );
+
 GradientButton.displayName = "GradientButton";
 
 export { GradientButton, gradientButtonVariants };
