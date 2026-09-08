@@ -9,7 +9,7 @@ import {
   IconShieldCheck,
 } from '@tabler/icons-react';
 import { GradientButton } from '@/components/ui/gradient-button';
-import { KodaMascot } from '../../components/mascot/KodaMascot';
+import { KodaMascot } from '@/components/mascot/KodaMascot';
 
 export default function LoginPage() {
   return (
