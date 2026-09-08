@@ -34,12 +34,13 @@ export const RegisterBottomBar: React.FC<RegisterBottomBarProps> = ({
             onClick={onContinue}
             disabled={!canContinue}
             size="lg"
-            className="w-full sm:w-48 py-3 text-sm font-bold gap-2"
+            className="w-full sm:w-48 py-3 text-sm font-black gap-2 text-black"
           >
-            <span>{continueText}</span>
-            <IconArrowRight className="w-4 h-4" />
+            <span className="text-black font-black">{continueText}</span>
+            <IconArrowRight className="w-4 h-4 stroke-[2.5] text-black" />
           </GradientButton>
         </div>
+
       </div>
     </footer>
   );

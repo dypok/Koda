@@ -1,0 +1,3 @@
+# Changelog: 08-09-2026
+
+- [Tuesday]-[08/09/2026]-[06:39] : Contraste y legibilidad de texto en botones: actualización a negro sólido (text-black font-black) en el botón principal de Continuar y variantes por defecto de GradientButton y globals.css, e implementación de fondo ámbar sólido con texto negro profundo (bg-amber-500 text-black border-amber-400 font-bold) en las píldoras de filtrado por categoría seleccionadas en LanguageSelectionStep, garantizando máxima legibilidad sobre fondos cálidos y degradados, manteniendo estricto cumplimiento de menos de 100 líneas por archivo (<93 líneas) y compilación limpia en Turbopack.
