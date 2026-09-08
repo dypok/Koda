@@ -15,14 +15,14 @@ export const CtaActions: React.FC<{ onOpenLogin?: () => void }> = ({ onOpenLogin
     <GradientButton
       asChild
       size="lg"
-      className="w-full sm:w-auto px-8 py-3.5 text-base font-black gap-2.5 group"
-      style={{ color: '#000000' }}
+      className="w-full sm:w-auto px-8 py-3.5 text-base gap-2.5"
     >
-      <Link href="/register" className="inline-flex items-center justify-center gap-2.5 !text-black text-black font-black" style={{ color: '#000000' }}>
-        <IconRocket className="w-5 h-5 !text-black text-black stroke-[2.5]" style={{ color: '#000000' }} />
+      <Link href="/register">
+        <IconRocket className="w-5 h-5" />
         Comenzar Ahora — Es Gratis
       </Link>
     </GradientButton>
+
 
     <GradientButton
       variant="secondary"
