@@ -5,6 +5,7 @@ import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
 import { RegisterHeaderBar } from '@/views/register/RegisterHeaderBar';
 import { LanguageSelectionStep } from '@/views/register/LanguageSelectionStep';
 import { ExperienceStep } from '@/views/register/ExperienceStep';
+import { StyleStep } from '@/views/register/StyleStep';
 import { RegisterBottomBar } from '@/views/register/RegisterBottomBar';
 import { useRegisterStepperController } from '@/controllers/register/useRegisterStepperController';
 
@@ -42,6 +43,15 @@ export default function RegisterPage() {
             selectedExperienceId={stepper.selectedExperienceId}
             selectedTechName={stepper.selectedOption?.name}
             onSelectExperience={stepper.selectExperience}
+          />
+        )}
+
+        {stepper.currentStep === 3 && (
+          <StyleStep
+            options={stepper.styleOptions}
+            selectedStyleId={stepper.selectedStyleId}
+            selectedTechName={stepper.selectedOption?.name}
+            onSelectStyle={stepper.selectStyle}
           />
         )}
       </main>

@@ -4,9 +4,10 @@ import {
   IconBrandSwift, IconBrandKotlin, IconBrandPhp, IconBrandNodejs, IconBrandReact,
   IconBrandNextjs, IconBrandVue, IconBrandAngular, IconBrandSvelte, IconBrandTailwind,
   IconBrandFlutter, IconBrandDjango, IconBrandDocker, IconBrandMysql, IconBrandGit,
-  IconBrandGraphql, IconBrandMongodb, IconCoffee, IconPlant2, IconBolt, IconRocket
+  IconBrandGraphql, IconBrandMongodb, IconCoffee, IconPlant2, IconBolt, IconRocket,
+  IconTerminal2, IconCompass, IconPuzzle
 } from '@tabler/icons-react';
-import { LanguageOption, ExperienceOption, TechCategory } from './register.model';
+import { LanguageOption, ExperienceOption, StyleOption, TechCategory } from './register.model';
 
 export const TECH_CATEGORIES: { id: TechCategory; label: string }[] = [
   { id: 'all', label: 'Todos' },
@@ -19,6 +20,13 @@ export const EXPERIENCE_OPTIONS: ExperienceOption[] = [
   { id: 'beginner', title: 'Empezando desde cero', description: 'Nunca he escrito código. Quiero aprender paso a paso desde los fundamentos.', color: '#4ADE80', icon: IconPlant2 },
   { id: 'elementary', title: 'Conozco los fundamentos', description: 'Entiendo variables, bucles y lógica básica; quiero ir directo a la práctica.', color: '#FACC15', icon: IconBolt },
   { id: 'intermediate', title: 'Nivel intermedio o avanzado', description: 'Tengo experiencia técnica previa y busco retos de algoritmos, POO y proyectos.', color: '#FB923C', icon: IconRocket },
+];
+
+export const STYLE_OPTIONS: StyleOption[] = [
+  { id: 'hands-on', title: 'Práctica directa en terminal', description: 'Menos teoría extensa y más ejercicios interactivos de código desde el primer minuto.', color: '#38BDF8', icon: IconTerminal2 },
+  { id: 'guided', title: 'Paso a paso con explicaciones guiadas', description: 'Conceptos claros, analogías y fundamentos detallados antes de escribir cada bloque.', color: '#4ADE80', icon: IconCompass },
+  { id: 'projects', title: 'Basado en proyectos reales', description: 'Aprender creando herramientas útiles, scripts funcionales y mini-aplicaciones prácticas.', color: '#FB923C', icon: IconRocket },
+  { id: 'gamified', title: 'Desafíos de lógica y gamificación', description: 'Puzzles mentales rápidos, misiones diarias y resolución de problemas algorítmicos.', color: '#A855F7', icon: IconPuzzle },
 ];
 
 export const AVAILABLE_LANGUAGES: LanguageOption[] = [

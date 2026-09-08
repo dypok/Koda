@@ -23,8 +23,17 @@ export interface ExperienceOption {
   icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
 }
 
+export interface StyleOption {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+}
+
 export interface StudentRegistrationState {
   currentStep: number;
   selectedLanguageId: string | null;
   selectedExperienceId: string | null;
+  selectedStyleId: string | null;
 }
