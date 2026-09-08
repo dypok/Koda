@@ -42,8 +42,8 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
           <Image
             src="/brand/logo.svg"
             alt="Koda"
-            width={78}
-            height={28}
+            width={498}
+            height={185}
             className="h-6 sm:h-7 w-auto object-contain select-none"
             priority
           />
