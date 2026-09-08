@@ -101,6 +101,8 @@
 - [Monday]-[07/09/2026]-[23:24] : Ampliación horizontal de la sección y tarjetas en /register: (1) Expansión del contenedor principal a max-w-6xl en LanguageSelectionStep, RegisterHeaderBar y RegisterBottomBar; (2) Reestructuración del grid de tecnologías con mayor holgura (gap-4) y flex-nowrap en la cabecera de la tarjeta para garantizar que el nombre y la badge 'Próximamente' se ubiquen siempre juntos en una misma línea sin saltos de texto; (3) Mantenimiento estricto de <82 líneas por archivo y compilación exitosa en Turbopack.
 - [Monday]-[07/09/2026]-[23:26] : Ajuste de texto en badge de Python: simplificación de 'Disponible ahora' a 'Disponible' en register.constants.ts.
 - [Monday]-[07/09/2026]-[23:27] : Supresión del icono de palomita (checkmark) en tarjetas de selección: eliminación de IconCircleCheckFilled en LanguageCard y ExperienceCard, confiando exclusivamente en el resalte perimetral ámbar, anillo luminoso y fondo translúcido para comunicar el estado seleccionado.
+- [Monday]-[07/09/2026]-[23:30] : Integración del componente GlareHover en tarjetas de onboarding: creación de apps/web/src/components/ui/glare-hover.tsx adaptando el componente de Svelte Bits a React 19/TypeScript con gradiente reactivo al hover, e integración fluida en LanguageCard y ExperienceCard con colores de acento dinámicos, manteniendo estricto cumplimiento de menos de 100 líneas por archivo (<80 líneas) y compilación limpia en Turbopack.
+
 
 
 
