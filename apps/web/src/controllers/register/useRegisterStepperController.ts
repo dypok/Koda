@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useMemo, useCallback } from 'react';
-import { AVAILABLE_LANGUAGES, TECH_CATEGORIES, EXPERIENCE_OPTIONS } from '@/models/register/register.constants';
+import {
+  AVAILABLE_LANGUAGES, TECH_CATEGORIES, EXPERIENCE_OPTIONS, STYLE_OPTIONS
+} from '@/models/register/register.constants';
 import { TechCategory } from '@/models/register/register.model';
 
 export function useRegisterStepperController() {
@@ -9,6 +11,7 @@ export function useRegisterStepperController() {
   const [selectedLanguageId, setSelectedLanguageId] = useState<string>('python');
   const [selectedCategory, setSelectedCategory] = useState<TechCategory>('all');
   const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>(null);
+  const [selectedStyleId, setSelectedStyleId] = useState<string | null>(null);
 
   const filteredLanguages = useMemo(() => {
     if (selectedCategory === 'all') return AVAILABLE_LANGUAGES;
@@ -31,11 +34,16 @@ export function useRegisterStepperController() {
     setSelectedExperienceId(id);
   }, []);
 
+  const selectStyle = useCallback((id: string) => {
+    setSelectedStyleId(id);
+  }, []);
+
   const canContinue = useMemo(() => {
     if (currentStep === 1) return Boolean(selectedOption && selectedOption.isAvailable);
     if (currentStep === 2) return Boolean(selectedExperienceId);
+    if (currentStep === 3) return Boolean(selectedStyleId);
     return true;
-  }, [currentStep, selectedOption, selectedExperienceId]);
+  }, [currentStep, selectedOption, selectedExperienceId, selectedStyleId]);
 
   const nextStep = useCallback(() => {
     if (!canContinue) return;
@@ -57,9 +65,12 @@ export function useRegisterStepperController() {
     selectedOption,
     experienceOptions: EXPERIENCE_OPTIONS,
     selectedExperienceId,
+    styleOptions: STYLE_OPTIONS,
+    selectedStyleId,
     canContinue,
     selectLanguage,
     selectExperience,
+    selectStyle,
     nextStep,
     prevStep,
   };
