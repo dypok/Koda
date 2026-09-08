@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { LanguageOption } from '@/models/register/register.model';
+import { GlareHover } from '@/components/ui/glare-hover';
 import { cn } from '@/lib/utils';
 
 interface LanguageCardProps {
@@ -21,13 +22,17 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
   };
 
   return (
-    <div
+    <GlareHover
       role="button"
       tabIndex={isClickable ? 0 : -1}
       aria-pressed={isSelected}
       aria-disabled={!isClickable}
       onClick={handleClick}
       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleClick()}
+      glareColor={isClickable ? (option.color || '#F59E0B') : '#64748B'}
+      glareOpacity={isClickable ? 0.35 : 0}
+      glareSize={280}
+      transitionDuration={700}
       className={cn(
         'group relative flex items-start gap-4 p-4.5 sm:p-5 rounded-2xl border transition-all duration-200 select-none text-left outline-none min-h-[102px]',
         isSelected
@@ -47,7 +52,7 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
       />
 
       {/* Contenido con nombre y badge en linea única */}
-      <div className="flex-1 min-w-0 pr-2">
+      <div className="flex-1 min-w-0 pr-2 relative z-0">
         <div className="flex items-center gap-2 mb-1.5 flex-nowrap">
           <h3 className="text-sm sm:text-base font-bold text-white tracking-tight leading-none whitespace-nowrap">
             {option.name}
@@ -69,6 +74,6 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
           {option.description}
         </p>
       </div>
-    </div>
+    </GlareHover>
   );
 };

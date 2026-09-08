@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { ExperienceOption } from '@/models/register/register.model';
+import { GlareHover } from '@/components/ui/glare-hover';
 import { cn } from '@/lib/utils';
 
 interface ExperienceCardProps {
@@ -14,12 +15,16 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({ option, isSelect
   const IconComponent = option.icon;
 
   return (
-    <div
+    <GlareHover
       role="button"
       tabIndex={0}
       aria-pressed={isSelected}
       onClick={() => onSelect(option.id)}
       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onSelect(option.id)}
+      glareColor={option.color || '#F59E0B'}
+      glareOpacity={0.3}
+      glareSize={280}
+      transitionDuration={700}
       className={cn(
         'group relative flex items-center gap-4 p-5 rounded-2xl border transition-all duration-200 cursor-pointer select-none text-left outline-none',
         isSelected
@@ -34,7 +39,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({ option, isSelect
       />
 
       {/* Contenido limpio: titulo y descripcion sin spans informativos */}
-      <div className="flex-1 min-w-0 pr-2">
+      <div className="flex-1 min-w-0 pr-2 relative z-0">
         <h3 className="text-base font-bold text-white tracking-tight leading-tight mb-1">
           {option.title}
         </h3>
@@ -42,6 +47,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({ option, isSelect
           {option.description}
         </p>
       </div>
-    </div>
+    </GlareHover>
   );
 };
+
