@@ -100,6 +100,7 @@
 - [Monday]-[07/09/2026]-[23:22] : Bloqueo estricto de selección en tecnologías no disponibles y supresión de banners de aviso: (1) Deshabilitación interactiva (cursor-not-allowed, opacidad atenuada, bloqueo de clic y eventos de teclado) en todas las tecnologías con isAvailable: false en LanguageCard.tsx; (2) Eliminación definitiva del banner de aviso residual en LanguageSelectionStep.tsx; (3) Mantenimiento de límites de código (<82 líneas) y verificación con build exitoso.
 - [Monday]-[07/09/2026]-[23:24] : Ampliación horizontal de la sección y tarjetas en /register: (1) Expansión del contenedor principal a max-w-6xl en LanguageSelectionStep, RegisterHeaderBar y RegisterBottomBar; (2) Reestructuración del grid de tecnologías con mayor holgura (gap-4) y flex-nowrap en la cabecera de la tarjeta para garantizar que el nombre y la badge 'Próximamente' se ubiquen siempre juntos en una misma línea sin saltos de texto; (3) Mantenimiento estricto de <82 líneas por archivo y compilación exitosa en Turbopack.
 - [Monday]-[07/09/2026]-[23:26] : Ajuste de texto en badge de Python: simplificación de 'Disponible ahora' a 'Disponible' en register.constants.ts.
+- [Monday]-[07/09/2026]-[23:27] : Supresión del icono de palomita (checkmark) en tarjetas de selección: eliminación de IconCircleCheckFilled en LanguageCard y ExperienceCard, confiando exclusivamente en el resalte perimetral ámbar, anillo luminoso y fondo translúcido para comunicar el estado seleccionado.
 
 
 
