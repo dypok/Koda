@@ -26,12 +26,12 @@ export const LoginModal: React.FC<LoginModalProps> = ({ isOpen, onClose }) => {
         </button>
 
         {/* Brand Logo Badge */}
-        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#182030] border border-slate-800 overflow-hidden">
+        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-[#182030] border border-slate-800 p-1.5 overflow-hidden">
           <Image
-            src="/logo.png"
+            src="/brand/koda-mascot-cartoon-2d.svg"
             alt="KodaAcademy Logo"
-            width={64}
-            height={64}
+            width={56}
+            height={56}
             className="object-contain"
           />
         </div>

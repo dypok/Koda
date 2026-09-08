@@ -29,12 +29,12 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
           <div className="relative">
             <div className="absolute inset-0 bg-orange-500/20 blur-lg rounded-full -z-10 transform scale-75 animate-pulse transform-gpu" />
             <Image
-              src="/brand/koda-mascot.png"
+              src="/brand/koda-mascot-cartoon-2d-transparent.png"
               alt="Mascota Koda"
               width={220}
-              height={158}
+              height={220}
               style={{ width: 'auto', height: 'auto' }}
-              className="object-contain animate-float select-none"
+              className="object-contain animate-float select-none drop-shadow-[0_10px_30px_rgba(249,115,22,0.3)]"
               priority
             />
           </div>

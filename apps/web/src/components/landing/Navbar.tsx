@@ -39,12 +39,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left: Brand Logo */}
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 group-hover:scale-105 group-hover:border-amber-500/40 transition-all overflow-hidden">
+          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 p-1 group-hover:scale-105 group-hover:border-amber-500/40 transition-all overflow-hidden">
             <Image
-              src="/logo.png"
+              src="/brand/koda-mascot-cartoon-2d.svg"
               alt="KodaAcademy Logo"
-              width={40}
-              height={40}
+              width={36}
+              height={36}
               className="object-contain"
               priority
             />

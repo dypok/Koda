@@ -24,7 +24,7 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
     <div className="flex items-center gap-4 text-left">
       <div className="relative h-14 w-14 sm:h-16 sm:w-16 shrink-0">
         <Image
-          src="/brand/koda-mascot.png"
+          src="/brand/koda-mascot-cartoon-2d.svg"
           alt="Koda Mascot"
           width={64}
           height={64}

@@ -26,12 +26,12 @@ export const Footer: React.FC = () => {
           {/* Marca & Misión */}
           <div className="md:col-span-3 space-y-4">
             <Link href="/" className="flex items-center gap-3 group w-fit">
-              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 group-hover:border-amber-500/40 group-hover:scale-105 transition-all overflow-hidden shadow-sm">
+              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 p-1 group-hover:border-amber-500/40 group-hover:scale-105 transition-all overflow-hidden shadow-sm">
                 <Image
-                  src="/logo.png"
+                  src="/brand/koda-mascot-cartoon-2d.svg"
                   alt="KodaAcademy Logo"
-                  width={40}
-                  height={40}
+                  width={36}
+                  height={36}
                   className="object-contain"
                 />
               </div>
