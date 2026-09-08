@@ -28,9 +28,10 @@ export const siteMetadata: Metadata = {
   icons: {
     icon: [
       { url: '/favicon.ico' },
+      { url: '/icon.svg', type: 'image/svg+xml' },
       { url: '/icon.png', sizes: '192x192', type: 'image/png' },
     ],
-    apple: '/apple-icon.png',
+    apple: '/icon.png',
   },
   openGraph: {
     type: 'website',
