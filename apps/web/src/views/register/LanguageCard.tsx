@@ -30,7 +30,7 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
       onClick={handleClick}
       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && handleClick()}
       className={cn(
-        'group relative flex items-start gap-4 p-4 sm:p-4.5 rounded-2xl border transition-all duration-200 select-none text-left outline-none min-h-[96px]',
+        'group relative flex items-start gap-4 p-4.5 sm:p-5 rounded-2xl border transition-all duration-200 select-none text-left outline-none min-h-[102px]',
         isSelected
           ? 'border-amber-500 bg-amber-500/10 shadow-[0_0_25px_rgba(245,158,11,0.2)] ring-2 ring-amber-500/50 cursor-pointer'
           : isClickable
@@ -47,16 +47,16 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
         style={{ color: option.color }}
       />
 
-      {/* Contenido con badge visible y resumen completo */}
+      {/* Contenido con nombre y badge en linea única */}
       <div className="flex-1 min-w-0 pr-6">
-        <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
-          <h3 className="text-sm sm:text-base font-bold text-white tracking-tight leading-none">
+        <div className="flex items-center gap-2 mb-1.5 flex-nowrap">
+          <h3 className="text-sm sm:text-base font-bold text-white tracking-tight leading-none whitespace-nowrap">
             {option.name}
           </h3>
           {option.badge && (
             <span
               className={cn(
-                'text-xs font-semibold px-2.5 py-0.5 rounded-full border tracking-wide whitespace-nowrap',
+                'text-xs font-semibold px-2.5 py-0.5 rounded-full border tracking-wide whitespace-nowrap shrink-0',
                 option.isAvailable
                   ? 'text-emerald-300 bg-emerald-500/15 border-emerald-500/40'
                   : 'text-slate-400 bg-slate-800/70 border-slate-700/50'
@@ -66,7 +66,7 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
             </span>
           )}
         </div>
-        <p className="text-xs sm:text-[13px] text-slate-300/80 leading-relaxed">
+        <p className="text-xs sm:text-[13px] text-slate-300/85 leading-relaxed">
           {option.description}
         </p>
       </div>

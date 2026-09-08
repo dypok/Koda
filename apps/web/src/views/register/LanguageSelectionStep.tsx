@@ -19,7 +19,7 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
   languages, categories, selectedCategory, onSelectCategory,
   selectedLanguageId, onSelectLanguage,
 }) => (
-  <div className="w-full max-w-4xl mx-auto px-4 py-4 sm:py-6 space-y-5 animate-fadeIn">
+  <div className="w-full max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-6 animate-fadeIn">
     {/* Koda Welcome & Header */}
     <div className="flex items-center gap-4 text-left">
       <div className="relative h-14 w-14 sm:h-16 sm:w-16 shrink-0">
@@ -62,8 +62,8 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
       ))}
     </div>
 
-    {/* Grid of Technologies */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+    {/* Grid of Technologies ampliado horizontalmente */}
+    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
       {languages.map((item) => (
         <LanguageCard
           key={item.id}
