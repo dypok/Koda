@@ -17,7 +17,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({ option, isSelect
 
   return (
     <ClickSpark
-      sparkColor={option.color || '#F59E0B'}
+      sparkColor="#F97316"
       sparkRadius={20}
       sparkSize={10}
       sparkCount={8}
@@ -30,10 +30,10 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({ option, isSelect
         aria-pressed={isSelected}
         onClick={() => onSelect(option.id)}
         onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && onSelect(option.id)}
-        glareColor={option.color || '#F59E0B'}
+        glareColor="#F97316"
         glareOpacity={0.3}
         glareSize={280}
-        transitionDuration={700}
+        transitionDuration={2000}
         className={cn(
           'group relative flex items-center gap-4 p-5 rounded-2xl border transition-all duration-200 cursor-pointer select-none text-left outline-none',
           isSelected

@@ -18,7 +18,7 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
 
   return (
     <ClickSpark
-      sparkColor={option.color || '#F59E0B'}
+      sparkColor="#F97316"
       sparkCount={isClickable ? 8 : 0}
       sparkRadius={20}
       sparkSize={10}
@@ -32,10 +32,10 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
         aria-disabled={!isClickable}
         onClick={() => isClickable && onSelect(option.id)}
         onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && isClickable && onSelect(option.id)}
-        glareColor={isClickable ? (option.color || '#F59E0B') : '#64748B'}
+        glareColor={isClickable ? '#F97316' : '#64748B'}
         glareOpacity={isClickable ? 0.35 : 0}
         glareSize={280}
-        transitionDuration={700}
+        transitionDuration={2000}
         className={cn(
           'group relative flex items-start gap-4 p-4.5 sm:p-5 rounded-2xl border transition-all duration-200 select-none text-left outline-none min-h-[102px] h-full',
           isSelected
