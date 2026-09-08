@@ -15,12 +15,11 @@ export const HeroCtaGroup: React.FC<{ onOpenLogin?: () => void }> = ({ onOpenLog
     <GradientButton
       asChild
       size="lg"
-      className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base justify-center font-black group"
-      style={{ color: '#000000' }}
+      className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base justify-center group"
     >
-      <Link href="/register" className="inline-flex items-center justify-center gap-2.5 !text-black text-black font-black" style={{ color: '#000000' }}>
+      <Link href="/register">
         Comenzar Ahora
-        <IconArrowRight className="w-5 h-5 transition-transform duration-200 group-hover:translate-x-1.5 !text-black text-black stroke-[2.5]" style={{ color: '#000000' }} />
+        <IconArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1.5" />
       </Link>
     </GradientButton>
 
@@ -28,7 +27,7 @@ export const HeroCtaGroup: React.FC<{ onOpenLogin?: () => void }> = ({ onOpenLog
       onClick={onOpenLogin}
       variant="secondary"
       size="lg"
-      className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base justify-center font-bold border border-slate-700/80 hover:border-amber-400/50 group"
+      className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base justify-center group"
     >
       <IconLogin className="w-5 h-5 text-amber-400/90 transition-transform duration-300 group-hover:scale-110" />
       Ya tengo una cuenta
