@@ -9,7 +9,6 @@ export function useRegisterStepperController() {
   const [selectedLanguageId, setSelectedLanguageId] = useState<string>('python');
   const [selectedCategory, setSelectedCategory] = useState<TechCategory>('all');
   const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>(null);
-  const [notice, setNotice] = useState<string | null>(null);
 
   const filteredLanguages = useMemo(() => {
     if (selectedCategory === 'all') return AVAILABLE_LANGUAGES;
@@ -22,12 +21,9 @@ export function useRegisterStepperController() {
   );
 
   const selectLanguage = useCallback((id: string) => {
-    setSelectedLanguageId(id);
     const chosen = AVAILABLE_LANGUAGES.find((lang) => lang.id === id);
-    if (chosen && !chosen.isAvailable) {
-      setNotice(`La ruta de ${chosen.name} está en desarrollo. Python está disponible ahora.`);
-    } else {
-      setNotice(null);
+    if (chosen && chosen.isAvailable) {
+      setSelectedLanguageId(id);
     }
   }, []);
 
@@ -61,7 +57,6 @@ export function useRegisterStepperController() {
     selectedOption,
     experienceOptions: EXPERIENCE_OPTIONS,
     selectedExperienceId,
-    notice,
     canContinue,
     selectLanguage,
     selectExperience,

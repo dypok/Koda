@@ -28,7 +28,6 @@ export default function RegisterPage() {
             selectedCategory={stepper.selectedCategory}
             onSelectCategory={stepper.setSelectedCategory}
             selectedLanguageId={stepper.selectedLanguageId}
-            notice={stepper.notice}
             onSelectLanguage={stepper.selectLanguage}
           />
         )}
