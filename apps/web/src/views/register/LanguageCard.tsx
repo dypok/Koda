@@ -34,11 +34,25 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
         style={{ color: option.color }}
       />
 
-      {/* Contenido limpio: nombre y descripcion */}
+      {/* Contenido con nombre y badge discreta si aplica */}
       <div className="flex-1 min-w-0 pr-6">
-        <h3 className="text-sm font-bold text-white tracking-tight leading-none mb-1">
-          {option.name}
-        </h3>
+        <div className="flex items-center gap-2 mb-1">
+          <h3 className="text-sm font-bold text-white tracking-tight leading-none">
+            {option.name}
+          </h3>
+          {option.badge && (
+            <span
+              className={cn(
+                'text-[10px] font-semibold px-2 py-0.5 rounded-full border',
+                option.isAvailable
+                  ? 'text-emerald-400 bg-emerald-500/10 border-emerald-500/30'
+                  : 'text-slate-400 bg-slate-800/80 border-slate-700/50'
+              )}
+            >
+              {option.badge}
+            </span>
+          )}
+        </div>
         <p className="text-xs text-slate-400 leading-snug line-clamp-1">
           {option.description}
         </p>
