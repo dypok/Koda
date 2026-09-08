@@ -12,6 +12,7 @@ export interface LanguageOption {
   icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
   isAvailable: boolean;
   category: 'language' | 'framework' | 'tools';
+  badge?: string;
 }
 
 export interface ExperienceOption {
