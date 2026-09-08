@@ -56,8 +56,20 @@ export function useHeroSkyController(starCount = STAR_COUNT_DEFAULT, seed = 88, 
     pointerRef.current = { x: -1, y: -1, inside: false };
   }, []);
 
+  useEffect(() => {
+    if (!interactive || reduceMotion) return;
+    const handleMove = (e: PointerEvent) => {
+      const { left, top, width, height } = rectRef.current;
+      const inside = e.clientX >= left && e.clientX <= left + width && e.clientY >= top && e.clientY <= top + height;
+      pointerRef.current = { x: e.clientX - left, y: e.clientY - top, inside };
+    };
+    window.addEventListener('pointermove', handleMove, { passive: true });
+    return () => window.removeEventListener('pointermove', handleMove);
+  }, [interactive, reduceMotion]);
+
   return {
     containerRef, canvasRef, realCoreRef, realBloomRef, realStar,
     reduceMotion, triggerStarDiscovery, onPointerMove, onPointerLeave,
   };
 }
+
