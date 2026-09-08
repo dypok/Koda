@@ -12,7 +12,7 @@ export default function RegisterPage() {
   const stepper = useRegisterStepperController();
 
   return (
-    <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-amber-500/30 selection:text-amber-200">
+    <div className="relative isolate min-h-screen bg-transparent text-slate-100 flex flex-col justify-between selection:bg-amber-500/30 selection:text-amber-200">
       {/* Fondo cósmico del Hero con estrellas interactivas */}
       <HeroSkyBackground starCount={160} interactive={true} className="fixed inset-0 pointer-events-none -z-10" />
 

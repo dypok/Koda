@@ -17,7 +17,7 @@ export const RegisterBottomBar: React.FC<RegisterBottomBarProps> = ({
   continueText = 'Continuar',
 }) => {
   return (
-    <footer className="sticky bottom-0 z-30 w-full border-t border-slate-800/80 bg-slate-950/95 backdrop-blur-md py-3.5 px-4 sm:px-8">
+    <footer className="sticky bottom-0 z-30 w-full bg-transparent py-3.5 px-4 sm:px-8">
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Existing account link */}
         <Link
