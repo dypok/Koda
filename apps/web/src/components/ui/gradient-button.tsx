@@ -7,31 +7,40 @@ import { cn } from "@/lib/utils";
 
 const gradientButtonVariants = cva(
   [
-    "group relative inline-flex items-center justify-center overflow-hidden rounded-xl",
+    "group relative isolate inline-flex items-center justify-center overflow-hidden rounded-xl",
     "cursor-pointer select-none font-bold tracking-tight transform-gpu",
-    "transition-all duration-200 ease-out",
+    "transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500",
     "active:scale-[0.98]",
-    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-slate-800/80 disabled:bg-none disabled:text-slate-500 disabled:border-slate-800 disabled:shadow-none disabled:opacity-40",
+    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100",
   ],
   {
     variants: {
       variant: {
         default: [
           "text-slate-950 font-black",
-          "bg-gradient-to-r from-orange-500 via-amber-500 to-orange-500 hover:brightness-105 active:brightness-95",
-          "border border-amber-400/25",
-          "shadow-sm shadow-orange-950/20",
+          "bg-gradient-to-r from-orange-600 via-amber-400 to-orange-600",
+          "bg-[length:200%_auto] bg-left hover:bg-right",
+          "border border-amber-400/30 hover:border-amber-400/60",
+          "hover:scale-[1.015]",
+          "after:absolute after:inset-0 after:rounded-[inherit] after:pointer-events-none after:-z-[1]",
+          "after:bg-gradient-to-r after:from-amber-400 after:via-orange-500 after:to-amber-400",
+          "after:bg-[length:200%_auto] after:bg-left hover:after:bg-right",
+          "after:opacity-0 hover:after:opacity-100 after:transition-all after:duration-500",
         ].join(" "),
         secondary: [
-          "text-slate-200 font-bold",
-          "border border-slate-700/80 bg-slate-900/80 hover:bg-slate-800/90 hover:text-white hover:border-slate-600",
-          "shadow-sm shadow-slate-950/50",
+          "text-slate-100 font-bold",
+          "border border-slate-700/80 hover:border-amber-400/40 hover:text-white",
+          "bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900",
+          "bg-[length:200%_auto] bg-left hover:bg-right",
+          "hover:scale-[1.015]",
         ].join(" "),
         variant: [
-          "text-slate-200 font-bold",
-          "border border-slate-700/80 bg-slate-900/80 hover:bg-slate-800/90 hover:text-white hover:border-slate-600",
-          "shadow-sm shadow-slate-950/50",
+          "text-slate-100 font-bold",
+          "border border-slate-700/80 hover:border-amber-400/40 hover:text-white",
+          "bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900",
+          "bg-[length:200%_auto] bg-left hover:bg-right",
+          "hover:scale-[1.015]",
         ].join(" "),
       },
       size: {
@@ -72,4 +81,5 @@ const GradientButton = React.forwardRef<HTMLButtonElement, GradientButtonProps>(
 GradientButton.displayName = "GradientButton";
 
 export { GradientButton, gradientButtonVariants };
+
 
