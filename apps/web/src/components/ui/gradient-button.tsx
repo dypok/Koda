@@ -7,39 +7,23 @@ import { cn } from "@/lib/utils";
 
 const gradientButtonVariants = cva(
   [
-    "group relative isolate inline-flex items-center justify-center overflow-hidden rounded-xl",
-    "cursor-pointer select-none font-bold tracking-tight transform-gpu",
-    "transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
-    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500",
-    "disabled:pointer-events-none disabled:opacity-50 active:scale-[0.975]",
+    "inline-flex items-center justify-center rounded-xl",
+    "cursor-pointer select-none font-bold tracking-tight",
+    "transition-colors duration-150",
+    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500",
+    "disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
   ],
   {
     variants: {
       variant: {
-        default: [
-          "!text-black text-black font-black",
-          "bg-gradient-to-br from-orange-600 via-orange-500 to-amber-500",
-          "shadow-[0_2px_8px_-2px_rgba(234,88,12,0.3)] hover:shadow-[0_8px_30px_-4px_rgba(249,115,22,0.5)]",
-          "before:absolute before:inset-0 before:rounded-[inherit] before:p-[1px] before:pointer-events-none before:z-[1]",
-          "before:bg-gradient-to-br before:from-yellow-200/70 before:via-amber-500/40 before:to-orange-600/80",
-          "before:[mask:linear-gradient(#fff_0_0)_content-box,linear-gradient(#fff_0_0)] before:[mask-composite:exclude]",
-          "hover:before:bg-gradient-to-br hover:before:from-white/95 hover:before:via-yellow-200/85 hover:before:to-orange-500/95 before:transition-colors before:duration-300",
-          "after:absolute after:inset-0 after:rounded-[inherit] after:pointer-events-none after:-z-[1] after:opacity-0 hover:after:opacity-100",
-          "after:bg-gradient-to-br after:from-yellow-200 after:via-amber-400 after:to-orange-600 after:transition-opacity after:duration-300",
-        ].join(" "),
+        default: "bg-orange-500 hover:bg-orange-600 text-black font-black",
         secondary: [
           "text-slate-100 font-bold border border-slate-700/80 hover:border-amber-400/50 hover:text-white",
-          "bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950",
-          "shadow-[0_2px_8px_-2px_rgba(15,23,42,0.5)] hover:shadow-[0_8px_25px_-4px_rgba(245,158,11,0.25)]",
-          "after:absolute after:inset-0 after:rounded-[inherit] after:pointer-events-none after:-z-[1] after:opacity-0 hover:after:opacity-100",
-          "after:bg-gradient-to-br after:from-slate-700 after:via-slate-800 after:to-slate-900 after:transition-opacity after:duration-300",
+          "bg-slate-900/90 hover:bg-slate-800/90",
         ].join(" "),
         variant: [
           "text-slate-100 font-bold border border-slate-700/80 hover:border-amber-400/50 hover:text-white",
-          "bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950",
-          "shadow-[0_2px_8px_-2px_rgba(15,23,42,0.5)] hover:shadow-[0_8px_25px_-4px_rgba(245,158,11,0.25)]",
-          "after:absolute after:inset-0 after:rounded-[inherit] after:pointer-events-none after:-z-[1] after:opacity-0 hover:after:opacity-100",
-          "after:bg-gradient-to-br after:from-slate-700 after:via-slate-800 after:to-slate-900 after:transition-opacity after:duration-300",
+          "bg-slate-900/90 hover:bg-slate-800/90",
         ].join(" "),
       },
       size: {
@@ -62,13 +46,18 @@ export interface GradientButtonProps
 }
 
 const GradientButton = React.forwardRef<HTMLButtonElement, GradientButtonProps>(
-  ({ className, variant, size, style, asChild = false, children, ...props }, ref) => {
+  ({ className, variant = "default", size, style, asChild = false, children, ...props }, ref) => {
     const isDark = variant === "secondary" || variant === "variant";
     const textStyle: React.CSSProperties = isDark ? style || {} : { color: "#000000", ...style };
 
     if (asChild) {
       return (
-        <Slot className={cn(gradientButtonVariants({ variant, size, className }), !isDark && "!text-black")} style={textStyle} ref={ref} {...props}>
+        <Slot
+          className={cn(gradientButtonVariants({ variant, size, className }), !isDark && "text-black !text-black")}
+          style={textStyle}
+          ref={ref}
+          {...props}
+        >
           {children}
         </Slot>
       );
@@ -76,16 +65,12 @@ const GradientButton = React.forwardRef<HTMLButtonElement, GradientButtonProps>(
 
     return (
       <button
-        className={cn(gradientButtonVariants({ variant, size, className }), !isDark && "!text-black")}
+        className={cn(gradientButtonVariants({ variant, size, className }), !isDark && "text-black !text-black")}
         style={textStyle}
         ref={ref}
         {...props}
       >
-        <span
-          className="pointer-events-none absolute inset-0 z-[2] w-full h-full -translate-x-full bg-[linear-gradient(105deg,transparent_20%,rgba(255,255,255,0.32)_50%,transparent_80%)] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-full"
-          aria-hidden="true"
-        />
-        <span className={cn("relative z-10 inline-flex items-center justify-center gap-2.5", !isDark && "!text-black font-black")} style={!isDark ? { color: "#000000" } : undefined}>
+        <span className={cn("inline-flex items-center justify-center gap-2.5", !isDark && "text-black !text-black font-black")}>
           {children}
         </span>
       </button>
