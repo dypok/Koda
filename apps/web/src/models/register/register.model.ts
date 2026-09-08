@@ -1,6 +1,6 @@
 import React from 'react';
 
-export type RegisterStep = 'language' | 'credentials' | 'success';
+export type RegisterStep = 'language' | 'experience' | 'style' | 'goal' | 'profile';
 export type TechCategory = 'all' | 'language' | 'framework' | 'tools';
 
 export interface LanguageOption {
@@ -11,11 +11,19 @@ export interface LanguageOption {
   color: string;
   icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
   isAvailable: boolean;
-  badge: string;
   category: 'language' | 'framework' | 'tools';
 }
 
+export interface ExperienceOption {
+  id: string;
+  title: string;
+  description: string;
+  color: string;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+}
+
 export interface StudentRegistrationState {
-  currentStep: RegisterStep;
+  currentStep: number;
   selectedLanguageId: string | null;
+  selectedExperienceId: string | null;
 }

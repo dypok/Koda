@@ -8,11 +8,13 @@ import { IconArrowLeft } from '@tabler/icons-react';
 interface RegisterHeaderBarProps {
   currentStepIndex?: number;
   totalSteps?: number;
+  onPrevStep?: () => void;
 }
 
 export const RegisterHeaderBar: React.FC<RegisterHeaderBarProps> = ({
   currentStepIndex = 1,
-  totalSteps = 2,
+  totalSteps = 5,
+  onPrevStep,
 }) => {
   const progressPercent = Math.min(100, Math.max(10, (currentStepIndex / totalSteps) * 100));
 
@@ -20,13 +22,24 @@ export const RegisterHeaderBar: React.FC<RegisterHeaderBarProps> = ({
     <header className="sticky top-0 z-30 w-full bg-slate-950/90 backdrop-blur-md border-b border-slate-900/80">
       <div className="max-w-4xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between gap-4">
         {/* Back button */}
-        <Link
-          href="/"
-          className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors"
-          aria-label="Volver a la página principal"
-        >
-          <IconArrowLeft className="w-5 h-5" />
-        </Link>
+        {currentStepIndex > 1 && onPrevStep ? (
+          <button
+            type="button"
+            onClick={onPrevStep}
+            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors"
+            aria-label="Volver al paso anterior"
+          >
+            <IconArrowLeft className="w-5 h-5" />
+          </button>
+        ) : (
+          <Link
+            href="/"
+            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors"
+            aria-label="Volver a la página principal"
+          >
+            <IconArrowLeft className="w-5 h-5" />
+          </Link>
+        )}
 
         {/* Duolingo-style Progress Bar */}
         <div className="flex-1 max-w-md">
