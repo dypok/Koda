@@ -34,6 +34,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({ option, isSelect
         glareOpacity={0.3}
         glareSize={280}
         transitionDuration={2000}
+        playOnce={true}
         className={cn(
           'group relative flex items-center gap-4 p-5 rounded-2xl border transition-all duration-200 cursor-pointer select-none text-left outline-none',
           isSelected

@@ -27,7 +27,7 @@ function hexToRgba(hexColor: string, opacity: number): string {
 
 export const GlareHover: React.FC<GlareHoverProps> = ({
   children, glareColor = '#F97316', glareOpacity = 0.25, glareAngle = -45,
-  glareSize = 250, transitionDuration = 2000, playOnce = false,
+  glareSize = 250, transitionDuration = 2000, playOnce = true,
   className, style, onMouseEnter, onMouseLeave, ...props
 }) => {
   const overlayRef = useRef<HTMLDivElement>(null);
