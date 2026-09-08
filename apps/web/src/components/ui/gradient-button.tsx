@@ -7,34 +7,34 @@ import { cn } from "@/lib/utils";
 
 const gradientButtonVariants = cva(
   [
-    "group relative isolate inline-flex items-center justify-center overflow-hidden rounded-xl",
+    "group relative inline-flex items-center justify-center overflow-hidden rounded-xl",
     "cursor-pointer select-none font-bold tracking-tight transform-gpu",
-    "transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
+    "transition-all duration-200 ease-out",
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500",
-    "disabled:pointer-events-none disabled:cursor-not-allowed disabled:shadow-none active:scale-[0.975]",
+    "active:scale-[0.98]",
+    "disabled:pointer-events-none disabled:cursor-not-allowed",
   ],
   {
     variants: {
       variant: {
         default: [
           "text-white font-bold",
-          "bg-gradient-to-r from-orange-500 via-orange-600 to-amber-600",
-          "border border-orange-400/30 hover:border-orange-300/50",
-          "shadow-[0_2px_10px_-2px_rgba(234,88,12,0.25)] hover:shadow-[0_4px_16px_-2px_rgba(249,115,22,0.35)]",
-          "hover:brightness-105 active:brightness-95",
-          "disabled:bg-none disabled:bg-slate-800/90 disabled:text-slate-400 disabled:border-slate-700/50 disabled:shadow-none",
+          "bg-gradient-to-r from-orange-600 via-orange-500 to-amber-600",
+          "border border-amber-500/30",
+          "shadow-sm shadow-orange-950/40",
+          "hover:from-orange-500 hover:via-amber-500 hover:to-orange-500",
+          "hover:border-amber-400/50 hover:shadow-md hover:shadow-orange-950/50",
+          "disabled:from-slate-800 disabled:via-slate-800 disabled:to-slate-800 disabled:text-slate-400 disabled:border-slate-700/50",
         ].join(" "),
         secondary: [
-          "text-slate-100 font-bold border border-slate-700/80 hover:border-amber-400/50 hover:text-white",
-          "bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950",
-          "shadow-[0_2px_8px_-2px_rgba(15,23,42,0.5)] hover:shadow-[0_8px_25px_-4px_rgba(245,158,11,0.25)]",
-          "disabled:bg-slate-900 disabled:text-slate-600 disabled:border-slate-800",
+          "text-slate-100 font-bold border border-slate-700/80 hover:border-amber-400/40 hover:text-white",
+          "bg-slate-900/80 hover:bg-slate-800/90",
+          "shadow-sm shadow-black/40",
         ].join(" "),
         variant: [
-          "text-slate-100 font-bold border border-slate-700/80 hover:border-amber-400/50 hover:text-white",
-          "bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950",
-          "shadow-[0_2px_8px_-2px_rgba(15,23,42,0.5)] hover:shadow-[0_8px_25px_-4px_rgba(245,158,11,0.25)]",
-          "disabled:bg-slate-900 disabled:text-slate-600 disabled:border-slate-800",
+          "text-slate-100 font-bold border border-slate-700/80 hover:border-amber-400/40 hover:text-white",
+          "bg-slate-900/80 hover:bg-slate-800/90",
+          "shadow-sm shadow-black/40",
         ].join(" "),
       },
       size: {
