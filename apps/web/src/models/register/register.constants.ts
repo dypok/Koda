@@ -22,7 +22,7 @@ export const EXPERIENCE_OPTIONS: ExperienceOption[] = [
 ];
 
 export const AVAILABLE_LANGUAGES: LanguageOption[] = [
-  { id: 'python', name: 'Python', slug: 'python', color: '#38BDF8', icon: IconBrandPython, isAvailable: true, badge: 'Disponible ahora', category: 'language', description: 'Sintaxis limpia y fundamentos desde cero.' },
+  { id: 'python', name: 'Python', slug: 'python', color: '#38BDF8', icon: IconBrandPython, isAvailable: true, badge: 'Disponible', category: 'language', description: 'Sintaxis limpia y fundamentos desde cero.' },
   { id: 'html', name: 'HTML', slug: 'html', color: '#E34F26', icon: IconBrandHtml5, isAvailable: false, badge: 'Próximamente', category: 'language', description: 'Estructura semántica de la web desde cero.' },
   { id: 'css', name: 'CSS', slug: 'css', color: '#1572B6', icon: IconBrandCss3, isAvailable: false, badge: 'Próximamente', category: 'language', description: 'Diseño visual, layouts modernos y estilos.' },
   { id: 'javascript', name: 'JavaScript', slug: 'javascript', color: '#FACC15', icon: IconBrandJavascript, isAvailable: false, badge: 'Próximamente', category: 'language', description: 'Interactividad y desarrollo en navegadores.' },
