@@ -20,26 +20,26 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
   onSelectLanguage,
 }) => {
   return (
-    <div className="w-full max-w-2xl mx-auto px-4 py-6 sm:py-10 space-y-6 animate-fadeIn">
+    <div className="w-full max-w-4xl mx-auto px-4 py-4 sm:py-6 space-y-5 animate-fadeIn">
       {/* Koda Welcome & Header */}
       <div className="flex items-center gap-4 text-left">
-        <div className="relative h-16 w-16 sm:h-20 sm:w-20 shrink-0">
+        <div className="relative h-14 w-14 sm:h-16 sm:w-16 shrink-0">
           <Image
             src="/brand/koda-mascot.png"
             alt="Koda Mascot"
-            width={80}
-            height={80}
+            width={64}
+            height={64}
             className="object-contain"
             style={{ width: 'auto', height: 'auto' }}
             priority
           />
         </div>
-        <div className="space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
+        <div className="space-y-0.5">
+          <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
             ¿Qué lenguaje quieres aprender?
           </h1>
           <p className="text-xs sm:text-sm text-slate-400">
-            Aprende paso a paso con desafíos interactivos en vivo y feedback instantáneo.
+            Aprende desde cero con desafíos interactivos y feedback en tiempo real.
           </p>
         </div>
       </div>
@@ -53,7 +53,7 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
       )}
 
       {/* Grid of Languages */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
         {languages.map((lang) => (
           <LanguageCard
             key={lang.id}
