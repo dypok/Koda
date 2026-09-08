@@ -1,49 +1,52 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { RegisterHeaderBar } from '@/views/register/RegisterHeaderBar';
 import { LanguageSelectionStep } from '@/views/register/LanguageSelectionStep';
+import { ExperienceStep } from '@/views/register/ExperienceStep';
 import { RegisterBottomBar } from '@/views/register/RegisterBottomBar';
-import { useLanguageSelectionController } from '@/controllers/register/useLanguageSelectionController';
-import { LanguageOption } from '@/models/register/register.model';
+import { useRegisterStepperController } from '@/controllers/register/useRegisterStepperController';
 
 export default function RegisterPage() {
-  const [confirmedLanguage, setConfirmedLanguage] = useState<LanguageOption | null>(null);
-
-  const controller = useLanguageSelectionController('python', (selected) => {
-    setConfirmedLanguage(selected);
-  });
+  const stepper = useRegisterStepperController();
 
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between selection:bg-amber-500/30 selection:text-amber-200">
-      {/* Header with Duolingo Progress Bar */}
-      <RegisterHeaderBar currentStepIndex={1} totalSteps={2} />
+      {/* Header with Dynamic Progress Bar (Paso X de 5) */}
+      <RegisterHeaderBar
+        currentStepIndex={stepper.currentStep}
+        totalSteps={stepper.totalSteps}
+        onPrevStep={stepper.prevStep}
+      />
 
-      {/* Step 1: Technology & Language Selection */}
+      {/* Dynamic Step Content */}
       <main className="flex-1 flex flex-col justify-start items-center py-4 px-2">
-        <LanguageSelectionStep
-          languages={controller.languages}
-          categories={controller.categories}
-          selectedCategory={controller.selectedCategory}
-          onSelectCategory={controller.setSelectedCategory}
-          selectedLanguageId={controller.selectedLanguageId}
-          notice={controller.notice}
-          onSelectLanguage={controller.selectLanguage}
-        />
+        {stepper.currentStep === 1 && (
+          <LanguageSelectionStep
+            languages={stepper.languages}
+            categories={stepper.categories}
+            selectedCategory={stepper.selectedCategory}
+            onSelectCategory={stepper.setSelectedCategory}
+            selectedLanguageId={stepper.selectedLanguageId}
+            notice={stepper.notice}
+            onSelectLanguage={stepper.selectLanguage}
+          />
+        )}
 
-        {/* Confirmation feedback when continuing */}
-        {confirmedLanguage && (
-          <div className="mx-4 my-3 p-4 max-w-md rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs text-center animate-in fade-in zoom-in-95 duration-200">
-            <span className="font-bold">¡Excelente elección!</span> Has seleccionado{' '}
-            <span className="underline font-semibold">{confirmedLanguage.name}</span> como tu ruta de inicio. Paso 1 completado exitosamente.
-          </div>
+        {stepper.currentStep === 2 && (
+          <ExperienceStep
+            options={stepper.experienceOptions}
+            selectedExperienceId={stepper.selectedExperienceId}
+            selectedTechName={stepper.selectedOption?.name}
+            onSelectExperience={stepper.selectExperience}
+          />
         )}
       </main>
 
       {/* Bottom Sticky Action Bar */}
       <RegisterBottomBar
-        canContinue={controller.canContinue}
-        onContinue={controller.handleContinue}
+        canContinue={stepper.canContinue}
+        onContinue={stepper.nextStep}
         continueText="Continuar"
       />
     </div>

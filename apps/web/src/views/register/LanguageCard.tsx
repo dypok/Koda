@@ -34,7 +34,7 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
         style={{ color: option.color }}
       />
 
-      {/* Contenido sin versión */}
+      {/* Contenido limpio: nombre y descripcion */}
       <div className="flex-1 min-w-0 pr-6">
         <h3 className="text-sm font-bold text-white tracking-tight leading-none mb-1">
           {option.name}
@@ -42,17 +42,6 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
         <p className="text-xs text-slate-400 leading-snug line-clamp-1">
           {option.description}
         </p>
-        <div className="mt-1.5 flex items-center">
-          {option.isAvailable ? (
-            <span className="text-[10px] font-semibold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-full border border-emerald-500/30">
-              {option.badge}
-            </span>
-          ) : (
-            <span className="text-[10px] font-semibold text-slate-400 bg-slate-800/80 px-2 py-0.5 rounded-full border border-slate-700/50">
-              {option.badge}
-            </span>
-          )}
-        </div>
       </div>
 
       {/* Indicador de seleccionado */}
