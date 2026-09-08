@@ -45,7 +45,7 @@ export const RegisterHeaderBar: React.FC<RegisterHeaderBarProps> = ({
         <div className="flex-1 max-w-md">
           <div className="h-3.5 w-full bg-slate-800/80 rounded-full overflow-hidden p-0.5 border border-slate-700/60">
             <div
-              className="h-full bg-gradient-to-r from-orange-500 to-amber-400 rounded-full transition-all duration-500"
+              className="h-full bg-gradient-to-r from-orange-500 to-amber-400 rounded-full transition-all duration-500 shadow-[0_0_12px_rgba(245,158,11,0.5)]"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
