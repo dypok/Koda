@@ -2,7 +2,6 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { IconInfoCircle } from '@tabler/icons-react';
 import { LanguageOption, TechCategory } from '@/models/register/register.model';
 import { LanguageCard } from './LanguageCard';
 import { cn } from '@/lib/utils';
@@ -13,13 +12,12 @@ interface LanguageSelectionStepProps {
   selectedCategory: TechCategory;
   onSelectCategory: (cat: TechCategory) => void;
   selectedLanguageId: string;
-  notice: string | null;
   onSelectLanguage: (id: string) => void;
 }
 
 export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
   languages, categories, selectedCategory, onSelectCategory,
-  selectedLanguageId, notice, onSelectLanguage,
+  selectedLanguageId, onSelectLanguage,
 }) => (
   <div className="w-full max-w-4xl mx-auto px-4 py-4 sm:py-6 space-y-5 animate-fadeIn">
     {/* Koda Welcome & Header */}
@@ -63,14 +61,6 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
         </button>
       ))}
     </div>
-
-    {/* Notice Banner */}
-    {notice && (
-      <div className="flex items-center gap-2.5 p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs">
-        <IconInfoCircle className="w-4 h-4 shrink-0" />
-        <span>{notice}</span>
-      </div>
-    )}
 
     {/* Grid of Technologies */}
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
