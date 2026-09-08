@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { IconCircleCheckFilled } from '@tabler/icons-react';
 import { ExperienceOption } from '@/models/register/register.model';
 import { cn } from '@/lib/utils';
 
@@ -35,7 +34,7 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({ option, isSelect
       />
 
       {/* Contenido limpio: titulo y descripcion sin spans informativos */}
-      <div className="flex-1 min-w-0 pr-6">
+      <div className="flex-1 min-w-0 pr-2">
         <h3 className="text-base font-bold text-white tracking-tight leading-tight mb-1">
           {option.title}
         </h3>
@@ -43,13 +42,6 @@ export const ExperienceCard: React.FC<ExperienceCardProps> = ({ option, isSelect
           {option.description}
         </p>
       </div>
-
-      {/* Indicador de seleccionado */}
-      {isSelected && (
-        <div className="absolute top-5 right-5 text-amber-400 animate-in zoom-in-50 duration-200">
-          <IconCircleCheckFilled className="w-5 h-5" />
-        </div>
-      )}
     </div>
   );
 };

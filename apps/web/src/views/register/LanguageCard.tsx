@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { IconCircleCheckFilled } from '@tabler/icons-react';
 import { LanguageOption } from '@/models/register/register.model';
 import { cn } from '@/lib/utils';
 
@@ -48,7 +47,7 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
       />
 
       {/* Contenido con nombre y badge en linea única */}
-      <div className="flex-1 min-w-0 pr-6">
+      <div className="flex-1 min-w-0 pr-2">
         <div className="flex items-center gap-2 mb-1.5 flex-nowrap">
           <h3 className="text-sm sm:text-base font-bold text-white tracking-tight leading-none whitespace-nowrap">
             {option.name}
@@ -70,13 +69,6 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
           {option.description}
         </p>
       </div>
-
-      {/* Indicador de seleccionado */}
-      {isSelected && (
-        <div className="absolute top-4 right-4 text-amber-400 animate-in zoom-in-50 duration-200">
-          <IconCircleCheckFilled className="w-5 h-5" />
-        </div>
-      )}
     </div>
   );
 };
