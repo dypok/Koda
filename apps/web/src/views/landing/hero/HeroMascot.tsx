@@ -16,7 +16,8 @@ export const HeroMascot: React.FC = () => (
         alt="Koda — Mascota Oficial KodaAcademy"
         width={420}
         height={302}
-        className="relative z-10 w-auto h-auto max-h-[220px] sm:max-h-[260px] lg:max-h-[300px] object-contain animate-float select-none transform-gpu will-change-transform"
+        style={{ width: 'auto', height: 'auto' }}
+        className="relative z-10 max-h-[220px] sm:max-h-[260px] lg:max-h-[300px] object-contain animate-float select-none transform-gpu will-change-transform"
         priority
       />
     </div>
