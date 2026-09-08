@@ -28,9 +28,9 @@ export const CtaActions: React.FC<{ onOpenLogin?: () => void }> = ({ onOpenLogin
       variant="secondary"
       size="lg"
       onClick={onOpenLogin}
-      className="w-full sm:w-auto px-8 py-3.5 text-base font-bold gap-2.5"
+      className="w-full sm:w-auto px-8 py-3.5 text-base font-bold gap-2.5 border border-slate-700/80 hover:border-amber-400/50 group"
     >
-      <IconLogin className="w-5 h-5 text-amber-400" />
+      <IconLogin className="w-5 h-5 text-amber-400 transition-transform duration-300 group-hover:scale-110" />
       Ya tengo una cuenta
     </GradientButton>
   </motion.div>

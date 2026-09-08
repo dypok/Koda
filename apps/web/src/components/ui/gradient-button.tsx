@@ -13,6 +13,10 @@ const gradientButtonVariants = cva(
     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500",
     "disabled:pointer-events-none disabled:opacity-50 active:scale-[0.975]",
     "[&>*]:relative [&>*]:z-10",
+    "before:absolute before:inset-0 before:w-full before:h-full before:-translate-x-full hover:before:translate-x-full",
+    "before:bg-[linear-gradient(105deg,transparent_20%,rgba(255,255,255,0.32)_50%,transparent_80%)]",
+    "before:transition-transform before:duration-700 before:ease-[cubic-bezier(0.16,1,0.3,1)]",
+    "before:pointer-events-none before:z-0",
   ],
   {
     variants: {
@@ -25,10 +29,6 @@ const gradientButtonVariants = cva(
           "shadow-[0_4px_20px_-2px_rgba(249,115,22,0.45),inset_0_1px_0_0_rgba(255,255,255,0.35)]",
           "hover:shadow-[0_8px_32px_-2px_rgba(249,115,22,0.65),inset_0_1px_0_0_rgba(255,255,255,0.5)]",
           "hover:scale-[1.015]",
-          "before:absolute before:inset-0 before:w-full before:h-full before:-translate-x-full hover:before:translate-x-full",
-          "before:bg-[linear-gradient(105deg,transparent_20%,rgba(255,255,255,0.35)_50%,transparent_80%)]",
-          "before:transition-transform before:duration-700 before:ease-[cubic-bezier(0.16,1,0.3,1)]",
-          "before:pointer-events-none before:z-0",
         ].join(" "),
         secondary: [
           "text-slate-100 font-bold hover:text-white",
@@ -36,6 +36,8 @@ const gradientButtonVariants = cva(
           "bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950",
           "shadow-[0_2px_8px_-2px_rgba(15,23,42,0.5)] hover:shadow-[0_8px_25px_-4px_rgba(245,158,11,0.25)]",
           "hover:scale-[1.015]",
+          "after:absolute after:inset-0 after:rounded-[inherit] after:pointer-events-none after:-z-[1] after:opacity-0 hover:after:opacity-100",
+          "after:bg-gradient-to-br after:from-slate-700 after:via-slate-800 after:to-slate-900 after:transition-opacity after:duration-300",
         ].join(" "),
         variant: [
           "text-slate-100 font-bold hover:text-white",
@@ -43,6 +45,8 @@ const gradientButtonVariants = cva(
           "bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950",
           "shadow-[0_2px_8px_-2px_rgba(15,23,42,0.5)] hover:shadow-[0_8px_25px_-4px_rgba(245,158,11,0.25)]",
           "hover:scale-[1.015]",
+          "after:absolute after:inset-0 after:rounded-[inherit] after:pointer-events-none after:-z-[1] after:opacity-0 hover:after:opacity-100",
+          "after:bg-gradient-to-br after:from-slate-700 after:via-slate-800 after:to-slate-900 after:transition-opacity after:duration-300",
         ].join(" "),
       },
       size: {
