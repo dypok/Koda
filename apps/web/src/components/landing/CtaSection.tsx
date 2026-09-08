@@ -32,7 +32,8 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
               src="/brand/koda-mascot.png"
               alt="Mascota Koda"
               width={220}
-              height={160}
+              height={158}
+              style={{ width: 'auto', height: 'auto' }}
               className="object-contain animate-float select-none"
               priority
             />
