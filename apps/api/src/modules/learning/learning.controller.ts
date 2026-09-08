@@ -1,10 +1,10 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { LearningService } from './learning.service';
+import { LessonAnswerSubmissionDto } from './dto/lesson-answer-submission.dto';
 import type {
   RoadmapResponse,
   LessonDetail,
-  LessonAnswerSubmission,
   LessonAnswerFeedback,
 } from '@koda/types';
 
@@ -32,7 +32,7 @@ export class LearningController {
   @ApiResponse({ status: 200, description: 'Feedback evaluado y XP otorgado' })
   evaluateAnswer(
     @Param('lessonId') lessonId: string,
-    @Body() submission: LessonAnswerSubmission,
+    @Body() submission: LessonAnswerSubmissionDto,
   ): LessonAnswerFeedback {
     return this.learningService.evaluateAnswer({ ...submission, lesson_id: lessonId });
   }
