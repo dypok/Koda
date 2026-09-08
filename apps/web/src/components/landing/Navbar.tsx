@@ -38,13 +38,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left: Brand Logo (k{}da wordmark) */}
-        <Link href="/" className="flex items-center group focus:outline-none py-1">
+        <Link href="/" className="flex items-center focus:outline-none" aria-label="Koda">
           <Image
             src="/brand/logo.svg"
             alt="Koda"
-            width={120}
-            height={44}
-            className="h-9 sm:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+            width={78}
+            height={28}
+            className="h-6 sm:h-7 w-auto object-contain select-none"
             priority
           />
         </Link>
