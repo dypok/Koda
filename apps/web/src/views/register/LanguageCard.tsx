@@ -36,6 +36,7 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
         glareOpacity={isClickable ? 0.35 : 0}
         glareSize={280}
         transitionDuration={2000}
+        playOnce={true}
         className={cn(
           'group relative flex items-start gap-4 p-4.5 sm:p-5 rounded-2xl border transition-all duration-200 select-none text-left outline-none min-h-[102px] h-full',
           isSelected
