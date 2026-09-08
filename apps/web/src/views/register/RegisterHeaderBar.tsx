@@ -19,7 +19,7 @@ export const RegisterHeaderBar: React.FC<RegisterHeaderBarProps> = ({
   const progressPercent = Math.min(100, Math.max(10, (currentStepIndex / totalSteps) * 100));
 
   return (
-    <header className="sticky top-0 z-30 w-full bg-slate-950/90 backdrop-blur-md border-b border-slate-900/80">
+    <header className="sticky top-0 z-30 w-full bg-transparent">
       <div className="max-w-6xl mx-auto px-4 py-3 sm:py-4 flex items-center justify-between gap-4">
         {/* Back button */}
         {currentStepIndex > 1 && onPrevStep ? (
