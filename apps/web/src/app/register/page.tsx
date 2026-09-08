@@ -19,10 +19,13 @@ export default function RegisterPage() {
       {/* Header with Duolingo Progress Bar */}
       <RegisterHeaderBar currentStepIndex={1} totalSteps={2} />
 
-      {/* Step 1: Language Selection */}
+      {/* Step 1: Technology & Language Selection */}
       <main className="flex-1 flex flex-col justify-start items-center py-4 px-2">
         <LanguageSelectionStep
           languages={controller.languages}
+          categories={controller.categories}
+          selectedCategory={controller.selectedCategory}
+          onSelectCategory={controller.setSelectedCategory}
           selectedLanguageId={controller.selectedLanguageId}
           notice={controller.notice}
           onSelectLanguage={controller.selectLanguage}
