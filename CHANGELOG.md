@@ -9,7 +9,43 @@ Zona horaria: America/Bogota (UTC-5)
 
 ## [Unreleased]
 
+### Added
+- [2026-09-07 08:46] [Changed] **Reestructuración Editorial Multi-Lenguaje de la Landing Page:**
+  - Se reformuló la narrativa y textos en todos los componentes (`layout.tsx`, `Navbar`, `HeroSection`, `InteractivePreview`, `MethodologySection`, `CurriculumSection`, `FaqSection`, `CtaSection` y `Footer`).
+  - Se reposicionó a Python 3.12 como el **Track Inaugural Piloto** de una plataforma diseñada para ser multi-lenguaje, incorporando avisos de roadmap oficial para JavaScript/TypeScript, Go y Rust.
+  - Se eliminó el tono hiperbólico y métricas no justificadas, priorizando una redacción profesional, concisa y orientada a los fundamentos universales de la programación.
+- [2026-09-07 08:37] [Changed] **Unificación Visual de Mascota y Corrección de LightRays en HeroSection:**
+  - Se eliminó el selector doble de vista "3D Oficial" / "WebGL 2D" en el Hero, unificando la presencia de Koda en su modelo oficial de alta definición.
+  - Se retiró el contenedor de tarjeta (`rounded-3xl border border-slate-800 bg-slate-900`), integrando a la mascota Koda directamente en la composición con un pedestal de iluminación difusa, animación flotante, badge de estado superior y burbuja de diálogo dirigida con indicador triangular hacia la mascota.
+  - Se solventó la invisibilidad de los rayos de luz `<LightRays />`: se corrigió el contexto de apilamiento CSS aplicando `isolate` y `z-0` sobre el fondo `#0B0F19`, y se dotó al componente WebGL (`ogl`) de un `ResizeObserver` y renderizado inmediato en montaje para evitar resoluciones `1x1` en cálculo diferido.
+- [2026-09-07 08:17] [Added] **Integración del Componente WebGL LightRays en HeroSection:**
+  - Se portó el componente `<LightRays />` de Svelte Bits a React 19/TypeScript con la biblioteca `ogl` en `apps/web/src/components/landing/LightRays.tsx`.
+  - Se configuraron shaders WebGL con efecto volumétrico de rayos de luz ámbar (`#f59e0b`) de emisión `top-center`, soporte de dispersión, desvanecimiento, grano cinematográfico y seguimiento orgánico al cursor del mouse.
+  - Se integró en el fondo de `HeroSection.tsx` detrás del contenido principal sin afectar la interactividad (`pointer-events-none`).
+- [2026-09-07 08:06] [Added] **Aislamiento de la Mascota Oficial Koda y Generación de Recursos Visuales:**
+  - Se aisló la mascota Koda en fondo transparente (`apps/web/public/brand/koda-mascot.png` y `apps/web/public/mascot.png`) eliminando el escenario mediante segmentación de alta precisión (GrabCut con prior de U2-Net y preservación de curvas de llama).
+  - Se generaron variantes cuadradas transparentes de 512px, 256px y 128px (`apps/web/public/brand/koda-mascot-{512,256,128}.png`).
+  - Se crearon avatares de perfil con fondo circular oscuro `#0B0F19` y transparente (`apps/web/public/brand/koda-avatar.png`).
+  - Se generaron iconos del sistema: `favicon.ico` multirresolución (16, 32, 48px), `icon.png` (192px) para PWA, y `apple-icon.png` (180px) para dispositivos Apple.
+  - Se generó la imagen de portada y redes sociales `og-image.png` (1200x630) y `koda-scene.png`.
+  - Se implementó un selector de modo visual en `HeroSection` permitiendo alternar entre el "Render 3D Oficial" flotante y la animación interactiva "WebGL 2D" que sigue el cursor.
+
+### Fixed
+- [2026-09-07 08:06] [Fixed] **Resolución del error 500 en servidor de desarrollo Next.js:**
+  - Se eliminó el conflicto de colisión entre `next dev` y `next build` en `apps/web/.next` que provocaba errores `MODULE_NOT_FOUND` y `ENOENT` en vendor-chunks de Webpack.
+  - Se limpió el caché `.next` y se verificó la compilación limpia en producción y desarrollo con respuesta `200 OK`.
+
+- [2026-09-07 07:26] [Added] **Integración del Logo Oficial e Identidad de Marca KodaAcademy:**
+  - Se incorporó el logotipo oficial `{ 🔥 }` de **KodaAcademy** en `apps/web/public/logo.png` y `apps/web/public/brand/koda-academy-logo.png`.
+  - Se actualizaron los metadatos de Next.js (`title`, `description`, `icons: { icon: '/logo.png' }`, OpenGraph y Twitter Cards) en `apps/web/src/app/layout.tsx`.
+  - Se estandarizó la tipografía y marca `KodaAcademy` en `Navbar`, `HeroSection`, `InteractivePreview`, `MethodologySection`, `CurriculumSection`, `LoginModal`, `/login`, `Sidebar` y `Footer`.
+
 ### Changed
+- [2026-09-07 07:07] [Changed] **Profesionalización de la Landing Page y Desincorporación del Modo Próximamente en Código:**
+  - Se eliminó el banner superior de prelanzamiento (`ComingSoonBanner`) con textos de "Acceso Anticipado / Lista de espera".
+  - Se removió la variable `NEXT_PUBLIC_COMING_SOON_MODE` de `.env.example` y la lógica de intercepción forzada de `apps/web/src/middleware.ts`.
+  - Se eliminaron métricas simuladas y pruebas sociales no auténticas en `HeroSection` e `InteractivePreview`.
+  - Se estandarizó el flujo de "Iniciar Sesión" en `Navbar`, `HeroSection`, `CurriculumSection` y `CtaSection`, conectándolo al componente `LoginModal` y a la ruta `/login` con mensaje formal de disponibilidad próxima.
 - [2026-09-03 11:41] [Changed] **Transición definitiva a Python 3.12 como único lenguaje oficial de lanzamiento del MVP:**
   - Se eliminó todo el contenido y archivos relacionados con Lua (`content/languages/lua/`, `test_m01.html`, `test_m02.html`, `docs/28_LUA_CURRICULUM.md`).
   - Se creó la estructura declarativa oficial en `content/languages/python/` (`manifest.json` con los 12 módulos canónicos, `config/thresholds.json`, `config/xp.json`, `config/compositions.json`, `modules/01_fundamentos/module.json` y `bank.json`).
@@ -22,6 +58,28 @@ Zona horaria: America/Bogota (UTC-5)
 - [2026-09-03 11:26] [Fixed] Se corrigió el script de ejecución concurrente `pnpm dev` agregando `"dev": "nest start --watch"` en `apps/api/package.json` y asegurando la pre-compilación de `@koda/types`. Causa: `apps/api` solo tenía definido `"start:dev"`, por lo que el comando paralelo `pnpm --parallel --filter "./apps/*" dev` ignoraba el backend y levantaba únicamente el frontend Next.js. Fix: estandarizar el script `"dev"` en ambas aplicaciones.
 
 ### Added
+- [2026-09-06 17:11] [Feat] Se implementó y programó la Landing Page oficial de Koda y el modo "Próximamente" en `apps/web` (Next.js 15 App Router, React 19, Tailwind CSS, PixiJS v7):
+  - **Mascota Koda WebGL (`KodaMascot.tsx`):** Renderizado procedural con físicas de flotación continua a 60 FPS, seguimiento de cursor con pupilas reactivas, parpadeo de ojos y emisor de partículas de confeti en WebGL.
+  - **Hero Section (`HeroSection.tsx`):** Propuesta de valor, badge oficial de Python 3.12, CTAs duales y prueba social.
+  - **Terminal Interactiva en Vivo (`InteractivePreview.tsx`):** Sandbox interactivo con 3 snippets ejecutables en tiempo real y retroalimentación conceptual.
+  - **Metodología Pedagógica (`MethodologySection.tsx`):** Grid de los 4 pilares formativos y comparador visual vs. cursos tradicionales.
+  - **Showcase de Currículo (`CurriculumSection.tsx`):** Vista previa de los 12 módulos canónicos de Python 3.12 y certificado digital con código QR.
+  - **Captura de Lista de Espera (`WaitlistSection.tsx`):** Formulario de correo con validación RFC 5322, persistencia local y celebración con confeti.
+  - **FAQ y Footer (`FaqSection.tsx`, `Footer.tsx`):** Acordeón interactivo con 6 preguntas clave, enlaces a GitHub, verificación y estándares de privacidad.
+  - **Modo Próximamente (`middleware.ts`, `ComingSoonBanner.tsx`):** Interceptor de rutas privadas (`/app`, `/dashboard`, `/learn`) redirigiendo a la landing informativa con aviso modal amigable.
+  - **SEO & Assets:** Metadatos completos OpenGraph, Twitter Cards, SVG favicon (`icon.svg`) y build de producción optimizado (0 errores, 0 advertencias).
+- [2026-09-06 17:01] [Docs] Se completó el Backlog Jira-Ready integral de la plataforma Koda en `documentation/UserHistories/` (10 Épicas, 45 Stories, 177 Story Points):
+  - **`README.md`:** Definition of Done (DoD) global de 12 puntos y matriz del backlog por Sprint.
+  - **`EPIC-01-montado-documentacion-y-gobernanza.md`:** 5 stories (DOCS-01..05, 18 SP) de especificación y arquitectura.
+  - **`EPIC-02-landing-page-informativa-proximamente.md`:** 7 stories (LAND-01..07, 22 SP) de landing y modo próximamente.
+  - **`EPIC-03-autenticacion-perfiles-onboarding.md`:** 4 stories (AUTH-01..04, 16 SP) de JWT rotativo, diagnóstico y perfiles.
+  - **`EPIC-04-motor-aprendizaje-roadmap-python.md`:** 5 stories (LEARN-01..05, 21 SP) de roadmap, candados y estrellas.
+  - **`EPIC-05-workspace-leccion-practica-interactiva.md`:** 5 stories (LESS-01..05, 20 SP) de split 50/50, stepper y atajos.
+  - **`EPIC-06-sistema-evaluacion-quizzes-examenes.md`:** 4 stories (EVAL-01..04, 15 SP) de quizzes (70%) y exámenes (80%).
+  - **`EPIC-07-cuaderno-errores-repaso-adaptativo.md`:** 3 stories (NOTE-01..03, 13 SP) de remediación y repaso espaciado.
+  - **`EPIC-08-gamificacion-rachas-mascota-koda.md`:** 4 stories (GAMI-01..04, 18 SP) de economía XP, rachas y PixiJS Koda 🦊.
+  - **`EPIC-09-certificacion-pdf-qr-google-drive.md`:** 4 stories (CERT-01..04, 18 SP) de PDF vectorial, QR y Drive API v3.
+  - **`EPIC-10-monetizacion-admin-despliegue.md`:** 4 stories (MONA-01..04, 16 SP) de Free/Premium, Admin y CI/CD Cloud.
 - [2026-09-02 18:15] [Docs] Se completó la auditoría y modernización integral de la documentación del proyecto Koda:
   - **Hub Central de Documentación:** Se creó `docs/README.md` como índice maestro estructurado en 5 dominios y rutas de lectura sugeridas por rol (Frontend, Backend, Diseñador Instruccional, DevOps/QA).
   - **Sistema de ADRs (`docs/adr/`):** Se formalizó el sistema de Architectural Decision Records con `docs/adr/README.md`, symlink `09-decisions` y los 6 ADRs fundacionales (ADR-001 Monorepo PNPM, ADR-002 Supabase PG15, ADR-003 Certificados Google Drive Storage, ADR-004 PixiJS v7 para Koda 🦊, ADR-005 Lua como curso piloto de validación pedagógica, ADR-006 Motor híbrido ICodeRunner).

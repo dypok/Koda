@@ -53,3 +53,7 @@ build/
 # Coverage
 coverage/
 .nyc_output/
+
+# 3D assets scratch
+*.blend*
+
