@@ -102,6 +102,8 @@
 - [Monday]-[07/09/2026]-[23:26] : Ajuste de texto en badge de Python: simplificación de 'Disponible ahora' a 'Disponible' en register.constants.ts.
 - [Monday]-[07/09/2026]-[23:27] : Supresión del icono de palomita (checkmark) en tarjetas de selección: eliminación de IconCircleCheckFilled en LanguageCard y ExperienceCard, confiando exclusivamente en el resalte perimetral ámbar, anillo luminoso y fondo translúcido para comunicar el estado seleccionado.
 - [Monday]-[07/09/2026]-[23:30] : Integración del componente GlareHover en tarjetas de onboarding: creación de apps/web/src/components/ui/glare-hover.tsx adaptando el componente de Svelte Bits a React 19/TypeScript con gradiente reactivo al hover, e integración fluida en LanguageCard y ExperienceCard con colores de acento dinámicos, manteniendo estricto cumplimiento de menos de 100 líneas por archivo (<80 líneas) y compilación limpia en Turbopack.
+- [Monday]-[07/09/2026]-[23:32] : Integración del componente ClickSpark de Svelte Bits adaptado a React 19/TypeScript: creación de apps/web/src/components/ui/click-spark.tsx con renderizado en canvas de partículas/chispas dinámicas por clic, cálculo de trayectorias angulares y bucle RAF optimizado que se desactiva en reposo; integración en LanguageCard y ExperienceCard con colores temáticos por tecnología, respetando estrictamente el límite de menos de 100 líneas por archivo (<92 líneas) y compilación limpia en Turbopack.
+
 
 
 
