@@ -20,7 +20,7 @@ export default function RegisterPage() {
       <RegisterHeaderBar currentStepIndex={1} totalSteps={2} />
 
       {/* Step 1: Language Selection */}
-      <main className="flex-1 flex flex-col justify-center items-center py-4">
+      <main className="flex-1 flex flex-col justify-start items-center py-4 px-2">
         <LanguageSelectionStep
           languages={controller.languages}
           selectedLanguageId={controller.selectedLanguageId}
@@ -30,7 +30,7 @@ export default function RegisterPage() {
 
         {/* Confirmation feedback when continuing */}
         {confirmedLanguage && (
-          <div className="mx-4 mt-2 p-4 max-w-md rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs text-center animate-in fade-in zoom-in-95 duration-200">
+          <div className="mx-4 my-3 p-4 max-w-md rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-300 text-xs text-center animate-in fade-in zoom-in-95 duration-200">
             <span className="font-bold">¡Excelente elección!</span> Has seleccionado{' '}
             <span className="underline font-semibold">{confirmedLanguage.name}</span> como tu ruta de inicio. Paso 1 completado exitosamente.
           </div>

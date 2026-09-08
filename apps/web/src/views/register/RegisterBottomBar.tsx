@@ -17,7 +17,7 @@ export const RegisterBottomBar: React.FC<RegisterBottomBarProps> = ({
   continueText = 'Continuar',
 }) => {
   return (
-    <footer className="w-full border-t border-slate-800/80 bg-slate-950/95 backdrop-blur-md py-4 px-4 sm:px-8">
+    <footer className="sticky bottom-0 z-30 w-full border-t border-slate-800/80 bg-slate-950/95 backdrop-blur-md py-3.5 px-4 sm:px-8">
       <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Existing account link */}
         <Link
@@ -34,7 +34,7 @@ export const RegisterBottomBar: React.FC<RegisterBottomBarProps> = ({
             onClick={onContinue}
             disabled={!canContinue}
             size="lg"
-            className="w-full sm:w-48 py-3.5 text-sm font-bold gap-2"
+            className="w-full sm:w-48 py-3 text-sm font-bold gap-2"
           >
             <span>{continueText}</span>
             <IconArrowRight className="w-4 h-4" />

@@ -1,16 +1,16 @@
+import React from 'react';
+
 export type RegisterStep = 'language' | 'credentials' | 'success';
 
 export interface LanguageOption {
   id: string;
   name: string;
-  version: string;
   slug: string;
-  headline: string;
   description: string;
-  badge: string;
+  color: string;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
   isAvailable: boolean;
-  accentColor: string;
-  stats: string;
+  badge: string;
 }
 
 export interface StudentRegistrationState {
