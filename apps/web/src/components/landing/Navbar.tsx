@@ -37,25 +37,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
       )}
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Left: Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 p-1 group-hover:scale-105 group-hover:border-amber-500/40 transition-all overflow-hidden">
-            <Image
-              src="/brand/koda-mascot-cartoon-2d.svg"
-              alt="KodaAcademy Logo"
-              width={36}
-              height={36}
-              className="object-contain"
-              priority
-            />
-          </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <span className="font-display text-2xl font-bold tracking-tight bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
-                KodaAcademy
-              </span>
-            </div>
-          </div>
+        {/* Left: Brand Logo (k{}da wordmark) */}
+        <Link href="/" className="flex items-center group focus:outline-none py-1">
+          <Image
+            src="/brand/logo.svg"
+            alt="Koda"
+            width={120}
+            height={44}
+            className="h-9 sm:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-[1.04]"
+            priority
+          />
         </Link>
 
         {/* Right: Selector de idioma desplegable */}
