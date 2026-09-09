@@ -33,7 +33,7 @@ export const ProfileSummaryBadge: React.FC<ProfileSummaryBadgeProps> = ({
       {/* Badge Meta Diaria */}
       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/15 border border-orange-500/35 text-orange-300 text-xs font-bold">
         <IconFlame className="w-3.5 h-3.5 text-orange-400 fill-orange-500/30" />
-        <span>{goalTitle} · {goalMinutes} min/día</span>
+        <span>{goalTitle}</span>
       </span>
     </div>
   );
