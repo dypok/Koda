@@ -22,16 +22,16 @@ export default function LoginPage() {
   }, [isAuthenticated, router]);
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col lg:flex-row selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden">
-      <HeroSkyBackground starCount={120} interactive={true} className="fixed inset-0 pointer-events-none -z-10" />
+    <div className="relative isolate min-h-screen bg-transparent text-slate-100 flex flex-col lg:flex-row selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden">
+      <HeroSkyBackground starCount={160} interactive={true} className="fixed inset-0 pointer-events-none -z-10" />
 
       {/* Left Section: Ambient Non-Interactive Showcase Carousel */}
-      <section className="hidden lg:flex lg:w-7/12 min-h-screen border-r border-slate-800/40 relative z-10 bg-slate-950/20 backdrop-blur-[2px]">
+      <section className="hidden lg:flex lg:w-5/12 min-h-screen border-r border-slate-800/30 relative z-10 bg-slate-950/20 backdrop-blur-[1px]">
         <LoginShowcaseCarousel />
       </section>
 
-      {/* Right Section: Integrated Login Form (No Cards) */}
-      <section className="w-full lg:w-5/12 min-h-screen flex items-center justify-center p-6 sm:p-10 lg:p-14 relative z-10">
+      {/* Right Section: Integrated Login Form (Made Bigger: 7/12 width) */}
+      <section className="w-full lg:w-7/12 min-h-screen flex items-center justify-center p-6 sm:p-12 lg:p-20 relative z-10">
         <LoginForm />
       </section>
     </div>

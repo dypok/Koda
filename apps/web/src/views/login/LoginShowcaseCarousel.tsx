@@ -31,32 +31,22 @@ export const LoginShowcaseCarousel: React.FC = () => {
         />
       </div>
 
-      {/* Center Animated Slide Area */}
-      <div className="my-auto py-8 max-w-lg space-y-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900/80 border border-slate-700/60 text-xs font-bold text-amber-400">
-          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-          {current.tag}
+      {/* Center Animated Slide Area (Sin badges) */}
+      <div className="my-auto py-6 max-w-md space-y-5">
+        <div
+          className="w-14 h-14 rounded-2xl flex items-center justify-center bg-slate-900/60 border border-slate-800/80 shadow-lg transform-gpu transition-all duration-500"
+          style={{ color: current.color }}
+        >
+          <IconComponent className="w-8 h-8" />
         </div>
 
-        <div className="flex items-start gap-4">
-          <div
-            className="p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 shrink-0 shadow-lg transform-gpu transition-all duration-500"
-            style={{ color: current.color }}
-          >
-            <IconComponent className="w-8 h-8" />
-          </div>
-          <div className="space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight transition-all duration-500">
-              {current.title}
-            </h2>
-            <p className="text-sm text-slate-300 leading-relaxed transition-opacity duration-500">
-              {current.description}
-            </p>
-          </div>
-        </div>
-
-        <div className="inline-block px-3.5 py-1.5 rounded-xl bg-slate-900/70 border border-slate-800/80 text-xs font-semibold text-slate-300">
-          ✨ {current.stat}
+        <div className="space-y-3">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight transition-all duration-500">
+            {current.title}
+          </h2>
+          <p className="text-sm sm:text-base text-slate-300 leading-relaxed transition-opacity duration-500">
+            {current.description}
+          </p>
         </div>
       </div>
 
