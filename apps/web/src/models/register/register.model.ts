@@ -42,10 +42,17 @@ export interface GoalOption {
   badge?: string;
 }
 
+export interface RegisterProfileForm {
+  fullName: string;
+  email: string;
+  password: string;
+}
+
 export interface StudentRegistrationState {
   currentStep: number;
   selectedLanguageId: string | null;
   selectedExperienceId: string | null;
   selectedStyleId: string | null;
   selectedGoalId: string | null;
+  profile?: RegisterProfileForm;
 }
