@@ -52,19 +52,17 @@ export const RegisterHeaderBar: React.FC<RegisterHeaderBarProps> = ({
         </div>
 
         {/* Brand Icon & Step Counter */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2.5">
           <span className="hidden sm:inline text-xs font-bold text-slate-400 uppercase tracking-wider">
             Paso {currentStepIndex} de {totalSteps}
           </span>
-          <div className="h-8 w-8 rounded-lg bg-[#182030] border border-slate-800 p-1 flex items-center justify-center overflow-hidden shadow-sm">
-            <Image
-              src="/icon.svg"
-              alt="Koda"
-              width={175}
-              height={130}
-              className="h-4 w-auto object-contain select-none"
-            />
-          </div>
+          <Image
+            src="/icon.svg"
+            alt="Koda"
+            width={175}
+            height={130}
+            className="h-6 w-auto object-contain select-none"
+          />
         </div>
       </div>
     </header>

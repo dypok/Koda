@@ -5,9 +5,11 @@ import {
   IconBrandNextjs, IconBrandVue, IconBrandAngular, IconBrandSvelte, IconBrandTailwind,
   IconBrandFlutter, IconBrandDjango, IconBrandDocker, IconBrandMysql, IconBrandGit,
   IconBrandGraphql, IconBrandMongodb, IconCoffee, IconPlant2, IconBolt, IconRocket,
-  IconTerminal2, IconCompass, IconPuzzle
+  IconTerminal2, IconCompass, IconPuzzle, IconFlame, IconTrophy
 } from '@tabler/icons-react';
-import { LanguageOption, ExperienceOption, StyleOption, TechCategory } from './register.model';
+import {
+  LanguageOption, ExperienceOption, StyleOption, GoalOption, TechCategory
+} from './register.model';
 
 export const TECH_CATEGORIES: { id: TechCategory; label: string }[] = [
   { id: 'all', label: 'Todos' },
@@ -27,6 +29,13 @@ export const STYLE_OPTIONS: StyleOption[] = [
   { id: 'guided', title: 'Paso a paso con explicaciones guiadas', description: 'Conceptos claros, analogías y fundamentos detallados antes de escribir cada bloque.', color: '#4ADE80', icon: IconCompass },
   { id: 'projects', title: 'Basado en proyectos reales', description: 'Aprender creando herramientas útiles, scripts funcionales y mini-aplicaciones prácticas.', color: '#FB923C', icon: IconRocket },
   { id: 'gamified', title: 'Desafíos de lógica y gamificación', description: 'Puzzles mentales rápidos, misiones diarias y resolución de problemas algorítmicos.', color: '#A855F7', icon: IconPuzzle },
+];
+
+export const GOAL_OPTIONS: GoalOption[] = [
+  { id: 'casual', title: 'Casual', timeText: '5 min / día', minutes: 5, description: 'Ideal para dar los primeros pasos y construir el hábito sin presión.', color: '#38BDF8', icon: IconCoffee },
+  { id: 'regular', title: 'Regular', timeText: '10 min / día', minutes: 10, description: 'El equilibrio óptimo entre avance constante y retención de conceptos.', color: '#F97316', icon: IconFlame, badge: 'Recomendado' },
+  { id: 'focused', title: 'Enfocado', timeText: '15 min / día', minutes: 15, description: 'Para quienes quieren progresar a paso firme y dominar proyectos pronto.', color: '#4ADE80', icon: IconRocket },
+  { id: 'intense', title: 'Intensivo', timeText: '20+ min / día', minutes: 20, description: 'Inmersión rápida para desarrolladores con alta dedicación.', color: '#A855F7', icon: IconTrophy },
 ];
 
 export const AVAILABLE_LANGUAGES: LanguageOption[] = [

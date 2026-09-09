@@ -6,6 +6,7 @@ import { RegisterHeaderBar } from '@/views/register/RegisterHeaderBar';
 import { LanguageSelectionStep } from '@/views/register/LanguageSelectionStep';
 import { ExperienceStep } from '@/views/register/ExperienceStep';
 import { StyleStep } from '@/views/register/StyleStep';
+import { GoalStep } from '@/views/register/GoalStep';
 import { RegisterBottomBar } from '@/views/register/RegisterBottomBar';
 import { useRegisterStepperController } from '@/controllers/register/useRegisterStepperController';
 
@@ -52,6 +53,14 @@ export default function RegisterPage() {
             selectedStyleId={stepper.selectedStyleId}
             selectedTechName={stepper.selectedOption?.name}
             onSelectStyle={stepper.selectStyle}
+          />
+        )}
+
+        {stepper.currentStep === 4 && (
+          <GoalStep
+            options={stepper.goalOptions}
+            selectedGoalId={stepper.selectedGoalId}
+            onSelectGoal={stepper.selectGoal}
           />
         )}
       </main>
