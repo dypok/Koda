@@ -17,7 +17,7 @@ export function RoadmapGraphNode({ node, onSelectNode }: RoadmapGraphNodeProps) 
     <g
       transform={`translate(${node.x}, ${node.y})`}
       onClick={() => isClickable && onSelectNode(node)}
-      className={`group transition-transform duration-300 ${isClickable ? 'cursor-pointer hover:scale-105' : 'cursor-not-allowed opacity-80'}`}
+      className={`group transition-all duration-200 ${isClickable ? 'cursor-pointer hover:brightness-125' : 'cursor-not-allowed opacity-80'}`}
     >
       {/* Top badge if present */}
       {node.badge ? (
