@@ -31,9 +31,21 @@ export interface StyleOption {
   icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
 }
 
+export interface GoalOption {
+  id: string;
+  title: string;
+  timeText: string;
+  minutes: number;
+  description: string;
+  color: string;
+  icon: React.ComponentType<{ className?: string; style?: React.CSSProperties }>;
+  badge?: string;
+}
+
 export interface StudentRegistrationState {
   currentStep: number;
   selectedLanguageId: string | null;
   selectedExperienceId: string | null;
   selectedStyleId: string | null;
+  selectedGoalId: string | null;
 }

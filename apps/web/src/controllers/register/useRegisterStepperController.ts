@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback } from 'react';
 import {
-  AVAILABLE_LANGUAGES, TECH_CATEGORIES, EXPERIENCE_OPTIONS, STYLE_OPTIONS
+  AVAILABLE_LANGUAGES, TECH_CATEGORIES, EXPERIENCE_OPTIONS, STYLE_OPTIONS, GOAL_OPTIONS
 } from '@/models/register/register.constants';
 import { TechCategory } from '@/models/register/register.model';
 
@@ -12,6 +12,7 @@ export function useRegisterStepperController() {
   const [selectedCategory, setSelectedCategory] = useState<TechCategory>('all');
   const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>(null);
   const [selectedStyleId, setSelectedStyleId] = useState<string | null>(null);
+  const [selectedGoalId, setSelectedGoalId] = useState<string | null>('regular');
 
   const filteredLanguages = useMemo(() => {
     if (selectedCategory === 'all') return AVAILABLE_LANGUAGES;
@@ -38,12 +39,17 @@ export function useRegisterStepperController() {
     setSelectedStyleId(id);
   }, []);
 
+  const selectGoal = useCallback((id: string) => {
+    setSelectedGoalId(id);
+  }, []);
+
   const canContinue = useMemo(() => {
     if (currentStep === 1) return Boolean(selectedOption && selectedOption.isAvailable);
     if (currentStep === 2) return Boolean(selectedExperienceId);
     if (currentStep === 3) return Boolean(selectedStyleId);
+    if (currentStep === 4) return Boolean(selectedGoalId);
     return true;
-  }, [currentStep, selectedOption, selectedExperienceId, selectedStyleId]);
+  }, [currentStep, selectedOption, selectedExperienceId, selectedStyleId, selectedGoalId]);
 
   const nextStep = useCallback(() => {
     if (!canContinue) return;
@@ -67,10 +73,13 @@ export function useRegisterStepperController() {
     selectedExperienceId,
     styleOptions: STYLE_OPTIONS,
     selectedStyleId,
+    goalOptions: GOAL_OPTIONS,
+    selectedGoalId,
     canContinue,
     selectLanguage,
     selectExperience,
     selectStyle,
+    selectGoal,
     nextStep,
     prevStep,
   };
