@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { IconLogin, IconRocket } from '@tabler/icons-react';
 import { GradientButton } from '@/components/ui/gradient-button';
 
-export const CtaActions: React.FC<{ onOpenLogin?: () => void }> = ({ onOpenLogin }) => (
+export const CtaActions: React.FC = () => (
   <motion.div
     initial={{ opacity: 0, y: 20 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -23,15 +23,16 @@ export const CtaActions: React.FC<{ onOpenLogin?: () => void }> = ({ onOpenLogin
       </Link>
     </GradientButton>
 
-
     <GradientButton
+      asChild
       variant="secondary"
       size="lg"
-      onClick={onOpenLogin}
       className="w-full sm:w-auto px-8 py-3.5 text-base font-bold gap-2.5 border border-slate-700/80 hover:border-amber-400/50 group"
     >
-      <IconLogin className="w-5 h-5 text-amber-400 transition-transform duration-300 group-hover:scale-110" />
-      Ya tengo una cuenta
+      <Link href="/login">
+        <IconLogin className="w-5 h-5 text-amber-400 transition-transform duration-300 group-hover:scale-110" />
+        Ya tengo una cuenta
+      </Link>
     </GradientButton>
   </motion.div>
 );

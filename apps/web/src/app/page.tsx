@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Navbar } from '@/components/landing/Navbar';
 import { HeroSection } from '@/components/landing/HeroSection';
@@ -8,14 +8,12 @@ import { InteractivePreview } from '@/components/landing/InteractivePreview';
 import { MethodologySection } from '@/components/landing/MethodologySection';
 import { CtaSection } from '@/components/landing/CtaSection';
 import { Footer } from '@/components/landing/Footer';
-import { LoginModal } from '@/components/landing/LoginModal';
 import { StudentDashboardView } from '@/views/dashboard/StudentDashboardView';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function HomePage() {
   const router = useRouter();
   const { isAuthenticated, hasEverLoggedIn, hasHydrated, initAuth } = useAuthStore();
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
   useEffect(() => {
     initAuth();
@@ -37,15 +35,14 @@ export default function HomePage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">
-      <Navbar onOpenLogin={() => setIsLoginModalOpen(true)} />
+      <Navbar />
       <main className="flex-1">
-        <HeroSection onOpenLogin={() => setIsLoginModalOpen(true)} />
+        <HeroSection />
         <InteractivePreview />
         <MethodologySection />
-        <CtaSection onOpenLogin={() => setIsLoginModalOpen(true)} />
+        <CtaSection />
       </main>
       <Footer />
-      <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
     </div>
   );
 }
