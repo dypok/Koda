@@ -8,7 +8,7 @@ import { InteractivePreview } from '@/components/landing/InteractivePreview';
 import { MethodologySection } from '@/components/landing/MethodologySection';
 import { CtaSection } from '@/components/landing/CtaSection';
 import { Footer } from '@/components/landing/Footer';
-import { StudentDashboardView } from '@/views/dashboard/StudentDashboardView';
+import { StudentRoadmapView } from '@/views/roadmap/StudentRoadmapView';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function HomePage() {
@@ -30,7 +30,7 @@ export default function HomePage() {
   }
 
   if (isAuthenticated) {
-    return <StudentDashboardView />;
+    return <StudentRoadmapView />;
   }
 
   return (
