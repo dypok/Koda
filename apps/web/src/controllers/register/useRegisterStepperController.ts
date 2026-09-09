@@ -60,6 +60,15 @@ export function useRegisterStepperController() {
     setCurrentStep((prev) => Math.max(1, prev - 1));
   }, []);
 
+  const selectedExperience = useMemo(
+    () => EXPERIENCE_OPTIONS.find((e) => e.id === selectedExperienceId),
+    [selectedExperienceId]
+  );
+  const selectedGoal = useMemo(
+    () => GOAL_OPTIONS.find((g) => g.id === selectedGoalId),
+    [selectedGoalId]
+  );
+
   return {
     currentStep,
     totalSteps: 5,
@@ -71,10 +80,12 @@ export function useRegisterStepperController() {
     selectedOption,
     experienceOptions: EXPERIENCE_OPTIONS,
     selectedExperienceId,
+    selectedExperience,
     styleOptions: STYLE_OPTIONS,
     selectedStyleId,
     goalOptions: GOAL_OPTIONS,
     selectedGoalId,
+    selectedGoal,
     canContinue,
     selectLanguage,
     selectExperience,
