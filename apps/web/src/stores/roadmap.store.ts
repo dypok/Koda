@@ -16,7 +16,6 @@ interface RoadmapStoreState {
   lessonsDataset: GraphDataset;
   openCourseLessons: (courseId: string) => Promise<void>;
   returnToCourses: () => void;
-  toggleViewMode: () => void;
   setActiveNode: (id: string | null) => void;
   setLanguage: (langId: string) => Promise<void>;
   zoomIn: () => void;
@@ -44,7 +43,6 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     set({ lessonsDataset: dataset, isLoading: false });
   },
   returnToCourses: () => set({ viewMode: 'courses' }),
-  toggleViewMode: () => set((s) => ({ viewMode: s.viewMode === 'courses' ? 'lessons' : 'courses' })),
   setActiveNode: (id) => set({ activeNodeId: id }),
   setLanguage: async (langId) => {
     set({ selectedLanguageId: langId, isLoading: true });
