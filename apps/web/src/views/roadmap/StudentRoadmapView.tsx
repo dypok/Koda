@@ -3,15 +3,13 @@
 import React from 'react';
 import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
 import { useRoadmapStore } from '@/stores/roadmap.store';
-import { PYTHON_COURSES_DATASET } from '@/models/roadmap/python-courses-graph.mock';
-import { PYTHON_BASIC_LESSONS_DATASET } from '@/models/roadmap/python-lessons-graph.mock';
 import { RoadmapSidebar } from './RoadmapSidebar';
 import { RoadmapTopHud } from './RoadmapTopHud';
 import { RoadmapCanvas } from './RoadmapCanvas';
 import { RoadmapLegend } from './RoadmapLegend';
 
 export const StudentRoadmapView: React.FC = () => {
-  const { viewMode, openCourseLessons } = useRoadmapStore();
+  const { openCourseLessons, getCurrentDataset } = useRoadmapStore();
 
   React.useEffect(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('view=lessons')) {
@@ -19,7 +17,7 @@ export const StudentRoadmapView: React.FC = () => {
     }
   }, [openCourseLessons]);
 
-  const dataset = viewMode === 'courses' ? PYTHON_COURSES_DATASET : PYTHON_BASIC_LESSONS_DATASET;
+  const dataset = getCurrentDataset();
 
   return (
     <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex overflow-hidden select-none">

@@ -76,9 +76,9 @@ export const RoadmapSidebar: React.FC = () => {
         <div className="flex items-center justify-between gap-2 pt-1">
           <div className="flex items-center gap-2 min-w-0">
             <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center justify-center shrink-0">
-              {user?.name ? user.name.slice(0, 2).toUpperCase() : 'KD'}
+              {user?.fullName ? user.fullName.slice(0, 2).toUpperCase() : 'KD'}
             </div>
-            <span className="hidden lg:block truncate text-xs font-semibold text-slate-300">{user?.name || 'Estudiante'}</span>
+            <span className="hidden lg:block truncate text-xs font-semibold text-slate-300">{user?.fullName || 'Estudiante'}</span>
           </div>
           <button onClick={handleLogout} className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-900/60 transition-colors" title="Cerrar sesión">
             <IconLogout className="w-4 h-4 shrink-0" />
