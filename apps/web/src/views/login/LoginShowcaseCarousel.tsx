@@ -33,12 +33,10 @@ export const LoginShowcaseCarousel: React.FC = () => {
 
       {/* Center Animated Slide Area (Sin badges) */}
       <div className="my-auto py-6 max-w-md space-y-5">
-        <div
-          className="w-14 h-14 rounded-2xl flex items-center justify-center bg-slate-900/60 border border-slate-800/80 shadow-lg transform-gpu transition-all duration-500"
+        <IconComponent
+          className="w-10 h-10 transform-gpu transition-all duration-500"
           style={{ color: current.color }}
-        >
-          <IconComponent className="w-8 h-8" />
-        </div>
+        />
 
         <div className="space-y-3">
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight leading-tight transition-all duration-500">
