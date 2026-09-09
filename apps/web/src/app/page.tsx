@@ -29,7 +29,9 @@ export default function HomePage() {
     return <div className="min-h-screen bg-slate-950" />;
   }
 
-  if (isAuthenticated) {
+  const isRoadmapPreview = typeof window !== 'undefined' && window.location.search.includes('roadmap=true');
+
+  if (isAuthenticated || isRoadmapPreview) {
     return <StudentRoadmapView />;
   }
 
