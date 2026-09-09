@@ -20,8 +20,8 @@ export function RoadmapLegend() {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 px-3 py-1 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-semibold">
-        <IconShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+      <div className="flex items-center gap-2 text-cyan-400 font-bold">
+        <IconShieldCheck className="w-4 h-4 text-cyan-400" />
         <span>Nivel {user?.level || 4} Architect</span>
       </div>
     </footer>
