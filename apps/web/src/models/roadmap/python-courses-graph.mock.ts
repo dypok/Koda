@@ -4,7 +4,7 @@ const NODES: GraphNode[] = [
   {
     id: 'py-course-basic', code: '01', label: 'PYTHON BÁSICO', subtitle: 'FUNDAMENTOS & SINTAXIS',
     x: 140, y: 290, variant: 'active', iconType: 'brackets', stars: 8, maxStars: 15, xp: 115,
-    statusText: 'ACTIVO • CLIC PARA VER CLASES', badge: 'EN CURSO • 3/5 LECCIONES', targetCourseId: 'py-basic', isUnlocked: true,
+    statusText: 'ACTIVO • CLIC PARA VER CLASES', targetCourseId: 'py-basic', isUnlocked: true,
   },
   {
     id: 'py-course-intermediate', code: '02', label: 'PYTHON INTERMEDIO', subtitle: 'POO & ESTRUCTURAS',
@@ -19,17 +19,17 @@ const NODES: GraphNode[] = [
   {
     id: 'py-fw-fastapi', code: 'F1', label: 'FASTAPI ASYNC', subtitle: 'MICROSERVICIOS REST',
     x: 820, y: 150, variant: 'branch', iconType: 'server', stars: 0, maxStars: 9, xp: 150,
-    statusText: 'SELLADO • REQ. AVANZADO', badge: 'LÍNEA 1: FRAMEWORKS', targetCourseId: 'py-fw-fastapi', isUnlocked: false,
+    statusText: 'SELLADO • REQ. AVANZADO', targetCourseId: 'py-fw-fastapi', isUnlocked: false,
   },
   {
     id: 'py-fw-django', code: 'F2', label: 'DJANGO & FLASK', subtitle: 'FULL-STACK & ORM',
     x: 820, y: 430, variant: 'branch', iconType: 'database', stars: 0, maxStars: 18, xp: 180,
-    statusText: 'SELLADO • REQ. AVANZADO', badge: 'LÍNEA 2: FRAMEWORKS', targetCourseId: 'py-fw-django', isUnlocked: false,
+    statusText: 'SELLADO • REQ. AVANZADO', targetCourseId: 'py-fw-django', isUnlocked: false,
   },
   {
     id: 'py-course-boss', code: 'Ω', label: 'APEX MASTER GATE', subtitle: 'PROYECTO INTEGRAL PYTHON',
     x: 1020, y: 290, variant: 'boss', iconType: 'skull', xp: 500,
-    statusText: 'DESAFÍO FINAL • 3 FASES', badge: 'APEX GATE', isUnlocked: false,
+    statusText: 'DESAFÍO FINAL • 3 FASES', isUnlocked: false,
   },
 ];
 
@@ -45,7 +45,6 @@ const CONNECTIONS: GraphConnection[] = [
 
 export const PYTHON_COURSES_DATASET: GraphDataset = {
   sectorTitle: 'SECTOR 01: PYTHON TRACK OVERVIEW',
-  sectorTag: 'RUTA PRINCIPAL Y ESPECIALIZACIONES',
   progressPercent: 24,
   nodes: NODES,
   connections: CONNECTIONS,

@@ -19,12 +19,12 @@ const NODES: GraphNode[] = [
   {
     id: 'les-04', code: '04', label: 'CONTROL FLOW', subtitle: 'BUCLES FOR & WHILE',
     x: 570, y: 300, variant: 'active', iconType: 'matrix', stars: 0, maxStars: 3, xp: 250,
-    statusText: 'EN PROGRESO • +250 XP', badge: 'ACTIVE • STEP 3/4', isUnlocked: true,
+    statusText: 'EN PROGRESO • +250 XP', isUnlocked: true,
   },
   {
     id: 'les-05a', code: '05A', label: 'MODULAR MATRIX', subtitle: 'FUNCIONES & PARAMETROS',
     x: 740, y: 190, variant: 'locked', iconType: 'lock', xp: 350,
-    statusText: 'SELLADO • REQ. PASO 4', badge: 'SECTOR γ • FUNCIONES', isUnlocked: false,
+    statusText: 'SELLADO • REQ. PASO 4', isUnlocked: false,
   },
   {
     id: 'les-05b', code: '05B', label: 'MEMORY & DICTS', subtitle: 'ESTRUCTURAS BÁSICAS',
@@ -56,7 +56,6 @@ const CONNECTIONS: GraphConnection[] = [
 
 export const PYTHON_BASIC_LESSONS_DATASET: GraphDataset = {
   sectorTitle: 'SECTOR 02: PYTHON BÁSICO',
-  sectorTag: 'SECTOR ALPHA: CORE FUNDAMENTALS [3/5 MASTERED]',
   progressPercent: 68,
   nodes: NODES,
   connections: CONNECTIONS,

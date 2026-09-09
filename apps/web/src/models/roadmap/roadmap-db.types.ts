@@ -34,7 +34,6 @@ export interface DbLessonEntity {
   graph_x: number;
   graph_y: number;
   icon_type: string;
-  badge?: string | null;
   prerequisite_lesson_id?: string | null;
   is_published: boolean;
 }

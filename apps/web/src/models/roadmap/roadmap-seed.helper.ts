@@ -37,7 +37,6 @@ export function datasetToDbLessonRows(dataset: GraphDataset, courseId: string): 
     graph_x: node.x,
     graph_y: node.y,
     icon_type: node.iconType,
-    badge: node.badge || null,
     is_published: true,
   }));
 }

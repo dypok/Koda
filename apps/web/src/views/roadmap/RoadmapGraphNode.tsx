@@ -11,23 +11,14 @@ interface RoadmapGraphNodeProps {
 }
 
 export function RoadmapGraphNode({ node, onSelectNode }: RoadmapGraphNodeProps) {
-  const isClickable = node.isUnlocked || Boolean(node.targetCourseId);
+  const isClickable = node.isUnlocked;
 
   return (
     <g
       transform={`translate(${node.x}, ${node.y})`}
       onClick={() => isClickable && onSelectNode(node)}
-      className={`group transition-all duration-200 ${isClickable ? 'cursor-pointer hover:brightness-125' : 'cursor-not-allowed opacity-80'}`}
+      className={`group transition-all duration-200 ${isClickable ? 'cursor-pointer hover:brightness-125' : 'cursor-not-allowed opacity-75'}`}
     >
-      {/* Top badge if present */}
-      {node.badge ? (
-        <g transform="translate(0, -48)">
-          <rect x="-65" y="-10" width="130" height="18" rx="9" fill="#0F172A" stroke="#F97316" strokeWidth="1" strokeOpacity="0.8" />
-          <text textAnchor="middle" y="3" fill="#FDBA74" fontSize="8" fontFamily="monospace" fontWeight="bold" letterSpacing="1">
-            {node.badge}
-          </text>
-        </g>
-      ) : null}
 
       {/* Outer luminous rings & circles */}
       <RoadmapNodeRings variant={node.variant} />

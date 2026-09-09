@@ -1,7 +1,6 @@
 {
   "course_id": "py-basic",
   "sector_title": "SECTOR 02: PYTHON BÁSICO",
-  "sector_tag": "SECTOR ALPHA: CORE FUNDAMENTALS [3/5 MASTERED]",
   "lessons": [
     {
       "id": "les-01",
@@ -45,7 +44,7 @@
       "order_index": 4,
       "xp_reward": 250,
       "max_stars": 3,
-      "graph": { "x": 570, "y": 300, "variant": "active", "icon": "matrix", "badge": "ACTIVE • STEP 3/4" }
+      "graph": { "x": 570, "y": 300, "variant": "active", "icon": "matrix" }
     },
     {
       "id": "les-05a",
@@ -56,7 +55,7 @@
       "order_index": 5,
       "xp_reward": 350,
       "max_stars": 3,
-      "graph": { "x": 740, "y": 190, "variant": "locked", "icon": "lock", "badge": "SECTOR γ • FUNCIONES" }
+      "graph": { "x": 740, "y": 190, "variant": "locked", "icon": "lock" }
     },
     {
       "id": "les-05b",

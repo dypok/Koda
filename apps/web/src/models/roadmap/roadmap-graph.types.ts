@@ -20,7 +20,6 @@ export interface GraphNode {
   maxStars?: number;
   xp?: number;
   statusText?: string;
-  badge?: string;
   targetCourseId?: string;
   isUnlocked: boolean;
 }
@@ -36,7 +35,6 @@ export interface GraphConnection {
 
 export interface GraphDataset {
   sectorTitle: string;
-  sectorTag: string;
   progressPercent: number;
   nodes: GraphNode[];
   connections: GraphConnection[];
