@@ -1,15 +1,13 @@
 'use client';
 
-import React, { useRef, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface GlareHoverProps extends React.HTMLAttributes<HTMLDivElement> {
   glareColor?: string;
   glareOpacity?: number;
   glareAngle?: number;
-  glareSize?: number;
   transitionDuration?: number;
-  playOnce?: boolean;
 }
 
 function hexToRgba(hexColor: string, opacity: number): string {
@@ -26,51 +24,38 @@ function hexToRgba(hexColor: string, opacity: number): string {
 }
 
 export const GlareHover: React.FC<GlareHoverProps> = ({
-  children, glareColor = '#F97316', glareOpacity = 0.25, glareAngle = -45,
-  glareSize = 250, transitionDuration = 2000, playOnce = true,
-  className, style, onMouseEnter, onMouseLeave, ...props
+  children,
+  glareColor = '#F97316',
+  glareOpacity = 0.25,
+  glareAngle = -45,
+  transitionDuration = 650,
+  className,
+  style,
+  ...props
 }) => {
-  const overlayRef = useRef<HTMLDivElement>(null);
   const rgba = useMemo(() => hexToRgba(glareColor, glareOpacity), [glareColor, glareOpacity]);
-
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (overlayRef.current) {
-      overlayRef.current.style.transition = 'none';
-      overlayRef.current.style.backgroundPosition = '-100% -100%, 0 0';
-      void overlayRef.current.offsetWidth;
-      overlayRef.current.style.transition = `${transitionDuration}ms ease`;
-      overlayRef.current.style.backgroundPosition = '100% 100%, 0 0';
-    }
-    onMouseEnter?.(e);
-  };
-
-  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (overlayRef.current && !playOnce) {
-      overlayRef.current.style.transition = `${transitionDuration}ms ease`;
-      overlayRef.current.style.backgroundPosition = '-100% -100%, 0 0';
-    }
-    onMouseLeave?.(e);
-  };
 
   return (
     <div
-      className={cn('relative overflow-hidden', className)}
+      className={cn('group/glare relative overflow-hidden transform-gpu', className)}
       style={style}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       {...props}
     >
-      <div
-        ref={overlayRef}
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-10"
-        style={{
-          background: `linear-gradient(${glareAngle}deg, hsla(0,0%,0%,0) 60%, ${rgba} 70%, hsla(0,0%,0%,0) 100%)`,
-          backgroundSize: `${glareSize}% ${glareSize}%, 100% 100%`,
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: '-100% -100%, 0 0',
-        }}
-      />
+      {/* Barrido lumínico 100% acelerado por GPU sin layout thrashing ni offsetWidth */}
+      {glareOpacity > 0 && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -inset-full z-10 opacity-0 group-hover/glare:opacity-100 transition-opacity duration-200 overflow-hidden"
+        >
+          <div
+            className="w-full h-full transform-gpu -translate-x-full group-hover/glare:translate-x-full transition-transform ease-out will-change-transform"
+            style={{
+              transitionDuration: `${transitionDuration}ms`,
+              background: `linear-gradient(${glareAngle}deg, transparent 40%, ${rgba} 50%, transparent 60%)`,
+            }}
+          />
+        </div>
+      )}
       {children}
     </div>
   );
