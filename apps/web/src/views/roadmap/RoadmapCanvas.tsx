@@ -15,6 +15,7 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
   const { zoomLevel, openCourseLessons, setActiveNode } = useRoadmapStore();
 
   const handleSelectNode = (node: GraphNode) => {
+    if (!node.isUnlocked) return;
     setActiveNode(node.id);
     if (node.targetCourseId) {
       openCourseLessons(node.targetCourseId);
@@ -34,14 +35,6 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
           className="w-full h-full max-w-7xl max-h-[85vh] drop-shadow-2xl"
           style={{ overflow: 'visible' }}
         >
-          {/* Sector Badge floating pill */}
-          <g transform="translate(130, 90)">
-            <rect x="0" y="0" width="310" height="26" rx="6" fill="#0B132B" stroke="#0284C7" strokeWidth="1" strokeOpacity="0.6" />
-            <text x="15" y="17" fill="#38BDF8" fontSize="9" fontFamily="monospace" fontWeight="bold" letterSpacing="1">
-              ✓ {dataset.sectorTag}
-            </text>
-          </g>
-
           {/* Ambient micro-constellation decorative dots */}
           <g className="opacity-30 pointer-events-none" fill="#94A3B8" fontSize="8" fontFamily="monospace">
             <text x="140" y="180">+</text>

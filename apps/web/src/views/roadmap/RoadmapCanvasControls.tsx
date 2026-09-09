@@ -3,6 +3,7 @@
 import React from 'react';
 import { IconPlus, IconMinus, IconGitBranch } from '@tabler/icons-react';
 import { useRoadmapStore } from '@/stores/roadmap.store';
+import { GradientButton } from '@/components/ui/gradient-button';
 
 export function RoadmapCanvasControls() {
   const { zoomLevel, zoomIn, zoomOut, resetZoom, toggleViewMode, viewMode } = useRoadmapStore();
@@ -33,13 +34,15 @@ export function RoadmapCanvasControls() {
         </button>
       </div>
 
-      <button
+      <GradientButton
+        variant="secondary"
+        size="sm"
         onClick={toggleViewMode}
-        className="flex items-center gap-2 px-3 py-1.5 bg-slate-900/80 backdrop-blur-md border border-cyan-800/60 hover:border-cyan-500 rounded-lg text-cyan-400 hover:text-cyan-300 font-mono text-xs font-semibold tracking-wider uppercase shadow-lg shadow-cyan-950/40 transition-all active:scale-95"
+        className="h-9 px-3.5 text-xs font-mono tracking-wider uppercase gap-2"
       >
-        <IconGitBranch className="w-3.5 h-3.5" />
+        <IconGitBranch className="w-3.5 h-3.5 text-amber-400" />
         <span>{viewMode === 'courses' ? 'Ver Clases' : 'Ver Cursos'}</span>
-      </button>
+      </GradientButton>
     </div>
   );
 }

@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { IconArrowLeft, IconBolt, IconShieldCheck } from '@tabler/icons-react';
+import { IconArrowLeft, IconBolt } from '@tabler/icons-react';
 import { useRoadmapStore } from '@/stores/roadmap.store';
+import { GradientButton } from '@/components/ui/gradient-button';
 
 interface RoadmapTopHudProps {
   sectorTitle: string;
@@ -16,17 +17,18 @@ export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudPro
     <header className="h-16 px-6 border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-md flex items-center justify-between z-20 shrink-0">
       <div className="flex items-center gap-4">
         {viewMode === 'lessons' ? (
-          <button
+          <GradientButton
+            variant="secondary"
+            size="sm"
             onClick={returnToCourses}
-            className="flex items-center gap-2 text-xs font-mono text-cyan-400 hover:text-cyan-300 transition-colors uppercase tracking-wider bg-cyan-950/40 border border-cyan-800/50 px-3 py-1.5 rounded-md"
+            className="h-8 px-3 text-xs font-mono uppercase tracking-wider gap-1.5"
           >
             <IconArrowLeft className="w-3.5 h-3.5" />
             <span>Volver a Cursos</span>
-          </button>
+          </GradientButton>
         ) : null}
-        <div className="flex items-center gap-2 font-mono text-sm tracking-widest text-slate-200">
-          <span className="text-cyan-400 animate-pulse text-base">((o))</span>
-          <span className="font-semibold uppercase">{sectorTitle}</span>
+        <div className="font-mono text-sm tracking-widest text-slate-200 font-semibold uppercase">
+          {sectorTitle}
         </div>
       </div>
 
@@ -42,18 +44,15 @@ export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudPro
           <span className="text-xs font-mono text-cyan-400 font-bold">{progressPercent}%</span>
         </div>
 
-        <div className="flex items-center gap-1.5 px-3 py-1 rounded-md bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-mono font-semibold">
-          <IconShieldCheck className="w-3.5 h-3.5 text-amber-400" />
-          <span>LVL 4 ARCHITECT</span>
-        </div>
-
-        <button
+        <GradientButton
+          variant="default"
+          size="sm"
           onClick={() => openCourseLessons('py-basic')}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold text-xs tracking-wider uppercase shadow-lg shadow-orange-500/20 transition-all active:scale-95"
+          className="h-9 px-4 text-xs tracking-wider uppercase font-bold gap-2"
         >
           <IconBolt className="w-4 h-4 fill-slate-950" />
           <span>{viewMode === 'courses' ? 'Continuar Curso →' : 'Resume Jump Point →'}</span>
-        </button>
+        </GradientButton>
       </div>
     </header>
   );

@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { IconFlame, IconStar, IconLogout, IconLock } from '@tabler/icons-react';
+import { IconLogout, IconLock } from '@tabler/icons-react';
 import { SIDEBAR_LANGUAGES } from '@/models/roadmap/python-roadmap.mock';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { useAuthStore } from '@/stores/auth.store';
@@ -61,29 +61,16 @@ export const RoadmapSidebar: React.FC = () => {
         </div>
       </div>
 
-      <div className="space-y-3 pt-3 border-t border-slate-800/40">
-        <div className="hidden lg:flex items-center justify-between text-xs font-bold px-1">
-          <span className="flex items-center gap-1 text-orange-400">
-            <IconFlame className="w-3.5 h-3.5 fill-orange-500" />
-            {user?.streak || 1}d
-          </span>
-          <span className="flex items-center gap-1 text-amber-400">
-            <IconStar className="w-3.5 h-3.5 fill-amber-400" />
-            {user?.totalXp || 50} XP
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between gap-2 pt-1">
-          <div className="flex items-center gap-2 min-w-0">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center justify-center shrink-0">
-              {user?.fullName ? user.fullName.slice(0, 2).toUpperCase() : 'KD'}
-            </div>
-            <span className="hidden lg:block truncate text-xs font-semibold text-slate-300">{user?.fullName || 'Estudiante'}</span>
+      <div className="pt-3 border-t border-slate-800/40 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <div className="w-8 h-8 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 font-bold text-xs flex items-center justify-center shrink-0">
+            {user?.fullName ? user.fullName.slice(0, 2).toUpperCase() : 'KD'}
           </div>
-          <button onClick={handleLogout} className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-900/60 transition-colors" title="Cerrar sesión">
-            <IconLogout className="w-4 h-4 shrink-0" />
-          </button>
+          <span className="hidden lg:block truncate text-xs font-semibold text-slate-300">{user?.fullName || 'Estudiante'}</span>
         </div>
+        <button onClick={handleLogout} className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-slate-900/60 transition-colors" title="Cerrar sesión">
+          <IconLogout className="w-4 h-4 shrink-0" />
+        </button>
       </div>
     </aside>
   );

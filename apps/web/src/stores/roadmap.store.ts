@@ -37,6 +37,8 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   coursesDataset: PYTHON_COURSES_DATASET,
   lessonsDataset: PYTHON_BASIC_LESSONS_DATASET,
   openCourseLessons: async (courseId) => {
+    const courseNode = get().coursesDataset.nodes.find((n) => n.targetCourseId === courseId || n.id === courseId);
+    if (courseNode && !courseNode.isUnlocked) return;
     set({ viewMode: 'lessons', selectedCourseId: courseId, isLoading: true });
     const dataset = await RoadmapService.getCourseLessonsGraph(courseId);
     set({ lessonsDataset: dataset, isLoading: false });
