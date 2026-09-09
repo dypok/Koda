@@ -53,8 +53,21 @@ export function RoadmapNodeRings({ variant }: { variant: NodeVariant }) {
   // Locked or branch locked
   return (
     <g className="node-locked-halo">
-      <circle r="26" stroke="#475569" strokeWidth="1.5" fill="#0F172A" opacity="0.8" />
-      <circle r="22" fill="#1E293B" stroke="#64748B" strokeWidth="1.5" />
+      <circle
+        r="28"
+        stroke="#475569"
+        strokeWidth="1.5"
+        fill="#0F172A"
+        opacity="0.8"
+        className="transition-all duration-300 group-hover:stroke-rose-500/80 group-hover:opacity-100 group-hover:drop-shadow-[0_0_10px_rgba(244,63,94,0.5)]"
+      />
+      <circle
+        r="22"
+        fill="#1E293B"
+        stroke="#64748B"
+        strokeWidth="1.5"
+        className="transition-all duration-300 group-hover:stroke-rose-400/80 group-hover:fill-rose-950/40"
+      />
     </g>
   );
 }

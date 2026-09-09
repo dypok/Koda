@@ -19,19 +19,24 @@ export const RoadmapLessonNode: React.FC<RoadmapLessonNodeProps> = ({
   const isAvailable = courseUnlocked && lesson.isUnlocked;
 
   return (
-    <div className="relative flex items-start gap-4 py-3 select-none group">
+    <div
+      className={cn(
+        'relative flex items-start gap-4 py-3 select-none group transition-all duration-200',
+        !isAvailable && !lesson.isCompleted ? 'cursor-not-allowed opacity-75 hover:opacity-100' : 'cursor-pointer'
+      )}
+    >
       {!isLast && (
         <div className="absolute left-5 top-10 bottom-0 w-0.5 bg-slate-800 group-hover:bg-slate-700 transition-colors" />
       )}
 
       <div
         className={cn(
-          'w-10 h-10 rounded-full flex items-center justify-center shrink-0 border transition-all z-10',
+          'w-10 h-10 rounded-full flex items-center justify-center shrink-0 border transition-all duration-300 z-10',
           lesson.isCompleted
             ? 'bg-amber-500/20 border-amber-400 text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.25)]'
             : isAvailable
             ? 'bg-orange-500/20 border-orange-400 text-orange-400 animate-pulse'
-            : 'bg-slate-900 border-slate-800 text-slate-600'
+            : 'bg-slate-900 border-slate-800 text-slate-600 group-hover:border-rose-500/50 group-hover:text-rose-400 group-hover:bg-rose-950/30 group-hover:shadow-[0_0_12px_rgba(244,63,94,0.3)]'
         )}
       >
         {lesson.isCompleted ? (
@@ -39,7 +44,7 @@ export const RoadmapLessonNode: React.FC<RoadmapLessonNodeProps> = ({
         ) : isAvailable ? (
           <IconPlayerPlay className="w-4 h-4 fill-current ml-0.5" />
         ) : (
-          <IconLock className="w-4 h-4" />
+          <IconLock className="w-4 h-4 transition-transform duration-200 group-hover:-rotate-12 group-hover:scale-110" />
         )}
       </div>
 
