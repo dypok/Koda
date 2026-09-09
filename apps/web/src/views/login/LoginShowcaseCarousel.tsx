@@ -49,22 +49,17 @@ export const LoginShowcaseCarousel: React.FC = () => {
       </div>
 
       {/* Passive Visual Progress Indicators (NO INTERACTIVE) */}
-      <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          {SHOWCASE_SLIDES.map((slide, idx) => (
-            <div
-              key={slide.id}
-              className="h-1.5 rounded-full transition-all duration-500 bg-slate-800"
-              style={{
-                width: idx === currentIndex ? '36px' : '10px',
-                backgroundColor: idx === currentIndex ? current.color : undefined,
-              }}
-            />
-          ))}
-        </div>
-        <span className="text-[11px] text-slate-400 font-medium">
-          Plataforma Interactiva de Aprendizaje
-        </span>
+      <div className="flex items-center gap-2">
+        {SHOWCASE_SLIDES.map((slide, idx) => (
+          <div
+            key={slide.id}
+            className="h-1.5 rounded-full transition-all duration-500 bg-slate-800"
+            style={{
+              width: idx === currentIndex ? '36px' : '10px',
+              backgroundColor: idx === currentIndex ? current.color : undefined,
+            }}
+          />
+        ))}
       </div>
     </div>
   );
