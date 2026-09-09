@@ -17,7 +17,7 @@ export function RoadmapGraphNode({ node, onSelectNode }: RoadmapGraphNodeProps) 
     <g
       transform={`translate(${node.x}, ${node.y})`}
       onClick={() => isClickable && onSelectNode(node)}
-      className={`group transition-all duration-200 ${isClickable ? 'cursor-pointer hover:brightness-125' : 'cursor-not-allowed opacity-75'}`}
+      className={`group transition-all duration-200 ${isClickable ? 'cursor-pointer hover:brightness-125' : 'cursor-not-allowed opacity-70 hover:opacity-100'}`}
     >
 
       {/* Outer luminous rings & circles */}
@@ -28,7 +28,15 @@ export function RoadmapGraphNode({ node, onSelectNode }: RoadmapGraphNodeProps) 
         <div className="w-full h-full flex items-center justify-center text-white">
           <RoadmapNodeIcon
             iconType={node.iconType}
-            className={`w-4 h-4 ${node.variant === 'active' ? 'text-slate-950 font-bold' : node.variant === 'boss' ? 'text-rose-200' : 'text-slate-200'}`}
+            className={`w-4 h-4 transition-transform duration-200 ${
+              !node.isUnlocked
+                ? 'text-slate-400 group-hover:text-rose-400 group-hover:-rotate-12 group-hover:scale-110'
+                : node.variant === 'active'
+                  ? 'text-slate-950 font-bold'
+                  : node.variant === 'boss'
+                    ? 'text-rose-200'
+                    : 'text-slate-200'
+            }`}
           />
         </div>
       </foreignObject>
@@ -55,7 +63,15 @@ export function RoadmapGraphNode({ node, onSelectNode }: RoadmapGraphNodeProps) 
           {node.code} • {node.label}
         </text>
         {node.statusText ? (
-          <text textAnchor="middle" y="14" fill={node.variant === 'active' ? '#FB923C' : node.variant === 'boss' ? '#F87171' : '#94A3B8'} fontSize="9" fontFamily="monospace" fontWeight="500">
+          <text
+            textAnchor="middle"
+            y="14"
+            fill={node.variant === 'active' ? '#FB923C' : node.variant === 'boss' ? '#F87171' : '#94A3B8'}
+            fontSize="9"
+            fontFamily="monospace"
+            fontWeight="500"
+            className={!node.isUnlocked ? 'transition-colors duration-200 group-hover:fill-rose-400' : ''}
+          >
             {node.statusText}
           </text>
         ) : null}

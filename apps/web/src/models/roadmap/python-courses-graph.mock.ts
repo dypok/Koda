@@ -4,7 +4,7 @@ const NODES: GraphNode[] = [
   {
     id: 'py-course-basic', code: '01', label: 'PYTHON BÁSICO', subtitle: 'FUNDAMENTOS & SINTAXIS',
     x: 140, y: 290, variant: 'active', iconType: 'brackets', stars: 8, maxStars: 15, xp: 115,
-    statusText: 'ACTIVO • CLIC PARA VER CLASES', targetCourseId: 'py-basic', isUnlocked: true,
+    statusText: 'ACTIVO • EN PROGRESO', targetCourseId: 'py-basic', isUnlocked: true,
   },
   {
     id: 'py-course-intermediate', code: '02', label: 'PYTHON INTERMEDIO', subtitle: 'POO & ESTRUCTURAS',
