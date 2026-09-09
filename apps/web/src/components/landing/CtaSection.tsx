@@ -6,11 +6,7 @@ import { motion } from 'framer-motion';
 import { CtaActions } from '@/views/landing/cta/CtaActions';
 import { CtaTrustPoints } from '@/views/landing/cta/CtaTrustPoints';
 
-interface CtaSectionProps {
-  onOpenLogin?: () => void;
-}
-
-export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
+export const CtaSection: React.FC = () => {
   return (
     <section className="py-24 md:py-36 bg-gradient-to-b from-slate-950 via-[#120e17] to-slate-950 relative overflow-hidden border-t border-slate-800/80">
       <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[480px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.18)_0%,rgba(234,88,12,0.06)_45%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
@@ -59,7 +55,7 @@ export const CtaSection: React.FC<CtaSectionProps> = ({ onOpenLogin }) => {
           </p>
         </motion.div>
 
-        <CtaActions onOpenLogin={onOpenLogin} />
+        <CtaActions />
         <CtaTrustPoints />
       </div>
     </section>

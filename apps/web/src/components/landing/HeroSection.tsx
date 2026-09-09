@@ -7,11 +7,7 @@ import { UpcomingTechCarousel } from './UpcomingTechCarousel';
 import { HeroCtaGroup } from '@/views/landing/hero/HeroCtaGroup';
 import { HeroMascot } from '@/views/landing/hero/HeroMascot';
 
-interface HeroSectionProps {
-  onOpenLogin?: () => void;
-}
-
-export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
+export const HeroSection: React.FC = () => {
   return (
     <section className="relative isolate overflow-hidden min-h-screen min-h-[100dvh] flex flex-col justify-between pt-20 pb-4 md:pt-24 md:pb-6">
       <HeroSkyBackground starCount={140} interactive={true} />
@@ -34,7 +30,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({ onOpenLogin }) => {
               . Cero frustración.
             </motion.h1>
 
-            <HeroCtaGroup onOpenLogin={onOpenLogin} />
+            <HeroCtaGroup />
           </div>
 
           {/* Right Column: Mascota Oficial Koda */}
