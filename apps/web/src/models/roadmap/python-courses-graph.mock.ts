@@ -44,7 +44,7 @@ const CONNECTIONS: GraphConnection[] = [
 ];
 
 export const PYTHON_COURSES_DATASET: GraphDataset = {
-  sectorTitle: 'SECTOR 01: PYTHON TRACK OVERVIEW',
+  sectorTitle: 'PYTHON TRACK OVERVIEW',
   progressPercent: 24,
   nodes: NODES,
   connections: CONNECTIONS,

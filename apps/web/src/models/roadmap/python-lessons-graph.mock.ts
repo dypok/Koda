@@ -55,8 +55,8 @@ const CONNECTIONS: GraphConnection[] = [
 ];
 
 export const PYTHON_BASIC_LESSONS_DATASET: GraphDataset = {
-  sectorTitle: 'SECTOR 02: PYTHON BÁSICO',
-  progressPercent: 68,
+  sectorTitle: 'PYTHON BÁSICO',
+  progressPercent: 62,
   nodes: NODES,
   connections: CONNECTIONS,
 };

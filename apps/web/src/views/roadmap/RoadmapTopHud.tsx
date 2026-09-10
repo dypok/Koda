@@ -14,6 +14,8 @@ export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudPro
   const { viewMode, returnToCourses, openCourseLessons, coursesDataset } = useRoadmapStore();
   const activeCourseId = coursesDataset.nodes.find((n) => n.isUnlocked)?.targetCourseId || coursesDataset.nodes[0]?.targetCourseId || '';
 
+  const displayTitle = sectorTitle.replace(/^SECTOR\s+\d+:\s*/i, '');
+
   return (
     <header className="h-16 px-6 border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-md flex items-center justify-between z-20 shrink-0">
       <div className="flex items-center gap-4">
@@ -29,7 +31,7 @@ export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudPro
           </GradientButton>
         ) : null}
         <div className="font-mono text-sm tracking-widest text-slate-200 font-semibold uppercase">
-          {sectorTitle}
+          {displayTitle}
         </div>
       </div>
 

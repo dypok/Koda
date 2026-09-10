@@ -10,9 +10,8 @@ export function RoadmapSidebarBranches() {
 
   return (
     <div className="space-y-2">
-      <div className="hidden lg:flex items-center justify-between px-2 pb-1 text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">
+      <div className="hidden lg:flex items-center px-2 pb-1 text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">
         <span>Ramas de Carrera</span>
-        <span className="text-cyan-400">3 Rutas</span>
       </div>
 
       {CAREER_BRANCHES.map((branch) => {

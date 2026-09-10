@@ -44,7 +44,7 @@ const CONNECTIONS: GraphConnection[] = [
 ];
 
 export const DEVOPS_COURSES_DATASET: GraphDataset = {
-  sectorTitle: 'SECTOR 03: DEVOPS & CLOUD ARCHITECTURE',
+  sectorTitle: 'DEVOPS & CLOUD ARCHITECTURE',
   progressPercent: 12,
   nodes: NODES,
   connections: CONNECTIONS,
