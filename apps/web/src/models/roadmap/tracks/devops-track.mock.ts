@@ -8,23 +8,23 @@ const NODES: GraphNode[] = [
   },
   {
     id: 'dev-git-ci', code: '02', label: 'GIT & CI/CD PIPELINES', subtitle: 'ACTIONS & AUTOMATIZACIÓN',
-    x: 370, y: 290, variant: 'locked', iconType: 'code', stars: 0, maxStars: 12, xp: 120,
-    statusText: 'SELLADO • REQ. LINUX', targetCourseId: 'dev-git-ci', isUnlocked: false,
+    x: 370, y: 290, variant: 'locked', iconType: 'lock', stars: 0, maxStars: 12, xp: 120,
+    statusText: 'RQ LINUX', targetCourseId: 'dev-git-ci', isUnlocked: false,
   },
   {
     id: 'dev-docker', code: '03', label: 'DOCKER & CONTENEDORES', subtitle: 'DOCKERFILES & COMPOSE',
-    x: 600, y: 290, variant: 'locked', iconType: 'server', stars: 0, maxStars: 15, xp: 150,
-    statusText: 'SELLADO • REQ. CI/CD', targetCourseId: 'dev-docker', isUnlocked: false,
+    x: 600, y: 290, variant: 'locked', iconType: 'lock', stars: 0, maxStars: 15, xp: 150,
+    statusText: 'RQ CI/CD', targetCourseId: 'dev-docker', isUnlocked: false,
   },
   {
     id: 'dev-k8s', code: 'D1', label: 'KUBERNETES & CLUSTERS', subtitle: 'ORQUESTACIÓN & HELM',
-    x: 820, y: 150, variant: 'branch', iconType: 'server', stars: 0, maxStars: 12, xp: 170,
-    statusText: 'SELLADO • REQ. DOCKER', targetCourseId: 'dev-k8s', isUnlocked: false,
+    x: 820, y: 150, variant: 'branch', iconType: 'lock', stars: 0, maxStars: 12, xp: 170,
+    statusText: 'RQ DOCKER', targetCourseId: 'dev-k8s', isUnlocked: false,
   },
   {
     id: 'dev-terraform', code: 'D2', label: 'CLOUD & TERRAFORM', subtitle: 'INFRAESTRUCTURA IAC',
-    x: 820, y: 430, variant: 'branch', iconType: 'database', stars: 0, maxStars: 12, xp: 160,
-    statusText: 'SELLADO • REQ. DOCKER', targetCourseId: 'dev-terraform', isUnlocked: false,
+    x: 820, y: 430, variant: 'branch', iconType: 'lock', stars: 0, maxStars: 12, xp: 160,
+    statusText: 'RQ DOCKER', targetCourseId: 'dev-terraform', isUnlocked: false,
   },
   {
     id: 'dev-apex', code: 'Ω', label: 'APEX DEVOPS GATE', subtitle: 'PIPELINE ZERO-DOWNTIME',

@@ -24,7 +24,7 @@ const NODES: GraphNode[] = [
   {
     id: 'les-05a', code: '05A', label: 'MODULAR MATRIX', subtitle: 'FUNCIONES & PARAMETROS',
     x: 740, y: 190, variant: 'locked', iconType: 'lock', xp: 350,
-    statusText: 'SELLADO • REQ. PASO 4', isUnlocked: false,
+    statusText: 'RQ PASO 4', isUnlocked: false,
   },
   {
     id: 'les-05b', code: '05B', label: 'MEMORY & DICTS', subtitle: 'ESTRUCTURAS BÁSICAS',
