@@ -1,7 +1,9 @@
 # 12 — Diseño de Base de Datos
 
-> **Estado:** Aprobado / Actualizado · **Versión del documento:** 2.0.0 · **Fecha:** 2026-09-02
-> Complementa a `01_PROJECT_OVERVIEW.md`, `03_OBJECTIVES.md`, `04_SCOPE.md`, `05_FUNCTIONAL_REQUIREMENTS.md`, `06_NON_FUNCTIONAL_REQUIREMENTS.md`, `07_USER_STORIES.md`, `11_SYSTEM_ARCHITECTURE.md`, `14_LEARNING_SYSTEM.md`, `16_GAMIFICATION.md`, `27_UI_UX_SPECIFICATION.md` y `01_PROJECT_OVERVIEW.md`. Materializa el modelo relacional para PostgreSQL ≥ 15 que deben implementar las migraciones versionadas, incluyendo el sistema de desbloqueo progresivo por estrellas (1–3⭐), candados secuenciales, cuaderno de errores y soporte multi-lenguaje (con Python como lenguaje insignia de lanzamiento).
+> **Estado:** Aprobado / Actualizado · **Versión del documento:** 3.0.0 · **Fecha:** 2026-09-10
+> Complementa a `docs/01-producto-negocio/`, `docs/02-requisitos-ux/`, `11_SYSTEM_ARCHITECTURE.md`, `ADR-002`, `ADR-007`, `ADR-008` y `ADR-009`. Materializa la **Arquitectura de Persistencia Híbrida Políglota**:
+> 1. **Supabase (PostgreSQL 15+):** Núcleo transaccional ACID para usuarios, perfiles, estado de progreso, estrellas (1–3⭐), libro mayor de XP, rachas, cuaderno de errores y diplomas oficiales.
+> 2. **MongoDB:** Almacén documental no relacional de alto volumen para ramas de carrera, grafo DAG de cursos con prerrequisitos `RQ`, módulos, secciones secuenciales, lecciones y bancos de preguntas polimórficos.
 
 ---
 
@@ -9,77 +11,69 @@
 
 Este documento define **qué se persiste, cómo se relaciona y con qué garantías** para la plataforma interactiva de aprendizaje de programación con enfoque gamificado. Es la fuente de verdad para:
 
-- Migraciones versionadas (`RF-ADM-005`, `RNF-035`).
-- Contratos de API (`13_API_SPECIFICATION.md`): cada recurso persistido tiene reflejo en un endpoint.
-- Motores de Dominio: `Learning`, `Question`, `Evapythontion`, `Progress`, `Gamification` (Estrellas ⭐, XP, Rachas, Logros), `Review Notebook` (Cuaderno de Errores) y `Certification` (`01` §24–§29, `03` OT-01, `14`, `16`, `28`).
-- Desbloqueo progresivo con candados secuenciales ($S_1 \to S_n$) y compuertas de maestría de módulos ($M_{i+1}$ requiere 100% de secciones y $\ge 80\%$ de estrellas de maestría de $M_i$).
-- Trazabilidad `RF-*` → tabla/columna y pruebas de invariantes (`20_TESTING.md`, `RNF-033`–`RNF-036`).
+- Migraciones versionadas en PostgreSQL (`RF-ADM-005`, `RNF-035`) y esquemas Mongoose en MongoDB (`ADR-009`).
+- Contratos de API (`13_API_SPECIFICATION.md`): cada recurso persistido tiene reflejo en un endpoint REST.
+- Motores de Dominio: `Learning`, `Question`, `Evaluation`, `Progress`, `Gamification` (Estrellas ⭐, XP, Rachas, Logros), `Review Notebook` (Cuaderno de Errores) y `Certification` (`ADR-003`, `ADR-007`, `ADR-008`, `ADR-009`).
+- Desbloqueo progresivo en Grafo DAG con compuertas de maestría y prerrequisitos `RQ` (`ADR-007`).
+- Trazabilidad `RF-*` → tabla/colección y pruebas de invariantes (`20_TESTING.md`, `RNF-033`–`RNF-036`).
 
-**Fuera de alcance:** elección cerrada de proveedor de nube (se especifica interfaz `PostgreSQL ≥ 15` compatible como referencia sin hardcodear hosting), sintaxis propietaria vendor-lock (se provee DDL ANSI/Postgres en `§10`), y detalle de infraestructura de despliegue (`21_DEPLOYMENT.md`).
+**Fuera de alcance:** detalle de infraestructura física de despliegue en cloud (`21_DEPLOYMENT.md`).
 
 ---
 
-## 2. Convenciones
+## 2. Convenciones y Persistencia Híbrida
 
 ### 2.1 Identificadores y tipos base
 
-| Convención | Valor |
-|---|---|
-| PK de todas las tablas de negocio | `UUID v4` (`uuid` / `gen_random_uuid()`), salvo catálogos pequeños inmutables donde se admite `SMALLINT` |
-| FK | `UUID` hacia PK referenciada, `ON DELETE RESTRICT` por defecto; `ON DELETE CASCADE` solo en hijos sin sentido sin padre (ej. `answer → question`, `review_queue_items → attempt`) |
-| Timestamps | `TIMESTAMPTZ` en UTC; presentación en `America/Bogota` en capa de aplicación (`RNF-018`, `RNF-045`) |
-| Moneda | `amount_cents INTEGER` + `currency CHAR(3)` para evitar flotantes |
-| Enumeraciones | `VARCHAR` + `CHECK` + `TYPE ENUM` opcional; nunca `INTEGER` mágico |
-| Texto largo | `TEXT` con `CHECK (char_length(col) <= N)` cuando hay límite de producto |
-| JSON | `JSONB` solo para metadatos extensibles no consultados por rango; todo lo consultable tiene columna dedicada |
-| Borrado | `deleted_at TIMESTAMPTZ` (soft delete) en contenido administrable; datos de usuario eliminables se anonimizan (`RF-USR-003`, `RNF-038`) no solo soft-delete |
-
-### 2.2 Nombres
-
-- Tablas en `snake_case` plural (`users`, `programming_languages`, `user_section_stars`, `user_mistakes_notebook`).
-- Columnas en `snake_case`.
-- Índices `idx_{tabla}_{columnas}`, únicos `uq_{tabla}_{columnas}`, FK `fk_{tabla}_{ref}`, checks `chk_{tabla}_{regla}`.
-- Migraciones `V{YYYYMMDD}_{NNN}__{descripcion}.sql` versionadas y reproducibles (`RNF-019`, `RNF-043`).
-
-### 2.3 Principios transversales
-
-1. **Integridad referencial en BD** (`RNF-036`): toda FK existe en BD, no solo en app. Sin huérfanos.
-2. **Persistencia atómica** (`RNF-033`, `RF-PROG-001`, `RF-LEC-003`): cada `Attempt`/`AttemptAnswer` es transaccional; doble envío con `idempotency_key` no duplica (`RNF-042`, `05` regla 3).
-3. **Calificación Formativa en Estrellas** (`14` §4.2, `16` §8.1): la calificación de 1 a 3 estrellas mide la precisión en la primera pasada y se adjudica tras completar la lección o su ronda de repaso formativo, permitiendo rejugabilidad sin penalizaciones.
-4. **Versionado de contenido** (`RNF-035`, `RF-PREG-006`, `RF-ADM-005`): cada intento congela `content_version` y `threshold_applied`; editar una pregunta crea nueva fila versionada, no `UPDATE` destructivo.
-5. **Contenido desacoplado** (`RNF-031`, `RF-LANG-004`): ningún texto de lección/pregunta hardcodeado fuera de tablas/archivos de contenido.
-6. **Privacidad por diseño** (`RNF-037`–`RNF-040`): PII mínima, nunca en logs/URLs; `document_number` solo para certificado y cifrable si se requiere.
+| Convención | Valor | Motor |
+|---|---|---|
+| PK de tablas de usuario y negocio | `UUID v4` (`gen_random_uuid()`) | Supabase PostgreSQL |
+| Identificador de contenido curricular | `slug VARCHAR(80)` inmutable (ej. `python-fundamentos`, `modulo-01`) | MongoDB & PostgreSQL |
+| ID de documento pedagógico | `ObjectId` de MongoDB o `UUID` v4 string | MongoDB |
+| Timestamps | `TIMESTAMPTZ` en UTC; presentación en `America/Bogota` | PostgreSQL & MongoDB |
+| Moneda | `amount_cents INTEGER` + `currency CHAR(3)` | PostgreSQL |
+| Transacciones de XP | Libro mayor inmutable (`xp_transactions`) | PostgreSQL |
+| Contenido curricular / Lecciones | Documentos BSON/JSON anidados con entrega $O(1)$ sin joins | MongoDB |
 
 ---
 
-## 3. Gestor recomendado y justificación
+## 3. Gestores Seleccionados y Justificación (ADR-002, ADR-009)
 
-| Opción | Ventajas | Desventajas | Recomendación |
+| Motor | Rol en Koda | Ventajas Clave | Justificación Arquitectónica |
 |---|---|---|---|
-| **PostgreSQL ≥ 15 (recomendado)** | FKs + `EXCLUDE` + `JSONB` + `GIN` + `pgcrypto`/`pg_partman`; transacciones sólidas; `TIMESTAMPTZ`; ecosistema de migraciones (Flyway/Liquibase/Prisma/Drizzle) | Requiere gestión de índices y `VACUUM` | ⭐ **Elegida para Producción** — cubre `RNF-033`–`RNF-036` con máximo rendimiento y garantías ACID |
-| MySQL 8 | Amplio hosting | Menor soporte `EXCLUDE`, `JSONB` limitado | Alternativa secundaria |
-| SQLite | Simplicidad local | No apto para `RNF-005` (escalado horizontal) ni concurrencia de `RNF-001` | Solo para prototipos rápidos o tests offline |
+| **Supabase (PostgreSQL 15+)** | **Núcleo Transaccional & ACID** | Integridad referencial estricta, Row-Level Security (RLS), triggers PL/pgSQL, secuencias atómicas para certificados (`CQ-*`) | Garantiza cero inconsistencias en puntuaciones, auditoría financiera y estados de usuario (`ADR-002`). |
+| **MongoDB** | **Almacén Documental de Contenido** | Estructuras en árbol nativas, esquema flexible para preguntas polimórficas (código, opción múltiple, fill-blank), lecturas $O(1)$ sin joins | Ratio de lectura 99.9%. Desacopla la publicación de cursos de la base transaccional (`ADR-009`). |
 
 ---
 
-## 4. Diagrama ER (Mermaid)
+## 4. Diagrama de Arquitectura de Datos Híbrida (Mermaid)
 
 ```mermaid
 erDiagram
+    %% SUPABASE POSTGRESQL (Transaccional)
     users ||--o| user_profiles : "1:1 tiene"
-    users ||--o{ learning_paths : "1:N personaliza"
-    users ||--o{ attempts : "1:N intenta"
-    users ||--o{ progress : "1:N agrega"
-    users ||--o{ user_section_stars : "1:N califica"
-    users ||--o{ user_module_progress : "1:N desbloquea"
-    users ||--o{ user_mistakes_notebook : "1:N repasa"
-    users ||--o{ review_queue_items : "1:N procesa"
-    users ||--o{ xp_transactions : "1:N gana"
-    users ||--o{ streaks : "1:N historial"
-    users ||--o{ user_achievements : "1:N desbloquea"
-    users ||--o{ certificates : "1:N certifica"
-    users ||--o{ subscriptions : "1:N suscribe"
-    users ||--o{ diagnostic_results : "1:N diagnostica"
+    users ||--o{ user_module_progress : "1:N estado"
+    users ||--o{ user_section_stars : "1:N estrellas"
+    users ||--o{ user_branch_enrollment : "1:N inscribe"
+    users ||--o{ xp_transactions : "1:N ledger"
+    users ||--o{ streaks : "1:N racha"
+    users ||--o{ user_mistakes_notebook : "1:N cuaderno"
+    users ||--o{ certificates : "1:N diploma"
+    users ||--o{ subscriptions : "1:N pago"
+
+    %% MONGODB (Documental No Relacional)
+    tracks ||--o{ courses : "1:N contiene"
+    courses ||--o{ modules : "1:N agrupa"
+    modules ||--o{ sections : "1:N secuencia"
+    sections ||--o{ lessons : "1:N 10_pildoras"
+    modules ||--o{ question_banks : "1:N reactivos"
+
+    %% ENLACE LÓGICO DESACOPLADO
+    user_module_progress }o..o{ modules : "referencia module_slug"
+    user_section_stars }o..o{ sections : "referencia section_slug"
+    user_branch_enrollment }o..o{ tracks : "referencia track_slug"
+    user_mistakes_notebook }o..o{ lessons : "referencia lesson_id"
+```
 
     programming_languages ||--o{ learning_paths : "1:N ofrece"
     programming_languages ||--o{ modules : "1:N contiene"

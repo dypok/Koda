@@ -30,8 +30,8 @@ content/
 
 Toda lección y ejercicio añadido a este directorio debe apegarse estrictamente a:
 
-1. [`docs/23_CONTENT_SPECIFICATION.md`](../docs/23_CONTENT_SPECIFICATION.md): Estructura técnica de esquemas y validaciones.
-2. [`docs/24_CONTENT_AUTHORING_GUIDE.md`](../docs/24_CONTENT_AUTHORING_GUIDE.md): Guía pedagógica oficial.
+1. [`docs/03-pedagogia-contenido/23_CONTENT_SPECIFICATION.md`](../docs/03-pedagogia-contenido/23_CONTENT_SPECIFICATION.md): Estructura técnica de esquemas y validaciones.
+2. [`docs/03-pedagogia-contenido/24_CONTENT_AUTHORING_GUIDE.md`](../docs/03-pedagogia-contenido/24_CONTENT_AUTHORING_GUIDE.md): Guía pedagógica oficial.
    - **Longitud de lección:** 40 a 70 palabras en segunda persona (*"tú"*).
    - **Un concepto por lección:** Introducido con analogías cotidianas y evaluado inmediatamente.
    - **Feedback sin spoilers:** La pista inteligente orienta, pero jamás revela la respuesta correcta.

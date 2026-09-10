@@ -1,25 +1,24 @@
 # 13 — Especificación de API (API Specification)
 
-> **Estado:** Aprobado · **Versión del documento:** 2.0.0 · **Fecha:** 2026-09-02  
-> **Complementa a:** `01_PROJECT_OVERVIEW.md` (§5 flujo, §7 jerarquía, §24 motores), `03_OBJECTIVES.md` (OT-04 API REST versionada), `04_SCOPE.md` (§2.8 transversales MVP), `05_FUNCTIONAL_REQUIREMENTS.md` (128 RF), `06_NON_FUNCTIONAL_REQUIREMENTS.md` (RNF-001/003/008/010/032/041), `07_USER_STORIES.md` (E01–E10), `11_SYSTEM_ARCHITECTURE.md`, `12_DATABASE_DESIGN.md` (v2.0.0), `14_LEARNING_SYSTEM.md`, `16_GAMIFICATION.md`, `27_UI_UX_SPECIFICATION.md` y `01_PROJECT_OVERVIEW.md`.  
-> **Zona horaria de timestamps de API:** `America/Bogota` (UTC-5) — coherente con `19_SECURITY.md` y `CHANGELOG.md`.
+> **Estado:** Aprobado · **Versión del documento:** 2.1.0 · **Fecha:** 2026-09-10  
+> **Complementa a:** `docs/01-producto-negocio/`, `docs/02-requisitos-ux/`, `11_SYSTEM_ARCHITECTURE.md`, `12_DATABASE_DESIGN.md` (v3.0.0), `ADR-007` (Roadmap DAG), `ADR-008` (NestJS Oficial) y `ADR-009` (Persistencia Híbrida MongoDB + Supabase).  
+> **Zona horaria de timestamps de API:** `America/Bogota` (UTC-5).
 
 ---
 
 ## 1. Propósito y alcance
 
-Este documento especifica el **contrato HTTP REST** de la plataforma educativa gamificada. Define qué expone el sistema, los modelos de datos de entrada/salida, los códigos de estado, las reglas de negocio en cada operación y la interacción con los motores pedagógico, de gamificación, de evapythonción y de contenido.
+Este documento especifica el **contrato HTTP REST** de la plataforma educativa gamificada implementado en NestJS (`ADR-008`). Define qué expone el sistema, los modelos de datos de entrada/salida, los códigos de estado, las reglas de negocio en cada operación y la interacción entre el almacenamiento de contenido en MongoDB y la persistencia de usuario en Supabase PostgreSQL (`ADR-009`).
 
 **Sí incluye:**
 - Base URL y versionado semántico (`/api/v1`).
 - Convenciones transversales de paginación, correlación (`X-Request-Id`) e idempotencia (`Idempotency-Key`).
 - Autenticación JWT stateless con rotación de refresh tokens y control de acceso RBAC.
-- Sistema de Roadmap y Candados Progresivos ($S_1 \to S_n$ y $M_{i+1}$ condicionado a 100% secciones + $\ge 80\%$ de estrellas de maestría + examen aprobado).
-- Calificación formativa en estrellas (1–3 ⭐) con rejugabilidad no punitiva y conservación de mejor marca (`max_stars_earned`).
-- Cuaderno de errores persistente (`user_mistakes_notebook`) para práctica deliberada (+5 XP de remediación formativa).
-- Ronda de repaso intra-sesión y feedback formativo anti-spoilers.
-- Soporte curricular multi-lenguaje (con Python como rutas insignias de lanzamiento).
-- Tabla completa de 44 endpoints REST, schemas JSON canónicos, ejemplos de consumo cURL y catálogo de errores de negocio.
+- Endpoints de contenido curricular servidos desde MongoDB: `GET /api/v1/content/tracks/:slug`, `GET /api/v1/content/courses/:slug`, `GET /api/v1/content/lessons/:id`.
+- Sistema de Roadmap DAG y Candados Progresivos (`ADR-007`) con prerrequisitos `RQ` validados en PostgreSQL.
+- Calificación formativa en estrellas (1–3 ⭐) y cuaderno de errores persistente (`user_mistakes_notebook`).
+- Emisión atómica de certificados oficiales `CQ-*` respaldados en Google Drive Storage (`ADR-003`).
+- Tabla completa de endpoints REST, schemas JSON canónicos y catálogo de errores RFC 7807.
 
 **No incluye:**
 - Implementación física interna de base de datos (`12_DATABASE_DESIGN.md`).
