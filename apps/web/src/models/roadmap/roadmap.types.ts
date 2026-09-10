@@ -45,3 +45,17 @@ export interface LanguageTrack {
   mainCourses: RoadmapCourse[];
   frameworkBranches: FrameworkBranch[];
 }
+
+export interface SidebarLanguageItem {
+  id: string;
+  name: string;
+  icon: React.ComponentType<{ className?: string }>;
+  color: string;
+  isAvailable: boolean;
+  totalStars: number;
+  earnedStars: number;
+  completedCourses?: number;
+  totalCourses?: number;
+  progressPercent?: number;
+  currentStage?: string;
+}
