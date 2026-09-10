@@ -8,23 +8,23 @@ const NODES: GraphNode[] = [
   },
   {
     id: 'fe-css', code: '02', label: 'CSS MODERNO', subtitle: 'FLEXBOX, GRID & ESTILOS',
-    x: 370, y: 290, variant: 'locked', iconType: 'atom', stars: 0, maxStars: 12, xp: 120,
-    statusText: 'SELLADO • REQ. HTML', targetCourseId: 'fe-css', isUnlocked: false,
+    x: 370, y: 290, variant: 'locked', iconType: 'lock', stars: 0, maxStars: 12, xp: 120,
+    statusText: 'RQ HTML', targetCourseId: 'fe-css', isUnlocked: false,
   },
   {
     id: 'fe-js-dom', code: '03', label: 'JS & MANEJO DEL DOM', subtitle: 'EVENTOS, SELECTORES & APIS',
-    x: 600, y: 290, variant: 'locked', iconType: 'brackets', stars: 0, maxStars: 15, xp: 150,
-    statusText: 'SELLADO • REQ. CSS', targetCourseId: 'fe-js-dom', isUnlocked: false,
+    x: 600, y: 290, variant: 'locked', iconType: 'lock', stars: 0, maxStars: 15, xp: 150,
+    statusText: 'RQ CSS', targetCourseId: 'fe-js-dom', isUnlocked: false,
   },
   {
     id: 'fe-react', code: 'F1', label: 'REACT & HOOKS', subtitle: 'ESTADO & COMPONENTES',
-    x: 820, y: 150, variant: 'branch', iconType: 'server', stars: 0, maxStars: 9, xp: 140,
-    statusText: 'SELLADO • REQ. JS DOM', targetCourseId: 'fe-react', isUnlocked: false,
+    x: 820, y: 150, variant: 'branch', iconType: 'lock', stars: 0, maxStars: 9, xp: 140,
+    statusText: 'RQ JS DOM', targetCourseId: 'fe-react', isUnlocked: false,
   },
   {
     id: 'fe-tailwind', code: 'F2', label: 'TAILWIND & UI', subtitle: 'SISTEMAS DE DISEÑO',
-    x: 820, y: 430, variant: 'branch', iconType: 'database', stars: 0, maxStars: 9, xp: 130,
-    statusText: 'SELLADO • REQ. JS DOM', targetCourseId: 'fe-tailwind', isUnlocked: false,
+    x: 820, y: 430, variant: 'branch', iconType: 'lock', stars: 0, maxStars: 9, xp: 130,
+    statusText: 'RQ JS DOM', targetCourseId: 'fe-tailwind', isUnlocked: false,
   },
   {
     id: 'fe-apex', code: 'Ω', label: 'APEX FRONTEND GATE', subtitle: 'PROYECTO SPA INTEGRAL',

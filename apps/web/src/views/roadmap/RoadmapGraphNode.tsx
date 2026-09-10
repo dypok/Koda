@@ -27,7 +27,7 @@ export function RoadmapGraphNode({ node, onSelectNode }: RoadmapGraphNodeProps) 
       <foreignObject x="-14" y="-14" width="28" height="28" className="pointer-events-none">
         <div className="w-full h-full flex items-center justify-center text-white">
           <RoadmapNodeIcon
-            iconType={node.iconType}
+            iconType={!node.isUnlocked && node.variant !== 'boss' ? 'lock' : node.iconType}
             className={`w-4 h-4 transition-transform duration-200 ${
               !node.isUnlocked
                 ? 'text-slate-400 group-hover:text-rose-400 group-hover:-rotate-12 group-hover:scale-110'

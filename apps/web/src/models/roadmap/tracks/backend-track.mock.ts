@@ -8,23 +8,23 @@ const NODES: GraphNode[] = [
   },
   {
     id: 'be-sql', code: '02', label: 'BASES DE DATOS & SQL', subtitle: 'MODELADO, ORM & CONSULTAS',
-    x: 370, y: 290, variant: 'locked', iconType: 'database', stars: 0, maxStars: 12, xp: 135,
-    statusText: 'SELLADO • REQ. PYTHON', targetCourseId: 'be-sql', isUnlocked: false,
+    x: 370, y: 290, variant: 'locked', iconType: 'lock', stars: 0, maxStars: 12, xp: 135,
+    statusText: 'RQ PYTHON', targetCourseId: 'be-sql', isUnlocked: false,
   },
   {
     id: 'be-apis', code: '03', label: 'APIS REST & FASTAPI', subtitle: 'ENDPOINTS ASYNC & PYDANTIC',
-    x: 600, y: 290, variant: 'locked', iconType: 'server', stars: 0, maxStars: 15, xp: 150,
-    statusText: 'SELLADO • REQ. SQL', targetCourseId: 'be-apis', isUnlocked: false,
+    x: 600, y: 290, variant: 'locked', iconType: 'lock', stars: 0, maxStars: 15, xp: 150,
+    statusText: 'RQ SQL', targetCourseId: 'be-apis', isUnlocked: false,
   },
   {
     id: 'be-go', code: 'B1', label: 'GO CONCURRENTE', subtitle: 'GOROUTINES & BAJA LATENCIA',
-    x: 820, y: 150, variant: 'branch', iconType: 'server', stars: 0, maxStars: 12, xp: 160,
-    statusText: 'SELLADO • REQ. APIS', targetCourseId: 'be-go', isUnlocked: false,
+    x: 820, y: 150, variant: 'branch', iconType: 'lock', stars: 0, maxStars: 12, xp: 160,
+    statusText: 'RQ APIS', targetCourseId: 'be-go', isUnlocked: false,
   },
   {
     id: 'be-django', code: 'B2', label: 'DJANGO FULL-STACK', subtitle: 'ARQUITECTURA MVT & AUTH',
-    x: 820, y: 430, variant: 'branch', iconType: 'database', stars: 0, maxStars: 12, xp: 160,
-    statusText: 'SELLADO • REQ. APIS', targetCourseId: 'be-django', isUnlocked: false,
+    x: 820, y: 430, variant: 'branch', iconType: 'lock', stars: 0, maxStars: 12, xp: 160,
+    statusText: 'RQ APIS', targetCourseId: 'be-django', isUnlocked: false,
   },
   {
     id: 'be-apex', code: 'Ω', label: 'APEX BACKEND GATE', subtitle: 'SISTEMAS DISTRIBUIDOS',

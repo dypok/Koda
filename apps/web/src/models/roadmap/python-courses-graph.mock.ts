@@ -9,22 +9,22 @@ const NODES: GraphNode[] = [
   {
     id: 'py-course-intermediate', code: '02', label: 'PYTHON INTERMEDIO', subtitle: 'POO & ESTRUCTURAS',
     x: 370, y: 290, variant: 'locked', iconType: 'lock', stars: 0, maxStars: 12, xp: 135,
-    statusText: 'SELLADO • REQ. BÁSICO', targetCourseId: 'py-intermediate', isUnlocked: false,
+    statusText: 'RQ BÁSICO', targetCourseId: 'py-intermediate', isUnlocked: false,
   },
   {
     id: 'py-course-advanced', code: '03', label: 'PYTHON AVANZADO', subtitle: 'ASYNCIO & CONCURRENCIA',
     x: 600, y: 290, variant: 'locked', iconType: 'lock', stars: 0, maxStars: 9, xp: 140,
-    statusText: 'SELLADO • REQ. INTERMEDIO', targetCourseId: 'py-advanced', isUnlocked: false,
+    statusText: 'RQ INTERMEDIO', targetCourseId: 'py-advanced', isUnlocked: false,
   },
   {
     id: 'py-fw-fastapi', code: 'F1', label: 'FASTAPI ASYNC', subtitle: 'MICROSERVICIOS REST',
-    x: 820, y: 150, variant: 'branch', iconType: 'server', stars: 0, maxStars: 9, xp: 150,
-    statusText: 'SELLADO • REQ. AVANZADO', targetCourseId: 'py-fw-fastapi', isUnlocked: false,
+    x: 820, y: 150, variant: 'branch', iconType: 'lock', stars: 0, maxStars: 9, xp: 150,
+    statusText: 'RQ AVANZADO', targetCourseId: 'py-fw-fastapi', isUnlocked: false,
   },
   {
     id: 'py-fw-django', code: 'F2', label: 'DJANGO & FLASK', subtitle: 'FULL-STACK & ORM',
-    x: 820, y: 430, variant: 'branch', iconType: 'database', stars: 0, maxStars: 18, xp: 180,
-    statusText: 'SELLADO • REQ. AVANZADO', targetCourseId: 'py-fw-django', isUnlocked: false,
+    x: 820, y: 430, variant: 'branch', iconType: 'lock', stars: 0, maxStars: 18, xp: 180,
+    statusText: 'RQ AVANZADO', targetCourseId: 'py-fw-django', isUnlocked: false,
   },
   {
     id: 'py-course-boss', code: 'Ω', label: 'APEX MASTER GATE', subtitle: 'PROYECTO INTEGRAL PYTHON',
