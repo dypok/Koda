@@ -1,13 +1,13 @@
 import { create } from 'zustand';
 import { GraphViewMode, GraphDataset } from '@/models/roadmap/roadmap-graph.types';
-import { PYTHON_TRACK } from '@/models/roadmap/python-roadmap.mock';
-import { PYTHON_COURSES_DATASET } from '@/models/roadmap/python-courses-graph.mock';
 import { PYTHON_BASIC_LESSONS_DATASET } from '@/models/roadmap/python-lessons-graph.mock';
+import { CareerBranchId, CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
+import { FRONTEND_COURSES_DATASET } from '@/models/roadmap/tracks/frontend-track.mock';
 import { RoadmapService } from '@/services/roadmap/roadmap.service';
 
 interface RoadmapStoreState {
   viewMode: GraphViewMode;
-  selectedLanguageId: string;
+  activeBranchId: CareerBranchId;
   selectedCourseId: string;
   activeNodeId: string | null;
   zoomLevel: number;
@@ -17,23 +17,21 @@ interface RoadmapStoreState {
   openCourseLessons: (courseId: string) => Promise<void>;
   returnToCourses: () => void;
   setActiveNode: (id: string | null) => void;
-  setLanguage: (langId: string) => Promise<void>;
+  setBranch: (branchId: CareerBranchId) => void;
   zoomIn: () => void;
   zoomOut: () => void;
   resetZoom: () => void;
-  getEarnedStars: () => number;
-  getTotalStars: () => number;
   getCurrentDataset: () => GraphDataset;
 }
 
 export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   viewMode: 'courses',
-  selectedLanguageId: 'python',
-  selectedCourseId: 'py-basic',
-  activeNodeId: 'les-04',
+  activeBranchId: 'frontend',
+  selectedCourseId: 'fe-html',
+  activeNodeId: 'fe-html',
   zoomLevel: 100,
   isLoading: false,
-  coursesDataset: PYTHON_COURSES_DATASET,
+  coursesDataset: FRONTEND_COURSES_DATASET,
   lessonsDataset: PYTHON_BASIC_LESSONS_DATASET,
   openCourseLessons: async (courseId) => {
     const courseNode = get().coursesDataset.nodes.find((n) => n.targetCourseId === courseId || n.id === courseId);
@@ -44,15 +42,18 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   },
   returnToCourses: () => set({ viewMode: 'courses' }),
   setActiveNode: (id) => set({ activeNodeId: id }),
-  setLanguage: async (langId) => {
-    set({ selectedLanguageId: langId, isLoading: true });
-    const dataset = await RoadmapService.getCoursesGraph(langId);
-    set({ coursesDataset: dataset, isLoading: false });
+  setBranch: (branchId) => {
+    const branch = CAREER_BRANCHES.find((b) => b.id === branchId) || CAREER_BRANCHES[0];
+    set({
+      activeBranchId: branchId,
+      coursesDataset: branch.dataset,
+      viewMode: 'courses',
+      selectedCourseId: branch.dataset.nodes[0]?.targetCourseId || branch.dataset.nodes[0]?.id || '',
+      activeNodeId: branch.dataset.nodes[0]?.id || null,
+    });
   },
   zoomIn: () => set((s) => ({ zoomLevel: Math.min(140, s.zoomLevel + 10) })),
   zoomOut: () => set((s) => ({ zoomLevel: Math.max(70, s.zoomLevel - 10) })),
   resetZoom: () => set({ zoomLevel: 100 }),
-  getEarnedStars: () => PYTHON_TRACK.mainCourses.reduce((acc, c) => acc + c.earnedStars, 0),
-  getTotalStars: () => PYTHON_TRACK.mainCourses.reduce((acc, c) => acc + c.totalStars, 0),
   getCurrentDataset: () => (get().viewMode === 'courses' ? get().coursesDataset : get().lessonsDataset),
 }));

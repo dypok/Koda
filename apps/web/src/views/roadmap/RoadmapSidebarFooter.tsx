@@ -28,8 +28,8 @@ export function RoadmapSidebarFooter() {
           <span className="truncate text-xs font-bold text-slate-200 font-mono">
             {user?.fullName || 'Estudiante'}
           </span>
-          <span className="text-[10px] font-mono text-cyan-400/90 font-medium truncate">
-            Cadete Python • Nivel 4
+          <span className="text-[10px] font-mono text-slate-400 truncate">
+            {user?.email || 'Sesión activa'}
           </span>
         </div>
       </div>
