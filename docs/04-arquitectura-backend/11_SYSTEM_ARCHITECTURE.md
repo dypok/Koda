@@ -1,7 +1,11 @@
 # 11 — Arquitectura del Sistema
 
-> **Estado:** En planificación · **Versión del documento:** 1.0.0 · **Fecha:** 2026-08-29
-> Complementa a `01_PROJECT_OVERVIEW.md` §24–§31, `03_OBJECTIVES.md` §6 (OT-01 a OT-04), `04_SCOPE.md` §5 y §9, `05_FUNCTIONAL_REQUIREMENTS.md` (128 RF) y `06_NON_FUNCTIONAL_REQUIREMENTS.md` (RNF-005/006/030–032). No duplica su contenido; lo materializa en decisiones, componentes y flujos verificables. El detalle de datos, API y cada motor se expande en `12_DATABASE_DESIGN.md`, `13_API_SPECIFICATION.md`, `14_LEARNING_SYSTEM.md`, `15_QUIZ_EXAM_SYSTEM.md`, `16_GAMIFICATION.md`, `17_CERTIFICATION.md`, `18_MONETIZATION.md`, `23_CONTENT_SPECIFICATION.md` y `25_ADMIN_SYSTEM.md`.
+> **Estado:** Aprobado · **Versión del documento:** 2.1.0 · **Fecha:** 2026-09-10
+> Complementa a `docs/01-producto-negocio/`, `docs/02-requisitos-ux/`, `ADR-001` (Monorepo), `ADR-002` (Supabase), `ADR-007` (Grafo DAG), `ADR-008` (NestJS Oficial) y `ADR-009` (Persistencia Híbrida Políglota). Materializa la arquitectura técnica integral:
+> - **Frontend:** Next.js 15 (App Router, React 19, Tailwind CSS, PixiJS WebGL).
+> - **Backend:** Monolito Modular en NestJS (`apps/api`) con 9 motores de dominio e inyección de dependencias estricta.
+> - **Persistencia Híbrida:** Supabase (PostgreSQL 15+) para transacciones y estado + MongoDB para contenido pedagógico de alto volumen.
+> - **Contratos Compartidos:** Paquete `@koda/types` tipado de extremo a extremo.
 
 ---
 
@@ -12,9 +16,7 @@ Este documento define **cómo está estructurado el sistema**, no qué hace (ver
 - Separar responsabilidades y evitar acoplamiento prohibido (`06` RNF-030/031).
 - Garantizar que agregar un lenguaje es solo contenido + config (`06` RNF-006, `03` OT-03).
 - Permitir escalado horizontal sin re-arquitectura (`06` RNF-005).
-- Servir como base para `12` (datos), `13` (API), `14`–`18` (motores) y `21_DEPLOYMENT.md`.
-
-**Fuera de alcance:** el esquema exacto de tablas (`12`), el contrato OpenAPI (`13`) y la especificación pedagógica del contenido (`23`). Aquí se definen los límites y contratos entre componentes.
+- Servir como base para `12_DATABASE_DESIGN.md`, `13_API_SPECIFICATION.md`, motores de dominio y `21_DEPLOYMENT.md`.
 
 **Principio rector:** arquitectura modular, desacoplada y escalable. Ningún texto de lección ni pregunta vive en el código del motor (`01` §31).
 
@@ -24,12 +26,13 @@ Este documento define **cómo está estructurado el sistema**, no qué hace (ver
 
 ### 2.1 Estilo arquitectónico
 
-| Decisión | Elección recomendada | Justificación |
+| Decisión | Elección oficial | Justificación |
 |---|---|---|
-| Estilo | **Modular monolito con fronteras explícitas** en MVP; preparado para extraer servicios sin reescribir | Ver §13.1 — un monolito modular reduce complejidad operativa en MVP (un deploy, una BD) y cumple `RNF-005` (stateless + réplicas) sin el costo de microservicios prematuros. |
-| Comunicación interna | Llamadas en proceso vía **interfaces/puertos** (ports & adapters) | Permite extraer un motor a servicio independiente cambiando el adaptador, no el núcleo. |
-| Comunicación externa | **API REST versionada** (`/api/v1`) + JSON | Ver `03` OT-04 y `06` RNF-032; estándar, cacheable y documentable con OpenAPI. GraphQL queda como Post-MVP solo si `26_ANALYTICS.md` demuestra necesidad de agregaciones complejas. |
-| Estado de sesión | **Stateless** (JWT corto + refresh rotativo) | Permite balanceo sin sticky sessions (`RNF-005`). Sesión en memoria local es un defecto bloqueante. |
+| Estilo | **Monolito Modular con fronteras explícitas** en NestJS (`ADR-008`) | Módulos desacoplados (`@Module()`), inyección de dependencias limpia, un solo despliegue con escalabilidad horizontal (`RNF-005`). |
+| Persistencia | **Híbrida Políglota (PostgreSQL + MongoDB)** (`ADR-009`) | PostgreSQL (Supabase) para transacciones ACID y MongoDB para entrega $O(1)$ de lecciones y grafo curricular. |
+| Comunicación interna | Llamadas en proceso vía **servicios e interfaces tipadas** | Ports & Adapters; permite extraer motores a microservicios si fuese necesario sin refactorizar el dominio. |
+| Comunicación externa | **API REST OpenAPI 3.0.3** (`/api/v1`) | Estándar, cacheable, documentada automáticamente mediante Swagger en NestJS (`13_API_SPECIFICATION.md`). |
+| Estado de sesión | **Stateless** (JWT corto 15 min + refresh rotativo 7d HttpOnly) | Permite balanceo sin sticky sessions (`RNF-005`). |
 
 > Alternativa descartada en MVP: microservicios por motor. Se adopta solo si métricas de `21`/`26` muestran que un motor (ej. Evapythontion) es cuello de botella aislado y justifica el costo operativo. La frontera modular ya deja esa puerta abierta.
 

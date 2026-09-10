@@ -5,8 +5,8 @@
 [![Python Version](https://img.shields.io/badge/Python-3.12-blue.svg?logo=python&logoColor=white)](https://www.python.org)
 [![Módulo 01](https://img.shields.io/badge/Módulo%2001-Fundamentos-success.svg)](content/languages/python/modules/01_fundamentos/module.json)
 [![Ruta Oficial](https://img.shields.io/badge/Ruta-12%20Módulos-blueviolet.svg)](content/languages/python/manifest.json)
-[![Arquitectura](https://img.shields.io/badge/Arquitectura-Monolito%20Modular%20(Next.js%20%2B%20NestJS)-indigo.svg)](docs/11_SYSTEM_ARCHITECTURE.md)
-[![Base de Datos](https://img.shields.io/badge/Database-Supabase%20(PostgreSQL%2015)-emerald.svg)](docs/12_DATABASE_DESIGN.md)
+[![Arquitectura](https://img.shields.io/badge/Arquitectura-Monolito%20Modular%20(Next.js%20%2B%20NestJS)-indigo.svg)](docs/04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md)
+[![Base de Datos](https://img.shields.io/badge/Database-H%C3%ADbrida%20(Supabase%20%2B%20MongoDB)-emerald.svg)](docs/04-arquitectura-backend/12_DATABASE_DESIGN.md)
 [![Documentación](https://img.shields.io/badge/Docs-Hub%20de%20Especificaciones-purple.svg)](docs/README.md)
 [![Licencia](https://img.shields.io/badge/Licencia-MIT-green.svg)](LICENSE)
 
@@ -184,7 +184,7 @@ pnpm dev:api    # Inicia NestJS en http://localhost:4000
 
 ¡Las contribuciones son bienvenidas! Consulta [`CONTRIBUTING.md`](CONTRIBUTING.md) para conocer las pautas de estilo, convención de commits y el flujo de trabajo con ramas.
 
-Para proponer nuevo contenido pedagógico, consulta la guía de autoría en [`docs/24_CONTENT_AUTHORING_GUIDE.md`](docs/24_CONTENT_AUTHORING_GUIDE.md).
+Para proponer nuevo contenido pedagógico, consulta la guía de autoría en [`docs/03-pedagogia-contenido/24_CONTENT_AUTHORING_GUIDE.md`](docs/03-pedagogia-contenido/24_CONTENT_AUTHORING_GUIDE.md).
 
 ---
 
