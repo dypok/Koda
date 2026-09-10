@@ -32,16 +32,30 @@ export function RoadmapSvgPaths({ connections }: RoadmapSvgPathsProps) {
             strokeOpacity="0.2"
             strokeLinecap="round"
           />
-          {/* Core crisp laser path */}
+          {/* Core laser beam */}
           <path
             d={c.path}
             fill="none"
             stroke={c.color}
             strokeWidth="2.5"
-            strokeOpacity="0.85"
+            strokeOpacity={c.isDashed ? '0.5' : '0.85'}
             strokeLinecap="round"
-            strokeDasharray={c.isDashed ? '6 6' : undefined}
+            strokeDasharray={c.isDashed ? '6 8' : undefined}
+            className={c.isDashed ? 'animate-laser-standby' : undefined}
           />
+          {/* High-speed energy photon packet traveling along active links */}
+          {!c.isDashed && (
+            <path
+              d={c.path}
+              fill="none"
+              stroke="#FFFFFF"
+              strokeWidth="3"
+              strokeOpacity="0.95"
+              strokeLinecap="round"
+              strokeDasharray="20 100"
+              className="animate-laser-flow drop-shadow-[0_0_6px_#38BDF8]"
+            />
+          )}
         </g>
       ))}
     </g>

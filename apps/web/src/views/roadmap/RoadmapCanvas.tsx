@@ -36,19 +36,23 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
           style={{ overflow: 'visible' }}
         >
           {/* Ambient micro-constellation decorative dots */}
-          <g className="opacity-30 pointer-events-none" fill="#94A3B8" fontSize="8" fontFamily="monospace">
-            <text x="140" y="180">+</text>
-            <text x="350" y="140">+</text>
-            <text x="630" y="80">+</text>
-            <text x="920" y="130">+</text>
-            <text x="240" y="490">+</text>
-            <text x="520" y="520">+</text>
-            <text x="880" y="470">+</text>
-            <circle cx="210" cy="160" r="1.5" fill="#38BDF8" />
-            <circle cx="490" cy="110" r="1.5" fill="#F97316" />
-            <circle cx="790" cy="90" r="1.5" fill="#A855F7" />
-            <circle cx="330" cy="510" r="1.5" fill="#10B981" />
-            <circle cx="680" cy="540" r="1.5" fill="#F59E0B" />
+          <g className="pointer-events-none" fill="#94A3B8" fontSize="8" fontFamily="monospace">
+            <g className="animate-star-twinkle-a">
+              <text x="140" y="180">+</text>
+              <text x="630" y="80">+</text>
+              <text x="240" y="490">+</text>
+              <circle cx="210" cy="160" r="1.5" fill="#38BDF8" />
+              <circle cx="790" cy="90" r="1.5" fill="#A855F7" />
+            </g>
+            <g className="animate-star-twinkle-b">
+              <text x="350" y="140">+</text>
+              <text x="920" y="130">+</text>
+              <text x="520" y="520">+</text>
+              <text x="880" y="470">+</text>
+              <circle cx="490" cy="110" r="1.5" fill="#F97316" />
+              <circle cx="330" cy="510" r="1.5" fill="#10B981" />
+              <circle cx="680" cy="540" r="1.5" fill="#F59E0B" />
+            </g>
           </g>
 
           {/* Glowing laser connections between nodes */}
