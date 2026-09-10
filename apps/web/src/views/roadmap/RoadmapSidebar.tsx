@@ -10,7 +10,7 @@ export const RoadmapSidebar: React.FC = () => {
   return (
     <aside className="w-16 sm:w-20 lg:w-72 shrink-0 h-screen border-r border-slate-800/40 flex flex-col justify-between p-3 sm:p-4 bg-slate-950/60 backdrop-blur-md z-20 select-none">
       {/* Brand Header */}
-      <div className="flex items-center justify-between px-2 py-1 mb-3 shrink-0">
+      <div className="flex items-center px-2 py-1 mb-3 shrink-0">
         <Image
           src="/brand/logo.svg"
           alt="Koda"
@@ -19,9 +19,6 @@ export const RoadmapSidebar: React.FC = () => {
           className="h-7 w-auto object-contain"
           priority
         />
-        <span className="hidden lg:inline-flex px-1.5 py-0.5 rounded text-[9px] font-mono font-bold uppercase tracking-widest text-slate-400 bg-slate-900 border border-slate-800">
-          v2.4
-        </span>
       </div>
 
       {/* Main Scrollable Telemetry Body */}
