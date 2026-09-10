@@ -35,11 +35,13 @@ export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudPro
       <div className="flex items-center gap-6">
         <div className="hidden md:flex items-center gap-3">
           <span className="text-[11px] font-mono uppercase tracking-wider text-slate-400">Progress</span>
-          <div className="w-36 h-2 bg-slate-800 rounded-full overflow-hidden p-0.5">
+          <div className="w-36 h-2 bg-slate-800 rounded-full overflow-hidden p-0.5 relative">
             <div
-              className="h-full bg-gradient-to-r from-cyan-500 to-amber-500 rounded-full transition-all duration-500"
+              className="h-full bg-gradient-to-r from-cyan-500 to-amber-500 rounded-full transition-all duration-500 relative overflow-hidden"
               style={{ width: `${progressPercent}%` }}
-            />
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent animate-hud-shimmer pointer-events-none" />
+            </div>
           </div>
           <span className="text-xs font-mono text-cyan-400 font-bold">{progressPercent}%</span>
         </div>

@@ -6,7 +6,13 @@ import { NodeVariant } from '@/models/roadmap/roadmap-graph.types';
 export function RoadmapNodeRings({ variant }: { variant: NodeVariant }) {
   if (variant === 'active') {
     return (
-      <g className="node-active-halo">
+      <g className="node-active-halo pointer-events-none">
+        {/* Sonar radar expanding resonance wave */}
+        <circle r="26" fill="none" stroke="#F97316" strokeWidth="1.5" className="animate-sonar-wave" />
+        {/* Orbiting energetic satellite */}
+        <g className="animate-orbit-cw">
+          <circle cx="44" cy="0" r="3" fill="#38BDF8" className="drop-shadow-[0_0_8px_#38BDF8]" />
+        </g>
         <circle r="44" stroke="#F97316" strokeWidth="1.5" strokeDasharray="5 5" fill="none" opacity="0.35" className="animate-spin" style={{ animationDuration: '18s' }} />
         <circle r="36" stroke="#F97316" strokeWidth="1.5" fill="none" opacity="0.6" className="animate-pulse" />
         <circle r="26" fill="#EA580C" stroke="#FDBA74" strokeWidth="2.5" className="drop-shadow-[0_0_15px_rgba(249,115,22,0.6)]" />
@@ -16,8 +22,10 @@ export function RoadmapNodeRings({ variant }: { variant: NodeVariant }) {
 
   if (variant === 'boss') {
     return (
-      <g className="node-boss-halo">
-        <circle r="36" stroke="#EF4444" strokeWidth="1.5" fill="none" opacity="0.5" className="animate-pulse" />
+      <g className="node-boss-halo pointer-events-none">
+        {/* Outer warning radar perimeter */}
+        <circle r="42" stroke="#EF4444" strokeWidth="1" strokeDasharray="4 6" fill="none" opacity="0.4" className="animate-spin" style={{ animationDuration: '24s' }} />
+        <circle r="34" stroke="#EF4444" strokeWidth="1.5" fill="none" className="animate-boss-pulse" />
         <circle r="26" fill="#7F1D1D" stroke="#F87171" strokeWidth="2.5" className="drop-shadow-[0_0_15px_rgba(239,68,68,0.5)]" />
       </g>
     );

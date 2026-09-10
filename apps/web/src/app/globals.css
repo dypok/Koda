@@ -8,4 +8,25 @@
 ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #334155; }
 
+/* 120 FPS GPU-Accelerated Cybernetic Keyframes */
+@keyframes laser-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -120; } }
+@keyframes laser-standby { from { stroke-dashoffset: 0; } to { stroke-dashoffset: 80; } }
+@keyframes sonar-wave { 0% { transform: scale(1); opacity: 0.65; } 100% { transform: scale(1.85); opacity: 0; } }
+@keyframes orbit-cw { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes boss-pulse { 0%, 100% { transform: scale(1); opacity: 0.45; } 50% { transform: scale(1.12); opacity: 0.85; } }
+@keyframes star-twinkle-a { 0%, 100% { opacity: 0.2; transform: scale(0.85); } 50% { opacity: 0.85; transform: scale(1.15); } }
+@keyframes star-twinkle-b { 0%, 100% { opacity: 0.8; transform: scale(1.1); } 50% { opacity: 0.15; transform: scale(0.8); } }
+@keyframes cosmic-float { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -5px, 0); } }
+@keyframes hud-shimmer { 0% { transform: translate3d(-100%, 0, 0); } 100% { transform: translate3d(200%, 0, 0); } }
+
+.animate-laser-flow { animation: laser-flow 2.2s linear infinite; will-change: stroke-dashoffset; }
+.animate-laser-standby { animation: laser-standby 18s linear infinite; will-change: stroke-dashoffset; }
+.animate-sonar-wave { animation: sonar-wave 3.2s cubic-bezier(0.1, 0.7, 0.1, 1) infinite; transform-origin: center; will-change: transform, opacity; }
+.animate-orbit-cw { animation: orbit-cw 12s linear infinite; transform-origin: center; will-change: transform; }
+.animate-boss-pulse { animation: boss-pulse 2.8s ease-in-out infinite; transform-origin: center; will-change: transform, opacity; }
+.animate-star-twinkle-a { animation: star-twinkle-a 3s ease-in-out infinite; transform-origin: center; will-change: transform, opacity; }
+.animate-star-twinkle-b { animation: star-twinkle-b 4.5s ease-in-out infinite; transform-origin: center; will-change: transform, opacity; }
+.animate-cosmic-float { animation: cosmic-float 6s ease-in-out infinite; will-change: transform; }
+.animate-hud-shimmer { animation: hud-shimmer 2.4s ease-in-out infinite; will-change: transform; }
+
 
