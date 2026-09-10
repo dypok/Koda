@@ -10,23 +10,28 @@
 
 /* 120 FPS GPU-Accelerated Cybernetic Keyframes */
 @keyframes laser-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -120; } }
-@keyframes laser-standby { from { stroke-dashoffset: 0; } to { stroke-dashoffset: 80; } }
-@keyframes sonar-wave { 0% { transform: scale(1); opacity: 0.65; } 100% { transform: scale(1.85); opacity: 0; } }
-@keyframes orbit-cw { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-@keyframes boss-pulse { 0%, 100% { transform: scale(1); opacity: 0.45; } 50% { transform: scale(1.12); opacity: 0.85; } }
-@keyframes star-twinkle-a { 0%, 100% { opacity: 0.2; transform: scale(0.85); } 50% { opacity: 0.85; transform: scale(1.15); } }
-@keyframes star-twinkle-b { 0%, 100% { opacity: 0.8; transform: scale(1.1); } 50% { opacity: 0.15; transform: scale(0.8); } }
-@keyframes cosmic-float { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(0, -5px, 0); } }
+@keyframes laser-standby { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -56; } }
+@keyframes star-twinkle-a { 0%, 100% { opacity: 0.2; transform: scale(0.85); } 50% { opacity: 0.9; transform: scale(1.15); } }
+@keyframes star-twinkle-b { 0%, 100% { opacity: 0.85; transform: scale(1.1); } 50% { opacity: 0.15; transform: scale(0.8); } }
 @keyframes hud-shimmer { 0% { transform: translate3d(-100%, 0, 0); } 100% { transform: translate3d(200%, 0, 0); } }
 
+/* Organic Non-Linear Cosmic Star Wanderings across the entire map */
+@keyframes wander-1 { 0%, 100% { transform: translate3d(0, 0, 0); } 30% { transform: translate3d(240px, -70px, 0); } 70% { transform: translate3d(420px, 50px, 0); } }
+@keyframes wander-2 { 0%, 100% { transform: translate3d(0, 0, 0); } 40% { transform: translate3d(-180px, 90px, 0); } 75% { transform: translate3d(140px, 160px, 0); } }
+@keyframes wander-3 { 0%, 100% { transform: translate3d(0, 0, 0); } 35% { transform: translate3d(150px, 110px, 0); } 65% { transform: translate3d(-100px, -80px, 0); } }
+@keyframes wander-4 { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(-240px, -90px, 0); } 80% { transform: translate3d(-90px, 70px, 0); } }
+@keyframes wander-5 { 0%, 100% { transform: translate3d(0, 0, 0); } 25% { transform: translate3d(190px, -50px, 0); } 70% { transform: translate3d(-150px, -110px, 0); } }
+
 .animate-laser-flow { animation: laser-flow 2.2s linear infinite; will-change: stroke-dashoffset; }
-.animate-laser-standby { animation: laser-standby 18s linear infinite; will-change: stroke-dashoffset; }
-.animate-sonar-wave { animation: sonar-wave 3.2s cubic-bezier(0.1, 0.7, 0.1, 1) infinite; transform-origin: center; will-change: transform, opacity; }
-.animate-orbit-cw { animation: orbit-cw 12s linear infinite; transform-origin: center; will-change: transform; }
-.animate-boss-pulse { animation: boss-pulse 2.8s ease-in-out infinite; transform-origin: center; will-change: transform, opacity; }
+.animate-laser-standby { animation: laser-standby 4s linear infinite; will-change: stroke-dashoffset; }
 .animate-star-twinkle-a { animation: star-twinkle-a 3s ease-in-out infinite; transform-origin: center; will-change: transform, opacity; }
 .animate-star-twinkle-b { animation: star-twinkle-b 4.5s ease-in-out infinite; transform-origin: center; will-change: transform, opacity; }
-.animate-cosmic-float { animation: cosmic-float 6s ease-in-out infinite; will-change: transform; }
 .animate-hud-shimmer { animation: hud-shimmer 2.4s ease-in-out infinite; will-change: transform; }
+
+.animate-wander-1 { animation: wander-1 26s ease-in-out infinite; will-change: transform; }
+.animate-wander-2 { animation: wander-2 32s ease-in-out -8s infinite; will-change: transform; }
+.animate-wander-3 { animation: wander-3 22s ease-in-out -14s infinite; will-change: transform; }
+.animate-wander-4 { animation: wander-4 28s ease-in-out -5s infinite; will-change: transform; }
+.animate-wander-5 { animation: wander-5 36s ease-in-out -19s infinite; will-change: transform; }
 
 
