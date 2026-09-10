@@ -1,7 +1,7 @@
 import {
   IconBrandPython, IconBrandJavascript, IconBrandTypescript, IconBrandRust, IconBrandGolang
 } from '@tabler/icons-react';
-import { LanguageTrack, RoadmapCourse } from './roadmap.types';
+import { LanguageTrack, RoadmapCourse, SidebarLanguageItem } from './roadmap.types';
 
 const BASIC_LESSONS = [
   { id: 'py-b-01', title: 'Variables y tipos de datos', order: 1, durationMinutes: 5, xp: 15, stars: 3, maxStars: 3, isUnlocked: true, isCompleted: true },
@@ -51,10 +51,10 @@ export const PYTHON_TRACK: LanguageTrack = {
   mainCourses: PYTHON_MAIN_COURSES, frameworkBranches: PYTHON_FRAMEWORK_BRANCHES,
 };
 
-export const SIDEBAR_LANGUAGES = [
-  { id: 'python', name: 'Python', icon: IconBrandPython, color: '#38BDF8', isAvailable: true, totalStars: 54, earnedStars: 8 },
-  { id: 'javascript', name: 'JavaScript', icon: IconBrandJavascript, color: '#FACC15', isAvailable: false, totalStars: 45, earnedStars: 0 },
-  { id: 'typescript', name: 'TypeScript', icon: IconBrandTypescript, color: '#60A5FA', isAvailable: false, totalStars: 45, earnedStars: 0 },
-  { id: 'rust', name: 'Rust', icon: IconBrandRust, color: '#FB923C', isAvailable: false, totalStars: 45, earnedStars: 0 },
-  { id: 'go', name: 'Go', icon: IconBrandGolang, color: '#22D3EE', isAvailable: false, totalStars: 45, earnedStars: 0 },
+export const SIDEBAR_LANGUAGES: SidebarLanguageItem[] = [
+  { id: 'python', name: 'Python', icon: IconBrandPython, color: '#38BDF8', isAvailable: true, totalStars: 54, earnedStars: 8, completedCourses: 1, totalCourses: 5, progressPercent: 24, currentStage: '01 Básico' },
+  { id: 'javascript', name: 'JavaScript', icon: IconBrandJavascript, color: '#FACC15', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
+  { id: 'typescript', name: 'TypeScript', icon: IconBrandTypescript, color: '#60A5FA', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
+  { id: 'rust', name: 'Rust', icon: IconBrandRust, color: '#FB923C', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
+  { id: 'go', name: 'Go', icon: IconBrandGolang, color: '#22D3EE', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
 ];
