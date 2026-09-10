@@ -11,7 +11,8 @@ interface RoadmapTopHudProps {
 }
 
 export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudProps) {
-  const { viewMode, returnToCourses, openCourseLessons } = useRoadmapStore();
+  const { viewMode, returnToCourses, openCourseLessons, coursesDataset } = useRoadmapStore();
+  const activeCourseId = coursesDataset.nodes.find((n) => n.isUnlocked)?.targetCourseId || coursesDataset.nodes[0]?.targetCourseId || '';
 
   return (
     <header className="h-16 px-6 border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-md flex items-center justify-between z-20 shrink-0">
@@ -49,7 +50,7 @@ export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudPro
         <GradientButton
           variant="default"
           size="sm"
-          onClick={() => openCourseLessons('py-basic')}
+          onClick={() => activeCourseId && openCourseLessons(activeCourseId)}
           className="h-9 px-4 text-xs tracking-wider uppercase font-bold gap-2"
         >
           <IconBolt className="w-4 h-4 fill-slate-950" />

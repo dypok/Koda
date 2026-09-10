@@ -2,8 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { RoadmapSidebarNav } from './RoadmapSidebarNav';
-import { RoadmapSidebarLanguages } from './RoadmapSidebarLanguages';
+import { RoadmapSidebarBranches } from './RoadmapSidebarBranches';
 import { RoadmapSidebarGoal } from './RoadmapSidebarGoal';
 import { RoadmapSidebarFooter } from './RoadmapSidebarFooter';
 
@@ -11,7 +10,7 @@ export const RoadmapSidebar: React.FC = () => {
   return (
     <aside className="w-16 sm:w-20 lg:w-72 shrink-0 h-screen border-r border-slate-800/40 flex flex-col justify-between p-3 sm:p-4 bg-slate-950/60 backdrop-blur-md z-20 select-none">
       {/* Brand Header */}
-      <div className="flex items-center justify-between px-2 py-1 mb-4 shrink-0">
+      <div className="flex items-center justify-between px-2 py-1 mb-3 shrink-0">
         <Image
           src="/brand/logo.svg"
           alt="Koda"
@@ -26,14 +25,9 @@ export const RoadmapSidebar: React.FC = () => {
       </div>
 
       {/* Main Scrollable Telemetry Body */}
-      <div className="flex-1 space-y-5 overflow-y-auto pr-1">
-        {/* Campus Navigation */}
-        <RoadmapSidebarNav />
-
-        {/* Language Tracks */}
-        <div className="pt-2 border-t border-slate-800/30">
-          <RoadmapSidebarLanguages />
-        </div>
+      <div className="flex-1 space-y-4 overflow-y-auto pr-1">
+        {/* Career Branches: Frontend, Backend, DevOps */}
+        <RoadmapSidebarBranches />
 
         {/* Daily Study Habit Goal & Next Milestone */}
         <RoadmapSidebarGoal />
