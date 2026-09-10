@@ -44,7 +44,7 @@ const CONNECTIONS: GraphConnection[] = [
 ];
 
 export const BACKEND_COURSES_DATASET: GraphDataset = {
-  sectorTitle: 'SECTOR 02: BACKEND & DISTRIBUTED SYSTEMS',
+  sectorTitle: 'BACKEND & DISTRIBUTED SYSTEMS',
   progressPercent: 24,
   nodes: NODES,
   connections: CONNECTIONS,

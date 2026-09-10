@@ -44,7 +44,7 @@ const CONNECTIONS: GraphConnection[] = [
 ];
 
 export const FRONTEND_COURSES_DATASET: GraphDataset = {
-  sectorTitle: 'SECTOR 01: FRONTEND WEB & DOM TRACK',
+  sectorTitle: 'FRONTEND WEB & DOM TRACK',
   progressPercent: 18,
   nodes: NODES,
   connections: CONNECTIONS,
