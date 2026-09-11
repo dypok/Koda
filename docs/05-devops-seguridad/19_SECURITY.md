@@ -49,7 +49,7 @@ Se usa STRIDE como marco de referencia. La tabla consolida amenazas por dominio;
 |---|---|---|---|---|---|---|---|
 | Autenticación / Contraseñas | Suplantación por credencial robada | — | Negar registro/login | Hash filtrado en log | Fuerza bruta | — | §4 + §5 + §7 + §8 |
 | Sesiones / Tokens | Robo/replay de token | Manipulación de JWT | Negar logout | Fuga de refresh en XSS | — | Reuso de refresh robado | §6 + §7 |
-| Autorización / API | Suplantar otro usuario (IDOR) | Modificar evapythonción en cliente | Negar intento | Enumeración de usuarios | Abuso de reintentos | Escalar a admin | §8 + §9 + §11 + §12 |
+| Autorización / API | Suplantar otro usuario (IDOR) | Modificar evaluación en cliente | Negar intento | Enumeración de usuarios | Abuso de reintentos | Escalar a admin | §8 + §9 + §11 + §12 |
 | Datos / Certificados | Certificado falso | PDF desincronizado | Negar emisión | PII en verificación pública | — | Re-emisión indebida | §10 + §12 + §13 + §14 |
 | Logs / Backups | — | Alterar auditoría | Negar acción admin | PII en logs | Destruir backups | Restaurar backup ajeno | §15 + §16 |
 
@@ -220,7 +220,7 @@ sequenceDiagram
 
 | Rol | Valor | Permisos | Endpoints |
 |---|---|---|---|
-| `USER` | `user` | CRUD propio: `/users/me/*`, aprendizaje, evapythonción, progreso, certificados propios | Todo excepto `/admin/*`; aislamiento estricto por `user_id` del token |
+| `USER` | `user` | CRUD propio: `/users/me/*`, aprendizaje, evaluación, progreso, certificados propios | Todo excepto `/admin/*`; aislamiento estricto por `user_id` del token |
 | `ADMIN` | `admin` | `USER` + administración de contenido | `POST/PATCH/DELETE /admin/*` (RF-ADM-001 a 008); auditoría obligatoria |
 | Premium | `user.is_premium: true` | Flag derivado de `subscriptions` (no rol); condiciona `ads` pero no permisos de contenido | `RF-PREM-005`; verificado en gateway |
 
@@ -316,7 +316,7 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 | Farm de XP / clic sin aprender | Solo `POST` de respuesta/intento calificado en servidor otorga XP (§7.2); `GET` nunca otorga XP; idempotencia + `Idempotency-Key`; heurística de tiempo mínimo 20 s por lección y <2 s por 5 ejercicios → flag `sospechoso` sin XP hasta verificación | RF-XP-005, RNF-042, `16` §5.5 |
 | Fuerza bruta de login | §8 (5 intentos/min/IP) + backoff + CAPTCHA invisible | RF-AUTH-006, RNF-009 |
 | Spam de reintentos quiz/examen | `rate.eval_per_hour = 5` por usuario/hora (§11, `15` §11.2) | `15` RN-QE-016 |
-| Scraping de banco de preguntas | Revisión post-evapythonción solo muestra N preguntas del intento, nunca banco completo; paginación obligatoria + rate limit por IP | RF-QUIZ-004, RF-EXAM-006 |
+| Scraping de banco de preguntas | Revisión post-evaluación solo muestra N preguntas del intento, nunca banco completo; paginación obligatoria + rate limit por IP | RF-QUIZ-004, RF-EXAM-006 |
 | Creación masiva de cuentas | Rate limit en `POST /auth/register` por IP (ej. 10/h) + validación de email + verificación | RF-AUTH-001, §8 |
 | Publicidad fraudulenta | `AdsProvider` abstracto con `reportImpression` solo tras `loadAd` validado; sin incentivo por clic en MVP | RF-ADS-004/005 |
 

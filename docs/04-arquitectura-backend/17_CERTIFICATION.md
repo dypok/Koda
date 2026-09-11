@@ -57,7 +57,7 @@ Esta aclaración debe aparecer **siempre** en el PDF (§10) y en la vista de ver
 
 ## 4. Condiciones para obtener el certificado
 
-Un certificado se genera **si y solo si** se cumplen **todas** las condiciones siguientes en el momento de la solicitud (evapythondas en servidor, `05` RF-EVAL-006):
+Un certificado se genera **si y solo si** se cumplen **todas** las condiciones siguientes en el momento de la solicitud (evaluadas en servidor, `05` RF-EVAL-006):
 
 ### 4.1 Condiciones obligatorias
 
@@ -96,7 +96,7 @@ POST /v1/certificates:issue  { language_id } + Idempotency-Key
 
 El certificado no fija un porcentaje único global; exige **aprobar cada examen** con su umbral vigente al momento del intento (`05` RF-EVAL-005).
 
-| Evapythonción | Umbral inicial | Configurable | Efecto |
+| Evaluación | Umbral inicial | Configurable | Efecto |
 |---|---|---|---|
 | Quiz | 70% (`threshold.quiz`) | Sí, 50–90% sin despliegue (`15` §18) | No bloquea certificado; solo es formativo |
 | Examen | **80%** (`threshold.exam`) | Sí, 60–95% | **Debe ser ≥ umbral para que el módulo cuente como APROBADO** |
@@ -280,9 +280,9 @@ stateDiagram-v2
 
 ### 9.4 Cuándo un cambio de contenido vuelve obsoleto un certificado
 
-- **Cambio menor** (typos, explicación, reorden de secciones sin afectar evapythonción): `content_version` patch → **no obsoleta**.
+- **Cambio menor** (typos, explicación, reorden de secciones sin afectar evaluación): `content_version` patch → **no obsoleta**.
 - **Cambio significativo** (nuevo módulo, examen con nueva composición, cambio de umbral que altera dominio): `content_version` major → **obsoleta** todos los `valid` de ese lenguaje. Decisión registrada por admin con `reason` y `content_version` (`05` RF-CERT-005, `12` metadata).
-- Los intentos históricos conservan `content_version` evapythonda (`06` RNF-035); la obsolescencia no re-califica intentos.
+- Los intentos históricos conservan `content_version` evaluada (`06` RNF-035); la obsolescencia no re-califica intentos.
 
 ---
 
@@ -630,7 +630,7 @@ Cambios versionados y auditados (`05` RF-ADM-005/008).
 
 | Riesgo | Mitigación |
 |---|---|
-| Emisión sin dominio (falsos positivos) | Guardas C-04/C-05 en transacción; `Evapythontion Engine` como única fuente de aprobación |
+| Emisión sin dominio (falsos positivos) | Guardas C-04/C-05 en transacción; `Evaluation Engine` como única fuente de aprobación |
 | Certificados duplicados por carrera | `UNIQUE partial` + `certificate_sequences` atómico + `Idempotency-Key` |
 | PDF desincronizado del registro | `RF-PDF-003` + test `sha256`; plantilla versionada |
 | Falsificación por edición de PDF | Verificación por `code`/QR contra BD es la única verdad; PDF sin registro no verifica |

@@ -109,6 +109,88 @@ export interface RoadmapResponse {
   modules: RoadmapModule[];
 }
 
+// ------------------------------------------
+// Modelos de Grafo DAG Multi-Rama (ADR-007, ADR-011)
+// ------------------------------------------
+
+export type CareerBranchType = 'frontend' | 'backend' | 'devops' | 'python';
+
+export interface CareerBranch {
+  id: CareerBranchType;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  progress_percentage: number;
+  completed_courses: number;
+  total_courses: number;
+  stars_earned: number;
+  is_active: boolean;
+}
+
+export type GraphNodeVariant =
+  | 'active'
+  | 'locked'
+  | 'unlocked'
+  | 'completed'
+  | 'branch'
+  | 'boss'
+  | 'bonus';
+
+export type GraphNodeIconType =
+  | 'brackets'
+  | 'code'
+  | 'flow'
+  | 'matrix'
+  | 'atom'
+  | 'lock'
+  | 'skull'
+  | 'chest'
+  | 'server'
+  | 'database';
+
+export interface GraphNode {
+  id: string;
+  code: string;
+  title: string;
+  subtitle: string;
+  variant: GraphNodeVariant;
+  icon_type: GraphNodeIconType;
+  graph_x: number;
+  graph_y: number;
+  is_unlocked: boolean;
+  stars_earned: number;
+  max_stars: number;
+  prerequisites: string[];
+  course_slug?: string;
+  lesson_id?: string;
+}
+
+export type GraphEdgeVariant = 'direct' | 'curved' | 'dashed';
+
+export interface GraphEdge {
+  id: string;
+  from_id: string;
+  to_id: string;
+  variant: GraphEdgeVariant;
+  is_completed: boolean;
+}
+
+export interface BranchRoadmapResponse {
+  branch: CareerBranch;
+  nodes: GraphNode[];
+  connections: GraphEdge[];
+}
+
+export interface MilestoneTelemetry {
+  code: string;
+  title: string;
+  description: string;
+  xp_reward: number;
+  prerequisite_label: string; // ej. "RQ HTML"
+  is_locked: boolean;
+}
+
 // ==========================================
 // 3. LECCIONES Y PREGUNTAS
 // ==========================================
@@ -178,14 +260,23 @@ export interface MistakesNotebookItem {
   id: string;
   user_id: string;
   question_id: string;
-  language_id: string;
-  module_id: string;
-  section_id: string;
+  track_slug?: string;
+  course_slug?: string;
+  module_slug?: string;
+  section_slug?: string;
+  language_id?: string;
+  module_id?: string;
+  section_id?: string;
   lesson_title: string;
   prompt: string;
   code_context?: string;
   error_count: number;
   is_resolved: boolean;
+  // Parámetros del Algoritmo SuperMemo SM-2 (ADR-011)
+  interval_days?: number;
+  ease_factor?: number;
+  repetition_count?: number;
+  next_review_at?: string;
   created_at: string;
   last_failed_at: string;
 }

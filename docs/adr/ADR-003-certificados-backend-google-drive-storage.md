@@ -8,9 +8,9 @@
 ---
 
 ## 1. Contexto y Problema
-El sistema de certificación emite certificados de finalización acreditando que el estudiante aprobó con $\ge 80\%$ todos los módulos y exámenes de un lenguaje. El diseño anterior evapythonba almacenamiento en buckets S3/MinIO. Sin embargo, se requiere una solución de almacenamiento cloud sin costo de egress recurrente para el MVP, con alta disponibilidad, control de acceso mediante Cuenta de Servicio (*Service Account*) y organización jerárquica por carpetas. Además, la generación de PDFs en cliente presentaba vulnerabilidades de falsificación en el DOM.
+El sistema de certificación emite certificados de finalización acreditando que el estudiante aprobó con $\ge 80\%$ todos los módulos y exámenes de un lenguaje. El diseño anterior evaluaba almacenamiento en buckets S3/MinIO. Sin embargo, se requiere una solución de almacenamiento cloud sin costo de egress recurrente para el MVP, con alta disponibilidad, control de acceso mediante Cuenta de Servicio (*Service Account*) y organización jerárquica por carpetas. Además, la generación de PDFs en cliente presentaba vulnerabilidades de falsificación en el DOM.
 
-## 2. Alternativas Evapythondas
+## 2. Alternativas Evaluadas
 1. **Generación en cliente (HTML5 Canvas / jsPDF):**
    - *Desventajas:* Crítico riesgo de seguridad y falsificación; el usuario puede manipular el DOM o inyectar notas y nombres arbitrarios. Cero validez criptográfica.
 2. **Object Storage estándar (AWS S3 / Cloudflare R2):**
