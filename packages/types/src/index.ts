@@ -149,6 +149,34 @@ export type GraphNodeIconType =
   | 'server'
   | 'database';
 
+export interface NodeTopology {
+  tier: number; // Columna horizontal progresiva (1, 2, 3...)
+  lane: number; // 0: centro, 1: superior, -1: inferior
+  lane_name?: string;
+}
+
+export type AnimationPresetKey =
+  | 'laser_flow_fast'
+  | 'laser_flow_normal'
+  | 'laser_standby_dashed'
+  | 'sonar_radar_pulse'
+  | 'boss_threat_pulse'
+  | 'orbital_satellite';
+
+export interface NodeFxConfig {
+  preset: AnimationPresetKey;
+  color?: string;
+  glow_rgba?: string;
+  speed_multiplier?: number;
+}
+
+export interface EdgeFxConfig {
+  preset: AnimationPresetKey;
+  laser_color?: string;
+  trail_color?: string;
+  dash_style?: 'solid' | 'dashed';
+}
+
 export interface GraphNode {
   id: string;
   code: string;
@@ -156,8 +184,10 @@ export interface GraphNode {
   subtitle: string;
   variant: GraphNodeVariant;
   icon_type: GraphNodeIconType;
-  graph_x: number;
-  graph_y: number;
+  topology?: NodeTopology;
+  fx?: NodeFxConfig;
+  graph_x?: number;
+  graph_y?: number;
   is_unlocked: boolean;
   stars_earned: number;
   max_stars: number;
@@ -173,6 +203,7 @@ export interface GraphEdge {
   from_id: string;
   to_id: string;
   variant: GraphEdgeVariant;
+  fx?: EdgeFxConfig;
   is_completed: boolean;
 }
 
@@ -222,6 +253,48 @@ export interface LessonQuestion {
   options: QuestionOption[];
 }
 
+// ------------------------------------------
+// Tríada Evaluativa de Lección (ADR-011)
+// ------------------------------------------
+
+export interface ConsoleTestCase {
+  input: string;
+  expected_output: string;
+  is_hidden: boolean;
+}
+
+export interface ConsoleChallenge {
+  type: 'CONSOLE_CHALLENGE';
+  instruction: string;
+  starter_code: string;
+  solution_code?: string;
+  test_cases: ConsoleTestCase[];
+  timeout_ms: number;
+}
+
+export interface FourOptionsQuestion {
+  type: 'SINGLE_CHOICE';
+  prompt: string;
+  options: [QuestionOption, QuestionOption, QuestionOption, QuestionOption]; // Exactamente 4 opciones A, B, C, D
+  correct_option_id?: string;
+  explanation?: string;
+}
+
+export interface PredictionChallenge {
+  type: 'PREDICT_OUTPUT' | 'BUG_HUNT';
+  prompt: string;
+  code_snippet?: string;
+  options?: QuestionOption[];
+  expected_output?: string;
+  explanation?: string;
+}
+
+export interface LessonTriadEvaluation {
+  item_1_console: ConsoleChallenge;
+  item_2_options: FourOptionsQuestion;
+  item_3_prediction: PredictionChallenge;
+}
+
 export interface LessonDetail {
   id: string;
   section_id: string;
@@ -231,7 +304,8 @@ export interface LessonDetail {
   code_example: string;
   expected_output?: string;
   tip_markdown?: string;
-  question: LessonQuestion;
+  question?: LessonQuestion; // Legacy / compatibilidad
+  evaluation_triad?: LessonTriadEvaluation; // Modelo Oficial Tríada (ADR-011)
 }
 
 export interface LessonAnswerSubmission {
@@ -249,6 +323,27 @@ export interface LessonAnswerFeedback {
   hint?: string;
   explanation?: string;
   correct_option_ids?: string[]; // Solo presente en revisiones o aciertos
+  added_to_review_queue: boolean;
+}
+
+export interface LessonTriadSubmission {
+  lesson_id: string;
+  item_1_code: string;
+  item_2_selected_option_id: string;
+  item_3_answer: string;
+}
+
+export interface LessonTriadFeedback {
+  is_completed: boolean;
+  stars_earned: 1 | 2 | 3;
+  items_passed: {
+    console: boolean;
+    options: boolean;
+    prediction: boolean;
+  };
+  xp_earned: number;
+  feedback_message: string;
+  console_output?: string;
   added_to_review_queue: boolean;
 }
 

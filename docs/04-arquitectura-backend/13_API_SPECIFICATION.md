@@ -318,7 +318,36 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
 }
 ```
 
-### 6.7 UserMistakesNotebookItem (Cuaderno de Errores)
+### 6.6A LessonTriadSubmission y Feedback de Estrellas (ADR-011)
+**Request Payload (`POST /api/v1/learning/lessons/{id}/submit-triad`):**
+```json
+{
+  "lesson_id": "les-dom-02",
+  "item_1_code": "const submitBtn = document.querySelector('#btn-submit');",
+  "item_2_selected_option_id": "opt-a",
+  "item_3_answer": "Hola"
+}
+```
+
+**Response Payload (`200 OK`):**
+```json
+{
+  "is_completed": true,
+  "stars_earned": 3,
+  "items_passed": {
+    "console": true,
+    "options": true,
+    "prediction": true
+  },
+  "score_percentage": 100.0,
+  "xp_earned": 25,
+  "feedback_message": "¡Excelente! Dominaste el código, la teoría y la predicción al primer intento.",
+  "console_output": "Test 1: Passed ✅ (Found #btn-submit)\nTest 2: Passed ✅ (Correct type HTMLButtonElement)",
+  "added_to_review_queue": false
+}
+```
+
+### 6.7 UserMistakesNotebookItem (Cuaderno de Errores con Algoritmo SM-2)
 ```json
 {
   "id": "mstk-0f8a-001",

@@ -79,7 +79,242 @@ erDiagram
 
 ---
 
-## 5. Resumen de entidades y trazabilidad
+## 5. Esquemas Documentales NoSQL en MongoDB (Currículo y Grafo de Aprendizaje)
+
+MongoDB almacena la totalidad del contenido educativo en estructuras documentales jerárquicas BSON, diseñadas para servir cualquier recurso en $O(1)$ sin realizar `JOINs` relacionales.
+
+### 5.1 Colección `tracks` (Ramas Profesionales de Carrera)
+Agrupa las especializaciones profesionales de Koda (**Frontend**, **Backend**, **DevOps**, **Python**).
+
+```json
+{
+  "_id": { "$oid": "66e1b001a1c2d3e4f5a6b701" },
+  "slug": "frontend",
+  "name": "Frontend Developer",
+  "description": "HTML Semántico, CSS Moderno, JavaScript DOM, React 19 y Tailwind CSS",
+  "icon": "IconDeviceDesktop",
+  "color": "#38BDF8",
+  "sort_order": 1,
+  "is_active": true,
+  "created_at": { "$date": "2026-09-10T00:00:00.000Z" },
+  "updated_at": { "$date": "2026-09-10T00:00:00.000Z" }
+}
+```
+
+### 5.2 Colección `courses` (Nodos del Grafo DAG con Topología Relativa Tier/Lane)
+Cada curso representa un nodo dentro del canvas interactivo del Roadmap. **No almacena coordenadas de píxeles fijas (`graph_x`, `graph_y`)**, sino una **topología relativa de rejilla** (`tier` y `lane`), permitiendo que el mapa crezca horizontalmente de manera infinita mientras el motor de renderizado del frontend calcula las curvas SVG automáticamente.
+
+```json
+{
+  "_id": { "$oid": "66e1b001a1c2d3e4f5a6b702" },
+  "slug": "react-hooks",
+  "track_slug": "frontend",
+  "code": "F1",
+  "title": "REACT & HOOKS",
+  "subtitle": "RQ JS DOM",
+  "variant": "branch",
+  "icon_type": "atom",
+  "topology": {
+    "tier": 4,
+    "lane": 1,
+    "lane_name": "top_branch"
+  },
+  "visual_style": {
+    "node_color": "#06B6D4",
+    "glow_color": "rgba(6, 182, 212, 0.45)",
+    "laser_color": "#38BDF8",
+    "animation_preset": "laser_flow_fast",
+    "line_dash": "solid"
+  },
+  "prerequisites": ["js-dom"],
+  "prerequisite_label": "RQ JS DOM",
+  "is_apex_gate": false,
+  "xp_reward": 150,
+  "max_stars": 9
+}
+```
+
+* **`topology.tier` (Paso / Columna horizontal $\rightarrow$):** Progresión cronológica (`1, 2, 3...`).
+* **`topology.lane` (Carril vertical $\updownarrow$):** `0` = Tronco central, `1` = Bifurcación superior, `-1` = Bifurcación inferior.
+* **`visual_style`:** Configuración cosmética y de aceleración por hardware.
+
+### 5.3 Colección `visual_effects` (Catálogo Maestro de Presets de Animación)
+Define los efectos físicos de láseres, halos, radares y partículas acelerados 100% por GPU (`will-change: stroke-dashoffset, transform`), evitando cadenas mágicas en los cursos.
+
+```json
+[
+  {
+    "_id": { "$oid": "66e1b001a1c2d3e4f5a6b720" },
+    "key": "laser_flow_fast",
+    "name": "Flujo Láser Fotónico de Alta Velocidad",
+    "target": "edge",
+    "engine": "svg_gpu",
+    "config": {
+      "css_class": "animate-laser-flow",
+      "duration_ms": 1200,
+      "timing_function": "linear",
+      "dash_array": "20 100",
+      "direction": "forward",
+      "repeat": "infinite"
+    },
+    "glow": {
+      "blur_px": 6,
+      "spread_px": 2,
+      "default_color": "#38BDF8"
+    }
+  },
+  {
+    "_id": { "$oid": "66e1b001a1c2d3e4f5a6b721" },
+    "key": "sonar_radar_pulse",
+    "name": "Pulso Sonar Radar Activo",
+    "target": "node_halo",
+    "engine": "svg_gpu",
+    "config": {
+      "css_class": "animate-sonar-wave",
+      "duration_ms": 3200,
+      "rings_count": 2,
+      "orbit_satellite": true,
+      "satellite_orbit_s": 8
+    },
+    "glow": {
+      "blur_px": 15,
+      "spread_px": 4,
+      "default_color": "rgba(249, 115, 22, 0.6)"
+    }
+  }
+]
+```
+
+### 5.4 Colección `modules` y `sections`
+Subdivisiones temáticas y paquetes de 10 micro-lecciones.
+
+```json
+{
+  "_id": { "$oid": "66e1b001a1c2d3e4f5a6b710" },
+  "slug": "mod-html-fundamentos",
+  "course_slug": "html-semantico",
+  "code": "M1",
+  "title": "Estructura del Documento y Etiquetas Principales",
+  "order_index": 1,
+  "sections_count": 3
+}
+```
+
+### 5.5 Colección `lessons` (Micro-lección Atómica con la Tríada de Evaluación)
+Cada lección se compone de teoría sintética ($< 2\text{ min}$) y una **Tríada de Evaluación Progresiva de 3 Ítems**:
+
+1. **Ítem 1 (`CONSOLE_CHALLENGE`):** Desafío de código en editor interactivo con consola/terminal integrada y validación por casos de prueba (`stdout` / `test_cases`).
+2. **Ítem 2 (`SINGLE_CHOICE`):** Pregunta conceptual de selección múltiple con exactamente **4 opciones de respuesta** (1 correcta + 3 distractores plausibles).
+3. **Ítem 3 (`PREDICT_OUTPUT` / `BUG_HUNT`):** Ejercicio de predicción de resultado o detección/corrección de bugs en código fuente.
+
+```json
+{
+  "_id": { "$oid": "66e1b001a1c2d3e4f5a6b730" },
+  "slug": "html-etiqueta-section",
+  "section_slug": "sec-html-semantica-01",
+  "course_slug": "html-semantico",
+  "order_index": 3,
+  "content_version": 1,
+  "title": "Estructuración Semántica con <section>",
+  "theory_markdown": "El elemento `<section>` representa una sección genérica y autónoma de un documento HTML...",
+  "code_example": "<section>\n  <h2>Perfil de Usuario</h2>\n  <p>Detalles del estudiante...</p>\n</section>",
+  "tip_markdown": "Usa `<section>` únicamente cuando el contenido cuente con un encabezado temático natural.",
+  
+  "evaluation_triad": {
+    "item_1_console": {
+      "type": "CONSOLE_CHALLENGE",
+      "instruction": "Escribe una función `esMayorDeEdad(edad)` que retorne true si la edad es >= 18.",
+      "starter_code": "function esMayorDeEdad(edad) {\n  // Tu código aquí\n}",
+      "solution_code": "function esMayorDeEdad(edad) {\n  return edad >= 18;\n}",
+      "test_cases": [
+        { "input": "20", "expected_output": "true", "is_hidden": false },
+        { "input": "15", "expected_output": "false", "is_hidden": false },
+        { "input": "18", "expected_output": "true", "is_hidden": true }
+      ],
+      "timeout_ms": 2500
+    },
+
+    "item_2_options": {
+      "type": "SINGLE_CHOICE",
+      "prompt": "¿Cuál es la principal ventaja de usar <section> en lugar de un contenedor <div> genérico?",
+      "options": [
+        { "id": "opt-a", "text": "Proporciona significado semántico y accesibilidad para lectores de pantalla y motores de búsqueda" },
+        { "id": "opt-b", "text": "Aplica automáticamente estilos visuales de flexbox y espaciado interno" },
+        { "id": "opt-c", "text": "Convierte el texto interno a negrita de forma predeterminada en el navegador" },
+        { "id": "opt-d", "text": "Evita que otros estilos CSS afecten a los elementos hijos dentro del contenedor" }
+      ],
+      "correct_option_id": "opt-a",
+      "explanation": "<section> comunica intención estructural en el DOM, mejorando la navegación accesible."
+    },
+
+    "item_3_prediction": {
+      "type": "PREDICT_OUTPUT",
+      "prompt": "Dado el código `const edad = 17; console.log(edad >= 18 ? 'Adulto' : 'Menor');`, ¿cuál es la salida exacta?",
+      "options": [
+        { "id": "p-1", "text": "Menor" },
+        { "id": "p-2", "text": "Adulto" },
+        { "id": "p-3", "text": "true" },
+        { "id": "p-4", "text": "undefined" }
+      ],
+      "correct_option_id": "p-1",
+      "explanation": "La condición `17 >= 18` evalúa a `false`, seleccionando la segunda rama del operador ternario."
+    }
+  }
+}
+```
+
+### 5.6 Regla Algorítmica de Concesión de Estrellas (1–3 ⭐)
+Las estrellas no son cosméticas; miden el rigor en la resolución de la Tríada al primer intento:
+* ⭐⭐⭐ **(3 Estrellas - Maestría):** Aprueba los **3 ítems al primer intento** (Consola sin errores + Pregunta de 4 opciones correcta + Predicción correcta).
+* ⭐⭐ **(2 Estrellas - Notable):** Aprueba **2 de los 3 ítems** al primer intento (ej. consola y predicción superados, pero erró la opción múltiple).
+* ⭐ **(1 Estrella - Aprobado Básico):** Aprueba **solo 1 ítem** al primer intento o resolvió la lección tras solicitar pistas y reintentos.
+* **0 Estrellas:** No superó el desafío de consola obligatorio; la lección no se da por completada.
+
+---
+
+## 6. Arquitectura de Conexión y Enlace Híbrido Desacoplado
+
+La conexión entre **MongoDB** y **Supabase PostgreSQL** se realiza en la **capa de aplicación de NestJS**, acelerada por **Redis L2 Cache**:
+
+```mermaid
+sequenceDiagram
+    participant FE as Frontend (Next.js)
+    participant API as NestJS Gateway / Services
+    participant REDIS as Redis L2 Cache
+    participant MONGO as MongoDB (Contenido)
+    participant PG as PostgreSQL (Transaccional)
+    participant BULL as BullMQ (Colas Redis)
+
+    Note over FE,PG: 1. Consulta del Roadmap con Fusión en Memoria
+    FE->>API: GET /api/v1/roadmap/branches/frontend
+    API->>REDIS: GET koda:track:frontend:nodes
+    alt Cache Hit
+        REDIS-->>API: Nodos del Grafo (Tier, Lane, FX)
+    else Cache Miss
+        API->>MONGO: courses.find({ track_slug: 'frontend' })
+        MONGO-->>API: Documentos de cursos con topología
+        API->>REDIS: SET koda:track:frontend:nodes (TTL 24h)
+    end
+    API->>PG: SELECT course_slug, stars_earned, is_unlocked FROM user_module_progress WHERE user_id = :uid
+    PG-->>API: Registros de progreso y estrellas del usuario
+    Note over API: Fusión en memoria: Mapea estrellas y evalúa prereqs (RQ)
+    API-->>FE: Payload unificado { branch, nodes: GraphNode[], connections: GraphEdge[] }
+
+    Note over FE,BULL: 2. Envío de Lección y Evaluación de la Tríada
+    FE->>API: POST /api/v1/learning/attempts (Idempotency-Key)
+    API->>REDIS: GET koda:lesson:html-etiqueta-section:v1
+    REDIS-->>API: Documento de lección con test cases y respuestas
+    Note over API: Verifica Código en sandbox + Opciones (4) + Predicción
+    API->>PG: INSERT INTO attempts (kind, score, stars_awarded, is_passed)
+    PG-->>API: Intento registrado (ACID)
+    API->>BULL: addJob('lesson_completed_effects', { userId, stars, xp })
+    API-->>FE: Feedback instantáneo (<50 ms) con estrellas ganadas (1-3⭐)
+    Note over BULL,PG: Worker en Background actualiza XP Ledger, Rachas y Cuaderno SM-2
+```
+
+---
+
+## 7. Resumen de entidades y trazabilidad
 
 | # | Entidad | Tabla | RF / RNF principales | Rol en la Plataforma |
 |---|---|---|---|---|
