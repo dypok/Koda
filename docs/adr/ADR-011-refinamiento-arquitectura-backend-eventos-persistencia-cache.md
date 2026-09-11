@@ -61,6 +61,23 @@ Con la adopción de NestJS (`ADR-008`), la persistencia híbrida con MongoDB y S
   - WebAssembly (Pyodide) en el frontend solo provee feedback interactivo en tiempo real al estudiante.
   - El backend valida la solución contra suites de pruebas cerradas antes de persistir el progreso.
 
+### H. Topología Relativa de Rejilla (Tier/Lane) y Catálogo NoSQL de Efectos Visuales
+- Se erradican las coordenadas fijas de píxeles (`graph_x`, `graph_y`) en los documentos de MongoDB.
+- Se adopta la **topología de rejilla relativa**:
+  - `tier`: Paso / columna horizontal progresiva hacia la derecha ($1, 2, 3 \dots$).
+  - `lane`: Carril vertical (`0` = central, `1` = superior, `-1` = inferior).
+- Colección `visual_effects`: Catálogo maestro de animaciones aceleradas 100% por GPU (`laser_flow_fast`, `sonar_radar_pulse`, `boss_threat_pulse`), desacoplando el diseño cosmético del código fuente.
+
+### I. Tríada Evaluativa de Lección (3 Ítems) y Concesión de Estrellas (1–3⭐)
+- Cada lección se evalúa mediante una tríada pedagógica integral:
+  1. **Ítem 1 (Consola Interactiva):** Desafío de código en editor con ejecución de consola y assertions automáticas.
+  2. **Ítem 2 (Comprensión Teórica):** Pregunta conceptual con exactamente **4 opciones de respuesta** (A, B, C, D).
+  3. **Ítem 3 (Predicción / Bug Hunt):** Predicción de salida por consola o detección/corrección de error de sintaxis/lógica.
+- **Cálculo de Estrellas:**
+  - ⭐⭐⭐ (3 Estrellas): Aprueba los 3 ítems al 1er intento.
+  - ⭐⭐ (2 Estrellas): Aprueba 2 de los 3 ítems al 1er intento.
+  - ⭐ (1 Estrella): Aprueba 1 ítem al 1er intento o completó tras reintentos formativos.
+
 ---
 
 ## 3. Consecuencias y Beneficios
