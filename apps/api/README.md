@@ -54,4 +54,4 @@ Copia el archivo de ejemplo para configurar tus credenciales locales:
 cp .env.example .env
 ```
 
-Consulta [`../../docs/21_DEPLOYMENT.md`](../../docs/21_DEPLOYMENT.md) para más detalles sobre cada variable requerida.
+Consulta [`../../docs/05-devops-seguridad/21_DEPLOYMENT.md`](../../docs/05-devops-seguridad/21_DEPLOYMENT.md) para más detalles sobre cada variable requerida.

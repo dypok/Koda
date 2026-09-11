@@ -1,7 +1,8 @@
 # 07 — Historias de Usuario
 
-> **Estado:** En planificación · **Versión del documento:** 1.0.0 · **Fecha:** 2026-08-29
-> Complementa a `01_PROJECT_OVERVIEW.md`, `02_PROBLEM_STATEMENT.md`, `03_OBJECTIVES.md`, `04_SCOPE.md`, `05_FUNCTIONAL_REQUIREMENTS.md` y `06_NON_FUNCTIONAL_REQUIREMENTS.md`. No duplica su contenido; lo materializa en historias verificables. Cada historia mapea a ≥1 `RF-*` (`05`) y a ≥1 `UC-*` (`08`). Los flujos navegables se detallan en `09_USER_FLOWS.md`.
+> **Estado:** En planificación · **Versión del documento:** 2.0.0 · **Fecha:** 2026-09-10
+> Complementa a los documentos de `docs/01-producto-negocio/` y `docs/02-requisitos-ux/`. No duplica su contenido; lo materializa en historias verificables. Cada historia mapea a ≥1 `RF-*` y a ≥1 `UC-*`.
+> **Nota de Backlog Ágil:** Para la descomposición operativa de tareas técnicas, épicas refinadas con subtasks por rol (Frontend, Backend, BD) y Definition of Done (DoD), consulta [`documentation/UserHistories/`](../../documentation/UserHistories/README.md).
 
 ---
 
