@@ -1,0 +1,3 @@
+# Changelog: 11-09-2026
+
+- [Friday]-[11/09/2026]-[07:52] - Daniel Echeverría : Redacción y formalización de ADR-010 (Arquitectura Backend Hexagonal Modular con Comunicación Basada en Eventos de Dominio y Patrón Cache-Aside en Redis); actualización integral de docs/04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md a v2.2.0 incorporando el nuevo diagrama de secuencia asíncrono no bloqueante con EventEmitter2 para lecciones (<50 ms), patrones de diseño de alto rendimiento (Repository & Ports, Strategy/Factory para ICodeRunner y Evaluadores, Cache-Aside L2 en Redis, Outbox/Worker para certificados e Idempotency Key) y la estructura de carpetas empresarial Bounded Contexts en apps/api/src/.
