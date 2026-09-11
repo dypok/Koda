@@ -20,7 +20,7 @@ interface RoadmapStoreState {
   setActiveNode: (id: string | null) => void;
   setBranch: (branchId: CareerBranchId) => void;
   setPanOffset: (pan: { x: number; y: number }) => void;
-  setZoomLevel: (zoom: number) => void;
+  setZoomLevel: (zoom: number | ((prev: number) => number)) => void;
   zoomIn: () => void;
   zoomOut: () => void;
   resetZoom: () => void;
@@ -58,7 +58,10 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     });
   },
   setPanOffset: (pan) => set({ panOffset: pan }),
-  setZoomLevel: (zoom) => set({ zoomLevel: Math.max(50, Math.min(200, zoom)) }),
+  setZoomLevel: (zoom) =>
+    set((s) => ({
+      zoomLevel: Math.max(50, Math.min(200, typeof zoom === 'function' ? zoom(s.zoomLevel) : zoom)),
+    })),
   zoomIn: () => set((s) => ({ zoomLevel: Math.min(200, s.zoomLevel + 15) })),
   zoomOut: () => set((s) => ({ zoomLevel: Math.max(50, s.zoomLevel - 15) })),
   resetZoom: () => set({ zoomLevel: 100, panOffset: { x: 0, y: 0 } }),
