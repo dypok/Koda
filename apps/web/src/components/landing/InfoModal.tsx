@@ -52,12 +52,12 @@ export const InfoModal: React.FC<InfoModalProps> = ({
 
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800/80 bg-slate-950/60 backdrop-blur-md relative z-10">
             <div className="flex items-center gap-3">
-              <div className="relative flex h-8 w-8 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 overflow-hidden shadow-sm">
+              <div className="relative flex h-8 w-8 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 p-0.5 overflow-hidden shadow-sm">
                 <Image
-                  src="/logo.png"
+                  src="/brand/koda-mascot-cartoon-2d.svg"
                   alt="KodaAcademy Logo"
-                  width={32}
-                  height={32}
+                  width={28}
+                  height={28}
                   className="object-contain"
                 />
               </div>

@@ -25,19 +25,14 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 mb-12">
           {/* Marca & Misión */}
           <div className="md:col-span-3 space-y-4">
-            <Link href="/" className="flex items-center gap-3 group w-fit">
-              <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 group-hover:border-amber-500/40 group-hover:scale-105 transition-all overflow-hidden shadow-sm">
-                <Image
-                  src="/logo.png"
-                  alt="KodaAcademy Logo"
-                  width={40}
-                  height={40}
-                  className="object-contain"
-                />
-              </div>
-              <span className="font-display text-2xl font-bold tracking-tight bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
-                KodaAcademy
-              </span>
+            <Link href="/" className="flex items-center focus:outline-none w-fit" aria-label="Koda">
+              <Image
+                src="/brand/logo.svg"
+                alt="Koda"
+                width={498}
+                height={185}
+                className="h-7 sm:h-8 w-auto object-contain select-none"
+              />
             </Link>
 
             <p className="text-slate-400 text-xs sm:text-sm max-w-sm leading-relaxed font-sans">

@@ -27,10 +27,11 @@ export const siteMetadata: Metadata = {
   creator: 'KodaAcademy',
   icons: {
     icon: [
-      { url: '/favicon.ico' },
-      { url: '/icon.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon.svg?v=2', type: 'image/svg+xml' },
+      { url: '/favicon.ico?v=2' },
+      { url: '/icon.png?v=2', sizes: '192x192', type: 'image/png' },
     ],
-    apple: '/apple-icon.png',
+    apple: '/icon.png?v=2',
   },
   openGraph: {
     type: 'website',
