@@ -26,8 +26,8 @@
 - [ ] [BACKEND] Implementar `AuthModule` en `apps/api/src/modules/auth/` con endpoints `POST /auth/register`, `POST /auth/login`, `POST /auth/refresh`, `POST /auth/logout`.
 - [ ] [BACKEND] Configurar `JwtAuthGuard` y decorador `@CurrentUser()` para inyección de usuario autenticado en controladores.
 - [ ] [BACKEND] Implementar servicio de rotación de Refresh Tokens con almacenamiento de hash en tabla de sesiones.
-- [ ] [FRONTEND] Diseñar formulario de login y registro en `apps/web/src/app/(auth)/` con validación en cliente (Zod / React Hook Form).
 - [ ] [FRONTEND] Configurar interceptor en `apiClient` para auto-renovación silenciosa del token al recibir 401.
+- [x] [FRONTEND] Diseñar formulario de registro interactivo en `apps/web/src/app/(auth)/` con validación Zod, feedback de errores, paleta Dark Navy y React Hook Form (`feat/register-frontend`).
 - [ ] [FRONTEND] Persistir estado de autenticación en Zustand `authStore` y sincronizar con cookie de sesión.
 
 **DoD adicional para esta US:**

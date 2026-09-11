@@ -1,7 +1,12 @@
 # 11 — Arquitectura del Sistema
 
-> **Estado:** En planificación · **Versión del documento:** 1.0.0 · **Fecha:** 2026-08-29
-> Complementa a `01_PROJECT_OVERVIEW.md` §24–§31, `03_OBJECTIVES.md` §6 (OT-01 a OT-04), `04_SCOPE.md` §5 y §9, `05_FUNCTIONAL_REQUIREMENTS.md` (128 RF) y `06_NON_FUNCTIONAL_REQUIREMENTS.md` (RNF-005/006/030–032). No duplica su contenido; lo materializa en decisiones, componentes y flujos verificables. El detalle de datos, API y cada motor se expande en `12_DATABASE_DESIGN.md`, `13_API_SPECIFICATION.md`, `14_LEARNING_SYSTEM.md`, `15_QUIZ_EXAM_SYSTEM.md`, `16_GAMIFICATION.md`, `17_CERTIFICATION.md`, `18_MONETIZATION.md`, `23_CONTENT_SPECIFICATION.md` y `25_ADMIN_SYSTEM.md`.
+> **Estado:** Aprobado · **Versión del documento:** 2.2.0 · **Fecha:** 2026-09-11
+> Complementa a `docs/01-producto-negocio/`, `docs/02-requisitos-ux/`, `ADR-001` (Monorepo), `ADR-002` (Supabase), `ADR-007` (Grafo DAG), `ADR-008` (NestJS Oficial), `ADR-009` (Persistencia Híbrida) y `ADR-010` (Arquitectura Hexagonal Modular con Eventos de Dominio y Cache-Aside). Materializa la arquitectura técnica integral:
+> - **Frontend:** Next.js 15 (App Router, React 19, Tailwind CSS, PixiJS WebGL).
+> - **Backend:** Monolito Modular Hexagonal en NestJS (`apps/api`) con desacoplamiento reactivo vía Domain Events (`@nestjs/event-emitter`).
+> - **Persistencia Híbrida:** Supabase (PostgreSQL 15+) para transacciones y estado + MongoDB para contenido pedagógico de alto volumen.
+> - **Aceleración L2:** Patrón Cache-Aside en Redis para entrega de lecciones en $O(1)$ (< 2 ms).
+> - **Contratos Compartidos:** Paquete `@koda/types` tipado de extremo a extremo.
 
 ---
 
@@ -12,9 +17,7 @@ Este documento define **cómo está estructurado el sistema**, no qué hace (ver
 - Separar responsabilidades y evitar acoplamiento prohibido (`06` RNF-030/031).
 - Garantizar que agregar un lenguaje es solo contenido + config (`06` RNF-006, `03` OT-03).
 - Permitir escalado horizontal sin re-arquitectura (`06` RNF-005).
-- Servir como base para `12` (datos), `13` (API), `14`–`18` (motores) y `21_DEPLOYMENT.md`.
-
-**Fuera de alcance:** el esquema exacto de tablas (`12`), el contrato OpenAPI (`13`) y la especificación pedagógica del contenido (`23`). Aquí se definen los límites y contratos entre componentes.
+- Servir como base para `12_DATABASE_DESIGN.md`, `13_API_SPECIFICATION.md`, motores de dominio y `21_DEPLOYMENT.md`.
 
 **Principio rector:** arquitectura modular, desacoplada y escalable. Ningún texto de lección ni pregunta vive en el código del motor (`01` §31).
 
@@ -24,12 +27,14 @@ Este documento define **cómo está estructurado el sistema**, no qué hace (ver
 
 ### 2.1 Estilo arquitectónico
 
-| Decisión | Elección recomendada | Justificación |
+| Decisión | Elección oficial | Justificación |
 |---|---|---|
-| Estilo | **Modular monolito con fronteras explícitas** en MVP; preparado para extraer servicios sin reescribir | Ver §13.1 — un monolito modular reduce complejidad operativa en MVP (un deploy, una BD) y cumple `RNF-005` (stateless + réplicas) sin el costo de microservicios prematuros. |
-| Comunicación interna | Llamadas en proceso vía **interfaces/puertos** (ports & adapters) | Permite extraer un motor a servicio independiente cambiando el adaptador, no el núcleo. |
-| Comunicación externa | **API REST versionada** (`/api/v1`) + JSON | Ver `03` OT-04 y `06` RNF-032; estándar, cacheable y documentable con OpenAPI. GraphQL queda como Post-MVP solo si `26_ANALYTICS.md` demuestra necesidad de agregaciones complejas. |
-| Estado de sesión | **Stateless** (JWT corto + refresh rotativo) | Permite balanceo sin sticky sessions (`RNF-005`). Sesión en memoria local es un defecto bloqueante. |
+| Estilo | **Monolito Modular Hexagonal con Domain Events** (`ADR-008`, `ADR-010`) | Bounded Contexts independientes en NestJS (`@Module()`), desacoplamiento reactivo asíncrono con `@nestjs/event-emitter` y puertos/adaptadores. |
+| Persistencia | **Híbrida Políglota (PostgreSQL + MongoDB)** (`ADR-009`) | PostgreSQL (Supabase) para transacciones ACID y MongoDB para entrega $O(1)$ de lecciones y grafo curricular. |
+| Aceleración | **Cache-Aside L2 en Redis** (`ADR-010`) | Almacena rutas y lecciones en Redis con TTL de 24h e invalidación reactiva ante eventos de publicación. |
+| Comunicación interna | **Eventos de Dominio Asíncronos + Interfaces Tipadas (Ports)** | Elimina dependencias circulares y llamadas bloqueantes en cascada; latencia HTTP de lecciones $p95 < 50\text{ ms}$. |
+| Comunicación externa | **API REST OpenAPI 3.0.3** (`/api/v1`) | Estándar, cacheable, documentada automáticamente mediante Swagger en NestJS (`13_API_SPECIFICATION.md`). |
+| Estado de sesión | **Stateless** (JWT corto 15 min + refresh rotativo 7d HttpOnly) | Permite balanceo sin sticky sessions (`RNF-005`). |
 
 > Alternativa descartada en MVP: microservicios por motor. Se adopta solo si métricas de `21`/`26` muestran que un motor (ej. Evapythontion) es cuello de botella aislado y justifica el costo operativo. La frontera modular ya deja esa puerta abierta.
 
@@ -145,45 +150,61 @@ flowchart TB
     class DB,OBJ,CACHE,EMAIL,ADS_PROV,PAY_PROV,OBS infra
 ```
 
-### 2.4 Diagrama de flujo de datos — sesión de aprendizaje
+### 2.4 Diagrama de flujo de datos — sesión de aprendizaje (Event-Driven & Cache-Aside)
 
 ```mermaid
 sequenceDiagram
     participant U as Usuario
     participant FE as Frontend
-    participant API as API /v1
-    participant LE as Learning Engine
-    participant QE as Question Engine
-    participant EE as Evapythontion Engine
-    participant PE as Progress Engine
-    participant GE as Gamification Engine
-    participant CE as Content Engine
+    participant API as API Gateway / Controllers
+    participant CACHE as Redis Cache (L2)
+    participant CE as Content Engine (MongoDB)
+    participant EVAL as Evaluation Engine (Strategy)
+    participant PE as Progress Engine (PostgreSQL)
+    participant BUS as Domain Event Bus (EventEmitter2)
+    participant GE as Gamification Listener (Async)
+    participant ST as Streak Listener (Async)
 
-    U->>FE: Abre lección (Lenguaje→Módulo→Sección)
-    FE->>API: GET /lecciones/{id} (JWT)
-    API->>CE: resolver contenido versionado
-    CE-->>API: lección + preguntas ancladas
-    API->>LE: validar prerrequisitos + estado
-    LE-->>API: ok (disponible/en progreso)
-    API-->>FE: lección renderizable
+    Note over U,CE: 1. Consulta de Lección con Patrón Cache-Aside (ADR-010)
+    U->>FE: Abre lección (Rama→Curso→Módulo→Sección)
+    FE->>API: GET /api/v1/content/lessons/{id} (JWT)
+    API->>CACHE: GET koda:lesson:{id}
+    alt Cache Hit (O(1) < 2ms)
+        CACHE-->>API: Documento cacheado en memoria
+    else Cache Miss
+        CACHE-->>API: null
+        API->>CE: MongoLessonRepository.findById()
+        CE-->>API: Documento BSON lección + reactivo
+        API->>CACHE: SET koda:lesson:{id} (TTL 24h)
+    end
+    API-->>FE: Lección atómica renderizable (p95 < 20ms)
 
-    U->>FE: Responde ejercicio
-    FE->>API: POST /intentos (Idempotency-Key)
-    API->>QE: validar tipo + respuesta
-    QE->>EE: calificar (determinista, servidor)
-    EE->>PE: persistir intento atómico
-    PE->>GE: evento XP/racha/logro
-    GE-->>PE: XP otorgada / logro desbloqueado
-    PE-->>API: resultado + XP + progreso
-    API-->>FE: feedback < 1s (RNF-010) + explicación
+    Note over U,ST: 2. Envío de Intento y Desacoplamiento por Eventos (ADR-010)
+    U->>FE: Responde desafío interactivo
+    FE->>API: POST /api/v1/learning/attempts (Idempotency-Key)
+    API->>EVAL: QuestionEvaluatorFactory.get(type).evaluate()
+    EVAL-->>API: resultado formativo + puntuación
+    API->>PE: PostgresProgressRepository.saveAttempt() (ACID)
+    PE-->>API: Intento registrado
 
-    U->>FE: Completa sección
-    FE->>API: POST /secciones/{id}/completar
-    API->>PE: verificar lecciones obligatorias
-    PE->>GE: +10 XP sección (configurable)
+    Note over API,ST: Emisión asíncrona en memoria: No bloquea respuesta al usuario
+    API->>BUS: emit('lesson.completed', eventPayload)
+    API-->>FE: Feedback instantáneo (< 50ms) + explicación
+
+    par Proceso Asíncrono en Background
+        BUS-)GE: OnLessonCompleted -> Calcular nivel y XP Ledger
+        GE->>PE: Guardar xp_transactions en Supabase
+    and
+        BUS-)ST: OnLessonCompleted -> Verificar ventana racha & freeze
+    end
+
+    Note over U,FE: 3. Cierre de Sección y Recompensa
+    U->>FE: Completa lección 10 de la sección
+    FE->>API: POST /api/v1/learning/sections/{id}/complete
+    API->>PE: consolidar estrellas (1-3⭐) y candado
     API-->>FE: Sección completada → Recompensa
-    FE->>FE: Si gratuito → Ads intersticial (async, no bloqueante)
-    FE->>U: Siguiente sección
+    FE->>FE: Si gratuito → Anuncio intersticial (async, no bloqueante)
+    FE->>U: Siguiente sección desbloqueada
 ```
 
 ---
@@ -227,52 +248,80 @@ Renderizar la experiencia de aprendizaje, catálogo, perfil, ruta, verificación
 
 ### 4.1 Responsabilidad
 
-Exponer la API REST `/api/v1`, orquestar los 9 motores desacoplados, aplicar reglas pedagógicas/gamificadas y persistir de forma atómica en Supabase PostgreSQL.
+Exponer la API REST `/api/v1`, orquestar los Bounded Contexts modulares, aplicar reglas pedagógicas/gamificadas mediante Domain Events y persistir con arquitectura híbrida (Supabase PostgreSQL + MongoDB + Redis L2).
 
-### 4.2 Decisiones justificadas (Stack Oficial)
+### 4.2 Decisiones justificadas (Stack Oficial — ADR-008, ADR-009, ADR-010)
 
 | Aspecto | Tecnología Seleccionada | Justificación |
 |---|---|---|
-| **Lenguaje / Runtime** | **Node.js (NestJS con TypeScript)** | Arquitectura modular nativa con inyección de dependencias (`@Module()`), tipado 100% compartido con Next.js vía monorepo PNPM Workspaces (`@koda/types`), y OpenAPI generado automáticamente. |
-| **Arquitectura interna** | **Monolito modular desacoplado** | Los 9 motores funcionan como módulos independientes con límites estrictos de importación; escalable horizontalmente y extraíble a microservicios si se requiere. |
+| **Lenguaje / Runtime** | **Node.js (NestJS con TypeScript)** | Arquitectura modular nativa con inyección de dependencias (`@Module()`), tipado 100% compartido con Next.js vía monorepo PNPM Workspaces (`@koda/types`), y OpenAPI generado automáticamente (`ADR-008`). |
+| **Arquitectura interna** | **Monolito Modular Hexagonal con Domain Events** | Puertos y adaptadores ligeros por contexto delimitado; comunicación inter-módulo asíncrona mediante `@nestjs/event-emitter` (`ADR-010`). |
+| **Persistencia Híbrida** | **Supabase PostgreSQL + MongoDB** | PostgreSQL para transacciones ACID (usuarios, progreso, estrellas, ledger XP); MongoDB para entrega $O(1)$ de cursos, módulos y lecciones (`ADR-009`). |
+| **Caché y Aceleración** | **Cache-Aside L2 con Redis** | Entrega de lecciones y catálogo en $< 2\text{ ms}$ con TTL escalonado e invalidación reactiva ante publicación (`ADR-010`). |
 | **Validación y DTOs** | **Zod / class-validator + DTOs estrictos** | Validación estricta en servidor de entradas antes de llegar a los motores (`RNF-009`, `RNF-036`). |
 | **Autenticación** | **JWT Stateless (15 min) + Refresh rotativo en HttpOnly Cookie** | Stateless para escalabilidad (`RNF-005`); refresh rotativo con detección de reuso mitiga robo de token (`19_SECURITY.md`). |
-| **Motor de Ejecución Multi-Lenguaje** | **Interfaz `ICodeRunner` (Wasm + Sandbox Judge0/Piston)** | Ejecución cliente (Wasm) para Python/Python/JS; delegación a sandbox seguro (Judge0 / Piston en Docker) para lenguajes compilados (Rust, C, C++, C#, Go). |
-| **Concurrencia y Transacciones** | **Transacciones ACID en Supabase PostgreSQL + Colas Async** | Integridad absoluta en otorgamiento de XP y estrellas (`RNF-033`); tareas pesadas de subida a Google Drive no bloquean la respuesta HTTP. |
+| **Motor de Ejecución Multi-Lenguaje** | **Interfaz `ICodeRunner` (Wasm + Sandbox Judge0/Piston)** | Ejecución cliente (Wasm) para Python/JS; delegación a sandbox seguro en Docker para lenguajes compilados (`ADR-006`). |
 
-### 4.3 Estructura de carpetas (backend NestJS monolito modular)
+### 4.3 Patrones de Diseño Clave (Arquitectura de Alto Rendimiento)
+
+1. **Patrón Repository & Ports (Hexagonal Ligero):** Los servicios de aplicación interactúan exclusivamente con interfaces de repositorio (`ICourseRepository`, `IProgressRepository`), desacoplándose de los drivers de Mongoose y PostgreSQL.
+2. **Patrón Domain Events (Desacoplamiento Temporal):** La finalización de lecciones emite `LessonCompletedEvent` en el bus en memoria. Gamificación y Rachas se calculan en background sin bloquear la respuesta HTTP (< 50 ms).
+3. **Patrón Strategy & Factory (`ICodeRunner` y Evaluadores):** `CodeExecutionFactory` resuelve la estrategia de ejecución (Wasm vs. Docker sandbox); `QuestionEvaluatorFactory` despacha la evaluación determinista según el tipo de reactivo (`SingleChoice`, `PredictOutput`, `FillBlank`).
+4. **Patrón Cache-Aside (Redis L2):** Consultas de lecciones y grafo DAG consultan primero Redis; si hay *Cache Miss*, recuperan de MongoDB, pueblan la caché con TTL 24h y retornan.
+5. **Patrón Outbox / Job Queue (Worker Asíncrono para Diplomas):** La subida a Google Drive API v3 (`ADR-003`) se encola como tarea diferida con reintentos exponenciales, evitando bloqueos de red en el cliente.
+6. **Patrón Idempotency Key con Redis:** Bloqueo de claves concurrentes (`SET NX`) en endpoints de mutación (`POST /intentos`) para evitar duplicación de XP ante reintentos de red.
+
+### 4.4 Estructura de carpetas (Backend NestJS Monolito Modular)
 
 ```
-src/
-├── modules/
-│   ├── auth/               # RF-AUTH/USR — hash Argon2id, tokens JWT, RBAC
-│   ├── users/              # RF-USR/PROF — perfil, avatar, preferencias
-│   ├── languages/          # RF-LANG — catálogo de lenguajes (Python, etc.)
-│   ├── learning/           # RF-LVL/DIAG/RUTA/MOD/SEC/LEC — candados y roadmap
-│   ├── questions/          # RF-PREG — banco versionado (11 tipos polimórficos)
-│   ├── evapythontion/         # RF-EVAL/QUIZ/EXAM — evapythondor determinista en servidor
-│   ├── progress/           # RF-PROG, RF-ESTRELLA-* — estrellas y desbloqueos
-│   ├── notebook/           # RF-CUADERNO-* — cuaderno de errores persistente
-│   ├── gamification/       # RF-XP/RACHA/LOGRO — economía XP, niveles y rachas
-│   ├── certification/      # RF-CERT/PDF — generación PDF + Google Drive API
-│   ├── runner/             # ICodeRunner — integración Judge0 / Piston / Wasm
-│   ├── monetization/       # RF-ADS/PREM — Ads/Pay adapters
-│   └── content/            # RF-ADM — Content Engine y validación declarativa
-├── common/
-│   ├── dto/                # DTOs compartidos (@koda/types)
-│   ├── guards/             # AuthGuard, RolesGuard, RateLimitGuard
-│   ├── interceptors/       # RequestIdInterceptor, IdempotencyInterceptor
-│   └── config/             # Configuración versionada de umbrales y XP
-├── infra/
-│   ├── db/                 # Supabase PostgreSQL (Prisma / Drizzle ORM)
-│   ├── storage/            # GoogleDriveStorageService (Service Account)
-│   ├── email/              # EmailAdapter (Resend / SendGrid)
-│   ├── ads/                # AdsAdapter abstracto
-│   └── cache/              # Redis (rate limiting y caché de contenido)
-└── main.ts / app.module.ts
+apps/api/src/
+├── common/                         # Kernel transversal
+│   ├── decorators/                 # @CurrentUser(), @Idempotent(), @Cacheable()
+│   ├── filters/                    # GlobalExceptionFilter (RFC 7807)
+│   ├── guards/                     # JwtAuthGuard, RolesGuard, RateLimitGuard
+│   ├── interceptors/               # RequestIdInterceptor, IdempotencyInterceptor
+│   └── pipes/                      # ZodValidationPipe
+│
+├── core/                           # Contratos y abstracciones de dominio
+│   ├── events/                     # LessonCompletedEvent, CoursePublishedEvent
+│   └── interfaces/                 # ICodeRunner, ICourseRepository, IXpRepository
+│
+├── modules/                        # Bounded Contexts modulares
+│   ├── auth/                       # Supabase Auth, JWT rotativo HttpOnly
+│   ├── users/                      # Perfiles, avatares, configuración
+│   ├── content/                    # MongoDB: Tracks, Cursos DAG, Módulos, Lecciones
+│   │   ├── domain/                 # Entidades y reglas de negocio puras
+│   │   ├── infrastructure/         # Mongoose schemas, MongoCourseRepository
+│   │   ├── content.controller.ts   # Endpoints REST /api/v1/content/*
+│   │   └── content.module.ts
+│   │
+│   ├── learning/                   # Progreso del alumno, candados RQ, estrellas
+│   │   ├── application/            # Casos de uso (CompleteLessonUseCase)
+│   │   ├── infrastructure/         # PostgresProgressRepository (Supabase)
+│   │   ├── learning.controller.ts
+│   │   └── learning.module.ts
+│   │
+│   ├── gamification/               # XP Ledger, Rachas, Logros (Reactivo a eventos)
+│   │   ├── listeners/              # OnLessonCompletedListener (Asíncrono)
+│   │   ├── gamification.service.ts
+│   │   └── gamification.module.ts
+│   │
+│   ├── certification/              # Generación PDF vectorial + Google Drive API v3
+│   ├── runner/                     # ICodeRunner (Pyodide Wasm + Docker sandbox)
+│   └── notebook/                   # Cuaderno de errores persistente
+│
+├── infra/                          # Adaptadores de infraestructura externa
+│   ├── database/
+│   │   ├── postgres/               # Conexión Supabase / TypeORM / Drizzle
+│   │   └── mongo/                  # Conexión Mongoose (@nestjs/mongoose)
+│   ├── cache/                      # RedisModule (Cache-Aside, Rate Limit)
+│   └── storage/                    # GoogleDriveStorageAdapter (Service Account)
+│
+├── app.module.ts                   # Orquestador raíz con EventEmitterModule
+└── main.ts                         # Bootstrap con Helmet, Swagger y Pipes globales
 ```
 
-> Regla de dependencia (`06` RNF-030): un import directo de `gamification` hacia `evapythontion` está **prohibido**. El flujo canónico es `evapythontion → progress → gamification`.
+> **Regla de Gobernanza de Dependencias (`RNF-030`):** La comunicación inter-módulos para efectos secundarios (XP, rachas, estadísticas) se realiza **únicamente** mediante publicación y suscripción de Eventos de Dominio (`@nestjs/event-emitter`). Los módulos de dominio nunca importan servicios internos de otros módulos de forma cruzada, previniendo dependencias circulares y habilitando la extracción a microservicios independientes en el futuro.
 
 ---
 
