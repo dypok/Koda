@@ -40,6 +40,7 @@ Los estados válidos son:
 | [**ADR-004**](ADR-004-motor-grafico-pixijs-mascota-koda.md) | Renderizado WebGL de Mascota Koda y Efectos con PixiJS v7 | ✅ Aprobado | 2026-09-02 | Aceleración por hardware, animaciones emocionales en tiempo real y confeti. |
 | [**ADR-005**](ADR-005-adopcion-python-lenguaje-oficial-mvp.md) | Adopción de Python 3.12 como Lenguaje Oficial del MVP | ✅ Aprobado | 2026-09-03 | Definición de Python como el único lenguaje de lanzamiento de Koda. |
 | [**ADR-006**](ADR-006-motor-ejecucion-hibrido-icoderunner.md) | Motor de Ejecución de Código Híbrido (`ICodeRunner`) | ✅ Aprobado | 2026-09-02 | Wasm en cliente (Pyodide) y sandbox Docker en backend (Piston). |
+| [**ADR-007**](ADR-007-arquitectura-roadmap-ramas-carrera-grafo-dag.md) | Arquitectura de Grafo DAG por Ramas de Carrera y Prerrequisitos | ✅ Aprobado | 2026-09-10 | 3 Ramas (Frontend, Backend, DevOps), modelo DAG, prerrequisitos 'RQ' y endpoints. |
 
 ---
 

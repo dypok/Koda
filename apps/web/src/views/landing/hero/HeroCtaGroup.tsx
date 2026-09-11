@@ -1,9 +1,10 @@
 import React from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { IconArrowRight, IconLogin } from '@tabler/icons-react';
 import { GradientButton } from '@/components/ui/gradient-button';
 
-export const HeroCtaGroup: React.FC<{ onOpenLogin?: () => void }> = ({ onOpenLogin }) => (
+export const HeroCtaGroup: React.FC = () => (
   <motion.div
     initial={{ opacity: 0, y: 24 }}
     whileInView={{ opacity: 1, y: 0 }}
@@ -12,22 +13,26 @@ export const HeroCtaGroup: React.FC<{ onOpenLogin?: () => void }> = ({ onOpenLog
     className="pt-2 flex flex-col items-center lg:items-start gap-3.5 w-full sm:w-auto transform-gpu"
   >
     <GradientButton
-      onClick={onOpenLogin}
+      asChild
       size="lg"
-      className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base shadow-none justify-center font-black group"
+      className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base justify-center group"
     >
-      Comenzar Ahora
-      <IconArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1.5" />
+      <Link href="/register">
+        Comenzar Ahora
+        <IconArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1.5" />
+      </Link>
     </GradientButton>
 
     <GradientButton
-      onClick={onOpenLogin}
+      asChild
       variant="secondary"
       size="lg"
-      className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base shadow-none justify-center font-bold border border-slate-700/80 hover:border-amber-400/50 group"
+      className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base justify-center font-bold border border-slate-700/80 hover:border-amber-400/50 group"
     >
-      <IconLogin className="w-5 h-5 text-amber-400/90 transition-transform duration-300 group-hover:scale-110" />
-      Ya tengo una cuenta
+      <Link href="/login">
+        <IconLogin className="w-5 h-5 text-amber-400/90 transition-transform duration-300 group-hover:scale-110" />
+        Ya tengo una cuenta
+      </Link>
     </GradientButton>
   </motion.div>
 );

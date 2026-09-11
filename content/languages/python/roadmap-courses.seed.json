@@ -1,0 +1,85 @@
+{
+  "language_slug": "python",
+  "sector_title": "SECTOR 01: PYTHON TRACK OVERVIEW",
+  "courses": [
+    {
+      "id": "py-basic",
+      "code": "01",
+      "slug": "python-basico",
+      "title": "PYTHON BÁSICO",
+      "subtitle": "FUNDAMENTOS & SINTAXIS",
+      "level": "basic",
+      "order_index": 1,
+      "stars_reward": 15,
+      "xp_reward": 115,
+      "graph": { "x": 140, "y": 290, "variant": "active", "icon": "brackets" }
+    },
+    {
+      "id": "py-intermediate",
+      "code": "02",
+      "slug": "python-intermedio",
+      "title": "PYTHON INTERMEDIO",
+      "subtitle": "POO & ESTRUCTURAS",
+      "level": "intermediate",
+      "order_index": 2,
+      "stars_reward": 12,
+      "xp_reward": 135,
+      "prerequisite_id": "py-basic",
+      "graph": { "x": 370, "y": 290, "variant": "locked", "icon": "lock" }
+    },
+    {
+      "id": "py-advanced",
+      "code": "03",
+      "slug": "python-avanzado",
+      "title": "PYTHON AVANZADO",
+      "subtitle": "ASYNCIO & CONCURRENCIA",
+      "level": "advanced",
+      "order_index": 3,
+      "stars_reward": 9,
+      "xp_reward": 140,
+      "prerequisite_id": "py-intermediate",
+      "graph": { "x": 600, "y": 290, "variant": "locked", "icon": "lock" }
+    },
+    {
+      "id": "py-fw-fastapi",
+      "code": "F1",
+      "slug": "fastapi-async",
+      "title": "FASTAPI ASYNC",
+      "subtitle": "MICROSERVICIOS REST",
+      "level": "framework",
+      "order_index": 4,
+      "stars_reward": 9,
+      "xp_reward": 150,
+      "prerequisite_id": "py-advanced",
+      "branch_line": 1,
+      "graph": { "x": 820, "y": 150, "variant": "branch", "icon": "server" }
+    },
+    {
+      "id": "py-fw-django",
+      "code": "F2",
+      "slug": "django-flask",
+      "title": "DJANGO & FLASK",
+      "subtitle": "FULL-STACK & ORM",
+      "level": "framework",
+      "order_index": 5,
+      "stars_reward": 18,
+      "xp_reward": 180,
+      "prerequisite_id": "py-advanced",
+      "branch_line": 2,
+      "graph": { "x": 820, "y": 430, "variant": "branch", "icon": "database" }
+    },
+    {
+      "id": "py-boss",
+      "code": "Ω",
+      "slug": "apex-master-gate",
+      "title": "APEX MASTER GATE",
+      "subtitle": "PROYECTO INTEGRAL PYTHON",
+      "level": "advanced",
+      "order_index": 6,
+      "stars_reward": 0,
+      "xp_reward": 500,
+      "prerequisite_id": "py-advanced",
+      "graph": { "x": 1020, "y": 290, "variant": "boss", "icon": "skull" }
+    }
+  ]
+}
