@@ -8,7 +8,7 @@
 
 ## 1. Propósito y alcance
 
-Este documento norma **cómo se redacta, ejemplifica, pregunta y corrige** en la plataforma para que cualquier persona —sin o con experiencia— avance sin fricción y la evapythonción mida comprensión real, no memoria ni adivinación.
+Este documento norma **cómo se redacta, ejemplifica, pregunta y corrige** en la plataforma para que cualquier persona —sin o con experiencia— avance sin fricción y la evaluación mida comprensión real, no memoria ni adivinación.
 
 **Dentro del alcance de este documento:**
 
@@ -37,7 +37,7 @@ Este documento norma **cómo se redacta, ejemplifica, pregunta y corrige** en la
 1. **Un concepto, una lección, un aprendizaje verificable.** Si una lección necesita dos ideas nuevas, son dos lecciones (`01` §6, `14` §2.5).
 2. **Práctica anclada obligatoria.** No existe lección sin al menos un ejercicio obligatorio (`14` §2.5, `05` RF-LEC-001, `03` OED-02).
 3. **Lenguaje al servicio del concepto, no al revés.** Se define un término una sola vez, se usa siempre igual y nunca se introduce jerga sin andamiaje (`02` PS-01/PS-02).
-4. **Evapythonr comprensión, no memoria.** Preguntas y distractores nacen de errores reales del aprendiz, no de trampas tipográficas (`02` PS-10, `15` §15).
+4. **Evaluar comprensión, no memoria.** Preguntas y distractores nacen de errores reales del aprendiz, no de trampas tipográficas (`02` PS-10, `15` §15).
 5. **Feedback enseña, no sentencia.** Todo error explica *por qué* falló y *qué hacer ahora* en lenguaje del usuario, nunca stack trace (`06` RNF-022, `15` §12).
 6. **Contenido desacoplado del motor.** Nada de lo escrito aquí exige cambiar código; agregar un lenguaje es agregar contenido (`01` §31, `06` RNF-031).
 
@@ -165,11 +165,11 @@ Toda pregunta y lección declara exactamente un nivel (`05` RF-PREG-002, `15` §
 
 | Nivel | Código | Peso `w` (`15` §4.1) | Criterio pedagógico | Tiempo estimado | Bloquea publicación si... |
 |---|---|---|---|---|---|
-| **Fácil** | `EASY` | 1.0 | **Recuerdo/comprensión directa** del concepto recién enseñado, sin combinar con otro. | 20–40 s | Se usa para evapythonr prerrequisitos no enseñados. |
+| **Fácil** | `EASY` | 1.0 | **Recuerdo/comprensión directa** del concepto recién enseñado, sin combinar con otro. | 20–40 s | Se usa para evaluar prerrequisitos no enseñados. |
 | **Medio** | `MEDIUM` | 1.5 | **Aplicación:** combinar 2 conceptos o predecir output con 1 trampa no trivial. | 40–90 s | Es en realidad 2 fáciles concatenadas sin trampa. |
 | **Difícil** | `HARD` | 2.0 | **Análisis:** detectar error sutil, ordenar lógica o resolver problema con condición compuesta. | 60–150 s | Se resuelve por descarte sin comprender el concepto. |
 
-> Pesos y tiempos de `15` §4.1; configurables sin código (`05` RF-ADM-004). Distribución objetivo por evapythonción: Quiz 40/40/20 y Examen 30/40/30 (`15` §4.1). Si el banco no permite la distribución, la publicación se bloquea (`15` §5.4).
+> Pesos y tiempos de `15` §4.1; configurables sin código (`05` RF-ADM-004). Distribución objetivo por evaluación: Quiz 40/40/20 y Examen 30/40/30 (`15` §4.1). Si el banco no permite la distribución, la publicación se bloquea (`15` §5.4).
 
 ### 5.2 Matriz de asignación de dificultad
 
@@ -193,7 +193,7 @@ Sección 5–6 (consolidación) →  20% EASY / 50% MEDIUM / 30% HARD
 Examen (cierre)             →  30/40/30  (15 §4.1)
 ```
 
-> Nunca colocar HARD en la primera lección de un módulo ni EASY como única evapythonción del examen final. La curva debe ser legible para el aprendiz.
+> Nunca colocar HARD en la primera lección de un módulo ni EASY como única evaluación del examen final. La curva debe ser legible para el aprendiz.
 
 ### 5.4 Calibración con datos
 
@@ -285,7 +285,7 @@ respuesta(s) válida(s), explicación (feedback), puntaje, peso, tiempo_estimado
 | ID | Tipo (`15` §3.1) | Cuándo usarlo | Evitar cuando... |
 |---|---|---|---|
 | T-01 | `SINGLE_CHOICE` (1 correcta / 4 opciones) | Verificar comprensión directa o predicción simple. | El concepto exige más de una respuesta válida. |
-| T-02 | `MULTIPLE_CHOICE` (2–3 correctas / 4–5) | Evapythonr conjuntos (ej. "marca los mutables"). | No hay conjunto claro; fuerza ambigüedad. |
+| T-02 | `MULTIPLE_CHOICE` (2–3 correctas / 4–5) | Evaluar conjuntos (ej. "marca los mutables"). | No hay conjunto claro; fuerza ambigüedad. |
 | T-03 | `TRUE_FALSE` | Definiciones y propiedades binarias. | La afirmación depende de contexto no dado. |
 | T-04 | `FILL_BLANK` (completar código/línea) | Sintaxis exacta, 1 hueco canónico + alias. | Hay >2 respuestas válidas distintas sin alias normalizable. |
 | T-05 | `PREDICT_OUTPUT` | Dado snippet, predecir salida exacta. | El snippet tiene comportamiento indefinido. |
@@ -333,7 +333,7 @@ Metadatos (dificultad, concepto_id, tiempo_estimado)
 | T-09 | Todo-o-nada en MVP; crédito parcial es post-MVP. Declararlo explícito en enunciado. | Sin `partial_credit` en MVP. |
 | T-11 numérico | Si admite flotante, declarar `epsilon` (tolerancia). Por defecto exacto. | Validador exige `epsilon` si tipo es float. |
 
-### 7.5 Composición por evapythonción (de `15` §5.1–§5.2)
+### 7.5 Composición por evaluación (de `15` §5.1–§5.2)
 
 No crees preguntas sueltas sin saber dónde vivirán. Respeta la composición configurable:
 
@@ -460,7 +460,7 @@ La ambigüedad es el defecto más caro: genera falsos negativos (aprende pero re
 | Fuente | Síntoma | Técnica de desambiguación | Ejemplo |
 |---|---|---|---|
 | **Enunciado vago** | "¿Qué hace el código?" sin especificar qué observar. | Verbo preciso + foco: "¿Qué **imprime**?", "¿Qué **valor guarda `x` al final**?" | "¿Qué imprime `print(x)`?" no "¿Qué hace?" |
-| **Snippet con comportamiento indefinido** | Depende de versión, orden de evapythonción o estado no mostrado. | Snippet autocontenido, sin dependencia externa, con imports y valores explícitos. | Mostrar `x = 5` explícito, no asumir `x` previo. |
+| **Snippet con comportamiento indefinido** | Depende de versión, orden de evaluación o estado no mostrado. | Snippet autocontenido, sin dependencia externa, con imports y valores explícitos. | Mostrar `x = 5` explícito, no asumir `x` previo. |
 | **Múltiples respuestas defendibles** | Dos opciones son correctas según interpretación. | Una sola clave; si hay matiz, reescribir opciones para que solo 1 sea defendible. | Si `0` y `False` ambos parecen correctos, cambiar enunciado a "¿Qué **tipo** retorna?" |
 | **Negación oculta** | "¿Cuál **no** es correcto?" sin resaltar. | Evitar negación; si es imprescindible, **negrita** + mayúscula: "**NO**". | "**¿Cuál NO es mutable?**" |
 | **Opciones heterogéneas** | Mezcla código, texto y números sin criterio. | Homogeneizar formato y longitud (ver §8.2 D-03). | Todas opciones son valores (`5`, `8`, `53`) o todas son snippets. |

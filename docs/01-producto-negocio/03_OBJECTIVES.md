@@ -6,7 +6,7 @@
 
 ## 1. Objetivo general
 
-Construir una plataforma interactiva y gamificada que guíe a cualquier persona — desde principiante absoluto hasta profesional — en el aprendizaje progresivo de programación mediante rutas estructuradas por lenguaje, con práctica inmediata, evapythonción continua y certificación verificable, reduciendo la fricción inicial y sosteniendo la motivación.
+Construir una plataforma interactiva y gamificada que guíe a cualquier persona — desde principiante absoluto hasta profesional — en el aprendizaje progresivo de programación mediante rutas estructuradas por lenguaje, con práctica inmediata, evaluación continua y certificación verificable, reduciendo la fricción inicial y sosteniendo la motivación.
 
 ---
 
@@ -17,7 +17,7 @@ Construir una plataforma interactiva y gamificada que guíe a cualquier persona 
 | OE-01 | Entregar un MVP funcional con Python como primer lenguaje (ver `04_SCOPE.md`). |
 | OE-02 | Implementar diagnóstico inicial que ubique al usuario en el punto correcto de la ruta. |
 | OE-03 | Desacoplar contenido del motor para agregar lenguajes sin reescribir el núcleo. |
-| OE-04 | Proveer evapythonción en dos niveles: Quiz intermedio y Examen final por módulo. |
+| OE-04 | Proveer evaluación en dos niveles: Quiz intermedio y Examen final por módulo. |
 | OE-05 | Sostener la constancia mediante gamificación (XP, rachas, logros) y perfil de progreso. |
 | OE-06 | Emitir certificados de finalización verificables y exportables a PDF. |
 | OE-07 | Operar bajo modelo gratuito con publicidad + premium USD $1/mes sin anuncios. |
@@ -31,7 +31,7 @@ Derivados de `05_FUNCTIONAL_REQUIREMENTS.md` (referencia, no duplicación):
 
 - **Autenticación y perfil:** registro, login, recuperación, perfil con progreso por lenguaje.
 - **Aprendizaje:** selección de lenguaje/nivel, ruta personalizada, módulos/secciones/lecciones, sesiones reanudables.
-- **Evapythonción:** banco de preguntas tipificadas, quizzes, exámenes, calificación automática, reintentos con repaso.
+- **Evaluación:** banco de preguntas tipificadas, quizzes, exámenes, calificación automática, reintentos con repaso.
 - **Progreso y gamificación:** registro de XP, niveles, rachas, logros y estadísticas.
 - **Certificación:** generación, identificación única, PDF y verificación QR.
 - **Monetización:** publicidad no intrusiva y suscripción premium.
@@ -71,7 +71,7 @@ Derivados de `05_FUNCTIONAL_REQUIREMENTS.md` (referencia, no duplicación):
 
 | ID | Objetivo técnico | Referencia |
 |---|---|---|
-| OT-01 | Arquitectura modular: Learning, Question, Evapythontion, Progress, Gamification, Certification desacoplados. | `11` |
+| OT-01 | Arquitectura modular: Learning, Question, Evaluation, Progress, Gamification, Certification desacoplados. | `11` |
 | OT-02 | Contenido independiente del código (formato declarativo versionado). | `23`, `11` § principio |
 | OT-03 | Agregar un lenguaje = agregar contenido + config, sin tocar el motor. | `04`, `11` |
 | OT-04 | API REST versionada, autenticada y documentada (OpenAPI). | `13` |
