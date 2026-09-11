@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 
 export function useRoadmapPanZoom() {
   const { zoomLevel, panOffset, setPanOffset, setZoomLevel } = useRoadmapStore();
   const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const startRef = useRef<{ px: number; py: number; ox: number; oy: number } | null>(null);
   const hasMovedRef = useRef(false);
 
@@ -21,6 +22,8 @@ export function useRoadmapPanZoom() {
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0) return;
+    const target = e.target as HTMLElement | null;
+    if (target?.closest('button, a, [role="button"], .no-drag')) return;
     startRef.current = { px: e.clientX, py: e.clientY, ox: panOffset.x, oy: panOffset.y };
     hasMovedRef.current = false;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
@@ -42,7 +45,7 @@ export function useRoadmapPanZoom() {
       try {
         (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
       } catch {
-        // ignore if already released
+        // ignore
       }
     }
     startRef.current = null;
@@ -52,23 +55,29 @@ export function useRoadmapPanZoom() {
     }, 50);
   }, []);
 
-  const onWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const step = e.deltaY < 0 ? 12 : -12;
-    setZoomLevel(zoomLevel + step);
-  }, [zoomLevel, setZoomLevel]);
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      const step = e.deltaY < 0 ? 10 : -10;
+      setZoomLevel((prev: number) => Math.max(50, Math.min(200, prev + step)));
+    };
+    el.addEventListener('wheel', handleWheel, { passive: false });
+    return () => el.removeEventListener('wheel', handleWheel);
+  }, [setZoomLevel]);
 
   return {
     isDragging,
     hasMovedRecently: () => hasMovedRef.current,
     panOffset,
     zoomLevel,
+    containerRef,
     containerProps: {
       onPointerDown,
       onPointerMove,
       onPointerUp,
       onPointerCancel: onPointerUp,
-      onWheel,
     },
   };
 }

@@ -15,7 +15,7 @@ interface RoadmapCanvasProps {
 
 export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
   const { openCourseLessons, setActiveNode } = useRoadmapStore();
-  const { isDragging, hasMovedRecently, panOffset, zoomLevel, containerProps } = useRoadmapPanZoom();
+  const { isDragging, hasMovedRecently, panOffset, zoomLevel, containerRef, containerProps } = useRoadmapPanZoom();
 
   const handleSelectNode = (node: GraphNode) => {
     if (!node.isUnlocked || hasMovedRecently()) return;
@@ -27,6 +27,7 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
 
   return (
     <div
+      ref={containerRef}
       {...containerProps}
       className={`relative w-full h-full overflow-hidden flex items-center justify-center select-none touch-none ${
         isDragging ? 'cursor-grabbing' : 'cursor-grab'
@@ -39,6 +40,7 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
           isDragging ? '' : 'transition-transform duration-200 ease-out'
         }`}
         style={{
+          transformOrigin: 'center center',
           transform: `translate3d(${panOffset.x}px, ${panOffset.y}px, 0) scale(${zoomLevel / 100})`,
         }}
       >
