@@ -43,6 +43,7 @@ Los estados válidos son:
 | [**ADR-007**](ADR-007-arquitectura-roadmap-ramas-carrera-grafo-dag.md) | Arquitectura de Grafo DAG por Ramas de Carrera y Prerrequisitos | ✅ Aprobado | 2026-09-10 | 3 Ramas (Frontend, Backend, DevOps), modelo DAG, prerrequisitos 'RQ' y endpoints. |
 | [**ADR-008**](ADR-008-adopcion-definitiva-nestjs-backend.md) | Adopción Definitiva de NestJS como Motor de Backend | ✅ Aprobado | 2026-09-10 | Estandarización de TypeScript, arquitectura monolito modular, DTOs compartidos y Swagger. |
 | [**ADR-009**](ADR-009-persistencia-hibrida-poliglota-mongodb-supabase.md) | Persistencia Híbrida Políglota (MongoDB Contenido + Supabase Transacciones) | ✅ Aprobado | 2026-09-10 | MongoDB para lecciones, cursos y grafo; Supabase (PostgreSQL 15+) para usuarios, progreso y estado. |
+| [**ADR-010**](ADR-010-arquitectura-backend-hexagonal-modular-eventos-dominio-cache.md) | Arquitectura Hexagonal Modular con Eventos de Dominio y Cache-Aside | ✅ Aprobado | 2026-09-11 | Desacoplamiento asíncrono con EventEmitter2, puertos y adaptadores, y caché Redis L2. |
 
 ---
 
