@@ -156,6 +156,7 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
 | 7 | Auth | POST | `/auth/verify-email` | No (token) | — | Confirma email del usuario | RF-AUTH-005 |
 | 8 | Users | GET | `/users/me` | Sí | USER | Perfil consolidado del titular | RF-PROF-001, RF-USR-002 |
 | 9 | Users | PATCH | `/users/me` | Sí | USER | Actualiza datos de perfil / clave | RF-USR-002, RF-PROF-002 |
+| 9B | Users | PATCH | `/users/me/preferences` | Sí | USER | Actualiza estilo de aprendizaje y meta diaria | RF-USR-002, RF-RACHA-004 |
 | 10 | Users | DELETE | `/users/me` | Sí | USER | Solicita anonimización / baja | RF-USR-003 |
 | 11 | Users | GET | `/users/me/progress` | Sí | USER | Progreso agregado por lenguaje / módulo | RF-PROG-002, RF-PROG-005 |
 | 12 | Users | GET | `/users/me/achievements` | Sí | USER | Logros desbloqueados y en progreso | RF-LOGRO-002/003 |
@@ -202,11 +203,11 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
 
 ## 6. Schemas comunes (contratos JSON)
 
-### 6.1 User
+### 6.1 User y UserProfile
 ```json
 {
   "id": "0f8a1e3a-4b2c-4d9e-9f1a-2b3c4d5e6f70",
-  "name": "Brandon",
+  "name": "Brandon Pérez",
   "email": "brandon@example.com",
   "role": "user",
   "avatar_url": "https://cdn.koda.app/avatars/koda.png",
@@ -214,6 +215,19 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
   "is_premium": false,
   "level": 3,
   "xp_total": 450,
+  "profile": {
+    "initial_language_slug": "python",
+    "experience_level": "beginner",
+    "learning_style": "hands-on",
+    "daily_goal_id": "regular",
+    "daily_goal_minutes": 10,
+    "current_streak": 5,
+    "longest_streak": 12,
+    "streak_freeze_count": 1,
+    "total_study_time_seconds": 3600,
+    "last_study_date": "2026-09-12",
+    "timezone": "America/Bogota"
+  },
   "created_at": "2026-09-01T10:00:00-05:00"
 }
 ```
@@ -498,12 +512,16 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
 - **Auth:** No · **Idempotencia:** No
 - **RF:** RF-AUTH-001, RF-USR-001 · **RNF:** RNF-008 (Argon2id/bcrypt)
 
-**Request:**
+**Request (incorporando las opciones del stepper de registro del frontend):**
 ```json
 {
-  "name": "Brandon Pérez",
+  "fullName": "Brandon Pérez",
   "email": "brandon@example.com",
-  "password": "PasswordSeguro!2026"
+  "password": "PasswordSeguro!2026",
+  "selectedLanguageId": "python",
+  "selectedExperienceId": "beginner",
+  "selectedStyleId": "hands-on",
+  "selectedGoalId": "regular"
 }
 ```
 
@@ -513,15 +531,32 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
   "data": {
     "user": {
       "id": "0f8a1e3a-4b2c-4d9e-9f1a-2b3c4d5e6f70",
-      "name": "Brandon Pérez",
       "email": "brandon@example.com",
       "role": "user",
       "email_verified": false
     },
+    "profile": {
+      "id": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+      "user_id": "0f8a1e3a-4b2c-4d9e-9f1a-2b3c4d5e6f70",
+      "display_name": "Brandon Pérez",
+      "initial_language_slug": "python",
+      "experience_level": "beginner",
+      "learning_style": "hands-on",
+      "daily_goal_id": "regular",
+      "daily_goal_minutes": 10,
+      "total_xp": 0,
+      "level": 1,
+      "current_streak": 0,
+      "longest_streak": 0,
+      "streak_freeze_count": 1,
+      "total_study_time_seconds": 0,
+      "timezone": "America/Bogota"
+    },
     "tokens": {
       "access_token": "eyJhbGciOi...",
       "refresh_token": "7a8b9c...",
-      "expires_in": 900
+      "expires_in": 900,
+      "token_type": "Bearer"
     }
   }
 }
@@ -887,6 +922,76 @@ Retorna el schema detallado en §6.8 con todos los módulos, candados, estrellas
       "xp_awarded": 100,
       "xp_total": 590
     }
+  }
+}
+```
+
+---
+
+### 7.12 `GET /progress/streak` — Estado de Racha y Tiempo de Estudio Diario
+
+- **Auth:** Sí (Bearer Token) · **Idempotencia:** No · **RF:** RF-RACHA-001–005, RF-PROF-006
+
+**Response `200 OK`:**
+```json
+{
+  "data": {
+    "current_streak": 7,
+    "longest_streak": 14,
+    "last_activity_date": "2026-09-12",
+    "is_active_today": true,
+    "freeze_count": 2,
+    "today_study_time_seconds": 720,
+    "daily_goal_minutes": 10,
+    "daily_goal_met": true,
+    "timezone": "America/Bogota",
+    "recent_history": [
+      {
+        "activity_date": "2026-09-12",
+        "study_time_seconds": 720,
+        "lessons_completed_count": 3,
+        "xp_earned_today": 45,
+        "daily_goal_met": true,
+        "freeze_used": false
+      },
+      {
+        "activity_date": "2026-09-11",
+        "study_time_seconds": 650,
+        "lessons_completed_count": 2,
+        "xp_earned_today": 30,
+        "daily_goal_met": true,
+        "freeze_used": false
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 7.13 `PATCH /users/me/preferences` — Actualizar Preferencias y Metas de Estudio
+
+- **Auth:** Sí (Bearer Token) · **Idempotencia:** No · **RF:** RF-USR-002, RF-RACHA-004
+
+**Request:**
+```json
+{
+  "learning_style": "gamified",
+  "daily_goal_id": "focused",
+  "daily_goal_minutes": 15,
+  "timezone": "America/Bogota"
+}
+```
+
+**Response `200 OK`:**
+```json
+{
+  "data": {
+    "learning_style": "gamified",
+    "daily_goal_id": "focused",
+    "daily_goal_minutes": 15,
+    "timezone": "America/Bogota",
+    "updated_at": "2026-09-12T16:35:00-05:00"
   }
 }
 ```
