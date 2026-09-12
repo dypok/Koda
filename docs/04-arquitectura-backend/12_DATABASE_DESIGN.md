@@ -75,87 +75,246 @@ erDiagram
     user_mistakes_notebook }o..o{ lessons : "referencia lesson_id"
 ```
 
-    programming_languages ||--o{ learning_paths : "1:N ofrece"
-    programming_languages ||--o{ modules : "1:N contiene"
-    programming_languages ||--o{ user_module_progress : "1:N mide"
-    programming_languages ||--o{ certificates : "1:N acredita"
-
-    learning_paths ||--o{ learning_path_modules : "1:N ordena"
-
-    modules ||--o{ sections : "1:N agrupa"
-    modules ||--o{ quizzes : "1:N evalúa"
-    modules ||--o{ exams : "1:N certifica"
-    modules ||--o{ questions : "1:N ancla"
-    modules ||--o{ user_module_progress : "1:N maestría"
-
-    sections ||--o{ lessons : "1:N compone"
-    sections ||--o{ questions : "1:N ancla"
-    sections ||--o{ user_section_stars : "1:N estrellas"
-
-    lessons ||--o{ questions : "1:N ancla"
-    lessons ||--o{ progress : "1:N mide"
-
-    questions ||--o{ answers : "1:N opciones"
-    questions ||--o{ quiz_questions : "N:M quiz"
-    questions ||--o{ exam_questions : "N:M exam"
-    questions ||--o{ attempt_answers : "1:N responde"
-    questions ||--o{ user_mistakes_notebook : "1:N registra"
-    questions ||--o{ review_queue_items : "1:N encola"
-
-    answers ||--o{ attempt_answers : "1:N elige"
-
-    quizzes ||--o{ quiz_questions : "1:N compone"
-    quizzes ||--o{ attempts : "1:N genera"
-
-    exams ||--o{ exam_questions : "1:N compone"
-    exams ||--o{ attempts : "1:N genera"
-
-    attempts ||--o{ attempt_answers : "1:N detalla"
-    attempts ||--o{ review_queue_items : "1:N activa"
-
-    achievements ||--o{ user_achievements : "1:N otorga"
-
-    %% Entidades de soporte
-    programming_languages {
-        uuid id PK
-        varchar code
-        varchar name
-        varchar status
-    }
-    users {
-        uuid id PK
-        varchar email
-        varchar status
-    }
-    user_section_stars {
-        uuid id PK
-        uuid user_id FK
-        uuid section_id FK
-        smallint stars_earned
-        int first_attempt_errors
-    }
-    user_module_progress {
-        uuid id PK
-        uuid user_id FK
-        uuid module_id FK
-        boolean is_unlocked
-        int stars_earned
-        numeric stars_percentage
-    }
-    user_mistakes_notebook {
-        uuid id PK
-        uuid user_id FK
-        uuid question_id FK
-        int fail_count
-        boolean is_resolved
-    }
-```
-
-> Nota: `quiz_questions` y `exam_questions` son tablas de composición versionada; `attempt_answers` congela la respuesta dada y su corrección. `user_section_stars` almacena el rendimiento en estrellas (1–3⭐) por sección. `user_module_progress` centraliza el estado del candado del módulo y el porcentaje de maestría acumulado. `user_mistakes_notebook` persiste los fallos para práctica deliberada y refuerzo formativo.
+> **Nota de Persistencia Políglota (ADR-009, ADR-011):** `tracks`, `courses`, `modules`, `sections`, `lessons` y `question_banks` se gestionan como documentos jerárquicos BSON en **MongoDB** para lecturas $O(1)$ sin JOINs. El núcleo transaccional en **Supabase (PostgreSQL)** custodia usuarios, progreso, estrellas, ledger de XP y el cuaderno de errores con repetición espaciada SM-2, referenciando el contenido únicamente por identificadores textuales inmutables (`slugs` / `UUIDs`).
 
 ---
 
-## 5. Resumen de entidades y trazabilidad
+## 5. Esquemas Documentales NoSQL en MongoDB (Currículo y Grafo de Aprendizaje)
+
+MongoDB almacena la totalidad del contenido educativo en estructuras documentales jerárquicas BSON, diseñadas para servir cualquier recurso en $O(1)$ sin realizar `JOINs` relacionales.
+
+### 5.1 Colección `tracks` (Ramas Profesionales de Carrera)
+Agrupa las especializaciones profesionales de Koda (**Frontend**, **Backend**, **DevOps**, **Python**).
+
+```json
+{
+  "_id": { "$oid": "66e1b001a1c2d3e4f5a6b701" },
+  "slug": "frontend",
+  "name": "Frontend Developer",
+  "description": "HTML Semántico, CSS Moderno, JavaScript DOM, React 19 y Tailwind CSS",
+  "icon": "IconDeviceDesktop",
+  "color": "#38BDF8",
+  "sort_order": 1,
+  "is_active": true,
+  "created_at": { "$date": "2026-09-10T00:00:00.000Z" },
+  "updated_at": { "$date": "2026-09-10T00:00:00.000Z" }
+}
+```
+
+### 5.2 Colección `courses` (Nodos del Grafo DAG con Topología Relativa Tier/Lane)
+Cada curso representa un nodo dentro del canvas interactivo del Roadmap. **No almacena coordenadas de píxeles fijas (`graph_x`, `graph_y`)**, sino una **topología relativa de rejilla** (`tier` y `lane`), permitiendo que el mapa crezca horizontalmente de manera infinita mientras el motor de renderizado del frontend calcula las curvas SVG automáticamente.
+
+```json
+{
+  "_id": { "$oid": "66e1b001a1c2d3e4f5a6b702" },
+  "slug": "react-hooks",
+  "track_slug": "frontend",
+  "code": "F1",
+  "title": "REACT & HOOKS",
+  "subtitle": "RQ JS DOM",
+  "variant": "branch",
+  "icon_type": "atom",
+  "topology": {
+    "tier": 4,
+    "lane": 1,
+    "lane_name": "top_branch"
+  },
+  "visual_style": {
+    "node_color": "#06B6D4",
+    "glow_color": "rgba(6, 182, 212, 0.45)",
+    "laser_color": "#38BDF8",
+    "animation_preset": "laser_flow_fast",
+    "line_dash": "solid"
+  },
+  "prerequisites": ["js-dom"],
+  "prerequisite_label": "RQ JS DOM",
+  "is_apex_gate": false,
+  "xp_reward": 150,
+  "max_stars": 9
+}
+```
+
+* **`topology.tier` (Paso / Columna horizontal $\rightarrow$):** Progresión cronológica (`1, 2, 3...`).
+* **`topology.lane` (Carril vertical $\updownarrow$):** `0` = Tronco central, `1` = Bifurcación superior, `-1` = Bifurcación inferior.
+* **`visual_style`:** Configuración cosmética y de aceleración por hardware.
+
+### 5.3 Colección `visual_effects` (Catálogo Maestro de Presets de Animación)
+Define los efectos físicos de láseres, halos, radares y partículas acelerados 100% por GPU (`will-change: stroke-dashoffset, transform`), evitando cadenas mágicas en los cursos.
+
+```json
+[
+  {
+    "_id": { "$oid": "66e1b001a1c2d3e4f5a6b720" },
+    "key": "laser_flow_fast",
+    "name": "Flujo Láser Fotónico de Alta Velocidad",
+    "target": "edge",
+    "engine": "svg_gpu",
+    "config": {
+      "css_class": "animate-laser-flow",
+      "duration_ms": 1200,
+      "timing_function": "linear",
+      "dash_array": "20 100",
+      "direction": "forward",
+      "repeat": "infinite"
+    },
+    "glow": {
+      "blur_px": 6,
+      "spread_px": 2,
+      "default_color": "#38BDF8"
+    }
+  },
+  {
+    "_id": { "$oid": "66e1b001a1c2d3e4f5a6b721" },
+    "key": "sonar_radar_pulse",
+    "name": "Pulso Sonar Radar Activo",
+    "target": "node_halo",
+    "engine": "svg_gpu",
+    "config": {
+      "css_class": "animate-sonar-wave",
+      "duration_ms": 3200,
+      "rings_count": 2,
+      "orbit_satellite": true,
+      "satellite_orbit_s": 8
+    },
+    "glow": {
+      "blur_px": 15,
+      "spread_px": 4,
+      "default_color": "rgba(249, 115, 22, 0.6)"
+    }
+  }
+]
+```
+
+### 5.4 Colección `modules` y `sections`
+Subdivisiones temáticas y paquetes de 10 micro-lecciones.
+
+```json
+{
+  "_id": { "$oid": "66e1b001a1c2d3e4f5a6b710" },
+  "slug": "mod-html-fundamentos",
+  "course_slug": "html-semantico",
+  "code": "M1",
+  "title": "Estructura del Documento y Etiquetas Principales",
+  "order_index": 1,
+  "sections_count": 3
+}
+```
+
+### 5.5 Colección `lessons` (Micro-lección Atómica con la Tríada de Evaluación)
+Cada lección se compone de teoría sintética ($< 2\text{ min}$) y una **Tríada de Evaluación Progresiva de 3 Ítems**:
+
+1. **Ítem 1 (`CONSOLE_CHALLENGE`):** Desafío de código en editor interactivo con consola/terminal integrada y validación por casos de prueba (`stdout` / `test_cases`).
+2. **Ítem 2 (`SINGLE_CHOICE`):** Pregunta conceptual de selección múltiple con exactamente **4 opciones de respuesta** (1 correcta + 3 distractores plausibles).
+3. **Ítem 3 (`PREDICT_OUTPUT` / `BUG_HUNT`):** Ejercicio de predicción de resultado o detección/corrección de bugs en código fuente.
+
+```json
+{
+  "_id": { "$oid": "66e1b001a1c2d3e4f5a6b730" },
+  "slug": "html-etiqueta-section",
+  "section_slug": "sec-html-semantica-01",
+  "course_slug": "html-semantico",
+  "order_index": 3,
+  "content_version": 1,
+  "title": "Estructuración Semántica con <section>",
+  "theory_markdown": "El elemento `<section>` representa una sección genérica y autónoma de un documento HTML...",
+  "code_example": "<section>\n  <h2>Perfil de Usuario</h2>\n  <p>Detalles del estudiante...</p>\n</section>",
+  "tip_markdown": "Usa `<section>` únicamente cuando el contenido cuente con un encabezado temático natural.",
+  
+  "evaluation_triad": {
+    "item_1_console": {
+      "type": "CONSOLE_CHALLENGE",
+      "instruction": "Escribe una función `esMayorDeEdad(edad)` que retorne true si la edad es >= 18.",
+      "starter_code": "function esMayorDeEdad(edad) {\n  // Tu código aquí\n}",
+      "solution_code": "function esMayorDeEdad(edad) {\n  return edad >= 18;\n}",
+      "test_cases": [
+        { "input": "20", "expected_output": "true", "is_hidden": false },
+        { "input": "15", "expected_output": "false", "is_hidden": false },
+        { "input": "18", "expected_output": "true", "is_hidden": true }
+      ],
+      "timeout_ms": 2500
+    },
+
+    "item_2_options": {
+      "type": "SINGLE_CHOICE",
+      "prompt": "¿Cuál es la principal ventaja de usar <section> en lugar de un contenedor <div> genérico?",
+      "options": [
+        { "id": "opt-a", "text": "Proporciona significado semántico y accesibilidad para lectores de pantalla y motores de búsqueda" },
+        { "id": "opt-b", "text": "Aplica automáticamente estilos visuales de flexbox y espaciado interno" },
+        { "id": "opt-c", "text": "Convierte el texto interno a negrita de forma predeterminada en el navegador" },
+        { "id": "opt-d", "text": "Evita que otros estilos CSS afecten a los elementos hijos dentro del contenedor" }
+      ],
+      "correct_option_id": "opt-a",
+      "explanation": "<section> comunica intención estructural en el DOM, mejorando la navegación accesible."
+    },
+
+    "item_3_prediction": {
+      "type": "PREDICT_OUTPUT",
+      "prompt": "Dado el código `const edad = 17; console.log(edad >= 18 ? 'Adulto' : 'Menor');`, ¿cuál es la salida exacta?",
+      "options": [
+        { "id": "p-1", "text": "Menor" },
+        { "id": "p-2", "text": "Adulto" },
+        { "id": "p-3", "text": "true" },
+        { "id": "p-4", "text": "undefined" }
+      ],
+      "correct_option_id": "p-1",
+      "explanation": "La condición `17 >= 18` evalúa a `false`, seleccionando la segunda rama del operador ternario."
+    }
+  }
+}
+```
+
+### 5.6 Regla Algorítmica de Concesión de Estrellas (1–3 ⭐)
+Las estrellas no son cosméticas; miden el rigor en la resolución de la Tríada al primer intento:
+* ⭐⭐⭐ **(3 Estrellas - Maestría):** Aprueba los **3 ítems al primer intento** (Consola sin errores + Pregunta de 4 opciones correcta + Predicción correcta).
+* ⭐⭐ **(2 Estrellas - Notable):** Aprueba **2 de los 3 ítems** al primer intento (ej. consola y predicción superados, pero erró la opción múltiple).
+* ⭐ **(1 Estrella - Aprobado Básico):** Aprueba **solo 1 ítem** al primer intento o resolvió la lección tras solicitar pistas y reintentos.
+* **0 Estrellas:** No superó el desafío de consola obligatorio; la lección no se da por completada.
+
+---
+
+## 6. Arquitectura de Conexión y Enlace Híbrido Desacoplado
+
+La conexión entre **MongoDB** y **Supabase PostgreSQL** se realiza en la **capa de aplicación de NestJS**, acelerada por **Redis L2 Cache**:
+
+```mermaid
+sequenceDiagram
+    participant FE as Frontend (Next.js)
+    participant API as NestJS Gateway / Services
+    participant REDIS as Redis L2 Cache
+    participant MONGO as MongoDB (Contenido)
+    participant PG as PostgreSQL (Transaccional)
+    participant BULL as BullMQ (Colas Redis)
+
+    Note over FE,PG: 1. Consulta del Roadmap con Fusión en Memoria
+    FE->>API: GET /api/v1/roadmap/branches/frontend
+    API->>REDIS: GET koda:track:frontend:nodes
+    alt Cache Hit
+        REDIS-->>API: Nodos del Grafo (Tier, Lane, FX)
+    else Cache Miss
+        API->>MONGO: courses.find({ track_slug: 'frontend' })
+        MONGO-->>API: Documentos de cursos con topología
+        API->>REDIS: SET koda:track:frontend:nodes (TTL 24h)
+    end
+    API->>PG: SELECT course_slug, stars_earned, is_unlocked FROM user_module_progress WHERE user_id = :uid
+    PG-->>API: Registros de progreso y estrellas del usuario
+    Note over API: Fusión en memoria: Mapea estrellas y evalúa prereqs (RQ)
+    API-->>FE: Payload unificado { branch, nodes: GraphNode[], connections: GraphEdge[] }
+
+    Note over FE,BULL: 2. Envío de Lección y Evaluación de la Tríada
+    FE->>API: POST /api/v1/learning/attempts (Idempotency-Key)
+    API->>REDIS: GET koda:lesson:html-etiqueta-section:v1
+    REDIS-->>API: Documento de lección con test cases y respuestas
+    Note over API: Verifica Código en sandbox + Opciones (4) + Predicción
+    API->>PG: INSERT INTO attempts (kind, score, stars_awarded, is_passed)
+    PG-->>API: Intento registrado (ACID)
+    API->>BULL: addJob('lesson_completed_effects', { userId, stars, xp })
+    API-->>FE: Feedback instantáneo (<50 ms) con estrellas ganadas (1-3⭐)
+    Note over BULL,PG: Worker en Background actualiza XP Ledger, Rachas y Cuaderno SM-2
+```
+
+---
+
+## 7. Resumen de entidades y trazabilidad
 
 | # | Entidad | Tabla | RF / RNF principales | Rol en la Plataforma |
 |---|---|---|---|---|
@@ -168,8 +327,8 @@ erDiagram
 | 7 | Lesson | `lessons` | RF-LEC-*, RF-PREG-* | Unidad mínima de aprendizaje (10 por sección, concepto + ejercicio) |
 | 8 | Question | `questions` | RF-PREG-* | Banco tipificado (8 tipos interactivos con versiones) |
 | 9 | Answer | `answers` | RF-PREG-002 | Opciones y validaciones por pregunta |
-| 10 | Quiz | `quizzes` | RF-QUIZ-* | Evapythonción intermedia por módulo (diagnóstica o formativa) |
-| 11 | Exam | `exams` | RF-EXAM-* | Examen de certificación y evapythonción final de módulo |
+| 10 | Quiz | `quizzes` | RF-QUIZ-* | Evaluación intermedia por módulo (diagnóstica o formativa) |
+| 11 | Exam | `exams` | RF-EXAM-* | Examen de certificación y evaluación final de módulo |
 | 12 | Attempt | `attempts` | RF-EVAL-*, RF-QUIZ-003, RF-EXAM-003 | Registro de intento inmutable y auditable |
 | 13 | Progress | `progress` | RF-PROG-* | Agregado de avance porcentual e ítems completados |
 | 14 | XPTransaction | `xp_transactions` | RF-XP-* | Ledger transaccional de XP (recompensas e incentivos) |
@@ -375,7 +534,7 @@ Unidad temática canónica (12 módulos en el currículo principal de Python `01
 
 ### 6.6 Section — `sections`
 
-Subdivisión pedagógica de módulo (`01` §7.3, `RF-SEC-*`). Cada sección agrupa lecciones teóricas y ejercicios interactivos con evapythonción formativa en estrellas (1–3⭐) y candado secuencial ($S_1 \to S_n$).
+Subdivisión pedagógica de módulo (`01` §7.3, `RF-SEC-*`). Cada sección agrupa lecciones teóricas y ejercicios interactivos con evaluación formativa en estrellas (1–3⭐) y candado secuencial ($S_1 \to S_n$).
 
 | Campo | Tipo | Restricción | Descripción |
 |---|---|---|---|
@@ -521,7 +680,7 @@ Opciones y respuestas válidas por pregunta (`RF-PREG-002`).
 
 ### 6.10 Quiz — `quizzes`
 
-Evapythonción intermedia por módulo (`RF-QUIZ-*`, `01` §13). Composición configurable.
+Evaluación intermedia por módulo (`RF-QUIZ-*`, `01` §13). Composición configurable.
 
 | Campo | Tipo | Restricción | Descripción |
 |---|---|---|---|
@@ -571,7 +730,7 @@ Evapythonción intermedia por módulo (`RF-QUIZ-*`, `01` §13). Composición con
 
 ### 6.11 Exam — `exams`
 
-Evapythonción final por módulo (`RF-EXAM-*`, `01` §14). Similar a `quizzes` pero con distribución por tipo configurable (`RF-EXAM-002`).
+Evaluación final por módulo (`RF-EXAM-*`, `01` §14). Similar a `quizzes` pero con distribución por tipo configurable (`RF-EXAM-002`).
 
 | Campo | Tipo | Restricción | Descripción |
 |---|---|---|---|
@@ -637,7 +796,7 @@ Intento inmutable y auditable (`RF-EVAL-003`, `RF-PREG-005`, `RF-PROG-001`, `RNF
 | `exam_id` | `UUID` | **FK → exams.id**, `NULL` | Solo si `kind='exam'` |
 | `question_id` | `UUID` | `NULL` | Solo si `kind='lesson_question'` (una pregunta) |
 | `question_version` | `INTEGER` | `NULL` | Congela versión |
-| `content_version` | `INTEGER` | `NOT NULL` | Versión de contenido evapythonda (`RNF-035`) |
+| `content_version` | `INTEGER` | `NOT NULL` | Versión de contenido evaluada (`RNF-035`) |
 | `threshold_applied` | `SMALLINT` | `NULL`, `CHECK (threshold_applied BETWEEN 0 AND 100)` | Umbral vigente al calificar (`RF-EVAL-005`); NULL para `lesson_question` |
 | `score` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (score >= 0)` | Puntaje total obtenido |
 | `max_score` | `INTEGER` | `NOT NULL`, `CHECK (max_score > 0)` | Puntaje máximo posible |
@@ -972,10 +1131,10 @@ Registro de calificación formativa en estrellas (1–3⭐), errores en primer i
 | Campo | Tipo | Restricción | Descripción |
 |---|---|---|---|
 | `id` | `UUID` | **PK**, `DEFAULT gen_random_uuid()` | Identificador del registro |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` | Usuario evapythondo |
+| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` | Usuario evaluado |
 | `language_id` | `UUID` | **FK → programming_languages.id**, `NOT NULL` | Lenguaje en curso |
 | `module_id` | `UUID` | **FK → modules.id**, `NOT NULL` | Módulo padre |
-| `section_id` | `UUID` | **FK → sections.id**, `NOT NULL` | Sección evapythonda |
+| `section_id` | `UUID` | **FK → sections.id**, `NOT NULL` | Sección evaluada |
 | `stars_earned` | `SMALLINT` | `NOT NULL`, `CHECK (stars_earned BETWEEN 1 AND 3)` | Estrellas obtenidas (3 = 0 errores, 2 = 1 error corregido, 1 = 2+ errores corregidos) |
 | `max_stars_earned` | `SMALLINT` | `NOT NULL`, `DEFAULT 1`, `CHECK (max_stars_earned BETWEEN 1 AND 3)` | Mejor puntuación histórica alcanzada en reintentos |
 | `first_attempt_errors` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (first_attempt_errors >= 0)` | Cantidad de ejercicios fallados en la primera pasada |
@@ -1010,7 +1169,7 @@ Estado de candado (`locked`/`unlocked`), total de estrellas acumuladas y porcent
 | `id` | `UUID` | **PK**, `DEFAULT gen_random_uuid()` | Identificador del registro |
 | `user_id` | `UUID` | **FK → users.id**, `NOT NULL` | Usuario |
 | `language_id` | `UUID` | **FK → programming_languages.id**, `NOT NULL` | Lenguaje |
-| `module_id` | `UUID` | **FK → modules.id**, `NOT NULL` | Módulo evapythondo |
+| `module_id` | `UUID` | **FK → modules.id**, `NOT NULL` | Módulo evaluado |
 | `status` | `VARCHAR(20)` | `NOT NULL`, `DEFAULT 'locked'`, `CHECK (status IN ('locked','unlocked','in_progress','completed','mastered'))` | Estado del módulo en la ruta |
 | `is_unlocked` | `BOOLEAN` | `NOT NULL`, `DEFAULT false` | `true` si el candado está abierto ($M_1$ o $M_i$ con prerequisitos cumplidos) |
 | `sections_total` | `SMALLINT` | `NOT NULL`, `DEFAULT 10`, `CHECK (sections_total > 0)` | Total de secciones configuradas en el módulo |
@@ -1271,7 +1430,7 @@ flowchart TD
 | Carga de Roadmap (12 módulos + candados + estrellas) | `user_module_progress`, `user_section_stars`, `modules` | `uq_user_module_progress`, `idx_user_section_stars_user_module`, `idx_modules_lang_position` | <80 ms (`RNF-007`) |
 | Carga de Cuaderno de Errores pendientes | `user_mistakes_notebook`, `questions` | `idx_user_mistakes_unresolved`, `idx_questions_lesson` | <100 ms (`RNF-001`) |
 | Lectura de Lección + 10 ejercicios interactivos | `lessons`, `questions`, `answers` | `idx_lessons_section_position`, `idx_questions_lesson`, `idx_answers_question` | <150 ms (`RNF-001`) |
-| Envío de respuesta individual + evapythonción | `attempts`, `attempt_answers`, `xp_transactions` | `uq_attempts_user_idempotency`, `uq_xp_user_idempotency` | <300 ms (`RNF-010`) |
+| Envío de respuesta individual + evaluación | `attempts`, `attempt_answers`, `xp_transactions` | `uq_attempts_user_idempotency`, `uq_xp_user_idempotency` | <300 ms (`RNF-010`) |
 | Cierre de sección y adjudicación de estrellas | `attempts`, `user_section_stars`, `user_module_progress` | `uq_user_section_stars`, `uq_user_module_progress` | <400 ms (`RNF-001`) |
 | Calificación de Quiz / Examen final | `attempts`, `attempt_answers`, `user_module_progress` | `idx_attempt_answers_attempt`, `uq_user_module_progress` | <800 ms (`RNF-012`) |
 | Historial de racha y DAU | `streaks` | `uq_streaks_user_date`, `idx_streaks_user_date_desc` | <50 ms |
@@ -1330,42 +1489,25 @@ CREATE TABLE programming_languages (
 CREATE UNIQUE INDEX uq_pl_code ON programming_languages (code);
 CREATE UNIQUE INDEX uq_pl_slug ON programming_languages (slug);
 
--- Questions (versionadas)
-CREATE TABLE questions (
-  id UUID NOT NULL,
-  version INT NOT NULL CHECK (version > 0),
-  language_id UUID NOT NULL REFERENCES programming_languages(id),
-  module_id UUID NOT NULL REFERENCES modules(id),
-  section_id UUID REFERENCES sections(id),
-  lesson_id UUID REFERENCES lessons(id),
-  type VARCHAR(30) NOT NULL
-    CHECK (type IN ('multiple_choice','true_false','fill_code','predict_output','find_error','order_lines','select_correct_code','match_concepts','write_code','small_problem')),
-  difficulty VARCHAR(20) NOT NULL DEFAULT 'medium'
-    CHECK (difficulty IN ('easy','medium','hard')),
-  prompt TEXT NOT NULL,
-  explanation TEXT NOT NULL,
-  score INT NOT NULL DEFAULT 10 CHECK (score > 0),
-  status VARCHAR(20) NOT NULL DEFAULT 'draft'
-    CHECK (status IN ('draft','published','archived')),
-  content_version INT NOT NULL DEFAULT 1,
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  deleted_at TIMESTAMPTZ,
-  PRIMARY KEY (id, version)
-);
+-- Nota de Persistencia Híbrida (ADR-009, ADR-011):
+-- El contenido educativo (tracks, courses, modules, sections, lessons y question_banks) 
+-- se almacena exclusivamente en MongoDB para lecturas O(1) sin JOINs.
+-- PostgreSQL custodia únicamente tablas transaccionales enlazadas por identificadores inmutables (slugs/UUIDs).
 
--- Attempts
+-- Attempts (Registro inmutable de intentos y evaluaciones)
 CREATE TABLE attempts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id),
   kind VARCHAR(20) NOT NULL
     CHECK (kind IN ('lesson_question','quiz','exam','diagnostic','review')),
-  module_id UUID REFERENCES modules(id),
-  section_id UUID REFERENCES sections(id),
-  lesson_id UUID REFERENCES lessons(id),
-  quiz_id UUID REFERENCES quizzes(id),
-  exam_id UUID REFERENCES exams(id),
-  question_id UUID,
+  track_slug VARCHAR(80) NOT NULL,
+  course_slug VARCHAR(80) NOT NULL,
+  module_slug VARCHAR(80),
+  section_slug VARCHAR(80),
+  lesson_id VARCHAR(64),
+  quiz_id VARCHAR(64),
+  exam_id VARCHAR(64),
+  question_id VARCHAR(64),
   question_version INT,
   content_version INT NOT NULL,
   threshold_applied SMALLINT CHECK (threshold_applied BETWEEN 0 AND 100),
@@ -1381,7 +1523,6 @@ CREATE TABLE attempts (
   graded_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  FOREIGN KEY (question_id, question_version) REFERENCES questions(id, version),
   CONSTRAINT chk_attempt_kind CHECK (
     (kind='quiz' AND quiz_id IS NOT NULL AND exam_id IS NULL AND question_id IS NULL) OR
     (kind='exam' AND exam_id IS NOT NULL AND quiz_id IS NULL AND question_id IS NULL) OR
@@ -1390,15 +1531,15 @@ CREATE TABLE attempts (
   )
 );
 CREATE UNIQUE INDEX uq_attempts_user_idempotency ON attempts (user_id, idempotency_key);
-CREATE INDEX idx_attempts_user_module ON attempts (user_id, module_id, kind, created_at DESC);
+CREATE INDEX idx_attempts_user_course ON attempts (user_id, course_slug, kind, created_at DESC);
 
 -- User Section Stars (Calificación formativa 1-3⭐)
 CREATE TABLE user_section_stars (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id),
-  language_id UUID NOT NULL REFERENCES programming_languages(id),
-  module_id UUID NOT NULL REFERENCES modules(id),
-  section_id UUID NOT NULL REFERENCES sections(id),
+  track_slug VARCHAR(80) NOT NULL,
+  course_slug VARCHAR(80) NOT NULL,
+  section_slug VARCHAR(80) NOT NULL,
   stars_earned SMALLINT NOT NULL CHECK (stars_earned BETWEEN 1 AND 3),
   max_stars_earned SMALLINT NOT NULL DEFAULT 1 CHECK (max_stars_earned BETWEEN 1 AND 3),
   first_attempt_errors INT NOT NULL DEFAULT 0 CHECK (first_attempt_errors >= 0),
@@ -1409,18 +1550,19 @@ CREATE TABLE user_section_stars (
   last_completed_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  CONSTRAINT uq_user_section_stars UNIQUE (user_id, section_id),
+  CONSTRAINT uq_user_section_stars UNIQUE (user_id, section_slug),
   CONSTRAINT chk_max_stars CHECK (max_stars_earned >= stars_earned)
 );
-CREATE INDEX idx_user_section_stars_user_module ON user_section_stars (user_id, module_id, stars_earned);
-CREATE INDEX idx_user_section_stars_user_lang ON user_section_stars (user_id, language_id);
+CREATE INDEX idx_user_section_stars_user_course ON user_section_stars (user_id, course_slug, stars_earned);
+CREATE INDEX idx_user_section_stars_user_track ON user_section_stars (user_id, track_slug);
 
 -- User Module Progress (Candados y Maestría 80%⭐)
 CREATE TABLE user_module_progress (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id),
-  language_id UUID NOT NULL REFERENCES programming_languages(id),
-  module_id UUID NOT NULL REFERENCES modules(id),
+  track_slug VARCHAR(80) NOT NULL,
+  course_slug VARCHAR(80) NOT NULL,
+  module_slug VARCHAR(80) NOT NULL,
   status VARCHAR(20) NOT NULL DEFAULT 'locked'
     CHECK (status IN ('locked','unlocked','in_progress','completed','mastered')),
   is_unlocked BOOLEAN NOT NULL DEFAULT false,
@@ -1436,25 +1578,31 @@ CREATE TABLE user_module_progress (
   mastered_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  CONSTRAINT uq_user_module_progress UNIQUE (user_id, module_id),
+  CONSTRAINT uq_user_module_progress UNIQUE (user_id, course_slug, module_slug),
   CONSTRAINT chk_sections_completed CHECK (sections_completed BETWEEN 0 AND sections_total),
   CONSTRAINT chk_stars_earned CHECK (stars_earned BETWEEN 0 AND stars_total_possible)
 );
-CREATE INDEX idx_user_module_progress_user_lang ON user_module_progress (user_id, language_id, status);
+CREATE INDEX idx_user_module_progress_user_track ON user_module_progress (user_id, track_slug, status);
 CREATE INDEX idx_user_module_progress_stars ON user_module_progress (user_id, stars_percentage);
 
--- User Mistakes Notebook (Cuaderno de Errores)
+-- User Mistakes Notebook (Cuaderno de Errores con Algoritmo SM-2 de Repetición Espaciada)
 CREATE TABLE user_mistakes_notebook (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id),
-  language_id UUID NOT NULL REFERENCES programming_languages(id),
-  module_id UUID NOT NULL REFERENCES modules(id),
-  section_id UUID REFERENCES sections(id),
-  lesson_id UUID REFERENCES lessons(id),
-  question_id UUID NOT NULL,
-  question_version INT NOT NULL,
+  track_slug VARCHAR(80) NOT NULL,
+  course_slug VARCHAR(80) NOT NULL,
+  module_slug VARCHAR(80) NOT NULL,
+  section_slug VARCHAR(80),
+  lesson_id VARCHAR(64),
+  question_id VARCHAR(64) NOT NULL,
+  question_version INT NOT NULL DEFAULT 1,
   fail_count INT NOT NULL DEFAULT 1 CHECK (fail_count > 0),
   is_resolved BOOLEAN NOT NULL DEFAULT false,
+  -- Parámetros del Algoritmo SuperMemo SM-2 (ADR-011)
+  interval_days INT NOT NULL DEFAULT 1 CHECK (interval_days >= 1),
+  ease_factor NUMERIC(4,2) NOT NULL DEFAULT 2.50 CHECK (ease_factor >= 1.30),
+  repetition_count INT NOT NULL DEFAULT 0 CHECK (repetition_count >= 0),
+  next_review_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   first_failed_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   last_failed_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   resolved_at TIMESTAMPTZ,
@@ -1462,31 +1610,29 @@ CREATE TABLE user_mistakes_notebook (
   xp_recovered INT NOT NULL DEFAULT 0 CHECK (xp_recovered >= 0),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  FOREIGN KEY (question_id, question_version) REFERENCES questions(id, version),
   CONSTRAINT uq_user_mistakes_user_question UNIQUE (user_id, question_id)
 );
-CREATE INDEX idx_user_mistakes_unresolved ON user_mistakes_notebook (user_id, module_id, last_failed_at DESC) WHERE is_resolved = false;
-CREATE INDEX idx_user_mistakes_user_lang ON user_mistakes_notebook (user_id, language_id, is_resolved);
+CREATE INDEX idx_user_mistakes_unresolved ON user_mistakes_notebook (user_id, course_slug, last_failed_at DESC) WHERE is_resolved = false;
+CREATE INDEX idx_user_mistakes_sm2_review ON user_mistakes_notebook (user_id, next_review_at) WHERE is_resolved = false;
 
 -- Review Queue Items (Cola de repaso activa)
 CREATE TABLE review_queue_items (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   attempt_id UUID NOT NULL REFERENCES attempts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES users(id),
-  section_id UUID NOT NULL REFERENCES sections(id),
-  question_id UUID NOT NULL,
-  question_version INT NOT NULL,
+  section_slug VARCHAR(80) NOT NULL,
+  question_id VARCHAR(64) NOT NULL,
+  question_version INT NOT NULL DEFAULT 1,
   status VARCHAR(20) NOT NULL DEFAULT 'pending'
     CHECK (status IN ('pending','passed','failed')),
   review_round SMALLINT NOT NULL DEFAULT 1 CHECK (review_round > 0),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  FOREIGN KEY (question_id, question_version) REFERENCES questions(id, version),
   CONSTRAINT uq_review_queue_item UNIQUE (attempt_id, question_id, review_round)
 );
 CREATE INDEX idx_review_queue_attempt_status ON review_queue_items (attempt_id, status);
 
--- Trigger Function: Recalcular estrellas de módulo y evapythonr desbloqueo del siguiente
+-- Trigger Function: Recalcular estrellas de módulo y evaluar desbloqueo del siguiente
 CREATE OR REPLACE FUNCTION fn_recalculate_module_progress()
 RETURNS TRIGGER AS $$
 DECLARE
@@ -1627,7 +1773,7 @@ FOR EACH ROW EXECUTE FUNCTION fn_recalculate_module_progress();
 
 | Decisión | Estado | Siguiente paso |
 |---|---|---|
-| Gestor concreto y hosting (RDS, Cloud SQL, Supabase) | Abierta — requiere ADR | Evapythonr costo vs. `RNF-001`/`RNF-005` en `09-decisions/` |
+| Gestor concreto y hosting (RDS, Cloud SQL, Supabase) | Abierta — requiere ADR | Evaluar costo vs. `RNF-001`/`RNF-005` en `09-decisions/` |
 | RLS vs. `WHERE user_id` en app | Abierta | Si se usa Supabase/PostgREST, habilitar RLS; si API propia, `WHERE` + tests IDOR (`RNF-009`) |
 | Particionado de `attempts` | Diferida a Post-MVP | Medir `RNF-007` con dataset sintético 100k intentos; si p95 >100 ms, particionar |
 | Cifrado de `document_number` | Abierta | Si `RNF-037` lo exige, usar `pgcrypto` o cifrado en app con KMS |
