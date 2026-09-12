@@ -24,7 +24,7 @@ Funcionalidad mínima que debe estar completa y probada para considerar el MVP e
 - Jerarquía `Lenguaje → Módulo → Sección → Lección` con arquitectura desacoplada (`23_CONTENT_SPECIFICATION.md`).
 - Sesiones reanudables y lección con explicación → ejemplo → ejercicio → feedback formativo sin spoilers.
 
-### 2.3 Evapythonción
+### 2.3 Evaluación
 - Banco de preguntas tipificadas (ver `15_QUIZ_EXAM_SYSTEM.md`).
 - Quiz intermedio por módulo y Examen final con calificación automática.
 - Umbrales configurables (Quiz 70%, Examen 80%) y reintentos con revisión de errores.
@@ -54,7 +54,7 @@ Documentadas como roadmap, **no** parte del MVP. Ver `22_ROADMAP.md` para orden 
 
 - Lenguajes adicionales: JavaScript, TypeScript, Java, C, C++, C#, Go.
 - Editor de código y ejecución en sandbox.
-- Proyectos prácticos y proyecto final evapythondo.
+- Proyectos prácticos y proyecto final evaluado.
 - Retos, rankings, competencias, tablas de clasificación.
 - Sistema de amigos, perfiles públicos.
 - Cursos creados por terceros (marketplace).
@@ -86,7 +86,7 @@ Cualquier solicitud fuera de este listado debe pasar por actualización de este 
 
 ## 5. Límites del sistema
 
-- **Frontera:** la plataforma es un sistema de **aprendizaje y evapythonción**, no un IDE ni un juez online con ejecución arbitraria en MVP.
+- **Frontera:** la plataforma es un sistema de **aprendizaje y evaluación**, no un IDE ni un juez online con ejecución arbitraria en MVP.
 - **Integraciones externas:** solo email (verificación/recuperación), almacenamiento de PDFs y servicio de anuncios; pagos abstraídos tras interfaz.
 - **Plataformas:** web responsive en MVP; móvil/escritorio nativo es post-MVP.
 - **Escalabilidad MVP:** diseñada para escalar en contenido y usuarios sin re-arquitectura, pero sin prometer multi-región en fase 1 (ver `06` y `11`).

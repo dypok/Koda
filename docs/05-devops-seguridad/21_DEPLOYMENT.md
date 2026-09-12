@@ -71,7 +71,7 @@ Este documento define **cómo se despliega, opera, observa y recupera** la plata
 
 > Ninguna elección se asume. Cada fila propone una opción para MVP y exige ADR si es arquitectónica (`11` §19). La alternativa queda documentada para no re-decidir sin evidencia.
 
-| Capa | Opciones evapythondas | Decisión Oficial Koda | Justificación | ADR Vinculante |
+| Capa | Opciones evaluadas | Decisión Oficial Koda | Justificación | ADR Vinculante |
 |---|---|---|---|---|
 | **Contenedores** | Docker + Compose / Podman / sin contenedores | **Docker + Compose** | Artefacto inmutable (P-02), paridad `dev`≈`staging`≈`prod`, `Dockerfile` multi-stage cacheable; evita deriva de "funciona en mi máquina". | Decidido por P-02 |
 | **Orquestación MVP** | Compose en VM / Kubernetes (k3s/EKS/GKE) / PaaS | **Compose en VM (1–2 nodos) + reverse proxy** | Menor costo operativo en MVP con 100 concurrentes (`06` RNF-001); cumple `RNF-005` con 2 réplicas tras balanceador. | No requiere K8s en MVP |

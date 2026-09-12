@@ -62,7 +62,7 @@ Este documento es la **fuente de verdad del subsistema administrativo**. Define 
 
 | Rol | Valor en `users.role` | Cómo se obtiene | Alcance |
 |---|---|---|---|
-| `USER` | `user` | Registro (`05` RF-AUTH-001) | Dueño de su propio progreso. Accede a `/users/me/*`, aprendizaje y evapythonción propios con aislamiento estricto `user_id = token.sub` (`05` RF-USR-005, `06` RNF-009). |
+| `USER` | `user` | Registro (`05` RF-AUTH-001) | Dueño de su propio progreso. Accede a `/users/me/*`, aprendizaje y evaluación propios con aislamiento estricto `user_id = token.sub` (`05` RF-USR-005, `06` RNF-009). |
 | `ADMIN` | `admin` | Asignación directa en BD por `ADMIN` existente o seed inicial; no auto-promoción por API pública | `USER` + todo `/admin/*` (ver `05` RF-ADM-007). Opera contenido, configuración, usuarios, certificados y logros. |
 | `PREMIUM` | Flag `users.is_premium` (derivado de `subscriptions`, no rol) | Suscripción activa (`05` RF-PREM-002) | Condiciona `ads` pero **no** permisos de contenido (`07` US-066). Un `ADMIN` puede ser `premium` o no; son ortogonales. |
 
