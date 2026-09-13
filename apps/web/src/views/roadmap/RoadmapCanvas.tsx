@@ -8,6 +8,7 @@ import { RoadmapCanvasControls } from './RoadmapCanvasControls';
 import { RoadmapAmbientStars } from './RoadmapAmbientStars';
 import { RoadmapTacticalGrid } from './RoadmapTacticalGrid';
 import { RoadmapNodeInspector } from './RoadmapNodeInspector';
+import { RoadmapMinimap } from './RoadmapMinimap';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { useRoadmapPanZoom } from './useRoadmapPanZoom';
 
@@ -53,6 +54,9 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
       }`}
     >
       <RoadmapCanvasControls />
+
+      {/* Radar Minimap Tracking Viewport with GSAP Sweep */}
+      <RoadmapMinimap dataset={dataset} />
 
       {/* Drone Scanner / Tactical Telemetry Inspector */}
       <RoadmapNodeInspector

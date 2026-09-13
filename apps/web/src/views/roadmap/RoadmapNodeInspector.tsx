@@ -4,6 +4,7 @@ import React from 'react';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { IconBolt, IconLock, IconCheck, IconX, IconSparkles, IconCrosshair } from '@tabler/icons-react';
+import gsap from 'gsap';
 
 interface RoadmapNodeInspectorProps {
   node: GraphNode | null;
@@ -12,6 +13,32 @@ interface RoadmapNodeInspectorProps {
 }
 
 export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeInspectorProps) {
+  const cardRef = React.useRef<HTMLElement | null>(null);
+
+  // Animación de entrada holográfica usando GSAP
+  React.useEffect(() => {
+    if (!node || !cardRef.current) return;
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        cardRef.current,
+        {
+          opacity: 0,
+          y: 20,
+          scale: 0.96,
+        },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 0.28,
+          ease: 'power3.out',
+        }
+      );
+    }, cardRef);
+
+    return () => ctx.revert();
+  }, [node]);
+
   if (!node) return null;
 
   const isUnlocked = node.isUnlocked;
@@ -21,8 +48,9 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
 
   return (
     <aside
+      ref={cardRef}
       aria-label="Inspector de Telemetría Táctica"
-      className="absolute bottom-16 right-6 z-30 w-80 sm:w-96 rounded-lg bg-slate-950/90 border border-cyan-500/30 backdrop-blur-xl shadow-[0_0_30px_rgba(0,0,0,0.8)] text-slate-100 overflow-hidden animate-in fade-in slide-in-from-bottom-3 duration-200"
+      className="absolute bottom-16 right-6 z-30 w-80 sm:w-96 rounded-lg bg-slate-950/90 border border-cyan-500/30 backdrop-blur-xl shadow-[0_0_30px_rgba(0,0,0,0.8)] text-slate-100 overflow-hidden"
     >
       {/* HUD Scanner Top Bar with Telemetry */}
       <div className="px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between text-xs font-mono">
