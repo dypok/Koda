@@ -1,5 +1,5 @@
 import React from 'react';
-import { InfoModalTab } from '@/components/landing/InfoModal';
+import { InfoModalTab } from '@/models/landing/info-modal.model';
 import {
   FOOTER_SUPPORT_LINKS,
   FOOTER_LEGAL_LINKS,

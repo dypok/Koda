@@ -31,12 +31,21 @@ export const FaqsTab: React.FC = () => (
       <p className="text-xs text-slate-400 mt-1">Todo lo que necesitas saber para aprender con éxito en KodaAcademy.</p>
     </div>
 
-    <div className="space-y-4">
+    <div className="space-y-3">
       {FAQS_DATA.map((faq, i) => (
-        <div key={i} className="rounded-2xl border border-slate-800/80 bg-slate-900/40 p-4 space-y-2">
-          <h5 className="font-bold text-white text-sm">{faq.q}</h5>
-          <p className="text-xs text-slate-400 leading-relaxed">{faq.a}</p>
-        </div>
+        <details
+          key={i}
+          open={i === 0}
+          className="group rounded-2xl border border-slate-800/80 bg-slate-900/40 open:border-amber-500/30 transition-colors"
+        >
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-3 p-4 font-bold text-white text-sm [&::-webkit-details-marker]:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/60 rounded-2xl">
+            {faq.q}
+            <span aria-hidden="true" className="shrink-0 rounded-full border border-slate-700 w-6 h-6 flex items-center justify-center text-amber-400 transition-transform group-open:rotate-45">
+              +
+            </span>
+          </summary>
+          <p className="px-4 pb-4 text-xs text-slate-400 leading-relaxed">{faq.a}</p>
+        </details>
       ))}
     </div>
   </div>
