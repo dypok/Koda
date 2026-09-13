@@ -8,7 +8,37 @@
 ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #334155; }
 
-/* 120 FPS GPU-Accelerated Cybernetic Keyframes */
+/* Koda landing tokens: focus visible + solid surfaces (no purple/blue defaults) */
+:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.koda-grid-bg {
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 20%, black 30%, transparent 75%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-marquee,
+  .animate-laser-flow,
+  .animate-laser-standby,
+  .animate-star-twinkle-a,
+  .animate-star-twinkle-b,
+  .animate-hud-shimmer,
+  .animate-wander-1,
+  .animate-wander-2,
+  .animate-wander-3,
+  .animate-wander-4,
+  .animate-wander-5 {
+    animation: none !important;
+  }
+}
 @keyframes laser-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -120; } }
 @keyframes laser-standby { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -56; } }
 @keyframes star-twinkle-a { 0%, 100% { opacity: 0.2; transform: scale(0.85); } 50% { opacity: 0.9; transform: scale(1.15); } }
