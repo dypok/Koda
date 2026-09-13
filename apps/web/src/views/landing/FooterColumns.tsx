@@ -27,7 +27,7 @@ const FooterLinkList: React.FC<{
           <li key={link.id}>
             <button
               onClick={() => onOpenModal(link.tab)}
-              className="inline-flex items-center gap-2 hover:text-amber-400 transition-colors cursor-pointer text-left"
+              className="inline-flex min-h-[32px] items-center gap-2 hover:text-amber-400 transition-colors cursor-pointer text-left py-0.5"
             >
               {Icon && <Icon className="w-3.5 h-3.5 text-slate-500" />}
               <span>{link.label}</span>
