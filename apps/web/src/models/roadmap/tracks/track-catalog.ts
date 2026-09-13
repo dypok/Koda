@@ -1,11 +1,12 @@
 import React from 'react';
-import { IconDeviceDesktop, IconServer, IconBrandDocker } from '@tabler/icons-react';
+import { IconDeviceDesktop, IconServer, IconBrandDocker, IconBrandPython } from '@tabler/icons-react';
 import { GraphDataset } from '../roadmap-graph.types';
 import { FRONTEND_COURSES_DATASET } from './frontend-track.mock';
 import { BACKEND_COURSES_DATASET } from './backend-track.mock';
 import { DEVOPS_COURSES_DATASET } from './devops-track.mock';
+import { PYTHON_COURSES_DATASET } from './python-track.mock';
 
-export type CareerBranchId = 'frontend' | 'backend' | 'devops';
+export type CareerBranchId = 'frontend' | 'backend' | 'devops' | 'python';
 
 export interface CareerBranchInfo {
   id: CareerBranchId;
@@ -64,5 +65,19 @@ export const CAREER_BRANCHES: CareerBranchInfo[] = [
     completedCourses: 1,
     totalCourses: 5,
     dataset: DEVOPS_COURSES_DATASET,
+  },
+  {
+    id: 'python',
+    title: 'Python Specialist',
+    tagline: 'Sintaxis, OOP & Algoritmos',
+    technologies: 'Python 3, POO, Scripts, FastAPI',
+    icon: IconBrandPython,
+    color: '#F59E0B',
+    progressPercent: 28,
+    earnedStars: 10,
+    totalStars: 60,
+    completedCourses: 1,
+    totalCourses: 6,
+    dataset: PYTHON_COURSES_DATASET,
   },
 ];
