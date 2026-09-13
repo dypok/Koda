@@ -88,6 +88,7 @@ export default function RegisterPage() {
             experienceTitle={stepper.selectedExperience?.title}
             goalTitle={stepper.selectedGoal?.title}
             goalMinutes={stepper.selectedGoal?.minutes}
+            onEditStep={stepper.goToStep}
             profile={profile}
           />
         )}
