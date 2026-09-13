@@ -3,10 +3,12 @@
 import React, { useEffect } from 'react';
 import Lenis from 'lenis';
 import { setLenisInstance } from '@/lib/scroll';
+import { getGsap } from '@/lib/gsap';
 
 /**
  * Smooth scroll solo para la landing. No se inicializa con
- * prefers-reduced-motion. Expone la instancia para GSAP ScrollTrigger (S2).
+ * prefers-reduced-motion. Lenis vive en el ticker de GSAP para
+ * sincronizar ScrollTrigger (S2).
  */
 export const LenisProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
@@ -19,12 +21,13 @@ export const LenisProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     });
     setLenisInstance(lenis);
 
-    let rafId = 0;
-    const raf = (time: number) => {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
+    const { gsap, ScrollTrigger } = getGsap();
+    lenis.on('scroll', ScrollTrigger.update);
+    const tick = (time: number) => {
+      lenis.raf(time * 1000);
     };
-    rafId = requestAnimationFrame(raf);
+    gsap.ticker.add(tick);
+    gsap.ticker.lagSmoothing(0);
 
     const onClick = (e: MouseEvent) => {
       const anchor = (e.target as HTMLElement).closest?.('a[href^="#"]') as
@@ -41,8 +44,8 @@ export const LenisProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     document.addEventListener('click', onClick);
 
     return () => {
-      cancelAnimationFrame(rafId);
       document.removeEventListener('click', onClick);
+      gsap.ticker.remove(tick);
       lenis.destroy();
       setLenisInstance(null);
     };

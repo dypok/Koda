@@ -1,29 +1,55 @@
 'use client';
 
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { HeroSkyBackground } from './HeroSkyBackground';
 import { UpcomingTechCarousel } from './UpcomingTechCarousel';
 import { HeroCtaGroup } from '@/views/landing/hero/HeroCtaGroup';
 import { HeroMascot } from '@/views/landing/hero/HeroMascot';
+import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 export const HeroSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const copyRef = useRef<HTMLDivElement>(null);
+  const mascotRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const carouselRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion()) return;
+    const { gsap } = getGsap();
+    const ctx = gsap.context(() => {
+      const trigger = {
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.6,
+      };
+      // Copy sube despacio y se atenúa; la mascota vuela más rápido (profundidad).
+      gsap.to(copyRef.current, { y: -70, opacity: 0.15, ease: 'none', scrollTrigger: trigger });
+      gsap.to(mascotRef.current, { y: -140, scale: 0.94, opacity: 0.35, ease: 'none', scrollTrigger: trigger });
+      gsap.to(gridRef.current, { yPercent: 12, ease: 'none', scrollTrigger: trigger });
+      gsap.to(carouselRef.current, { y: 40, opacity: 0, ease: 'none', scrollTrigger: trigger });
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
+      ref={sectionRef}
       aria-labelledby="koda-hero-title"
       className="relative isolate overflow-hidden min-h-screen min-h-[100dvh] flex flex-col justify-between pt-20 pb-4 md:pt-24 md:pb-6"
     >
       <HeroSkyBackground starCount={140} interactive={true} />
-      <div aria-hidden="true" className="koda-grid-bg pointer-events-none absolute inset-0" />
+      <div ref={gridRef} aria-hidden="true" className="koda-grid-bg pointer-events-none absolute inset-0" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full my-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column: Headlines & CTA */}
-          <div className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6">
+          <div ref={copyRef} className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 will-change-transform">
             <motion.p
               initial={reduceMotion ? false : { opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -65,20 +91,24 @@ export const HeroSection: React.FC = () => {
           </div>
 
           {/* Right Column: Mascota Oficial Koda */}
-          <HeroMascot />
+          <div ref={mascotRef} className="order-first lg:order-none lg:col-span-5 will-change-transform">
+            <HeroMascot />
+          </div>
         </div>
       </div>
 
       {/* Carrusel de Tecnologías */}
+      <div ref={carouselRef} className="relative z-10 w-full mt-auto pt-6 pb-2 will-change-transform">
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-        className="relative z-10 w-full mt-auto pt-6 pb-2"
+        className="w-full"
       >
         <UpcomingTechCarousel />
       </motion.div>
+      </div>
     </section>
   );
 };
