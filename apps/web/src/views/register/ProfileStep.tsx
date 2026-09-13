@@ -12,6 +12,7 @@ interface ProfileStepProps {
   experienceTitle?: string;
   goalTitle?: string;
   goalMinutes?: number;
+  onEditStep?: (step: number) => void;
   profile: ReturnType<typeof useRegisterProfileController>;
 }
 
@@ -20,6 +21,7 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
   experienceTitle,
   goalTitle,
   goalMinutes,
+  onEditStep,
   profile,
 }) => {
   return (
@@ -56,6 +58,7 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
             experienceTitle={experienceTitle}
             goalTitle={goalTitle}
             goalMinutes={goalMinutes}
+            onEditStep={onEditStep}
           />
         </div>
       </div>

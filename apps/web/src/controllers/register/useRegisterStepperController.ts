@@ -104,6 +104,10 @@ export function useRegisterStepperController() {
     setCurrentStep((prev) => Math.max(1, prev - 1));
   }, []);
 
+  const goToStep = useCallback((step: number) => {
+    setCurrentStep(Math.min(5, Math.max(1, Math.round(step))));
+  }, []);
+
   // Flechas del teclado para navegar (fuera de inputs).
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -149,5 +153,6 @@ export function useRegisterStepperController() {
     selectGoal,
     nextStep,
     prevStep,
+    goToStep,
   };
 }
