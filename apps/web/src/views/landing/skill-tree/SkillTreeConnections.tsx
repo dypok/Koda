@@ -9,6 +9,7 @@ export const SkillTreeConnections: React.FC = () => (
       strokeWidth="2.5"
       strokeLinecap="round"
       filter="url(#glow-soft)"
+      className="st-draw"
     />
     <circle r="2.5" fill="#a5f3fc">
       <animateMotion dur="3s" repeatCount="indefinite" path="M 50 115 C 90 115, 95 65, 135 65" />
@@ -21,6 +22,7 @@ export const SkillTreeConnections: React.FC = () => (
       strokeWidth="2.5"
       strokeLinecap="round"
       filter="url(#glow-soft)"
+      className="st-draw"
     />
     <circle r="2.5" fill="#a5f3fc">
       <animateMotion dur="3s" begin="1.5s" repeatCount="indefinite" path="M 135 65 C 180 65, 175 135, 220 135" />
@@ -33,7 +35,7 @@ export const SkillTreeConnections: React.FC = () => (
       strokeWidth="3"
       strokeLinecap="round"
       filter="url(#glow-amber)"
-      className="st-flicker"
+      className="st-draw st-flicker"
     />
 
     {/* Rama A: 04 -> 05A (Ámbar a Púrpura, bloqueada: flujo lento) */}
@@ -54,6 +56,7 @@ export const SkillTreeConnections: React.FC = () => (
       strokeWidth="2"
       strokeLinecap="round"
       filter="url(#glow-soft)"
+      className="st-draw"
     />
 
     {/* Conector curvo a Cofre Bonus */}
@@ -82,7 +85,7 @@ export const SkillTreeConnections: React.FC = () => (
       strokeWidth="2"
       strokeLinecap="round"
       filter="url(#glow-strong)"
-      className="opacity-75"
+      className="opacity-75 st-draw"
     />
 
     {/* Anillos orbitales del nodo activo 04 */}
