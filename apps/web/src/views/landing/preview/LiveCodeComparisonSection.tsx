@@ -65,7 +65,7 @@ export const LiveCodeComparisonSection: React.FC = () => {
             </div>
           </motion.div>
 
-          <div className="lg:col-span-5 w-full">
+          <div className="lg:col-span-5 w-full lg:sticky lg:top-24 self-start">
             <MiniLessonPreview />
           </div>
         </div>
