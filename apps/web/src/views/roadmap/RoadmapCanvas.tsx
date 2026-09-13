@@ -6,6 +6,7 @@ import { RoadmapSvgPaths } from './RoadmapSvgPaths';
 import { RoadmapGraphNode } from './RoadmapGraphNode';
 import { RoadmapCanvasControls } from './RoadmapCanvasControls';
 import { RoadmapAmbientStars } from './RoadmapAmbientStars';
+import { RoadmapTacticalGrid } from './RoadmapTacticalGrid';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { useRoadmapPanZoom } from './useRoadmapPanZoom';
 
@@ -49,6 +50,9 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
           className="w-full h-full max-w-7xl max-h-[85vh] drop-shadow-2xl pointer-events-auto"
           style={{ overflow: 'visible' }}
         >
+          {/* Tactical starmap cartography coordinates & grid */}
+          <RoadmapTacticalGrid />
+
           {/* Ambient micro-constellation decorative dots */}
           <RoadmapAmbientStars />
 
