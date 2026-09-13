@@ -1,6 +1,6 @@
 # 💻 Koda Web Client (`apps/web`) 🦊
 
-> Aplicación web construida con **Next.js 16 (App Router)**, **React 19**, **Tailwind CSS**, **Zustand**, **Lenis**, **GSAP ScrollTrigger** y **framer-motion**.
+> Aplicación web construida con **Next.js 16 (App Router)**, **React 19**, **Tailwind CSS**, **Zustand**, **Lenis**, **GSAP ScrollTrigger**, **Three.js** y **framer-motion**.
 
 Rutas actuales: `/` (landing con override `?landing=true` / preview `?roadmap=true`), `/login`, `/register`. Ver mapa completo de pantallas en `docs/02-requisitos-ux/10_INFORMATION_ARCHITECTURE.md`.
 
@@ -9,12 +9,14 @@ Rutas actuales: `/` (landing con override `?landing=true` / preview `?roadmap=tr
 ## 🎨 Estructura del frontend
 
 - **`src/app/`**: `layout.tsx` (fuentes `swap+latin`, metadata OG), `page.tsx` (landing: Navbar → Hero → GiantMarquee → Preview → Metodología → Testimonios → WorldMap → Pricing → Certificado → Finale → Footer), `not-found.tsx`, `error.tsx`.
-- **`src/components/landing/`**: Navbar, HeroSection (+ `HeroSkyBackground` canvas 2D, `LightBeams`, `LenisProvider`, `ScrollProgress`, `Preloader`, `AuroraProvider`, `PartyMode`, `AnnouncementBar`, `StickyMobileCta`, `ExitIntentModal`, `GiantMarquee`, `WaveDivider`, `KodaPeek`, `CinematicFinale`, `InfoModal`, `Footer`, `LanguageSelector`).
+- **`src/components/landing/`**: Navbar, HeroSection (+ `HeroSkyBackground` canvas 2D, `CosmicBackground` Three.js full-page, `LightBeams`, `LenisProvider`, `ScrollProgress`, `RouteThread`, `ActTheme`, `KodaGuide`, `GlowParallax`, `Preloader`, `AuroraProvider`, `PartyMode`, `AnnouncementBar`, `StickyMobileCta`, `ExitIntentModal`, `GiantMarquee`, `WaveDivider`, `KodaPeek`, `CinematicFinale`, `InfoModal`, `Footer`, `LanguageSelector`).
 - **`src/views/landing/`**: `hero/` (CTA, mascota, typewriter), `preview/` (demo `MiniLessonPreview` + `CodeConfetti`), `methodology/` (Hub, `PillarStrip`, 4 pilares), `conversion/` (testimonios, pricing, certificado, racha, mapa), `info-modal/` (tabs + sidebar), `skill-tree/` (SVG vivo).
 - **`src/components/ui/`**: `gradient-button`, `magnetic`, `split-text`, `highlight`, `transition-link`, `animated-counter` (odómetro), `glare-hover`, `click-spark`.
 - **`src/lib/`**: `utils (cn)`, `scroll` (Lenis + `scrollToId`), `gsap` (registro único), `sound` (WebAudio opt-in), `i18n` (ES/EN hero).
 - **`src/stores/`**: `auth.store.ts` (mock con `localStorage`), `roadmap.store.ts` (pan/zoom 50-200 + datasets); `src/services/roadmap/` con fallback a mocks.
-- **`src/models|controllers/landing/`**: datos y lógica de la landing (sky, metodología, techs, idiomas, footer, info-modal).
+- **`src/models|controllers/landing/`**: datos y lógica de la landing (sky, `cosmic-field`, metodología, techs, idiomas, footer, info-modal).
+
+Fondo 3D: `CosmicBackground` (3.500/1.200/700 partículas, twinkle shader, dolly + warp por Lenis, `UnrealBloomPass` lazy, guardián de fps con relevo 2D). Todo el motion respeta `prefers-reduced-motion`.
 
 Iconografía: **lucide-react** (tabler solo en brands/roadmap/auth pendientes de migrar). Mascota Koda: framer-motion (PixiJS diferido, ver `ADR-004`).
 

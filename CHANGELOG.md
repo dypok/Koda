@@ -10,6 +10,10 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-13 14:15] [Added] **Transiciones 2.5D entre secciones + fondo 3D (rama `feat/frontend-visual-experience`):**
+  - Tanda F: glows con parallax propio, wipe ámbar, shine del diploma, skew por velocidad, lift de testimonios, metodología apilada, demo y diploma pineados, focos del mapa por scrub, eclipse-wipe al footer, hilo de ruta continuo, actos temáticos (`body[data-act]`), hero pineado 200vh, premium elevada y Koda guía narradora.
+  - Tanda D: fondo 3D full-page con Three.js (`CosmicBackground` ssr:false, 3.500/1.200/700 partículas según dispositivo, twinkle por shader, dolly + warp por Lenis, intensidad por acto, `UnrealBloomPass` lazy y guardián de fps con relevo del sky 2D).
+  - Detalle por commit en `documentation/changelog/13-09-2026-changelog.md`.
 - [2026-09-13 13:40] [Added] **Landing page renovada (rama `feat/frontend-visual-experience`, 45 commits):**
   - Base L1-L6: copy pedagógico del hero, Navbar con anchors, mini-lección interactiva real, metodología con ritmo, CTA/Footer/InfoModal pulidos, iconografía lucide y logo que vuelve a la landing (`/?landing=true`).
   - Scroll y motion S1-S5 + W1-W15: Lenis, GSAP ScrollTrigger con parallax del hero, scroll-spy de pilares, reveals variados, micro-interacciones (magnetic, counters spring, burst, shake/pop), split-text, typewriter, highlights dibujados, odómetro, marquesina por velocidad, grain, cursor glow, confeti de código, onda divisoria, KodaPeeks, pillar strip pineada, View Transitions, skill-tree que se dibuja, carrusel 3D de testimonios y finale cinematográfico con eclipse.
