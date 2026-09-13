@@ -7,6 +7,24 @@ export function RoadmapNodeRings({ variant }: { variant: NodeVariant }) {
   if (variant === 'active') {
     return (
       <g className="node-active-beacon pointer-events-none">
+        {/* Keplerian Elliptical Orbital Ring with micro-particles */}
+        <g transform="rotate(-22)">
+          <ellipse
+            rx="46"
+            ry="18"
+            fill="none"
+            stroke="#F97316"
+            strokeWidth="1"
+            strokeDasharray="4 8"
+            opacity="0.55"
+            className="animate-spin"
+            style={{ animationDuration: '28s' }}
+          />
+          <circle cx="46" cy="0" r="2.2" fill="#FDBA74" className="drop-shadow-[0_0_6px_#F97316]" />
+          <circle cx="-46" cy="0" r="1.6" fill="#FED7AA" className="drop-shadow-[0_0_4px_#F97316]" />
+          <circle cx="0" cy="18" r="1.8" fill="#FB923C" className="drop-shadow-[0_0_5px_#F97316]" />
+        </g>
+
         {/* Outer tactical scanning radar brackets */}
         <circle
           r="48"
@@ -27,7 +45,7 @@ export function RoadmapNodeRings({ variant }: { variant: NodeVariant }) {
           opacity="0.65"
           className="animate-pulse"
         />
-        {/* Octagonal/circular inner core with intense glow */}
+        {/* Circular inner core with intense glow */}
         <circle
           r="26"
           fill="#EA580C"
@@ -44,20 +62,27 @@ export function RoadmapNodeRings({ variant }: { variant: NodeVariant }) {
   if (variant === 'boss') {
     return (
       <g className="node-boss-monolith pointer-events-none">
+        {/* Keplerian Dread Orbit with crimson energy particles */}
+        <g transform="rotate(32)">
+          <ellipse
+            rx="56"
+            ry="22"
+            fill="none"
+            stroke="#EF4444"
+            strokeWidth="1.2"
+            strokeDasharray="5 10"
+            opacity="0.65"
+            className="animate-spin"
+            style={{ animationDuration: '32s' }}
+          />
+          <circle cx="56" cy="0" r="2.5" fill="#FCA5A5" className="drop-shadow-[0_0_8px_#EF4444]" />
+          <circle cx="-56" cy="0" r="2" fill="#F87171" className="drop-shadow-[0_0_6px_#EF4444]" />
+          <circle cx="0" cy="22" r="2.2" fill="#DC2626" className="drop-shadow-[0_0_7px_#EF4444]" />
+        </g>
+
         {/* Outer forcefield distortion hex ring */}
         <circle
-          r="52"
-          stroke="#EF4444"
-          strokeWidth="1.5"
-          strokeDasharray="6 10"
-          fill="none"
-          opacity="0.4"
-          className="st-spin-slower"
-          style={{ animationDuration: '60s' }}
-        />
-        {/* Second dread ring */}
-        <circle
-          r="62"
+          r="64"
           stroke="#7F1D1D"
           strokeWidth="1"
           strokeDasharray="2 8"
@@ -66,25 +91,58 @@ export function RoadmapNodeRings({ variant }: { variant: NodeVariant }) {
           className="st-spin-slow"
           style={{ animationDuration: '80s' }}
         />
-        {/* Middle containment barrier */}
-        <circle
-          r="40"
+
+        {/* Octagonal containment barrier */}
+        <polygon
+          points="38,15.7 15.7,38 -15.7,38 -38,15.7 -38,-15.7 -15.7,-38 15.7,-38 38,-15.7"
+          fill="none"
           stroke="#DC2626"
           strokeWidth="1.5"
-          fill="none"
+          strokeDasharray="4 6"
           opacity="0.75"
           className="animate-pulse"
         />
-        {/* Core dark reactor cell */}
-        <circle
-          r="28"
+
+        {/* Octagonal Core Monolith */}
+        <polygon
+          points="28,11.6 11.6,28 -11.6,28 -28,11.6 -28,-11.6 -11.6,-28 11.6,-28 28,-11.6"
           fill="#450A0A"
           stroke="#F87171"
           strokeWidth="2.5"
-          className="drop-shadow-[0_0_22px_rgba(239,68,68,0.7)] st-flicker"
+          className="drop-shadow-[0_0_24px_rgba(239,68,68,0.85)] st-flicker"
         />
+
         {/* Warning hazard cross markers */}
         <path d="M -34 0 L -25 0 M 25 0 L 34 0 M 0 -34 L 0 -25 M 0 25 L 0 34" stroke="#FCA5A5" strokeWidth="2" />
+      </g>
+    );
+  }
+
+  if (variant === 'branch') {
+    return (
+      <g className="node-branch-beacon">
+        {/* Outer rotating dashed hexagon */}
+        <polygon
+          points="35,0 17.5,30.3 -17.5,30.3 -35,0 -17.5,-30.3 17.5,-30.3"
+          fill="none"
+          stroke="#38BDF8"
+          strokeWidth="1"
+          strokeDasharray="4 6"
+          opacity="0.55"
+          className="animate-spin"
+          style={{ animationDuration: '40s' }}
+        />
+        {/* Hexagonal Inner Core */}
+        <polygon
+          points="26,0 13,22.5 -13,22.5 -26,0 -13,-22.5 13,-22.5"
+          fill="#0C4A6E"
+          stroke="#38BDF8"
+          strokeWidth="2"
+          className="drop-shadow-[0_0_14px_rgba(56,189,248,0.6)]"
+        />
+        {/* Node connector ticks */}
+        <circle cx="0" cy="-30" r="1.5" fill="#38BDF8" />
+        <circle cx="0" cy="30" r="1.5" fill="#38BDF8" />
       </g>
     );
   }

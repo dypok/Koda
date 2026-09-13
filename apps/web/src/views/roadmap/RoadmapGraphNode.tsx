@@ -19,6 +19,7 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
   const iconWrapperRef = useRef<HTMLDivElement | null>(null);
   const lockShatterGlowRef = useRef<SVGCircleElement | null>(null);
   const quickToggleRef = useRef<SVGGElement | null>(null);
+  const shardsRef = useRef<SVGGElement | null>(null);
 
   const { toggleNodeLock, unlockNodeWithCinematic } = useRoadmapStore();
   const zoomLevel = useRoadmapStore((s) => s.zoomLevel);
@@ -108,7 +109,31 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
         tl.to(glow, { opacity: 0, r: 60, duration: 0.3, ease: 'power1.out' });
       }
 
-      // 3. Estallido y disipación del candado
+      // 3. Estallido cuántico: Dispersión radial de esquirlas de cristal
+      if (shardsRef.current) {
+        const shardElements = shardsRef.current.querySelectorAll('.lock-shard');
+        tl.set(shardsRef.current, { opacity: 1 }, '-=0.2');
+        shardElements.forEach((shard, idx) => {
+          const rad = (idx * 60 * Math.PI) / 180;
+          const dist = 32 + (idx % 2) * 10;
+          tl.fromTo(
+            shard,
+            { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
+            {
+              x: Math.cos(rad) * dist,
+              y: Math.sin(rad) * dist,
+              rotation: idx % 2 === 0 ? 120 : -120,
+              scale: 0.1,
+              opacity: 0,
+              duration: 0.55,
+              ease: 'power3.out',
+            },
+            '-=0.45'
+          );
+        });
+      }
+
+      // 4. Estallido y disipación del icono de candado
       tl.to(
         icon,
         {
@@ -121,7 +146,7 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
         '-=0.3'
       );
 
-      // 4. Salto de escala de la baliza y reaparición del icono como nodo activo
+      // 5. Salto de escala de la baliza y reaparición del icono como nodo activo
       tl.fromTo(
         group,
         { scale: 0.9 },
@@ -129,7 +154,7 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
       );
       tl.to(group, { scale: 1.0, duration: 0.25, ease: 'power2.out' });
 
-      // 5. El nuevo icono se manifiesta con rebote
+      // 6. El nuevo icono se manifiesta con rebote
       tl.fromTo(
         icon,
         { scale: 0, rotation: -90, opacity: 0 },
@@ -178,8 +203,32 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
         className="pointer-events-none"
       />
 
+      {/* Quantum crystal shards dispersed upon unlocking */}
+      <g ref={shardsRef} className="pointer-events-none opacity-0">
+        {[0, 60, 120, 180, 240, 300].map((deg, idx) => (
+          <polygon
+            key={idx}
+            className="lock-shard"
+            points="-3,-5 4,-2 2,5 -4,2"
+            fill="#38BDF8"
+            stroke="#BAE6FD"
+            strokeWidth="0.75"
+          />
+        ))}
+      </g>
+
       {/* Outer luminous rings & tactical brackets */}
       <RoadmapNodeRings variant={node.variant} />
+
+      {/* Tactical Glass Core Scanline Glaze */}
+      <circle
+        r={node.variant === 'boss' ? 28 : 26}
+        fill="none"
+        stroke="rgba(255,255,255,0.12)"
+        strokeWidth="0.75"
+        strokeDasharray="1 3"
+        className="pointer-events-none"
+      />
 
       {/* Centered Node Icon with tactile micro-hover */}
       <foreignObject x="-14" y="-14" width="28" height="28" className="pointer-events-none">
