@@ -101,6 +101,13 @@
 .koda-beam-a { animation: koda-beam-a 40s ease-in-out infinite; transform-origin: top center; }
 .koda-beam-b { animation: koda-beam-b 60s ease-in-out infinite; transform-origin: top center; }
 
+/* Register narrativo: el cielo cambia con el paso (noche → amanecer → día ámbar) */
+.register-sky { transition: filter 1.2s ease; }
+body[data-register-step='2'] .register-sky { filter: hue-rotate(8deg) brightness(1.05); }
+body[data-register-step='3'] .register-sky { filter: hue-rotate(16deg) brightness(1.1); }
+body[data-register-step='4'] .register-sky { filter: hue-rotate(26deg) brightness(1.15) saturate(1.1); }
+body[data-register-step='5'] .register-sky { filter: hue-rotate(36deg) brightness(1.2) saturate(1.2); }
+
 /* Actos temáticos por tramo (F15): el grano y el hilo respiran con la historia */
 body[data-act='2'] .koda-grain { opacity: 0.07; }
 body[data-act='3'] .koda-grain { opacity: 0.04; }

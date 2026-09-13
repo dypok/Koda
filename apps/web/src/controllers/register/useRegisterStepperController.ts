@@ -56,6 +56,10 @@ export function useRegisterStepperController() {
     } catch {
       // sin almacenamiento, la sesión sigue funcionando
     }
+    document.body.dataset.registerStep = String(currentStep);
+    return () => {
+      delete document.body.dataset.registerStep;
+    };
   }, [currentStep, selectedLanguageId, selectedCategory, selectedExperienceId, selectedStyleId, selectedGoalId]);
 
   const filteredLanguages = useMemo(() => {
