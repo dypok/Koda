@@ -37,3 +37,16 @@
 - [Sunday]-[13/09/2026]-[13:21]-[Brandon Carranza] : E10 modo fiesta konami (hue-rotate global 30s, badge dismissible, arpegio chiptune; inactivo con `reduced-motion`).
 - [Sunday]-[13/09/2026]-[13:31]-[Brandon Carranza] : Fix autoplay de testimonios que arrastraba la página (`scrollLeft` manual del track en vez de `scrollIntoView`; fuera drag de framer).
 - [Sunday]-[13/09/2026]-[13:39]-[Brandon Carranza] : Fusión del CTA clásico en `CinematicFinale` (login secundario + trust points absorbidos; eliminados `CtaSection/CtaActions/CtaTrustPoints`).
+- [Sunday]-[13/09/2026]-[13:50]-[Brandon Carranza] : F7 `GlowParallax` (9 glows a ritmo propio con scrub, absorbiendo translates de Tailwind).
+- [Sunday]-[13/09/2026]-[13:51]-[Brandon Carranza] : F4 cortina ámbar con scrub en `WaveDivider` + F5 barrido de brillo sobre el diploma.
+- [Sunday]-[13/09/2026]-[13:52]-[Brandon Carranza] : F9 skew por velocidad en la marquesina + F11 lift de la card activa de testimonios.
+- [Sunday]-[13/09/2026]-[13:53]-[Brandon Carranza] : F10 metodología apilada (sticky escalonado con rounded y sombra) + F2 demo pineada `top-24` en desktop.
+- [Sunday]-[13/09/2026]-[13:54]-[Brandon Carranza] : F12 diploma sticky con checklist que se ilumina item por item.
+- [Sunday]-[13/09/2026]-[13:55]-[Brandon Carranza] : F8 focos del mapa que se encienden escalonados con scrub.
+- [Sunday]-[13/09/2026]-[13:56]-[Brandon Carranza] : F6 eclipse-wipe al footer (eclipse x3.2 + fundido del contenido) + F13 `RouteThread` lateral que crece con el scroll.
+- [Sunday]-[13/09/2026]-[13:58]-[Brandon Carranza] : F15 `ActTheme` (`body[data-act]`, grano por tramo, ids de sección) + F1 hero pineado 200vh con el contenido deslizándose encima.
+- [Sunday]-[13/09/2026]-[13:59]-[Brandon Carranza] : F3 premium elevada sobre gratis + F14 `KodaGuide` narradora fija solo en desktop.
+- [Sunday]-[13/09/2026]-[14:10]-[Brandon Carranza] : D1 fondo 3D (`three` + `@types/three`, `CosmicBackground` ssr:false full-page, DPR capado, dispose total).
+- [Sunday]-[13/09/2026]-[14:11]-[Brandon Carranza] : D2 `ShaderMaterial` con twinkle por estrella y uniforms de warp e intensidad.
+- [Sunday]-[13/09/2026]-[14:12]-[Brandon Carranza] : D3 cosmos reactivo (dolly z 8→4.5, warp por velocity de Lenis, intensidad por acto) + D4 `UnrealBloomPass` lazy con fallback.
+- [Sunday]-[13/09/2026]-[14:13]-[Brandon Carranza] : D5 guardián de fps (degrada bloom→partículas→off si <45fps×3s, relevo del sky 2D).
