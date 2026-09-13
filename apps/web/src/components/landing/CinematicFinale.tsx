@@ -6,7 +6,8 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { TransitionLink } from '@/components/ui/transition-link';
 import { Magnetic } from '@/components/ui/magnetic';
 import { SplitText } from '@/components/ui/split-text';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Check, LogIn } from 'lucide-react';
+import Link from 'next/link';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 
 /** Cierre de película: negro total, frase letra por letra, Koda y un solo CTA. */
@@ -82,6 +83,30 @@ export const CinematicFinale: React.FC = () => {
               <ArrowRight aria-hidden="true" className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1.5" />
             </TransitionLink>
           </Magnetic>
+        </motion.div>
+
+        <motion.div
+          initial={reduceMotion ? false : { opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.6, delay: 0.7 }}
+          className="flex flex-col items-center gap-4 pt-2"
+        >
+          <Link
+            href="/login"
+            className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-700 px-5 text-sm font-bold text-slate-200 transition-all hover:border-amber-400/50 hover:text-amber-300"
+          >
+            <LogIn aria-hidden="true" className="w-4 h-4 text-amber-400" />
+            Ya tengo una cuenta
+          </Link>
+          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-500 font-medium">
+            {['100% Gratuito', 'Sin tarjeta ni suscripción', 'Práctica en navegador'].map((t) => (
+              <span key={t} className="flex items-center gap-1.5">
+                <Check aria-hidden="true" className="w-4 h-4 text-emerald-400" />
+                {t}
+              </span>
+            ))}
+          </div>
         </motion.div>
       </div>
     </section>

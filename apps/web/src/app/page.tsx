@@ -6,7 +6,6 @@ import { Navbar } from '@/components/landing/Navbar';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { InteractivePreview } from '@/components/landing/InteractivePreview';
 import { MethodologySection } from '@/components/landing/MethodologySection';
-import { CtaSection } from '@/components/landing/CtaSection';
 import { Footer } from '@/components/landing/Footer';
 import { StudentRoadmapView } from '@/views/roadmap/StudentRoadmapView';
 import { LenisProvider } from '@/components/landing/LenisProvider';
@@ -71,7 +70,6 @@ export default function HomePage() {
           <WorldMap />
           <PricingSection />
           <CertificateSection />
-          <CtaSection />
           <CinematicFinale />
         </main>
         <Footer />
