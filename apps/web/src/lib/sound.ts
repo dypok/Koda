@@ -66,4 +66,9 @@ export const sound = {
     tone(659, 0.09, 0.12, 'triangle');
     tone(784, 0.18, 0.2, 'triangle');
   },
+  party() {
+    if (!ensure()) return;
+    const seq = [523, 659, 784, 1047, 784, 1047];
+    seq.forEach((f, i) => tone(f, i * 0.11, 0.14, 'square', 0.04));
+  },
 };

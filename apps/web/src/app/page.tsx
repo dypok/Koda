@@ -23,6 +23,7 @@ import { WaveDivider } from '@/components/landing/WaveDivider';
 import { CinematicFinale } from '@/components/landing/CinematicFinale';
 import { Preloader } from '@/components/landing/Preloader';
 import { AuroraProvider } from '@/components/landing/AuroraProvider';
+import { PartyMode } from '@/components/landing/PartyMode';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function HomePage() {
@@ -76,6 +77,7 @@ export default function HomePage() {
         <Footer />
         <StickyMobileCta />
         <ExitIntentModal />
+        <PartyMode />
       </div>
     </LenisProvider>
   );
