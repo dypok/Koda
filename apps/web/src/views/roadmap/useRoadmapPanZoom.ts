@@ -26,7 +26,8 @@ export function useRoadmapPanZoom() {
     if (target?.closest('button, a, [role="button"], .no-drag')) return;
     startRef.current = { px: e.clientX, py: e.clientY, ox: panOffset.x, oy: panOffset.y };
     hasMovedRef.current = false;
-    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+    // No capturar aquí: el capture retargetea el click y los nodos dejan de recibirlo.
+    // Se captura solo al superar el umbral de arrastre (ver onPointerMove).
   }, [panOffset]);
 
   const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
@@ -36,6 +37,13 @@ export function useRoadmapPanZoom() {
     if (Math.hypot(dx, dy) > 4) {
       hasMovedRef.current = true;
       setIsDragging(true);
+      try {
+        if (!(e.currentTarget as HTMLElement).hasPointerCapture(e.pointerId)) {
+          (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+        }
+      } catch {
+        // sin captura, el pan sigue funcionando con eventos normales
+      }
       setPanOffset(clamp(startRef.current.ox + dx, startRef.current.oy + dy, zoomLevel));
     }
   }, [zoomLevel, clamp, setPanOffset]);

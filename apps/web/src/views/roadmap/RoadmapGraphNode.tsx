@@ -138,6 +138,7 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
     <g
       ref={nodeGroupRef}
       transform={`translate(${node.x}, ${node.y})`}
+      data-node-id={node.id}
       onClick={() => onSelectNode(node)}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

@@ -40,10 +40,17 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
   }, [retreatTrigger]);
 
   // Mantener sincronizado el nodo actualmente inspeccionado con el dataset (refleja cambios de bloqueo/desbloqueo al instante)
+  // Compara por campos para no entrar en bucle si el dataset trae objetos nuevos.
   React.useEffect(() => {
     if (inspectedNode) {
       const refreshed = dataset.nodes.find((n) => n.id === inspectedNode.id);
-      if (refreshed && refreshed !== inspectedNode) {
+      const same =
+        refreshed &&
+        refreshed.isUnlocked === inspectedNode.isUnlocked &&
+        refreshed.variant === inspectedNode.variant &&
+        refreshed.stars === inspectedNode.stars &&
+        refreshed.label === inspectedNode.label;
+      if (refreshed && !same) {
         setInspectedNode(refreshed);
       }
     } else if (activeNodeId) {
@@ -61,6 +68,19 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
     setActiveNode(node.id);
   };
 
+  // Red de seguridad: el pointer capture del pan puede retargetear el click;
+  // en fase de captura resolvemos el nodo bajo el puntero aunque el click se pierda.
+  const handlePointerUpCapture = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (hasMovedRecently() || isWarping) return;
+    const target = e.target as HTMLElement | null;
+    if (target?.closest('button, a, [role="button"], .no-drag')) return;
+    const el = document.elementFromPoint(e.clientX, e.clientY)?.closest?.('[data-node-id]');
+    const id = el?.getAttribute('data-node-id');
+    if (!id) return;
+    const node = dataset.nodes.find((n) => n.id === id);
+    if (node) handleSelectNode(node);
+  };
+
   const handleDeploy = (node: GraphNode) => {
     if (!node.isUnlocked || isWarping) return;
     if (viewMode === 'courses') {
@@ -74,9 +94,9 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
     <div
       ref={containerRef}
       {...containerProps}
-      className={`relative w-full h-full overflow-hidden flex items-center justify-center select-none touch-none ${
-        isDragging ? 'cursor-grabbing' : 'cursor-grab'
-      }`}
+      onPointerUpCapture={handlePointerUpCapture}
+      className={`relative w-full h-full overflow-hidden flex items-center justify-center select-none touch-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'
+        }`}
     >
       <RoadmapCanvasControls />
 
