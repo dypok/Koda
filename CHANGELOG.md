@@ -10,6 +10,9 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-13 15:00] [Added] **Acabado visual del registro `/register` (rama `feat/frontend-visual-experience`):**
+  - Transiciones de layout FLIP, fondo narrativo por paso, CTA contextual por paso, Koda reactivo al formulario, handoff animado al roadmap, terminal de idiomas con toggle y variante express `?v=express` con evento analytics stub.
+  - Detalle por commit en `documentation/changelog/13-09-2026-changelog.md`.
 - [2026-09-13 14:35] [Added] **Renovación del registro `/register` (rama `feat/frontend-visual-experience`):**
   - `SelectableCard` radio único + `StepLayout` con stagger (-78 líneas, fuera 3 cards duplicadas), progressbar real, persistencia del wizard, flechas de teclado y bottom bar con hint.
   - Form real (submit Enter, labels, errores por campo, medidor de fuerza, ojo accesible), social auth honesto con loading por provider, success modal accesible con confeti y CTA a roadmap, slide direccional + odómetro, Koda buddy por paso, Tu plan revisable, `AVAILABLE_IDS` como única fuente y fondo vivo por paso.
