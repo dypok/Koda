@@ -19,6 +19,7 @@ import { PricingSection } from '@/views/landing/conversion/PricingSection';
 import { CertificateSection } from '@/views/landing/conversion/CertificateSection';
 import { GiantMarquee } from '@/components/landing/GiantMarquee';
 import { WaveDivider } from '@/components/landing/WaveDivider';
+import { CinematicFinale } from '@/components/landing/CinematicFinale';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function HomePage() {
@@ -64,6 +65,7 @@ export default function HomePage() {
           <PricingSection />
           <CertificateSection />
           <CtaSection />
+          <CinematicFinale />
         </main>
         <Footer />
         <StickyMobileCta />
