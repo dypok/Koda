@@ -159,9 +159,33 @@ export const CosmicBackground: React.FC = () => {
     };
     window.addEventListener('resize', onResize);
 
+    // Guardián: si <45fps sostenidos, degrada por escalones hasta apagarse (queda el sky 2D).
+    const fullCount = geometry.getAttribute('position').count;
+    let emaFps = 60;
+    let lastEval = performance.now();
+    let level = 0;
+    const guardTick = (frameStart: number) => {
+      const now = performance.now();
+      const fps = 1000 / Math.max(1, now - frameStart);
+      emaFps += (fps - emaFps) * 0.05;
+      if (now - lastEval < 3000) return;
+      lastEval = now;
+      if (emaFps >= 45 || level >= 3) return;
+      level += 1;
+      if (level === 1) {
+        composer = null; // bloom off
+      } else if (level === 2) {
+        geometry.setDrawRange(0, Math.floor(fullCount / 2)); // mitad de partículas
+      } else {
+        running = false; // estático y oculto: el sky 2D toma el relevo
+        mount.style.display = 'none';
+      }
+    };
+
     const loop = () => {
       if (!running) return;
-      uniforms.uTime.value = performance.now() / 1000;
+      const frameStart = performance.now();
+      uniforms.uTime.value = frameStart / 1000;
       points.rotation.y += 0.0006;
       // Warp por velocidad de Lenis (suavizado) + intensidad por acto visible.
       const velocity = Math.abs(getLenisInstance()?.velocity ?? 0);
@@ -172,6 +196,7 @@ export const CosmicBackground: React.FC = () => {
       uniforms.uIntensity.value += (targetIntensity - uniforms.uIntensity.value) * 0.05;
       if (composer) composer.render();
       else renderer.render(scene, camera);
+      guardTick(frameStart);
       raf = requestAnimationFrame(loop);
     };
     loop();
