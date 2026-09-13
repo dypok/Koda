@@ -14,6 +14,8 @@ import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 export const CinematicFinale: React.FC = () => {
   const reduceMotion = useReducedMotion();
   const eclipseRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     if (prefersReducedMotion()) return;
@@ -29,17 +31,29 @@ export const CinematicFinale: React.FC = () => {
           scrollTrigger: { trigger: eclipseRef.current, start: 'top 80%', end: 'top 35%', scrub: 0.6 },
         }
       );
-    }, eclipseRef);
+      // Salida: el eclipse crece tapando todo y el contenido se funde; el footer emerge del brillo.
+      gsap.to('.st-eclipse-ring', {
+        scale: 3.2,
+        ease: 'none',
+        scrollTrigger: { trigger: sectionRef.current, start: 'bottom 85%', end: 'bottom 15%', scrub: 0.6 },
+      });
+      gsap.to(contentRef.current, {
+        opacity: 0.15,
+        y: -60,
+        ease: 'none',
+        scrollTrigger: { trigger: sectionRef.current, start: 'bottom 85%', end: 'bottom 15%', scrub: 0.6 },
+      });
+    }, sectionRef);
     return () => ctx.revert();
   }, []);
 
   return (
-    <section aria-labelledby="finale-title" className="relative overflow-hidden bg-black py-28 md:py-40 border-t border-slate-900">
+    <section ref={sectionRef} aria-labelledby="finale-title" className="relative overflow-hidden bg-black py-28 md:py-40 border-t border-slate-900">
       <div aria-hidden="true" data-glow="8" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[420px] bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.10)_0%,transparent_70%)] pointer-events-none" />
       <div ref={eclipseRef} aria-hidden="true" className="absolute left-1/2 top-24 -translate-x-1/2 pointer-events-none">
         <div className="st-eclipse-ring relative h-60 w-60 rounded-full bg-black border border-amber-400/70 shadow-[0_0_80px_10px_rgba(245,158,11,0.25)] will-change-transform" />
       </div>
-      <div className="mx-auto max-w-4xl px-4 sm:px-6 text-center space-y-8 relative z-10">
+      <div ref={contentRef} className="mx-auto max-w-4xl px-4 sm:px-6 text-center space-y-8 relative z-10 will-change-transform">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
