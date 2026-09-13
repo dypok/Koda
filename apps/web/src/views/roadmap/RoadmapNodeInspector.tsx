@@ -15,7 +15,14 @@ interface RoadmapNodeInspectorProps {
 
 export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeInspectorProps) {
   const cardRef = React.useRef<HTMLElement | null>(null);
-  const { toggleNodeLock } = useRoadmapStore();
+  const { toggleNodeLock, unlockNodeWithCinematic, unlockingNodeId } = useRoadmapStore();
+  const unlocking = unlockingNodeId === node?.id;
+
+  const handleLockToggle = () => {
+    if (!node || unlocking) return;
+    if (node.isUnlocked) toggleNodeLock(node.id);
+    else unlockNodeWithCinematic(node.id);
+  };
 
   // Animación de entrada holográfica usando GSAP
   React.useEffect(() => {
@@ -69,7 +76,8 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
 
         <div className="flex items-center gap-1.5">
           <button
-            onClick={() => toggleNodeLock(node.id)}
+            onClick={handleLockToggle}
+            disabled={unlocking}
             className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider flex items-center gap-1 transition-all border ${
               isUnlocked
                 ? 'bg-rose-950/40 border-rose-500/50 text-rose-300 hover:bg-rose-900/50'
@@ -77,8 +85,8 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
             }`}
             title={isUnlocked ? 'Bloquear este módulo' : 'Desbloquear este módulo'}
           >
-            {isUnlocked ? <Lock className="w-3 h-3" /> : <LockOpen className="w-3 h-3" />}
-            <span>{isUnlocked ? 'Bloquear' : 'Desbloquear'}</span>
+            {isUnlocked ? <Lock aria-hidden="true" className="w-3 h-3" /> : <LockOpen aria-hidden="true" className="w-3 h-3" />}
+            <span>{isUnlocked ? 'Bloquear' : unlocking ? 'Desbloqueando…' : 'Desbloquear'}</span>
           </button>
 
           <button
@@ -201,7 +209,8 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
 
           {/* Botón táctico para bloquear o desbloquear manualmente el nodo */}
           <button
-            onClick={() => toggleNodeLock(node.id)}
+            onClick={handleLockToggle}
+            disabled={unlocking}
             className={`w-full py-1.5 px-3 rounded text-[10px] font-mono uppercase font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all border ${
               isUnlocked
                 ? 'bg-slate-900/60 hover:bg-rose-950/40 border-slate-700/60 hover:border-rose-500/50 text-slate-400 hover:text-rose-300'
@@ -211,13 +220,13 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
           >
             {isUnlocked ? (
               <>
-                <Lock className="w-3 h-3 text-rose-400" />
+                <Lock aria-hidden="true" className="w-3 h-3 text-rose-400" />
                 <span>Bloquear Módulo</span>
               </>
             ) : (
               <>
-                <LockOpen className="w-3 h-3 text-cyan-400" />
-                <span>Desbloquear Módulo</span>
+                <LockOpen aria-hidden="true" className="w-3 h-3 text-cyan-400" />
+                <span>{unlocking ? 'Desbloqueando…' : 'Desbloquear Módulo'}</span>
               </>
             )}
           </button>

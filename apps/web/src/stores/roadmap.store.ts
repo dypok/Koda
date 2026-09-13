@@ -56,6 +56,7 @@ interface RoadmapStoreState {
   unlockingNodeId: string | null;
   simulateCompleteAndUnlockNext: () => void;
   toggleNodeLock: (nodeId: string) => void;
+  unlockNodeWithCinematic: (nodeId: string) => void;
   openCourseLessons: (courseId: string) => Promise<void>;
   returnToCourses: () => void;
   setActiveNode: (id: string | null) => void;
@@ -194,6 +195,37 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
         },
       });
     }
+  },
+  unlockNodeWithCinematic: (nodeId: string) => {
+    const isCourses = get().viewMode === 'courses';
+    const dataset = isCourses ? get().coursesDataset : get().lessonsDataset;
+    const target = dataset.nodes.find((n) => n.id === nodeId);
+    // Solo anima desbloqueos; si ya está abierto o hay cinemática en curso, no hace nada.
+    if (!target || target.isUnlocked || get().unlockingNodeId) return;
+    set({ unlockingNodeId: nodeId });
+
+    // La animación del nodo dura ~1.35s (shake + flash + estallido + rebote).
+    setTimeout(() => {
+      const current = isCourses ? get().coursesDataset : get().lessonsDataset;
+      const updatedNodes: GraphNode[] = current.nodes.map((n) =>
+        n.id === nodeId
+          ? {
+              ...n,
+              isUnlocked: true,
+              variant: (n.variant === 'locked' || n.variant === 'branch' ? 'unlocked' : n.variant) as NodeVariant,
+              iconType: n.iconType === 'lock' ? 'code' : n.iconType,
+              statusText: 'DISPONIBLE • DESBLOQUEADO',
+            }
+          : n
+      );
+      if (isCourses) {
+        const next = { ...current, nodes: updatedNodes };
+        set({ coursesDataset: next, unlockingNodeId: null });
+        persistProgress(next);
+      } else {
+        set({ lessonsDataset: { ...current, nodes: updatedNodes }, unlockingNodeId: null });
+      }
+    }, 1400);
   },
   openCourseLessons: async (courseId) => {
     const courseNode = get().coursesDataset.nodes.find((n) => n.targetCourseId === courseId || n.id === courseId);

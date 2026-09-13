@@ -20,7 +20,7 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
   const lockShatterGlowRef = useRef<SVGCircleElement | null>(null);
   const quickToggleRef = useRef<SVGGElement | null>(null);
 
-  const { toggleNodeLock } = useRoadmapStore();
+  const { toggleNodeLock, unlockNodeWithCinematic } = useRoadmapStore();
   const zoomLevel = useRoadmapStore((s) => s.zoomLevel);
   // Contreescala el texto para que no crezca con el zoom del canvas.
   const textScale = 100 / Math.max(50, zoomLevel);
@@ -60,9 +60,13 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
     }
   };
 
-  // Alternar bloqueo/desbloqueo directo con pulso GSAP
+  // Alternar bloqueo/desbloqueo directo con pulso GSAP (el desbloqueo usa cinemática)
   const handleQuickToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
+    if (!node.isUnlocked) {
+      unlockNodeWithCinematic(node.id);
+      return;
+    }
     const group = nodeGroupRef.current;
     if (group) {
       gsap.timeline()
