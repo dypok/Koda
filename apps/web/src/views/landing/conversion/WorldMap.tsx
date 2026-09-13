@@ -1,7 +1,8 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 
 // Elipses aproximadas de masa continental en grid 60x30 (x: 0-60, y: 0-30)
 const LAND = [
@@ -33,6 +34,25 @@ function isLand(x: number, y: number): boolean {
 export const WorldMap: React.FC = () => {
   const reduceMotion = useReducedMotion();
   const [online, setOnline] = useState(2431);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion()) return;
+    const { gsap } = getGsap();
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.st-hotspot',
+        { opacity: 0.15 },
+        {
+          opacity: 1,
+          ease: 'none',
+          stagger: 0.08,
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 75%', end: 'bottom 55%', scrub: 0.5 },
+        }
+      );
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
 
   const dots = useMemo(() => {
     const out: { x: number; y: number; hot: boolean }[] = [];
@@ -56,7 +76,7 @@ export const WorldMap: React.FC = () => {
   }, [reduceMotion]);
 
   return (
-    <section aria-labelledby="mapa-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950">
+    <section ref={sectionRef} aria-labelledby="mapa-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 28 }}
@@ -94,7 +114,7 @@ export const WorldMap: React.FC = () => {
                 r={d.hot ? 0.55 : 0.32}
                 fill={d.hot ? '#f59e0b' : '#334155'}
                 opacity={d.hot ? 1 : 0.7}
-                className={d.hot && !reduceMotion ? 'animate-pulse' : undefined}
+                className={d.hot ? 'st-hotspot' : undefined}
               />
             ))}
           </svg>
