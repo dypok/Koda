@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IconX } from '@tabler/icons-react';
+import { X } from 'lucide-react';
 import { InfoModalTab } from '@/models/landing/info-modal.model';
 import { useInfoModalController } from '@/controllers/landing/useInfoModalController';
 import { InfoModalSidebar } from '@/views/landing/info-modal/InfoModalSidebar';
@@ -46,7 +46,10 @@ export const InfoModal: React.FC<InfoModalProps> = ({
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.94, y: 20 }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="relative w-full max-w-4xl max-h-[88vh] flex flex-col rounded-3xl border border-slate-800 bg-gradient-to-b from-[#0d121f] via-slate-950 to-[#0a0d16] shadow-2xl overflow-hidden z-10"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Centro de Información de KodaAcademy"
+          className="relative w-full max-w-4xl max-h-[88vh] flex flex-col rounded-3xl border border-slate-800 bg-slate-950 shadow-2xl overflow-hidden z-10"
         >
           <div className="absolute top-0 right-1/4 w-96 h-48 bg-[radial-gradient(ellipse_at_top,rgba(249,115,22,0.12),transparent_70%)] blur-2xl pointer-events-none" />
 
@@ -69,10 +72,10 @@ export const InfoModal: React.FC<InfoModalProps> = ({
 
             <button
               onClick={onClose}
-              className="p-2 text-slate-400 hover:text-white rounded-full hover:bg-slate-800/80 transition-colors cursor-pointer"
+              className="min-h-[44px] min-w-[44px] p-2 text-slate-400 hover:text-white rounded-full hover:bg-slate-800/80 transition-colors cursor-pointer flex items-center justify-center"
               aria-label="Cerrar modal"
             >
-              <IconX className="w-5 h-5" />
+              <X aria-hidden="true" className="w-5 h-5" />
             </button>
           </div>
 

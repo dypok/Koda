@@ -1,12 +1,12 @@
 import React from 'react';
 import {
-  IconBrandInstagram,
-  IconBrandTiktok,
-  IconBrandX,
-  IconBrandYoutube,
-  IconBrandLinkedin,
-  IconArticle,
-} from '@tabler/icons-react';
+  Instagram,
+  Music2,
+  Twitter,
+  Youtube,
+  Linkedin,
+  Newspaper,
+} from 'lucide-react';
 import { InfoModalTab } from '@/components/landing/InfoModal';
 
 export interface FooterLinkItem {
@@ -30,10 +30,10 @@ export const FOOTER_LEGAL_LINKS: FooterLinkItem[] = [
 ];
 
 export const FOOTER_SOCIAL_LINKS: FooterLinkItem[] = [
-  { id: 'blog', label: 'Blog Oficial', tab: 'social', icon: IconArticle },
-  { id: 'instagram', label: 'Instagram', tab: 'social', icon: IconBrandInstagram },
-  { id: 'tiktok', label: 'TikTok', tab: 'social', icon: IconBrandTiktok },
-  { id: 'x', label: 'Twitter / X', tab: 'social', icon: IconBrandX },
-  { id: 'youtube', label: 'YouTube', tab: 'social', icon: IconBrandYoutube },
-  { id: 'linkedin', label: 'LinkedIn', tab: 'social', icon: IconBrandLinkedin },
+  { id: 'blog', label: 'Blog Oficial', tab: 'social', icon: Newspaper },
+  { id: 'instagram', label: 'Instagram', tab: 'social', icon: Instagram },
+  { id: 'tiktok', label: 'TikTok', tab: 'social', icon: Music2 },
+  { id: 'x', label: 'Twitter / X', tab: 'social', icon: Twitter },
+  { id: 'youtube', label: 'YouTube', tab: 'social', icon: Youtube },
+  { id: 'linkedin', label: 'LinkedIn', tab: 'social', icon: Linkedin },
 ];
