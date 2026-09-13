@@ -111,9 +111,9 @@ export const LessonRail: React.FC<LessonRailProps> = ({ dataset, onDeploy }) => 
             })}
           </div>
 
-          {/* Indicador estilo GSAP demo */}
-          <div className="absolute bottom-8 left-0 right-0 z-10">
-            <div className="mx-auto max-w-4xl px-6 flex items-center gap-4">
+          {/* Indicador estilo GSAP demo: fijo al viewport mientras el rail existe */}
+          <div className="fixed bottom-[4.5rem] left-0 right-0 z-30 pointer-events-none">
+            <div className="mx-auto max-w-4xl px-6 flex items-center gap-4 pointer-events-auto rounded-2xl border border-slate-800/80 bg-slate-950/80 backdrop-blur-md py-2.5">
               <span className="font-mono text-xs font-bold text-amber-300 tabular-nums">
                 0{activeIndex + 1} / 0{nodes.length}
               </span>
