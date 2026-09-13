@@ -9,7 +9,21 @@ import { useHeroSkyCanvasLoop } from './useHeroSkyCanvasLoop';
 export function useHeroSkyController(starCount = STAR_COUNT_DEFAULT, seed = 88, interactive = true) {
   const reduceMotion = useReducedMotion();
   const count = clamp(Math.round(starCount), 80, 200);
-  const { stars, realStar } = useMemo(() => generateStars(count, seed), [count, seed]);
+  const [effectiveCount, setEffectiveCount] = useState(count);
+
+  useEffect(() => {
+    const compute = () => {
+      const small = window.matchMedia('(max-width: 640px)').matches;
+      const saveData = window.matchMedia('(prefers-reduced-data: reduce)').matches
+        || (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+      setEffectiveCount(saveData ? 60 : small ? 90 : count);
+    };
+    compute();
+    window.addEventListener('resize', compute);
+    return () => window.removeEventListener('resize', compute);
+  }, [count]);
+
+  const { stars, realStar } = useMemo(() => generateStars(effectiveCount, seed), [effectiveCount, seed]);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -28,7 +42,8 @@ export function useHeroSkyController(starCount = STAR_COUNT_DEFAULT, seed = 88, 
     const update = () => {
       const rect = el.getBoundingClientRect();
       rectRef.current = { left: rect.left, top: rect.top, width: rect.width || 1, height: rect.height || 1 };
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const coarse = window.matchMedia('(pointer: coarse)').matches;
+      const dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2);
       canvas.width = Math.round((rect.width || 1) * dpr);
       canvas.height = Math.round((rect.height || 1) * dpr);
     };
