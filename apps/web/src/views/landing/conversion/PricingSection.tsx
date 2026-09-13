@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Check } from 'lucide-react';
 import { Highlight } from '@/components/ui/highlight';
+import { KodaPeek } from '@/components/landing/KodaPeek';
 import { cn } from '@/lib/utils';
 
 const FREE = [
@@ -25,6 +26,7 @@ export const PricingSection: React.FC = () => {
 
   return (
     <section aria-labelledby="planes-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950">
+      <KodaPeek align="left" size={64} />
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 28 }}
