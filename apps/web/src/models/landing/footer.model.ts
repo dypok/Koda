@@ -7,7 +7,7 @@ import {
   Linkedin,
   Newspaper,
 } from 'lucide-react';
-import { InfoModalTab } from '@/components/landing/InfoModal';
+import { InfoModalTab } from '@/models/landing/info-modal.model';
 
 export interface FooterLinkItem {
   id: string;
