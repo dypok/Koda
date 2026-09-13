@@ -63,36 +63,8 @@ export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudPro
         </div>
       </div>
 
-      {/* Telemetry Power Cells & Actions */}
-      <div className="flex items-center gap-6">
-        {/* Segmented Power/Progress Meter */}
-        <div className="hidden md:flex items-center gap-3">
-          <div className="text-right">
-            <span className="text-[9px] font-mono uppercase tracking-wider text-slate-400 block">
-              TELEMETRY SYNC
-            </span>
-            <span className="text-xs font-mono text-cyan-400 font-bold">{progressPercent}% SYNC</span>
-          </div>
-
-          {/* Segmented HUD Cells */}
-          <div className="flex items-center gap-1 p-1 bg-slate-900 border border-slate-800 rounded">
-            {Array.from({ length: barSegments }).map((_, idx) => {
-              const isFilled = idx < activeSegments;
-              return (
-                <div
-                  key={idx}
-                  className={`w-2 h-3.5 rounded-xs transition-colors duration-300 ${
-                    isFilled
-                      ? 'bg-gradient-to-t from-cyan-600 to-cyan-400 shadow-[0_0_6px_rgba(6,182,212,0.8)]'
-                      : 'bg-slate-800/80'
-                  }`}
-                />
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Action Button */}
+      {/* Action Button */}
+      <div className="flex items-center gap-4">
         <GradientButton
           variant="default"
           size="sm"
