@@ -10,6 +10,10 @@ export function useRoadmapWarpTransition(canvasSvgWrapperRef: React.RefObject<HT
   const [isWarping, setIsWarping] = useState(false);
   const flashOverlayRef = useRef<HTMLDivElement | null>(null);
 
+  const reduceMotion =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   /**
    * Ejecuta la transición de hiperespacio hacia las lecciones de un curso:
    * 1. Centra y enfoca la cámara SVG hacia las coordenadas (node.x, node.y).
@@ -20,9 +24,13 @@ export function useRoadmapWarpTransition(canvasSvgWrapperRef: React.RefObject<HT
    */
   const diveIntoCourse = (node: GraphNode) => {
     if (isWarping || !canvasSvgWrapperRef.current) return;
+    const targetCourseId = node.targetCourseId || node.id;
+    if (reduceMotion) {
+      openCourseLessons(targetCourseId);
+      return;
+    }
     setIsWarping(true);
 
-    const targetCourseId = node.targetCourseId || node.id;
     const wrapper = canvasSvgWrapperRef.current;
     const flash = flashOverlayRef.current;
 
@@ -88,6 +96,10 @@ export function useRoadmapWarpTransition(canvasSvgWrapperRef: React.RefObject<HT
    */
   const retreatToCourses = () => {
     if (isWarping || !canvasSvgWrapperRef.current) return;
+    if (reduceMotion) {
+      returnToCourses();
+      return;
+    }
     setIsWarping(true);
 
     const wrapper = canvasSvgWrapperRef.current;
