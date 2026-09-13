@@ -3,6 +3,7 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Quote, Flame } from 'lucide-react';
+import { Highlight } from '@/components/ui/highlight';
 
 const TESTIMONIALS = [
   {
@@ -39,7 +40,7 @@ export const TestimonialsSection: React.FC = () => {
           className="text-center space-y-4 max-w-2xl mx-auto mb-12"
         >
           <h2 id="testimonios-title" className="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight leading-[1.12]">
-            Gente real, <span className="text-amber-400 underline decoration-amber-400/40 decoration-4 underline-offset-8">rachas reales</span>
+            Gente real, <Highlight>rachas reales</Highlight>
           </h2>
           <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
             Miles de estudiantes mantienen su hábito diario con Koda.

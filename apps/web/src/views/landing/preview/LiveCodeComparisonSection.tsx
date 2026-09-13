@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { X, Check } from 'lucide-react';
 import { MiniLessonPreview } from './MiniLessonPreview';
+import { Highlight } from '@/components/ui/highlight';
 
 export const LiveCodeComparisonSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -24,9 +25,9 @@ export const LiveCodeComparisonSection: React.FC = () => {
           >
             <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
               Código Real{' '}
-              <span className="text-amber-400 underline decoration-amber-400/40 decoration-4 underline-offset-8">
+              <Highlight>
                 en Vivo
-              </span>
+              </Highlight>
             </h2>
 
             <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed font-sans max-w-xl">

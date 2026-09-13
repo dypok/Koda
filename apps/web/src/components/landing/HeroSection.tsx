@@ -8,6 +8,7 @@ import { HeroCtaGroup } from '@/views/landing/hero/HeroCtaGroup';
 import { HeroMascot } from '@/views/landing/hero/HeroMascot';
 import { TypewriterCode } from '@/views/landing/hero/TypewriterCode';
 import { SplitText } from '@/components/ui/split-text';
+import { Highlight } from '@/components/ui/highlight';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 import { useHeroStrings } from '@/lib/i18n';
 
@@ -69,9 +70,9 @@ export const HeroSection: React.FC = () => {
               className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.12] transform-gpu"
             >
               <SplitText text={t.titleA} mode="chars" delay={0.1} />{' '}
-              <span className="text-amber-400 underline decoration-amber-400/40 decoration-4 underline-offset-8">
+              <Highlight>
                 <SplitText text={t.titleAccent} mode="words" delay={0.45} />
-              </span>
+              </Highlight>
               <SplitText text={t.titleB} mode="chars" delay={0.7} />
             </h1>
 

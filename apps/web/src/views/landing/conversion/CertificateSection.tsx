@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { BadgeCheck, QrCode, ShieldCheck } from 'lucide-react';
+import { Highlight } from '@/components/ui/highlight';
 
 export const CertificateSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -25,9 +26,9 @@ export const CertificateSection: React.FC = () => {
             </p>
             <h2 id="certificado-title" className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
               Certificado con QR{' '}
-              <span className="text-amber-400 underline decoration-amber-400/40 decoration-4 underline-offset-8">
+              <Highlight>
                 verificable
-              </span>
+              </Highlight>
             </h2>
             <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed font-sans max-w-xl">
               Al completar Python recibes un certificado con código único y QR que cualquiera

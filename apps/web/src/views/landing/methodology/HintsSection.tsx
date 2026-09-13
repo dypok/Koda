@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { Highlight } from '@/components/ui/highlight';
 
 export const HintsSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -39,9 +40,9 @@ export const HintsSection: React.FC = () => {
       </p>
       <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] max-w-3xl mx-auto">
         Pistas que te enseñan a{' '}
-        <span className="text-amber-400 underline decoration-amber-400/40 decoration-4 underline-offset-8">
+        <Highlight>
           pensar
-        </span>
+        </Highlight>
         , no spoilers
       </h3>
 
