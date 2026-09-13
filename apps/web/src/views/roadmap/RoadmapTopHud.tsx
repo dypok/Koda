@@ -4,12 +4,11 @@ import React from 'react';
 import { ArrowLeft, Zap } from 'lucide-react';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { GradientButton } from '@/components/ui/gradient-button';
-import { cn } from '@/lib/utils';
 import gsap from 'gsap';
 
 interface RoadmapTopHudProps {
   sectorTitle: string;
-  progressPercent: number;
+  progressPercent?: number;
 }
 
 export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudProps) {
@@ -22,8 +21,6 @@ export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudPro
     '';
 
   const displayTitle = sectorTitle.replace(/^SECTOR\s+\d+:\s*/i, '');
-  const barSegments = 10;
-  const activeSegments = Math.round((progressPercent / 100) * barSegments);
 
   const headerRef = React.useRef<HTMLElement | null>(null);
 
@@ -63,29 +60,6 @@ export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudPro
           <div className="font-mono text-xs sm:text-sm tracking-widest text-slate-100 font-bold uppercase">
             {displayTitle}
           </div>
-        </div>
-        {/* Barra segmentada de progreso del sector */}
-        <div
-          role="progressbar"
-          aria-label={`Progreso del sector: ${progressPercent}%`}
-          aria-valuenow={progressPercent}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          className="hidden sm:flex items-center gap-1"
-        >
-          {Array.from({ length: barSegments }).map((_, i) => (
-            <span
-              key={i}
-              aria-hidden="true"
-              className={cn(
-                'h-1.5 w-4 rounded-full transition-colors',
-                i < activeSegments ? 'bg-cyan-400 shadow-[0_0_6px_rgba(34,211,238,0.7)]' : 'bg-slate-800'
-              )}
-            />
-          ))}
-          <span className="ml-1 text-[10px] font-mono font-bold text-cyan-300 tabular-nums">
-            {progressPercent}%
-          </span>
         </div>
       </div>
 
