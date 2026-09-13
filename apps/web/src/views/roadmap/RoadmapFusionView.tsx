@@ -9,8 +9,6 @@ import {
   IconSparkles,
   IconChevronUp,
   IconChevronDown,
-  IconLayoutSidebarLeftCollapse,
-  IconLayoutSidebarLeftExpand,
   IconLayoutSidebarRightCollapse,
   IconLayoutSidebarRightExpand,
   IconSkull,
@@ -59,8 +57,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
   );
   const branchColor = activeBranch.color;
 
-  // Estado de visibilidad de paneles laterales
-  const [showLeftRail, setShowLeftRail] = useState(true);
+  // Estado de visibilidad del panel derecho de la tarjeta 3D
   const [showRightCard, setShowRightCard] = useState(true);
 
   // Sincronización del índice activo
@@ -153,20 +150,6 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeIndex, goTo]);
-
-  // Medición dinámica del cursor láser del riel lateral
-  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const [laserStyle, setLaserStyle] = useState({ top: 8, height: 36 });
-
-  useEffect(() => {
-    const activeEl = itemRefs.current[activeIndex];
-    if (activeEl) {
-      setLaserStyle({
-        top: activeEl.offsetTop + 4,
-        height: Math.max(26, activeEl.offsetHeight - 8),
-      });
-    }
-  }, [activeIndex, nodes]);
 
   // Selección directa en la constelación
   const handleSelectConstellationNode = (node: GraphNode) => {
@@ -503,148 +486,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
         </svg>
       )}
 
-      {/* 2. FLANCO IZQUIERDO: Riel Lateral Pinned (Panel Holográfico Flotante) */}
-      <div
-        className={cn(
-          'absolute left-4 sm:left-6 top-4 sm:top-6 bottom-4 sm:bottom-6 z-20 flex flex-col transition-all duration-400 ease-out pointer-events-none',
-          showLeftRail ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
-        )}
-      >
-        <div className="w-72 sm:w-80 h-full rounded-3xl border border-slate-800/80 bg-slate-950/85 backdrop-blur-xl shadow-2xl p-5 flex flex-col justify-between pointer-events-auto overflow-y-auto no-course-scroll">
-          <div className="space-y-4">
-            {/* Cabecera del Riel */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
-              <div className="space-y-0.5">
-                <div
-                  className="flex items-center gap-1.5 text-[9px] font-mono font-bold tracking-widest uppercase"
-                  style={{ color: branchColor }}
-                >
-                  <IconSparkles className="w-3 h-3" />
-                  <span>{activeBranch.title}</span>
-                </div>
-                <h3 className="font-display text-lg font-bold text-white leading-tight">
-                  Trayecto Táctico
-                </h3>
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowLeftRail(false)}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 border border-slate-800 transition-colors cursor-pointer"
-                title="Colapsar panel lateral"
-              >
-                <IconLayoutSidebarLeftCollapse className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* Riel con puntero láser sincronizado */}
-            <div className="relative pl-5 flex flex-col space-y-2" role="tablist">
-              <div
-                className="absolute left-1.5 top-2 bottom-2 w-[2px] bg-slate-800/80 rounded-full"
-                aria-hidden="true"
-              />
-
-              {/* Láser deslizante activo */}
-              <div
-                className="absolute left-[0px] w-[3.5px] rounded-full transition-all duration-400 ease-out pointer-events-none"
-                style={{
-                  top: `${laserStyle.top}px`,
-                  height: `${laserStyle.height}px`,
-                  backgroundColor: themeAccentColor,
-                  boxShadow: `0 0 14px ${themeAccentColor}, 0 0 3px #ffffff`,
-                }}
-                aria-hidden="true"
-              />
-
-              {nodes.map((node, index) => {
-                const isSelected = activeIndex === index;
-                const isUnlocked = node.isUnlocked;
-                const isItemBoss = node.variant === 'boss';
-
-                return (
-                  <button
-                    key={node.id}
-                    ref={(el) => {
-                      itemRefs.current[index] = el;
-                    }}
-                    type="button"
-                    onClick={() => goTo(index)}
-                    role="tab"
-                    aria-selected={isSelected}
-                    className={cn(
-                      'group text-left transition-all duration-300 flex flex-col py-2 px-2.5 rounded-xl focus:outline-none cursor-pointer',
-                      isSelected
-                        ? isItemBoss
-                          ? 'bg-rose-950/40 translate-x-1 border border-rose-500/50 shadow-md'
-                          : 'bg-slate-900/85 translate-x-1 border border-slate-800/90 shadow-md'
-                        : 'opacity-45 hover:opacity-90 hover:bg-slate-900/30'
-                    )}
-                  >
-                    <div className="flex items-center gap-2.5">
-                      <span
-                        className="font-mono text-[11px] font-bold tracking-wider"
-                        style={{
-                          color: isSelected
-                            ? isItemBoss
-                              ? '#F43F5E'
-                              : branchColor
-                            : '#94a3b8',
-                        }}
-                      >
-                        {node.code}
-                      </span>
-                      <span
-                        className={cn(
-                          'font-display text-xs sm:text-sm font-bold tracking-tight truncate flex items-center gap-1.5',
-                          isSelected
-                            ? isItemBoss
-                              ? 'text-rose-300 font-black'
-                              : 'text-white'
-                            : 'text-slate-400 group-hover:text-slate-200'
-                        )}
-                      >
-                        {isItemBoss && <IconSkull className="w-3.5 h-3.5 text-rose-400 shrink-0" />}
-                        <span className="truncate">{node.label}</span>
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-2 pl-6 mt-0.5">
-                      <span className="text-[9px] font-mono text-slate-500 truncate">
-                        {node.subtitle || (isUnlocked ? 'Disponible' : 'Bloqueado')}
-                      </span>
-                      {node.variant === 'completed' && (
-                        <span className="text-[9px] font-mono font-bold text-emerald-400 flex items-center gap-0.5">
-                          <IconCheck className="w-2.5 h-2.5" />
-                          <span>100%</span>
-                        </span>
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="pt-3 border-t border-slate-800/80 text-[10px] font-mono text-slate-500 flex items-center justify-between">
-            <span>MODO COCKPIT</span>
-            <span style={{ color: themeAccentColor }}>
-              {isBossNode ? 'ALERTA ROJA' : 'ENLACE ACTIVO'}
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* Botón flotante para reabrir panel izquierdo */}
-      {!showLeftRail && (
-        <button
-          type="button"
-          onClick={() => setShowLeftRail(true)}
-          className="absolute left-4 top-6 z-20 p-2.5 rounded-xl border border-slate-800/90 bg-slate-950/80 backdrop-blur-md text-slate-300 hover:text-white shadow-xl hover:scale-105 transition-all cursor-pointer"
-          title="Abrir riel de cursos"
-        >
-          <IconLayoutSidebarLeftExpand className="w-4 h-4" />
-        </button>
-      )}
-
-      {/* 3. FLANCO DERECHO: Tarjeta Táctica 3D Pinned con Mouse Tilt & Boss Mode */}
+      {/* 2. FLANCO DERECHO: Tarjeta Táctica 3D Pinned con Mouse Tilt & Boss Mode */}
       <div
         className={cn(
           'absolute right-4 sm:right-6 top-4 sm:top-6 bottom-4 sm:bottom-6 z-20 flex flex-col justify-center transition-all duration-400 ease-out pointer-events-none perspective-[1200px]',
