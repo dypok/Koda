@@ -58,3 +58,9 @@
 - [Sunday]-[13/09/2026]-[14:30]-[Brandon Carranza] : R7 burbuja `kodaSay` en los 5 pasos + pills de categoría como tablist.
 - [Sunday]-[13/09/2026]-[14:31]-[Brandon Carranza] : R8 Tu plan revisable (filas editables que saltan al paso, minutos visibles, sin defaults falsos, `goToStep`).
 - [Sunday]-[13/09/2026]-[14:32]-[Brandon Carranza] : R9 `AVAILABLE_IDS` + `techAvailability` como única fuente, iconos no-brand a lucide, eliminado controller duplicado + R10 fondo vivo (estrellas por paso, luciérnagas al final).
+- [Sunday]-[13/09/2026]-[14:51]-[Brandon Carranza] : G5 layout FLIP en `StepLayout` y grid de idiomas con `popLayout` al filtrar + G6 fondo narrativo (`body[data-register-step]`, hue/brightness por paso).
+- [Sunday]-[13/09/2026]-[14:52]-[Brandon Carranza] : G13 CTA contextual por paso con hint argumentado.
+- [Sunday]-[13/09/2026]-[14:53]-[Brandon Carranza] : G7 Koda reactivo (ojos al campo enfocado, salto por campo válido, decorativo).
+- [Sunday]-[13/09/2026]-[14:54]-[Brandon Carranza] : G14 handoff al roadmap (overlay con Koda volando + View Transition).
+- [Sunday]-[13/09/2026]-[14:56]-[Brandon Carranza] : G8 `TerminalLanguagePicker` (`$ koda use`, filtro, flechas/Enter) con toggle grid/terminal persistente.
+- [Sunday]-[13/09/2026]-[14:58]-[Brandon Carranza] : G15 `?v=express` (3 pasos visibles, defaults en resumen, evento analytics stub).
