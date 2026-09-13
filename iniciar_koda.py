@@ -17,7 +17,7 @@ Uso:
     python iniciar_koda.py --solo-api      # solo backend :4000
     python iniciar_koda.py --solo-web      # solo frontend :3000
     python iniciar_koda.py --sin-navegador # no abre el navegador
-    python iniciar_koda.py --forzar        # libera puertos 3000/4000 si estan ocupados
+    python iniciar_koda.py --no-liberar # falla si 3000/4000 estan ocupados
     python iniciar_koda.py --produccion    # `pnpm build` + `pnpm start` en vez de dev
 
 Logs: .koda-logs/api.log y .koda-logs/web.log junto al repo.
@@ -55,33 +55,61 @@ def puerto_ocupado(puerto: int) -> bool:
         return s.connect_ex(("127.0.0.1", puerto)) == 0
 
 
-def liberar_puerto(puerto: int) -> None:
-    """Intenta liberar un puerto. Windows: taskkill por PID. Linux: fuser -k."""
-    log(f"Liberando puerto {puerto}...")
+def pids_en_puerto(puerto: int) -> set[str]:
+    """PIDs en LISTEN sobre el puerto exacto (evita :30001 al buscar :3000)."""
+    import re
+    patron = re.compile(rf":{puerto}\s")
+    pids: set[str] = set()
     if os.name == "nt":
         try:
             out = subprocess.run(
                 ["netstat", "-ano"], capture_output=True, text=True, timeout=20
             ).stdout
-            pids = {l.strip().split()[-1] for l in out.splitlines()
-                    if f":{puerto}" in l and "LISTENING" in l}
-            for pid in pids:
-                if pid.isdigit() and int(pid) > 4:
+            for linea in out.splitlines():
+                if "LISTENING" in linea and patron.search(linea):
+                    pid = linea.strip().split()[-1]
+                    if pid.isdigit() and int(pid) > 4 and int(pid) != os.getpid():
+                        pids.add(pid)
+        except Exception as exc:  # noqa: BLE001
+            log(f"No se pudo inspeccionar {puerto}: {exc}")
+    else:
+        try:
+            r = subprocess.run(["lsof", "-ti", f":{puerto}"],
+                               capture_output=True, text=True, timeout=20)
+            for pid in r.stdout.split():
+                if pid.strip().isdigit() and int(pid.strip()) != os.getpid():
+                    pids.add(pid.strip())
+        except Exception:  # noqa: BLE001
+            pass
+    return pids
+
+
+def liberar_puerto(puerto: int, reintentos: int = 3) -> bool:
+    """Libera un puerto matando sus PIDs en LISTEN. Devuelve True si queda libre."""
+    for intento in range(1, reintentos + 1):
+        pids = pids_en_puerto(puerto)
+        if not pids and not puerto_ocupado(puerto):
+            return True
+        if pids:
+            log(f"Puerto {puerto} ocupado por PID {', '.join(sorted(pids))}, "
+                f"liberando (intento {intento}/{reintentos})...")
+            if os.name == "nt":
+                for pid in pids:
                     subprocess.run(["taskkill", "/F", "/PID", pid],
                                    capture_output=True, timeout=20)
-        except Exception as exc:  # noqa: BLE001
-            log(f"No se pudo liberar {puerto}: {exc}")
-    else:
-        for cmd in (["fuser", "-k", f"{puerto}/tcp"],
-                    ["lsof", "-ti", f":{puerto}"]):
-            try:
-                r = subprocess.run(cmd, capture_output=True, text=True, timeout=20)
-                if cmd[0] == "lsof" and r.stdout.strip():
-                    for pid in r.stdout.split():
-                        subprocess.run(["kill", "-9", pid.strip()],
-                                       capture_output=True, timeout=10)
-            except Exception:  # noqa: BLE001
-                pass
+            else:
+                for pid in pids:
+                    subprocess.run(["kill", "-9", pid],
+                                   capture_output=True, timeout=10)
+        else:
+            log(f"Puerto {puerto} ocupado sin PID visible, reintentando "
+                f"({intento}/{reintentos})...")
+        time.sleep(2)
+    libre = not puerto_ocupado(puerto)
+    if not libre:
+        resto = ", ".join(sorted(pids_en_puerto(puerto))) or "desconocido"
+        log(f"No se pudo liberar {puerto} (PID {resto}).")
+    return libre
 
 
 def verificar_previos() -> bool:
@@ -166,7 +194,9 @@ def main() -> int:
     g.add_argument("--solo-web", action="store_true")
     ap.add_argument("--sin-navegador", action="store_true")
     ap.add_argument("--forzar", action="store_true",
-                    help="Mata procesos en puertos 3000/4000 antes de arrancar.")
+                    help="Alias compatible: los puertos siempre se liberan solos.")
+    ap.add_argument("--no-liberar", action="store_true",
+                    help="No liberar puertos ocupados; fallar si estan en uso.")
     ap.add_argument("--produccion", action="store_true",
                     help="Usa build+start en vez de dev.")
     ap.add_argument("--espera", type=int, default=120, help="Segundos max. de health-check.")
@@ -183,13 +213,16 @@ def main() -> int:
     for nombre, puerto in PUERTOS.items():
         quiere = (nombre == "api" and con_api) or (nombre == "web" and con_web)
         if quiere and puerto_ocupado(puerto):
-            if args.forzar:
-                liberar_puerto(puerto)
-                time.sleep(2)
+            if args.no_liberar:
+                log(f"ERROR: puerto {puerto} ({nombre}) ocupado. "
+                    "Cierra la otra sesion o quita --no-liberar.")
+                return 1
+            liberar_puerto(puerto)
             if puerto_ocupado(puerto):
                 log(f"ERROR: puerto {puerto} ({nombre}) ocupado. "
-                    "Cierra la otra sesion o usa --forzar.")
+                    "Cierra la otra sesion o usa --no-liberar para ver el fallo.")
                 return 1
+            log(f"Puerto {puerto} ({nombre}) liberado.")
 
     if args.produccion:
         log("Compilando para produccion (`pnpm build`)...")
