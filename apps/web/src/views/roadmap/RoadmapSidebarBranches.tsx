@@ -6,10 +6,10 @@ import { useRoadmapStore } from '@/stores/roadmap.store';
 import { cn } from '@/lib/utils';
 
 export function RoadmapSidebarBranches() {
-  const { activeBranchId, setBranch } = useRoadmapStore();
+  const { activeBranchId, setBranch, isLoading } = useRoadmapStore();
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2" role="group" aria-label="Ramas de carrera">
       <div className="hidden lg:flex items-center px-2 pb-1 text-[10px] font-mono font-bold text-slate-500 uppercase tracking-widest">
         <span>Ramas de Carrera</span>
       </div>
@@ -22,6 +22,8 @@ export function RoadmapSidebarBranches() {
             key={branch.id}
             type="button"
             onClick={() => setBranch(branch.id as CareerBranchId)}
+            disabled={isLoading}
+            aria-pressed={isSelected}
             className={cn(
               'w-full flex flex-col p-3 rounded-xl transition-all duration-200 text-left group relative active:scale-[0.98] cursor-pointer',
               isSelected
