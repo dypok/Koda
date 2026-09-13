@@ -59,7 +59,17 @@ export const CertificateSection: React.FC = () => {
             transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-5 w-full max-w-md mx-auto lg:mx-0"
           >
-            <div className="rounded-2xl border border-emerald-400/25 bg-gradient-to-b from-slate-900 to-slate-950 p-6 space-y-4 shadow-[0_20px_60px_-20px_rgba(16,185,129,0.35)]">
+            <div className="rounded-2xl border border-emerald-400/25 bg-gradient-to-b from-slate-900 to-slate-950 p-6 space-y-4 shadow-[0_20px_60px_-20px_rgba(16,185,129,0.35)] relative overflow-hidden">
+              {!reduceMotion && (
+                <motion.span
+                  aria-hidden="true"
+                  initial={{ x: '-180%', skewX: -18 }}
+                  whileInView={{ x: '280%' }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 1.1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                  className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.14),transparent)] will-change-transform"
+                />
+              )}
               <div className="flex items-center justify-between">
                 <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
                   Certificado de ejemplo
