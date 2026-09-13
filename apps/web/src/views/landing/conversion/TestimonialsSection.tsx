@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useReducedMotion, useTransform } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { Quote, Flame, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Highlight } from '@/components/ui/highlight';
 import { cn } from '@/lib/utils';
@@ -33,8 +33,6 @@ export const TestimonialsSection: React.FC = () => {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const tilt = useTransform(x, [-320, 320], [7, -7]);
 
   const goTo = useCallback((i: number) => {
     const n = TESTIMONIALS.length;
@@ -42,8 +40,12 @@ export const TestimonialsSection: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const el = trackRef.current?.children[index] as HTMLElement | undefined;
-    el?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
+    // Solo mueve el carrusel en horizontal: jamás la página (scrollIntoView la arrastraría).
+    const track = trackRef.current;
+    const child = track?.children[index] as HTMLElement | undefined;
+    if (!track || !child) return;
+    const left = child.offsetLeft - (track.clientWidth - child.clientWidth) / 2;
+    track.scrollTo({ left, behavior: reduceMotion ? 'auto' : 'smooth' });
   }, [index, reduceMotion]);
 
   useEffect(() => {
@@ -79,15 +81,7 @@ export const TestimonialsSection: React.FC = () => {
         >
           <motion.div
             ref={trackRef}
-            drag={reduceMotion ? false : 'x'}
-            style={{ x, rotateY: reduceMotion ? 0 : tilt, transformStyle: 'preserve-3d' }}
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.12}
-            onDragEnd={(_, info) => {
-              if (info.offset.x < -60) goTo(index + 1);
-              else if (info.offset.x > 60) goTo(index - 1);
-            }}
-            className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 cursor-grab active:cursor-grabbing [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            className="flex gap-5 overflow-x-auto snap-x snap-mandatory pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {TESTIMONIALS.map((t, i) => (
               <motion.figure
