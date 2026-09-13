@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { LanguageOption, TechCategory } from '@/models/register/register.model';
 import { LanguageCard } from './LanguageCard';
 import { cn } from '@/lib/utils';
@@ -18,7 +19,10 @@ interface LanguageSelectionStepProps {
 export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
   languages, categories, selectedCategory, onSelectCategory,
   selectedLanguageId, onSelectLanguage,
-}) => (
+}) => {
+  const reduceMotion = useReducedMotion();
+
+  return (
   <div className="w-full max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-6 animate-fadeIn">
     {/* Koda Welcome & Header */}
     <div className="flex items-center gap-4 text-left">
@@ -70,15 +74,26 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
     </div>
 
     {/* Grid of Technologies ampliado horizontalmente */}
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
-      {languages.map((item) => (
-        <LanguageCard
-          key={item.id}
-          option={item}
-          isSelected={selectedLanguageId === item.id}
-          onSelect={onSelectLanguage}
-        />
-      ))}
-    </div>
+    <motion.div layout={reduceMotion ? false : true} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
+      <AnimatePresence mode="popLayout">
+        {languages.map((item) => (
+          <motion.div
+            key={item.id}
+            layout={reduceMotion ? false : true}
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
+          >
+            <LanguageCard
+              option={item}
+              isSelected={selectedLanguageId === item.id}
+              onSelect={onSelectLanguage}
+            />
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </motion.div>
   </div>
-);
+  );
+};

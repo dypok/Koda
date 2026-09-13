@@ -50,6 +50,7 @@ export const StepLayout: React.FC<StepLayoutProps> = ({ title, subtitle, groupLa
       <motion.div
         role="radiogroup"
         aria-label={groupLabel}
+        layout
         initial="hidden"
         animate="show"
         variants={reduceMotion ? {} : { hidden: {}, show: { transition: { staggerChildren: 0.07 } } }}
@@ -57,8 +58,9 @@ export const StepLayout: React.FC<StepLayoutProps> = ({ title, subtitle, groupLa
       >
         {React.Children.map(children, (child) => (
           <motion.div
+            layout
             variants={reduceMotion ? {} : { hidden: { opacity: 0, y: 16 }, show: { opacity: 1, y: 0 } }}
-            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1], layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
           >
             {child}
           </motion.div>
