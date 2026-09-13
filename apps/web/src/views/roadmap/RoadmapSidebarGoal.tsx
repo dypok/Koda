@@ -7,10 +7,13 @@ import { useRoadmapStore } from '@/stores/roadmap.store';
 export function RoadmapSidebarGoal() {
   const { viewMode, coursesDataset, lessonsDataset } = useRoadmapStore();
   const currentDataset = viewMode === 'courses' ? coursesDataset : lessonsDataset;
+  const unlockedCount = currentDataset.nodes.filter((n) => n.isUnlocked).length;
+  const totalCount = currentDataset.nodes.length || 1;
+  const routePercent = Math.round((unlockedCount / totalCount) * 100);
   const nextMilestone =
     currentDataset.nodes.find((n) => !n.isUnlocked && n.variant !== 'boss') ||
     currentDataset.nodes.find((n) => !n.isUnlocked) ||
-    currentDataset.nodes[1];
+    null;
 
   return (
     <div className="hidden lg:block pt-3 border-t border-slate-800/40 space-y-3">
@@ -19,14 +22,14 @@ export function RoadmapSidebarGoal() {
         <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500">
           <span className="flex items-center gap-1.5 text-amber-400">
             <IconFlame className="w-3.5 h-3.5 fill-amber-400" />
-            <span>Meta Diaria</span>
+            <span>Avance de Ruta</span>
           </span>
-          <span className="text-slate-400">7 / 10 min</span>
+          <span className="text-slate-400 tabular-nums">{unlockedCount} / {totalCount} nodos</span>
         </div>
         <div className="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden p-0.5 border border-slate-800/60">
           <div
             className="h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full transition-all duration-300"
-            style={{ width: '70%' }}
+            style={{ width: `${routePercent}%` }}
           />
         </div>
       </div>
@@ -68,7 +71,11 @@ export function RoadmapSidebarGoal() {
               ) : null}
             </div>
           </div>
-        ) : null}
+        ) : (
+          <div className="p-2 rounded-lg bg-emerald-950/40 border border-emerald-500/30 text-[11px] font-mono text-emerald-300 text-center">
+            Ruta completada — todo desbloqueado
+          </div>
+        )}
       </div>
     </div>
   );

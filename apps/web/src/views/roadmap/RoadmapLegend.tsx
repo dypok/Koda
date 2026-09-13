@@ -57,13 +57,13 @@ export function RoadmapLegend() {
           <div className="p-1 rounded bg-orange-500/10 border border-orange-500/20 group-hover:scale-110 transition-transform">
             <IconFlame className="w-3.5 h-3.5 fill-orange-500" />
           </div>
-          <span className="tracking-wide">{user?.streak || 1}D RACHA</span>
+          <span className="tracking-wide">{user ? `${user.streak}D RACHA` : 'SIN SESIÓN'}</span>
         </div>
         <div className="flex items-center gap-2 text-amber-300 font-bold group cursor-default">
           <div className="p-1 rounded bg-amber-500/10 border border-amber-500/20 group-hover:scale-110 transition-transform">
             <IconStar className="w-3.5 h-3.5 fill-amber-400" />
           </div>
-          <span className="tracking-wide">+{user?.totalXp || 50} XP</span>
+          <span className="tracking-wide">+{user ? user.totalXp : '–'} XP</span>
         </div>
       </div>
 
@@ -128,7 +128,7 @@ export function RoadmapLegend() {
 
         <div className="flex items-center gap-2 text-cyan-400 font-bold pl-2 border-l border-slate-800">
           <IconShieldCheck className="w-4 h-4 text-cyan-400" />
-          <span className="text-[11px]">Nivel {user?.level || 4}</span>
+          <span className="text-[11px]">Nivel {user ? user.level : '–'}</span>
         </div>
       </div>
     </footer>
