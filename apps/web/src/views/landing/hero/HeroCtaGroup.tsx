@@ -4,9 +4,11 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, LogIn } from 'lucide-react';
 import { GradientButton } from '@/components/ui/gradient-button';
 import { Magnetic } from '@/components/ui/magnetic';
+import { useHeroStrings } from '@/lib/i18n';
 
 export const HeroCtaGroup: React.FC = () => {
   const reduceMotion = useReducedMotion();
+  const t = useHeroStrings();
 
   return (
     <motion.div
@@ -23,7 +25,7 @@ export const HeroCtaGroup: React.FC = () => {
         className="w-full gap-2.5 px-8 py-4 text-base justify-center group"
       >
         <Link href="/register" aria-label="Comenzar ahora gratis en Koda">
-          Comenzar Ahora
+          {t.ctaPrimary}
           <ArrowRight
             aria-hidden="true"
             className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1.5"
@@ -43,12 +45,12 @@ export const HeroCtaGroup: React.FC = () => {
             aria-hidden="true"
             className="w-5 h-5 text-amber-400/90 transition-transform duration-300 group-hover:scale-110"
           />
-          Ya tengo una cuenta
+          {t.ctaSecondary}
         </Link>
       </GradientButton>
 
       <p className="text-xs sm:text-sm text-slate-400">
-        Gratis · Sin instalación · Python 3.12 · +10 XP por sección
+        {t.trust}
       </p>
     </motion.div>
   );
