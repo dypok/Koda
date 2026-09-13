@@ -89,6 +89,7 @@ export const TestimonialsSection: React.FC = () => {
                 initial={reduceMotion ? false : { opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
+                animate={reduceMotion ? {} : i === index ? { y: -8, scale: 1.02 } : { y: 0, scale: 1 }}
                 transition={{ duration: 0.7, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
                 aria-hidden={i !== index || undefined}
                 className={cn(
