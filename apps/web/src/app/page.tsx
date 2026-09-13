@@ -21,6 +21,7 @@ import { GiantMarquee } from '@/components/landing/GiantMarquee';
 import { WaveDivider } from '@/components/landing/WaveDivider';
 import { CinematicFinale } from '@/components/landing/CinematicFinale';
 import { Preloader } from '@/components/landing/Preloader';
+import { AuroraProvider } from '@/components/landing/AuroraProvider';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function HomePage() {
@@ -53,6 +54,7 @@ export default function HomePage() {
     <LenisProvider>
       <ScrollProgress />
       <Preloader />
+      <AuroraProvider />
       <div aria-hidden="true" className="koda-grain" />
       <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">
         <AnnouncementBar />
