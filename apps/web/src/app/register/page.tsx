@@ -1,6 +1,7 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
 import { RegisterHeaderBar } from '@/views/register/RegisterHeaderBar';
 import { LanguageSelectionStep } from '@/views/register/LanguageSelectionStep';
@@ -21,6 +22,12 @@ export default function RegisterPage() {
   const canContinue = isLast ? profile.isFormValid : stepper.canContinue;
   const handleContinue = isLast ? profile.submit : stepper.nextStep;
   const continueText = isLast ? 'Crear cuenta y comenzar' : 'Continuar';
+  const reduceMotion = useReducedMotion();
+  const prevStepRef = useRef(stepper.currentStep);
+  const direction = stepper.currentStep >= prevStepRef.current ? 1 : -1;
+  useEffect(() => {
+    prevStepRef.current = stepper.currentStep;
+  }, [stepper.currentStep]);
 
   return (
     <div className="relative isolate min-h-screen bg-transparent text-slate-100 flex flex-col justify-between selection:bg-amber-500/30 selection:text-amber-200">
@@ -32,7 +39,16 @@ export default function RegisterPage() {
         onPrevStep={stepper.prevStep}
       />
 
-      <main className="flex-1 flex flex-col justify-start items-center py-4 px-2 relative z-10">
+      <main className="flex-1 flex flex-col justify-start items-center py-4 px-2 relative z-10 overflow-hidden">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={stepper.currentStep}
+            initial={reduceMotion ? { opacity: 0 } : { opacity: 0, x: 48 * direction }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, x: -48 * direction }}
+            transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full flex flex-col items-center"
+          >
         {stepper.currentStep === 1 && (
           <LanguageSelectionStep
             languages={stepper.languages}
@@ -75,6 +91,8 @@ export default function RegisterPage() {
             profile={profile}
           />
         )}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       <RegisterBottomBar
