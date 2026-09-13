@@ -11,6 +11,7 @@ import { RoadmapNodeInspector } from './RoadmapNodeInspector';
 import { useRoadmapWarpTransition } from './useRoadmapWarpTransition';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { useRoadmapPanZoom } from './useRoadmapPanZoom';
+import gsap from 'gsap';
 
 interface RoadmapCanvasProps {
   dataset: GraphDataset;
@@ -64,6 +65,13 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
 
   const handleSelectNode = (node: GraphNode) => {
     if (hasMovedRecently() || isWarping) return;
+    // El boss bloqueado tiembla al intentarlo: presencia, no silencio.
+    if (node.variant === 'boss' && !node.isUnlocked) {
+      const el = containerRef.current?.querySelector(`[data-node-id="${node.id}"]`);
+      if (el) {
+        gsap.fromTo(el, { x: 0 }, { x: 6, duration: 0.05, repeat: 5, yoyo: true, clearProps: 'x' });
+      }
+    }
     setInspectedNode(node);
     setActiveNode(node.id);
   };

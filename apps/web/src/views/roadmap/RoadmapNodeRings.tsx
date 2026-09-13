@@ -55,6 +55,17 @@ export function RoadmapNodeRings({ variant }: { variant: NodeVariant }) {
           className="st-spin-slower"
           style={{ animationDuration: '60s' }}
         />
+        {/* Second dread ring */}
+        <circle
+          r="62"
+          stroke="#7F1D1D"
+          strokeWidth="1"
+          strokeDasharray="2 8"
+          fill="none"
+          opacity="0.5"
+          className="st-spin-slow"
+          style={{ animationDuration: '80s' }}
+        />
         {/* Middle containment barrier */}
         <circle
           r="40"
@@ -70,7 +81,7 @@ export function RoadmapNodeRings({ variant }: { variant: NodeVariant }) {
           fill="#450A0A"
           stroke="#F87171"
           strokeWidth="2.5"
-          className="drop-shadow-[0_0_22px_rgba(239,68,68,0.7)]"
+          className="drop-shadow-[0_0_22px_rgba(239,68,68,0.7)] st-flicker"
         />
         {/* Warning hazard cross markers */}
         <path d="M -34 0 L -25 0 M 25 0 L 34 0 M 0 -34 L 0 -25 M 0 25 L 0 34" stroke="#FCA5A5" strokeWidth="2" />

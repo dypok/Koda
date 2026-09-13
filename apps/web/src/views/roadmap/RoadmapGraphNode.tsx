@@ -158,6 +158,9 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
         node.isUnlocked ? '' : 'opacity-80 hover:opacity-100'
       }`}
     >
+      {node.variant === 'boss' && !node.isUnlocked ? (
+        <title>Desafío final bloqueado: completa todos los sectores anteriores para abrir el Apex Gate</title>
+      ) : null}
       {/* Hit-area táctil generosa */}
       <circle r="32" fill="transparent" />
       {/* Shockwave circle for lock shattering */}
