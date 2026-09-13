@@ -61,7 +61,7 @@ export const StudentRoadmapView: React.FC = () => {
               <LessonRail dataset={dataset} onDeploy={handleDeployLesson} />
             </div>
           ) : coursesDisplayMode === 'pin-rail' ? (
-            <div className="absolute inset-0 overflow-y-auto">
+            <div className="absolute inset-0">
               <CoursePinRail dataset={dataset} onDeploy={handleDeployLesson} />
             </div>
           ) : (
