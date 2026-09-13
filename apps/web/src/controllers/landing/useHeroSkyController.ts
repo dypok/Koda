@@ -69,7 +69,7 @@ export function useHeroSkyController(starCount = STAR_COUNT_DEFAULT, seed = 88, 
 
   return {
     containerRef, canvasRef, realCoreRef, realBloomRef, realStar,
-    reduceMotion, triggerStarDiscovery, onPointerMove, onPointerLeave,
+    reduceMotion, discovered, triggerStarDiscovery, onPointerMove, onPointerLeave,
   };
 }
 

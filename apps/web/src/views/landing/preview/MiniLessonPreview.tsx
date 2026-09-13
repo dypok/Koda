@@ -54,7 +54,6 @@ export const MiniLessonPreview: React.FC = () => {
         <p className="text-sm sm:text-base font-semibold text-white">
           ¿Qué muestra este código en pantalla?
         </p>
-
         <pre className="overflow-x-auto rounded-xl bg-slate-950 border border-slate-800 p-3.5 font-mono text-sm leading-relaxed">
           <code>
             <span className="text-fuchsia-400">print</span>
@@ -64,6 +63,20 @@ export const MiniLessonPreview: React.FC = () => {
           </code>
         </pre>
 
+        <motion.div
+          key={`feedback-${attempts}`}
+          animate={
+            reduceMotion
+              ? {}
+              : phase === 'hint'
+                ? { x: [0, -10, 10, -6, 6, 0] }
+                : phase === 'success'
+                  ? { scale: [1, 1.03, 1] }
+                  : {}
+          }
+          transition={{ duration: 0.45 }}
+          className="space-y-4"
+        >
         <div role="radiogroup" aria-label="Opciones de respuesta" className="space-y-2">
           {OPTIONS.map((opt, i) => {
             const active = selected === opt.key;
@@ -152,6 +165,7 @@ export const MiniLessonPreview: React.FC = () => {
             </div>
           </>
         )}
+        </motion.div>
       </div>
     </motion.div>
   );

@@ -21,7 +21,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
   className,
 }) => {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: false, margin: '-20px' });
+  const isInView = useInView(ref, { once: true, margin: '-20px' });
 
   useEffect(() => {
     const node = ref.current;
@@ -33,9 +33,10 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     }
 
     const controls = animate(from, to, {
-      duration,
+      type: 'spring',
+      stiffness: 55,
+      damping: 15,
       delay,
-      ease: [0.16, 1, 0.3, 1],
       onUpdate: (latest) => {
         if (ref.current) {
           ref.current.textContent = `${Math.round(latest)}${suffix}`;
@@ -44,7 +45,7 @@ export const AnimatedCounter: React.FC<AnimatedCounterProps> = ({
     });
 
     return () => controls.stop();
-  }, [isInView, from, to, duration, delay, suffix]);
+  }, [isInView, from, to, delay, suffix]);
 
   return (
     <span ref={ref} className={className}>
