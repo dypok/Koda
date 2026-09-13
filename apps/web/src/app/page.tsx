@@ -11,6 +11,11 @@ import { Footer } from '@/components/landing/Footer';
 import { StudentRoadmapView } from '@/views/roadmap/StudentRoadmapView';
 import { LenisProvider } from '@/components/landing/LenisProvider';
 import { ScrollProgress } from '@/components/landing/ScrollProgress';
+import { AnnouncementBar } from '@/components/landing/AnnouncementBar';
+import { StickyMobileCta } from '@/components/landing/StickyMobileCta';
+import { ExitIntentModal } from '@/components/landing/ExitIntentModal';
+import { TestimonialsSection } from '@/views/landing/conversion/TestimonialsSection';
+import { PricingSection } from '@/views/landing/conversion/PricingSection';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function HomePage() {
@@ -43,14 +48,19 @@ export default function HomePage() {
     <LenisProvider>
       <ScrollProgress />
       <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">
+        <AnnouncementBar />
         <Navbar />
         <main className="flex-1">
           <HeroSection />
           <InteractivePreview />
           <MethodologySection />
+          <TestimonialsSection />
+          <PricingSection />
           <CtaSection />
         </main>
         <Footer />
+        <StickyMobileCta />
+        <ExitIntentModal />
       </div>
     </LenisProvider>
   );
