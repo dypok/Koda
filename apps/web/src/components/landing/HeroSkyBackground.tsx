@@ -25,6 +25,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
     realBloomRef,
     realStar,
     reduceMotion,
+    discovered,
     triggerStarDiscovery,
     onPointerMove,
     onPointerLeave,
@@ -60,6 +61,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
         realCoreRef={realCoreRef}
         realBloomRef={realBloomRef}
         reduceMotion={reduceMotion}
+        discovered={discovered}
         onDiscover={triggerStarDiscovery}
       />
 

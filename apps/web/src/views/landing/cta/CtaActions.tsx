@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { LogIn, Rocket } from 'lucide-react';
 import { GradientButton } from '@/components/ui/gradient-button';
+import { Magnetic } from '@/components/ui/magnetic';
 
 export const CtaActions: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -15,16 +16,18 @@ export const CtaActions: React.FC = () => {
     transition={{ duration: 0.65, delay: 0.28, ease: [0.16, 1, 0.3, 1] }}
     className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4"
   >
+    <Magnetic className="w-full sm:w-auto">
     <GradientButton
       asChild
       size="lg"
-      className="w-full sm:w-auto px-8 py-3.5 text-base gap-2.5"
+      className="w-full px-8 py-3.5 text-base gap-2.5"
     >
       <Link href="/register" aria-label="Comenzar ahora gratis en Koda">
         <Rocket aria-hidden="true" className="w-5 h-5" />
         Comenzar Ahora — Es Gratis
       </Link>
     </GradientButton>
+    </Magnetic>
 
     <GradientButton
       asChild

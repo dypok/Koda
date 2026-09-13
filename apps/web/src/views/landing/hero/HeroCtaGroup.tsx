@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, LogIn } from 'lucide-react';
 import { GradientButton } from '@/components/ui/gradient-button';
+import { Magnetic } from '@/components/ui/magnetic';
 
 export const HeroCtaGroup: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -15,10 +16,11 @@ export const HeroCtaGroup: React.FC = () => {
       transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
       className="pt-2 flex flex-col items-center lg:items-start gap-3.5 w-full sm:w-auto transform-gpu"
     >
+      <Magnetic className="w-full sm:w-72 max-w-xs sm:max-w-none">
       <GradientButton
         asChild
         size="lg"
-        className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base justify-center group"
+        className="w-full gap-2.5 px-8 py-4 text-base justify-center group"
       >
         <Link href="/register" aria-label="Comenzar ahora gratis en Koda">
           Comenzar Ahora
@@ -28,6 +30,7 @@ export const HeroCtaGroup: React.FC = () => {
           />
         </Link>
       </GradientButton>
+      </Magnetic>
 
       <GradientButton
         asChild

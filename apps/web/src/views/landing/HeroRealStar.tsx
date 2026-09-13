@@ -7,6 +7,7 @@ interface HeroRealStarProps {
   realCoreRef: React.RefObject<HTMLSpanElement | null>;
   realBloomRef: React.RefObject<HTMLSpanElement | null>;
   reduceMotion: boolean | null;
+  discovered: boolean;
   onDiscover: () => void;
 }
 
@@ -15,6 +16,7 @@ export const HeroRealStar: React.FC<HeroRealStarProps> = ({
   realCoreRef,
   realBloomRef,
   reduceMotion,
+  discovered,
   onDiscover,
 }) => (
   <button
@@ -65,5 +67,17 @@ export const HeroRealStar: React.FC<HeroRealStarProps> = ({
       }
       transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
     />
+
+    {discovered && !reduceMotion && (
+      <motion.span
+        key="star-burst"
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 m-auto rounded-full border-2 border-amber-300"
+        style={{ width: 32, height: 32 }}
+        initial={{ scale: 0.4, opacity: 0.9 }}
+        animate={{ scale: 2.6, opacity: 0 }}
+        transition={{ duration: 0.9, ease: 'easeOut' }}
+      />
+    )}
   </button>
 );
