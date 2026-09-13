@@ -67,7 +67,12 @@ export default function HomePage() {
         <AnnouncementBar />
         <Navbar />
         <main className="flex-1">
-          <HeroSection />
+          <div className="relative h-[200vh]">
+            <div className="sticky top-0 h-screen overflow-hidden">
+              <HeroSection />
+            </div>
+          </div>
+          <div className="relative z-10 bg-slate-950 shadow-[0_-24px_60px_rgba(0,0,0,0.6)]">
           <GiantMarquee />
           <InteractivePreview />
           <MethodologySection />
@@ -77,6 +82,7 @@ export default function HomePage() {
           <PricingSection />
           <CertificateSection />
           <CinematicFinale />
+          </div>
         </main>
         <Footer />
         <StickyMobileCta />
