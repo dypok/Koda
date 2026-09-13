@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
+import { AnimatedCounter } from '@/components/ui/animated-counter';
 
 interface RegisterHeaderBarProps {
   currentStepIndex?: number;
@@ -60,8 +61,8 @@ export const RegisterHeaderBar: React.FC<RegisterHeaderBarProps> = ({
 
         {/* Brand Icon & Step Counter */}
         <div className="flex items-center gap-2.5">
-          <span className="hidden sm:inline text-xs font-bold text-slate-400 uppercase tracking-wider tabular-nums">
-            Paso {currentStepIndex} de {totalSteps}
+          <span className="hidden sm:inline-flex items-center gap-1 text-xs font-bold text-slate-400 uppercase tracking-wider tabular-nums">
+            Paso <AnimatedCounter to={currentStepIndex} duration={0.6} className="inline-flex" /> de {totalSteps}
           </span>
           <Image
             src="/icon.svg"
