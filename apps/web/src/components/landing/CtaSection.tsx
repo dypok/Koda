@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { CtaActions } from '@/views/landing/cta/CtaActions';
 import { CtaTrustPoints } from '@/views/landing/cta/CtaTrustPoints';
+import { Highlight } from '@/components/ui/highlight';
 
 export const CtaSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -46,9 +47,9 @@ export const CtaSection: React.FC = () => {
         >
           <h2 className="font-display text-4xl sm:text-6xl font-bold text-white tracking-tight leading-[1.1]">
             Comienza a programar{' '}
-            <span className="text-amber-400 underline decoration-amber-400/40 decoration-4 underline-offset-8">
+            <Highlight>
               hoy mismo
-            </span>
+            </Highlight>
           </h2>
           <p className="text-slate-400 text-base sm:text-lg leading-relaxed font-sans">
             Construye bases lógicas universales y domina la programación paso a paso. Sin configuraciones complejas, a tu propio ritmo y con práctica directa en tu navegador.

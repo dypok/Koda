@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
+import { Highlight } from '@/components/ui/highlight';
 
 export const FreeTierSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -23,9 +24,9 @@ export const FreeTierSection: React.FC = () => {
           >
             <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
               Aprende{' '}
-              <span className="text-amber-400 underline decoration-amber-400/40 decoration-4 underline-offset-8">
+              <Highlight>
                 100% gratis
-              </span>{' '}
+              </Highlight>{' '}
               con los mejores resultados
             </h2>
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
+import { Highlight } from '@/components/ui/highlight';
 import { Pillar } from '@/models/landing/methodology.model';
 import { cn } from '@/lib/utils';
 
@@ -32,9 +33,9 @@ export const MethodologyHub: React.FC<MethodologyHubProps> = ({ pillars, activeI
       >
         <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.12]">
           ¿Por qué nuestro método{' '}
-          <span className="text-amber-400 underline decoration-amber-400/40 decoration-4 underline-offset-8">
+          <Highlight>
             es el mejor
-          </span>
+          </Highlight>
           ?
         </h2>
         <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed max-w-2xl mx-auto font-sans">

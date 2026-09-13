@@ -4,6 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Check } from 'lucide-react';
+import { Highlight } from '@/components/ui/highlight';
 import { cn } from '@/lib/utils';
 
 const FREE = [
@@ -33,7 +34,7 @@ export const PricingSection: React.FC = () => {
           className="text-center space-y-4 max-w-2xl mx-auto mb-12"
         >
           <h2 id="planes-title" className="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight leading-[1.12]">
-            Gratis de verdad, <span className="text-amber-400 underline decoration-amber-400/40 decoration-4 underline-offset-8">premium sin truco</span>
+            Gratis de verdad, <Highlight>premium sin truco</Highlight>
           </h2>
           <p className="text-slate-400 text-base sm:text-lg leading-relaxed">
             La misma educación para todos. Premium solo quita los anuncios.
