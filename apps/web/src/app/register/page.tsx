@@ -32,7 +32,7 @@ export default function RegisterPage() {
 
   return (
     <div className="relative isolate min-h-screen bg-transparent text-slate-100 flex flex-col justify-between selection:bg-amber-500/30 selection:text-amber-200">
-      <HeroSkyBackground starCount={140 + stepper.currentStep * 12} interactive={true} className="fixed inset-0 pointer-events-none -z-10" />
+      <HeroSkyBackground starCount={140 + stepper.currentStep * 12} interactive={true} className="register-sky fixed inset-0 pointer-events-none -z-10" />
       <WeatherLayer type={stepper.currentStep >= 4 ? 'fireflies' : 'embers'} count={10} />
 
       <RegisterHeaderBar
