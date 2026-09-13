@@ -63,6 +63,7 @@ interface RoadmapStoreState {
   setBranch: (branchId: CareerBranchId) => void;
   setPanOffset: (pan: { x: number; y: number }) => void;
   setZoomLevel: (zoom: number | ((prev: number) => number)) => void;
+  hydrateProgress: () => void;
   zoomIn: () => void;
   zoomOut: () => void;
   resetZoom: () => void;
@@ -77,7 +78,7 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   zoomLevel: 100,
   panOffset: { x: 0, y: 0 },
   isLoading: false,
-  coursesDataset: typeof window !== 'undefined' ? restoreProgress(FRONTEND_COURSES_DATASET) : FRONTEND_COURSES_DATASET,
+  coursesDataset: FRONTEND_COURSES_DATASET,
   lessonsDataset: PYTHON_BASIC_LESSONS_DATASET,
   retreatTrigger: 0,
   triggerRetreatToCourses: () => set((s) => ({ retreatTrigger: s.retreatTrigger + 1 })),
@@ -312,6 +313,10 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     });
   },
   setPanOffset: (pan) => set({ panOffset: pan }),
+  hydrateProgress: () => {
+    if (typeof window === 'undefined') return;
+    set({ coursesDataset: restoreProgress(get().coursesDataset) });
+  },
   setZoomLevel: (zoom) =>
     set((s) => ({
       zoomLevel: Math.max(50, Math.min(200, typeof zoom === 'function' ? zoom(s.zoomLevel) : zoom)),

@@ -13,7 +13,11 @@ import { RoadmapFusionView } from './RoadmapFusionView';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 
 export const StudentRoadmapView: React.FC = () => {
-  const { openCourseLessons, getCurrentDataset, viewMode, retreatTrigger, returnToCourses, setActiveNode, isLoading } = useRoadmapStore();
+  const { openCourseLessons, getCurrentDataset, viewMode, retreatTrigger, returnToCourses, setActiveNode, isLoading, hydrateProgress } = useRoadmapStore();
+
+  React.useEffect(() => {
+    hydrateProgress();
+  }, [hydrateProgress]);
   const [coursesDisplayMode, setCoursesDisplayMode] = React.useState<'pin-rail' | 'canvas' | 'fusion'>('fusion');
 
   React.useEffect(() => {

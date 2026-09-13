@@ -13,19 +13,24 @@ export function useLanguageSelectorController({
   onLanguageChange,
 }: UseLanguageSelectorProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState<Language>(() => {
-    if (typeof window !== 'undefined') {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
-      const bySaved = SUPPORTED_LANGUAGES.find((lang) => lang.code === saved && !lang.comingSoon);
-      if (bySaved) return bySaved;
-    }
-    return (
+  // Default determinista en el primer render (igual que el servidor); se hidrata en efecto.
+  const [selectedLanguage, setSelectedLanguage] = useState<Language>(
+    () =>
       SUPPORTED_LANGUAGES.find((lang) => lang.code === currentLanguageCode && !lang.comingSoon) ||
       SUPPORTED_LANGUAGES[0]
-    );
-  });
+  );
   const containerRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem(STORAGE_KEY);
+      const bySaved = SUPPORTED_LANGUAGES.find((lang) => lang.code === saved && !lang.comingSoon);
+      if (bySaved) setSelectedLanguage(bySaved);
+    } catch {
+      // sin almacenamiento, se queda el default
+    }
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

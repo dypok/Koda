@@ -32,25 +32,35 @@ function loadProgress(): Partial<PersistedProgress> {
 }
 
 export function useRegisterStepperController() {
-  const isExpress =
-    typeof window !== 'undefined' &&
-    new URLSearchParams(window.location.search).get('v') === 'express';
+  // false en el primer render (igual que el servidor); se hidrata en efecto.
+  const [isExpress, setIsExpress] = useState(false);
   useEffect(() => {
+    const express = new URLSearchParams(window.location.search).get('v') === 'express';
+    setIsExpress(express);
     // Puerta a A/B real: variante visible en consola hasta tener analytics.
     // eslint-disable-next-line no-console
-    console.info('[analytics] register_variant', isExpress ? 'express' : 'full');
-  }, [isExpress]);
-  const [restored] = useState<PersistedProgress | null>(() =>
-    typeof window === 'undefined' ? null : (loadProgress() as PersistedProgress | null)
-  );
-  const [currentStep, setCurrentStep] = useState<number>(restored?.currentStep ?? 1);
-  const [selectedLanguageId, setSelectedLanguageId] = useState<string>(restored?.selectedLanguageId ?? 'python');
-  const [selectedCategory, setSelectedCategory] = useState<TechCategory>(restored?.selectedCategory ?? 'all');
-  const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>(restored?.selectedExperienceId ?? null);
-  const [selectedStyleId, setSelectedStyleId] = useState<string | null>(restored?.selectedStyleId ?? null);
-  const [selectedGoalId, setSelectedGoalId] = useState<string | null>(restored?.selectedGoalId ?? 'regular');
+    console.info('[analytics] register_variant', express ? 'express' : 'full');
+  }, []);
+  // Defaults deterministas en el primer render (igual que el servidor); se hidratan en efecto.
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [selectedLanguageId, setSelectedLanguageId] = useState<string>('python');
+  const [selectedCategory, setSelectedCategory] = useState<TechCategory>('all');
+  const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>(null);
+  const [selectedStyleId, setSelectedStyleId] = useState<string | null>(null);
+  const [selectedGoalId, setSelectedGoalId] = useState<string | null>('regular');
+
+  useEffect(() => {
+    const saved = loadProgress();
+    if (saved.currentStep != null) setCurrentStep(saved.currentStep);
+    if (saved.selectedLanguageId) setSelectedLanguageId(saved.selectedLanguageId);
+    if (saved.selectedCategory) setSelectedCategory(saved.selectedCategory);
+    if (saved.selectedExperienceId !== undefined) setSelectedExperienceId(saved.selectedExperienceId);
+    if (saved.selectedStyleId !== undefined) setSelectedStyleId(saved.selectedStyleId);
+    if (saved.selectedGoalId !== undefined) setSelectedGoalId(saved.selectedGoalId);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+  }, []);
   // Express: defaults visibles en el resumen (pasos 2-4 colapsados).
-  const [expressDefaults] = useState(() => isExpress && !restored);
+  const expressDefaults = isExpress;
   const effectiveExperienceId = selectedExperienceId ?? (expressDefaults ? 'beginner' : null);
 
   useEffect(() => {

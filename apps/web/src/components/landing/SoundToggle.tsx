@@ -1,12 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Volume2, VolumeX } from 'lucide-react';
 import { isSoundEnabled, setSoundEnabled, sound } from '@/lib/sound';
 
 /** Toggle de sonido opt-in (apagado por defecto), persiste en localStorage. */
 export const SoundToggle: React.FC = () => {
-  const [on, setOn] = useState(isSoundEnabled());
+  // false en el primer render a propósito (igual que el servidor) para no romper hidratación.
+  const [on, setOn] = useState(false);
+
+  useEffect(() => {
+    setOn(isSoundEnabled());
+  }, []);
 
   const toggle = () => {
     const next = !on;
