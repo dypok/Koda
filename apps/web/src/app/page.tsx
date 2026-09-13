@@ -23,6 +23,7 @@ import { CinematicFinale } from '@/components/landing/CinematicFinale';
 import { Preloader } from '@/components/landing/Preloader';
 import { AuroraProvider } from '@/components/landing/AuroraProvider';
 import { GlowParallax } from '@/components/landing/GlowParallax';
+import { RouteThread } from '@/components/landing/RouteThread';
 import { PartyMode } from '@/components/landing/PartyMode';
 import { useAuthStore } from '@/stores/auth.store';
 
@@ -58,6 +59,7 @@ export default function HomePage() {
       <Preloader />
       <AuroraProvider />
       <GlowParallax />
+      <RouteThread />
       <div aria-hidden="true" className="koda-grain" />
       <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">
         <AnnouncementBar />
