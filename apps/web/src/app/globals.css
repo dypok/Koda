@@ -8,6 +8,18 @@
 ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #334155; }
 
+/* Aurora: acento rotativo ámbar→esmeralda→cian */
+@property --koda-hue {
+  syntax: '<number>';
+  initial-value: 38;
+  inherits: true;
+}
+
+:root {
+  --koda-hue: 38;
+  transition: --koda-hue 2s ease;
+}
+
 /* Koda landing tokens: focus visible + solid surfaces (no purple/blue defaults) */
 :focus-visible {
   outline: 2px solid #f59e0b;

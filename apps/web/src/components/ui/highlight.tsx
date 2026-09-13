@@ -32,7 +32,8 @@ export const Highlight: React.FC<{ children: React.ReactNode; className?: string
     <span ref={ref} className={cn('relative inline-block text-amber-400', className)}>
       <span
         aria-hidden="true"
-        className="st-highlight-bg absolute inset-x-0 bottom-1 top-auto h-[0.32em] origin-left rounded-sm bg-amber-400/25 will-change-transform"
+        className="st-highlight-bg absolute inset-x-0 bottom-1 top-auto h-[0.32em] origin-left rounded-sm will-change-transform"
+        style={{ background: 'hsl(var(--koda-hue) 95% 62% / 0.28)' }}
       />
       <span className="relative">{children}</span>
     </span>
