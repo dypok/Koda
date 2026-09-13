@@ -6,6 +6,7 @@ import { HeroSkyBackground } from './HeroSkyBackground';
 import { UpcomingTechCarousel } from './UpcomingTechCarousel';
 import { HeroCtaGroup } from '@/views/landing/hero/HeroCtaGroup';
 import { HeroMascot } from '@/views/landing/hero/HeroMascot';
+import { SplitText } from '@/components/ui/split-text';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 import { useHeroStrings } from '@/lib/i18n';
 
@@ -62,20 +63,16 @@ export const HeroSection: React.FC = () => {
               <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-amber-400" />
               {t.eyebrow}
             </motion.p>
-            <motion.h1
+            <h1
               id="koda-hero-title"
-              initial={reduceMotion ? false : { opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.85, ease: [...EASE] }}
               className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.12] transform-gpu"
             >
-              {t.titleA}{' '}
+              <SplitText text={t.titleA} mode="chars" delay={0.1} />{' '}
               <span className="text-amber-400 underline decoration-amber-400/40 decoration-4 underline-offset-8">
-                {t.titleAccent}
+                <SplitText text={t.titleAccent} mode="words" delay={0.45} />
               </span>
-              {t.titleB}
-            </motion.h1>
+              <SplitText text={t.titleB} mode="chars" delay={0.7} />
+            </h1>
 
             <motion.p
               initial={reduceMotion ? false : { opacity: 0, y: 20 }}
