@@ -25,7 +25,7 @@ export const Footer: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 mb-12">
           {/* Marca & Misión */}
           <div className="md:col-span-3 space-y-4">
-            <Link href="/" className="flex items-center focus:outline-none w-fit" aria-label="Koda">
+            <Link href="/?landing=true" className="flex items-center focus:outline-none w-fit" aria-label="Koda - inicio">
               <Image
                 src="/brand/logo.svg"
                 alt="Koda"

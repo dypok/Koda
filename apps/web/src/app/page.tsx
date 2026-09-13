@@ -29,9 +29,11 @@ export default function HomePage() {
     return <div className="min-h-screen bg-slate-950" />;
   }
 
-  const isRoadmapPreview = typeof window !== 'undefined' && window.location.search.includes('roadmap=true');
+  const search = typeof window !== 'undefined' ? window.location.search : '';
+  const isRoadmapPreview = search.includes('roadmap=true');
+  const isLandingForced = search.includes('landing=true');
 
-  if (isAuthenticated || isRoadmapPreview) {
+  if ((isAuthenticated || isRoadmapPreview) && !isLandingForced) {
     return <StudentRoadmapView />;
   }
 
