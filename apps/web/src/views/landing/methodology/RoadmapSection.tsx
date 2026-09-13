@@ -8,7 +8,7 @@ export const RoadmapSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-  <section id="roadmap" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
+  <section id="roadmap" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20 sticky top-[148px] z-[15] rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.5)]">
     <KodaPeek align="right" />
     <WeatherLayer type="embers" count={10} />
     <div aria-hidden="true" data-glow="14" className="absolute -top-24 left-1/4 -translate-x-1/2 w-[650px] h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />

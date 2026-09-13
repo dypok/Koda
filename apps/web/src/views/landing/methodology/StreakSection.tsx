@@ -7,7 +7,7 @@ export const StreakSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-  <section id="rachas" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
+  <section id="rachas" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20 sticky top-[128px] z-[10] rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.5)]">
     <div aria-hidden="true" data-glow="-10" className="absolute top-1/2 right-4 lg:right-20 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(234,88,12,0.12)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
     {/* Ascuas vivas de fuego flotantes (GPU Accelerated) */}

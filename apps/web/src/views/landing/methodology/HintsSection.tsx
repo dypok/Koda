@@ -7,7 +7,7 @@ export const HintsSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-  <section id="pistas" className="py-28 md:py-36 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
+  <section id="pistas" className="py-28 md:py-36 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20 sticky top-[188px] z-[25] rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.5)]">
     <WeatherLayer type="fireflies" count={12} />
     <div aria-hidden="true" data-glow="10" className="absolute -top-16 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
