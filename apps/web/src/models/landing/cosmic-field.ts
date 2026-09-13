@@ -4,10 +4,15 @@ import { mulberry32 } from './hero-sky.model';
 export const COSMIC_COLORS = ['#f59e0b', '#22d3ee', '#ffffff', '#fbbf24', '#67e8f9'];
 
 /** Genera posiciones en esfera aplanada con brazos espirales sutiles. */
-export function generateCosmos(count: number, seed = 7): { positions: Float32Array; colors: Float32Array } {
+export function generateCosmos(
+  count: number,
+  seed = 7
+): { positions: Float32Array; colors: Float32Array; phases: Float32Array; sizes: Float32Array } {
   const rand = mulberry32(seed);
   const positions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
+  const phases = new Float32Array(count);
+  const sizes = new Float32Array(count);
   const color = new THREE.Color();
 
   for (let i = 0; i < count; i++) {
@@ -23,9 +28,12 @@ export function generateCosmos(count: number, seed = 7): { positions: Float32Arr
     colors[i * 3] = color.r * dim;
     colors[i * 3 + 1] = color.g * dim;
     colors[i * 3 + 2] = color.b * dim;
+
+    phases[i] = rand() * Math.PI * 2;
+    sizes[i] = 0.5 + rand() * 1.1;
   }
 
-  return { positions, colors };
+  return { positions, colors, phases, sizes };
 }
 
 /** Sprite radial suave para puntos redondos (no cuadrados). */
