@@ -18,6 +18,7 @@ import { TestimonialsSection } from '@/views/landing/conversion/TestimonialsSect
 import { PricingSection } from '@/views/landing/conversion/PricingSection';
 import { CertificateSection } from '@/views/landing/conversion/CertificateSection';
 import { GiantMarquee } from '@/components/landing/GiantMarquee';
+import { WaveDivider } from '@/components/landing/WaveDivider';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function HomePage() {
@@ -58,6 +59,7 @@ export default function HomePage() {
           <GiantMarquee />
           <InteractivePreview />
           <MethodologySection />
+          <WaveDivider />
           <TestimonialsSection />
           <PricingSection />
           <CertificateSection />

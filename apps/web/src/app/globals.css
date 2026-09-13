@@ -45,10 +45,15 @@
   .st-twinkle,
   .st-flicker,
   .st-chest,
-  .koda-grain {
+  .koda-grain,
+  .koda-wave {
     animation: none !important;
   }
 }
+/* Onda divisoria entre secciones */
+@keyframes koda-wave-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.koda-wave { animation: koda-wave-drift 14s linear infinite; will-change: transform; }
+
 /* Grain cinematográfico global (landing) */
 @keyframes koda-grain {
   0%, 100% { transform: translate(0, 0); }
