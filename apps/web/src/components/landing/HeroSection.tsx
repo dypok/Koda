@@ -6,6 +6,7 @@ import { HeroSkyBackground } from './HeroSkyBackground';
 import { UpcomingTechCarousel } from './UpcomingTechCarousel';
 import { HeroCtaGroup } from '@/views/landing/hero/HeroCtaGroup';
 import { HeroMascot } from '@/views/landing/hero/HeroMascot';
+import { TypewriterCode } from '@/views/landing/hero/TypewriterCode';
 import { SplitText } from '@/components/ui/split-text';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 import { useHeroStrings } from '@/lib/i18n';
@@ -85,6 +86,7 @@ export const HeroSection: React.FC = () => {
             </motion.p>
 
             <HeroCtaGroup />
+            <TypewriterCode />
           </div>
 
           {/* Right Column: Mascota Oficial Koda */}
