@@ -10,6 +10,10 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-13 14:35] [Added] **Renovación del registro `/register` (rama `feat/frontend-visual-experience`):**
+  - `SelectableCard` radio único + `StepLayout` con stagger (-78 líneas, fuera 3 cards duplicadas), progressbar real, persistencia del wizard, flechas de teclado y bottom bar con hint.
+  - Form real (submit Enter, labels, errores por campo, medidor de fuerza, ojo accesible), social auth honesto con loading por provider, success modal accesible con confeti y CTA a roadmap, slide direccional + odómetro, Koda buddy por paso, Tu plan revisable, `AVAILABLE_IDS` como única fuente y fondo vivo por paso.
+  - Detalle por commit en `documentation/changelog/13-09-2026-changelog.md`.
 - [2026-09-13 14:15] [Added] **Transiciones 2.5D entre secciones + fondo 3D (rama `feat/frontend-visual-experience`):**
   - Tanda F: glows con parallax propio, wipe ámbar, shine del diploma, skew por velocidad, lift de testimonios, metodología apilada, demo y diploma pineados, focos del mapa por scrub, eclipse-wipe al footer, hilo de ruta continuo, actos temáticos (`body[data-act]`), hero pineado 200vh, premium elevada y Koda guía narradora.
   - Tanda D: fondo 3D full-page con Three.js (`CosmicBackground` ssr:false, 3.500/1.200/700 partículas según dispositivo, twinkle por shader, dolly + warp por Lenis, intensidad por acto, `UnrealBloomPass` lazy y guardián de fps con relevo del sky 2D).
