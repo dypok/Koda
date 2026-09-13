@@ -37,18 +37,23 @@ export const CertificateSection: React.FC = () => {
               puede verificar. Sin letra pequeña, sin costo extra.
             </p>
             <ul className="space-y-2.5 text-sm text-slate-200">
-              <li className="flex items-start gap-2.5">
-                <BadgeCheck aria-hidden="true" className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                Código único por certificado, imposible de falsificar a simple vista
-              </li>
-              <li className="flex items-start gap-2.5">
-                <QrCode aria-hidden="true" className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                QR que abre la ficha pública de verificación
-              </li>
-              <li className="flex items-start gap-2.5">
-                <ShieldCheck aria-hidden="true" className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                PDF descargable para tu portafolio y LinkedIn
-              </li>
+              {[
+                { icon: BadgeCheck, text: 'Código único por certificado, imposible de falsificar a simple vista' },
+                { icon: QrCode, text: 'QR que abre la ficha pública de verificación' },
+                { icon: ShieldCheck, text: 'PDF descargable para tu portafolio y LinkedIn' },
+              ].map((item, i) => (
+                <motion.li
+                  key={item.text}
+                  initial={reduceMotion ? false : { opacity: 0.35, x: -12 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: '-60px' }}
+                  transition={{ duration: 0.5, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex items-start gap-2.5"
+                >
+                  <item.icon aria-hidden="true" className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                  {item.text}
+                </motion.li>
+              ))}
             </ul>
           </motion.div>
 
@@ -57,7 +62,7 @@ export const CertificateSection: React.FC = () => {
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
             viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 w-full max-w-md mx-auto lg:mx-0"
+            className="lg:col-span-5 w-full max-w-md mx-auto lg:mx-0 lg:sticky lg:top-24 self-start"
           >
             <div className="rounded-2xl border border-emerald-400/25 bg-gradient-to-b from-slate-900 to-slate-950 p-6 space-y-4 shadow-[0_20px_60px_-20px_rgba(16,185,129,0.35)] relative overflow-hidden">
               {!reduceMotion && (
