@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
-import Link from 'next/link';
+import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Sparkles, ArrowRight, Flame } from 'lucide-react';
 import { GradientButton } from '@/components/ui/gradient-button';
+import { TransitionLink } from '@/components/ui/transition-link';
 import { CodeConfetti } from '@/views/landing/preview/CodeConfetti';
 
 interface RegisterSuccessModalProps {
@@ -24,6 +24,7 @@ export const RegisterSuccessModal: React.FC<RegisterSuccessModalProps> = ({
   const reduceMotion = useReducedMotion();
   const dialogRef = useRef<HTMLDivElement>(null);
   const ctaRef = useRef<HTMLAnchorElement>(null);
+  const [handoff, setHandoff] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -110,12 +111,40 @@ export const RegisterSuccessModal: React.FC<RegisterSuccessModalProps> = ({
             </div>
 
             <GradientButton asChild className="w-full py-3 text-sm gap-2">
-              <Link ref={ctaRef} href="/?roadmap=true">
+              <TransitionLink ref={ctaRef} href="/?roadmap=true" onClick={() => setHandoff(true)}>
                 <span>Comenzar a Programar</span>
                 <ArrowRight aria-hidden="true" className="w-4 h-4" />
-              </Link>
+              </TransitionLink>
             </GradientButton>
           </motion.div>
+
+          {/* Handoff: Koda vuela hacia la ruta durante la transición */}
+          <AnimatePresence>
+            {handoff && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                aria-hidden="true"
+                className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-slate-950/95 backdrop-blur-md"
+              >
+                <motion.div
+                  initial={reduceMotion ? {} : { scale: 0.6, y: 30 }}
+                  animate={{ scale: 1.4, y: -20 }}
+                  transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <Image
+                    src="/brand/koda-mascot-cartoon-2d.svg"
+                    alt=""
+                    width={120}
+                    height={120}
+                    className="object-contain select-none"
+                  />
+                </motion.div>
+                <p className="font-display font-black text-amber-300">¡A la ruta! 🚀</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       )}
     </AnimatePresence>
