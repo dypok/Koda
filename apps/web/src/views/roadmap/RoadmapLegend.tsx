@@ -115,16 +115,18 @@ export function RoadmapLegend() {
 
       {/* Acciones y Nivel de Usuario */}
       <div className="flex items-center gap-3">
-        {/* Botón táctico de prueba de cinemática de completado */}
-        <button
-          onClick={simulateCompleteAndUnlockNext}
-          disabled={Boolean(animatingConnectionId)}
-          className="px-2.5 py-1 rounded bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-900/60 hover:border-cyan-400 text-[10px] uppercase font-bold tracking-wider flex items-center gap-1.5 transition-all disabled:opacity-50 hover:scale-105 active:scale-95 cursor-pointer"
-          title="Simula la finalización del módulo actual, el avance del láser y la rotura del candado"
-        >
-          <IconPlayerPlay className="w-3 h-3 text-cyan-400" />
-          <span>Simular Desbloqueo</span>
-        </button>
+        {/* Botón táctico de prueba: solo desarrollo, nunca producción */}
+        {process.env.NODE_ENV !== 'production' ? (
+          <button
+            onClick={simulateCompleteAndUnlockNext}
+            disabled={Boolean(animatingConnectionId)}
+            className="px-2.5 py-1 rounded bg-cyan-950/60 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-900/60 hover:border-cyan-400 text-[10px] uppercase font-bold tracking-wider flex items-center gap-1.5 transition-all disabled:opacity-50 hover:scale-105 active:scale-95 cursor-pointer"
+            title="Solo dev: simula la finalización del módulo actual"
+          >
+            <IconPlayerPlay className="w-3 h-3 text-cyan-400" />
+            <span>Simular Desbloqueo</span>
+          </button>
+        ) : null}
 
         <div className="flex items-center gap-2 text-cyan-400 font-bold pl-2 border-l border-slate-800">
           <IconShieldCheck className="w-4 h-4 text-cyan-400" />

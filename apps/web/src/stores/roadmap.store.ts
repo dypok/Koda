@@ -5,6 +5,41 @@ import { CareerBranchId, CAREER_BRANCHES } from '@/models/roadmap/tracks/track-c
 import { FRONTEND_COURSES_DATASET } from '@/models/roadmap/tracks/frontend-track.mock';
 import { RoadmapService } from '@/services/roadmap/roadmap.service';
 
+const PROGRESS_KEY = 'koda_roadmap_progress';
+
+function persistProgress(dataset: GraphDataset) {
+  try {
+    const unlockedIds = dataset.nodes.filter((n) => n.isUnlocked).map((n) => n.id);
+    window.localStorage.setItem(
+      PROGRESS_KEY,
+      JSON.stringify({ progressPercent: dataset.progressPercent, unlockedIds })
+    );
+  } catch {
+    // sin almacenamiento, el avance vive solo en memoria
+  }
+}
+
+function restoreProgress(dataset: GraphDataset): GraphDataset {
+  try {
+    const raw = window.localStorage.getItem(PROGRESS_KEY);
+    if (!raw) return dataset;
+    const saved = JSON.parse(raw) as { progressPercent?: number; unlockedIds?: string[] };
+    if (!Array.isArray(saved.unlockedIds)) return dataset;
+    const unlocked = new Set(saved.unlockedIds);
+    return {
+      ...dataset,
+      progressPercent: typeof saved.progressPercent === 'number' ? saved.progressPercent : dataset.progressPercent,
+      nodes: dataset.nodes.map((n) =>
+        unlocked.has(n.id) && !n.isUnlocked
+          ? { ...n, isUnlocked: true, variant: (n.variant === 'locked' ? 'unlocked' : n.variant) as NodeVariant }
+          : n
+      ),
+    };
+  } catch {
+    return dataset;
+  }
+}
+
 interface RoadmapStoreState {
   viewMode: GraphViewMode;
   activeBranchId: CareerBranchId;
@@ -41,7 +76,7 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   zoomLevel: 100,
   panOffset: { x: 0, y: 0 },
   isLoading: false,
-  coursesDataset: FRONTEND_COURSES_DATASET,
+  coursesDataset: typeof window !== 'undefined' ? restoreProgress(FRONTEND_COURSES_DATASET) : FRONTEND_COURSES_DATASET,
   lessonsDataset: PYTHON_BASIC_LESSONS_DATASET,
   retreatTrigger: 0,
   triggerRetreatToCourses: () => set((s) => ({ retreatTrigger: s.retreatTrigger + 1 })),
@@ -97,6 +132,12 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
         },
         activeNodeId: targetNodeId,
       });
+      persistProgress({
+        ...dataset,
+        progressPercent: Math.min(100, dataset.progressPercent + 20),
+        nodes: updatedNodes,
+        connections: updatedConnections,
+      });
 
       // 3. Limpiar banderas de animación tras completarse la cinemática
       setTimeout(() => {
@@ -139,12 +180,12 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     });
 
     if (isCourses) {
-      set({
-        coursesDataset: {
-          ...dataset,
-          nodes: updatedNodes,
-        },
-      });
+      const next = {
+        ...dataset,
+        nodes: updatedNodes,
+      };
+      set({ coursesDataset: next });
+      persistProgress(next);
     } else {
       set({
         lessonsDataset: {
