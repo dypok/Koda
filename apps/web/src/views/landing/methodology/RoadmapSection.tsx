@@ -11,7 +11,7 @@ export const RoadmapSection: React.FC = () => {
   <section id="roadmap" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
     <KodaPeek align="right" />
     <WeatherLayer type="embers" count={10} />
-    <div aria-hidden="true" className="absolute -top-24 left-1/4 -translate-x-1/2 w-[650px] h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+    <div aria-hidden="true" data-glow="14" className="absolute -top-24 left-1/4 -translate-x-1/2 w-[650px] h-[520px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">

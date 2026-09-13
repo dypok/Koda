@@ -10,7 +10,7 @@ export const FreeTierSection: React.FC = () => {
       id="propuesta-valor"
       className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950"
     >
-      <div aria-hidden="true" className="absolute top-1/2 right-6 lg:right-24 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+      <div aria-hidden="true" data-glow="12" className="absolute top-1/2 right-6 lg:right-24 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
       <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-amber-400/40 to-transparent pointer-events-none" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">

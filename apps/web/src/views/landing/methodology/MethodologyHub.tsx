@@ -16,7 +16,7 @@ export const MethodologyHub: React.FC<MethodologyHubProps> = ({ pillars, activeI
 
   return (
   <section className="pt-24 pb-20 md:pt-32 md:pb-28 relative overflow-hidden border-t border-slate-800/80 bg-slate-950">
-    <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[450px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+    <div aria-hidden="true" data-glow="10" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[450px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
     <div aria-hidden="true" className="flex flex-col items-center mb-8 pointer-events-none">
       <div className="w-[1px] h-12 bg-gradient-to-b from-transparent via-amber-500/50 to-amber-400" />

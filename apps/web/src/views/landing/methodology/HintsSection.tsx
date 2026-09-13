@@ -9,7 +9,7 @@ export const HintsSection: React.FC = () => {
   return (
   <section id="pistas" className="py-28 md:py-36 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
     <WeatherLayer type="fireflies" count={12} />
-    <div aria-hidden="true" className="absolute -top-16 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+    <div aria-hidden="true" data-glow="10" className="absolute -top-16 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
     <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-80 pointer-events-none select-none opacity-20 hidden sm:block">
       <svg className="w-full h-full" viewBox="0 0 800 300" fill="none">
