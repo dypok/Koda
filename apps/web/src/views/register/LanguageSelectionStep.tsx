@@ -1,10 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { LayoutGrid, Terminal } from 'lucide-react';
 import { LanguageOption, TechCategory } from '@/models/register/register.model';
 import { LanguageCard } from './LanguageCard';
+import { TerminalLanguagePicker } from './TerminalLanguagePicker';
 import { cn } from '@/lib/utils';
 
 interface LanguageSelectionStepProps {
@@ -21,6 +23,25 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
   selectedLanguageId, onSelectLanguage,
 }) => {
   const reduceMotion = useReducedMotion();
+  const [view, setView] = useState<'grid' | 'terminal'>('grid');
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem('koda-lang-view');
+      if (saved === 'terminal' || saved === 'grid') setView(saved);
+    } catch {
+      // sin almacenamiento, grid por defecto
+    }
+  }, []);
+
+  const switchView = (next: 'grid' | 'terminal') => {
+    setView(next);
+    try {
+      window.localStorage.setItem('koda-lang-view', next);
+    } catch {
+      // solo sesión
+    }
+  };
 
   return (
   <div className="w-full max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-6 animate-fadeIn">
@@ -52,8 +73,9 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
       </div>
     </div>
 
-    {/* Category Pills */}
-    <div role="tablist" aria-label="Filtrar por categoría" className="flex items-center gap-2 overflow-x-auto pb-1">
+    {/* Category Pills + vista */}
+    <div className="flex items-center justify-between gap-2">
+    <div role="tablist" aria-label="Filtrar por categoría" className="flex flex-1 items-center gap-2 overflow-x-auto pb-1">
       {categories.map((cat) => (
         <button
           key={cat.id}
@@ -72,8 +94,39 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
         </button>
       ))}
     </div>
+      <div role="group" aria-label="Vista de selección" className="flex shrink-0 items-center gap-1 rounded-full border border-slate-800 bg-slate-900/60 p-1 ml-2">
+        {(
+          [
+            { id: 'grid', label: 'Cuadrícula', Icon: LayoutGrid },
+            { id: 'terminal', label: 'Terminal', Icon: Terminal },
+          ] as const
+        ).map(({ id, label, Icon }) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => switchView(id)}
+            aria-pressed={view === id}
+            aria-label={`Vista ${label}`}
+            title={label}
+            className={cn(
+              'inline-flex min-h-[32px] min-w-[32px] items-center justify-center rounded-full transition-colors',
+              view === id ? 'bg-amber-400 text-slate-950' : 'text-slate-400 hover:text-white'
+            )}
+          >
+            <Icon aria-hidden="true" className="w-4 h-4" />
+          </button>
+        ))}
+      </div>
+    </div>
 
-    {/* Grid of Technologies ampliado horizontalmente */}
+    {view === 'terminal' ? (
+      <TerminalLanguagePicker
+        languages={languages}
+        selectedLanguageId={selectedLanguageId}
+        onSelectLanguage={onSelectLanguage}
+      />
+    ) : (
+    /* Grid of Technologies ampliado horizontalmente */
     <motion.div layout={reduceMotion ? false : true} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
       <AnimatePresence mode="popLayout">
         {languages.map((item) => (
@@ -94,6 +147,7 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
         ))}
       </AnimatePresence>
     </motion.div>
+    )}
   </div>
   );
 };
