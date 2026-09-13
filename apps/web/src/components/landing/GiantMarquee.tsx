@@ -26,6 +26,7 @@ export const GiantMarquee: React.FC = () => {
   const reduceMotion = useReducedMotion();
   const trackRef = useRef<HTMLDivElement>(null);
   const xRef = useRef(0);
+  const skewRef = useRef(0);
 
   useEffect(() => {
     if (reduceMotion || !trackRef.current) return;
@@ -39,8 +40,11 @@ export const GiantMarquee: React.FC = () => {
       xRef.current -= (30 + boost * 60) * dt;
       const half = (trackRef.current?.scrollWidth ?? 0) / 2;
       if (half > 0 && -xRef.current >= half) xRef.current += half;
+      // Inclina el texto con la velocidad (suavizado) para dinamismo.
+      const targetSkew = Math.max(-6, Math.min(6, (getLenisInstance()?.velocity ?? 0) * 0.25));
+      skewRef.current += (targetSkew - skewRef.current) * 0.08;
       if (trackRef.current) {
-        trackRef.current.style.transform = `translate3d(${xRef.current}px, 0, 0)`;
+        trackRef.current.style.transform = `translate3d(${xRef.current}px, 0, 0) skewX(${skewRef.current}deg)`;
       }
       raf = requestAnimationFrame(loop);
     };
