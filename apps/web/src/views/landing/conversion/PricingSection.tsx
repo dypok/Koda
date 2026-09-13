@@ -25,7 +25,7 @@ export const PricingSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section aria-labelledby="planes-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950">
+    <section id="planes" aria-labelledby="planes-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
       <KodaPeek align="left" size={64} />
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div

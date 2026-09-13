@@ -46,6 +46,7 @@ export const HeroSection: React.FC = () => {
   return (
     <section
       ref={sectionRef}
+      id="inicio"
       aria-labelledby="koda-hero-title"
       className="relative isolate overflow-hidden min-h-screen min-h-[100dvh] flex flex-col justify-between pt-20 pb-4 md:pt-24 md:pb-6"
     >

@@ -11,7 +11,7 @@ export const CertificateSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-    <section aria-labelledby="certificado-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950">
+    <section id="certificado" aria-labelledby="certificado-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
       <WeatherLayer type="dust" count={12} />
       <div aria-hidden="true" data-glow="-10" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.08)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">

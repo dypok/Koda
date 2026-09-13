@@ -55,7 +55,7 @@ export const TestimonialsSection: React.FC = () => {
   }, [paused, reduceMotion]);
 
   return (
-    <section aria-labelledby="testimonios-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950">
+    <section id="testimonios" aria-labelledby="testimonios-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 28 }}

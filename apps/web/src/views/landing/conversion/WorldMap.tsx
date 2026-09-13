@@ -76,7 +76,7 @@ export const WorldMap: React.FC = () => {
   }, [reduceMotion]);
 
   return (
-    <section ref={sectionRef} aria-labelledby="mapa-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950">
+    <section ref={sectionRef} id="mapa" aria-labelledby="mapa-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, y: 28 }}
