@@ -10,6 +10,12 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-13 13:40] [Added] **Landing page renovada (rama `feat/frontend-visual-experience`, 45 commits):**
+  - Base L1-L6: copy pedagógico del hero, Navbar con anchors, mini-lección interactiva real, metodología con ritmo, CTA/Footer/InfoModal pulidos, iconografía lucide y logo que vuelve a la landing (`/?landing=true`).
+  - Scroll y motion S1-S5 + W1-W15: Lenis, GSAP ScrollTrigger con parallax del hero, scroll-spy de pilares, reveals variados, micro-interacciones (magnetic, counters spring, burst, shake/pop), split-text, typewriter, highlights dibujados, odómetro, marquesina por velocidad, grain, cursor glow, confeti de código, onda divisoria, KodaPeeks, pillar strip pineada, View Transitions, skill-tree que se dibuja, carrusel 3D de testimonios y finale cinematográfico con eclipse.
+  - Contenido y confianza: carrusel tech con pills, skill-tree vivo y accesible, selector de idioma premium, InfoModal accesible (tablist, focus trap, acordeón), footer honesto, kit de conversión (anuncio, testimonios, pricing, CTA sticky, exit-intent), kit lúdico (Koda emocional, racha simulada, sonido opt-in), certificado demo, i18n ES/EN del hero, páginas 404/error y espectáculo E1-E10 (preloader, aurora, mapa mundial, rayos, clima por sección, konami).
+  - Rendimiento: imágenes AVIF/WebP, fuera `three`/`ogl` sin uso, sky adaptativo (estrellas y DPR por dispositivo), `reduced-motion` en toda animación y `next build` verde.
+  - Detalle por commit en `documentation/changelog/12-09-2026-changelog.md` y `13-09-2026-changelog.md`.
 - [2026-09-07 08:46] [Changed] **Reestructuración Editorial Multi-Lenguaje de la Landing Page:**
   - Se reformuló la narrativa y textos en todos los componentes (`layout.tsx`, `Navbar`, `HeroSection`, `InteractivePreview`, `MethodologySection`, `CurriculumSection`, `FaqSection`, `CtaSection` y `Footer`).
   - Se reposicionó a Python 3.12 como el **Track Inaugural Piloto** de una plataforma diseñada para ser multi-lenguaje, incorporando avisos de roadmap oficial para JavaScript/TypeScript, Go y Rust.
