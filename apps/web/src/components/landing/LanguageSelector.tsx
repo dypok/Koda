@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { IconWorld, IconChevronDown } from '@tabler/icons-react';
+import { Globe, ChevronDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Language } from '@/models/landing/languages.model';
 import { useLanguageSelectorController } from '@/controllers/landing/useLanguageSelectorController';
@@ -38,9 +38,9 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           isOpen && 'text-white bg-slate-900/80'
         )}
       >
-        <IconWorld className="w-4 h-4 text-slate-400 transition-colors group-hover:text-amber-400" />
+        <Globe className="w-4 h-4 text-slate-400 transition-colors group-hover:text-amber-400" />
         <span className="tracking-tight">{selectedLanguage.name}</span>
-        <IconChevronDown
+        <ChevronDown
           className={cn(
             'w-3.5 h-3.5 text-slate-500 transition-transform duration-200 group-hover:text-slate-300',
             isOpen && 'rotate-180 text-amber-400'

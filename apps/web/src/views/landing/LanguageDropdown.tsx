@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { IconCheck } from '@tabler/icons-react';
+import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Language } from '@/models/landing/languages.model';
 
@@ -49,7 +49,7 @@ export const LanguageDropdown: React.FC<LanguageDropdownProps> = ({
               <IconComponent className="w-4 h-4" />
               <span>{language.name}</span>
             </div>
-            {isSelected && <IconCheck className="w-4 h-4 text-amber-400 flex-shrink-0" />}
+            {isSelected && <Check className="w-4 h-4 text-amber-400 flex-shrink-0" />}
           </button>
         );
       })}

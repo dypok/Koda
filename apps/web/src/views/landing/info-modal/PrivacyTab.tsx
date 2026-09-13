@@ -1,11 +1,11 @@
 import React from 'react';
-import { IconShieldLock } from '@tabler/icons-react';
+import { ShieldCheck } from 'lucide-react';
 
 export const PrivacyTab: React.FC = () => (
   <div className="space-y-6 animate-fadeIn">
     <div>
       <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-400 bg-emerald-500/10 px-2.5 py-0.5 rounded-full border border-emerald-500/20 mb-2 font-sans">
-        <IconShieldLock className="w-3.5 h-3.5" />
+        <ShieldCheck className="w-3.5 h-3.5" />
         Privacidad y Seguridad
       </div>
       <h4 className="font-display text-2xl font-bold text-white tracking-tight">Política de Privacidad</h4>
