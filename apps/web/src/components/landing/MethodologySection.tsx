@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useMethodologyController } from '@/controllers/landing/useMethodologyController';
 import { MethodologyHub } from '@/views/landing/methodology/MethodologyHub';
+import { PillarStrip } from '@/views/landing/methodology/PillarStrip';
 import { StreakSection } from '@/views/landing/methodology/StreakSection';
 import { RoadmapSection } from '@/views/landing/methodology/RoadmapSection';
 import { LiveCodeSection } from '@/views/landing/methodology/LiveCodeSection';
@@ -33,6 +34,7 @@ export const MethodologySection: React.FC = () => {
   return (
     <div id="metodologia" className="bg-slate-950 scroll-mt-20">
       <MethodologyHub pillars={pillars} activeId={activeId} onScrollTo={scrollTo} />
+      <PillarStrip pillars={pillars} activeId={activeId} onScrollTo={scrollTo} />
       <StreakSection />
       <RoadmapSection />
       <LiveCodeSection />
