@@ -32,9 +32,9 @@ export const Navbar: React.FC = () => {
           : 'bg-transparent border-b border-transparent shadow-none'
       )}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Left: Brand Logo (k{}da wordmark) */}
-        <Link href="/" className="flex items-center focus:outline-none" aria-label="Koda">
+        <Link href="/" className="flex shrink-0 items-center focus:outline-none" aria-label="Koda - inicio">
           <Image
             src="/brand/logo.svg"
             alt="Koda"
@@ -45,8 +45,30 @@ export const Navbar: React.FC = () => {
           />
         </Link>
 
-        {/* Right: Selector de idioma desplegable */}
-        <div className="flex items-center gap-3">
+        {/* Center: Desktop nav */}
+        <nav aria-label="Principal" className="hidden md:flex items-center gap-1 text-sm font-medium text-slate-300">
+          <Link
+            href="#metodologia"
+            className="rounded-lg px-3 py-2 transition-colors hover:text-white hover:bg-slate-800/60"
+          >
+            Metodología
+          </Link>
+          <Link
+            href="#vista-previa"
+            className="rounded-lg px-3 py-2 transition-colors hover:text-white hover:bg-slate-800/60"
+          >
+            Vista previa
+          </Link>
+        </nav>
+
+        {/* Right: CTA + Selector de idioma desplegable */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/register"
+            className="hidden sm:inline-flex min-h-[44px] items-center rounded-xl bg-amber-400 px-4 py-2 text-sm font-bold text-slate-950 transition-all hover:bg-amber-300 hover:scale-[1.02] active:scale-[0.98]"
+          >
+            Comenzar gratis
+          </Link>
           <LanguageSelector />
         </div>
       </div>
