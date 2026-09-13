@@ -15,8 +15,8 @@ export function RoadmapNodeRings({ variant }: { variant: NodeVariant }) {
           strokeDasharray="8 16"
           fill="none"
           opacity="0.4"
-          className="animate-spin"
-          style={{ animationDuration: '24s' }}
+          className="st-spin-slow"
+          style={{ animationDuration: '48s' }}
         />
         {/* Concentric pulse ring */}
         <circle
@@ -52,8 +52,8 @@ export function RoadmapNodeRings({ variant }: { variant: NodeVariant }) {
           strokeDasharray="6 10"
           fill="none"
           opacity="0.4"
-          className="animate-spin"
-          style={{ animationDuration: '30s', animationDirection: 'reverse' }}
+          className="st-spin-slower"
+          style={{ animationDuration: '60s' }}
         />
         {/* Middle containment barrier */}
         <circle
@@ -136,8 +136,8 @@ export function RoadmapNodeRings({ variant }: { variant: NodeVariant }) {
           strokeDasharray="3 4"
           fill="none"
           opacity="0.6"
-          className="animate-spin"
-          style={{ animationDuration: '20s' }}
+          className="st-spin-slow"
+          style={{ animationDuration: '44s' }}
         />
         <circle
           r="25"

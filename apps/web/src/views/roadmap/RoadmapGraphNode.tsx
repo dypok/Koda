@@ -21,6 +21,9 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
   const quickToggleRef = useRef<SVGGElement | null>(null);
 
   const { toggleNodeLock } = useRoadmapStore();
+  const zoomLevel = useRoadmapStore((s) => s.zoomLevel);
+  // Contreescala el texto para que no crezca con el zoom del canvas.
+  const textScale = 100 / Math.max(50, zoomLevel);
 
   // Micro-animación GSAP al hacer hover sobre el nodo
   const handleMouseEnter = () => {
@@ -139,13 +142,24 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
       ref={nodeGroupRef}
       transform={`translate(${node.x}, ${node.y})`}
       data-node-id={node.id}
+      role="button"
+      tabIndex={0}
+      aria-label={`${node.code}: ${node.label}${node.statusText ? `. ${node.statusText}` : ''}${node.isUnlocked ? '' : '. Bloqueado'}`}
       onClick={() => onSelectNode(node)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onSelectNode(node);
+        }
+      }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`group cursor-pointer select-none ${
+      className={`group cursor-pointer select-none focus-visible:outline-none focus-visible:drop-shadow-[0_0_10px_rgba(34,211,238,0.9)] ${
         node.isUnlocked ? '' : 'opacity-80 hover:opacity-100'
       }`}
     >
+      {/* Hit-area táctil generosa */}
+      <circle r="32" fill="transparent" />
       {/* Shockwave circle for lock shattering */}
       <circle
         ref={lockShatterGlowRef}
@@ -186,7 +200,7 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
         ref={quickToggleRef}
         transform="translate(24, -24)"
         onClick={handleQuickToggle}
-        className="opacity-0 cursor-pointer pointer-events-auto transition-opacity"
+        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-within:opacity-100 cursor-pointer pointer-events-auto transition-opacity"
       >
         <title>{node.isUnlocked ? 'Clic para bloquear este círculo' : 'Clic para desbloquear este círculo'}</title>
         <circle
@@ -209,25 +223,25 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
 
       {/* Stars Badge: Repositioned as a compact floating tactical pill */}
       {node.stars !== undefined && node.maxStars !== undefined && (
-        <g transform="translate(0, 38)">
+        <g transform={`translate(0, 38) scale(${textScale})`}>
           <rect
-            x="-24"
-            y="-10"
-            width="48"
-            height="14"
-            rx="3"
+            x="-28"
+            y="-11"
+            width="56"
+            height="18"
+            rx="4"
             fill="#090D16"
             stroke="#1E293B"
             strokeWidth="0.75"
             className="opacity-90"
           />
           {node.maxStars <= 3 ? (
-            <text textAnchor="middle" y="0" fontSize="9" letterSpacing="2">
+            <text textAnchor="middle" y="1" fontSize="9" letterSpacing="2">
               <tspan fill="#FBBF24">{'★'.repeat(node.stars)}</tspan>
               <tspan fill="#334155">{'★'.repeat(Math.max(0, node.maxStars - node.stars))}</tspan>
             </text>
           ) : (
-            <text textAnchor="middle" y="0" fill="#FBBF24" fontSize="8.5" fontFamily="monospace" fontWeight="bold">
+            <text textAnchor="middle" y="1" fill="#FBBF24" fontSize="9" fontFamily="monospace" fontWeight="bold">
               ★ {node.stars}/{node.maxStars}
             </text>
           )}
@@ -235,12 +249,12 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
       )}
 
       {/* Tactical Badge & Subtitle Typography */}
-      <g transform={`translate(0, ${node.stars !== undefined ? 58 : 44})`}>
+      <g transform={`translate(0, ${node.stars !== undefined ? 58 : 44}) scale(${textScale})`}>
         <text
           textAnchor="middle"
           y="0"
           fill="#F1F5F9"
-          fontSize="11"
+          fontSize="12.5"
           fontFamily="monospace"
           fontWeight="bold"
           letterSpacing="0.75"
@@ -250,7 +264,7 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
         </text>
 
         {node.statusText ? (
-          <g transform="translate(0, 14)">
+          <g transform="translate(0, 15)">
             <text
               textAnchor="middle"
               y="0"
@@ -261,7 +275,7 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
                     ? '#F87171'
                     : '#64748B'
               }
-              fontSize="8.5"
+              fontSize="9.5"
               fontFamily="monospace"
               fontWeight="600"
               letterSpacing="0.5"

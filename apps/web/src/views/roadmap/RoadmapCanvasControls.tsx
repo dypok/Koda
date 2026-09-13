@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { IconPlus, IconMinus, IconFocusCentered } from '@tabler/icons-react';
+import { Plus, Minus, LocateFixed } from 'lucide-react';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 
 export function RoadmapCanvasControls() {
@@ -9,7 +9,7 @@ export function RoadmapCanvasControls() {
 
   return (
     <div
-      className="absolute top-6 right-6 z-30 flex items-center no-drag"
+      className="absolute bottom-6 right-6 z-30 flex items-center no-drag"
       onPointerDown={(e) => e.stopPropagation()}
       onPointerUp={(e) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
@@ -23,10 +23,11 @@ export function RoadmapCanvasControls() {
             e.stopPropagation();
             zoomIn();
           }}
-          className="w-7 h-7 flex items-center justify-center rounded hover:bg-cyan-950/60 hover:text-cyan-300 border border-transparent hover:border-cyan-500/40 active:scale-90 transition-all cursor-pointer"
+          aria-label="Acercar"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded hover:bg-cyan-950/60 hover:text-cyan-300 border border-transparent hover:border-cyan-500/40 active:scale-90 transition-all cursor-pointer"
           title="Acercar (Zoom In)"
         >
-          <IconPlus className="w-3.5 h-3.5 pointer-events-none" />
+          <Plus aria-hidden="true" className="w-4 h-4 pointer-events-none" />
         </button>
         <button
           type="button"
@@ -34,10 +35,11 @@ export function RoadmapCanvasControls() {
             e.stopPropagation();
             zoomOut();
           }}
-          className="w-7 h-7 flex items-center justify-center rounded hover:bg-cyan-950/60 hover:text-cyan-300 border border-transparent hover:border-cyan-500/40 active:scale-90 transition-all cursor-pointer"
+          aria-label="Alejar"
+          className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded hover:bg-cyan-950/60 hover:text-cyan-300 border border-transparent hover:border-cyan-500/40 active:scale-90 transition-all cursor-pointer"
           title="Alejar (Zoom Out)"
         >
-          <IconMinus className="w-3.5 h-3.5 pointer-events-none" />
+          <Minus aria-hidden="true" className="w-4 h-4 pointer-events-none" />
         </button>
         <button
           type="button"
@@ -45,11 +47,12 @@ export function RoadmapCanvasControls() {
             e.stopPropagation();
             resetZoom();
           }}
-          className="px-2.5 h-7 flex items-center gap-1.5 rounded hover:bg-cyan-950/60 hover:text-cyan-300 border border-transparent hover:border-cyan-500/40 active:scale-95 transition-all text-[11px] font-bold cursor-pointer"
+          aria-label={`Restablecer zoom y centrar (actual ${zoomLevel}%)`}
+          className="px-2.5 min-h-[44px] flex items-center gap-1.5 rounded hover:bg-cyan-950/60 hover:text-cyan-300 border border-transparent hover:border-cyan-500/40 active:scale-95 transition-all text-[11px] font-bold cursor-pointer"
           title="Recentrar y Restablecer Zoom"
         >
-          <IconFocusCentered className="w-3.5 h-3.5 text-cyan-400 pointer-events-none" />
-          <span className="pointer-events-none">{zoomLevel}%</span>
+          <LocateFixed aria-hidden="true" className="w-3.5 h-3.5 text-cyan-400 pointer-events-none" />
+          <span className="pointer-events-none tabular-nums">{zoomLevel}%</span>
         </button>
       </div>
     </div>

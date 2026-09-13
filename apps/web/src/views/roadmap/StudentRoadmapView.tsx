@@ -21,7 +21,7 @@ export const StudentRoadmapView: React.FC = () => {
 
   return (
     <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex overflow-hidden select-none">
-      <HeroSkyBackground starCount={160} interactive={true} className="fixed inset-0 pointer-events-none -z-10" />
+      <HeroSkyBackground starCount={60} interactive={false} className="fixed inset-0 pointer-events-none -z-10" />
 
       {/* Asidebar de Navegación Lateral para cambiar de lenguaje */}
       <RoadmapSidebar />

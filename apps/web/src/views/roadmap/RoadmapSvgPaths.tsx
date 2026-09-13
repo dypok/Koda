@@ -83,7 +83,7 @@ export function RoadmapSvgPaths({ connections, animatingConnectionId }: RoadmapS
             strokeDasharray={c.isDashed ? '6 8' : undefined}
             className={c.isDashed ? 'animate-laser-standby' : undefined}
           />
-          {/* Forward-traveling energy photon packet */}
+          {/* Forward-traveling energy photon packet: solo en ruta activa */}
           <path
             d={c.path}
             fill="none"
@@ -92,7 +92,7 @@ export function RoadmapSvgPaths({ connections, animatingConnectionId }: RoadmapS
             strokeOpacity={c.isDashed ? '0.75' : '0.95'}
             strokeLinecap="round"
             strokeDasharray="20 100"
-            className="animate-laser-flow"
+            className={c.isDashed ? undefined : 'animate-laser-flow'}
             style={{ filter: `drop-shadow(0 0 6px ${c.color})` }}
           />
         </g>
