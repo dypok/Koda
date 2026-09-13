@@ -17,6 +17,7 @@ import { ExitIntentModal } from '@/components/landing/ExitIntentModal';
 import { TestimonialsSection } from '@/views/landing/conversion/TestimonialsSection';
 import { PricingSection } from '@/views/landing/conversion/PricingSection';
 import { CertificateSection } from '@/views/landing/conversion/CertificateSection';
+import { GiantMarquee } from '@/components/landing/GiantMarquee';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function HomePage() {
@@ -53,6 +54,7 @@ export default function HomePage() {
         <Navbar />
         <main className="flex-1">
           <HeroSection />
+          <GiantMarquee />
           <InteractivePreview />
           <MethodologySection />
           <TestimonialsSection />
