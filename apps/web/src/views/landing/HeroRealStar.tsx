@@ -20,7 +20,8 @@ export const HeroRealStar: React.FC<HeroRealStarProps> = ({
   <button
     type="button"
     tabIndex={-1}
-    aria-label="Cosmic Star"
+    aria-hidden="true"
+    title="Estrella cósmica de Koda"
     onClick={onDiscover}
     className="absolute z-10 -translate-x-1/2 -translate-y-1/2 rounded-full outline-none cursor-pointer group transform-gpu"
     style={{
