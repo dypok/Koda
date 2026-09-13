@@ -79,7 +79,8 @@ export const PricingSection: React.FC = () => {
             transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
             className={cn(
               'rounded-2xl border border-amber-400/40 bg-gradient-to-b from-amber-400/10 to-transparent',
-              'p-6 sm:p-8 space-y-5 relative'
+              'p-6 sm:p-8 space-y-5 relative lg:-translate-y-3',
+              'shadow-[0_24px_60px_-16px_rgba(245,158,11,0.35)]'
             )}
           >
             <span className="absolute -top-3 left-6 rounded-full bg-amber-400 px-3 py-1 text-[11px] font-black uppercase tracking-wider text-slate-950">
