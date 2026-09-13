@@ -50,3 +50,11 @@
 - [Sunday]-[13/09/2026]-[14:11]-[Brandon Carranza] : D2 `ShaderMaterial` con twinkle por estrella y uniforms de warp e intensidad.
 - [Sunday]-[13/09/2026]-[14:12]-[Brandon Carranza] : D3 cosmos reactivo (dolly z 8→4.5, warp por velocity de Lenis, intensidad por acto) + D4 `UnrealBloomPass` lazy con fallback.
 - [Sunday]-[13/09/2026]-[14:13]-[Brandon Carranza] : D5 guardián de fps (degrada bloom→partículas→off si <45fps×3s, relevo del sky 2D).
+- [Sunday]-[13/09/2026]-[14:23]-[Brandon Carranza] : R1 `SelectableCard` radio único + `StepLayout` con stagger reemplazan 3 cards y 3 steps duplicados (-78 líneas); fix `p-4.5` inválido.
+- [Sunday]-[13/09/2026]-[14:24]-[Brandon Carranza] : R2 progressbar real, persistencia del wizard en localStorage, flechas de teclado, bottom bar con blur/hint y tab correcto, iconos lucide.
+- [Sunday]-[13/09/2026]-[14:27]-[Brandon Carranza] : R3 form con submit Enter, labels asociadas, errores por campo con alert, medidor de fuerza con meter, ojo con aria-pressed, términos sin affordance falsa + R4 social auth con loading por provider, marcas SVG propias y aviso honesto.
+- [Sunday]-[13/09/2026]-[14:28]-[Brandon Carranza] : R5 success modal accesible (exit animado, focus trap + restore, Escape a ruta, confeti, CTA a roadmap, sin bounce infinito).
+- [Sunday]-[13/09/2026]-[14:29]-[Brandon Carranza] : R6 slide direccional entre pasos con `AnimatePresence wait` + contador odómetro en el header.
+- [Sunday]-[13/09/2026]-[14:30]-[Brandon Carranza] : R7 burbuja `kodaSay` en los 5 pasos + pills de categoría como tablist.
+- [Sunday]-[13/09/2026]-[14:31]-[Brandon Carranza] : R8 Tu plan revisable (filas editables que saltan al paso, minutos visibles, sin defaults falsos, `goToStep`).
+- [Sunday]-[13/09/2026]-[14:32]-[Brandon Carranza] : R9 `AVAILABLE_IDS` + `techAvailability` como única fuente, iconos no-brand a lucide, eliminado controller duplicado + R10 fondo vivo (estrellas por paso, luciérnagas al final).
