@@ -3,6 +3,10 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { generateCosmos } from '@/models/landing/cosmic-field';
+import { getGsap } from '@/lib/gsap';
+import { getLenisInstance } from '@/lib/scroll';
+
+const ACT_INTENSITY: Record<string, number> = { '1': 1, '2': 0.7, '3': 0.55, '4': 0.85 };
 
 function deviceCount(): number {
   if (typeof window === 'undefined') return 1200;
@@ -122,13 +126,36 @@ export const CosmicBackground: React.FC = () => {
       if (!running) return;
       uniforms.uTime.value = performance.now() / 1000;
       points.rotation.y += 0.0006;
+      // Warp por velocidad de Lenis (suavizado) + intensidad por acto visible.
+      const velocity = Math.abs(getLenisInstance()?.velocity ?? 0);
+      const targetWarp = Math.min(1, velocity * 0.06);
+      uniforms.uWarp.value += (targetWarp - uniforms.uWarp.value) * 0.08;
+      const act = document.body.dataset.act ?? '1';
+      const targetIntensity = ACT_INTENSITY[act] ?? 1;
+      uniforms.uIntensity.value += (targetIntensity - uniforms.uIntensity.value) * 0.05;
       renderer.render(scene, camera);
       raf = requestAnimationFrame(loop);
     };
     loop();
 
+    // Dolly de cámara + giro extra con el scroll global.
+    const { gsap } = getGsap();
+    const scrollCtx = gsap.context(() => {
+      gsap.to(camera.position, {
+        z: 4.5,
+        ease: 'none',
+        scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 1 },
+      });
+      gsap.to(points.rotation, {
+        y: '+=0.9',
+        ease: 'none',
+        scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 1 },
+      });
+    });
+
     return () => {
       cancelAnimationFrame(raf);
+      scrollCtx.revert();
       io.disconnect();
       document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('resize', onResize);
