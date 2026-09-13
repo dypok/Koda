@@ -9,11 +9,12 @@ import { RoadmapCanvas } from './RoadmapCanvas';
 import { RoadmapLegend } from './RoadmapLegend';
 import { LessonRail } from './LessonRail';
 import { CoursePinRail } from './CoursePinRail';
+import { RoadmapFusionView } from './RoadmapFusionView';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 
 export const StudentRoadmapView: React.FC = () => {
   const { openCourseLessons, getCurrentDataset, viewMode, retreatTrigger, returnToCourses, setActiveNode, isLoading } = useRoadmapStore();
-  const [coursesDisplayMode, setCoursesDisplayMode] = React.useState<'pin-rail' | 'canvas'>('pin-rail');
+  const [coursesDisplayMode, setCoursesDisplayMode] = React.useState<'pin-rail' | 'canvas' | 'fusion'>('fusion');
 
   React.useEffect(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('view=lessons')) {
@@ -59,6 +60,10 @@ export const StudentRoadmapView: React.FC = () => {
           {viewMode === 'lessons' ? (
             <div className="absolute inset-0 overflow-y-auto">
               <LessonRail dataset={dataset} onDeploy={handleDeployLesson} />
+            </div>
+          ) : coursesDisplayMode === 'fusion' ? (
+            <div className="absolute inset-0">
+              <RoadmapFusionView dataset={dataset} onDeploy={handleDeployLesson} />
             </div>
           ) : coursesDisplayMode === 'pin-rail' ? (
             <div className="absolute inset-0">

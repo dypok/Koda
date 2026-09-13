@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { ArrowLeft, Zap } from 'lucide-react';
-import { IconLayoutList, IconAffiliate } from '@tabler/icons-react';
+import { IconLayoutList, IconAffiliate, IconLayersIntersect } from '@tabler/icons-react';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { GradientButton } from '@/components/ui/gradient-button';
 import { cn } from '@/lib/utils';
@@ -11,8 +11,8 @@ import gsap from 'gsap';
 interface RoadmapTopHudProps {
   sectorTitle: string;
   progressPercent?: number;
-  coursesDisplayMode?: 'pin-rail' | 'canvas';
-  onToggleCoursesDisplayMode?: (mode: 'pin-rail' | 'canvas') => void;
+  coursesDisplayMode?: 'pin-rail' | 'canvas' | 'fusion';
+  onToggleCoursesDisplayMode?: (mode: 'pin-rail' | 'canvas' | 'fusion') => void;
 }
 
 export function RoadmapTopHud({
@@ -101,6 +101,20 @@ export function RoadmapTopHud({
             >
               <IconAffiliate className="w-3.5 h-3.5" />
               <span>Constelación</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onToggleCoursesDisplayMode('fusion')}
+              className={cn(
+                'px-2.5 py-1 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer',
+                coursesDisplayMode === 'fusion'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
+              )}
+              title="Fusión interactiva: Riel Lateral y Constelación espacial sincronizados"
+            >
+              <IconLayersIntersect className="w-3.5 h-3.5" />
+              <span>Fusión</span>
             </button>
           </div>
         )}
