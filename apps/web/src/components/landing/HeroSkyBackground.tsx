@@ -23,6 +23,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
     canvasRef,
     realCoreRef,
     realBloomRef,
+    glowRef,
     realStar,
     reduceMotion,
     discovered,
@@ -55,6 +56,14 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
         ref={canvasRef}
         className="pointer-events-none absolute inset-0 w-full h-full block"
       />
+
+      {!reduceMotion && (
+        <div
+          ref={glowRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute left-0 top-0 hidden [@media(pointer:fine)]:block h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(245,158,11,0.10)_0%,transparent_70%)] will-change-transform"
+        />
+      )}
 
       <HeroRealStar
         realStar={realStar}

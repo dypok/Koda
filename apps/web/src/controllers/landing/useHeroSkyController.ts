@@ -29,6 +29,7 @@ export function useHeroSkyController(starCount = STAR_COUNT_DEFAULT, seed = 88, 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const realCoreRef = useRef<HTMLSpanElement>(null);
   const realBloomRef = useRef<HTMLSpanElement>(null);
+  const glowRef = useRef<HTMLDivElement>(null);
 
   const pointerRef = useRef<PointerState>({ x: -1, y: -1, inside: false });
   const rippleRef = useRef<RippleState>({ active: false, t: 0, x: 0, y: 0 });
@@ -64,9 +65,17 @@ export function useHeroSkyController(starCount = STAR_COUNT_DEFAULT, seed = 88, 
     discovered, onDiscover: triggerStarDiscovery,
   });
 
+  const moveGlow = useCallback((clientX: number, clientY: number) => {
+    const glow = glowRef.current;
+    if (!glow) return;
+    const { left, top } = rectRef.current;
+    glow.style.transform = `translate3d(${clientX - left - 160}px, ${clientY - top - 160}px, 0)`;
+  }, []);
+
   const onPointerMove = useCallback((e: React.PointerEvent) => {
     pointerRef.current = { x: e.clientX - rectRef.current.left, y: e.clientY - rectRef.current.top, inside: true };
-  }, []);
+    moveGlow(e.clientX, e.clientY);
+  }, [moveGlow]);
   const onPointerLeave = useCallback(() => {
     pointerRef.current = { x: -1, y: -1, inside: false };
   }, []);
@@ -77,13 +86,14 @@ export function useHeroSkyController(starCount = STAR_COUNT_DEFAULT, seed = 88, 
       const { left, top, width, height } = rectRef.current;
       const inside = e.clientX >= left && e.clientX <= left + width && e.clientY >= top && e.clientY <= top + height;
       pointerRef.current = { x: e.clientX - left, y: e.clientY - top, inside };
+      if (inside) moveGlow(e.clientX, e.clientY);
     };
     window.addEventListener('pointermove', handleMove, { passive: true });
     return () => window.removeEventListener('pointermove', handleMove);
-  }, [interactive, reduceMotion]);
+  }, [interactive, reduceMotion, moveGlow]);
 
   return {
-    containerRef, canvasRef, realCoreRef, realBloomRef, realStar,
+    containerRef, canvasRef, realCoreRef, realBloomRef, glowRef, realStar,
     reduceMotion, discovered, triggerStarDiscovery, onPointerMove, onPointerLeave,
   };
 }
