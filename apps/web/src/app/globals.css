@@ -77,6 +77,12 @@
 @keyframes koda-vt-out { to { opacity: 0; transform: translateY(-24px); } }
 @keyframes koda-vt-in { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: none; } }
 
+/* Modo fiesta konami */
+@keyframes koda-party-hue { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
+.koda-party {
+  animation: koda-party-hue 6s linear infinite;
+}
+
 /* Clima por sección */
 @keyframes wx-rise { 0% { transform: translateY(20px); opacity: 0; } 20% { opacity: 0.9; } 100% { transform: translateY(-120px); opacity: 0; } }
 @keyframes wx-drift { 0%, 100% { transform: translate(0, 0); opacity: 0.3; } 50% { transform: translate(24px, -18px); opacity: 1; } }
