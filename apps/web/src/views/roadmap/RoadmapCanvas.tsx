@@ -9,6 +9,7 @@ import { RoadmapAmbientStars } from './RoadmapAmbientStars';
 import { RoadmapTacticalGrid } from './RoadmapTacticalGrid';
 import { RoadmapNodeInspector } from './RoadmapNodeInspector';
 import { RoadmapMinimap } from './RoadmapMinimap';
+import { useRoadmapWarpTransition } from './useRoadmapWarpTransition';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { useRoadmapPanZoom } from './useRoadmapPanZoom';
 
@@ -17,9 +18,12 @@ interface RoadmapCanvasProps {
 }
 
 export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
-  const { openCourseLessons, setActiveNode, activeNodeId } = useRoadmapStore();
+  const { openCourseLessons, setActiveNode, activeNodeId, viewMode } = useRoadmapStore();
   const { isDragging, hasMovedRecently, panOffset, zoomLevel, containerRef, containerProps } = useRoadmapPanZoom();
   const [inspectedNode, setInspectedNode] = React.useState<GraphNode | null>(null);
+
+  const warpWrapperRef = React.useRef<HTMLDivElement | null>(null);
+  const { isWarping, flashOverlayRef, diveIntoCourse } = useRoadmapWarpTransition(warpWrapperRef);
 
   // Inicializar o sincronizar el nodo inspeccionado con el nodo activo por defecto
   React.useEffect(() => {
@@ -33,14 +37,16 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
   }, [dataset, activeNodeId]);
 
   const handleSelectNode = (node: GraphNode) => {
-    if (hasMovedRecently()) return;
+    if (hasMovedRecently() || isWarping) return;
     setInspectedNode(node);
     setActiveNode(node.id);
   };
 
   const handleDeploy = (node: GraphNode) => {
-    if (!node.isUnlocked) return;
-    if (node.targetCourseId) {
+    if (!node.isUnlocked || isWarping) return;
+    if (viewMode === 'courses') {
+      diveIntoCourse(node);
+    } else if (node.targetCourseId) {
       openCourseLessons(node.targetCourseId);
     }
   };
@@ -65,7 +71,14 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
         onDeploy={handleDeploy}
       />
 
+      {/* Quantum Warp Flash Overlay */}
       <div
+        ref={flashOverlayRef}
+        className="absolute inset-0 bg-cyan-400/20 pointer-events-none opacity-0 z-40 backdrop-blur-xs transition-opacity"
+      />
+
+      <div
+        ref={warpWrapperRef}
         className={`w-full h-full flex items-center justify-center will-change-transform ${
           isDragging ? '' : 'transition-transform duration-200 ease-out'
         }`}
