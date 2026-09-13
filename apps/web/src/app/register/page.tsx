@@ -45,7 +45,7 @@ export default function RegisterPage() {
       <WeatherLayer type={stepper.currentStep >= 4 ? 'fireflies' : 'embers'} count={10} />
 
       <RegisterHeaderBar
-        currentStepIndex={stepper.currentStep}
+        currentStepIndex={stepper.displayStep}
         totalSteps={stepper.totalSteps}
         onPrevStep={stepper.prevStep}
       />
