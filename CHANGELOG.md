@@ -10,6 +10,10 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-13 16:40] [Added] **Roadmap: clicks fiables y datos honestos (rama `feat/frontend-visual-experience`):**
+  - Fix del inspector (capture diferido, fallback por `elementFromPoint`, sync anti-bucle).
+  - Avance real, TopHud con barra segmentada, debug solo en dev, avance persistido, ramas accesibles, servicio sin doble `/api/v1`, canvas legible y calmado, inspector cinematográfico, camino ámbar, warp con bypass, boss con presencia y leyenda con ticks.
+  - Detalle por commit en `documentation/changelog/13-09-2026-changelog.md`.
 - [2026-09-13 15:00] [Added] **Acabado visual del registro `/register` (rama `feat/frontend-visual-experience`):**
   - Transiciones de layout FLIP, fondo narrativo por paso, CTA contextual por paso, Koda reactivo al formulario, handoff animado al roadmap, terminal de idiomas con toggle y variante express `?v=express` con evento analytics stub.
   - Detalle por commit en `documentation/changelog/13-09-2026-changelog.md`.

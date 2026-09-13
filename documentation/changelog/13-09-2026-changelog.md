@@ -64,3 +64,14 @@
 - [Sunday]-[13/09/2026]-[14:54]-[Brandon Carranza] : G14 handoff al roadmap (overlay con Koda volando + View Transition).
 - [Sunday]-[13/09/2026]-[14:56]-[Brandon Carranza] : G8 `TerminalLanguagePicker` (`$ koda use`, filtro, flechas/Enter) con toggle grid/terminal persistente.
 - [Sunday]-[13/09/2026]-[14:58]-[Brandon Carranza] : G15 `?v=express` (3 pasos visibles, defaults en resumen, evento analytics stub).
+- [Sunday]-[13/09/2026]-[16:23]-[Brandon Carranza] : Fix scanner del roadmap (capture diferido al umbral, selección fallback por `elementFromPoint`, sync anti-bucle, `data-node-id`).
+- [Sunday]-[13/09/2026]-[16:25]-[Brandon Carranza] : M6 avance real desbloqueados/total, hito sin fallback falso, racha/XP/nivel sin números inventados.
+- [Sunday]-[13/09/2026]-[16:26]-[Brandon Carranza] : M7 barra segmentada con `progressPercent` y Continuar al curso del nodo activo, iconos lucide.
+- [Sunday]-[13/09/2026]-[16:27]-[Brandon Carranza] : M8 Simular Desbloqueo solo en dev + avance persistido en localStorage.
+- [Sunday]-[13/09/2026]-[16:29]-[Brandon Carranza] : M9 ramas con `aria-pressed` y bloqueo en carga, overlay de carga, fix doble `/api/v1` y puerto, fuera huérfanos.
+- [Sunday]-[13/09/2026]-[16:31]-[Brandon Carranza] : Fase 2 canvas legible (fondo único 60, nodos con rol/foco/teclado/hit-area, texto contreescalado, controles abajo 44px, anillos lentos, fotones solo en activa).
+- [Sunday]-[13/09/2026]-[16:32]-[Brandon Carranza] : M11 inspector con scanline, XP/estrellas con odómetro e iconos lucide.
+- [Sunday]-[13/09/2026]-[16:33]-[Brandon Carranza] : M12 conexiones del nodo activo en ámbar.
+- [Sunday]-[13/09/2026]-[16:34]-[Brandon Carranza] : M13 warp con bypass instantáneo en `reduced-motion`.
+- [Sunday]-[13/09/2026]-[16:36]-[Brandon Carranza] : M14 boss con doble anillo, flicker, shake al intentarlo y tooltip de requisitos.
+- [Sunday]-[13/09/2026]-[16:37]-[Brandon Carranza] : M15 ticks vivos por nodo en la leyenda.
