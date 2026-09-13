@@ -53,19 +53,35 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
       aria-label="Inspector de Telemetría Táctica"
       className="absolute bottom-16 right-6 z-30 w-80 sm:w-96 rounded-lg bg-slate-950/90 border border-cyan-500/30 backdrop-blur-xl shadow-[0_0_30px_rgba(0,0,0,0.8)] text-slate-100 overflow-hidden"
     >
-      {/* HUD Scanner Top Bar with Telemetry */}
+      {/* HUD Scanner Top Bar with Telemetry & Quick Lock Switch */}
       <div className="px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between text-xs font-mono">
         <div className="flex items-center gap-2 text-cyan-400">
           <IconCrosshair className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '10s' }} />
           <span className="font-bold tracking-wider">DRONE SCANNER // {node.code}</span>
         </div>
-        <button
-          onClick={onClose}
-          className="p-1 text-slate-400 hover:text-white hover:bg-slate-800 rounded transition-colors"
-          title="Cerrar Inspector"
-        >
-          <IconX className="w-4 h-4" />
-        </button>
+
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => toggleNodeLock(node.id)}
+            className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold tracking-wider flex items-center gap-1 transition-all border ${
+              isUnlocked
+                ? 'bg-rose-950/40 border-rose-500/50 text-rose-300 hover:bg-rose-900/50'
+                : 'bg-cyan-950/40 border-cyan-500/50 text-cyan-300 hover:bg-cyan-900/50'
+            }`}
+            title={isUnlocked ? 'Bloquear este módulo' : 'Desbloquear este módulo'}
+          >
+            {isUnlocked ? <IconLock className="w-3 h-3" /> : <IconLockOpen className="w-3 h-3" />}
+            <span>{isUnlocked ? 'Bloquear' : 'Desbloquear'}</span>
+          </button>
+
+          <button
+            onClick={onClose}
+            className="p-1 text-slate-400 hover:text-white hover:bg-slate-800 rounded transition-colors"
+            title="Cerrar Inspector"
+          >
+            <IconX className="w-4 h-4" />
+          </button>
+        </div>
       </div>
 
       {/* Main Body Info */}

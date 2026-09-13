@@ -4,6 +4,8 @@ import React, { useRef, useEffect } from 'react';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { RoadmapNodeRings } from './RoadmapNodeRings';
 import { RoadmapNodeIcon } from './RoadmapNodeIcon';
+import { useRoadmapStore } from '@/stores/roadmap.store';
+import { IconLock, IconLockOpen } from '@tabler/icons-react';
 import gsap from 'gsap';
 
 interface RoadmapGraphNodeProps {
@@ -16,6 +18,57 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
   const nodeGroupRef = useRef<SVGGElement | null>(null);
   const iconWrapperRef = useRef<HTMLDivElement | null>(null);
   const lockShatterGlowRef = useRef<SVGCircleElement | null>(null);
+  const quickToggleRef = useRef<SVGGElement | null>(null);
+
+  const { toggleNodeLock } = useRoadmapStore();
+
+  // Micro-animación GSAP al hacer hover sobre el nodo
+  const handleMouseEnter = () => {
+    if (!nodeGroupRef.current) return;
+    gsap.to(nodeGroupRef.current, {
+      scale: 1.06,
+      duration: 0.25,
+      ease: 'power2.out',
+    });
+    if (quickToggleRef.current) {
+      gsap.to(quickToggleRef.current, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.2,
+        ease: 'back.out(1.7)',
+      });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (!nodeGroupRef.current) return;
+    gsap.to(nodeGroupRef.current, {
+      scale: 1,
+      duration: 0.25,
+      ease: 'power2.out',
+    });
+    if (quickToggleRef.current) {
+      gsap.to(quickToggleRef.current, {
+        opacity: 0,
+        scale: 0.8,
+        duration: 0.15,
+        ease: 'power2.in',
+      });
+    }
+  };
+
+  // Alternar bloqueo/desbloqueo directo con pulso GSAP
+  const handleQuickToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const group = nodeGroupRef.current;
+    if (group) {
+      gsap.timeline()
+        .to(group, { scale: 0.92, duration: 0.1, ease: 'power2.in' })
+        .to(group, { scale: 1.08, duration: 0.2, ease: 'back.out(2)' })
+        .to(group, { scale: 1, duration: 0.15, ease: 'power2.out' });
+    }
+    toggleNodeLock(node.id);
+  };
 
   // Animación GSAP de ruptura de candado y encendido de baliza
   useEffect(() => {
@@ -86,8 +139,10 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
       ref={nodeGroupRef}
       transform={`translate(${node.x}, ${node.y})`}
       onClick={() => onSelectNode(node)}
-      className={`group transition-all duration-200 cursor-pointer ${
-        node.isUnlocked ? '' : 'opacity-75 hover:opacity-100'
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className={`group cursor-pointer select-none ${
+        node.isUnlocked ? '' : 'opacity-80 hover:opacity-100'
       }`}
     >
       {/* Shockwave circle for lock shattering */}
@@ -125,10 +180,35 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
         </div>
       </foreignObject>
 
-      {/* Stars Badge: Repositioned as a compact floating tactical pill above or right below without colliding */}
+      {/* Direct Individual Lock/Unlock Holographic Toggle Badge */}
+      <g
+        ref={quickToggleRef}
+        transform="translate(24, -24)"
+        onClick={handleQuickToggle}
+        className="opacity-0 cursor-pointer pointer-events-auto transition-opacity"
+        title={node.isUnlocked ? 'Clic para bloquear este círculo' : 'Clic para desbloquear este círculo'}
+      >
+        <circle
+          r="11"
+          fill={node.isUnlocked ? '#0F172A' : '#083344'}
+          stroke={node.isUnlocked ? '#F43F5E' : '#22D3EE'}
+          strokeWidth="1.5"
+          className="drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] hover:scale-125 transition-transform"
+        />
+        <foreignObject x="-6" y="-6" width="12" height="12" className="pointer-events-none">
+          <div className="w-full h-full flex items-center justify-center">
+            {node.isUnlocked ? (
+              <IconLock className="w-2.5 h-2.5 text-rose-400" />
+            ) : (
+              <IconLockOpen className="w-2.5 h-2.5 text-cyan-300" />
+            )}
+          </div>
+        </foreignObject>
+      </g>
+
+      {/* Stars Badge: Repositioned as a compact floating tactical pill */}
       {node.stars !== undefined && node.maxStars !== undefined && (
         <g transform="translate(0, 38)">
-          {/* Subtle dark pill background for stars */}
           <rect
             x="-24"
             y="-10"
@@ -153,9 +233,8 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
         </g>
       )}
 
-      {/* Tactical Badge & Subtitle Typography (Structured HUD Card Layout) */}
+      {/* Tactical Badge & Subtitle Typography */}
       <g transform={`translate(0, ${node.stars !== undefined ? 58 : 44})`}>
-        {/* Module Code Badge & Label */}
         <text
           textAnchor="middle"
           y="0"
@@ -169,7 +248,6 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
           {node.code} • {node.label}
         </text>
 
-        {/* Status telemetry pill */}
         {node.statusText ? (
           <g transform="translate(0, 14)">
             <text
