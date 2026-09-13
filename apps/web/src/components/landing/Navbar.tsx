@@ -34,7 +34,7 @@ export const Navbar: React.FC = () => {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Left: Brand Logo (k{}da wordmark) */}
-        <Link href="/" className="flex shrink-0 items-center focus:outline-none" aria-label="Koda - inicio">
+        <Link href="/?landing=true" className="flex shrink-0 items-center focus:outline-none" aria-label="Koda - inicio">
           <Image
             src="/brand/logo.svg"
             alt="Koda"
