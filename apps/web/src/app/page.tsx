@@ -1,13 +1,11 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React from 'react';
 import { Navbar } from '@/components/landing/Navbar';
 import { HeroSection } from '@/components/landing/HeroSection';
 import { InteractivePreview } from '@/components/landing/InteractivePreview';
 import { MethodologySection } from '@/components/landing/MethodologySection';
 import { Footer } from '@/components/landing/Footer';
-import { StudentRoadmapView } from '@/views/roadmap/StudentRoadmapView';
 import { LenisProvider } from '@/components/landing/LenisProvider';
 import { ScrollProgress } from '@/components/landing/ScrollProgress';
 import { AnnouncementBar } from '@/components/landing/AnnouncementBar';
@@ -33,34 +31,8 @@ const CosmicBackground = dynamic(
 );
 import { KodaGuide } from '@/components/landing/KodaGuide';
 import { PartyMode } from '@/components/landing/PartyMode';
-import { useAuthStore } from '@/stores/auth.store';
 
 export default function HomePage() {
-  const router = useRouter();
-  const { isAuthenticated, hasEverLoggedIn, hasHydrated, initAuth } = useAuthStore();
-
-  useEffect(() => {
-    initAuth();
-  }, [initAuth]);
-
-  useEffect(() => {
-    if (hasHydrated && hasEverLoggedIn && !isAuthenticated) {
-      router.replace('/login');
-    }
-  }, [hasHydrated, hasEverLoggedIn, isAuthenticated, router]);
-
-  if (!hasHydrated || (hasEverLoggedIn && !isAuthenticated)) {
-    return <div className="min-h-screen bg-slate-950" />;
-  }
-
-  const search = typeof window !== 'undefined' ? window.location.search : '';
-  const isRoadmapPreview = search.includes('roadmap=true');
-  const isLandingForced = search.includes('landing=true');
-
-  if ((isAuthenticated || isRoadmapPreview) && !isLandingForced) {
-    return <StudentRoadmapView />;
-  }
-
   return (
     <LenisProvider>
       <ScrollProgress />

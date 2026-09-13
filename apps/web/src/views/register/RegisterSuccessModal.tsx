@@ -111,7 +111,7 @@ export const RegisterSuccessModal: React.FC<RegisterSuccessModalProps> = ({
             </div>
 
             <GradientButton asChild className="w-full py-3 text-sm gap-2">
-              <TransitionLink ref={ctaRef} href="/?roadmap=true" onClick={() => setHandoff(true)}>
+              <TransitionLink ref={ctaRef} href="/app/ruta" onClick={() => setHandoff(true)}>
                 <span>Comenzar a Programar</span>
                 <ArrowRight aria-hidden="true" className="w-4 h-4" />
               </TransitionLink>

@@ -14,7 +14,7 @@ export const RoadmapSidebar: React.FC = () => {
       {/* Brand Header */}
       <div className="flex items-center px-2 py-1 mb-3 shrink-0">
         <Link
-          href="/?landing=true"
+          href="/"
           aria-label="Koda - volver a la landing"
           className="focus:outline-none rounded-lg"
         >

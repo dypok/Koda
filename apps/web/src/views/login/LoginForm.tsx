@@ -24,13 +24,13 @@ export const LoginForm: React.FC = () => {
     if (!email.trim() || !password) { setError('Ingresa tu correo y contraseña.'); return; }
     setError(''); setIsSubmitting(true);
     await new Promise((r) => setTimeout(r, 550));
-    login(email); setIsSubmitting(false); router.replace('/');
+    login(email); setIsSubmitting(false); router.replace('/app/ruta');
   };
 
   const handleSocial = async (provider: 'google' | 'github') => {
     setIsSubmitting(true);
     await new Promise((r) => setTimeout(r, 450));
-    loginSocial(provider); setIsSubmitting(false); router.replace('/');
+    loginSocial(provider); setIsSubmitting(false); router.replace('/app/ruta');
   };
 
   return (
