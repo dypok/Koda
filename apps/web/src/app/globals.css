@@ -37,10 +37,35 @@
   .animate-wander-4,
   .animate-wander-5,
   [class*='emberRise'],
-  [class*='codeStream'] {
+  [class*='codeStream'],
+  .st-dash-flow,
+  .st-spin-slow,
+  .st-spin-slower,
+  .st-breathe,
+  .st-twinkle,
+  .st-flicker,
+  .st-chest {
     animation: none !important;
   }
 }
+/* SkillTree vivo (SVG): flujo, órbitas, respiración y destellos */
+@keyframes st-dash-flow { to { stroke-dashoffset: -28; } }
+@keyframes st-spin { to { transform: rotate(360deg); } }
+@keyframes st-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+@keyframes st-twinkle { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.9; } }
+@keyframes st-flicker { 0%, 100% { opacity: 1; } 45% { opacity: 0.75; } 55% { opacity: 0.95; } }
+@keyframes st-chest { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+.st-dash-flow { animation: st-dash-flow 1.1s linear infinite; }
+.st-spin-slow { animation: st-spin 28s linear infinite; transform-box: fill-box; transform-origin: center; }
+.st-spin-slower { animation: st-spin 44s linear infinite reverse; transform-box: fill-box; transform-origin: center; }
+.st-breathe { animation: st-breathe 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.st-twinkle { animation: st-twinkle 3s ease-in-out infinite; }
+.st-flicker { animation: st-flicker 1.8s ease-in-out infinite; }
+.st-chest { animation: st-chest 2.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.st-node { transition: filter 0.3s ease; }
+.st-node:hover { filter: brightness(1.3); }
+
 @keyframes laser-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -120; } }
 @keyframes laser-standby { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -56; } }
 @keyframes star-twinkle-a { 0%, 100% { opacity: 0.2; transform: scale(0.85); } 50% { opacity: 0.9; transform: scale(1.15); } }

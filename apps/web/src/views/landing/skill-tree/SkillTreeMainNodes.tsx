@@ -3,8 +3,12 @@ import React from 'react';
 export const SkillTreeMainNodes: React.FC = () => (
   <>
     {/* NODO 01: SINTAXIS */}
-    <g>
-      <circle cx="50" cy="115" r="16" fill="#0c4a6e" stroke="#06b6d4" strokeWidth="2" filter="url(#glow-cyan)" />
+    <g className="st-node">
+      <circle cx="50" cy="115" r="16" fill="#0c4a6e" stroke="#06b6d4" strokeWidth="2" filter="url(#glow-soft)" />
+      <g transform="translate(60, 105)">
+        <circle cx="0" cy="0" r="6" fill="#10b981" />
+        <path d="M -2.5 0 l 1.8 1.8 l 3.4 -3.6" fill="none" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
       <g transform="translate(50, 115) scale(0.75) translate(-12, -12)" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M7 4h-4v16h4" /><path d="M17 4h4v16h-4" /><path d="M8 16h.01" /><path d="M12 16h.01" /><path d="M16 16h.01" />
       </g>
@@ -14,8 +18,12 @@ export const SkillTreeMainNodes: React.FC = () => (
     </g>
 
     {/* NODO 02: SCOPE & VARIABLES */}
-    <g>
-      <circle cx="135" cy="65" r="16" fill="#0c4a6e" stroke="#06b6d4" strokeWidth="2" filter="url(#glow-cyan)" />
+    <g className="st-node">
+      <circle cx="135" cy="65" r="16" fill="#0c4a6e" stroke="#06b6d4" strokeWidth="2" filter="url(#glow-soft)" />
+      <g transform="translate(145, 55)">
+        <circle cx="0" cy="0" r="6" fill="#10b981" />
+        <path d="M -2.5 0 l 1.8 1.8 l 3.4 -3.6" fill="none" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
       <g transform="translate(135, 65) scale(0.75) translate(-12, -12)" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M6 20a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" /><path d="M16 4a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" />
         <path d="M16 20a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" /><path d="M11 12a2 2 0 1 0 -4 0a2 2 0 0 0 4 0" />
@@ -28,8 +36,12 @@ export const SkillTreeMainNodes: React.FC = () => (
     </g>
 
     {/* NODO 03: FUNCIONES */}
-    <g>
-      <circle cx="220" cy="135" r="16" fill="#0c4a6e" stroke="#06b6d4" strokeWidth="2" filter="url(#glow-cyan)" />
+    <g className="st-node">
+      <circle cx="220" cy="135" r="16" fill="#0c4a6e" stroke="#06b6d4" strokeWidth="2" filter="url(#glow-soft)" />
+      <g transform="translate(230, 125)">
+        <circle cx="0" cy="0" r="6" fill="#10b981" />
+        <path d="M -2.5 0 l 1.8 1.8 l 3.4 -3.6" fill="none" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+      </g>
       <g transform="translate(220, 135) scale(0.75) translate(-12, -12)" fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M9 12a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" /><path d="M12 21l0 .01" /><path d="M3 9l0 .01" />
         <path d="M21 9l0 .01" /><path d="M8 20.1a9 9 0 0 1 -5 -7.1" /><path d="M16 20.1a9 9 0 0 0 5 -7.1" /><path d="M6.2 5a9 9 0 0 1 11.4 0" />
@@ -40,8 +52,12 @@ export const SkillTreeMainNodes: React.FC = () => (
     </g>
 
     {/* NODO 04: CONTROL FLOW (ACTIVO) */}
-    <g>
-      <circle cx="310" cy="105" r="19" fill="#ea580c" stroke="#fbbf24" strokeWidth="2.5" filter="url(#glow-amber)" />
+    <g className="st-node">
+      <circle cx="310" cy="105" r="19" fill="none" stroke="#fbbf24" strokeWidth="1" opacity="0.6">
+        <animate attributeName="r" values="19;32" dur="2s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.6;0" dur="2s" repeatCount="indefinite" />
+      </circle>
+      <circle cx="310" cy="105" r="19" fill="#ea580c" stroke="#fbbf24" strokeWidth="2.5" filter="url(#glow-amber)" className="st-breathe" />
       <g transform="translate(310, 105) scale(0.85) translate(-12, -12)" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
         <path d="M3 19a2 2 0 1 0 4 0a2 2 0 0 0 -4 0" /><path d="M19 7a2 2 0 1 0 0 -4a2 2 0 0 0 0 4" />
         <path d="M11 19h5.5a3.5 3.5 0 0 0 0 -7h-8a3.5 3.5 0 0 1 0 -7h4.5" />
