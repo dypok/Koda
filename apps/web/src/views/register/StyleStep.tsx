@@ -26,6 +26,7 @@ export const StyleStep: React.FC<StyleStepProps> = ({
         : 'Personalizaremos la metodología y retos interactivos para tu ritmo.'
     }
     groupLabel="Estilo de aprendizaje"
+    kodaSay="Cada mente aprende distinto ✨"
   >
     {options.map((option) => (
       <SelectableCard

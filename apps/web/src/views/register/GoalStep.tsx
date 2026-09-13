@@ -20,6 +20,7 @@ export const GoalStep: React.FC<GoalStepProps> = ({
     title="¿Cuál es tu meta diaria de estudio?"
     subtitle="Establecer una meta diaria te ayudará a crear un hábito constante. Puedes cambiarla en cualquier momento."
     groupLabel="Meta diaria"
+    kodaSay="15 min al día cambian todo 🔥"
   >
     {options.map((option) => (
       <SelectableCard

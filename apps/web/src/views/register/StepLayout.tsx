@@ -8,26 +8,34 @@ interface StepLayoutProps {
   title: string;
   subtitle: string;
   groupLabel: string;
+  kodaSay?: string;
   children: React.ReactNode;
 }
 
 /** Armazón común de paso: Koda + título + subtítulo vivo + radiogroup con stagger. */
-export const StepLayout: React.FC<StepLayoutProps> = ({ title, subtitle, groupLabel, children }) => {
+export const StepLayout: React.FC<StepLayoutProps> = ({ title, subtitle, groupLabel, kodaSay, children }) => {
   const reduceMotion = useReducedMotion();
 
   return (
     <div className="w-full max-w-2xl mx-auto px-4 py-6 sm:py-8 space-y-6">
       <div className="flex items-center gap-4 text-left">
-        <div className="relative h-14 w-14 sm:h-16 sm:w-16 shrink-0">
-          <Image
-            src="/brand/koda-mascot-cartoon-2d.svg"
-            alt="Koda, tu guía de registro"
-            width={64}
-            height={64}
-            className="object-contain"
-            style={{ width: 'auto', height: 'auto' }}
-            priority
-          />
+        <div className="relative shrink-0 flex flex-col items-center">
+          <div className="relative h-14 w-14 sm:h-16 sm:w-16">
+            <Image
+              src="/brand/koda-mascot-cartoon-2d.svg"
+              alt="Koda, tu guía de registro"
+              width={64}
+              height={64}
+              className="object-contain"
+              style={{ width: 'auto', height: 'auto' }}
+              priority
+            />
+          </div>
+          {kodaSay && (
+            <span aria-hidden="true" className="mt-1 max-w-[120px] rounded-xl rounded-tl-sm border border-amber-400/30 bg-amber-400/10 px-2 py-1 text-center text-[10px] font-bold leading-tight text-amber-200">
+              {kodaSay}
+            </span>
+          )}
         </div>
         <div className="space-y-0.5">
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">

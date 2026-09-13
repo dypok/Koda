@@ -26,6 +26,7 @@ export const ExperienceStep: React.FC<ExperienceStepProps> = ({
         : 'Personalizaremos los desafíos prácticos para tu ritmo de aprendizaje.'
     }
     groupLabel="Nivel de experiencia"
+    kodaSay="¿Cuánto sabes? ¡Sin pena! 🦊"
   >
     {options.map((option) => (
       <SelectableCard
