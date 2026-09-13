@@ -186,8 +186,8 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
         transform="translate(24, -24)"
         onClick={handleQuickToggle}
         className="opacity-0 cursor-pointer pointer-events-auto transition-opacity"
-        title={node.isUnlocked ? 'Clic para bloquear este círculo' : 'Clic para desbloquear este círculo'}
       >
+        <title>{node.isUnlocked ? 'Clic para bloquear este círculo' : 'Clic para desbloquear este círculo'}</title>
         <circle
           r="11"
           fill={node.isUnlocked ? '#0F172A' : '#083344'}

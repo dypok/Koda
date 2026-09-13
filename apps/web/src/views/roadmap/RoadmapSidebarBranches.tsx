@@ -23,10 +23,10 @@ export function RoadmapSidebarBranches() {
             type="button"
             onClick={() => setBranch(branch.id as CareerBranchId)}
             className={cn(
-              'w-full flex flex-col p-3 rounded-xl transition-all text-left group relative',
+              'w-full flex flex-col p-3 rounded-xl transition-all duration-200 text-left group relative active:scale-[0.98] cursor-pointer',
               isSelected
-                ? 'bg-cyan-500/10 text-white border border-cyan-500/40 shadow-[0_0_15px_rgba(6,182,212,0.15)]'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/60 border border-slate-800/40'
+                ? 'bg-cyan-500/15 text-white border border-cyan-500/50 shadow-[0_0_15px_rgba(6,182,212,0.2)]'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900/80 border border-slate-800/60 hover:border-slate-700'
             )}
           >
             <div className="flex items-center gap-3 w-full">
