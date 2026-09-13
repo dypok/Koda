@@ -3,7 +3,8 @@
 import React from 'react';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { useRoadmapStore } from '@/stores/roadmap.store';
-import { IconBolt, IconLock, IconLockOpen, IconCheck, IconX, IconSparkles, IconCrosshair } from '@tabler/icons-react';
+import { Bolt, Lock, LockOpen, Check, X, Sparkles, Crosshair } from 'lucide-react';
+import { AnimatedCounter } from '@/components/ui/animated-counter';
 import gsap from 'gsap';
 
 interface RoadmapNodeInspectorProps {
@@ -53,10 +54,16 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
       aria-label="Inspector de Telemetría Táctica"
       className="absolute bottom-16 right-6 z-30 w-80 sm:w-96 rounded-lg bg-slate-950/90 border border-cyan-500/30 backdrop-blur-xl shadow-[0_0_30px_rgba(0,0,0,0.8)] text-slate-100 overflow-hidden"
     >
+      {/* Línea de escaneo al cambiar de nodo */}
+      <div
+        key={`scan-${node.id}`}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-10 bg-[linear-gradient(to_bottom,transparent,rgba(34,211,238,0.18),transparent)] animate-[scanline_0.7s_ease-out_forwards]"
+      />
       {/* HUD Scanner Top Bar with Telemetry & Quick Lock Switch */}
       <div className="px-4 py-2.5 bg-slate-900/90 border-b border-slate-800 flex items-center justify-between text-xs font-mono">
         <div className="flex items-center gap-2 text-cyan-400">
-          <IconCrosshair className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '10s' }} />
+          <Crosshair className="w-3.5 h-3.5 animate-spin" style={{ animationDuration: '10s' }} />
           <span className="font-bold tracking-wider">DRONE SCANNER // {node.code}</span>
         </div>
 
@@ -70,7 +77,7 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
             }`}
             title={isUnlocked ? 'Bloquear este módulo' : 'Desbloquear este módulo'}
           >
-            {isUnlocked ? <IconLock className="w-3 h-3" /> : <IconLockOpen className="w-3 h-3" />}
+            {isUnlocked ? <Lock className="w-3 h-3" /> : <LockOpen className="w-3 h-3" />}
             <span>{isUnlocked ? 'Bloquear' : 'Desbloquear'}</span>
           </button>
 
@@ -79,7 +86,7 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
             className="p-1 text-slate-400 hover:text-white hover:bg-slate-800 rounded transition-colors"
             title="Cerrar Inspector"
           >
-            <IconX className="w-4 h-4" />
+            <X className="w-4 h-4" />
           </button>
         </div>
       </div>
@@ -135,15 +142,19 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
           <div className="bg-slate-900/60 border border-slate-800/80 rounded p-2.5">
             <span className="text-[10px] text-slate-400 block mb-0.5">RECOMPENSA XP</span>
             <div className="flex items-center gap-1.5 text-amber-400 font-bold">
-              <IconSparkles className="w-3.5 h-3.5" />
-              <span>+{node.xp || 150} XP</span>
+              <Sparkles aria-hidden="true" className="w-3.5 h-3.5" />
+              <span className="flex items-center">
+                +<AnimatedCounter to={node.xp || 150} duration={0.6} />&nbsp;XP
+              </span>
             </div>
           </div>
 
           <div className="bg-slate-900/60 border border-slate-800/80 rounded p-2.5">
             <span className="text-[10px] text-slate-400 block mb-0.5">ESTRELLAS</span>
             <div className="flex items-center gap-1.5 text-cyan-300 font-bold">
-              <span>★ {node.stars ?? 0} / {node.maxStars ?? 9}</span>
+              <span aria-hidden="true">★</span>
+              <AnimatedCounter to={node.stars ?? 0} duration={0.6} />
+              <span>/ {node.maxStars ?? 9}</span>
             </div>
           </div>
         </div>
@@ -156,12 +167,12 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
           <div className="flex items-center gap-1.5 text-slate-300">
             {isUnlocked ? (
               <>
-                <IconCheck className="w-3.5 h-3.5 text-emerald-400" />
+                <Check className="w-3.5 h-3.5 text-emerald-400" />
                 <span className="text-emerald-300">Canal de telemetría sincronizado</span>
               </>
             ) : (
               <>
-                <IconLock className="w-3.5 h-3.5 text-rose-400" />
+                <Lock className="w-3.5 h-3.5 text-rose-400" />
                 <span className="text-rose-300">Requiere completar el sector anterior</span>
               </>
             )}
@@ -179,7 +190,7 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
                   : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black shadow-cyan-950/50'
               }`}
             >
-              <IconBolt className="w-4 h-4 fill-current" />
+              <Bolt className="w-4 h-4 fill-current" />
               <span>{isBoss ? 'DESAFIAR APEX GATE →' : 'INICIAR PROTOCOLO →'}</span>
             </button>
           ) : (
@@ -200,12 +211,12 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
           >
             {isUnlocked ? (
               <>
-                <IconLock className="w-3 h-3 text-rose-400" />
+                <Lock className="w-3 h-3 text-rose-400" />
                 <span>Bloquear Módulo</span>
               </>
             ) : (
               <>
-                <IconLockOpen className="w-3 h-3 text-cyan-400" />
+                <LockOpen className="w-3 h-3 text-cyan-400" />
                 <span>Desbloquear Módulo</span>
               </>
             )}

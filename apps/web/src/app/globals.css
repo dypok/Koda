@@ -83,6 +83,9 @@
   animation: koda-party-hue 6s linear infinite;
 }
 
+/* Escaneo del inspector drone */
+@keyframes scanline { from { transform: translateY(-100%); opacity: 0; } 30% { opacity: 1; } to { transform: translateY(420px); opacity: 0; } }
+
 /* Clima por sección */
 @keyframes wx-rise { 0% { transform: translateY(20px); opacity: 0; } 20% { opacity: 0.9; } 100% { transform: translateY(-120px); opacity: 0; } }
 @keyframes wx-drift { 0%, 100% { transform: translate(0, 0); opacity: 0.3; } 50% { transform: translate(24px, -18px); opacity: 1; } }
