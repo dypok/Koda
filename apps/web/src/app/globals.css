@@ -58,7 +58,9 @@
   .st-flicker,
   .st-chest,
   .koda-grain,
-  .koda-wave {
+  .koda-wave,
+  .koda-beam-a,
+  .koda-beam-b {
     animation: none !important;
   }
 }
@@ -75,6 +77,12 @@
 /* Onda divisoria entre secciones */
 @keyframes koda-wave-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .koda-wave { animation: koda-wave-drift 14s linear infinite; will-change: transform; }
+
+/* Rayos volumétricos del hero (faros barriendo) */
+@keyframes koda-beam-a { 0%, 100% { transform: rotate(-8deg); opacity: 0.5; } 50% { transform: rotate(9deg); opacity: 0.9; } }
+@keyframes koda-beam-b { 0%, 100% { transform: rotate(7deg); opacity: 0.8; } 50% { transform: rotate(-9deg); opacity: 0.45; } }
+.koda-beam-a { animation: koda-beam-a 40s ease-in-out infinite; transform-origin: top center; }
+.koda-beam-b { animation: koda-beam-b 60s ease-in-out infinite; transform-origin: top center; }
 
 /* Grain cinematográfico global (landing) */
 @keyframes koda-grain {

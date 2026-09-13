@@ -3,6 +3,7 @@
 import React, { useLayoutEffect, useRef } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { HeroSkyBackground } from './HeroSkyBackground';
+import { LightBeams } from './LightBeams';
 import { UpcomingTechCarousel } from './UpcomingTechCarousel';
 import { HeroCtaGroup } from '@/views/landing/hero/HeroCtaGroup';
 import { HeroMascot } from '@/views/landing/hero/HeroMascot';
@@ -49,6 +50,7 @@ export const HeroSection: React.FC = () => {
       className="relative isolate overflow-hidden min-h-screen min-h-[100dvh] flex flex-col justify-between pt-20 pb-4 md:pt-24 md:pb-6"
     >
       <HeroSkyBackground starCount={140} interactive={true} />
+      <LightBeams />
       <div ref={gridRef} aria-hidden="true" className="koda-grid-bg pointer-events-none absolute inset-0" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full my-auto">
