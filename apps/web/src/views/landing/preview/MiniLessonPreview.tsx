@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Check, RotateCcw, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { sound } from '@/lib/sound';
 
 const OPTIONS = [
   { key: 'A', label: 'Hola, Koda', correct: true },
@@ -26,6 +27,8 @@ export const MiniLessonPreview: React.FC = () => {
     const ok = OPTIONS.find((o) => o.key === selected)?.correct;
     setAttempts((n) => n + 1);
     setPhase(ok ? 'success' : 'hint');
+    if (ok) sound.success();
+    else sound.hint();
   };
 
   const retry = () => {
@@ -51,8 +54,17 @@ export const MiniLessonPreview: React.FC = () => {
       </div>
 
       <div className="space-y-4 p-4 sm:p-5">
-        <p className="text-sm sm:text-base font-semibold text-white">
-          ¿Qué muestra este código en pantalla?
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-sm sm:text-base font-semibold text-white">
+            ¿Qué muestra este código en pantalla?
+          </p>
+        </div>
+        <p aria-live="polite" className="text-xs text-slate-400 -mt-2">
+          {phase === 'success'
+            ? '🦊 Koda celebra tu acierto'
+            : phase === 'hint'
+              ? '🦊 Koda te anima con una pista'
+              : '🦊 Koda observa con curiosidad'}
         </p>
         <pre className="overflow-x-auto rounded-xl bg-slate-950 border border-slate-800 p-3.5 font-mono text-sm leading-relaxed">
           <code>

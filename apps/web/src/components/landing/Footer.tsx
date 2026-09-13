@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { InfoModal, InfoModalTab } from './InfoModal';
 import { FooterColumns } from '@/views/landing/FooterColumns';
+import { SoundToggle } from './SoundToggle';
 
 export const Footer: React.FC = () => {
   const [modalTab, setModalTab] = useState<InfoModalTab | null>(null);
@@ -51,6 +52,7 @@ export const Footer: React.FC = () => {
         {/* Barra Inferior */}
         <div className="pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-sans">
           <p>© {new Date().getFullYear()} KodaAcademy. Todos los derechos reservados.</p>
+          <SoundToggle />
         </div>
       </motion.div>
 

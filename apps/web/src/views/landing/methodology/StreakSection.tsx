@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { AnimatedCounter } from '@/components/ui/animated-counter';
+import { StreakPreview } from '@/views/landing/conversion/StreakPreview';
 
 export const StreakSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -57,6 +58,15 @@ export const StreakSection: React.FC = () => {
           </span>
         </motion.div>
       </div>
+      <motion.div
+        initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-40px' }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="mt-12"
+      >
+        <StreakPreview />
+      </motion.div>
     </div>
   </section>
   );
