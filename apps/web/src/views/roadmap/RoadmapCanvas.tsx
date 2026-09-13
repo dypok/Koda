@@ -11,6 +11,7 @@ import { RoadmapNodeInspector } from './RoadmapNodeInspector';
 import { useRoadmapWarpTransition } from './useRoadmapWarpTransition';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { useRoadmapPanZoom } from './useRoadmapPanZoom';
+import { useRoadmapKeyboardNav } from './useRoadmapKeyboardNav';
 import gsap from 'gsap';
 
 interface RoadmapCanvasProps {
@@ -97,6 +98,15 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
       openCourseLessons(node.targetCourseId);
     }
   };
+
+  // Navegación espacial por teclado (Flechas, Enter, Escape, Espacio, Zoom)
+  useRoadmapKeyboardNav({
+    nodes: dataset.nodes,
+    onSelectNode: handleSelectNode,
+    onDeployNode: handleDeploy,
+    onCloseInspector: () => setInspectedNode(null),
+    inspectedNode,
+  });
 
   return (
     <div
