@@ -138,6 +138,7 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
           <RoadmapSvgPaths
             connections={dataset.connections}
             animatingConnectionId={animatingConnectionId}
+            highlightFromId={activeNodeId}
           />
 
           {/* Interactive Graph Nodes */}

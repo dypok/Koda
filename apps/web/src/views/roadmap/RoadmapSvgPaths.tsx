@@ -7,9 +7,10 @@ import gsap from 'gsap';
 interface RoadmapSvgPathsProps {
   connections: GraphConnection[];
   animatingConnectionId?: string | null;
+  highlightFromId?: string | null;
 }
 
-export function RoadmapSvgPaths({ connections, animatingConnectionId }: RoadmapSvgPathsProps) {
+export function RoadmapSvgPaths({ connections, animatingConnectionId, highlightFromId }: RoadmapSvgPathsProps) {
   const laserBeamsRef = useRef<{ [key: string]: SVGPathElement | null }>({});
 
   // Animación cinemática de haz de energía cuando una conexión se enciende
@@ -58,15 +59,18 @@ export function RoadmapSvgPaths({ connections, animatingConnectionId }: RoadmapS
         </filter>
       </defs>
 
-      {connections.map((c) => (
+      {connections.map((c) => {
+        const isActivePath = highlightFromId != null && (c.fromId === highlightFromId || c.toId === highlightFromId);
+        const stroke = isActivePath && !c.isDashed ? '#F59E0B' : c.color;
+        return (
         <g key={c.id}>
           {/* Subtle luminous ambient glow path */}
           <path
             d={c.path}
             fill="none"
-            stroke={c.color}
-            strokeWidth="7"
-            strokeOpacity="0.2"
+            stroke={stroke}
+            strokeWidth={isActivePath ? 9 : 7}
+            strokeOpacity={isActivePath ? 0.3 : 0.2}
             strokeLinecap="round"
           />
           {/* Core laser beam */}
@@ -76,7 +80,7 @@ export function RoadmapSvgPaths({ connections, animatingConnectionId }: RoadmapS
             }}
             d={c.path}
             fill="none"
-            stroke={c.color}
+            stroke={stroke}
             strokeWidth="2.5"
             strokeOpacity={c.isDashed ? '0.45' : '0.85'}
             strokeLinecap="round"
@@ -93,10 +97,11 @@ export function RoadmapSvgPaths({ connections, animatingConnectionId }: RoadmapS
             strokeLinecap="round"
             strokeDasharray="20 100"
             className={c.isDashed ? undefined : 'animate-laser-flow'}
-            style={{ filter: `drop-shadow(0 0 6px ${c.color})` }}
+            style={{ filter: `drop-shadow(0 0 6px ${stroke})` }}
           />
         </g>
-      ))}
+        );
+      })}
     </g>
   );
 }
