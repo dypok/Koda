@@ -97,6 +97,41 @@ export const CosmicBackground: React.FC = () => {
     const points = new THREE.Points(geometry, material);
     scene.add(points);
 
+    // Bloom real solo en dispositivos capaces; si no, el sprite del shader ya da glow fake.
+    type Composer = {
+      render: () => void;
+      setSize: (w: number, h: number) => void;
+      setPixelRatio: (r: number) => void;
+    };
+    let composer: Composer | null = null;
+    const capable =
+      (navigator.hardwareConcurrency ?? 4) >= 6 &&
+      !window.matchMedia('(prefers-reduced-data: reduce)').matches;
+    if (capable) {
+      void Promise.all([
+        import('three/examples/jsm/postprocessing/EffectComposer.js'),
+        import('three/examples/jsm/postprocessing/RenderPass.js'),
+        import('three/examples/jsm/postprocessing/UnrealBloomPass.js'),
+      ])
+        .then(([composerMod, renderPassMod, bloomMod]) => {
+          if (disposed) return;
+          const nextComposer = new composerMod.EffectComposer(renderer);
+          nextComposer.addPass(new renderPassMod.RenderPass(scene, camera));
+          const bloom = new bloomMod.UnrealBloomPass(
+            new THREE.Vector2(mount.clientWidth, mount.clientHeight),
+            0.55,
+            0.6,
+            0.72
+          );
+          nextComposer.addPass(bloom);
+          composer = nextComposer;
+        })
+        .catch(() => {
+          composer = null;
+        });
+    }
+    let disposed = false;
+
     let raf = 0;
     let running = true;
     const io = new IntersectionObserver(
@@ -119,6 +154,8 @@ export const CosmicBackground: React.FC = () => {
       camera.updateProjectionMatrix();
       renderer.setPixelRatio(dprCap());
       renderer.setSize(mount.clientWidth, mount.clientHeight);
+      composer?.setPixelRatio(dprCap());
+      composer?.setSize(mount.clientWidth, mount.clientHeight);
     };
     window.addEventListener('resize', onResize);
 
@@ -133,7 +170,8 @@ export const CosmicBackground: React.FC = () => {
       const act = document.body.dataset.act ?? '1';
       const targetIntensity = ACT_INTENSITY[act] ?? 1;
       uniforms.uIntensity.value += (targetIntensity - uniforms.uIntensity.value) * 0.05;
-      renderer.render(scene, camera);
+      if (composer) composer.render();
+      else renderer.render(scene, camera);
       raf = requestAnimationFrame(loop);
     };
     loop();
@@ -154,6 +192,7 @@ export const CosmicBackground: React.FC = () => {
     });
 
     return () => {
+      disposed = true;
       cancelAnimationFrame(raf);
       scrollCtx.revert();
       io.disconnect();
