@@ -1,20 +1,43 @@
 'use client';
 
-import React from 'react';
+import React, { useLayoutEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { TransitionLink } from '@/components/ui/transition-link';
 import { Magnetic } from '@/components/ui/magnetic';
 import { SplitText } from '@/components/ui/split-text';
 import { ArrowRight } from 'lucide-react';
+import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 
 /** Cierre de película: negro total, frase letra por letra, Koda y un solo CTA. */
 export const CinematicFinale: React.FC = () => {
   const reduceMotion = useReducedMotion();
+  const eclipseRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion()) return;
+    const { gsap } = getGsap();
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        '.st-eclipse-ring',
+        { scale: 0.55, opacity: 0.25 },
+        {
+          scale: 1,
+          opacity: 1,
+          ease: 'none',
+          scrollTrigger: { trigger: eclipseRef.current, start: 'top 80%', end: 'top 35%', scrub: 0.6 },
+        }
+      );
+    }, eclipseRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section aria-labelledby="finale-title" className="relative overflow-hidden bg-black py-28 md:py-40 border-t border-slate-900">
       <div aria-hidden="true" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[420px] bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.10)_0%,transparent_70%)] pointer-events-none" />
+      <div ref={eclipseRef} aria-hidden="true" className="absolute left-1/2 top-24 -translate-x-1/2 pointer-events-none">
+        <div className="st-eclipse-ring relative h-60 w-60 rounded-full bg-black border border-amber-400/70 shadow-[0_0_80px_10px_rgba(245,158,11,0.25)] will-change-transform" />
+      </div>
       <div className="mx-auto max-w-4xl px-4 sm:px-6 text-center space-y-8 relative z-10">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, scale: 0.9 }}
