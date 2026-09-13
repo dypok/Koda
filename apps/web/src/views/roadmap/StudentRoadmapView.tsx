@@ -8,10 +8,12 @@ import { RoadmapTopHud } from './RoadmapTopHud';
 import { RoadmapCanvas } from './RoadmapCanvas';
 import { RoadmapLegend } from './RoadmapLegend';
 import { LessonRail } from './LessonRail';
+import { CoursePinRail } from './CoursePinRail';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 
 export const StudentRoadmapView: React.FC = () => {
   const { openCourseLessons, getCurrentDataset, viewMode, retreatTrigger, returnToCourses, setActiveNode, isLoading } = useRoadmapStore();
+  const [coursesDisplayMode, setCoursesDisplayMode] = React.useState<'pin-rail' | 'canvas'>('pin-rail');
 
   React.useEffect(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('view=lessons')) {
@@ -49,6 +51,8 @@ export const StudentRoadmapView: React.FC = () => {
         <RoadmapTopHud
           sectorTitle={dataset.sectorTitle}
           progressPercent={dataset.progressPercent}
+          coursesDisplayMode={coursesDisplayMode}
+          onToggleCoursesDisplayMode={setCoursesDisplayMode}
         />
 
         <main className="flex-1 relative overflow-hidden flex items-center justify-center p-2">
@@ -56,9 +60,14 @@ export const StudentRoadmapView: React.FC = () => {
             <div className="absolute inset-0 overflow-y-auto">
               <LessonRail dataset={dataset} onDeploy={handleDeployLesson} />
             </div>
+          ) : coursesDisplayMode === 'pin-rail' ? (
+            <div className="absolute inset-0 overflow-y-auto">
+              <CoursePinRail dataset={dataset} onDeploy={handleDeployLesson} />
+            </div>
           ) : (
             <RoadmapCanvas dataset={dataset} />
           )}
+
           {isLoading ? (
             <div
               role="status"

@@ -2,16 +2,25 @@
 
 import React from 'react';
 import { ArrowLeft, Zap } from 'lucide-react';
+import { IconLayoutList, IconAffiliate } from '@tabler/icons-react';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { GradientButton } from '@/components/ui/gradient-button';
+import { cn } from '@/lib/utils';
 import gsap from 'gsap';
 
 interface RoadmapTopHudProps {
   sectorTitle: string;
   progressPercent?: number;
+  coursesDisplayMode?: 'pin-rail' | 'canvas';
+  onToggleCoursesDisplayMode?: (mode: 'pin-rail' | 'canvas') => void;
 }
 
-export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudProps) {
+export function RoadmapTopHud({
+  sectorTitle,
+  progressPercent,
+  coursesDisplayMode = 'pin-rail',
+  onToggleCoursesDisplayMode,
+}: RoadmapTopHudProps) {
   const { viewMode, triggerRetreatToCourses, openCourseLessons, coursesDataset, activeNodeId } = useRoadmapStore();
   const activeNode = coursesDataset.nodes.find((n) => n.id === activeNodeId);
   const activeCourseId =
@@ -61,6 +70,40 @@ export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudPro
             {displayTitle}
           </div>
         </div>
+
+        {/* View Switcher between Pin Lateral and Constellation Canvas */}
+        {viewMode === 'courses' && onToggleCoursesDisplayMode && (
+          <div className="hidden sm:flex items-center p-0.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono ml-2 shadow-inner">
+            <button
+              type="button"
+              onClick={() => onToggleCoursesDisplayMode('pin-rail')}
+              className={cn(
+                'px-2.5 py-1 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer',
+                coursesDisplayMode === 'pin-rail'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
+              )}
+              title="Vista de cursos estilo GSAP Lateral Pin"
+            >
+              <IconLayoutList className="w-3.5 h-3.5" />
+              <span>Pin Lateral</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => onToggleCoursesDisplayMode('canvas')}
+              className={cn(
+                'px-2.5 py-1 rounded-lg transition-all flex items-center gap-1.5 cursor-pointer',
+                coursesDisplayMode === 'canvas'
+                  ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-[0_0_10px_rgba(6,182,212,0.15)] font-bold'
+                  : 'text-slate-400 hover:text-slate-200'
+              )}
+              title="Vista libre de mapa estelar interactivo"
+            >
+              <IconAffiliate className="w-3.5 h-3.5" />
+              <span>Constelación</span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Action Button */}
