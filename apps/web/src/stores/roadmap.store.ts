@@ -17,6 +17,9 @@ interface RoadmapStoreState {
   lessonsDataset: GraphDataset;
   retreatTrigger: number;
   triggerRetreatToCourses: () => void;
+  animatingConnectionId: string | null;
+  unlockingNodeId: string | null;
+  simulateCompleteAndUnlockNext: () => void;
   openCourseLessons: (courseId: string) => Promise<void>;
   returnToCourses: () => void;
   setActiveNode: (id: string | null) => void;
@@ -41,6 +44,65 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   lessonsDataset: PYTHON_BASIC_LESSONS_DATASET,
   retreatTrigger: 0,
   triggerRetreatToCourses: () => set((s) => ({ retreatTrigger: s.retreatTrigger + 1 })),
+  animatingConnectionId: null,
+  unlockingNodeId: null,
+  simulateCompleteAndUnlockNext: () => {
+    const dataset = get().coursesDataset;
+    const activeNode = dataset.nodes.find((n) => n.variant === 'active');
+    if (!activeNode) return;
+
+    // Encontrar conexión saliente desde el nodo activo hacia el siguiente nodo bloqueado
+    const nextConnection = dataset.connections.find((c) => c.fromId === activeNode.id);
+    if (!nextConnection) return;
+    const targetNodeId = nextConnection.toId;
+
+    // 1. Iniciar encendido del haz láser
+    set({ animatingConnectionId: nextConnection.id });
+
+    // 2. Al llegar el rayo (0.85s), marcar el nodo anterior como completado y activar la rotura de candado del nodo destino
+    setTimeout(() => {
+      set({ unlockingNodeId: targetNodeId });
+
+      // Actualizar los datos del dataset
+      const updatedNodes = dataset.nodes.map((n) => {
+        if (n.id === activeNode.id) {
+          return { ...n, variant: 'completed' as const, stars: n.maxStars || 9, statusText: 'DOMINADO • 100%' };
+        }
+        if (n.id === targetNodeId) {
+          return {
+            ...n,
+            isUnlocked: true,
+            variant: 'active' as const,
+            iconType: 'brackets' as const,
+            statusText: 'ACTIVO • EN PROGRESO',
+          };
+        }
+        return n;
+      });
+
+      const updatedConnections = dataset.connections.map((c) => {
+        if (c.id === nextConnection.id) {
+          return { ...c, isDashed: false };
+        }
+        return c;
+      });
+
+      set({
+        coursesDataset: {
+          ...dataset,
+          progressPercent: Math.min(100, dataset.progressPercent + 20),
+          nodes: updatedNodes,
+          connections: updatedConnections,
+        },
+        activeNodeId: targetNodeId,
+      });
+
+      // 3. Limpiar banderas de animación tras completarse la cinemática
+      setTimeout(() => {
+        set({ animatingConnectionId: null, unlockingNodeId: null });
+      }, 1200);
+    }, 850);
+  },
   openCourseLessons: async (courseId) => {
     const courseNode = get().coursesDataset.nodes.find((n) => n.targetCourseId === courseId || n.id === courseId);
     if (courseNode && !courseNode.isUnlocked) return;

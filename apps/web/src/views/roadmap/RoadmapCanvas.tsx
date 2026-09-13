@@ -18,7 +18,15 @@ interface RoadmapCanvasProps {
 }
 
 export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
-  const { openCourseLessons, setActiveNode, activeNodeId, viewMode, retreatTrigger } = useRoadmapStore();
+  const {
+    openCourseLessons,
+    setActiveNode,
+    activeNodeId,
+    viewMode,
+    retreatTrigger,
+    animatingConnectionId,
+    unlockingNodeId,
+  } = useRoadmapStore();
   const { isDragging, hasMovedRecently, panOffset, zoomLevel, containerRef, containerProps } = useRoadmapPanZoom();
   const [inspectedNode, setInspectedNode] = React.useState<GraphNode | null>(null);
 
@@ -106,7 +114,10 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
           <RoadmapAmbientStars />
 
           {/* Glowing laser connections between nodes */}
-          <RoadmapSvgPaths connections={dataset.connections} />
+          <RoadmapSvgPaths
+            connections={dataset.connections}
+            animatingConnectionId={animatingConnectionId}
+          />
 
           {/* Interactive Graph Nodes */}
           {dataset.nodes.map((node) => (
@@ -114,6 +125,7 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
               key={node.id}
               node={node}
               onSelectNode={handleSelectNode}
+              isUnlocking={unlockingNodeId === node.id}
             />
           ))}
         </svg>

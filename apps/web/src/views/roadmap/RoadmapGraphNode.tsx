@@ -1,32 +1,115 @@
 'use client';
 
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { RoadmapNodeRings } from './RoadmapNodeRings';
 import { RoadmapNodeIcon } from './RoadmapNodeIcon';
+import gsap from 'gsap';
 
 interface RoadmapGraphNodeProps {
   node: GraphNode;
   onSelectNode: (node: GraphNode) => void;
+  isUnlocking?: boolean;
 }
 
-export function RoadmapGraphNode({ node, onSelectNode }: RoadmapGraphNodeProps) {
-  const isClickable = true;
+export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGraphNodeProps) {
+  const nodeGroupRef = useRef<SVGGElement | null>(null);
+  const iconWrapperRef = useRef<HTMLDivElement | null>(null);
+  const lockShatterGlowRef = useRef<SVGCircleElement | null>(null);
+
+  // Animación GSAP de ruptura de candado y encendido de baliza
+  useEffect(() => {
+    if (!isUnlocking) return;
+    const group = nodeGroupRef.current;
+    const icon = iconWrapperRef.current;
+    const glow = lockShatterGlowRef.current;
+    if (!group || !icon) return;
+
+    const ctx = gsap.context(() => {
+      const tl = gsap.timeline();
+
+      // 1. Vibración de sobrecarga energética sobre el candado
+      tl.to(icon, {
+        x: '+=3',
+        yoyo: true,
+        repeat: 7,
+        duration: 0.05,
+        ease: 'power1.inOut',
+      });
+
+      // 2. Destello de sobretensión en el núcleo
+      if (glow) {
+        tl.fromTo(
+          glow,
+          { r: 10, opacity: 0 },
+          { r: 48, opacity: 0.9, duration: 0.25, ease: 'power2.out' },
+          '-=0.15'
+        );
+        tl.to(glow, { opacity: 0, r: 60, duration: 0.3, ease: 'power1.out' });
+      }
+
+      // 3. Estallido y disipación del candado
+      tl.to(
+        icon,
+        {
+          scale: 0,
+          rotation: 45,
+          opacity: 0,
+          duration: 0.2,
+          ease: 'back.in(2)',
+        },
+        '-=0.3'
+      );
+
+      // 4. Salto de escala de la baliza y reaparición del icono como nodo activo
+      tl.fromTo(
+        group,
+        { scale: 0.9 },
+        { scale: 1.15, duration: 0.3, ease: 'back.out(2)' }
+      );
+      tl.to(group, { scale: 1.0, duration: 0.25, ease: 'power2.out' });
+
+      // 5. El nuevo icono se manifiesta con rebote
+      tl.fromTo(
+        icon,
+        { scale: 0, rotation: -90, opacity: 0 },
+        { scale: 1, rotation: 0, opacity: 1, duration: 0.35, ease: 'back.out(2)' },
+        '-=0.3'
+      );
+    }, group);
+
+    return () => ctx.revert();
+  }, [isUnlocking]);
 
   return (
     <g
+      ref={nodeGroupRef}
       transform={`translate(${node.x}, ${node.y})`}
       onClick={() => onSelectNode(node)}
       className={`group transition-all duration-200 cursor-pointer ${
         node.isUnlocked ? '' : 'opacity-75 hover:opacity-100'
       }`}
     >
+      {/* Shockwave circle for lock shattering */}
+      <circle
+        ref={lockShatterGlowRef}
+        r="0"
+        fill="none"
+        stroke="#38BDF8"
+        strokeWidth="3"
+        opacity="0"
+        className="pointer-events-none"
+      />
+
       {/* Outer luminous rings & tactical brackets */}
       <RoadmapNodeRings variant={node.variant} />
 
       {/* Centered Node Icon with tactile micro-hover */}
       <foreignObject x="-14" y="-14" width="28" height="28" className="pointer-events-none">
-        <div className="w-full h-full flex items-center justify-center text-white">
+        <div
+          ref={iconWrapperRef}
+          className="w-full h-full flex items-center justify-center text-white will-change-transform"
+        >
           <RoadmapNodeIcon
             iconType={!node.isUnlocked && node.variant !== 'boss' ? 'lock' : node.iconType}
             className={`w-4 h-4 transition-all duration-300 ${
