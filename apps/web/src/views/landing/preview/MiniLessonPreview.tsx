@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Check, RotateCcw, ArrowRight } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { sound } from '@/lib/sound';
+import { CodeConfetti } from './CodeConfetti';
 
 const OPTIONS = [
   { key: 'A', label: 'Hola, Koda', correct: true },
@@ -128,7 +129,8 @@ export const MiniLessonPreview: React.FC = () => {
         </div>
 
         {phase === 'success' ? (
-          <div role="status" className="space-y-3 rounded-xl border border-emerald-400/30 bg-emerald-400/10 p-3.5">
+          <div role="status" className="relative space-y-3 rounded-xl border border-emerald-400/30 bg-emerald-400/10 p-3.5">
+            <CodeConfetti burstKey={attempts} />
             <p className="flex items-center gap-2 text-sm font-bold text-emerald-300">
               <Check aria-hidden="true" className="h-4 w-4" />
               ¡Correcto! +5 XP
