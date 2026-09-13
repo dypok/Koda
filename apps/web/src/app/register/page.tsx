@@ -22,7 +22,16 @@ export default function RegisterPage() {
   const isLast = stepper.currentStep === 5;
   const canContinue = isLast ? profile.isFormValid : stepper.canContinue;
   const handleContinue = isLast ? profile.submit : stepper.nextStep;
-  const continueText = isLast ? 'Crear cuenta y comenzar' : 'Continuar';
+  const STEP_CTA: Record<number, { text: string; hint: string }> = {
+    1: { text: 'Explorar y continuar', hint: 'Elige tu tecnología para continuar' },
+    2: { text: 'Confirmar mi nivel', hint: 'Elige tu nivel para continuar' },
+    3: { text: 'Confirmar mi estilo', hint: 'Elige tu estilo para continuar' },
+    4: { text: 'Fijar mi meta · 10 min/día', hint: 'Elige tu meta para continuar' },
+    5: { text: 'Crear cuenta y comenzar', hint: 'Completa el formulario para continuar' },
+  };
+  const stepCta = STEP_CTA[stepper.currentStep] ?? STEP_CTA[1];
+  const continueText = stepCta.text;
+  const blockedHint = stepCta.hint;
   const reduceMotion = useReducedMotion();
   const prevStepRef = useRef(stepper.currentStep);
   const direction = stepper.currentStep >= prevStepRef.current ? 1 : -1;
@@ -102,6 +111,7 @@ export default function RegisterPage() {
         canContinue={canContinue}
         onContinue={handleContinue}
         continueText={continueText}
+        blockedHint={blockedHint}
         isLoading={profile.isSubmitting}
       />
       <RegisterSuccessModal

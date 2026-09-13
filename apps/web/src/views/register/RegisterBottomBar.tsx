@@ -9,6 +9,7 @@ interface RegisterBottomBarProps {
   canContinue: boolean;
   onContinue: () => void;
   continueText?: string;
+  blockedHint?: string;
   isLoading?: boolean;
 }
 
@@ -16,6 +17,7 @@ export const RegisterBottomBar: React.FC<RegisterBottomBarProps> = ({
   canContinue,
   onContinue,
   continueText = 'Continuar',
+  blockedHint = 'Elige una opción para continuar',
   isLoading = false,
 }) => {
   return (
@@ -44,7 +46,7 @@ export const RegisterBottomBar: React.FC<RegisterBottomBarProps> = ({
           </GradientButton>
           {!canContinue && !isLoading && (
             <p aria-live="polite" className="text-[11px] text-slate-500">
-              Elige una opción para continuar
+              {blockedHint}
             </p>
           )}
         </div>
