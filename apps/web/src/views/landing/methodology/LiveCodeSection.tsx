@@ -15,7 +15,7 @@ export const LiveCodeSection: React.FC = () => {
           initial={reduceMotion ? false : { opacity: 0, scale: 0.9, y: 20 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ type: 'spring', stiffness: 90, damping: 14 }}
           className="lg:col-span-5 order-2 lg:order-1 flex flex-col items-start lg:items-start justify-center text-left space-y-2"
         >
           <AnimatedCounter

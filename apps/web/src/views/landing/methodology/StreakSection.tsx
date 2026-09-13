@@ -21,8 +21,8 @@ export const StreakSection: React.FC = () => {
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, x: -35 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          initial={reduceMotion ? false : { opacity: 0, x: -35, filter: 'blur(8px)' }}
+          whileInView={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="lg:col-span-7 space-y-5 text-left"

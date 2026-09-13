@@ -28,8 +28,8 @@ export const HintsSection: React.FC = () => {
     </div>
 
     <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 32, scale: 0.98 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      initial={reduceMotion ? false : { opacity: 0, y: 32, scale: 0.98, rotate: -1 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
       className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-6 relative"
