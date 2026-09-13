@@ -7,7 +7,7 @@ export const LiveCodeSection: React.FC = () => {
 
   return (
   <section id="codigo-real" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
-    <div aria-hidden="true" className="absolute top-1/2 left-4 lg:left-20 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+    <div aria-hidden="true" data-glow="-14" className="absolute top-1/2 left-4 lg:left-20 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">

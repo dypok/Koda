@@ -8,7 +8,7 @@ export const StreakSection: React.FC = () => {
 
   return (
   <section id="rachas" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
-    <div aria-hidden="true" className="absolute top-1/2 right-4 lg:right-20 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(234,88,12,0.12)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+    <div aria-hidden="true" data-glow="-10" className="absolute top-1/2 right-4 lg:right-20 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(234,88,12,0.12)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
     {/* Ascuas vivas de fuego flotantes (GPU Accelerated) */}
     <div aria-hidden="true" className="absolute right-8 lg:right-28 bottom-6 w-72 h-72 pointer-events-none overflow-hidden select-none">

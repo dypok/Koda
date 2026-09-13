@@ -12,7 +12,7 @@ export const LiveCodeComparisonSection: React.FC = () => {
       id="codigo-en-vivo"
       className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950"
     >
-      <div aria-hidden="true" className="absolute top-1/2 right-6 lg:right-24 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(234,88,12,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+      <div aria-hidden="true" data-glow="-12" className="absolute top-1/2 right-6 lg:right-24 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(234,88,12,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
