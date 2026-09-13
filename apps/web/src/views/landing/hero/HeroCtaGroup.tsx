@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { TransitionLink } from '@/components/ui/transition-link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ArrowRight, LogIn } from 'lucide-react';
 import { GradientButton } from '@/components/ui/gradient-button';
@@ -24,13 +25,13 @@ export const HeroCtaGroup: React.FC = () => {
         size="lg"
         className="w-full gap-2.5 px-8 py-4 text-base justify-center group"
       >
-        <Link href="/register" aria-label="Comenzar ahora gratis en Koda">
+        <TransitionLink href="/register" aria-label="Comenzar ahora gratis en Koda">
           {t.ctaPrimary}
           <ArrowRight
             aria-hidden="true"
             className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1.5"
           />
-        </Link>
+        </TransitionLink>
       </GradientButton>
       </Magnetic>
 

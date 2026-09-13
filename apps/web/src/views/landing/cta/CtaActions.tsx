@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+import { TransitionLink } from '@/components/ui/transition-link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { LogIn, Rocket } from 'lucide-react';
 import { GradientButton } from '@/components/ui/gradient-button';
@@ -22,10 +23,10 @@ export const CtaActions: React.FC = () => {
       size="lg"
       className="w-full px-8 py-3.5 text-base gap-2.5"
     >
-      <Link href="/register" aria-label="Comenzar ahora gratis en Koda">
+      <TransitionLink href="/register" aria-label="Comenzar ahora gratis en Koda">
         <Rocket aria-hidden="true" className="w-5 h-5" />
         Comenzar Ahora — Es Gratis
-      </Link>
+      </TransitionLink>
     </GradientButton>
     </Magnetic>
 
