@@ -4,12 +4,22 @@ import {
   IconBrandSwift, IconBrandKotlin, IconBrandPhp, IconBrandNodejs, IconBrandReact,
   IconBrandNextjs, IconBrandVue, IconBrandAngular, IconBrandSvelte, IconBrandTailwind,
   IconBrandFlutter, IconBrandDjango, IconBrandDocker, IconBrandMysql, IconBrandGit,
-  IconBrandGraphql, IconBrandMongodb, IconCoffee, IconPlant2, IconBolt, IconRocket,
-  IconTerminal2, IconCompass, IconPuzzle, IconFlame, IconTrophy
+  IconBrandGraphql, IconBrandMongodb, IconCoffee
 } from '@tabler/icons-react';
+import {
+  Sprout, Zap, Rocket, SquareTerminal, Compass, Puzzle, Coffee, Flame, Trophy,
+} from 'lucide-react';
 import {
   LanguageOption, ExperienceOption, StyleOption, GoalOption, TechCategory
 } from './register.model';
+
+/** Única fuente de verdad de disponibilidad (el badge se deriva de aquí). */
+export const AVAILABLE_IDS = ['python'] as const;
+
+export function techAvailability(id: string): { isAvailable: boolean; badge: string } {
+  const isAvailable = (AVAILABLE_IDS as readonly string[]).includes(id);
+  return { isAvailable, badge: isAvailable ? 'Disponible' : 'Próximamente' };
+}
 
 export const TECH_CATEGORIES: { id: TechCategory; label: string }[] = [
   { id: 'all', label: 'Todos' },
@@ -19,23 +29,23 @@ export const TECH_CATEGORIES: { id: TechCategory; label: string }[] = [
 ];
 
 export const EXPERIENCE_OPTIONS: ExperienceOption[] = [
-  { id: 'beginner', title: 'Empezando desde cero', description: 'Nunca he escrito código. Quiero aprender paso a paso desde los fundamentos.', color: '#4ADE80', icon: IconPlant2 },
-  { id: 'elementary', title: 'Conozco los fundamentos', description: 'Entiendo variables, bucles y lógica básica; quiero ir directo a la práctica.', color: '#FACC15', icon: IconBolt },
-  { id: 'intermediate', title: 'Nivel intermedio o avanzado', description: 'Tengo experiencia técnica previa y busco retos de algoritmos, POO y proyectos.', color: '#FB923C', icon: IconRocket },
+  { id: 'beginner', title: 'Empezando desde cero', description: 'Nunca he escrito código. Quiero aprender paso a paso desde los fundamentos.', color: '#4ADE80', icon: Sprout },
+  { id: 'elementary', title: 'Conozco los fundamentos', description: 'Entiendo variables, bucles y lógica básica; quiero ir directo a la práctica.', color: '#FACC15', icon: Zap },
+  { id: 'intermediate', title: 'Nivel intermedio o avanzado', description: 'Tengo experiencia técnica previa y busco retos de algoritmos, POO y proyectos.', color: '#FB923C', icon: Rocket },
 ];
 
 export const STYLE_OPTIONS: StyleOption[] = [
-  { id: 'hands-on', title: 'Práctica directa en terminal', description: 'Menos teoría extensa y más ejercicios interactivos de código desde el primer minuto.', color: '#38BDF8', icon: IconTerminal2 },
-  { id: 'guided', title: 'Paso a paso con explicaciones guiadas', description: 'Conceptos claros, analogías y fundamentos detallados antes de escribir cada bloque.', color: '#4ADE80', icon: IconCompass },
-  { id: 'projects', title: 'Basado en proyectos reales', description: 'Aprender creando herramientas útiles, scripts funcionales y mini-aplicaciones prácticas.', color: '#FB923C', icon: IconRocket },
-  { id: 'gamified', title: 'Desafíos de lógica y gamificación', description: 'Puzzles mentales rápidos, misiones diarias y resolución de problemas algorítmicos.', color: '#A855F7', icon: IconPuzzle },
+  { id: 'hands-on', title: 'Práctica directa en terminal', description: 'Menos teoría extensa y más ejercicios interactivos de código desde el primer minuto.', color: '#38BDF8', icon: SquareTerminal },
+  { id: 'guided', title: 'Paso a paso con explicaciones guiadas', description: 'Conceptos claros, analogías y fundamentos detallados antes de escribir cada bloque.', color: '#4ADE80', icon: Compass },
+  { id: 'projects', title: 'Basado en proyectos reales', description: 'Aprender creando herramientas útiles, scripts funcionales y mini-aplicaciones prácticas.', color: '#FB923C', icon: Rocket },
+  { id: 'gamified', title: 'Desafíos de lógica y gamificación', description: 'Puzzles mentales rápidos, misiones diarias y resolución de problemas algorítmicos.', color: '#A855F7', icon: Puzzle },
 ];
 
 export const GOAL_OPTIONS: GoalOption[] = [
-  { id: 'casual', title: 'Casual', timeText: '5 min / día', minutes: 5, description: 'Ideal para dar los primeros pasos y construir el hábito sin presión.', color: '#38BDF8', icon: IconCoffee },
-  { id: 'regular', title: 'Regular', timeText: '10 min / día', minutes: 10, description: 'El equilibrio óptimo entre avance constante y retención de conceptos.', color: '#F97316', icon: IconFlame, badge: 'Recomendado' },
-  { id: 'focused', title: 'Enfocado', timeText: '15 min / día', minutes: 15, description: 'Para quienes quieren progresar a paso firme y dominar proyectos pronto.', color: '#4ADE80', icon: IconRocket },
-  { id: 'intense', title: 'Intensivo', timeText: '20+ min / día', minutes: 20, description: 'Inmersión rápida para desarrolladores con alta dedicación.', color: '#A855F7', icon: IconTrophy },
+  { id: 'casual', title: 'Casual', timeText: '5 min / día', minutes: 5, description: 'Ideal para dar los primeros pasos y construir el hábito sin presión.', color: '#38BDF8', icon: Coffee },
+  { id: 'regular', title: 'Regular', timeText: '10 min / día', minutes: 10, description: 'El equilibrio óptimo entre avance constante y retención de conceptos.', color: '#F97316', icon: Flame, badge: 'Recomendado' },
+  { id: 'focused', title: 'Enfocado', timeText: '15 min / día', minutes: 15, description: 'Para quienes quieren progresar a paso firme y dominar proyectos pronto.', color: '#4ADE80', icon: Rocket },
+  { id: 'intense', title: 'Intensivo', timeText: '20+ min / día', minutes: 20, description: 'Inmersión rápida para desarrolladores con alta dedicación.', color: '#A855F7', icon: Trophy },
 ];
 
 export const AVAILABLE_LANGUAGES: LanguageOption[] = [
