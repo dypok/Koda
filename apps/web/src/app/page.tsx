@@ -20,6 +20,7 @@ import { CertificateSection } from '@/views/landing/conversion/CertificateSectio
 import { GiantMarquee } from '@/components/landing/GiantMarquee';
 import { WaveDivider } from '@/components/landing/WaveDivider';
 import { CinematicFinale } from '@/components/landing/CinematicFinale';
+import { Preloader } from '@/components/landing/Preloader';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function HomePage() {
@@ -51,6 +52,7 @@ export default function HomePage() {
   return (
     <LenisProvider>
       <ScrollProgress />
+      <Preloader />
       <div aria-hidden="true" className="koda-grain" />
       <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">
         <AnnouncementBar />
