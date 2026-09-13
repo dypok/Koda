@@ -12,7 +12,7 @@ interface RoadmapTopHudProps {
 }
 
 export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudProps) {
-  const { viewMode, returnToCourses, openCourseLessons, coursesDataset } = useRoadmapStore();
+  const { viewMode, triggerRetreatToCourses, openCourseLessons, coursesDataset } = useRoadmapStore();
   const activeCourseId =
     coursesDataset.nodes.find((n) => n.isUnlocked)?.targetCourseId ||
     coursesDataset.nodes[0]?.targetCourseId ||
@@ -48,7 +48,7 @@ export function RoadmapTopHud({ sectorTitle, progressPercent }: RoadmapTopHudPro
           <GradientButton
             variant="secondary"
             size="sm"
-            onClick={returnToCourses}
+            onClick={triggerRetreatToCourses}
             className="h-8 px-3 text-xs font-mono uppercase tracking-wider gap-1.5"
           >
             <IconArrowLeft className="w-3.5 h-3.5" />

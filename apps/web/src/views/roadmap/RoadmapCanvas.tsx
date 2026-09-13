@@ -18,12 +18,19 @@ interface RoadmapCanvasProps {
 }
 
 export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
-  const { openCourseLessons, setActiveNode, activeNodeId, viewMode } = useRoadmapStore();
+  const { openCourseLessons, setActiveNode, activeNodeId, viewMode, retreatTrigger } = useRoadmapStore();
   const { isDragging, hasMovedRecently, panOffset, zoomLevel, containerRef, containerProps } = useRoadmapPanZoom();
   const [inspectedNode, setInspectedNode] = React.useState<GraphNode | null>(null);
 
   const warpWrapperRef = React.useRef<HTMLDivElement | null>(null);
-  const { isWarping, flashOverlayRef, diveIntoCourse } = useRoadmapWarpTransition(warpWrapperRef);
+  const { isWarping, flashOverlayRef, diveIntoCourse, retreatToCourses } = useRoadmapWarpTransition(warpWrapperRef);
+
+  // Escuchar evento de retorno desde el HUD superior
+  React.useEffect(() => {
+    if (retreatTrigger > 0) {
+      retreatToCourses();
+    }
+  }, [retreatTrigger]);
 
   // Inicializar o sincronizar el nodo inspeccionado con el nodo activo por defecto
   React.useEffect(() => {

@@ -15,6 +15,8 @@ interface RoadmapStoreState {
   isLoading: boolean;
   coursesDataset: GraphDataset;
   lessonsDataset: GraphDataset;
+  retreatTrigger: number;
+  triggerRetreatToCourses: () => void;
   openCourseLessons: (courseId: string) => Promise<void>;
   returnToCourses: () => void;
   setActiveNode: (id: string | null) => void;
@@ -37,6 +39,8 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   isLoading: false,
   coursesDataset: FRONTEND_COURSES_DATASET,
   lessonsDataset: PYTHON_BASIC_LESSONS_DATASET,
+  retreatTrigger: 0,
+  triggerRetreatToCourses: () => set((s) => ({ retreatTrigger: s.retreatTrigger + 1 })),
   openCourseLessons: async (courseId) => {
     const courseNode = get().coursesDataset.nodes.find((n) => n.targetCourseId === courseId || n.id === courseId);
     if (courseNode && !courseNode.isUnlocked) return;
