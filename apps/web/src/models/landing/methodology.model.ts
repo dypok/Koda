@@ -5,7 +5,6 @@ export interface Pillar {
   id: string;
   title: string;
   subtitle: string;
-  blurb: string;
   icon: React.ElementType;
   badgeBorder: string;
   badgeText: string;
@@ -18,7 +17,6 @@ export const PILLARS: Pillar[] = [
     id: 'rachas',
     title: 'Rachas Diarias',
     subtitle: '15 min al día',
-    blurb: 'La constancia enciende tu racha y convierte 15 minutos diarios en un hábito que no se rompe.',
     icon: Flame,
     badgeBorder: 'border-orange-500/30',
     badgeText: 'text-orange-400',
@@ -29,7 +27,6 @@ export const PILLARS: Pillar[] = [
     id: 'roadmap',
     title: 'Roadmap Claro',
     subtitle: 'Paso a paso',
-    blurb: 'Siempre sabes qué sigue: una ruta secuencial de 12 módulos, sin perderte en tutoriales infinitos.',
     icon: Route,
     badgeBorder: 'border-amber-500/30',
     badgeText: 'text-amber-400',
@@ -40,7 +37,6 @@ export const PILLARS: Pillar[] = [
     id: 'codigo-real',
     title: 'Código Real',
     subtitle: 'Retención 4x',
-    blurb: 'Cada idea se practica al instante en tu navegador. Se aprende haciendo, no mirando videos.',
     icon: SquareTerminal,
     badgeBorder: 'border-orange-500/30',
     badgeText: 'text-orange-400',
@@ -51,7 +47,6 @@ export const PILLARS: Pillar[] = [
     id: 'pistas',
     title: 'Pistas Guiadas',
     subtitle: 'Sin spoilers',
-    blurb: 'Si fallas, Koda te orienta con preguntas guía hasta que la lógica hace clic. Nunca regala respuestas.',
     icon: Lightbulb,
     badgeBorder: 'border-amber-500/30',
     badgeText: 'text-amber-400',
