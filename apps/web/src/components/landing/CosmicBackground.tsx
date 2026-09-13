@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { generateCosmos, makeGlowSprite } from '@/models/landing/cosmic-field';
+import { generateCosmos } from '@/models/landing/cosmic-field';
 
 function deviceCount(): number {
   if (typeof window === 'undefined') return 1200;
@@ -40,18 +40,55 @@ export const CosmicBackground: React.FC = () => {
     const camera = new THREE.PerspectiveCamera(60, mount.clientWidth / mount.clientHeight, 0.1, 100);
     camera.position.z = 8;
 
-    const { positions, colors } = generateCosmos(deviceCount());
+    const { positions, colors, phases, sizes } = generateCosmos(deviceCount());
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-    const material = new THREE.PointsMaterial({
-      size: 0.09,
-      map: makeGlowSprite(),
-      vertexColors: true,
+    geometry.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1));
+    geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
+    const uniforms = {
+      uTime: { value: 0 },
+      uPixelRatio: { value: dprCap() },
+      uWarp: { value: 0 },
+      uIntensity: { value: 1 },
+    };
+    const material = new THREE.ShaderMaterial({
+      uniforms,
       transparent: true,
-      opacity: 0.9,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
+      vertexShader: /* glsl */ `
+        attribute vec3 color;
+        attribute float aPhase;
+        attribute float aSize;
+        uniform float uTime;
+        uniform float uPixelRatio;
+        uniform float uWarp;
+        varying vec3 vColor;
+        varying float vTwinkle;
+        void main() {
+          vColor = color;
+          float tw = 0.55 + 0.45 * sin(uTime * 1.6 + aPhase);
+          vTwinkle = tw;
+          vec4 mv = modelViewMatrix * vec4(position, 1.0);
+          // Warp: estira radialmente con la velocidad del scroll.
+          vec2 dir = normalize(position.xy + vec2(0.0001));
+          mv.xy += dir * uWarp * 0.35;
+          gl_PointSize = aSize * tw * uPixelRatio * (14.0 / -mv.z);
+          gl_Position = projectionMatrix * mv;
+        }
+      `,
+      fragmentShader: /* glsl */ `
+        varying vec3 vColor;
+        varying float vTwinkle;
+        uniform float uIntensity;
+        void main() {
+          vec2 uv = gl_PointCoord - vec2(0.5);
+          float d = length(uv);
+          float glow = smoothstep(0.5, 0.05, d);
+          gl_FragColor = vec4(vColor * vTwinkle * uIntensity, glow * vTwinkle * uIntensity);
+        }
+      `,
     });
     const points = new THREE.Points(geometry, material);
     scene.add(points);
@@ -83,6 +120,7 @@ export const CosmicBackground: React.FC = () => {
 
     const loop = () => {
       if (!running) return;
+      uniforms.uTime.value = performance.now() / 1000;
       points.rotation.y += 0.0006;
       renderer.render(scene, camera);
       raf = requestAnimationFrame(loop);
@@ -95,7 +133,6 @@ export const CosmicBackground: React.FC = () => {
       document.removeEventListener('visibilitychange', onVisibility);
       window.removeEventListener('resize', onResize);
       geometry.dispose();
-      material.map?.dispose();
       material.dispose();
       renderer.dispose();
       mount.removeChild(renderer.domElement);
