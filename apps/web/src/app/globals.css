@@ -35,7 +35,9 @@
   .animate-wander-2,
   .animate-wander-3,
   .animate-wander-4,
-  .animate-wander-5 {
+  .animate-wander-5,
+  [class*='emberRise'],
+  [class*='codeStream'] {
     animation: none !important;
   }
 }
