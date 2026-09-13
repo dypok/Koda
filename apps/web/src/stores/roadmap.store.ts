@@ -155,19 +155,84 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
 
     const willUnlock = !targetNode.isUnlocked;
 
-    const updatedNodes: GraphNode[] = dataset.nodes.map((n) => {
-      if (n.id === nodeId) {
-        if (willUnlock) {
-          // Desbloquear nodo
-          return {
-            ...n,
-            isUnlocked: true,
-            variant: (n.variant === 'locked' || n.variant === 'branch' ? 'unlocked' : n.variant) as NodeVariant,
-            iconType: n.iconType === 'lock' ? 'code' : n.iconType,
-            statusText: 'DISPONIBLE • DESBLOQUEADO',
-          };
+    if (willUnlock) {
+      // Buscar la conexión entrante hacia este nodo para animar el láser
+      const incomingConn = dataset.connections.find((c) => c.toId === nodeId);
+
+      if (incomingConn) {
+        // 1. Iniciar encendido del haz láser desde el predecesor
+        set({ animatingConnectionId: incomingConn.id });
+
+        // 2. Al llegar el láser al nodo (0.85s), activar rotura de candado y desbloquear
+        setTimeout(() => {
+          const currentDataset = isCourses ? get().coursesDataset : get().lessonsDataset;
+          set({ unlockingNodeId: nodeId });
+
+          const updatedNodes: GraphNode[] = currentDataset.nodes.map((n) => {
+            if (n.id === nodeId) {
+              return {
+                ...n,
+                isUnlocked: true,
+                variant: (n.variant === 'locked' || n.variant === 'branch' ? 'unlocked' : n.variant) as NodeVariant,
+                iconType: n.iconType === 'lock' ? 'code' : n.iconType,
+                statusText: 'DISPONIBLE • DESBLOQUEADO',
+              };
+            }
+            return n;
+          });
+
+          const updatedConnections = currentDataset.connections.map((c) => {
+            if (c.id === incomingConn.id) {
+              return { ...c, isDashed: false };
+            }
+            return c;
+          });
+
+          if (isCourses) {
+            const next = { ...currentDataset, nodes: updatedNodes, connections: updatedConnections };
+            set({ coursesDataset: next });
+            persistProgress(next);
+          } else {
+            set({ lessonsDataset: { ...currentDataset, nodes: updatedNodes, connections: updatedConnections } });
+          }
+
+          // 3. Limpiar banderas tras culminar el pulso de rotura
+          setTimeout(() => {
+            set({ animatingConnectionId: null, unlockingNodeId: null });
+          }, 1200);
+        }, 850);
+      } else {
+        // Desbloqueo directo para nodos raíz sin conexión previa
+        set({ unlockingNodeId: nodeId });
+        const updatedNodes: GraphNode[] = dataset.nodes.map((n) => {
+          if (n.id === nodeId) {
+            return {
+              ...n,
+              isUnlocked: true,
+              variant: (n.variant === 'locked' || n.variant === 'branch' ? 'unlocked' : n.variant) as NodeVariant,
+              iconType: n.iconType === 'lock' ? 'code' : n.iconType,
+              statusText: 'DISPONIBLE • DESBLOQUEADO',
+            };
+          }
+          return n;
+        });
+
+        if (isCourses) {
+          const next = { ...dataset, nodes: updatedNodes };
+          set({ coursesDataset: next });
+          persistProgress(next);
         } else {
-          // Bloquear nodo
+          set({ lessonsDataset: { ...dataset, nodes: updatedNodes } });
+        }
+
+        setTimeout(() => {
+          set({ unlockingNodeId: null });
+        }, 1200);
+      }
+    } else {
+      // Bloquear nodo manualmente: restablecer a estado restringido y desconectar haz
+      const updatedNodes: GraphNode[] = dataset.nodes.map((n) => {
+        if (n.id === nodeId) {
           return {
             ...n,
             isUnlocked: false,
@@ -176,24 +241,23 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
             statusText: 'BLOQUEADO • RESTRINGIDO',
           };
         }
-      }
-      return n;
-    });
-
-    if (isCourses) {
-      const next = {
-        ...dataset,
-        nodes: updatedNodes,
-      };
-      set({ coursesDataset: next });
-      persistProgress(next);
-    } else {
-      set({
-        lessonsDataset: {
-          ...dataset,
-          nodes: updatedNodes,
-        },
+        return n;
       });
+
+      const updatedConnections = dataset.connections.map((c) => {
+        if (c.fromId === nodeId || c.toId === nodeId) {
+          return { ...c, isDashed: true };
+        }
+        return c;
+      });
+
+      if (isCourses) {
+        const next = { ...dataset, nodes: updatedNodes, connections: updatedConnections };
+        set({ coursesDataset: next });
+        persistProgress(next);
+      } else {
+        set({ lessonsDataset: { ...dataset, nodes: updatedNodes, connections: updatedConnections } });
+      }
     }
   },
   unlockNodeWithCinematic: (nodeId: string) => {

@@ -115,6 +115,7 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
         onDeploy={handleDeploy}
       />
 
+
       {/* Quantum Warp Flash Overlay */}
       <div
         ref={flashOverlayRef}
@@ -147,6 +148,7 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
             connections={dataset.connections}
             animatingConnectionId={animatingConnectionId}
             highlightFromId={activeNodeId}
+            nodes={dataset.nodes}
           />
 
           {/* Interactive Graph Nodes */}

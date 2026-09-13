@@ -8,10 +8,17 @@ interface RoadmapSvgPathsProps {
   connections: GraphConnection[];
   animatingConnectionId?: string | null;
   highlightFromId?: string | null;
+  nodes?: { id: string; isUnlocked: boolean }[];
 }
 
-export function RoadmapSvgPaths({ connections, animatingConnectionId, highlightFromId }: RoadmapSvgPathsProps) {
+export function RoadmapSvgPaths({ connections, animatingConnectionId, highlightFromId, nodes }: RoadmapSvgPathsProps) {
   const laserBeamsRef = useRef<{ [key: string]: SVGPathElement | null }>({});
+
+  const nodeMap = React.useMemo(() => {
+    const map = new Map<string, boolean>();
+    nodes?.forEach((n) => map.set(n.id, n.isUnlocked));
+    return map;
+  }, [nodes]);
 
   // Animación cinemática de haz de energía cuando una conexión se enciende
   useEffect(() => {
@@ -60,46 +67,59 @@ export function RoadmapSvgPaths({ connections, animatingConnectionId, highlightF
       </defs>
 
       {connections.map((c) => {
+        const fromUnlocked = nodeMap.get(c.fromId) ?? false;
+        const toUnlocked = nodeMap.get(c.toId) ?? false;
+        const isRouteUnlocked = fromUnlocked && toUnlocked;
+        const isAnimating = animatingConnectionId === c.id;
+        const isGray = !isRouteUnlocked && !isAnimating;
+
         const isActivePath = highlightFromId != null && (c.fromId === highlightFromId || c.toId === highlightFromId);
-        const stroke = isActivePath && !c.isDashed ? '#F59E0B' : c.color;
+        const stroke = isGray ? '#334155' : (isActivePath && !c.isDashed ? '#F59E0B' : c.color);
+
         return (
-        <g key={c.id}>
-          {/* Subtle luminous ambient glow path */}
-          <path
-            d={c.path}
-            fill="none"
-            stroke={stroke}
-            strokeWidth={isActivePath ? 9 : 7}
-            strokeOpacity={isActivePath ? 0.3 : 0.2}
-            strokeLinecap="round"
-          />
-          {/* Core laser beam */}
-          <path
-            ref={(el) => {
-              laserBeamsRef.current[c.id] = el;
-            }}
-            d={c.path}
-            fill="none"
-            stroke={stroke}
-            strokeWidth="2.5"
-            strokeOpacity={c.isDashed ? '0.45' : '0.85'}
-            strokeLinecap="round"
-            strokeDasharray={c.isDashed ? '6 8' : undefined}
-            className={c.isDashed ? 'animate-laser-standby' : undefined}
-          />
-          {/* Forward-traveling energy photon packet: solo en ruta activa */}
-          <path
-            d={c.path}
-            fill="none"
-            stroke={c.isDashed ? c.color : '#FFFFFF'}
-            strokeWidth={c.isDashed ? '2' : '3'}
-            strokeOpacity={c.isDashed ? '0.75' : '0.95'}
-            strokeLinecap="round"
-            strokeDasharray="20 100"
-            className={c.isDashed ? undefined : 'animate-laser-flow'}
-            style={{ filter: `drop-shadow(0 0 6px ${stroke})` }}
-          />
-        </g>
+          <g key={c.id}>
+            {/* Ambient glow path: Solo si la ruta está desbloqueada o animando */}
+            {!isGray && (
+              <path
+                d={c.path}
+                fill="none"
+                stroke={stroke}
+                strokeWidth={isActivePath ? 9 : 6}
+                strokeOpacity={isActivePath ? 0.35 : 0.2}
+                strokeLinecap="round"
+              />
+            )}
+
+            {/* Core laser beam: Gris neutro en reposo si la ruta está bloqueada */}
+            <path
+              ref={(el) => {
+                laserBeamsRef.current[c.id] = el;
+              }}
+              d={c.path}
+              fill="none"
+              stroke={stroke}
+              strokeWidth={isGray ? '2' : '2.5'}
+              strokeOpacity={isGray ? '0.4' : (isAnimating ? '1' : '0.85')}
+              strokeLinecap="round"
+              strokeDasharray={isGray ? '5 7' : (c.isDashed && !isAnimating ? '6 8' : undefined)}
+              className={isGray ? undefined : (c.isDashed && !isAnimating ? 'animate-laser-standby' : undefined)}
+            />
+
+            {/* Forward-traveling energy photon packet: Solo en rutas desbloqueadas activas o animando */}
+            {!isGray && (
+              <path
+                d={c.path}
+                fill="none"
+                stroke={isAnimating ? '#38BDF8' : '#FFFFFF'}
+                strokeWidth="3"
+                strokeOpacity="0.95"
+                strokeLinecap="round"
+                strokeDasharray="20 100"
+                className="animate-laser-flow"
+                style={{ filter: `drop-shadow(0 0 6px ${stroke})` }}
+              />
+            )}
+          </g>
         );
       })}
     </g>
