@@ -110,6 +110,17 @@ export function RoadmapLegend() {
               />
             </div>
           </div>
+          {/* Ticks vivos: un punto por nodo del dataset */}
+          <div className="flex items-center gap-1" role="img" aria-label={`${completedOrUnlockedNodes} de ${totalNodes} nodos desbloqueados`}>
+            {dataset.nodes.map((n) => (
+              <span
+                key={n.id}
+                aria-hidden="true"
+                title={`${n.code}: ${n.isUnlocked ? 'desbloqueado' : 'bloqueado'}`}
+                className={`h-1.5 w-1.5 rounded-full transition-colors ${n.isUnlocked ? 'bg-cyan-300 shadow-[0_0_6px_rgba(34,211,238,0.8)]' : 'bg-slate-800'}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
