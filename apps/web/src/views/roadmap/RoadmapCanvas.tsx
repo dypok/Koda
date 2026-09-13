@@ -12,6 +12,7 @@ import { useRoadmapWarpTransition } from './useRoadmapWarpTransition';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { useRoadmapPanZoom } from './useRoadmapPanZoom';
 import { useRoadmapKeyboardNav } from './useRoadmapKeyboardNav';
+import { RoadmapProtocolModal } from './RoadmapProtocolModal';
 import gsap from 'gsap';
 
 interface RoadmapCanvasProps {
@@ -90,12 +91,16 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
     if (node) handleSelectNode(node);
   };
 
+  const [activeProtocolNode, setActiveProtocolNode] = React.useState<GraphNode | null>(null);
+
   const handleDeploy = (node: GraphNode) => {
     if (!node.isUnlocked || isWarping) return;
     if (viewMode === 'courses') {
       diveIntoCourse(node);
     } else if (node.targetCourseId) {
       openCourseLessons(node.targetCourseId);
+    } else {
+      setActiveProtocolNode(node);
     }
   };
 
@@ -125,6 +130,12 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
         onDeploy={handleDeploy}
       />
 
+      {/* Modal Táctico de Misión / Triada de Evaluación */}
+      <RoadmapProtocolModal
+        node={activeProtocolNode}
+        isOpen={Boolean(activeProtocolNode)}
+        onClose={() => setActiveProtocolNode(null)}
+      />
 
       {/* Quantum Warp Flash Overlay */}
       <div
