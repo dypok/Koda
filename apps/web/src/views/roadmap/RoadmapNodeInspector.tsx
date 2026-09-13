@@ -3,7 +3,7 @@
 import React from 'react';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { useRoadmapStore } from '@/stores/roadmap.store';
-import { IconBolt, IconLock, IconCheck, IconX, IconSparkles, IconCrosshair } from '@tabler/icons-react';
+import { IconBolt, IconLock, IconLockOpen, IconCheck, IconX, IconSparkles, IconCrosshair } from '@tabler/icons-react';
 import gsap from 'gsap';
 
 interface RoadmapNodeInspectorProps {
@@ -14,6 +14,7 @@ interface RoadmapNodeInspectorProps {
 
 export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeInspectorProps) {
   const cardRef = React.useRef<HTMLElement | null>(null);
+  const { toggleNodeLock } = useRoadmapStore();
 
   // Animación de entrada holográfica usando GSAP
   React.useEffect(() => {
@@ -151,8 +152,8 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
           </div>
         </div>
 
-        {/* Action Button */}
-        <div>
+        {/* Action & Override Buttons */}
+        <div className="space-y-2">
           {isUnlocked ? (
             <button
               onClick={() => onDeploy(node)}
@@ -170,6 +171,29 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
               [ ACCESO RESTRINGIDO POR EL SISTEMA ]
             </div>
           )}
+
+          {/* Botón táctico para bloquear o desbloquear manualmente el nodo */}
+          <button
+            onClick={() => toggleNodeLock(node.id)}
+            className={`w-full py-1.5 px-3 rounded text-[10px] font-mono uppercase font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all border ${
+              isUnlocked
+                ? 'bg-slate-900/60 hover:bg-rose-950/40 border-slate-700/60 hover:border-rose-500/50 text-slate-400 hover:text-rose-300'
+                : 'bg-cyan-950/40 hover:bg-cyan-900/50 border-cyan-500/40 text-cyan-300 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
+            }`}
+            title={isUnlocked ? 'Bloquear este módulo manualmente' : 'Desbloquear este módulo manualmente'}
+          >
+            {isUnlocked ? (
+              <>
+                <IconLock className="w-3 h-3 text-rose-400" />
+                <span>Bloquear Módulo</span>
+              </>
+            ) : (
+              <>
+                <IconLockOpen className="w-3 h-3 text-cyan-400" />
+                <span>Desbloquear Módulo</span>
+              </>
+            )}
+          </button>
         </div>
       </div>
     </aside>

@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GraphViewMode, GraphDataset } from '@/models/roadmap/roadmap-graph.types';
+import { GraphViewMode, GraphDataset, NodeVariant, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { PYTHON_BASIC_LESSONS_DATASET } from '@/models/roadmap/python-lessons-graph.mock';
 import { CareerBranchId, CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 import { FRONTEND_COURSES_DATASET } from '@/models/roadmap/tracks/frontend-track.mock';
@@ -20,6 +20,7 @@ interface RoadmapStoreState {
   animatingConnectionId: string | null;
   unlockingNodeId: string | null;
   simulateCompleteAndUnlockNext: () => void;
+  toggleNodeLock: (nodeId: string) => void;
   openCourseLessons: (courseId: string) => Promise<void>;
   returnToCourses: () => void;
   setActiveNode: (id: string | null) => void;
@@ -102,6 +103,56 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
         set({ animatingConnectionId: null, unlockingNodeId: null });
       }, 1200);
     }, 850);
+  },
+  toggleNodeLock: (nodeId: string) => {
+    const isCourses = get().viewMode === 'courses';
+    const dataset = isCourses ? get().coursesDataset : get().lessonsDataset;
+
+    const targetNode = dataset.nodes.find((n) => n.id === nodeId);
+    if (!targetNode) return;
+
+    const willUnlock = !targetNode.isUnlocked;
+
+    const updatedNodes: GraphNode[] = dataset.nodes.map((n) => {
+      if (n.id === nodeId) {
+        if (willUnlock) {
+          // Desbloquear nodo
+          return {
+            ...n,
+            isUnlocked: true,
+            variant: (n.variant === 'locked' || n.variant === 'branch' ? 'unlocked' : n.variant) as NodeVariant,
+            iconType: n.iconType === 'lock' ? 'code' : n.iconType,
+            statusText: 'DISPONIBLE • DESBLOQUEADO',
+          };
+        } else {
+          // Bloquear nodo
+          return {
+            ...n,
+            isUnlocked: false,
+            variant: n.variant === 'boss' ? 'boss' : ('locked' as const),
+            iconType: n.variant === 'boss' ? 'skull' : ('lock' as const),
+            statusText: 'BLOQUEADO • RESTRINGIDO',
+          };
+        }
+      }
+      return n;
+    });
+
+    if (isCourses) {
+      set({
+        coursesDataset: {
+          ...dataset,
+          nodes: updatedNodes,
+        },
+      });
+    } else {
+      set({
+        lessonsDataset: {
+          ...dataset,
+          nodes: updatedNodes,
+        },
+      });
+    }
   },
   openCourseLessons: async (courseId) => {
     const courseNode = get().coursesDataset.nodes.find((n) => n.targetCourseId === courseId || n.id === courseId);

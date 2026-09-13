@@ -40,16 +40,21 @@ export function RoadmapCanvas({ dataset }: RoadmapCanvasProps) {
     }
   }, [retreatTrigger]);
 
-  // Inicializar o sincronizar el nodo inspeccionado con el nodo activo por defecto
+  // Mantener sincronizado el nodo actualmente inspeccionado con el dataset (refleja cambios de bloqueo/desbloqueo al instante)
   React.useEffect(() => {
-    if (activeNodeId) {
+    if (inspectedNode) {
+      const refreshed = dataset.nodes.find((n) => n.id === inspectedNode.id);
+      if (refreshed && refreshed !== inspectedNode) {
+        setInspectedNode(refreshed);
+      }
+    } else if (activeNodeId) {
       const active = dataset.nodes.find((n) => n.id === activeNodeId);
       if (active) setInspectedNode(active);
     } else {
       const active = dataset.nodes.find((n) => n.variant === 'active') || dataset.nodes[0];
       if (active) setInspectedNode(active);
     }
-  }, [dataset, activeNodeId]);
+  }, [dataset, activeNodeId, inspectedNode]);
 
   const handleSelectNode = (node: GraphNode) => {
     if (hasMovedRecently() || isWarping) return;
