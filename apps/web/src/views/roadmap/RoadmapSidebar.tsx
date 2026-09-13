@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { RoadmapSidebarBranches } from './RoadmapSidebarBranches';
 import { RoadmapSidebarGoal } from './RoadmapSidebarGoal';
+import { RoadmapSidebarKoda } from './RoadmapSidebarKoda';
 import { RoadmapSidebarFooter } from './RoadmapSidebarFooter';
 
 export const RoadmapSidebar: React.FC = () => {
@@ -30,11 +31,14 @@ export const RoadmapSidebar: React.FC = () => {
 
       {/* Main Scrollable Telemetry Body */}
       <div className="flex-1 space-y-4 overflow-y-auto pr-1">
-        {/* Career Branches: Frontend, Backend, DevOps */}
+        {/* Career Branches: Frontend, Backend, DevOps, Python */}
         <RoadmapSidebarBranches />
 
         {/* Daily Study Habit Goal & Next Milestone */}
         <RoadmapSidebarGoal />
+
+        {/* Holographic Koda Pedagogical Console */}
+        <RoadmapSidebarKoda />
       </div>
 
       {/* Student Profile Footer */}
