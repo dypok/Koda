@@ -2,6 +2,7 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { Highlight } from '@/components/ui/highlight';
+import { PillarRail } from './PillarRail';
 import { Pillar } from '@/models/landing/methodology.model';
 import { cn } from '@/lib/utils';
 
@@ -15,6 +16,7 @@ export const MethodologyHub: React.FC<MethodologyHubProps> = ({ pillars, activeI
   const reduceMotion = useReducedMotion();
 
   return (
+  <>
   <section className="pt-24 pb-20 md:pt-32 md:pb-28 relative overflow-hidden border-t border-slate-800/80 bg-slate-950">
     <div aria-hidden="true" data-glow="10" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] h-[450px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
@@ -48,7 +50,7 @@ export const MethodologyHub: React.FC<MethodologyHubProps> = ({ pillars, activeI
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: '-30px' }}
         transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-        className="relative max-w-4xl mx-auto"
+        className="relative max-w-4xl mx-auto lg:hidden"
       >
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
           {pillars.map((pillar, index) => {
@@ -82,7 +84,7 @@ export const MethodologyHub: React.FC<MethodologyHubProps> = ({ pillars, activeI
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="flex flex-col items-center pt-4"
+        className="flex flex-col items-center pt-4 lg:hidden"
       >
         <button
           onClick={() => onScrollTo('rachas')}
@@ -95,5 +97,7 @@ export const MethodologyHub: React.FC<MethodologyHubProps> = ({ pillars, activeI
       </motion.div>
     </div>
   </section>
+  <PillarRail pillars={pillars} onScrollTo={onScrollTo} />
+  </>
   );
 };
