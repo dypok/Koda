@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
-  AVAILABLE_LANGUAGES, TECH_CATEGORIES, EXPERIENCE_OPTIONS, STYLE_OPTIONS, GOAL_OPTIONS
+  AVAILABLE_LANGUAGES, TECH_CATEGORIES, EXPERIENCE_OPTIONS, STYLE_OPTIONS, GOAL_OPTIONS, techAvailability
 } from '@/models/register/register.constants';
 import { TechCategory } from '@/models/register/register.model';
 
@@ -69,8 +69,7 @@ export function useRegisterStepperController() {
   );
 
   const selectLanguage = useCallback((id: string) => {
-    const chosen = AVAILABLE_LANGUAGES.find((lang) => lang.id === id);
-    if (chosen && chosen.isAvailable) {
+    if (techAvailability(id).isAvailable) {
       setSelectedLanguageId(id);
     }
   }, []);
