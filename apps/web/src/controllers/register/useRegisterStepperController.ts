@@ -1,18 +1,77 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import {
-  AVAILABLE_LANGUAGES, TECH_CATEGORIES, EXPERIENCE_OPTIONS, STYLE_OPTIONS, GOAL_OPTIONS
+  AVAILABLE_LANGUAGES, TECH_CATEGORIES, EXPERIENCE_OPTIONS, STYLE_OPTIONS, GOAL_OPTIONS, techAvailability
 } from '@/models/register/register.constants';
 import { TechCategory } from '@/models/register/register.model';
 
+const STORAGE_KEY = 'koda-register-progress';
+
+interface PersistedProgress {
+  currentStep: number;
+  selectedLanguageId: string;
+  selectedCategory: TechCategory;
+  selectedExperienceId: string | null;
+  selectedStyleId: string | null;
+  selectedGoalId: string | null;
+}
+
+function loadProgress(): Partial<PersistedProgress> {
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return {};
+    const parsed = JSON.parse(raw) as Partial<PersistedProgress>;
+    if (typeof parsed.currentStep !== 'number' || parsed.currentStep < 1 || parsed.currentStep > 5) {
+      return {};
+    }
+    return parsed;
+  } catch {
+    return {};
+  }
+}
+
 export function useRegisterStepperController() {
-  const [currentStep, setCurrentStep] = useState<number>(1);
-  const [selectedLanguageId, setSelectedLanguageId] = useState<string>('python');
-  const [selectedCategory, setSelectedCategory] = useState<TechCategory>('all');
-  const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>(null);
-  const [selectedStyleId, setSelectedStyleId] = useState<string | null>(null);
-  const [selectedGoalId, setSelectedGoalId] = useState<string | null>('regular');
+  const isExpress =
+    typeof window !== 'undefined' &&
+    new URLSearchParams(window.location.search).get('v') === 'express';
+  useEffect(() => {
+    // Puerta a A/B real: variante visible en consola hasta tener analytics.
+    // eslint-disable-next-line no-console
+    console.info('[analytics] register_variant', isExpress ? 'express' : 'full');
+  }, [isExpress]);
+  const [restored] = useState<PersistedProgress | null>(() =>
+    typeof window === 'undefined' ? null : (loadProgress() as PersistedProgress | null)
+  );
+  const [currentStep, setCurrentStep] = useState<number>(restored?.currentStep ?? 1);
+  const [selectedLanguageId, setSelectedLanguageId] = useState<string>(restored?.selectedLanguageId ?? 'python');
+  const [selectedCategory, setSelectedCategory] = useState<TechCategory>(restored?.selectedCategory ?? 'all');
+  const [selectedExperienceId, setSelectedExperienceId] = useState<string | null>(restored?.selectedExperienceId ?? null);
+  const [selectedStyleId, setSelectedStyleId] = useState<string | null>(restored?.selectedStyleId ?? null);
+  const [selectedGoalId, setSelectedGoalId] = useState<string | null>(restored?.selectedGoalId ?? 'regular');
+  // Express: defaults visibles en el resumen (pasos 2-4 colapsados).
+  const [expressDefaults] = useState(() => isExpress && !restored);
+  const effectiveExperienceId = selectedExperienceId ?? (expressDefaults ? 'beginner' : null);
+
+  useEffect(() => {
+    try {
+      const data: PersistedProgress = {
+        currentStep,
+        selectedLanguageId,
+        selectedCategory,
+        selectedExperienceId,
+        selectedStyleId,
+        selectedGoalId,
+      };
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch {
+      // sin almacenamiento, la sesión sigue funcionando
+    }
+    document.body.dataset.registerStep = String(currentStep);
+    return () => {
+      delete document.body.dataset.registerStep;
+    };
+  }, [currentStep, selectedLanguageId, selectedCategory, selectedExperienceId, selectedStyleId, selectedGoalId]);
 
   const filteredLanguages = useMemo(() => {
     if (selectedCategory === 'all') return AVAILABLE_LANGUAGES;
@@ -25,8 +84,7 @@ export function useRegisterStepperController() {
   );
 
   const selectLanguage = useCallback((id: string) => {
-    const chosen = AVAILABLE_LANGUAGES.find((lang) => lang.id === id);
-    if (chosen && chosen.isAvailable) {
+    if (techAvailability(id).isAvailable) {
       setSelectedLanguageId(id);
     }
   }, []);
@@ -53,16 +111,34 @@ export function useRegisterStepperController() {
 
   const nextStep = useCallback(() => {
     if (!canContinue) return;
-    setCurrentStep((prev) => Math.min(5, prev + 1));
-  }, [canContinue]);
+    setCurrentStep((prev) => (isExpress && prev === 1 ? 5 : Math.min(5, prev + 1)));
+  }, [canContinue, isExpress]);
 
   const prevStep = useCallback(() => {
-    setCurrentStep((prev) => Math.max(1, prev - 1));
-  }, []);
+    setCurrentStep((prev) => (isExpress && prev === 5 ? 1 : Math.max(1, prev - 1)));
+  }, [isExpress]);
+
+  // En express, goToStep recibe el número visible (1-3) y salta al real.
+  const goToStep = useCallback((step: number) => {
+    const real = isExpress ? (step >= 3 ? 5 : 1) : step;
+    setCurrentStep(Math.min(5, Math.max(1, Math.round(real))));
+  }, [isExpress]);
+
+  // Flechas del teclado para navegar (fuera de inputs).
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (target && ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName)) return;
+      if (e.key === 'ArrowRight') nextStep();
+      else if (e.key === 'ArrowLeft') prevStep();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [nextStep, prevStep]);
 
   const selectedExperience = useMemo(
-    () => EXPERIENCE_OPTIONS.find((e) => e.id === selectedExperienceId),
-    [selectedExperienceId]
+    () => EXPERIENCE_OPTIONS.find((e) => e.id === effectiveExperienceId),
+    [effectiveExperienceId]
   );
   const selectedGoal = useMemo(
     () => GOAL_OPTIONS.find((g) => g.id === selectedGoalId),
@@ -71,7 +147,9 @@ export function useRegisterStepperController() {
 
   return {
     currentStep,
-    totalSteps: 5,
+    displayStep: isExpress ? (currentStep === 5 ? 3 : 1) : currentStep,
+    totalSteps: isExpress ? 3 : 5,
+    isExpress,
     categories: TECH_CATEGORIES,
     selectedCategory,
     setSelectedCategory,
@@ -93,5 +171,6 @@ export function useRegisterStepperController() {
     selectGoal,
     nextStep,
     prevStep,
+    goToStep,
   };
 }

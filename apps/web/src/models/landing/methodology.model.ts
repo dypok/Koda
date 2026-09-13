@@ -1,5 +1,5 @@
 import React from 'react';
-import { IconFlame, IconRoute, IconTerminal2, IconBulb } from '@tabler/icons-react';
+import { Flame, Route, SquareTerminal, Lightbulb } from 'lucide-react';
 
 export interface Pillar {
   id: string;
@@ -17,7 +17,7 @@ export const PILLARS: Pillar[] = [
     id: 'rachas',
     title: 'Rachas Diarias',
     subtitle: '15 min al día',
-    icon: IconFlame,
+    icon: Flame,
     badgeBorder: 'border-orange-500/30',
     badgeText: 'text-orange-400',
     hoverBorder: 'group-hover:border-orange-400',
@@ -27,7 +27,7 @@ export const PILLARS: Pillar[] = [
     id: 'roadmap',
     title: 'Roadmap Claro',
     subtitle: 'Paso a paso',
-    icon: IconRoute,
+    icon: Route,
     badgeBorder: 'border-amber-500/30',
     badgeText: 'text-amber-400',
     hoverBorder: 'group-hover:border-amber-400',
@@ -37,7 +37,7 @@ export const PILLARS: Pillar[] = [
     id: 'codigo-real',
     title: 'Código Real',
     subtitle: 'Retención 4x',
-    icon: IconTerminal2,
+    icon: SquareTerminal,
     badgeBorder: 'border-orange-500/30',
     badgeText: 'text-orange-400',
     hoverBorder: 'group-hover:border-orange-400',
@@ -47,7 +47,7 @@ export const PILLARS: Pillar[] = [
     id: 'pistas',
     title: 'Pistas Guiadas',
     subtitle: 'Sin spoilers',
-    icon: IconBulb,
+    icon: Lightbulb,
     badgeBorder: 'border-amber-500/30',
     badgeText: 'text-amber-400',
     hoverBorder: 'group-hover:border-amber-400',
