@@ -9,6 +9,7 @@ import { MethodologySection } from '@/components/landing/MethodologySection';
 import { CtaSection } from '@/components/landing/CtaSection';
 import { Footer } from '@/components/landing/Footer';
 import { StudentRoadmapView } from '@/views/roadmap/StudentRoadmapView';
+import { LenisProvider } from '@/components/landing/LenisProvider';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function HomePage() {
@@ -38,15 +39,17 @@ export default function HomePage() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">
-      <Navbar />
-      <main className="flex-1">
-        <HeroSection />
-        <InteractivePreview />
-        <MethodologySection />
-        <CtaSection />
-      </main>
-      <Footer />
-    </div>
+    <LenisProvider>
+      <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">
+        <Navbar />
+        <main className="flex-1">
+          <HeroSection />
+          <InteractivePreview />
+          <MethodologySection />
+          <CtaSection />
+        </main>
+        <Footer />
+      </div>
+    </LenisProvider>
   );
 }
