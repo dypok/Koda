@@ -59,17 +59,29 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
       <ProfileSocialAuth disabled={profile.isSubmitting} />
 
       {/* Direct Registration Form Fields */}
-      <ProfileFormFields
-        fullName={profile.form.fullName}
-        email={profile.form.email}
-        password={profile.form.password}
-        showPassword={profile.showPassword}
-        onFullNameChange={profile.setFullName}
-        onEmailChange={profile.setEmail}
-        onPasswordChange={profile.setPassword}
-        onToggleShowPassword={profile.toggleShowPassword}
-        disabled={profile.isSubmitting}
-      />
+      <form
+        className="w-full"
+        noValidate
+        onSubmit={(e) => {
+          e.preventDefault();
+          profile.submit();
+        }}
+      >
+        <ProfileFormFields
+          fullName={profile.form.fullName}
+          email={profile.form.email}
+          password={profile.form.password}
+          showPassword={profile.showPassword}
+          errors={profile.errors}
+          passwordStrength={profile.passwordStrength}
+          onFullNameChange={profile.setFullName}
+          onEmailChange={profile.setEmail}
+          onPasswordChange={profile.setPassword}
+          onToggleShowPassword={profile.toggleShowPassword}
+          onBlurField={profile.touch}
+          disabled={profile.isSubmitting}
+        />
+      </form>
     </div>
   );
 };
