@@ -15,6 +15,7 @@ import { AnnouncementBar } from '@/components/landing/AnnouncementBar';
 import { StickyMobileCta } from '@/components/landing/StickyMobileCta';
 import { ExitIntentModal } from '@/components/landing/ExitIntentModal';
 import { TestimonialsSection } from '@/views/landing/conversion/TestimonialsSection';
+import { WorldMap } from '@/views/landing/conversion/WorldMap';
 import { PricingSection } from '@/views/landing/conversion/PricingSection';
 import { CertificateSection } from '@/views/landing/conversion/CertificateSection';
 import { GiantMarquee } from '@/components/landing/GiantMarquee';
@@ -66,6 +67,7 @@ export default function HomePage() {
           <MethodologySection />
           <WaveDivider />
           <TestimonialsSection />
+          <WorldMap />
           <PricingSection />
           <CertificateSection />
           <CtaSection />
