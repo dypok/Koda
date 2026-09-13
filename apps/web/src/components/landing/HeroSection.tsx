@@ -7,11 +7,13 @@ import { UpcomingTechCarousel } from './UpcomingTechCarousel';
 import { HeroCtaGroup } from '@/views/landing/hero/HeroCtaGroup';
 import { HeroMascot } from '@/views/landing/hero/HeroMascot';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
+import { useHeroStrings } from '@/lib/i18n';
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 export const HeroSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
+  const t = useHeroStrings();
   const sectionRef = useRef<HTMLElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
   const mascotRef = useRef<HTMLDivElement>(null);
@@ -58,7 +60,7 @@ export const HeroSection: React.FC = () => {
               className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3.5 py-1.5 text-xs sm:text-sm font-semibold text-amber-200"
             >
               <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-amber-400" />
-              Micro-lecciones de Python 3.12 · 40–70 palabras
+              {t.eyebrow}
             </motion.p>
             <motion.h1
               id="koda-hero-title"
@@ -68,11 +70,11 @@ export const HeroSection: React.FC = () => {
               transition={{ duration: 0.85, ease: [...EASE] }}
               className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.12] transform-gpu"
             >
-              Aprende a programar{' '}
+              {t.titleA}{' '}
               <span className="text-amber-400 underline decoration-amber-400/40 decoration-4 underline-offset-8">
-                como juegas
+                {t.titleAccent}
               </span>
-              . Cero frustración.
+              {t.titleB}
             </motion.h1>
 
             <motion.p
@@ -82,9 +84,7 @@ export const HeroSection: React.FC = () => {
               transition={{ duration: 0.75, delay: 0.08, ease: [...EASE] }}
               className="max-w-xl text-slate-300 text-base sm:text-lg leading-relaxed"
             >
-              Tú lees una idea corta, la ves en código real y la practicas al
-              instante. Si fallas, recibes una pista sin spoilers y la repasas
-              al final. Así avanzas por 12 módulos sin muros de texto.
+              {t.sub}
             </motion.p>
 
             <HeroCtaGroup />

@@ -16,6 +16,7 @@ import { StickyMobileCta } from '@/components/landing/StickyMobileCta';
 import { ExitIntentModal } from '@/components/landing/ExitIntentModal';
 import { TestimonialsSection } from '@/views/landing/conversion/TestimonialsSection';
 import { PricingSection } from '@/views/landing/conversion/PricingSection';
+import { CertificateSection } from '@/views/landing/conversion/CertificateSection';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function HomePage() {
@@ -56,6 +57,7 @@ export default function HomePage() {
           <MethodologySection />
           <TestimonialsSection />
           <PricingSection />
+          <CertificateSection />
           <CtaSection />
         </main>
         <Footer />
