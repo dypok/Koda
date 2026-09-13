@@ -3,6 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
+import { WeatherLayer } from '@/components/landing/WeatherLayer';
 import { RegisterHeaderBar } from '@/views/register/RegisterHeaderBar';
 import { LanguageSelectionStep } from '@/views/register/LanguageSelectionStep';
 import { ExperienceStep } from '@/views/register/ExperienceStep';
@@ -31,7 +32,8 @@ export default function RegisterPage() {
 
   return (
     <div className="relative isolate min-h-screen bg-transparent text-slate-100 flex flex-col justify-between selection:bg-amber-500/30 selection:text-amber-200">
-      <HeroSkyBackground starCount={160} interactive={true} className="fixed inset-0 pointer-events-none -z-10" />
+      <HeroSkyBackground starCount={140 + stepper.currentStep * 12} interactive={true} className="fixed inset-0 pointer-events-none -z-10" />
+      <WeatherLayer type={stepper.currentStep >= 4 ? 'fireflies' : 'embers'} count={10} />
 
       <RegisterHeaderBar
         currentStepIndex={stepper.currentStep}
