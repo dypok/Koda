@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { LanguageSelector } from './LanguageSelector';
+import { WipeButton } from '@/components/ui/wipe-button';
 import { cn } from '@/lib/utils';
 
 export const Navbar: React.FC = () => {
@@ -63,12 +64,13 @@ export const Navbar: React.FC = () => {
 
         {/* Right: CTA + Selector de idioma desplegable */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <Link
+          <WipeButton
             href="/register"
-            className="hidden sm:inline-flex min-h-[44px] items-center rounded-xl bg-amber-400 px-4 py-2 text-sm font-bold text-slate-950 transition-all hover:bg-amber-300 hover:scale-[1.02] active:scale-[0.98]"
+            size="sm"
+            className="hidden sm:inline-flex px-4 font-bold"
           >
             Comenzar gratis
-          </Link>
+          </WipeButton>
           <LanguageSelector />
         </div>
       </div>

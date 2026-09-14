@@ -1,10 +1,10 @@
 'use client';
 
 import React from 'react';
-import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Check } from '@phosphor-icons/react';
 import { Highlight } from '@/components/ui/highlight';
+import { WipeButton } from '@/components/ui/wipe-button';
 import { KodaPeek } from '@/components/landing/KodaPeek';
 import { cn } from '@/lib/utils';
 
@@ -64,12 +64,13 @@ export const PricingSection: React.FC = () => {
                 </li>
               ))}
             </ul>
-            <Link
+            <WipeButton
               href="/register"
-              className="flex min-h-[48px] items-center justify-center rounded-xl border border-slate-700 px-4 py-2.5 text-sm font-bold text-white transition-all hover:border-amber-400/50 hover:text-amber-300"
+              tone="ghost"
+              className="flex min-h-[48px] w-full"
             >
               Empezar gratis
-            </Link>
+            </WipeButton>
           </motion.div>
 
           <motion.div
@@ -101,12 +102,12 @@ export const PricingSection: React.FC = () => {
                 </li>
               ))}
             </ul>
-            <Link
+            <WipeButton
               href="/register"
-              className="flex min-h-[48px] items-center justify-center rounded-xl bg-amber-400 px-4 py-2.5 text-sm font-bold text-slate-950 transition-all hover:bg-amber-300"
+              className="flex min-h-[48px] w-full"
             >
               Probar premium
-            </Link>
+            </WipeButton>
           </motion.div>
         </div>
       </div>

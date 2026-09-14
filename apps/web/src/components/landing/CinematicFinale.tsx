@@ -6,8 +6,8 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { TransitionLink } from '@/components/ui/transition-link';
 import { Magnetic } from '@/components/ui/magnetic';
 import { SplitText } from '@/components/ui/split-text';
+import { WipeButton } from '@/components/ui/wipe-button';
 import { ArrowRight, Check, SignIn } from '@phosphor-icons/react';
-import Link from 'next/link';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 
 /** Cierre de película: negro total, frase letra por letra, Koda y un solo CTA. */
@@ -85,17 +85,16 @@ export const CinematicFinale: React.FC = () => {
           className="flex justify-center pt-2"
         >
           <Magnetic className="w-full sm:w-auto">
-            <TransitionLink
+            <WipeButton
               href="/register"
-              aria-label="Empezar mi racha gratis en Koda"
-              className="group relative inline-flex min-h-[64px] w-full sm:w-auto items-center justify-center gap-3 rounded-2xl bg-amber-400 px-10 py-4 text-lg font-black text-slate-950 transition-all hover:bg-amber-300"
+              LinkComponent={TransitionLink}
+              ariaLabel="Empezar mi racha gratis en Koda"
+              size="lg"
+              className="w-full sm:w-auto px-10 py-4 text-lg font-black gap-3"
             >
-              {!reduceMotion && (
-                <span aria-hidden="true" className="absolute inset-0 rounded-2xl border-2 border-amber-300 animate-ping [animation-duration:2s] opacity-30" />
-              )}
               Empezar mi racha
               <ArrowRight aria-hidden="true" className="w-6 h-6 transition-transform duration-300 group-hover:translate-x-1.5" />
-            </TransitionLink>
+            </WipeButton>
           </Magnetic>
         </motion.div>
 
@@ -106,13 +105,16 @@ export const CinematicFinale: React.FC = () => {
           transition={{ duration: 0.6, delay: 0.7 }}
           className="flex flex-col items-center gap-4 pt-2"
         >
-          <Link
+          <WipeButton
             href="/login"
-            className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-700 px-5 text-sm font-bold text-slate-200 transition-all hover:border-amber-400/50 hover:text-amber-300"
+            LinkComponent={TransitionLink}
+            tone="ghost"
+            size="sm"
+            className="px-5 gap-2"
           >
             <SignIn aria-hidden="true" className="w-4 h-4 text-amber-400" />
             Ya tengo una cuenta
-          </Link>
+          </WipeButton>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-500 font-medium">
             {['100% Gratuito', 'Sin tarjeta ni suscripción', 'Práctica en navegador'].map((t) => (
               <span key={t} className="flex items-center gap-1.5">
