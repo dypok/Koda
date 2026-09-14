@@ -48,14 +48,14 @@
   4. **Python Track (MVP Insignia):** 12 Módulos canónicos desde Fundamentos hasta Proyecto Integrador.
 - Selector dinámico de carreras en el Asidebar (`RoadmapSidebarBranches.tsx`) conectado reactivamente a Zustand (`roadmap.store.ts`).
 - Nodo terminal **Apex Master Gate**: diseño imponente con perímetro de advertencia y pulsación en contrafase, desbloqueable únicamente al completar el 100% de los cursos previos de la rama.
-- Consulta de la estructura de cursos desde MongoDB (`ADR-009`) mediante endpoint `GET /api/v1/content/tracks/:trackSlug`.
+- Consulta de la estructura de cursos y grafo DAG desde MongoDB (`ADR-009`) mediante la consulta **GraphQL (`Query roadmapGraph(branch: CareerBranch!)`)** con entrega de nodos, edges y prerrequisitos en un solo viaje de red (`ADR-012`).
 
 **Subtasks:**
 - [x] [FRONTEND] Crear datasets curriculares mock (`frontend-track.mock.ts`, `backend-track.mock.ts`, `devops-track.mock.ts`, `python-courses-graph.mock.ts`).
 - [x] [FRONTEND] Implementar conmutador de ramas en `RoadmapSidebarBranches.tsx` y sincronizar con `roadmap.store.ts`.
 - [x] [FRONTEND] Diseñar nodo visual terminal `Apex Master Gate` con estilos de alta jerarquía y compuerta final.
-- [ ] [BACKEND] Modelo Mongoose `TrackSchema` y `CourseSchema` en NestJS `ContentModule` para servir el árbol DAG desde MongoDB.
-- [ ] [BACKEND] Endpoint `GET /api/v1/content/tracks/:slug` con resolución de dependencias DAG.
+- [ ] [BACKEND] Definir puerto `ICourseRepository` en capa de dominio y adaptador `MongoCourseRepository` en infraestructura (`ADR-010`).
+- [ ] [BACKEND] Resolver GraphQL `LearningResolver` con `Query roadmapGraph(branch)` y DataLoader para resolver dependencias DAG sin N+1 (`ADR-012`).
 
 ---
 

@@ -70,9 +70,10 @@
 > para aprender del error mediante una pista que estimule mi razonamiento en lugar de darme la respuesta servida."
 
 **Criterios de aceptación:**
-- Endpoint `POST /api/v1/learning/lessons/:id/answer`:
-  - Recibe `{ selected_option_ids: string[], time_spent_seconds: number }`.
-  - Evalúa la respuesta de forma determinista contra el contenido oficial de Python 3.12.
+- **Mutación GraphQL (`Mutation submitLessonAnswer(input: SubmitLessonAnswerInput!)`)** (`ADR-012`):
+  - Recibe `{ lesson_id: ID!, selected_option_ids: [ID!]!, time_spent_seconds: Int! }`.
+  - Evalúa la respuesta de forma determinista contra el contenido oficial de Python 3.12 y responde en **$p95 < 50\text{ ms}$** (`RNF-010`).
+  - Despacha de forma asíncrona no bloqueante el evento de dominio `lesson.completed` hacia el bus persistente en BullMQ (`ADR-010`, `ADR-011`) para procesar rachas y XP sin retrasar la respuesta al estudiante.
   - Si es **Correcta**:
     - Retorna `is_correct: true`, `xp_earned: 5`, mensaje de refuerzo conceptual y explicación del porqué es correcta.
     - Banner verde inferior en la UI con sonido amigable y Koda celebrando 🦊.
@@ -82,8 +83,9 @@
     - Banner ámbar/rosa inferior invitando a releer la pista.
 
 **Subtasks:**
-- [ ] [BACKEND] Servicio `LearningService.evaluateAnswer()` con reglas de puntuación deterministas.
-- [ ] [BACKEND] Persistencia inmediata del intento en `user_attempts` y `attempt_answers` en Supabase.
+- [ ] [BACKEND] Caso de uso `SubmitLessonUseCase` en `application/` y Resolver GraphQL `LearningResolver.submitLessonAnswer()` en `infrastructure/` (`ADR-012`).
+- [ ] [BACKEND] Emisión asíncrona del evento de dominio `LessonCompletedEvent` con BullMQ (`ADR-010`, `ADR-011`).
+- [ ] [BACKEND] Persistencia atómica del intento mediante el puerto `IProgressRepository` en Supabase PostgreSQL.
 - [ ] [FRONTEND] Componente `FeedbackBanner.tsx` con estados visuales diferenciados (éxito, error, pista).
 - [ ] [FRONTEND] Conectar reacción emocional de la mascota Koda (estado `happy` o `encouraging`).
 - [ ] [FRONTEND] Actualizar barra de XP en el header global de Zustand al acertar.

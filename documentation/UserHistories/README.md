@@ -21,6 +21,9 @@ Todas las historias de usuario de este backlog se fundamentan en las decisiones 
 - **ADR-007:** Arquitectura de Grafo DAG por Ramas de Carrera (*Frontend, Backend, DevOps, Python*), Paneo/Zoom a 120 FPS y Prerrequisitos `RQ`.
 - **ADR-008:** Adopción Definitiva de NestJS como Motor de Backend.
 - **ADR-009:** Persistencia Híbrida Políglota (MongoDB Contenido + Supabase Transacciones).
+- **ADR-010:** Arquitectura Backend Hexagonal Modular con Comunicación Basada en Eventos de Dominio y Patrón Cache-Aside.
+- **ADR-011:** Refinamiento de Arquitectura Backend (BullMQ para Eventos Persistentes, Caché Versionada y Contratos DAG).
+- **ADR-012:** Adopción de Arquitectura Híbrida GraphQL y REST en Backend NestJS.
 
 ---
 
@@ -51,7 +54,9 @@ Antes de mover cualquier Story a **"Done"** en el tablero de Jira, se deben cump
 - [ ] Los criterios de aceptación de la US están cumplidos al 100% y verificados manualmente por el desarrollador y/o QA.
 - [ ] La suite de tipos compila sin errores (`pnpm --filter "@koda/types" build` exitoso).
 - [ ] No hay advertencias críticas ni errores en la consola del navegador (`F12`) ni en los logs del servidor NestJS (`apps/api`).
-- [ ] El backend compila con `nest build` y todos los endpoints nuevos están tipados y documentados en Swagger (`/api/docs`).
+- [ ] El backend compila con `nest build`: los endpoints REST están documentados en Swagger (`/api/docs`), y el esquema GraphQL (`/graphql`) compila sin errores tipado con Code Generator.
+- [ ] Las mutaciones y endpoints de evaluación responden con latencia $p95 < 50\text{ ms}$ delegando efectos secundarios a eventos de dominio o colas BullMQ (`RNF-010`, `ADR-010`).
+- [ ] Las consultas con relaciones anidadas en GraphQL implementan DataLoaders para neutralizar el problema N+1.
 - [ ] El frontend compila con `next build` generando las páginas estáticas o dinámicas sin fallas de hidratación.
 - [ ] Los componentes visuales respetan la paleta oficial (Dark Navy `#0B0F19`, Slate, Violeta, Acento Dorado/Naranja Koda 🦊) y son responsivos (Mobile, Tablet, Desktop).
 - [ ] Las variables de entorno sensibles están documentadas en `.env.example` y los archivos `.env` reales **nunca** se suben a Git.

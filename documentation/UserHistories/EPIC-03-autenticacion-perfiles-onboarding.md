@@ -75,14 +75,15 @@
 > para personalizar mi experiencia y asegurar que mis futuros diplomas salgan con mi nombre oficial correcto."
 
 **Criterios de aceptación:**
-- Endpoint `GET /api/v1/users/me` entrega: nombre, email, avatar, fecha de registro, XP total, nivel actual, racha y documento enmascarado (`CC ***678`).
-- Endpoint `PATCH /api/v1/users/me` permite modificar: `full_name`, `avatar_id`, `theme_preference` y `document_number` (cifrado simétrico en BD `19` §14).
-- Selector de avatares oficiales con expresiones de Koda 🦊 (Koda Clásico, Koda Detective, Koda Astronauta, Koda Hacker).
+- Consulta de perfil optimizada vía **GraphQL (`Query userProfile` / `Query me`)**: entrega nombre, email, avatar, fecha de registro, XP total, nivel actual, racha, estadísticas de lecciones y documento enmascarado (`CC ***678`) en una sola petición sin over-fetching (`ADR-012`).
+- Endpoint REST `PATCH /api/v1/users/me` permite modificar: `full_name`, `avatar_id`, `theme_preference` y `document_number` (cifrado simétrico en BD `19` §14).
+- Selector de avatares oficiales con expresiones de Koda 🦊 (Koda Clásico, Koda Detective, Koda Astronauta, Koda Hacker) con carga binaria mediante `POST /api/v1/uploads/avatar`.
 - Visualización de estadísticas del estudiante: lecciones completadas, porcentaje de maestría en Python 3.12, certificados obtenidos.
 
 **Subtasks:**
 - [ ] [BD] Verificar tabla `user_profiles` en Supabase con función `pgp_sym_encrypt` para número de identificación legal.
-- [ ] [BACKEND] Controlador `UsersController` con endpoints de lectura y actualización parcial de perfil.
+- [ ] [BACKEND] Resolver GraphQL `UserResolver` (`Query userProfile`) para entrega granular y eficiente de estadísticas.
+- [ ] [BACKEND] Controlador REST `UsersController` (`PATCH /api/v1/users/me` y subida de avatares).
 - [ ] [FRONTEND] Pantalla `apps/web/src/app/perfil/page.tsx` con grid de estadísticas, badge de nivel y selector de avatares.
 - [ ] [FRONTEND] Formulario de edición con validación de nombre y cédula/pasaporte.
 - [ ] [FRONTEND] Toast interactivo de confirmación al actualizar datos.

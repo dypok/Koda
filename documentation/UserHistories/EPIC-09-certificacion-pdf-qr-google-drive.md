@@ -24,7 +24,8 @@
 
 **Subtasks:**
 - [ ] [BD] Tabla `certificates` y tabla de secuencias `certificate_sequences` con constraint UNIQUE por `(user_id, language_id)`.
-- [ ] [BACKEND] Servicio `CertificationService.issueCertificate(userId, languageSlug)` con transacción atómica.
+- [ ] [BACKEND] Disparo asíncrono de emisión ante evento de dominio `course.completed` mediante worker BullMQ `GenerateCertificateWorker` (`ADR-010`, `ADR-011`).
+- [ ] [BACKEND] Servicio `CertificationService.issueCertificate(userId, languageSlug)` con transacción atómica en Supabase.
 - [ ] [BACKEND] Generar enlace canónico de verificación: `https://koda.app/verificar/KODA-PY-{SEQ}`.
 - [ ] [TEST] Test de concurrencia validando que dos solicitudes simultáneas de emisión nunca generen el mismo correlativo.
 
@@ -42,7 +43,8 @@
 > con sello digital, código QR escaneable y formato institucional para incluir en mi portafolio o imprimirlo."
 
 **Criterios de aceptación:**
-- Generación 100% en backend (Node.js con PDFKit / Canvas vectorial) para garantizar seguridad y evitar manipulación en cliente (`ADR-003`).
+- Generación asíncrona 100% en backend (Node.js con PDFKit / Canvas vectorial) para garantizar seguridad y evitar manipulación en cliente (`ADR-003`).
+- Descarga física del binario mediante el **endpoint REST `GET /api/v1/certificates/:id/pdf`** con streaming de buffer y headers `Content-Disposition: attachment` (`ADR-012`).
 - Elementos del documento PDF (formato A4 Horizontal / Landscape):
   - Marco ornamental institucional con gradiente dorado/índigo y sello de Koda 🦊 en relieve.
   - Título formal: *"Certificado de Competencia Profesional en Programación"*.
@@ -57,7 +59,8 @@
 **Subtasks:**
 - [ ] [BACKEND] Implementar servicio `PdfGeneratorService` con PDFKit y utilidades de renderizado vectorial.
 - [ ] [BACKEND] Generador de QR dinámico con biblioteca `qrcode` en buffer binario.
-- [ ] [BACKEND] Calcular digest SHA-256 del buffer PDF antes de su almacenamiento.
+- [ ] [BACKEND] Controlador REST `CertificatesController` para streaming de descarga `GET /api/v1/certificates/:id/pdf` (`ADR-012`).
+- [ ] [BACKEND] Calcular digest SHA-256 del buffer PDF antes de su almacenamiento en Google Drive.
 - [ ] [TEST] Verificar legibilidad del QR con escáner móvil físico a 30 cm de distancia.
 
 **DoD adicional para esta US:**

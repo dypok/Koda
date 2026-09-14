@@ -29,7 +29,8 @@
 
 **Subtasks:**
 - [ ] [BD] Tabla `xp_transactions` con trigger que actualice `users.total_xp` y `users.level`.
-- [ ] [BACKEND] Servicio `GamificationService.awardXp()` con validación anti-farming e idempotencia por request.
+- [ ] [BACKEND] Listener de eventos de dominio `GamificationListener` (`@OnEvent('lesson.completed')` / BullMQ Consumer) que acredita XP y recalcula niveles de forma asíncrona sin bloquear la respuesta de lección (`ADR-010`, `ADR-011`).
+- [ ] [BACKEND] Resolver GraphQL `GamificationResolver` con `Query studentDashboard` para agregar nivel, XP, racha y estado de curso en una sola llamada (`ADR-012`).
 - [ ] [FRONTEND] Barra de nivel animada en el Header global con porcentaje de avance hacia el siguiente nivel.
 - [ ] [FRONTEND] Modal interactivo de subida de nivel con sonido triunfal y tarjeta compartible.
 
@@ -57,7 +58,8 @@
 
 **Subtasks:**
 - [ ] [BD] Tabla `user_streaks` con `current_streak`, `max_streak`, `freeze_count`, `last_activity_date`.
-- [ ] [BACKEND] Cron job diario o trigger al inicio del día que evalúe y aplique consumos de freeze o reinicio de rachas.
+- [ ] [BACKEND] Listener `StreakListener` que reacciona asíncronamente a `lesson.completed` para marcar la racha del día sin impacto en la latencia de la lección (`ADR-010`).
+- [ ] [BACKEND] Worker BullMQ programado para evaluar consumos de freeze al cierre de la ventana de gracia (`ADR-011`).
 - [ ] [FRONTEND] Widget de racha en el Header con tooltip explicativo del estado del día y protectores restantes.
 - [ ] [FRONTEND] Modal de rescate de racha si se consumió un Freeze: *"¡Tu protector de racha te ha salvado ayer! Continúa hoy para mantener el fuego encendido 🛡️"*.
 

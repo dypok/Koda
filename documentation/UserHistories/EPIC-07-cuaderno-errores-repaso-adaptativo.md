@@ -14,7 +14,7 @@
 > para consultar en cualquier momento los conceptos de Python donde me equivoqué y planificar mi estudio correctivo."
 
 **Criterios de aceptación:**
-- Endpoint `GET /api/v1/notebook/mistakes` entrega la lista paginada de errores no resueltos (`is_resolved=false`) filtrable por lenguaje (`python`) y módulo.
+- Consulta de errores mediante **GraphQL (`Query mistakeNotebook(status: MistakeStatus)`)** (`ADR-012`): entrega la lista paginada de fallos con soporte para el algoritmo de repetición espaciada SuperMemo SM-2 (`next_review_at`, `ease_factor`, `repetition_count`) (`ADR-011`).
 - Pantalla `/app/cuaderno` con diseño tipo libreta de laboratorio con temática oscura:
   - Header motivador: *"Tu Cuaderno de Laboratorio · X conceptos pendientes por dominar"*.
   - Mascota Koda 🦊 con bata de científico o lupa (modo `thinking`).
@@ -23,8 +23,8 @@
   - Estado vacío enriquecido: *"¡Tu cuaderno está impecable! No tienes errores pendientes. Sigue así 🚀"*.
 
 **Subtasks:**
-- [ ] [BD] Tabla `user_notebook_mistakes` en Supabase con columnas: `id`, `user_id`, `question_id`, `concept_id`, `fail_count`, `is_resolved`, `created_at`, `resolved_at`.
-- [ ] [BACKEND] Controlador `NotebookController` con endpoint de listado paginado y conteo de fallos pendientes.
+- [ ] [BD] Tabla `user_notebook_mistakes` en Supabase con columnas de algoritmo SM-2: `interval_days`, `ease_factor`, `repetition_count`, `next_review_at` (`ADR-011`).
+- [ ] [BACKEND] Resolver GraphQL `NotebookResolver` con `Query mistakeNotebook` en `infrastructure/` implementando el puerto `INotebookRepository`.
 - [ ] [FRONTEND] Pantalla `apps/web/src/app/cuaderno/page.tsx` con grid de tarjetas de errores pendientes.
 - [ ] [FRONTEND] Badge numérico de alerta en el ítem de navegación del Sidebar: *"📓 Cuaderno [ 4 ]"*.
 
@@ -44,16 +44,16 @@
 **Criterios de aceptación:**
 - Botón *"Practicar este error"* en la tarjeta del cuaderno, o botón global *"Modo Remediación Rápida (5 preguntas)"*.
 - Se presenta el ejercicio con **opciones barajadas aleatoriamente** para validar comprensión real en lugar de memoria posicional.
-- Endpoint `POST /api/v1/notebook/mistakes/:questionId/resolve`:
+- **Mutación GraphQL (`Mutation resolveMistake(input: ResolveMistakeInput!)`)** (`ADR-012`):
   - Si la respuesta es **Correcta**:
-    - Marca el error como resuelto (`is_resolved = true`, `resolved_at = now()`).
+    - Marca el error como resuelto o recalcula el intervalo SM-2 de revisión futura.
     - Otorga **+5 XP** de remediación deliberada (`16` §4).
     - Tarjeta verde animada: *"¡Concepto dominado! Has eliminado este tropiezo de tu cuaderno"*.
   - Si la respuesta es **Incorrecta**:
     - El error permanece en la lista, se incrementa `fail_count` y se muestra una pista reforzada con analogía visual.
 
 **Subtasks:**
-- [ ] [BACKEND] Endpoint de resolución en `NotebookService` con validación de solución y acreditación transaccional de XP en Supabase.
+- [ ] [BACKEND] Caso de uso `ResolveMistakeUseCase` en `application/` y Resolver GraphQL `NotebookResolver.resolveMistake()`.
 - [ ] [FRONTEND] Modal de remediación rápida enfocado en el código con atajos de teclado (`1-4`, `Enter`).
 - [ ] [FRONTEND] Animación de tachado o disolución de la tarjeta de error cuando el usuario la resuelve con éxito.
 - [ ] [FRONTEND] Actualizar contador del Sidebar en tiempo real vía Zustand.
