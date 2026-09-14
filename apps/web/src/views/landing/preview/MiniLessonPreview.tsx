@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Check, RotateCcw, ArrowRight } from 'lucide-react';
+import { Check, ArrowCounterClockwise, ArrowRight } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 import { sound } from '@/lib/sound';
 import { CodeConfetti } from './CodeConfetti';
@@ -172,7 +172,7 @@ export const MiniLessonPreview: React.FC = () => {
                   onClick={retry}
                   className="inline-flex min-h-[48px] items-center gap-1.5 rounded-xl border border-slate-700 px-4 py-2.5 text-sm font-semibold text-slate-200 transition-all hover:border-slate-500"
                 >
-                  <RotateCcw aria-hidden="true" className="h-4 w-4" />
+                  <ArrowCounterClockwise aria-hidden="true" className="h-4 w-4" />
                   Reintentar
                 </button>
               )}

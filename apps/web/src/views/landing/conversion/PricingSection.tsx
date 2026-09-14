@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check } from '@phosphor-icons/react';
 import { Highlight } from '@/components/ui/highlight';
 import { KodaPeek } from '@/components/landing/KodaPeek';
 import { cn } from '@/lib/utils';

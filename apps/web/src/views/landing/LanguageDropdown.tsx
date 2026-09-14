@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Check } from 'lucide-react';
+import { Check } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 import { Language } from '@/models/landing/languages.model';
 

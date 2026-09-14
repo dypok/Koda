@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { CaretDown } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 import { Language } from '@/models/landing/languages.model';
 import { useLanguageSelectorController } from '@/controllers/landing/useLanguageSelectorController';
@@ -43,7 +43,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
       >
         <SelectedFlag className="w-5 h-3.5" />
         <span className="tracking-tight font-bold">{selectedLanguage.code.toUpperCase()}</span>
-        <ChevronDown
+        <CaretDown
           className={cn(
             'w-3.5 h-3.5 text-slate-500 transition-transform duration-200 group-hover:text-slate-300',
             isOpen && 'rotate-180 text-amber-400'

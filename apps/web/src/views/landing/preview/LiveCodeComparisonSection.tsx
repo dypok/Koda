@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { X, Check } from 'lucide-react';
+import { X, Check } from '@phosphor-icons/react';
 import { MiniLessonPreview } from './MiniLessonPreview';
 import { Highlight } from '@/components/ui/highlight';
 

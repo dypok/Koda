@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X } from '@phosphor-icons/react';
 
 const SESSION_KEY = 'koda-exit-shown';
 

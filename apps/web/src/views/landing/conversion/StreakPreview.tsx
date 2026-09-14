@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Flame, Shield } from 'lucide-react';
+import { Flame, Shield } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 
 const DAYS = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Pause, Play } from 'lucide-react';
+import { Pause, Play } from '@phosphor-icons/react';
 import { UPCOMING_TECHS, type TechItem } from '@/models/landing/technologies.model';
 import { cn } from '@/lib/utils';
 

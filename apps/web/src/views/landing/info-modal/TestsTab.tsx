@@ -1,11 +1,11 @@
 import React from 'react';
-import { Award, Check } from 'lucide-react';
+import { Medal, Check } from '@phosphor-icons/react';
 
 export const TestsTab: React.FC = () => (
   <div className="space-y-6 animate-fadeIn">
     <div>
       <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20 mb-2 font-sans">
-        <Award className="w-3.5 h-3.5" />
+        <Medal className="w-3.5 h-3.5" />
         Acreditación Verificable
       </div>
       <h4 className="font-display text-2xl font-bold text-white tracking-tight">

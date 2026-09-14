@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { PartyPopper, X } from 'lucide-react';
+import { Confetti, X } from '@phosphor-icons/react';
 import { sound } from '@/lib/sound';
 
 const KONAMI = [
@@ -68,7 +68,7 @@ export const PartyMode: React.FC = () => {
           >
             <X aria-hidden="true" className="h-4 w-4" />
           </button>
-          <PartyPopper aria-hidden="true" className="w-5 h-5 text-amber-400 absolute -top-2 -right-2" />
+          <Confetti aria-hidden="true" className="w-5 h-5 text-amber-400 absolute -top-2 -right-2" />
           <span className="sr-only">Secuencia konami {progress} de {KONAMI.length}</span>
         </motion.div>
       )}

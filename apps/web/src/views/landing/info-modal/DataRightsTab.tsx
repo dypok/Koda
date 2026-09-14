@@ -1,5 +1,5 @@
 import React from 'react';
-import { UserCheck, CircleCheck } from 'lucide-react';
+import { UserCheck, CheckCircle } from '@phosphor-icons/react';
 
 export const DataRightsTab: React.FC = () => (
   <div className="space-y-6 animate-fadeIn">
@@ -25,15 +25,15 @@ export const DataRightsTab: React.FC = () => (
       <h5 className="font-bold text-white text-sm">Tus Derechos Fundamentales:</h5>
       <ul className="space-y-2 font-sans">
         <li className="flex items-center gap-2">
-          <CircleCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+          <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>Derecho a descargar una copia completa de tu historial y progreso en formato JSON.</span>
         </li>
         <li className="flex items-center gap-2">
-          <CircleCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+          <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>Derecho al olvido y eliminación definitiva de tu cuenta y datos con un solo clic.</span>
         </li>
         <li className="flex items-center gap-2">
-          <CircleCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+          <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>Desactivación total de cookies analíticas no esenciales en cualquier momento.</span>
         </li>
       </ul>

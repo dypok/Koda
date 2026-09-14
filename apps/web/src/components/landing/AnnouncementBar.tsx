@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { X, Sparkles } from 'lucide-react';
+import { X, Sparkle } from '@phosphor-icons/react';
 
 const STORAGE_KEY = 'koda-announce-dismissed';
 
@@ -30,7 +30,7 @@ export const AnnouncementBar: React.FC = () => {
 
   return (
     <div className="relative z-40 flex items-center justify-center gap-2 bg-amber-400 px-4 py-2 text-center text-[13px] font-semibold text-slate-950">
-      <Sparkles aria-hidden="true" className="h-4 w-4 shrink-0" />
+      <Sparkle aria-hidden="true" className="h-4 w-4 shrink-0" />
       <p>
         Módulo 02 · Variables y Tipos ya disponible.{' '}
         <Link href="/register" className="underline underline-offset-2 hover:opacity-80">

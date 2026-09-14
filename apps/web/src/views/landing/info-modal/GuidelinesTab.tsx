@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users } from 'lucide-react';
+import { Users } from '@phosphor-icons/react';
 
 export const GuidelinesTab: React.FC = () => (
   <div className="space-y-6 animate-fadeIn">

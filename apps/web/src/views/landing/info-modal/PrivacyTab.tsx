@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck } from 'lucide-react';
+import { ShieldCheck } from '@phosphor-icons/react';
 
 export const PrivacyTab: React.FC = () => (
   <div className="space-y-6 animate-fadeIn">

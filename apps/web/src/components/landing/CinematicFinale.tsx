@@ -6,7 +6,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { TransitionLink } from '@/components/ui/transition-link';
 import { Magnetic } from '@/components/ui/magnetic';
 import { SplitText } from '@/components/ui/split-text';
-import { ArrowRight, Check, LogIn } from 'lucide-react';
+import { ArrowRight, Check, SignIn } from '@phosphor-icons/react';
 import Link from 'next/link';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 
@@ -110,7 +110,7 @@ export const CinematicFinale: React.FC = () => {
             href="/login"
             className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border border-slate-700 px-5 text-sm font-bold text-slate-200 transition-all hover:border-amber-400/50 hover:text-amber-300"
           >
-            <LogIn aria-hidden="true" className="w-4 h-4 text-amber-400" />
+            <SignIn aria-hidden="true" className="w-4 h-4 text-amber-400" />
             Ya tengo una cuenta
           </Link>
           <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-slate-500 font-medium">

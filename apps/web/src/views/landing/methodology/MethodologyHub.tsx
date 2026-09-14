@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { CaretDown } from '@phosphor-icons/react';
 import { Highlight } from '@/components/ui/highlight';
 import { Pillar } from '@/models/landing/methodology.model';
 import { cn } from '@/lib/utils';
@@ -89,7 +89,7 @@ export const MethodologyHub: React.FC<MethodologyHubProps> = ({ pillars, activeI
           className="inline-flex min-h-[44px] items-center gap-2 text-xs font-sans text-slate-400 hover:text-amber-400 transition-colors cursor-pointer group"
         >
           <span>Descubre cómo funciona</span>
-          <ChevronDown aria-hidden="true" className="w-4 h-4 animate-bounce text-amber-400" />
+          <CaretDown aria-hidden="true" className="w-4 h-4 animate-bounce text-amber-400" />
         </button>
         <div aria-hidden="true" className="w-[1px] h-10 bg-gradient-to-b from-amber-500/40 to-transparent mt-3" />
       </motion.div>

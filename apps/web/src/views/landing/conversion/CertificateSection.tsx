@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion, useReducedMotion } from 'framer-motion';
-import { BadgeCheck, QrCode, ShieldCheck } from 'lucide-react';
+import { SealCheck, QrCode, ShieldCheck } from '@phosphor-icons/react';
 import { Highlight } from '@/components/ui/highlight';
 import { WeatherLayer } from '@/components/landing/WeatherLayer';
 
@@ -38,7 +38,7 @@ export const CertificateSection: React.FC = () => {
             </p>
             <ul className="space-y-2.5 text-sm text-slate-200">
               {[
-                { icon: BadgeCheck, text: 'Código único por certificado, imposible de falsificar a simple vista' },
+                { icon: SealCheck, text: 'Código único por certificado, imposible de falsificar a simple vista' },
                 { icon: QrCode, text: 'QR que abre la ficha pública de verificación' },
                 { icon: ShieldCheck, text: 'PDF descargable para tu portafolio y LinkedIn' },
               ].map((item, i) => (
@@ -80,7 +80,7 @@ export const CertificateSection: React.FC = () => {
                   Certificado de ejemplo
                 </p>
                 <span className="inline-flex items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2 py-0.5 text-[11px] font-bold text-emerald-300">
-                  <BadgeCheck aria-hidden="true" className="w-3.5 h-3.5" />
+                  <SealCheck aria-hidden="true" className="w-3.5 h-3.5" />
                   Oficial
                 </span>
               </div>
