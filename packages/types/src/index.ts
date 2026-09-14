@@ -8,6 +8,18 @@
 
 export type UserRole = 'user' | 'admin';
 
+export type ExperienceLevel = 'beginner' | 'elementary' | 'intermediate' | 'advanced';
+export type LearningStyle = 'hands-on' | 'guided' | 'projects' | 'gamified';
+export type DailyGoalId = 'casual' | 'regular' | 'focused' | 'intense';
+
+export interface DailyStudyGoal {
+  id: DailyGoalId;
+  title: string;
+  time_text: string;
+  minutes: number;
+  description: string;
+}
+
 export interface User {
   id: string;
   email: string;
@@ -24,12 +36,46 @@ export interface UserProfile {
   user_id: string;
   full_name: string;
   avatar_url?: string;
+  avatar_object_key?: string;
   document_number?: string;
   document_type?: 'CC' | 'TI' | 'CE' | 'PASSPORT';
   bio?: string;
-  selected_language_id?: string;
+  timezone: string;
+  locale: string;
+
+  // Preferencias pedagógicas configuradas en el onboarding
+  initial_language_slug: string;
+  experience_level: ExperienceLevel;
+  learning_style: LearningStyle;
+  daily_goal_id: DailyGoalId;
+  daily_goal_minutes: number;
+
+  // Métricas agregadas O(1) de gamificación y tiempo de estudio
   total_xp: number;
   level: number;
+  current_streak: number;
+  longest_streak: number;
+  streak_freeze_count: number;
+  total_study_time_seconds: number;
+  last_study_date?: string;
+}
+
+export interface RegisterRequestDto {
+  fullName: string;
+  email: string;
+  password: string;
+  selectedLanguageId: string;
+  selectedExperienceId: ExperienceLevel;
+  selectedStyleId: LearningStyle;
+  selectedGoalId: DailyGoalId;
+}
+
+export interface UpdateLearningPreferencesDto {
+  learning_style?: LearningStyle;
+  daily_goal_id?: DailyGoalId;
+  daily_goal_minutes?: number;
+  timezone?: string;
+  initial_language_slug?: string;
 }
 
 export interface AuthTokens {
@@ -386,6 +432,24 @@ export interface UserStreak {
   last_activity_date: string;
   freeze_count: number;
   is_active_today: boolean;
+  today_study_time_seconds: number;
+  daily_goal_minutes: number;
+  daily_goal_met: boolean;
+}
+
+export interface DailyStreakLog {
+  id: string;
+  user_id: string;
+  activity_date: string;
+  study_time_seconds: number;
+  activity_count: number;
+  lessons_completed_count: number;
+  xp_earned_today: number;
+  daily_goal_met: boolean;
+  freeze_used: boolean;
+  timezone: string;
+  first_activity_at: string;
+  last_activity_at: string;
 }
 
 export interface Achievement {

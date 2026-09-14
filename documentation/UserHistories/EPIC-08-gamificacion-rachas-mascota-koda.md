@@ -1,126 +1,125 @@
 # 🟠 EPIC 8 — Gamificación, Economía XP, Rachas y Mascota Koda 🦊
-`Sprint 4 · v1.0 · Color Jira: Naranja · Código: GAMI`
+`Sprint 4 · v2.0 · Color Jira: Naranja · Código: GAMI`
 
-> Esta épica materializa el **Gamification Engine** de Koda (`16_GAMIFICATION.md`, `05_FUNCTIONAL_REQUIREMENTS.md` RF-XP/RF-RACHA/RF-LOGRO) y la integración del **Motor Gráfico WebGL PixiJS v7** (`ADR-004`): economía de puntos XP determinista, fórmula de niveles exponencial, rachas diarias con congelamiento (*freeze*), catálogo de 18 logros y reacciones emocionales de la mascota 🦊 en tiempo real.
+> Esta épica materializa el **Gamification Engine** de Koda (`16_GAMIFICATION.md`, `12_DATABASE_DESIGN.md`, `05_FUNCTIONAL_REQUIREMENTS.md` RF-XP/RF-RACHA/RF-LOGRO) y la integración del **Motor Gráfico WebGL PixiJS v7** (`ADR-004`): economía de puntos XP determinista con libro mayor inmutable, fórmula de niveles exponencial, rachas diarias con protectores de congelamiento (*freeze*), control automatizado de tiempo de estudio mediante triggers en Supabase, catálogo de 18 logros y reacciones emocionales de la mascota 🦊 en tiempo real.
 
 ---
 
 ### GAMI-01 — Economía de Experiencia (XP) Determinista y Progresión de Niveles
 **Tipo:** Story | **SP:** 5 | **Prioridad:** Muy Alta | **Asignado:** Backend Developer + Frontend Developer  
-**Rama sugerida:** `feature/economia-xp-niveles`
+**Rama sugerida:** `feature/economia-xp-niveles`  
+**Trazabilidad:** `16_GAMIFICATION.md` §4, `12_DATABASE_DESIGN.md`
 
 **Historia de usuario:**
 > "Como estudiante, quiero ganar puntos de experiencia (XP) por cada acción de aprendizaje y subir de nivel progresivamente,
 > para sentir una sensación tangible de avance y maestría conforme domino Python 3.12."
 
 **Criterios de aceptación:**
-- Tabla oficial de 10 acciones XP deterministas (`16` §4):
-  - `XP-EJ-CORR`: +5 XP por ejercicio correcto en lección.
+- Tabla oficial de acciones XP deterministas (`16` §4):
+  - `XP-EJ-CORR`: +5 XP por ítem correcto en la tríada de lección.
   - `XP-SEC`: +10 XP al completar una sección (10 lecciones).
   - `XP-QUIZ`: +25 XP al aprobar un Quiz intermedio ($\ge 70\%$).
   - `XP-EXAM`: +100 XP al aprobar un Examen Final ($\ge 80\%$).
   - `XP-MOD-BONO`: +50 XP al completar un módulo al 100%.
-  - `XP-REPASO`: +2 XP en ronda final de sección / +5 XP en remediación de cuaderno.
-- Fórmula de nivel exponencial (`16` §6):
+  - `XP-REPASO`: +2 XP en ronda final de sección / +5 XP en remediación de cuaderno de errores.
+- Fórmula de nivel exponencial:
   $$\text{XP}(N) = \lfloor 100 \cdot N^{1.65} + 20 \cdot N \rfloor$$
   (Nivel 1: 120 XP, Nivel 2: 350 XP, Nivel 5: 1,520 XP, Nivel 10: 4,700 XP).
-- Reglas anti-gaming del servidor: validación estricta de tiempo mínimo por lección (mínimo 15 segundos para evitar bots de auto-click) e idempotencia por acción.
+- **Inmutabilidad estricta del Ledger de XP (`xp_transactions`):**
+  - Cada otorgamiento de XP genera una fila inmutable con `amount`, `balance_after`, `reason`, `reference_id` e `idempotency_key`.
+  - Trigger PL/pgSQL `trg_xp_immutability` en Supabase que bloquea cualquier operación de `UPDATE` o `DELETE` sobre el libro mayor.
 - Modal de celebración de "Level Up!" con animación de fuegos artificiales y Koda 🦊 ascendiendo de rango.
 
 **Subtasks:**
-- [ ] [BD] Tabla `xp_transactions` con trigger que actualice `users.total_xp` y `users.level`.
+- [x] [BD] Tabla `xp_transactions` en Supabase con RLS y trigger de inmutabilidad `fn_enforce_xp_immutability()`.
 - [ ] [BACKEND] Servicio `GamificationService.awardXp()` con validación anti-farming e idempotencia por request.
 - [ ] [FRONTEND] Barra de nivel animada en el Header global con porcentaje de avance hacia el siguiente nivel.
 - [ ] [FRONTEND] Modal interactivo de subida de nivel con sonido triunfal y tarjeta compartible.
 
-**DoD adicional para esta US:**
-- Transacciones de XP auditables con cero inconsistencias numéricas tras reinicios de sesión.
-
 ---
 
-### GAMI-02 — Sistema de Rachas Diarias (Streaks), Ventana de Gracia y Freeze
+### GAMI-02 — Sistema de Rachas Diarias, Tiempo de Estudio y Freeze Automatizado por Triggers
 **Tipo:** Story | **SP:** 5 | **Prioridad:** Muy Alta | **Asignado:** Fullstack Developer  
-**Rama sugerida:** `feature/rachas-diarias-freeze`
+**Rama sugerida:** `feature/rachas-diarias-freeze`  
+**Trazabilidad:** `16_GAMIFICATION.md` §8, `12_DATABASE_DESIGN.md`
 
 **Historia de usuario:**
-> "Como estudiante que busca construir un hábito constante de estudio, quiero mantener una racha de días consecutivos de aprendizaje,
-> para no romper mi disciplina y tener protectores de racha en caso de imprevistos."
+> "Como estudiante que busca construir un hábito diario de estudio, quiero acumular días consecutivos de racha y registrar mi tiempo real de práctica según mi meta de onboarding,
+> para mantener mi disciplina de aprendizaje y contar con protectores automáticos de racha en caso de imprevistos."
 
 **Criterios de aceptación:**
-- Contador de racha visible en el Header: ícono de fuego activo `🔥 7 días`.
-- Ventana diaria configurada según la zona horaria del usuario (`America/Bogota` por defecto, `00:00:00` a `23:59:59`):
-  - Al completar al menos 1 micro-lección en el día, la racha del día se marca como activa (`is_active_today = true`).
-  - Si el usuario no practica en el día y tiene al menos 1 **Streak Freeze**, se consume automáticamente el protector y la racha se preserva intacta.
-  - Ventana de gracia de 2 horas (hasta las `02:00:00` del día siguiente) antes de que la racha se reinicie a cero (`16` §8).
-- Obtención de protectores: 1 Streak Freeze otorgado automáticamente por cada 7 días de racha continua (máximo 2 acumulables).
-- Estado visual del fuego: encendido (naranja brillante) si ya practicó hoy; apagado/grisáceo si aún no ha completado su lección diaria.
+- **Persistencia Diaria en Supabase (`streaks`):**
+  - Registro diario por usuario (`user_id`, `activity_date`, `timezone`, `activity_count`, `study_time_seconds`, `lessons_completed_count`, `xp_earned_today`, `daily_goal_met`, `freeze_used`).
+  - Cumplimiento de meta diaria: `daily_goal_met = true` cuando el tiempo acumulado de estudio en el día alcanza o supera los minutos configurados en el onboarding (`daily_goal_minutes * 60` segundos).
+- **Métricas Agregadas $O(1)$ en `public.users`:**
+  - `current_streak`: Racha activa continua en días.
+  - `longest_streak`: Récord histórico personal de racha.
+  - `streak_freeze_count`: Protectores acumulados (máximo 2).
+  - `total_study_time_seconds`: Segundos totales de estudio acumulados en la plataforma.
+  - `last_study_date`: Fecha de la última sesión completada.
+- **Motor Automatizado en PostgreSQL (`fn_handle_user_study_activity`):**
+  - Disparado tras cada inserción o actualización de lección en `attempts` (`completed_at IS NOT NULL`).
+  - Si el usuario practicó ayer: incrementa `current_streak` en 1 y, si la racha es múltiplo de 7 (`current_streak % 7 == 0`), otorga automáticamente +1 protector (si tiene menos de 2).
+  - Si el usuario faltó ayer pero tiene protectores (`streak_freeze_count > 0`): consume 1 protector, marca `freeze_used = true` en `streaks` y preserva la racha intacta.
+  - Si el usuario faltó más de un día sin protectores: la racha se reinicia a 1.
+- Contador de racha visible en el Header: ícono de fuego activo `🔥 7 días`. Encendido en naranja si ya completó su lección de hoy; grisáceo si aún tiene la meta pendiente.
 
 **Subtasks:**
-- [ ] [BD] Tabla `user_streaks` con `current_streak`, `max_streak`, `freeze_count`, `last_activity_date`.
-- [ ] [BACKEND] Cron job diario o trigger al inicio del día que evalúe y aplique consumos de freeze o reinicio de rachas.
-- [ ] [FRONTEND] Widget de racha en el Header con tooltip explicativo del estado del día y protectores restantes.
-- [ ] [FRONTEND] Modal de rescate de racha si se consumió un Freeze: *"¡Tu protector de racha te ha salvado ayer! Continúa hoy para mantener el fuego encendido 🛡️"*.
-
-**DoD adicional para esta US:**
-- Manejo correcto de bordes de zona horaria verificado mediante tests de fecha y hora simulados.
+- [x] [BD] Tabla `streaks` en Supabase y trigger automático `trg_attempts_update_streak_and_study_time` ejecutando `fn_handle_user_study_activity()`.
+- [x] [BD] Columnas agregadas `total_study_time_seconds`, `current_streak`, `longest_streak`, `streak_freeze_count` en `public.users`.
+- [ ] [FRONTEND] Widget de racha en el Header con tooltip explicativo del estado del día, tiempo invertido y protectores restantes.
+- [ ] [FRONTEND] Modal de notificación cuando se consumió un Freeze para salvar la racha: *"¡Tu protector de racha te ha salvado ayer! Continúa hoy para mantener el fuego encendido 🛡️"*.
 
 ---
 
 ### GAMI-03 — Catálogo de Logros (Achievements) y Medallas Desbloqueables
 **Tipo:** Story | **SP:** 3 | **Prioridad:** Alta | **Asignado:** Frontend Developer + Backend Developer  
-**Rama sugerida:** `feature/catalogo-logros-medallas`
+**Rama sugerida:** `feature/catalogo-logros-medallas`  
+**Trazabilidad:** `16_GAMIFICATION.md` §10, `12_DATABASE_DESIGN.md`
 
 **Historia de usuario:**
-> "Como estudiante, quiero desbloquear medallas y logros especiales al alcanzar hitos clave,
-> para coleccionar reconocimientos en mi perfil y celebrar mis momentos memorables en Python."
+> "Como estudiante, quiero desbloquear medallas y logros especiales al alcanzar hitos clave (racha, maestría 3⭐, remediación de errores),
+> para coleccionar reconocimientos en mi perfil y celebrar mis momentos memorables en Python 3.12."
 
 **Criterios de aceptación:**
-- Catálogo de **18 logros MVP** (`16` §10) distribuidos en 4 categorías:
-  1. *Primeros Pasos:* "¡Hola, Mundo!" (completar primera lección), "Primeros 100 XP".
-  2. *Constancia:* "Semana de Fuego" (7 días de racha), "Mes Legendario" (30 días).
-  3. *Maestría:* "Perfección en Fundamentos" (3⭐ en todo M01), "Cazador de Errores" (10 errores remediados en el cuaderno).
-  4. *Excelencia:* "Mente Brillante" (100% en un Examen Final sin errores).
-- Endpoint `GET /api/v1/users/me/achievements`: lista completa de logros con fecha de desbloqueo o progreso porcentual hacia la meta.
-- Notificación flotante tipo Toast animado en el momento exacto en que se desbloquea un logro: *"🏆 ¡Logro Desbloqueado: Perfección en Fundamentos! (+50 XP)"*.
-- Pantalla `/app/logros` con vitrina de medallas doradas, plateadas y de bronce.
+- Catálogo oficial poblado en Supabase (`achievements`):
+  - *Primera Racha (`first_streak`):* Completar el primer día de estudio (+50 XP).
+  - *Fuego Imparable (`streak_7_days`):* Mantener 7 días de racha continua (+150 XP).
+  - *Perfección Absoluta (`first_star_3`):* Conseguir 3 estrellas en una sección (+100 XP).
+  - *Maestro del Módulo (`first_module_master`):* Dominar un módulo con más del 80% de estrellas (+300 XP).
+  - *Aprendiendo del Error (`first_remediation`):* Remediar el primer fallo en el Cuaderno de Errores (+75 XP).
+- Endpoint `GET /api/v1/users/me/achievements`: lista completa de logros con fecha de desbloqueo en `user_achievements`.
+- Notificación flotante tipo Toast animado en el momento exacto en que se desbloquea un logro: *"🏆 ¡Logro Desbloqueado: Perfección Absoluta! (+100 XP)"*.
+- Pantalla `/app/logros` con vitrina de medallas y filtros (Obtenidos / Por desbloquear).
 
 **Subtasks:**
-- [ ] [BD] Tablas `achievements` y `user_achievements` en Supabase con metadata, icono y XP bono.
+- [x] [BD] Tablas `achievements` y `user_achievements` en Supabase con RLS y semillas iniciales desplegadas.
 - [ ] [BACKEND] Event listener en NestJS (`EventEmitter2`) que escuche eventos de lección/examen y evalúe condiciones de logro.
-- [ ] [FRONTEND] Pantalla `apps/web/src/app/logros/page.tsx` con vitrina de medallas y filtros (Obtenidos / Por desbloquear).
+- [ ] [FRONTEND] Pantalla `apps/web/src/app/logros/page.tsx` con vitrina de medallas.
 - [ ] [FRONTEND] Componente de notificación emergente `AchievementToast.tsx` con sonido de fanfarria suave.
-
-**DoD adicional para esta US:**
-- Cada logro solo puede ser otorgado una única vez por usuario.
 
 ---
 
 ### GAMI-04 — Motor Gráfico WebGL PixiJS v7: Mascota Koda 🦊 y Confeti
 **Tipo:** Story | **SP:** 5 | **Prioridad:** Muy Alta | **Asignado:** Frontend Lead (PixiJS & Canvas Specialist)  
-**Rama sugerida:** `feature/pixijs-mascota-emociones`
+**Rama sugerida:** `feature/pixijs-mascota-emociones`  
+**Trazabilidad:** `ADR-004`, `27_UI_UX_SPECIFICATION.md`
 
 **Historia de usuario:**
-> "Como estudiante, quiero que la mascota Koda 🦊 reaccione en pantalla con emociones visuales y confeti en tiempo real según mi desempeño,
-> para tener un compañero de aprendizaje carismático y empático que celebre mis victorias y me anime en mis fallos."
+> "Como estudiante, quiero ver a la mascota Koda 🦊 reaccionar con animaciones fluidas a 120 FPS según mis resultados (festejo, ánimo, concentración),
+> para conectar emocionalmente con la plataforma y recibir motivación visual instantánea."
 
 **Criterios de aceptación:**
-- Motor gráfico basado en **PixiJS v7.4+** con aceleración por hardware WebGL y fallback automático a Canvas 2D (`ADR-004`).
-- **6 Estados Emocionales de Koda 🦊:**
-  1. `idle`: Flotación suave y parpadeo ocasional mientras el usuario lee la lección.
-  2. `thinking`: Orejas atentas y ceño curioso cuando el usuario interactúa con el código.
-  3. `happy`: Sonrisa brillante y salto de alegría cuando el usuario responde correctamente.
-  4. `proud`: Postura de superhéroe con medalla al completar una sección o quiz.
-  5. `encouraging`: Expresión cálida y gesto de ánimo *"¡No te rindas!"* cuando comete un error.
-  6. `celebrating`: Lluvia de confeti multicolor acelerado y giros al subir de nivel o graduarse del curso.
-- Renderizado a 60 FPS estables con consumo de memoria inferior a 40 MB en el navegador.
-- Integración perfecta con el estado global de la lección mediante Zustand: `setMascotMood('happy')`.
+- Renderizado mediante PixiJS v7 sobre canvas HTML5 con fallback transparente a CSS animations en navegadores sin WebGL.
+- Máquina de estados visuales de Koda 🦊:
+  - `IDLE`: Parpadeo suave, respiración y movimiento sutil de cola.
+  - `HAPPY`: Salto con orejas erguidas y ojos brillantes al acertar un ítem o lección.
+  - `ENCOURAGING`: Mano al mentón con expresión comprensiva y gesto de ánimo al cometer un error.
+  - `CELEBRATING`: Baile de victoria con explosión de partículas de confeti dorado al completar una sección o desbloquear 3 estrellas.
+- Rendimiento impecable: tasa de cuadros sostenida en 60–120 FPS sin picos de *garbage collection* ni fugas de memoria en cambios de ruta.
 
 **Subtasks:**
-- [ ] [FRONTEND] Diseñar los spritesheets optimizados de Koda 🦊 en formato WebP con resolución retina.
-- [ ] [FRONTEND] Implementar `PixiMascotCanvas.tsx` con contenedor `PIXI.Application` y ciclo de vida React limpio.
-- [ ] [FRONTEND] Implementar sistema de partículas para confeti acelerado (`PixiParticlesEmitter`).
-- [ ] [FRONTEND] Conectar transiciones de estados anímicos controladas por el resultado de las respuestas en el Workspace.
-- [ ] [TEST] Verificar desmonte correcto de WebGL context (`app.destroy(true)`) para prevenir memory leaks al navegar.
-
-**DoD adicional para esta US:**
-- La animación no bloquea el hilo principal de JavaScript ni provoca jank en dispositivos móviles de gama media.
+- [ ] [FRONTEND] Configurar contenedor PixiJS v7 desacoplado en `apps/web/src/components/mascot/KodaMascotCanvas.tsx`.
+- [ ] [FRONTEND] Crear máquina de estados de animaciones conectada a eventos del Workspace de Lección.
+- [ ] [FRONTEND] Sistema de partículas de confeti acelerado por hardware para hitos de 3 estrellas y exámenes aprobados.
+- [ ] [TEST] Verificar desmonte limpio del contexto WebGL en `useEffect` cleanup para evitar fugas de memoria.
