@@ -1,8 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Flame, LightningA } from '@phosphor-icons/react';
-import { TerminalBadge } from '@/components/landing/TerminalBadge';
 
 export const HeroMascot: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -29,21 +27,11 @@ export const HeroMascot: React.FC = () => {
           className="relative z-10 max-h-[200px] sm:max-h-[280px] lg:max-h-[320px] object-contain animate-float select-none transform-gpu will-change-transform drop-shadow-[0_20px_45px_rgba(249,115,22,0.35)]"
           priority
         />
-        <div className="absolute -left-1 top-6 sm:left-2">
-          <TerminalBadge
-            tone="emerald"
-            prefix="$"
-            text="+10 XP"
-            icon={<LightningA aria-hidden="true" className="h-3.5 w-3.5" weight="fill" />}
-          />
+        <div className="absolute -left-1 top-6 font-mono text-[11px] font-bold uppercase tracking-widest text-emerald-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:left-2">
+          +10 XP
         </div>
-        <div className="absolute -right-1 bottom-8 sm:right-2">
-          <TerminalBadge
-            tone="amber"
-            prefix=">"
-            text="racha_diaria --on"
-            icon={<Flame aria-hidden="true" className="h-3.5 w-3.5" weight="fill" />}
-          />
+        <div className="absolute -right-1 bottom-8 font-mono text-[11px] font-bold uppercase tracking-widest text-amber-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:right-2">
+          racha_diaria
         </div>
       </div>
       <p className="mt-3 text-xs sm:text-sm text-slate-400">

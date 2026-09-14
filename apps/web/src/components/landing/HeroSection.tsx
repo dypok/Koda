@@ -39,13 +39,6 @@ export const HeroSection: React.FC = () => {
       gsap.to(mascotRef.current, { y: -140, scale: 0.94, opacity: 0.35, ease: 'none', scrollTrigger: trigger });
       gsap.to(gridRef.current, { yPercent: 12, ease: 'none', scrollTrigger: trigger });
       gsap.to(carouselRef.current, { y: 40, opacity: 0, ease: 'none', scrollTrigger: trigger });
-      gsap.to('[data-hero-cursor]', {
-        opacity: 0,
-        duration: 0.55,
-        repeat: -1,
-        yoyo: true,
-        ease: 'steps(1)',
-      });
     }, sectionRef);
     return () => ctx.revert();
   }, []);
@@ -70,11 +63,9 @@ export const HeroSection: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
               transition={{ duration: 0.6, ease: [...EASE] }}
-              className="inline-flex items-center gap-2 rounded-[6px] border border-amber-400/40 border-l-2 border-l-amber-400 bg-slate-950/90 px-3 py-1.5 font-mono text-[11px] sm:text-xs font-bold uppercase tracking-widest text-amber-300"
+              className="font-mono text-[11px] sm:text-xs font-bold uppercase tracking-widest text-amber-300/90"
             >
-              <span aria-hidden="true" className="opacity-60">{'>'}</span>
               {t.eyebrow}
-              <span aria-hidden="true" data-hero-cursor className="inline-block h-3.5 w-[7px] bg-amber-400/80" />
             </motion.p>
             <h1
               id="koda-hero-title"
