@@ -55,14 +55,16 @@
   4. **DevOps Track:** Linux & Shell $\to$ Git CI/CD $\to$ Docker Containerization $\to$ Kubernetes $\to$ Cloud & Terraform $\to$ Apex DevOps Gate.
 - Selector dinámico de carreras en el Asidebar (`RoadmapSidebarBranches.tsx`) conectado reactivamente a Zustand (`roadmap.store.ts`).
 - Nodo terminal **Apex Master Gate**: diseño imponente con perímetro de advertencia y pulsación en contrafase, desbloqueable únicamente al completar el 100% de los cursos previos de la rama.
-- Consulta de la estructura de cursos desde MongoDB (`ADR-009`) mediante endpoint `GET /api/v1/content/tracks/:trackSlug`.
+- Consulta de la estructura de cursos y grafo DAG desde MongoDB (`ADR-009`) mediante la consulta **GraphQL (`Query roadmapGraph(branch: CareerBranch!)`)** con entrega de nodos, edges y prerrequisitos en un solo viaje de red (`ADR-012`).
 
 **Subtasks:**
 - [x] [FRONTEND] Crear datasets curriculares mock (`frontend-track.mock.ts`, `backend-track.mock.ts`, `devops-track.mock.ts`, `python-courses-graph.mock.ts`).
 - [x] [FRONTEND] Implementar conmutador de ramas en `RoadmapSidebarBranches.tsx` y sincronizar con `roadmap.store.ts`.
 - [x] [FRONTEND] Diseñar nodo visual terminal `Apex Master Gate` con estilos de alta jerarquía y compuerta final.
 - [x] [BACKEND] Modelos Mongoose `TrackSchema`, `CourseSchema` con topología `tier`/`lane` y `VisualEffectSchema` en `apps/api/src/database/schemas/`.
-- [ ] [BACKEND] Endpoint `GET /api/v1/content/tracks/:slug` con resolución de dependencias DAG.
+- [ ] [BACKEND] Definir puerto `ICourseRepository` en capa de dominio y adaptador `MongoCourseRepository` en infraestructura (`ADR-010`).
+- [ ] [BACKEND] Resolver GraphQL `LearningResolver` con `Query roadmapGraph(branch)` y DataLoader para resolver dependencias DAG sin N+1 (`ADR-012`).
+- [ ] [BACKEND] Endpoint REST `GET /api/v1/content/tracks/:slug` con resolución de dependencias DAG.
 
 ---
 
@@ -94,17 +96,17 @@
 ### LEARN-04 — Sistema de Calificación de 1 a 3 Estrellas (⭐) Vinculado a la Tríada Evaluativa
 **Tipo:** Story | **SP:** 3 | **Prioridad:** Alta | **Asignado:** Fullstack Developer  
 **Rama:** `feature/sistema-estrellas-seccion`  
-**Trazabilidad:** `16_GAMIFICATION.md`, `12_DATABASE_DESIGN.md`
+**Trazabilidad:** `16_GAMIFICATION.md`, `12_DATABASE_DESIGN.md`, `ADR-011`
 
 **Historia de usuario:**
 > "Como estudiante, quiero recibir de 1 a 3 estrellas según mi desempeño en los 3 ítems de la lección (código en consola, quiz conceptual y predicción de salida),
 > para tener una métrica formativa clara y motivarme a rejugar secciones hasta alcanzar la maestría (3⭐)."
 
 **Criterios de aceptación:**
-- Cada micro-lección evalúa la **Tríada Evaluativa** (Ítem 1: Consola, Ítem 2: Quiz de 4 opciones, Ítem 3: Predicción de salida).
+- Cada micro-lección evalúa la **Tríada Evaluativa** (`ADR-011`): Ítem 1 (Consola interactiva), Ítem 2 (Quiz de 4 opciones $A, B, C, D$) e Ítem 3 (Predicción de salida / Bug Hunt).
 - La calificación en estrellas de la sección (1 a 3⭐) se calcula de forma estricta y transparente:
   - ⭐⭐⭐ **(3 Estrellas - Perfección):** El estudiante resuelve los 3 ítems correctamente al primer intento en todas las lecciones de la sección.
-  - ⭐⭐ **(2 Estrellas - Sólido):** El estudiante ejecuta bien el código en consola (Ítem 1), pero falla en el quiz conceptual (Ítem 2) o la predicción (Ítem 3) y lo remedia en la ronda de repaso.
+  - ⭐⭐ **(2 Estrellas - Sólido):** El estudiante ejecuta bien el código en consola (Ítem 1), pero falla en el quiz conceptual (Ítem 2) o la predicción (Ítem 3) y lo remedia en la ronda de repaso final.
   - ⭐ **(1 Estrella - Aprobado):** El estudiante supera la sección tras reintentos múltiples o requirió derivar reactivos al Cuaderno de Errores con algoritmo SM-2.
   - **0 Estrellas (< 70%):** Sección no superada; debe reintentarse.
 - Persistencia de la mejor marca histórica en Supabase PostgreSQL (`user_section_stars`): reintentar una sección nunca reduce las estrellas ganadas.
@@ -117,10 +119,10 @@
 
 ---
 
-### LEARN-05 — Persistencia Híbrida Políglota (MongoDB Contenido + Supabase Progreso)
+### LEARN-05 — Persistencia Híbrida Políglota y Topología de Rejilla (Tier/Lane)
 **Tipo:** Story | **SP:** 5 | **Prioridad:** Muy Alta | **Asignado:** Backend Lead + Database Engineer  
 **Rama:** `feature/persistencia-hibrida-poliglota`  
-**Trazabilidad:** `ADR-008`, `ADR-009`, `ADR-011`, `12_DATABASE_DESIGN.md`
+**Trazabilidad:** `ADR-008`, `ADR-009`, `ADR-010`, `ADR-011`, `ADR-012`, `12_DATABASE_DESIGN.md`
 
 **Historia de usuario:**
 > "Como arquitecto del sistema, quiero desacoplar el almacenamiento de currículo (MongoDB) del progreso transaccional de los estudiantes (Supabase PostgreSQL),
@@ -128,12 +130,14 @@
 
 **Criterios de aceptación:**
 - **Supabase (PostgreSQL 15+):** Custodia de cuentas (`public.users` enlazada a `auth.users`), progreso (`user_module_progress`, `user_section_stars`), economía (`xp_transactions`, `streaks`), cuaderno de errores (`user_mistakes_notebook`) y certificaciones (`certificates`).
-- **MongoDB:** Almacena documentos jerárquicos BSON para `tracks`, `courses` (con `topology.tier`, `topology.lane`, `edges`), `modules`, `sections`, `lessons` (con la Tríada Evaluativa) y `visual_effects` con entrega $O(1)$ sin joins.
+- **MongoDB:** Almacena documentos jerárquicos BSON para `tracks`, `courses` (con topología de rejilla relativa `topology.tier`, `topology.lane` y `edges`), `modules`, `sections`, `lessons` (con la Tríada Evaluativa) y `visual_effects` con entrega $O(1)$ sin joins.
 - Enlace lógico desacoplado mediante identificadores inmutables en formato slug (`track_slug`, `course_slug`, `module_slug`, `section_slug`) en PostgreSQL, eliminando claves foráneas entre motores disjuntos.
+- Consulta unificada y eficiente mediante **GraphQL (`Query roadmapProgress`)** y soporte REST `GET /api/v1/learning/roadmap/progress` entregando el grafo enriquecido con telemetría de usuario en una sola llamada (`ADR-012`).
 - Idempotencia estricta en intentos evaluativos mediante cabecera `Idempotency-Key`.
 
 **Subtasks:**
 - [x] [BACKEND] Configurar esquemas de Mongoose en `apps/api/src/database/schemas/` (`Track`, `Course`, `Module`, `Section`, `Lesson`, `VisualEffect`) y semillas de datos.
 - [x] [BD] Migraciones DDL desplegadas en Supabase PostgreSQL con RLS y triggers de inmutabilidad y cálculo de racha.
-- [ ] [BACKEND] Endpoint `GET /api/v1/learning/roadmap/progress` que fusiona la telemetría de Supabase con los nodos de MongoDB.
+- [ ] [BACKEND] Resolver GraphQL `LearningResolver` con `Query roadmapProgress` conectando puertos `ICourseRepository` e `IProgressRepository` (`ADR-010`, `ADR-012`).
+- [ ] [BACKEND] Endpoint REST `GET /api/v1/learning/roadmap/progress` que fusiona la telemetría de Supabase con los nodos de MongoDB.
 - [ ] [TEST] Test de rendimiento verificando latencia p95 < 30 ms en la entrega de la hoja de ruta combinada.

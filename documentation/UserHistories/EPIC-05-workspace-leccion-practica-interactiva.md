@@ -67,8 +67,7 @@
 > "Como estudiante, quiero completar una tríada balanceada en cada lección (ejecutar código en consola, responder una pregunta conceptual de 4 opciones y predecir una salida),
 > para validar mi aprendizaje de forma integral antes de recibir mis estrellas formativas."
 
-**Criterios de aceptación:**
-- Cada micro-lección está estructurada formalmente con **3 ítems obligatorios**:
+- Cada micro-lección está estructurada formalmente con **3 ítems obligatorios** (`ADR-011`):
   1. **Ítem 1 (Consola interactiva - `item_1_console`):** Desafío práctico de programación en Python. Incluye código inicial (`initial_code`), solución canónica (`solution_code`) y casos de prueba automatizados (`test_cases`) con entradas y salidas esperadas.
   2. **Ítem 2 (Quiz conceptual - `item_2_quiz`):** Pregunta teórica de selección múltiple con **exactamente 4 opciones A/B/C/D** (`options`), una única respuesta correcta, distractores plausibles y explicaciones de feedback para cada alternativa.
   3. **Ítem 3 (Predicción de salida o bug - `item_3_prediction`):** Fragmento de código donde el estudiante debe deducir la salida exacta de la terminal o identificar un error de lógica antes de compilar.
@@ -76,16 +75,27 @@
   - El estudiante debe superar el Ítem 1 para avanzar al Ítem 2, y el Ítem 2 para avanzar al Ítem 3.
   - Al completar los 3 ítems se marca la lección como superada.
   - **Calificación en Estrellas (⭐ 1 a 3):**
-    - ⭐⭐⭐ **(3 Estrellas):** Acierto limpio en los 3 ítems en el primer intento sin cometer ningún error en toda la sección.
-    - ⭐⭐ **(2 Estrellas):** El estudiante ejecuta bien el código en consola (Ítem 1), pero falla en la pregunta de selección múltiple (Ítem 2) o la predicción (Ítem 3) y lo corrige en la ronda de repaso.
-    - ⭐ **(1 Estrella):** El estudiante requiere múltiples intentos en consola o deriva reactivos fallados al Cuaderno de Errores con algoritmo SM-2.
-- **Feedback Formativo sin Spoilers:** Si el usuario falla un ítem, el backend devuelve una pista inteligente (`hint`) sin revelar la respuesta correcta ni la solución.
+    - ⭐⭐⭐ **(3 Estrellas - Perfección):** Acierto limpio en los 3 ítems en el primer intento sin cometer ningún error en toda la sección.
+    - ⭐⭐ **(2 Estrellas - Sólido):** El estudiante ejecuta bien el código en consola (Ítem 1), pero falla en la pregunta de selección múltiple (Ítem 2) o la predicción (Ítem 3) y lo corrige en la ronda de repaso final.
+    - ⭐ **(1 Estrella - Aprobado):** El estudiante requiere múltiples intentos en consola o deriva reactivos fallados al Cuaderno de Errores con algoritmo SM-2.
+- **Mutación GraphQL (`Mutation submitLessonAnswer(input: SubmitLessonAnswerInput!)`)** (`ADR-012`):
+  - Recibe `{ lesson_id: ID!, selected_option_ids: [ID!]!, time_spent_seconds: Int! }`.
+  - Evalúa la respuesta de forma determinista contra el contenido oficial de Python 3.12 y responde en **$p95 < 50\text{ ms}$** (`RNF-010`).
+  - Despacha de forma asíncrona no bloqueante el evento de dominio `lesson.completed` hacia el bus persistente en BullMQ (`ADR-010`, `ADR-011`) para procesar rachas y XP sin retrasar la respuesta al estudiante.
+  - **Feedback Formativo sin Spoilers:** Si es correcta, retorna `is_correct: true`, `xp_earned: 5` y explicación conceptual. Si es incorrecta, retorna `is_correct: false`, pista inteligente (`hint`) sin revelar la respuesta y se encola automáticamente para la ronda de repaso (`added_to_review_queue: true`).
 
 **Subtasks:**
 - [x] [BACKEND] Esquema Mongoose `LessonSchema` en `apps/api/src/database/schemas/lesson.schema.ts` formalizando los 3 ítems y semillas de ejemplo.
+- [ ] [BACKEND] Caso de uso `SubmitLessonUseCase` en `application/` y Resolver GraphQL `LearningResolver.submitLessonAnswer()` en `infrastructure/` (`ADR-012`).
 - [ ] [BACKEND] Servicio `LearningService.evaluateTriad()` en NestJS que valide deterministamente los 3 ítems y registre el intento en `attempts`.
+- [ ] [BACKEND] Emisión asíncrona del evento de dominio `LessonCompletedEvent` con BullMQ (`ADR-010`, `ADR-011`).
+- [ ] [BACKEND] Persistencia atómica del intento mediante el puerto `IProgressRepository` en Supabase PostgreSQL.
 - [ ] [FRONTEND] Orquestador visual del flujo de la tríada en `LessonWorkspaceLayout.tsx`.
-- [ ] [FRONTEND] Banner formativo de retroalimentación inmediata sin spoilers con animación emocional de Koda 🦊.
+- [ ] [FRONTEND] Componente `FeedbackBanner.tsx` con estados visuales diferenciados (éxito, error, pista) y animación de Koda 🦊.
+- [ ] [FRONTEND] Actualizar barra de XP en el header global de Zustand al acertar.
+
+**DoD adicional para esta US:**
+- La respuesta correcta nunca viaja en el payload de la lección antes de que el usuario envíe su intento.
 
 ---
 
@@ -113,25 +123,26 @@
 
 ---
 
-### LESS-05 — Tipos de Desafío Polimórficos en la Capa NoSQL (MongoDB)
+### LESS-05 — Tipos de Desafío Polimórficos de la Tríada en MongoDB
 **Tipo:** Story | **SP:** 5 | **Prioridad:** Alta | **Asignado:** Frontend Developer + Backend Developer  
 **Rama sugerida:** `feature/tipos-desafios-interactivos`  
-**Trazabilidad:** `ADR-009`, `23_CONTENT_SPECIFICATION.md`
+**Trazabilidad:** `ADR-009`, `ADR-011`, `ADR-012`, `23_CONTENT_SPECIFICATION.md`
 
 **Historia de usuario:**
 > "Como autor pedagógico y estudiante, quiero que el catálogo de lecciones admita desafíos polimórficos de alta expresividad técnica,
 > para aprender con formatos dinámicos (código ejecutable, quizzes de 4 alternativas y deducción en terminal)."
 
 **Criterios de aceptación:**
-- Soporte para estructuras polimórficas validadas en MongoDB:
+- Soporte para estructuras polimórficas de la Tríada Evaluativa validadas en MongoDB (`ADR-011`):
   1. `item_1_console`: Reto de código con `prompt`, `initial_code`, `solution_code` y lista de `test_cases`.
-  2. `item_2_quiz`: Pregunta con exactamente 4 opciones A, B, C, D donde cada opción contiene `id`, `text`, `is_correct` y `feedback`.
-  3. `item_3_prediction`: Fragmento de código Python con `target_type: 'predict_output'`, `expected_answer` y `hint`.
+  2. `item_2_quiz`: Pregunta con exactamente 4 opciones ($A, B, C, D$) donde cada opción contiene `id`, `text`, `is_correct` y `feedback`.
+  3. `item_3_prediction`: Fragmento de código Python con `target_type: 'predict_output'`, `expected_answer` y `hint` sin spoilers.
 - Renderizadores de UI desacoplados y modulares en `apps/web/src/components/lesson/items/`: `ConsoleExercise.tsx`, `MultipleChoiceExercise.tsx`, `PredictionExercise.tsx`.
-- Entrega $O(1)$ sin joins desde el backend NestJS consumiendo la colección `lessons` de MongoDB.
+- Consulta optimizada mediante **GraphQL (`Query lessonContent(id: ID!)`)** con entrega $O(1)$ sin joins desde el backend NestJS consumiendo la colección `lessons` de MongoDB (`ADR-012`).
 
 **Subtasks:**
-- [x] [BACKEND] Esquema Mongoose con sub-documentos tipados para cada ítem de la tríada.
+- [x] [BACKEND] Esquema Mongoose con sub-documentos tipados para cada ítem de la tríada en MongoDB (`ContentModule`).
+- [ ] [BACKEND] Resolver GraphQL `LearningResolver.lessonContent` con DataLoader para lecciones anidadas (`ADR-012`).
 - [ ] [FRONTEND] Implementar componentes visuales individuales para Consola, Quiz de 4 opciones y Predicción de salida.
 - [ ] [TEST] Validación con lecciones reales del Módulo 01 de Python 3.12 asegurando que todos los ítems responden correctamente.
 
@@ -140,7 +151,7 @@
 ### LESS-06 — Motor de Ejecución de Código Híbrido (`ICodeRunner`: Pyodide + Docker Sandbox)
 **Tipo:** Story | **SP:** 5 | **Prioridad:** Muy Alta | **Asignado:** Fullstack Developer  
 **Rama sugerida:** `feature/icoderunner-hybrid-nosql`  
-**Trazabilidad:** `ADR-006`, `ADR-008`, `11_SYSTEM_ARCHITECTURE.md`
+**Trazabilidad:** `ADR-006`, `ADR-008`, `ADR-009`, `ADR-012`, `11_SYSTEM_ARCHITECTURE.md`
 
 **Historia de usuario:**
 > "Como estudiante, quiero ejecutar código Python 3.12 directamente en mi navegador con retroalimentación en menos de 300 ms y respaldo en servidor,
@@ -149,11 +160,12 @@
 **Criterios de aceptación:**
 - **Ejecución Híbrida en 2 Niveles (`ADR-006`):**
   - **Nivel 1 (Cliente en WebAssembly con Pyodide):** Ejecución instantánea en el navegador para todos los ejercicios del Ítem 1 de la tríada (latencia < 200 ms, sin llamadas a red).
-  - **Nivel 2 (Servidor Docker Sandbox en NestJS):** Fallback automático cuando se requiera validar librerías del sistema, scripts que excedan memoria o clientes sin soporte WebAssembly.
+  - **Nivel 2 (Servidor Docker Sandbox en NestJS):** Fallback seguro hacia endpoint REST `POST /api/v1/sandbox/run` cuando se requiera validar librerías del sistema, scripts que excedan memoria o clientes sin soporte WebAssembly (`ADR-012`).
 - Sandboxing estricto en servidor: CPU 0.5 cores, 64 MB RAM, timeout de 3 segundos y bloqueo total de sockets de red (`--network none`).
 - Captura formateada de `stdout`, `stderr` y excepciones comunes de Python (`SyntaxError`, `IndentationError`, `TypeError`, `ZeroDivisionError`) con mensajes pedagógicos.
 
 **Subtasks:**
 - [ ] [FRONTEND] Integrar Web Worker con Pyodide para ejecución de Python en cliente sin congelar el hilo principal de la UI.
 - [ ] [BACKEND] Implementar servicio `CodeExecutionService` con interfaz `ICodeRunner` y driver Docker en NestJS.
+- [ ] [BACKEND] Controlador REST `SandboxController` (`POST /api/v1/sandbox/run`) con soporte para timeout y límites estrictos (`ADR-012`).
 - [ ] [TEST] Pruebas de seguridad verificando que comandos de escape de sandbox (ej. `import os; os.system(...)`) son neutralizados.

@@ -74,7 +74,7 @@ Derivados de `05_FUNCTIONAL_REQUIREMENTS.md` (referencia, no duplicación):
 | OT-01 | Arquitectura modular: Learning, Question, Evaluation, Progress, Gamification, Certification desacoplados. | `11` |
 | OT-02 | Contenido independiente del código (formato declarativo versionado). | `23`, `11` § principio |
 | OT-03 | Agregar un lenguaje = agregar contenido + config, sin tocar el motor. | `04`, `11` |
-| OT-04 | API REST versionada, autenticada y documentada (OpenAPI). | `13` |
+| OT-04 | API híbrida (GraphQL para UI y REST OpenAPI versionada y documentada). | `13` |
 | OT-05 | Modelo de datos normalizado con trazabilidad de progreso por intento. | `12` |
 | OT-06 | Seguridad: hash de contraseñas, tokens, validación, rate limiting, protección de datos personales. | `19` |
 | OT-07 | Observabilidad: logs estructurados, métricas de negocio y técnicas, backups. | `21`, `26` |

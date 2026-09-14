@@ -33,6 +33,8 @@
 **Subtasks:**
 - [x] [BD] Tabla `xp_transactions` en Supabase con RLS y trigger de inmutabilidad `fn_enforce_xp_immutability()`.
 - [ ] [BACKEND] Servicio `GamificationService.awardXp()` con validación anti-farming e idempotencia por request.
+- [ ] [BACKEND] Listener de eventos de dominio `GamificationListener` (`@OnEvent('lesson.completed')` / BullMQ Consumer) que acredita XP y recalcula niveles de forma asíncrona sin bloquear la respuesta de lección (`ADR-010`, `ADR-011`).
+- [ ] [BACKEND] Resolver GraphQL `GamificationResolver` con `Query studentDashboard` para agregar nivel, XP, racha y estado de curso en una sola llamada (`ADR-012`).
 - [ ] [FRONTEND] Barra de nivel animada en el Header global con porcentaje de avance hacia el siguiente nivel.
 - [ ] [FRONTEND] Modal interactivo de subida de nivel con sonido triunfal y tarjeta compartible.
 
@@ -67,8 +69,13 @@
 **Subtasks:**
 - [x] [BD] Tabla `streaks` en Supabase y trigger automático `trg_attempts_update_streak_and_study_time` ejecutando `fn_handle_user_study_activity()`.
 - [x] [BD] Columnas agregadas `total_study_time_seconds`, `current_streak`, `longest_streak`, `streak_freeze_count` en `public.users`.
+- [ ] [BACKEND] Listener `StreakListener` que reacciona asíncronamente a `lesson.completed` en BullMQ para auditar la racha del día sin impacto en la latencia de la lección (`ADR-010`, `ADR-011`).
+- [ ] [BACKEND] Worker BullMQ programado para evaluar consumos de freeze al cierre de la ventana de gracia (`ADR-011`).
 - [ ] [FRONTEND] Widget de racha en el Header con tooltip explicativo del estado del día, tiempo invertido y protectores restantes.
-- [ ] [FRONTEND] Modal de notificación cuando se consumió un Freeze para salvar la racha: *"¡Tu protector de racha te ha salvado ayer! Continúa hoy para mantener el fuego encendido 🛡️"*.
+- [ ] [FRONTEND] Modal de rescate o notificación cuando se consumió un Freeze para salvar la racha: *"¡Tu protector de racha te ha salvado ayer! Continúa hoy para mantener el fuego encendido 🛡️"*.
+
+**DoD adicional para esta US:**
+- Manejo correcto de bordes de zona horaria verificado mediante tests de fecha y hora simulados.
 
 ---
 
@@ -81,20 +88,20 @@
 > "Como estudiante, quiero desbloquear medallas y logros especiales al alcanzar hitos clave (racha, maestría 3⭐, remediación de errores),
 > para coleccionar reconocimientos en mi perfil y celebrar mis momentos memorables en Python 3.12."
 
-**Criterios de aceptación:**
-- Catálogo oficial poblado en Supabase (`achievements`):
+- Catálogo oficial poblado en Supabase (`achievements`) con 18 logros MVP (`16` §10):
   - *Primera Racha (`first_streak`):* Completar el primer día de estudio (+50 XP).
   - *Fuego Imparable (`streak_7_days`):* Mantener 7 días de racha continua (+150 XP).
   - *Perfección Absoluta (`first_star_3`):* Conseguir 3 estrellas en una sección (+100 XP).
   - *Maestro del Módulo (`first_module_master`):* Dominar un módulo con más del 80% de estrellas (+300 XP).
   - *Aprendiendo del Error (`first_remediation`):* Remediar el primer fallo en el Cuaderno de Errores (+75 XP).
-- Endpoint `GET /api/v1/users/me/achievements`: lista completa de logros con fecha de desbloqueo en `user_achievements`.
+- Consulta de logros mediante **GraphQL (`Query myAchievements`)** (`ADR-012`) y soporte REST `GET /api/v1/users/me/achievements`: lista completa de logros con fecha de desbloqueo en `user_achievements` sin over-fetching.
 - Notificación flotante tipo Toast animado en el momento exacto en que se desbloquea un logro: *"🏆 ¡Logro Desbloqueado: Perfección Absoluta! (+100 XP)"*.
-- Pantalla `/app/logros` con vitrina de medallas y filtros (Obtenidos / Por desbloquear).
+- Pantalla `/app/logros` con vitrina de medallas doradas, plateadas y de bronce y filtros (Obtenidos / Por desbloquear).
 
 **Subtasks:**
 - [x] [BD] Tablas `achievements` y `user_achievements` en Supabase con RLS y semillas iniciales desplegadas.
-- [ ] [BACKEND] Event listener en NestJS (`EventEmitter2`) que escuche eventos de lección/examen y evalúe condiciones de logro.
+- [ ] [BACKEND] Event listener en NestJS (`EventEmitter2` / BullMQ) que escuche eventos de lección/examen y evalúe condiciones de logro de forma asíncrona (`ADR-010`, `ADR-011`).
+- [ ] [BACKEND] Resolver GraphQL `GamificationResolver` con `Query myAchievements` (`ADR-012`).
 - [ ] [FRONTEND] Pantalla `apps/web/src/app/logros/page.tsx` con vitrina de medallas.
 - [ ] [FRONTEND] Componente de notificación emergente `AchievementToast.tsx` con sonido de fanfarria suave.
 

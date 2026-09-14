@@ -74,27 +74,32 @@
 ### AUTH-03 — Gestión de Perfil de Usuario Consolidado y Métricas en Tiempo Real
 **Tipo:** Story | **SP:** 3 | **Prioridad:** Media | **Asignado:** Frontend Developer + Backend Developer  
 **Rama sugerida:** `feature/perfil-usuario`  
-**Trazabilidad:** `12_DATABASE_DESIGN.md`, `19_SECURITY.md`
+**Trazabilidad:** `12_DATABASE_DESIGN.md`, `19_SECURITY.md`, `ADR-012`
 
 **Historia de usuario:**
 > "Como usuario de Koda, quiero consultar y editar mi perfil unificado (nombre, avatar de Koda, documento legal para certificados y meta de minutos),
 > para mantener mis datos actualizados y asegurar que mis diplomas oficiales se expidan con mi identidad legal correcta."
 
 **Criterios de aceptación:**
-- Endpoint `GET /api/v1/users/me` entrega la entidad consolidada de `public.users`:
-  - Identidad: `id`, `email`, `display_name`, `avatar_url`, `document_type`, documento enmascarado (`CC ***678`), `bio`, `timezone`, `locale`.
-  - Preferencias: `initial_language_slug`, `experience_level`, `learning_style`, `daily_goal_id`, `daily_goal_minutes`.
-  - Gamificación y Hábitos: `total_xp`, `current_level`, `current_streak`, `longest_streak`, `streak_freeze_count`, `total_study_time_seconds`, `last_study_date`.
-- Endpoint `PATCH /api/v1/users/me` permite actualizar: `display_name`, `avatar_url`, `bio`, `document_number`, `document_type`, `daily_goal_minutes` y `timezone`.
-- Cifrado o protección estricta de `document_number` para cumplimiento de privacidad (`RNF-008`).
-- Selector de avatares oficiales con las 4 expresiones de la mascota Koda 🦊.
-- RLS en Supabase: solo el titular de la sesión (`auth.uid() = id`) puede emitir `UPDATE` sobre su registro.
+- Consulta de perfil optimizada vía **GraphQL (`Query userProfile` / `Query me`)** y soporte REST `GET /api/v1/users/me`: entrega la entidad consolidada de `public.users` enlazada a `auth.users` en una sola petición sin over-fetching (`ADR-012`):
+  - **Identidad:** `id`, `email`, `display_name`, `avatar_url`, `document_type`, documento enmascarado (`CC ***678`), `bio`, `timezone`, `locale`.
+  - **Preferencias:** `initial_language_slug`, `experience_level`, `learning_style`, `daily_goal_id`, `daily_goal_minutes`.
+  - **Gamificación y Hábitos:** `total_xp`, `current_level`, `current_streak`, `longest_streak`, `streak_freeze_count`, `total_study_time_seconds`, `last_study_date`.
+- Endpoint REST `PATCH /api/v1/users/me` permite modificar: `display_name`, `avatar_url`, `bio`, `document_number`, `document_type`, `daily_goal_minutes` y `timezone`.
+- Cifrado simétrico de `document_number` (`19` §14, `RNF-008`) y máscara de privacidad legal en respuestas públicas.
+- Selector de avatares oficiales con 4 expresiones de Koda 🦊 (Koda Clásico, Koda Detective, Koda Astronauta, Koda Hacker) con carga binaria mediante `POST /api/v1/uploads/avatar`.
+- Políticas de Row-Level Security (RLS) en Supabase: solo el titular de la sesión (`auth.uid() = id`) puede emitir `UPDATE` sobre su registro.
 
 **Subtasks:**
-- [x] [BD] Definir columnas de perfil y preferencias directamente en `public.users` con constraints de formato y longitud.
-- [ ] [BACKEND] Controlador `UsersController` con endpoints de lectura y actualización parcial de perfil en NestJS.
-- [ ] [FRONTEND] Pantalla de perfil en `apps/web` con panel de estadísticas (tiempo total de estudio, racha actual, XP y nivel).
-- [ ] [FRONTEND] Selector de avatares SVG de Koda y formulario de datos personales con validación.
+- [x] [BD] Definir columnas de perfil y preferencias en `public.users` enlazadas a `auth.users` con constraints de formato y longitud (migración `20260914000001_consolidate_users_with_auth_users.sql`).
+- [ ] [BACKEND] Resolver GraphQL `UserResolver` (`Query userProfile`) en `infrastructure/` implementando el puerto `IUserRepository` (`ADR-010`, `ADR-012`).
+- [ ] [BACKEND] Controlador REST `UsersController` (`GET /api/v1/users/me`, `PATCH /api/v1/users/me` y subida de avatares).
+- [ ] [FRONTEND] Pantalla `apps/web/src/app/perfil/page.tsx` con grid de estadísticas (tiempo total de estudio, racha actual, XP y nivel) y badge de nivel.
+- [ ] [FRONTEND] Selector de avatares SVG de Koda 🦊 y formulario de edición con validación de nombre, bio y cédula/pasaporte.
+- [ ] [FRONTEND] Toast interactivo de confirmación al actualizar datos.
+
+**DoD adicional para esta US:**
+- El número de documento se transmite con TLS y se devuelve enmascarado en la API pública.
 
 ---
 

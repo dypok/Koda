@@ -1,6 +1,6 @@
 # ⚙️ Koda Backend API (`apps/api`) 🦊
 
-> Servicio backend monolito modular construido con **NestJS**, **TypeScript**, **OpenAPI 3.0.3 (Swagger)** y diseñado para desacoplar los motores pedagógico, de certificación, gamificación y analítica.
+> Servicio backend monolito hexagonal basado en EDD construido con **NestJS**, **TypeScript**, **GraphQL** y **OpenAPI 3.0.3 (Swagger)** y diseñado para desacoplar los motores pedagógico, de certificación, gamificación y analítica (`ADR-010`, `ADR-012`).
 
 ---
 
@@ -38,11 +38,12 @@ pnpm --filter api test
 
 ---
 
-## 📚 Documentación Interactiva de la API (Swagger)
+## 📚 Documentación Interactiva de la API
 
 Cuando el servidor está en ejecución (puerto por defecto: `4000`):
-- **Base URL:** `http://localhost:4000/api/v1`
+- **Base URL REST:** `http://localhost:4000/api/v1`
 - **Swagger UI en vivo:** `http://localhost:4000/api/docs`
+- **GraphQL Sandbox / Endpoint:** `http://localhost:4000/graphql`
 
 ---
 
