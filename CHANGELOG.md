@@ -10,6 +10,8 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-13 18:30] [Added] **Workspace de lección con enunciados y quiz:**
+  - Loader de contenido con code-split por módulo, ruta `/app/curso/[course]/seccion/[section]`, split teoría/práctica con stepper y atajos, renderer por tipo, XP +5/+2 con repaso sin spoilers, quiz por composition (70%) con desbloqueo siguiente y rail conectado.
 - [2026-09-13 18:05] [Added] **Lua como segunda especialidad:**
   - Elegible en el paso 1 del registro (badge Disponible, icono luna, `techAvailability`).
   - Pill `live` 100% en el carrusel de la landing y copy ES/EN con Python y Lua (hero, pricing, certificado).

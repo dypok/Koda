@@ -78,3 +78,4 @@
 - [Sunday]-[13/09/2026]-[17:55]-[Brandon Carranza] : Resurrección de Lua (M01 9x10=90 + M02 10x10=100 lecciones, manifest 12 módulos, metodología 28 y ADR-005-lua adaptados a la estructura actual).
 - [Sunday]-[13/09/2026]-[18:05]-[Brandon Carranza] : Lua como segunda especialidad (elegible en registro con icono luna, pill live 100% en carrusel, copy ES/EN con Python y Lua).
 - [Sunday]-[13/09/2026]-[18:15]-[Brandon Carranza] : Rama Lua Specialist en el roadmap (12 nodos generados del manifest, lecciones reales M01/M02 local-first en el servicio).
+- [Sunday]-[13/09/2026]-[18:30]-[Brandon Carranza] : Workspace de lección (loader con code-split, ruta curso/seccion split 50/50, renderer por tipo, XP + repaso, quiz 70% con desbloqueo, rail conectado).
