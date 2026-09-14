@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { KodaLogoSvg } from './KodaLogoSvg';
 import { cn } from '@/lib/utils';
 
 interface KodaLogoProps {
@@ -12,7 +12,7 @@ interface KodaLogoProps {
   label?: string;
 }
 
-/** Logo KODA con micro-interacción hover: elevación + resplandor ámbar. */
+/** Logo KODA inline: hover expande las llaves con GSAP + resplandor ámbar. */
 export const KodaLogo: React.FC<KodaLogoProps> = ({
   href = '/',
   imgClassName,
@@ -27,18 +27,13 @@ export const KodaLogo: React.FC<KodaLogoProps> = ({
       linkClassName
     )}
   >
-    <Image
-      src="/brand/logo.svg"
-      alt="Koda"
-      width={498}
-      height={185}
-      priority
+    <KodaLogoSvg
+      label="Koda"
       className={cn(
-        'w-auto select-none object-contain transition-all duration-300 ease-out transform-gpu',
-        'group-hover/koda-logo:scale-[1.05] group-hover/koda-logo:brightness-110',
+        'select-none transition-all duration-300 ease-out',
+        'group-hover/koda-logo:brightness-110',
         'group-hover/koda-logo:drop-shadow-[0_0_14px_rgba(245,158,11,0.5)]',
-        'group-active/koda-logo:scale-[0.97]',
-        imgClassName ?? 'h-7 w-auto sm:h-8'
+        imgClassName ?? 'h-7 sm:h-8'
       )}
     />
   </Link>
