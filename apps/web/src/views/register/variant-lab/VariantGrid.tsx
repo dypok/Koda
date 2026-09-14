@@ -6,6 +6,7 @@ import { LanguageOption } from '@/models/register/register.model';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 import { cn } from '@/lib/utils';
 import { VariantTokens } from './variant-styles';
+import { FlowRow } from './FlowRow';
 
 interface VariantGridProps {
   variantId: string;
@@ -136,6 +137,28 @@ export const VariantGrid: React.FC<VariantGridProps> = ({ variantId, tokens, ite
       {list.map((option, i) => {
         const index = offset + i;
         const selected = selectedId === option.id;
+        if (tokens.flow) {
+          const selectedInList = list.some((o) => o.id === selectedId);
+          const firstId = list.find((o) => o.isAvailable)?.id;
+          return (
+            <FlowRow
+              key={option.id}
+              option={option}
+              selected={selected}
+              tokens={tokens}
+              onSelect={onSelect}
+              roleProps={
+                tokens.radio
+                  ? {
+                      role: 'radio',
+                      'aria-checked': selected,
+                      tabIndex: selected || (!selectedInList && option.id === firstId) ? 0 : -1,
+                    }
+                  : undefined
+              }
+            />
+          );
+        }
         const cls = cn(tokens.card, selected ? tokens.cardSelected : option.isAvailable ? '' : tokens.cardLocked);
         if (tokens.radio) {
           const selectedInList = list.some((o) => o.id === selectedId);
