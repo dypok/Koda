@@ -5,10 +5,10 @@ import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 
 const CAPTIONS: { caption: string; ids: string[] }[] = [
-  { caption: '¡Empieza aquí! 👇', ids: ['inicio'] },
-  { caption: 'Mira esto 👀', ids: ['vista-previa', 'metodologia'] },
-  { caption: 'Casi llegas… 🚀', ids: ['testimonios', 'mapa', 'planes', 'certificado'] },
-  { caption: '¡Tu racha! 🎉', ids: ['finale'] },
+  { caption: '> empieza_aqui', ids: ['inicio'] },
+  { caption: '> ver_demo', ids: ['vista-previa', 'metodologia'] },
+  { caption: '> casi_listo', ids: ['testimonios', 'mapa', 'planes', 'certificado'] },
+  { caption: '> tu_racha', ids: ['finale'] },
 ];
 
 /** Koda guía fija (solo desktop): narra el viaje según la sección visible. */
@@ -60,7 +60,7 @@ export const KodaGuide: React.FC = () => {
           aria-hidden="true"
           className="pointer-events-none fixed right-5 bottom-24 z-30 hidden xl:flex flex-col items-center gap-1.5 select-none"
         >
-          <span className="rounded-2xl rounded-br-sm border border-amber-400/30 bg-slate-950/90 backdrop-blur px-3 py-1.5 text-xs font-bold text-amber-200 whitespace-nowrap">
+          <span className="rounded-[6px] border border-amber-400/40 border-l-2 border-l-amber-400 bg-slate-950/90 backdrop-blur px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-amber-200 whitespace-nowrap">
             {caption}
           </span>
           <Image

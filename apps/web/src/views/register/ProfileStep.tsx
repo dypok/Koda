@@ -63,7 +63,7 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
             )}
           </motion.div>
           <span aria-hidden="true" className="mt-1 max-w-[110px] rounded-xl rounded-tl-sm border border-amber-400/30 bg-amber-400/10 px-2 py-1 text-center text-[10px] font-bold leading-tight text-amber-200">
-            ¡Ya casi! 🎉
+            {'> perfil_casi_listo'}
           </span>
         </div>
         <div className="flex-1 min-w-0 space-y-2">

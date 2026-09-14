@@ -141,7 +141,7 @@ export const RegisterSuccessModal: React.FC<RegisterSuccessModalProps> = ({
                     className="object-contain select-none"
                   />
                 </motion.div>
-                <p className="font-display font-black text-amber-300">¡A la ruta! 🚀</p>
+                <p className="font-display font-black text-amber-300">{'> ruta_desbloqueada'}</p>
               </motion.div>
             )}
           </AnimatePresence>
