@@ -24,12 +24,17 @@ export const KodaLogoSvg: React.FC<KodaLogoSvgProps> = ({ className, label = 'Ko
       const open = rootRef.current?.querySelector('[data-brace="open"]');
       const close = rootRef.current?.querySelector('[data-brace="close"]');
       if (!open || !close) return;
+      // GSAP `x` es absoluto: sin base pisaría el translate() original
+      // y expulsaría las llaves del viewBox. Se mide la base primero.
+      const openX = Number(gsap.getProperty(open, 'x'));
+      const closeX = Number(gsap.getProperty(close, 'x'));
       const enter = () => {
-        gsap.to(open, { x: -EXPAND, duration: 0.55, ease: 'elastic.out(1, 0.55)', overwrite: 'auto' });
-        gsap.to(close, { x: EXPAND, duration: 0.55, ease: 'elastic.out(1, 0.55)', overwrite: 'auto' });
+        gsap.to(open, { x: openX - EXPAND, duration: 0.55, ease: 'elastic.out(1, 0.55)', overwrite: 'auto' });
+        gsap.to(close, { x: closeX + EXPAND, duration: 0.55, ease: 'elastic.out(1, 0.55)', overwrite: 'auto' });
       };
       const leave = () => {
-        gsap.to([open, close], { x: 0, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
+        gsap.to(open, { x: openX, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
+        gsap.to(close, { x: closeX, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
       };
       const root = rootRef.current;
       root?.addEventListener('mouseenter', enter);
