@@ -122,53 +122,49 @@
 
 ---
 
-### LESS-05 — Soporte de Tipos de Desafío Interactivo (Single Choice, Predict Output, Fill Blank)
-**Tipo:** Story | **SP:** 5 | **Prioridad:** Alta | **Asignado:** Frontend Developer  
-**Rama sugerida:** `feature/tipos-desafios-interactivos`
+### LESS-05 — Tipos de Desafío Polimórficos de la Tríada en MongoDB
+**Tipo:** Story | **SP:** 5 | **Prioridad:** Alta | **Asignado:** Frontend Developer + Backend Developer  
+**Rama sugerida:** `feature/tipos-desafios-interactivos`  
+**Trazabilidad:** `ADR-009`, `ADR-011`, `ADR-012`, `23_CONTENT_SPECIFICATION.md`
 
 **Historia de usuario:**
-> "Como estudiante, quiero interactuar con desafíos variados (opción única, predecir salida y completar espacios en blanco),
-> para desarrollar agilidad de lectura de código Python sin aburrirme con un único formato monótono."
+> "Como autor pedagógico y estudiante, quiero que el catálogo de lecciones admita desafíos polimórficos de alta expresividad técnica,
+> para aprender con formatos dinámicos (código ejecutable, quizzes de 4 alternativas y deducción en terminal)."
 
 **Criterios de aceptación:**
-- Soporte para los tipos de desafío formativo del MVP (`23_CONTENT_SPECIFICATION.md` §3):
-  1. **SINGLE_CHOICE:** Pregunta conceptual o de sintaxis con 4 opciones balanceadas.
-  2. **TRUE_FALSE:** Afirmación sobre el comportamiento de Python con 2 tarjetas (Verdadero / Falso).
-  3. **PREDICT_OUTPUT:** Fragmento de código Python con 4 opciones de lo que imprimirá la consola.
-  4. **FILL_BLANK:** Línea de código incompleta con slots donde el usuario selecciona la ficha correcta para completar la instrucción.
-- Renderizadores de componente desacoplados: `SingleChoiceExercise.tsx`, `TrueFalseExercise.tsx`, `PredictOutputExercise.tsx`, `FillBlankExercise.tsx`.
-- Todos los tipos comparten la misma interfaz de envío (`SubmitAnswerDto`) hacia el backend.
+- Soporte para estructuras polimórficas de la Tríada Evaluativa validadas en MongoDB (`ADR-011`):
+  1. `item_1_console`: Reto de código con `prompt`, `initial_code`, `solution_code` y suite de `test_cases`.
+  2. `item_2_quiz`: Pregunta conceptual con exactamente 4 opciones ($A, B, C, D$) donde cada opción contiene `id`, `text`, `is_correct` y `feedback`.
+  3. `item_3_prediction`: Fragmento de código Python con `target_type: 'predict_output'`, `expected_answer` y `hint` sin spoilers.
+- Renderizadores de UI desacoplados y modulares en `apps/web/src/components/lesson/items/`: `ConsoleExercise.tsx`, `MultipleChoiceExercise.tsx`, `PredictionExercise.tsx`.
+- Consulta optimizada mediante **GraphQL (`Query lessonContent(id: ID!)`)** que entrega la tríada en una sola llamada sin joins ni over-fetching (`ADR-012`).
 
 **Subtasks:**
-- [ ] [FRONTEND] Implementar fábrica de componentes de ejercicio basada en la propiedad `question.type`.
-- [ ] [FRONTEND] Diseñar fichas interactivas arrastrables o clickeables para `FillBlankExercise`.
-- [ ] [FRONTEND] Componente de vista previa de consola con tipografía monoespaciada para `PredictOutputExercise`.
-- [ ] [TEST] Pruebas con lecciones reales del Módulo 01 de Python verificando el correcto comportamiento de cada tipo.
-
-**DoD adicional para esta US:**
-- Rendimiento impecable sin parpadeos visuales al cambiar entre tipos de ejercicio.
+- [x] [BACKEND] Esquema Mongoose con sub-documentos tipados para cada ítem de la tríada en MongoDB (`ContentModule`).
+- [ ] [BACKEND] Resolver GraphQL `LearningResolver.lessonContent` con DataLoader para lecciones anidadas.
+- [ ] [FRONTEND] Implementar componentes visuales individuales para Consola, Quiz de 4 opciones y Predicción de salida.
+- [ ] [TEST] Validación con lecciones reales del Módulo 01 de Python 3.12 asegurando que todos los ítems responden correctamente.
 
 ---
 
-### LESS-06 — Motor de Ejecución de Código Híbrido (`ICodeRunner`) y Carga Documental NoSQL
+### LESS-06 — Motor de Ejecución de Código Híbrido (`ICodeRunner`: Pyodide + Docker Sandbox)
 **Tipo:** Story | **SP:** 5 | **Prioridad:** Muy Alta | **Asignado:** Fullstack Developer  
 **Rama sugerida:** `feature/icoderunner-hybrid-nosql`  
-**Trazabilidad:** `ADR-006`, `ADR-008`, `ADR-009`, `docs/04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md`
+**Trazabilidad:** `ADR-006`, `ADR-008`, `ADR-009`, `ADR-012`, `11_SYSTEM_ARCHITECTURE.md`
 
 **Historia de usuario:**
-> "Como estudiante, quiero ejecutar código Python directamente en mi navegador con retroalimentación instantánea y consultar lecciones sin latencia,
-> para comprobar mis hipótesis de programación en menos de 500 ms de forma segura y fluida."
+> "Como estudiante, quiero ejecutar código Python 3.12 directamente en mi navegador con retroalimentación en menos de 300 ms y respaldo en servidor,
+> para probar soluciones en tiempo real de forma segura y sin instalar software localmente."
 
 **Criterios de aceptación:**
-- **Carga Documental desde MongoDB (`ADR-009`):**
-  - Endpoint `GET /api/v1/content/lessons/:id` entrega el documento completo de la micro-lección en una sola consulta $O(1)$ sin joins (teoría Markdown, código inicial, casos de prueba, pistas y metadatos).
-- **Ejecución Híbrida (`ADR-006`):**
-  - **Cliente (Nivel 1):** Ejecución instantánea en WebAssembly mediante Pyodide para ejercicios estándar sin I/O bloqueante (latencia < 200 ms).
-  - **Backend Sandbox (Nivel 2 Fallback):** Para ejecuciones complejas o que superen límites de memoria del navegador, fallback seguro hacia sandbox Docker en NestJS con límites estrictos de CPU (0.5 cores), memoria (64 MB) y timeout de 3 segundos.
-- Manejo seguro de errores de sintaxis y excepciones (`SyntaxError`, `NameError`, `ZeroDivisionError`) formateados pedagógicamente sin exponer trazas internas del servidor.
+- **Ejecución Híbrida en 2 Niveles (`ADR-006`):**
+  - **Nivel 1 (Cliente en WebAssembly con Pyodide):** Ejecución instantánea en el navegador para todos los ejercicios del Ítem 1 de la tríada (latencia < 200 ms, sin llamadas a red).
+  - **Nivel 2 (Servidor Sandbox en NestJS):** Fallback seguro hacia endpoint REST `POST /api/v1/sandbox/run` cuando se requiera validar librerías del sistema, scripts que excedan memoria o clientes sin soporte WebAssembly (`ADR-012`).
+- Sandboxing estricto en servidor: límites de CPU (0.5 cores), memoria (64 MB), timeout de 3 segundos y bloqueo total de sockets de red (`--network none`).
+- Captura formateada de `stdout`, `stderr` y excepciones comunes de Python (`SyntaxError`, `IndentationError`, `TypeError`, `ZeroDivisionError`) con mensajes pedagógicos.
 
 **Subtasks:**
-- [ ] [FRONTEND] Integrar Web Worker con Pyodide para ejecución de Python en cliente sin congelar la UI.
-- [ ] [BACKEND] Implementar interfaz `ICodeRunner` en NestJS `CodeExecutionService` con driver Docker aislado.
-- [ ] [BACKEND] Mapear schema Mongoose de lecciones en MongoDB (`ADR-009`) para entrega atómica en `ContentModule`.
-- [ ] [TEST] Verificar aislamiento y timeout del sandbox ante bucles infinitos (`while True:`).
+- [ ] [FRONTEND] Integrar Web Worker con Pyodide para ejecución de Python en cliente sin congelar el hilo principal de la UI.
+- [ ] [BACKEND] Implementar interfaz `ICodeRunner` en `apps/api` con driver Pyodide y driver Docker/Judge0 en NestJS.
+- [ ] [BACKEND] Controlador REST `SandboxController` (`POST /api/v1/sandbox/run`) con soporte para timeout y límites estrictos.
+- [ ] [TEST] Pruebas de seguridad verificando que comandos de escape de sandbox (ej. `import os; os.system(...)`) son neutralizados.

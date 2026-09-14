@@ -82,13 +82,14 @@
   2. *Constancia:* "Semana de Fuego" (7 días de racha), "Mes Legendario" (30 días).
   3. *Maestría:* "Perfección en Fundamentos" (3⭐ en todo M01), "Cazador de Errores" (10 errores remediados en el cuaderno).
   4. *Excelencia:* "Mente Brillante" (100% en un Examen Final sin errores).
-- Endpoint `GET /api/v1/users/me/achievements`: lista completa de logros con fecha de desbloqueo o progreso porcentual hacia la meta.
+- Consulta de logros mediante **GraphQL (`Query myAchievements`)** (`ADR-012`): lista completa de logros con fecha de desbloqueo o progreso porcentual hacia la meta sin over-fetching.
 - Notificación flotante tipo Toast animado en el momento exacto en que se desbloquea un logro: *"🏆 ¡Logro Desbloqueado: Perfección en Fundamentos! (+50 XP)"*.
 - Pantalla `/app/logros` con vitrina de medallas doradas, plateadas y de bronce.
 
 **Subtasks:**
 - [ ] [BD] Tablas `achievements` y `user_achievements` en Supabase con metadata, icono y XP bono.
-- [ ] [BACKEND] Event listener en NestJS (`EventEmitter2`) que escuche eventos de lección/examen y evalúe condiciones de logro.
+- [ ] [BACKEND] Event listener en NestJS (`EventEmitter2` / BullMQ) que escuche eventos de lección/examen y evalúe condiciones de logro de forma asíncrona (`ADR-010`).
+- [ ] [BACKEND] Resolver GraphQL `GamificationResolver` con `Query myAchievements` (`ADR-012`).
 - [ ] [FRONTEND] Pantalla `apps/web/src/app/logros/page.tsx` con vitrina de medallas y filtros (Obtenidos / Por desbloquear).
 - [ ] [FRONTEND] Componente de notificación emergente `AchievementToast.tsx` con sonido de fanfarria suave.
 

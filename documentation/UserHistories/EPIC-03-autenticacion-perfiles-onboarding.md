@@ -66,26 +66,28 @@
 
 ---
 
-### AUTH-03 — Gestión de Perfil de Usuario y Preferencias
-**Tipo:** Story | **SP:** 3 | **Prioridad:** Media | **Asignado:** Frontend Developer  
-**Rama sugerida:** `feature/perfil-usuario`
+### AUTH-03 — Gestión de Perfil de Usuario Consolidado y Preferencias
+**Tipo:** Story | **SP:** 3 | **Prioridad:** Media | **Asignado:** Frontend Developer + Backend Developer  
+**Rama sugerida:** `feature/perfil-usuario`  
+**Trazabilidad:** `12_DATABASE_DESIGN.md`, `19_SECURITY.md`, `ADR-012`
 
 **Historia de usuario:**
-> "Como usuario de Koda, quiero ver y editar mi perfil personal (nombre, avatar de Koda, número de documento para certificados),
-> para personalizar mi experiencia y asegurar que mis futuros diplomas salgan con mi nombre oficial correcto."
+> "Como usuario de Koda, quiero consultar y editar mi perfil unificado (nombre, avatar de Koda, documento legal para certificados y meta de minutos),
+> para mantener mis datos actualizados y asegurar que mis diplomas oficiales se expidan con mi identidad legal correcta."
 
 **Criterios de aceptación:**
-- Consulta de perfil optimizada vía **GraphQL (`Query userProfile` / `Query me`)**: entrega nombre, email, avatar, fecha de registro, XP total, nivel actual, racha, estadísticas de lecciones y documento enmascarado (`CC ***678`) en una sola petición sin over-fetching (`ADR-012`).
-- Endpoint REST `PATCH /api/v1/users/me` permite modificar: `full_name`, `avatar_id`, `theme_preference` y `document_number` (cifrado simétrico en BD `19` §14).
+- Consulta de perfil optimizada vía **GraphQL (`Query userProfile` / `Query me`)**: entrega la entidad consolidada de `public.users` enlazada a `auth.users` (`id`, `email`, `display_name`, `avatar_url`, `bio`, `timezone`, `daily_goal_minutes`, `total_xp`, `current_level`, `current_streak`, `longest_streak`, documento enmascarado `CC ***678`) en una sola petición sin over-fetching (`ADR-012`).
+- Endpoint REST `PATCH /api/v1/users/me` permite modificar: `display_name`, `avatar_url`, `bio`, `document_number`, `document_type`, `daily_goal_minutes` y `timezone`.
+- Cifrado simétrico de `document_number` (`19` §14) y máscara de privacidad legal en respuestas públicas.
 - Selector de avatares oficiales con expresiones de Koda 🦊 (Koda Clásico, Koda Detective, Koda Astronauta, Koda Hacker) con carga binaria mediante `POST /api/v1/uploads/avatar`.
-- Visualización de estadísticas del estudiante: lecciones completadas, porcentaje de maestría en Python 3.12, certificados obtenidos.
+- Políticas de Row-Level Security (RLS) en Supabase: solo el titular de la sesión (`auth.uid() = id`) puede emitir `UPDATE` sobre su registro.
 
 **Subtasks:**
-- [ ] [BD] Verificar tabla `user_profiles` en Supabase con función `pgp_sym_encrypt` para número de identificación legal.
-- [ ] [BACKEND] Resolver GraphQL `UserResolver` (`Query userProfile`) para entrega granular y eficiente de estadísticas.
+- [x] [BD] Definir columnas de perfil y preferencias en `public.users` enlazadas a `auth.users` con constraints de formato y longitud (migración `20260914000001_consolidate_users_with_auth_users.sql`).
+- [ ] [BACKEND] Resolver GraphQL `UserResolver` (`Query userProfile`) en `infrastructure/` implementando el puerto `IUserRepository`.
 - [ ] [BACKEND] Controlador REST `UsersController` (`PATCH /api/v1/users/me` y subida de avatares).
-- [ ] [FRONTEND] Pantalla `apps/web/src/app/perfil/page.tsx` con grid de estadísticas, badge de nivel y selector de avatares.
-- [ ] [FRONTEND] Formulario de edición con validación de nombre y cédula/pasaporte.
+- [ ] [FRONTEND] Pantalla `apps/web/src/app/perfil/page.tsx` con grid de estadísticas, badge de nivel y selector de avatares SVG de Koda 🦊.
+- [ ] [FRONTEND] Formulario de edición con validación de nombre, bio y cédula/pasaporte.
 - [ ] [FRONTEND] Toast interactivo de confirmación al actualizar datos.
 
 **DoD adicional para esta US:**

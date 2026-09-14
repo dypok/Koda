@@ -23,7 +23,7 @@
   - Estado vacío enriquecido: *"¡Tu cuaderno está impecable! No tienes errores pendientes. Sigue así 🚀"*.
 
 **Subtasks:**
-- [ ] [BD] Tabla `user_notebook_mistakes` en Supabase con columnas de algoritmo SM-2: `interval_days`, `ease_factor`, `repetition_count`, `next_review_at` (`ADR-011`).
+- [x] [BD] Tabla `user_notebook_mistakes` en Supabase con columnas de algoritmo SM-2: `interval_days`, `ease_factor`, `repetition_count`, `next_review_at` (`ADR-011`).
 - [ ] [BACKEND] Resolver GraphQL `NotebookResolver` con `Query mistakeNotebook` en `infrastructure/` implementando el puerto `INotebookRepository`.
 - [ ] [FRONTEND] Pantalla `apps/web/src/app/cuaderno/page.tsx` con grid de tarjetas de errores pendientes.
 - [ ] [FRONTEND] Badge numérico de alerta en el ítem de navegación del Sidebar: *"📓 Cuaderno [ 4 ]"*.
