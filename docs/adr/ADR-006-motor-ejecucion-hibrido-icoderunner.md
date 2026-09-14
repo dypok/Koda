@@ -10,7 +10,7 @@
 ## 1. Contexto y Problema
 Koda enseña programación práctica interactiva. La verificación de código de los estudiantes puede demandar miles de ejecuciones por minuto con alta concurrencia. Ejecutar cada script en servidores backend Docker introduce altos costos de infraestructura cloud, cuellos de botella de latencia (>1 s) y riesgos de seguridad (escape de sandbox, denegación de servicio por bucles infinitos).
 
-## 2. Alternativas Evapythondas
+## 2. Alternativas Evaluadas
 1. **Ejecución 100% en Servidor (Docker Sandbox / Judge0 / Piston):**
    - *Desventajas:* Costo de servidores elevado en fases tempranas, latencia de red en cada comprobación de código, riesgo de sobrecarga de CPU por scripts maliciosos del usuario.
 2. **Ejecución 100% en Cliente (Wasm / Web Workers):**

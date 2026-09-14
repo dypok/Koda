@@ -38,7 +38,7 @@ Este documento define **la estructura canónica del contenido educativo** —qu�
 
 ```
 Lenguaje (Language)
- └─ Módulo (Module)                 — unidad temática evapythonble con examen final
+ └─ Módulo (Module)                 — unidad temática evaluable con examen final
      ├─ Sección (Section)           — unidad de sesión: teoría + ejemplo + ejercicios
      │   └─ Lección (Lesson)        — micro-bloque: concepto → explicación → ejemplo → ejercicio(s) → feedback → recompensa
      │       ├─ Ejemplo(s) (Example)    — bloque(s) de código con output esperado
@@ -51,7 +51,7 @@ Lenguaje (Language)
 
 **Cardinalidades MVP (Python 12 módulos, `01` §34):**
 
-| Nivel | Cardinalidad | Orden | Prerrequisito | Evapythonble |
+| Nivel | Cardinalidad | Orden | Prerrequisito | Evaluable |
 |---|---|---|---|---|
 | Lenguaje | N en catálogo; 1 activo por usuario; en MVP solo `PY=available` | `sort_order` global | — | No (se completa vía módulos) |
 | Módulo | 12 en Python; N configurable por lenguaje | `position` 1..N por lenguaje, sin huecos | `prerequisite_module_id` (DAG) | Sí — Examen final |
@@ -167,7 +167,7 @@ Bloque ilustrativo dentro de una lección.
 | `explanation` | `string` | No | ≤1000 chars | Qué demuestra el ejemplo |
 | `position` | `integer` | Sí | 1..N | Orden dentro de la lección |
 
-**Regla:** el ejemplo nunca es evapythonble; solo ilustra. La evapythonción vive en `exercises`.
+**Regla:** el ejemplo nunca es evaluable; solo ilustra. La evaluación vive en `exercises`.
 
 ### 4.6 Ejercicio / Pregunta (Question)
 
@@ -192,7 +192,7 @@ Instancia tipificada. No se redefine aquí el catálogo completo; toda pregunta 
 | `score` | `integer` | Sí | 1–100, por defecto 10 | Puntaje base `p_base` |
 | `hints` | `array<string>` | No | Cada ≤500 chars | Pistas opcionales (no revelan respuesta) |
 | `time_estimated_seconds` | `integer` \| `null` | No | 10–600 | — |
-| `concept_ids` | `array<string>` | No | Cada `concept_id` válido | Conceptos evapythondos (para repaso) |
+| `concept_ids` | `array<string>` | No | Cada `concept_id` válido | Conceptos evaluados (para repaso) |
 | `status` | `enum` | Sí | `draft` \| `published` \| `archived` | — |
 | `content_version` | `integer` | Sí | `>=1`, alias de `version` | Trazabilidad `RNF-035` |
 | `is_diagnostic` | `boolean` | No | Por defecto `false` | Si `true`, elegible para diagnóstico (`14` §5.2) |
@@ -210,7 +210,7 @@ Instancia tipificada. No se redefine aquí el catálogo completo; toda pregunta 
 | `order_lines` | Ordenar líneas | Reordenar 4–6 bloques |
 | `select_code` | Seleccionar código correcto | Elegir snippet correcto entre 3–4 |
 | `matching` | Relacionar conceptos | Emparejar 3–5 pares término↔definición |
-| `write_code` | Escribir código (MVP restringido) | 1–3 líneas; evapythondo por tokens sin runner (`04` §4) |
+| `write_code` | Escribir código (MVP restringido) | 1–3 líneas; evaluado por tokens sin runner (`04` §4) |
 | `small_problem` | Resolver pequeño problema | Respuesta determinista (numérica/texto/opción) |
 
 ### 4.7 Respuesta (Answer)

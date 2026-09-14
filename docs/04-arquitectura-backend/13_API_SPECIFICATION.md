@@ -58,7 +58,7 @@ Base URL (prod):    https://api.duolingo-programacion.com/api/v1
 | Porcentaje de Maestría | Decimal `0.00` a `100.00` | `85.50` |
 | Paginación | `?page=1&per_page=20` (1-indexed) | — |
 | Ordenamiento | `?sort=created_at&order=desc` | — |
-| Idempotencia | Header `Idempotency-Key: <uuid>` en POST de mutación/evapythonción | — |
+| Idempotencia | Header `Idempotency-Key: <uuid>` en POST de mutación/evaluación | — |
 | Correlación | Response header `X-Request-Id: <uuid>` + campo `request_id` en errores (`RNF-041`, `RNF-045`) | — |
 
 ### 2.3 Paginación, filtrado y envoltorios
@@ -87,7 +87,7 @@ Regla `RNF-003`: ninguna lista devuelve >100 ítems sin paginación; payload de 
 
 ```http
 Authorization: Bearer <access_token>    // Requerido salvo endpoints públicos
-Idempotency-Key: <uuid>                // Requerido en POST evapythonbles y de progreso
+Idempotency-Key: <uuid>                // Requerido en POST evaluables y de progreso
 X-Request-Id: <uuid>                   // Devuelto por el servidor en todas las respuestas
 Cache-Control: no-store                // En respuestas autenticadas
 ```
@@ -158,6 +158,7 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
 | 7 | Auth | POST | `/auth/verify-email` | No (token) | — | Confirma email del usuario | RF-AUTH-005 |
 | 8 | Users | GET | `/users/me` | Sí | USER | Perfil consolidado del titular | RF-PROF-001, RF-USR-002 |
 | 9 | Users | PATCH | `/users/me` | Sí | USER | Actualiza datos de perfil / clave | RF-USR-002, RF-PROF-002 |
+| 9B | Users | PATCH | `/users/me/preferences` | Sí | USER | Actualiza estilo de aprendizaje y meta diaria | RF-USR-002, RF-RACHA-004 |
 | 10 | Users | DELETE | `/users/me` | Sí | USER | Solicita anonimización / baja | RF-USR-003 |
 | 11 | Users | GET | `/users/me/progress` | Sí | USER | Progreso agregado por lenguaje / módulo | RF-PROG-002, RF-PROG-005 |
 | 12 | Users | GET | `/users/me/achievements` | Sí | USER | Logros desbloqueados y en progreso | RF-LOGRO-002/003 |
@@ -166,7 +167,10 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
 | 15 | Languages | GET | `/languages` | No* | — | Lista de lenguajes (Python disponibles) | RF-LANG-001 |
 | 16 | Languages | GET | `/languages/{id}` | No* | — | Detalle de un lenguaje de programación | RF-LANG-001 |
 | 17 | Languages | GET | `/languages/{id}/modules` | Sí | USER | Lista de módulos con progreso y candados | RF-MOD-001, RF-RUTA-002 |
-| 18 | Languages | GET | `/languages/{id}/roadmap` | Sí | USER | **Roadmap interactivo:** módulos, candados y estrellas | RF-CANDADO-001, RF-ESTRELLA-001 |
+| 18 | Roadmap | GET | `/roadmap/branches` | Sí | USER | Listado de ramas profesionales (Frontend, Backend, DevOps) con telemetría | ADR-007, RF-RUTA-001 |
+| 18A | Roadmap | GET | `/roadmap/branches/{branchId}` | Sí | USER | **Grafo DAG interactivo:** nodos espaciales y aristas SVG | ADR-007, ADR-011 |
+| 18B | Roadmap | GET | `/roadmap/courses/{id}/lessons` | Sí | USER | Grafo DAG de lecciones detalladas del curso | ADR-007, RF-LEC-001 |
+| 18C | Roadmap | GET | `/roadmap/telemetry/milestone` | Sí | USER | Siguiente hito desbloqueable (título, XP, etiqueta `RQ`) | ADR-007, RF-MOD-003 |
 | 19 | Modules | GET | `/modules/{id}` | Sí | USER | Detalle de módulo (objetivo, candado, % estrellas) | RF-MOD-002/003/005 |
 | 20 | Modules | GET | `/modules/{id}/sections` | Sí | USER | Secciones del módulo con candados y ⭐ | RF-SEC-001, RF-CANDADO-002 |
 | 21 | Sections | GET | `/sections/{id}` | Sí | USER | Detalle de sección con micro-lecciones y ⭐ obtenidas | RF-SEC-002/004, RF-ESTRELLA-004 |
@@ -179,7 +183,7 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
 | 28 | Notebook | POST | `/notebook/mistakes/{question_id}/resolve` | Sí | USER | **Remediación en cuaderno:** valida solución (+5 XP) | RF-CUADERNO-005/006 |
 | 29 | Levels | POST | `/users/me/level` | Sí | USER | Declaración de nivel inicial | RF-LVL-001/002 |
 | 30 | Diagnostics | POST | `/diagnostics` | Sí | USER | Inicia diagnóstico por lenguaje | RF-DIAG-001 |
-| 31 | Diagnostics | POST | `/diagnostics/{id}/attempt` | Sí | USER | Envía intento de diagnóstico (evapythonción y entrada) | RF-DIAG-002/003 |
+| 31 | Diagnostics | POST | `/diagnostics/{id}/attempt` | Sí | USER | Envía intento de diagnóstico (evaluación y entrada) | RF-DIAG-002/003 |
 | 32 | Quizzes | GET | `/quizzes/{id}` | Sí | USER | Metadatos y composición del quiz | RF-QUIZ-001 |
 | 33 | Quizzes | POST | `/quiz/{id}/attempt` | Sí | USER | Envía intento de quiz (umbral 70%) | RF-QUIZ-002/003/006 |
 | 34 | Quizzes | GET | `/quiz/{id}/attempts` | Sí | USER | Historial de intentos de quiz | RF-QUIZ-005, RF-EVAL-003 |
@@ -201,11 +205,11 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
 
 ## 6. Schemas comunes (contratos JSON)
 
-### 6.1 User
+### 6.1 User y UserProfile
 ```json
 {
   "id": "0f8a1e3a-4b2c-4d9e-9f1a-2b3c4d5e6f70",
-  "name": "Brandon",
+  "name": "Brandon Pérez",
   "email": "brandon@example.com",
   "role": "user",
   "avatar_url": "https://cdn.koda.app/avatars/koda.png",
@@ -213,6 +217,19 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
   "is_premium": false,
   "level": 3,
   "xp_total": 450,
+  "profile": {
+    "initial_language_slug": "python",
+    "experience_level": "beginner",
+    "learning_style": "hands-on",
+    "daily_goal_id": "regular",
+    "daily_goal_minutes": 10,
+    "current_streak": 5,
+    "longest_streak": 12,
+    "streak_freeze_count": 1,
+    "total_study_time_seconds": 3600,
+    "last_study_date": "2026-09-12",
+    "timezone": "America/Bogota"
+  },
   "created_at": "2026-09-01T10:00:00-05:00"
 }
 ```
@@ -255,7 +272,7 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
     "min_stars_percentage_required": 80,
     "requires_exam_passed": false
   },
-  "evapythontions": {
+  "evaluations": {
     "quiz_id": "qz-py-01",
     "exam_id": "ex-py-01"
   }
@@ -317,7 +334,36 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
 }
 ```
 
-### 6.7 UserMistakesNotebookItem (Cuaderno de Errores)
+### 6.6A LessonTriadSubmission y Feedback de Estrellas (ADR-011)
+**Request Payload (`POST /api/v1/learning/lessons/{id}/submit-triad`):**
+```json
+{
+  "lesson_id": "les-dom-02",
+  "item_1_code": "const submitBtn = document.querySelector('#btn-submit');",
+  "item_2_selected_option_id": "opt-a",
+  "item_3_answer": "Hola"
+}
+```
+
+**Response Payload (`200 OK`):**
+```json
+{
+  "is_completed": true,
+  "stars_earned": 3,
+  "items_passed": {
+    "console": true,
+    "options": true,
+    "prediction": true
+  },
+  "score_percentage": 100.0,
+  "xp_earned": 25,
+  "feedback_message": "¡Excelente! Dominaste el código, la teoría y la predicción al primer intento.",
+  "console_output": "Test 1: Passed ✅ (Found #btn-submit)\nTest 2: Passed ✅ (Correct type HTMLButtonElement)",
+  "added_to_review_queue": false
+}
+```
+
+### 6.7 UserMistakesNotebookItem (Cuaderno de Errores con Algoritmo SM-2)
 ```json
 {
   "id": "mstk-0f8a-001",
@@ -335,13 +381,71 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
   ],
   "user_last_answer": { "selected_option_id": "b" },
   "error_count": 2,
+  "interval_days": 3,
+  "ease_factor": 2.50,
+  "repetition_count": 1,
+  "next_review_at": "2026-09-14T10:00:00-05:00",
   "last_failed_at": "2026-09-02T14:10:00-05:00",
   "is_resolved": false,
   "resolved_at": null
 }
 ```
 
-### 6.8 Roadmap Completo
+### 6.8 Grafo DAG de Carrera y Telemetría de Roadmap (ADR-007, ADR-011)
+```json
+{
+  "branch": {
+    "id": "frontend",
+    "name": "Frontend Developer",
+    "description": "HTML, CSS, JS DOM, React, Tailwind",
+    "progress_percentage": 18,
+    "completed_courses": 1,
+    "total_courses": 5,
+    "stars_earned": 6
+  },
+  "nodes": [
+    {
+      "id": "html-semantic",
+      "code": "01",
+      "title": "HTML SEMÁNTICO",
+      "subtitle": "ACTIVO • EN PROGRESO",
+      "variant": "active",
+      "icon_type": "brackets",
+      "graph_x": 140,
+      "graph_y": 300,
+      "is_unlocked": true,
+      "stars_earned": 6,
+      "max_stars": 9,
+      "prerequisites": []
+    },
+    {
+      "id": "css-modern",
+      "code": "02",
+      "title": "CSS MODERNO",
+      "subtitle": "RQ HTML",
+      "variant": "locked",
+      "icon_type": "lock",
+      "graph_x": 380,
+      "graph_y": 300,
+      "is_unlocked": false,
+      "stars_earned": 0,
+      "max_stars": 12,
+      "prerequisites": ["html-semantic"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "edge-html-css",
+      "from_id": "html-semantic",
+      "to_id": "css-modern",
+      "variant": "direct",
+      "is_completed": false
+    }
+  ]
+}
+```
+
+### 6.9 Roadmap Completo (Ruta Canónica de Módulos)
 ```json
 {
   "language_id": "python",
@@ -410,12 +514,16 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
 - **Auth:** No · **Idempotencia:** No
 - **RF:** RF-AUTH-001, RF-USR-001 · **RNF:** RNF-008 (Argon2id/bcrypt)
 
-**Request:**
+**Request (incorporando las opciones del stepper de registro del frontend):**
 ```json
 {
-  "name": "Brandon Pérez",
+  "fullName": "Brandon Pérez",
   "email": "brandon@example.com",
-  "password": "PasswordSeguro!2026"
+  "password": "PasswordSeguro!2026",
+  "selectedLanguageId": "python",
+  "selectedExperienceId": "beginner",
+  "selectedStyleId": "hands-on",
+  "selectedGoalId": "regular"
 }
 ```
 
@@ -425,15 +533,32 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
   "data": {
     "user": {
       "id": "0f8a1e3a-4b2c-4d9e-9f1a-2b3c4d5e6f70",
-      "name": "Brandon Pérez",
       "email": "brandon@example.com",
       "role": "user",
       "email_verified": false
     },
+    "profile": {
+      "id": "1a2b3c4d-5e6f-7a8b-9c0d-1e2f3a4b5c6d",
+      "user_id": "0f8a1e3a-4b2c-4d9e-9f1a-2b3c4d5e6f70",
+      "display_name": "Brandon Pérez",
+      "initial_language_slug": "python",
+      "experience_level": "beginner",
+      "learning_style": "hands-on",
+      "daily_goal_id": "regular",
+      "daily_goal_minutes": 10,
+      "total_xp": 0,
+      "level": 1,
+      "current_streak": 0,
+      "longest_streak": 0,
+      "streak_freeze_count": 1,
+      "total_study_time_seconds": 0,
+      "timezone": "America/Bogota"
+    },
     "tokens": {
       "access_token": "eyJhbGciOi...",
       "refresh_token": "7a8b9c...",
-      "expires_in": 900
+      "expires_in": 900,
+      "token_type": "Bearer"
     }
   }
 }
@@ -805,6 +930,76 @@ Retorna el schema detallado en §6.8 con todos los módulos, candados, estrellas
 
 ---
 
+### 7.12 `GET /progress/streak` — Estado de Racha y Tiempo de Estudio Diario
+
+- **Auth:** Sí (Bearer Token) · **Idempotencia:** No · **RF:** RF-RACHA-001–005, RF-PROF-006
+
+**Response `200 OK`:**
+```json
+{
+  "data": {
+    "current_streak": 7,
+    "longest_streak": 14,
+    "last_activity_date": "2026-09-12",
+    "is_active_today": true,
+    "freeze_count": 2,
+    "today_study_time_seconds": 720,
+    "daily_goal_minutes": 10,
+    "daily_goal_met": true,
+    "timezone": "America/Bogota",
+    "recent_history": [
+      {
+        "activity_date": "2026-09-12",
+        "study_time_seconds": 720,
+        "lessons_completed_count": 3,
+        "xp_earned_today": 45,
+        "daily_goal_met": true,
+        "freeze_used": false
+      },
+      {
+        "activity_date": "2026-09-11",
+        "study_time_seconds": 650,
+        "lessons_completed_count": 2,
+        "xp_earned_today": 30,
+        "daily_goal_met": true,
+        "freeze_used": false
+      }
+    ]
+  }
+}
+```
+
+---
+
+### 7.13 `PATCH /users/me/preferences` — Actualizar Preferencias y Metas de Estudio
+
+- **Auth:** Sí (Bearer Token) · **Idempotencia:** No · **RF:** RF-USR-002, RF-RACHA-004
+
+**Request:**
+```json
+{
+  "learning_style": "gamified",
+  "daily_goal_id": "focused",
+  "daily_goal_minutes": 15,
+  "timezone": "America/Bogota"
+}
+```
+
+**Response `200 OK`:**
+```json
+{
+  "data": {
+    "learning_style": "gamified",
+    "daily_goal_id": "focused",
+    "daily_goal_minutes": 15,
+    "timezone": "America/Bogota",
+    "updated_at": "2026-09-12T16:35:00-05:00"
+  }
+}
+```
+
+---
+
 ## 8. Catálogo de códigos de error por dominio
 
 | Dominio | HTTP | `code` | Mensaje (es) | RF / RNF |
@@ -821,7 +1016,7 @@ Retorna el schema detallado en §6.8 con todos los módulos, candados, estrellas
 | **Notebook** | 409 | `ALREADY_RESOLVED` | El error ya fue remediado previamente en el cuaderno. | RF-CUADERNO-005 |
 | **Lessons** | 422 | `LESSON_LOCKED` | Micro-lección bloqueada. Completa las anteriores. | RF-LEC-004 |
 | **Lessons** | 409 | `ALREADY_COMPLETED` | Lección o sección ya completada (idempotencia garantizada). | RF-XP-005 |
-| **Quiz/Exam**| 400 | `INCOMPLETE_ANSWERS` | Faltan respuestas para preguntas obligatorias de la evapythonción. | RF-QUIZ-002, RF-EXAM-001 |
+| **Quiz/Exam**| 400 | `INCOMPLETE_ANSWERS` | Faltan respuestas para preguntas obligatorias de la evaluación. | RF-QUIZ-002, RF-EXAM-001 |
 | **Quiz/Exam**| 409 | `IDEMPOTENCY_CONFLICT` | Mismo `Idempotency-Key` enviado con payload diferente. | RNF-042 |
 | **Certificates**| 403 | `NOT_CERTIFICATE_OWNER` | Solo el titular registrado puede descargar el PDF oficial. | RF-PDF-002 |
 | **Certificates**| 404 | `CERTIFICATE_NOT_FOUND` | Certificado no encontrado para el código proporcionado. | RF-CERT-006 |
@@ -898,7 +1093,7 @@ curl https://api.duolingo-programacion.com/api/v1/certificates/KODA-PY-000001
 | `RF-PREG-001–006` | `POST /lessons/{id}/answer`, `POST /quiz/{id}/attempt`, `POST /exam/{id}/attempt` | US-031, US-032 |
 | `RF-QUIZ-001–006` | `GET /quizzes/{id}`, `POST /quiz/{id}/attempt`, `GET /quiz/{id}/attempts` | US-033–US-035 |
 | `RF-EXAM-001–007` | `GET /exams/{id}`, `POST /exam/{id}/attempt`, `GET /exam/{id}/attempts` | US-036–US-039 |
-| `RF-EVAL-001–006` | Evapythondor en servidor en `POST /lessons/{id}/answer`, `POST /quiz/{id}/attempt`, `POST /exam/{id}/attempt` | US-040 |
+| `RF-EVAL-001–006` | Evaluador en servidor en `POST /lessons/{id}/answer`, `POST /quiz/{id}/attempt`, `POST /exam/{id}/attempt` | US-040 |
 | `RF-XP-001–005` | Motor de XP en `/sections/{id}/complete`, `/quiz/{id}/attempt`, `/exam/{id}/attempt`, `/notebook/mistakes/{id}/resolve` | US-041–US-043 |
 | `RF-RACHA-001–005` | `GET /progress/streak`, `GET /users/me/progress` | US-044, US-045 |
 | `RF-LOGRO-001–005` | `GET /users/me/achievements` | US-046–US-048 |
@@ -931,7 +1126,7 @@ Cada endpoint REST en backend debe satisfacer el siguiente checklist previo a su
 - [ ] Contrato documentado e integrado en `openapi.yaml` (pasa linter `spectral` sin advertencias).
 - [ ] Validación de payload con esquema Zod / Joi en servidor (rechaza campos no tipados).
 - [ ] Aislamiento estricto de usuario autenticado contra `user_id` del token JWT (prevención IDOR).
-- [ ] Implementación de `Idempotency-Key` en operaciones de escritura financiera/gamificada/evapythontiva.
+- [ ] Implementación de `Idempotency-Key` en operaciones de escritura financiera/gamificada/evaluativa.
 - [ ] Registro estructurado de trazas en JSON con `request_id`, método, ruta y código HTTP.
 - [ ] Pruebas automatizadas unitarias y de integración en `20_TESTING.md` con cobertura $\ge 70\%$.
 

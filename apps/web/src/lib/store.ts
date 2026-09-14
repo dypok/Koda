@@ -19,6 +19,9 @@ export const useKodaStore = create<KodaState>((set) => ({
     last_activity_date: new Date().toISOString().split('T')[0],
     freeze_count: 1,
     is_active_today: true,
+    today_study_time_seconds: 480,
+    daily_goal_minutes: 10,
+    daily_goal_met: false,
   },
   activeLanguageSlug: 'python',
   addXp: (amount) =>

@@ -14,7 +14,7 @@
 Todas las historias de usuario de este backlog se fundamentan en las decisiones oficiales documentadas en [`docs/adr/`](../../docs/adr/README.md):
 - **ADR-001:** Monorepo con PNPM Workspaces (`apps/web`, `apps/api`, `packages/types`).
 - **ADR-002:** Base de Datos Relacional con Supabase (PostgreSQL 15+).
-- **ADR-003:** Pipeline de Certificación en Backend y Storage en Google Drive API v3.
+- **ADR-003:** Pipeline de Certificación en Backend y Storage en Supabase Storage.
 - **ADR-004:** Renderizado WebGL de Mascota Koda y Efectos con PixiJS v7.
 - **ADR-005:** Adopción de Python 3.12 como Lenguaje Oficial del MVP.
 - **ADR-006:** Motor de Ejecución de Código Híbrido (`ICodeRunner`: Pyodide + Docker Sandbox).
@@ -39,7 +39,7 @@ Cada épica cuenta con su propio archivo independiente para lectura ergonómica 
 6. [**EPIC 6 — Sistema de Evaluación: Quizzes y Exámenes Finales**](EPIC-06-sistema-evaluacion-quizzes-examenes.md) (`Sprint 3 · 4 Stories · 15 SP`)
 7. [**EPIC 7 — Cuaderno de Errores Persistente y Repaso Adaptativo**](EPIC-07-cuaderno-errores-repaso-adaptativo.md) (`Sprint 3 · 3 Stories · 13 SP`)
 8. [**EPIC 8 — Gamificación, Economía XP, Rachas y Mascota Koda 🦊**](EPIC-08-gamificacion-rachas-mascota-koda.md) (`Sprint 4 · 4 Stories · 18 SP`)
-9. [**EPIC 9 — Pipeline de Certificación, Generación PDF, QR y Google Drive**](EPIC-09-certificacion-pdf-qr-google-drive.md) (`Sprint 4 · 4 Stories · 18 SP`)
+9. [**EPIC 9 — Pipeline de Certificación, Generación PDF, QR y Supabase Storage**](EPIC-09-certificacion-pdf-qr-supabase-storage.md) (`Sprint 4 · 4 Stories · 18 SP`)
 10. [**EPIC 10 — Monetización, Consola de Administración y Despliegue Cloud**](EPIC-10-monetizacion-admin-despliegue.md) (`Sprint 5 · 4 Stories · 16 SP`)
 
 ---
@@ -77,6 +77,6 @@ Antes de mover cualquier Story a **"Done"** en el tablero de Jira, se deben cump
 | **Épica 6 — Sistema de Evaluación & Quizzes** | `EVAL` | Sprint 3 | 4 | 15 | ⚪ Refinada | [`EPIC-06-sistema-evaluacion-quizzes-examenes.md`](EPIC-06-sistema-evaluacion-quizzes-examenes.md) |
 | **Épica 7 — Cuaderno de Errores & Repaso** | `NOTE` | Sprint 3 | 3 | 13 | ⚪ Refinada | [`EPIC-07-cuaderno-errores-repaso-adaptativo.md`](EPIC-07-cuaderno-errores-repaso-adaptativo.md) |
 | **Épica 8 — Gamificación & Mascota Koda 🦊** | `GAMI` | Sprint 4 | 4 | 18 | ⚪ Refinada (ADR-004) | [`EPIC-08-gamificacion-rachas-mascota-koda.md`](EPIC-08-gamificacion-rachas-mascota-koda.md) |
-| **Épica 9 — Certificación, PDF & Drive Storage** | `CERT` | Sprint 4 | 4 | 18 | ⚪ Refinada (ADR-003) | [`EPIC-09-certificacion-pdf-qr-google-drive.md`](EPIC-09-certificacion-pdf-qr-google-drive.md) |
+| **Épica 9 — Certificación, PDF & Supabase Storage** | `CERT` | Sprint 4 | 4 | 18 | 🟢 Refinada (Supabase Storage) | [`EPIC-09-certificacion-pdf-qr-supabase-storage.md`](EPIC-09-certificacion-pdf-qr-supabase-storage.md) |
 | **Épica 10 — Monetización, Admin & Despliegue** | `MONA` | Sprint 5 | 4 | 16 | ⚪ Refinada | [`EPIC-10-monetizacion-admin-despliegue.md`](EPIC-10-monetizacion-admin-despliegue.md) |
 | **TOTAL PLANIFICADO** | | | **46** | **182** | | |

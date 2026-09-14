@@ -15,7 +15,8 @@ export class CertificationService {
       holder_document_masked: 'CC ***678',
       language_name: 'Python 3.12',
       qr_payload: 'https://koda.app/verificar/KODA-PY-000001',
-      google_drive_file_id: '1aBcDeFgHiJkLmNoPqRsTuVwXyZ_example',
+      storage_path: 'certificates/KODA-PY-000001.pdf',
+      storage_url: 'https://sertfbduqivvjrmeblvh.supabase.co/storage/v1/object/public/certificates/KODA-PY-000001.pdf',
       pdf_sha256: 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855',
     },
   ];
@@ -38,7 +39,7 @@ export class CertificationService {
     };
   }
 
-  getDownloadInfo(id: string): { code: string; drive_file_id: string; cached: boolean } {
+  getDownloadInfo(id: string): { code: string; storage_path: string; storage_url: string; cached: boolean } {
     const cert = this.certificates.find((c) => c.id === id || c.code === id);
     if (!cert) {
       throw new NotFoundException(`Certificado '${id}' no encontrado.`);
@@ -46,8 +47,9 @@ export class CertificationService {
 
     return {
       code: cert.code,
-      drive_file_id: cert.google_drive_file_id || 'mock_file_id',
-      cached: !!cert.google_drive_file_id,
+      storage_path: cert.storage_path || 'certificates/mock.pdf',
+      storage_url: cert.storage_url || `https://sertfbduqivvjrmeblvh.supabase.co/storage/v1/object/public/${cert.storage_path || 'certificates/mock.pdf'}`,
+      cached: !!cert.storage_path,
     };
   }
 }

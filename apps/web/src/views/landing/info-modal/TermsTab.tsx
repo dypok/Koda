@@ -1,11 +1,11 @@
 import React from 'react';
-import { IconFileText } from '@tabler/icons-react';
+import { FileText } from 'lucide-react';
 
 export const TermsTab: React.FC = () => (
   <div className="space-y-6 animate-fadeIn">
     <div>
       <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20 mb-2 font-sans">
-        <IconFileText className="w-3.5 h-3.5" />
+        <FileText className="w-3.5 h-3.5" />
         Marco Legal
       </div>
       <h4 className="font-display text-2xl font-bold text-white tracking-tight">Términos de Servicio</h4>

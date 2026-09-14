@@ -27,7 +27,7 @@ Priorizar un **MVP funcional con un solo lenguaje (Python)** que valide el núcl
 | **1** | Arquitectura y base | Repo, stack, BD, API v1, CI/CD y observabilidad mínima | Infra + esqueleto desacoplado | RF-ADM-005/006 | RNF-005/016/017/018/032/043 |
 | **2** | Autenticación y usuarios | Identidad segura y perfil reanudable | Auth + Users + Perfil base | RF-AUTH-001–008, RF-USR-001–006, RF-PROF-001–007 | RNF-008/009/022/023/037/038 |
 | **3** | Sistema educativo | Jerarquía Lenguaje→Módulo→Sección→Lección + diagnóstico y ruta adaptativa | Learning Engine + Content Engine (módulos Python piloto) | RF-LANG-001–005, RF-LVL-001–004, RF-DIAG-001–006, RF-RUTA-001–005, RF-MOD-001–005, RF-SEC-001–005, RF-LEC-001–005 | RNF-006/010/011/021/023/031/033 |
-| **4** | Preguntas y evapythonciones | Banco tipificado + Quiz + Examen + Evapythontion Engine | Question + Evapythontion Engines | RF-PREG-001–007, RF-QUIZ-001–006, RF-EXAM-001–007, RF-EVAL-001–006 | RNF-010/012/033/035/036/042 |
+| **4** | Preguntas y evaluaciones | Banco tipificado + Quiz + Examen + Evaluation Engine | Question + Evaluation Engines | RF-PREG-001–007, RF-QUIZ-001–006, RF-EXAM-001–007, RF-EVAL-001–006 | RNF-010/012/033/035/036/042 |
 | **5** | Gamificación | XP, niveles, rachas, logros y repaso | Gamification + Progress Engines | RF-PROG-001–006, RF-XP-001–005, RF-RACHA-001–005, RF-LOGRO-001–005, RF-REP-001–005 | RNF-016/017 |
 | **6** | Certificación | Certificado verificable con QR y PDF | Certification Engine + Google Drive | RF-CERT-001–006, RF-PDF-001–004 | RNF-004/034/035 |
 | **7** | Monetización | Gratuito con ads + Premium USD $1/mes | Monetization (Ads + Premium) | RF-ADS-001–005, RF-PREM-001–006 | RNF-014/039/040 |
@@ -47,7 +47,7 @@ flowchart TB
     F1["FASE 1<br/>Arquitectura y base<br/>Repo + BD + API v1"]
     F2["FASE 2<br/>Autenticación y usuarios"]
     F3["FASE 3<br/>Sistema educativo<br/>módulos Python piloto"]
-    F4["FASE 4<br/>Preguntas y evapythonciones"]
+    F4["FASE 4<br/>Preguntas y evaluaciones"]
     F5["FASE 5<br/>Gamificación<br/>XP/Rachas/Logros/Repaso"]
     F6["FASE 6<br/>Certificación<br/>KODA-* + QR + PDF"]
     F7["FASE 7<br/>Monetización<br/>Ads + Premium"]
@@ -68,9 +68,9 @@ flowchart TB
 
     %% Dependencias transversales
     F1 -.->|Content Engine<br/>versionado| F3
-    F1 -.->|Evapythontion<br/>contratos| F4
+    F1 -.->|Evaluation<br/>contratos| F4
     F1 -.->|Gamification<br/>config| F5
-    F3 -.->|progreso +<br/>evapythonción| F5
+    F3 -.->|progreso +<br/>evaluación| F5
     F3 -.->|todos los<br/>módulos aprobados| F6
     F5 -.->|progreso<br/>conservado| F7
     F2 -.->|email verificado| F6
@@ -96,7 +96,7 @@ flowchart TB
 | 1 | 0 | Sin ADRs (`11` §19) ni `12`/`13` no hay migraciones ni contratos OpenAPI. |
 | 2 | 1 | Auth es prerrequisito de toda ruta protegida (`RF-RUTA-005`, `RNF-008/009`). |
 | 3 | 2 | Learning Engine requiere `user_id` + JWT + `Content Engine` versionado (`14` §5, `RNF-006`). |
-| 4 | 3 | Question/Evapythontion dependen de jerarquía `Módulo→Sección→Lección` y de `content_version` (`15` §5.4). |
+| 4 | 3 | Question/Evaluation dependen de jerarquía `Módulo→Sección→Lección` y de `content_version` (`15` §5.4). |
 | 5 | 4 | XP/racha/logro/repaso reaccionan a eventos ya calificados en servidor (`16` §4, `RF-EVAL-006`). |
 | 6 | 5 | Certificado exige `lenguaje completado ↔ todos los exámenes aprobados` (`RNF-034`, `RF-CERT-001`). |
 | 7 | 6 | Ads/Premium se intercalan en flujo ya estable (`RF-ADS-001` entre secciones); premium conserva progreso (`RF-PREM-003`). |
@@ -131,9 +131,9 @@ gantt
     F3 Content Engine + módulos Python piloto   :f3, 2026-09-27, 2026-10-18
     F3 Diagnóstico + Ruta adaptativa         :f3b, 2026-10-04, 2026-10-18
 
-    section FASE 4 Evapythonciones
+    section FASE 4 Evaluaciones
     F4 Banco tipificado + Quiz + Examen      :f4, 2026-10-18, 2026-11-08
-    F4 Evapythontion Engine + anti-trivialidad  :f4b, 2026-10-25, 2026-11-08
+    F4 Evaluation Engine + anti-trivialidad  :f4b, 2026-10-25, 2026-11-08
 
     section FASE 5 Gamificación
     F5 XP/Nivel + Rachas + Logros + Repaso   :f5, 2026-11-08, 2026-11-29
@@ -168,7 +168,7 @@ gantt
 | M1 — Esqueleto usable | 2026-09-13 | `POST /auth/register` → `GET /languages` funciona en `staging`; CI verde. |
 | M2 — Auth Done | 2026-09-27 | Login/refresh/logout + perfil + reanudación básica probados. |
 | M3 — Ruta Python navegable | 2026-10-18 | Módulos Python listables, lecciones con ejercicios y feedback <1 s. |
-| M4 — Evapythonción confiable | 2026-11-08 | Quiz 70% / Examen 80% con `B_min` y revisión sin fuga de banco. |
+| M4 — Evaluación confiable | 2026-11-08 | Quiz 70% / Examen 80% con `B_min` y revisión sin fuga de banco. |
 | M5 — Gamificación viva | 2026-11-29 | 265 XP por módulo, curva exponencial, racha con gracia 2h y freeze. |
 | M6 — Certificado verificable | 2026-12-13 | `KODA-PY-000001` con QR y PDF bit-a-bit almacenado en Google Drive. |
 | M7 — Monetización no intrusiva | 2026-12-27 | Ads solo entre secciones + premium sin ads, degradado probado. |
@@ -214,7 +214,7 @@ gantt
 
 **Alcance:**
 - Estilo `monolito modular con fronteras explícitas` (`11` §2.1), 3 capas + 9 motores desacoplados (`11` §2.3).
-- Repo `src/modules/{auth,users,languages,learning,questions,evapythontion,progress,gamification,certification,monetization,content}` (`11` §4.3) con linter de grafo de imports (CI falla si `gamification → evapythontion`).
+- Repo `src/modules/{auth,users,languages,learning,questions,evaluation,progress,gamification,certification,monetization,content}` (`11` §4.3) con linter de grafo de imports (CI falla si `gamification → evaluation`).
 - BD **PostgreSQL ≥15** con migraciones versionadas `V{YYYYMMDD}_{NNN}__*.sql` (`12` §2.2), FKs, índices para `RNF-007` y `content_version` por intento (`RNF-035`).
 - API **REST `/api/v1`** con OpenAPI 3.0.3 auto-generado y linteado en CI (`13`, `RNF-032`), envelope `{code,message,request_id}` (`RNF-041`), `X-Request-Id` + `Idempotency-Key` (`RNF-042/045`).
 - Cache/KV (Redis o equivalente) para rate limit y refresh; Google Drive API v3 para PDFs de certificados; Object Storage S3-compatible para avatares y assets (`11` §5).
@@ -234,7 +234,7 @@ gantt
 - [ ] ADRs en `09-decisions/` para cada fila con "ADR requerido = Sí" en `11` §19; este doc no impone stack.
 - [ ] `openapi.yaml` linteado en CI; cambio breaking exige `/v2` (`RNF-032`).
 - [ ] Migraciones reproducibles con FKs, `UNIQUE (email) WHERE deleted_at IS NULL`, índices `(user_id, language_id, module_id)` y `content_version` por intento (`RNF-036/035`).
-- [ ] Linter de grafo de imports en CI verde; `evapythontion → progress → gamification` es el flujo permitido (`RNF-030`).
+- [ ] Linter de grafo de imports en CI verde; `evaluation → progress → gamification` es el flujo permitido (`RNF-030`).
 - [ ] Grep en CI falla si hay literales de contenido hardcodeados fuera de `content/` (`RNF-031`).
 - [ ] Logs con `request_id`, `user_id` anonimizado y `America/Bogota`; ningún secreto en repo ni logs (`RNF-008/045`).
 - [ ] Backup diario con retención ≥7 días y ensayo de restore exitoso en `staging` (`RNF-043`); RPO ≤24 h, RTO ≤4 h.
@@ -305,9 +305,9 @@ gantt
 
 ---
 
-### FASE 4 — Preguntas y evapythonciones
+### FASE 4 — Preguntas y evaluaciones
 
-**Objetivo:** Convertir la práctica en evapythonción confiable, no memorizable y auditable en servidor.
+**Objetivo:** Convertir la práctica en evaluación confiable, no memorizable y auditable en servidor.
 
 **Alcance:**
 - `RF-PREG-001–007`: **11 tipos** canónicos (`SINGLE_CHOICE` … `SMALL_PROBLEM`, `15` §3.1) con metadatos `lenguaje/módulo/sección/lección/tipo/dificultad/categoría/respuestas/explicación/puntaje/versión`, entrega **anclada** al contenido actual (no aleatoria global), aleatorización de opciones con trazabilidad.
@@ -319,7 +319,7 @@ gantt
 
 **Entregables:**
 - `Question Engine` con `getQuestionsForLesson/Quiz/Exam/Review` y `validateAnswer` en servidor; contrato en `11` §9.
-- `Evapythontion Engine` con `<2 s` p95 en calificación (`RNF-012`) y `bank.min_ratio` bloqueante en publicación (`RF-ADM-006`).
+- `Evaluation Engine` con `<2 s` p95 en calificación (`RNF-012`) y `bank.min_ratio` bloqueante en publicación (`RF-ADM-006`).
 - Endpoints `POST /quiz/{id}/attempt`, `POST /exam/{id}/attempt` (con `Idempotency-Key`), `GET .../attempts` y `GET .../revision`.
 
 **Dependencias:** FASE 3 (jerarquía + `content_version`).
@@ -333,7 +333,7 @@ gantt
 - [ ] Aleatorización auditable: orden de preguntas y opciones difiere entre intentos con misma semántica (`15` §15.1); `overlap` de reintento dentro de límites o métrica `eval.overlap_high` en `26`.
 - [ ] Feedback individual <1 s y calificación de quiz/examen <2 s p95 con 50 envíos concurrentes (`RNF-010/012`); APM por endpoint verde.
 - [ ] Reintentos ilimitados, desbloqueo exige **un** aprobado, no promedio (`RF-EXAM-005`); XP por reintento con decaimiento (`15` §11.2) verificado.
-- [ ] Cobertura ≥70% en `Evapythontion Engine` y matriz `RF → test` en `20`.
+- [ ] Cobertura ≥70% en `Evaluation Engine` y matriz `RF → test` en `20`.
 
 ---
 
@@ -347,7 +347,7 @@ gantt
 - `RF-XP-002` — Fórmula de nivel exponencial `XP(N)=floor(100×N^1.65+20×N)` con tabla hasta nivel 50 y alternativa `tiered` (`16` §6), configurable sin deploy y sin reducir nivel ya alcanzado.
 - `RF-RACHA-001–005`: actividad válida (lección/sección/quiz/examen/repaso/diagnóstico), ventana `[00:00,23:59:59]` en `user.timezone` (default `America/Bogota`), gracia 2 h no acumulable y `Streak Freeze` (1 cada 7 días, máx 2) (`16` §7).
 - `RF-LOGRO-001–005`: catálogo de **18 logros MVP** (`FIRST_CODE`, `FIRST_MODULE`, `ON_FIRE` 7 días, `PERFECT SCORE`, `PYTHON_BEGINNER`, `CODE_MASTER` … `16` §9.2) con XP bono y rareza, desbloqueo automático una sola vez, configurable sin tocar motor.
-- `RF-REP-001–005`: repaso priorizado con `Score_repaso(c)=0.35×Tasa_error+0.25×(1-Rendimiento)+0.25×Antigüedad_norm+0.15×Prerrequisito_próximo` (`14` §8), 3 tipos (inter-sesión/post-evapythonción/manual), opcional y no bloqueante, sin penalizar % de módulo.
+- `RF-REP-001–005`: repaso priorizado con `Score_repaso(c)=0.35×Tasa_error+0.25×(1-Rendimiento)+0.25×Antigüedad_norm+0.15×Prerrequisito_próximo` (`14` §8), 3 tipos (inter-sesión/post-evaluación/manual), opcional y no bloqueante, sin penalizar % de módulo.
 - `S-20–S-21` (Repaso Hub + Sesión) y flujos `F-10–F-11`.
 
 **Entregables:**
@@ -491,7 +491,7 @@ gantt
 **Alcance:**
 - **Performance:** índices y `EXPLAIN ANALYZE` con 100k intentos, réplicas stateless con HPA y balanceo sin sticky sessions (`RNF-005/007`); CDN para PDFs/assets (`RNF-004` Post-MVP).
 - **Confiabilidad:** blue-green deploy (`RNF-015` Post-MVP), multi-región si `26` lo justifica (`04` §5, `06` §6), partícionado de `attempts`/`attempt_answers` por `language_id` si se justifica.
-- **Funcionalidades Post-MVP** (`04` §3) diseñadas para no bloquear MVP: editor y ejecución en sandbox, proyectos prácticos y proyecto final evapythondo, rankings/competencias, amigos/perfiles públicos, marketplace de cursos de terceros, modo offline y PWA, apps móvil/escritorio, IA tutor y recomendaciones personalizadas, repetición espaciada **FSRS/SM-2** (extiende `Score_repaso` sin romper invariantes, `14` §15), verificación pública de certificados.
+- **Funcionalidades Post-MVP** (`04` §3) diseñadas para no bloquear MVP: editor y ejecución en sandbox, proyectos prácticos y proyecto final evaluado, rankings/competencias, amigos/perfiles públicos, marketplace de cursos de terceros, modo offline y PWA, apps móvil/escritorio, IA tutor y recomendaciones personalizadas, repetición espaciada **FSRS/SM-2** (extiende `Score_repaso` sin romper invariantes, `14` §15), verificación pública de certificados.
 - **Privacidad:** auditoría externa de `RNF-040` si se requiere y seudonimización en `26`.
 
 **Entregables:**
@@ -518,7 +518,7 @@ gantt
 | **Architecture Review** | Fin de FASE 1 | Arquitectura | ADRs, OpenAPI linteado, grafo de imports, migraciones FK + índices. |
 | **Security Review** | Fin de FASE 2 y 8 | Seguridad | Hash, JWT, rate limiting, IDOR, SAST/DAST, PII. |
 | **Content Review** | Fin de FASE 3 y 9 | Pedagógico + ADM | `RF-ADM-006` (sin ciclos/huérfanos), cobertura por concepto ≥1, `B_min`. |
-| **Evapythontion Review** | Fin de FASE 4 | Pedagógico + QA | `B_min`, `max_easy_ratio`, `overlap`, calificación <2 s. |
+| **Evaluation Review** | Fin de FASE 4 | Pedagógico + QA | `B_min`, `max_easy_ratio`, `overlap`, calificación <2 s. |
 | **Beta Go/No-Go** | Fin de FASE 8 | Producto + QA | Criterios `03` §7.2/7.3 + RNF obligatorios + WCAG AA. |
 | **Post-MVP Go** | Inicio de FASE 9/10 | Producto | Métricas `26` justifican Python y escalabilidad. |
 
@@ -547,8 +547,8 @@ gantt
 | Riesgo | Impacto | Fase donde duele | Mitigación en este roadmap |
 |---|---|---|---|
 | Contenido hardcodeado en UI/motor | Rompe `RNF-006/031`; agregar Python exige deploy | 1, 3, 9 | Grep en CI + ensayo `RNF-006` + Content Engine como única fuente (`11` §18). |
-| Evapythonción en cliente | Fraude de XP/certificados | 4 | `RF-EVAL-006`: solo servidor; cliente nunca decide aprobación. |
-| Acoplamiento entre motores | Cambio en Gamificación rompe Evapythonción | 1, 5 | Linter de grafo de imports en CI (`RNF-030`). |
+| Evaluación en cliente | Fraude de XP/certificados | 4 | `RF-EVAL-006`: solo servidor; cliente nunca decide aprobación. |
+| Acoplamiento entre motores | Cambio en Gamificación rompe Evaluación | 1, 5 | Linter de grafo de imports en CI (`RNF-030`). |
 | Publicidad bloquea aprendizaje | Viola `RF-ADS-002`/`RNF-014` | 7 | Wrapper async + test de caos con ads deshabilitados. |
 | Certificados duplicados/falsos | Pérdida de confianza | 6 | `KODA-*` con lock + un vigente + verificación sin PII + PDF bit-a-bit. |
 | Pérdida de progreso por red | Abandono | 3, 4, 8 | `RNF-033` atómico + `Idempotency-Key` + reanudación `RNF-023/044`. |

@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { InfoModal, InfoModalTab } from './InfoModal';
 import { FooterColumns } from '@/views/landing/FooterColumns';
+import { SoundToggle } from './SoundToggle';
+import { AuroraToggle } from './AuroraToggle';
 
 export const Footer: React.FC = () => {
   const [modalTab, setModalTab] = useState<InfoModalTab | null>(null);
@@ -18,14 +20,14 @@ export const Footer: React.FC = () => {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: false, amount: 0.1 }}
+        viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
         className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-16 relative z-10"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 mb-12">
           {/* Marca & Misión */}
           <div className="md:col-span-3 space-y-4">
-            <Link href="/" className="flex items-center focus:outline-none w-fit" aria-label="Koda">
+            <Link href="/?landing=true" className="flex items-center focus:outline-none w-fit" aria-label="Koda - inicio">
               <Image
                 src="/brand/logo.svg"
                 alt="Koda"
@@ -51,6 +53,10 @@ export const Footer: React.FC = () => {
         {/* Barra Inferior */}
         <div className="pt-8 border-t border-slate-800/60 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500 font-sans">
           <p>© {new Date().getFullYear()} KodaAcademy. Todos los derechos reservados.</p>
+          <div className="flex items-center gap-2">
+            <AuroraToggle />
+            <SoundToggle />
+          </div>
         </div>
       </motion.div>
 

@@ -37,7 +37,7 @@ Este documento define **cómo está estructurado el sistema**, no qué hace (ver
 | Comunicación externa | **Híbrida: GraphQL (`/graphql`) + API REST OpenAPI 3.0.3 (`/api/v1`)** (`ADR-012`) | GraphQL primario para UI y agregaciones; REST para auth, uploads binarios, sandbox y webhooks. |
 | Estado de sesión | **Stateless** (JWT corto 15 min + refresh rotativo 7d HttpOnly) | Permite balanceo sin sticky sessions (`RNF-005`). |
 
-> Alternativa descartada en MVP: microservicios por motor. Se adopta solo si métricas de `21`/`26` muestran que un motor (ej. Evapythontion) es cuello de botella aislado y justifica el costo operativo. La frontera modular ya deja esa puerta abierta.
+> Alternativa descartada en MVP: microservicios por motor. Se adopta solo si métricas de `21`/`26` muestran que un motor (ej. Evaluation) es cuello de botella aislado y justifica el costo operativo. La frontera modular ya deja esa puerta abierta.
 
 ### 2.2 Capas
 
@@ -51,7 +51,7 @@ Este documento define **cómo está estructurado el sistema**, no qué hace (ver
 │  Rate limiting · Validación · Idempotency-Key · Versionado       │
 ├─────────────────────────────────────────────────────────────────┤
 │                         CAPA DE DOMINIO                         │
-│  Auth · Learning Engine · Question Engine · Evapythontion Engine   │
+│  Auth · Learning Engine · Question Engine · Evaluation Engine   │
 │  Progress Engine · Gamification Engine · Certification Engine   │
 │  Content Engine · Monetization (Ads + Premium)                  │
 ├─────────────────────────────────────────────────────────────────┤
@@ -83,7 +83,7 @@ flowchart TB
         AUTH_SVC["Auth\nRF-AUTH/USR"]
         LEARNING["Learning Engine\nRF-RUTA/MOD/SEC/LEC/DIAG"]
         QUESTION["Question Engine\nRF-PREG — Banco tipificado"]
-        EVAL["Evapythontion Engine\nRF-EVAL/QUIZ/EXAM"]
+        EVAL["Evaluation Engine\nRF-EVAL/QUIZ/EXAM"]
         PROGRESS["Progress Engine\nRF-PROG + Sesión reanudable"]
         GAMIF["Gamification Engine\nRF-XP/RACHA/LOGRO"]
         CERT["Certification Engine\nRF-CERT/PDF"]
@@ -214,7 +214,7 @@ sequenceDiagram
 
 ### 3.1 Responsabilidad
 
-Renderizar la experiencia de aprendizaje, catálogo, perfil, ruta, verificación pública y administración. **No contiene lógica de evapythonción ni de certificación**; toda decisión de aprobación/XP se toma en servidor (`05` RF-EVAL-006, `06` RNF-033/034).
+Renderizar la experiencia de aprendizaje, catálogo, perfil, ruta, verificación pública y administración. **No contiene lógica de evaluación ni de certificación**; toda decisión de aprobación/XP se toma en servidor (`05` RF-EVAL-006, `06` RNF-033/034).
 
 ### 3.2 Decisiones justificadas (Stack Oficial)
 
@@ -237,7 +237,7 @@ Renderizar la experiencia de aprendizaje, catálogo, perfil, ruta, verificación
 | Ruta (Roadmap) | `/ruta/[lang]` | RF-RUTA/MOD, RF-CANDADO-* | Plantilla universal `<RoadmapView />` que dibuja módulos, candados y estrellas dinámicamente |
 | Aprendizaje | `/aprender/[mod]/[sec]/[lec]` | RF-SEC/LEC/PREG, RF-ESTRELLA-* | Espacio de trabajo dividido 50/50, selector stepper de 10 píldoras y feedback anti-spoilers |
 | Cuaderno Errores | `/cuaderno` | RF-CUADERNO-* | Práctica deliberada de errores persistentes con remediación (+5 XP) |
-| Evapythonción | `/quiz/[id]`, `/examen/[id]` | RF-QUIZ/EXAM/EVAL | Calificación < 2 s (`RNF-012`), compuerta de maestría ($\ge 80\%$) |
+| Evaluación | `/quiz/[id]`, `/examen/[id]` | RF-QUIZ/EXAM/EVAL | Calificación < 2 s (`RNF-012`), compuerta de maestría ($\ge 80\%$) |
 | Perfil | `/perfil`, `/perfil/logros`, `/perfil/certificados` | RF-PROF/PROG/RACHA/LOGRO | Estadísticas, racha con Koda y listado de diplomas oficiales |
 | Certificado | `/certificados/[id]`, `/verificar/[id]` | RF-CERT/PDF | Verificación pública SSG/ISR con metadatos OpenGraph y descarga autenticada |
 | Admin | `/admin/*` | RF-ADM-* | RBAC, auditoría, validación `RF-ADM-006` |
@@ -251,26 +251,27 @@ Renderizar la experiencia de aprendizaje, catálogo, perfil, ruta, verificación
 
 Exponer la API REST `/api/v1`, orquestar los Bounded Contexts modulares, aplicar reglas pedagógicas/gamificadas mediante Domain Events y persistir con arquitectura híbrida (Supabase PostgreSQL + MongoDB + Redis L2).
 
-### 4.2 Decisiones justificadas (Stack Oficial — ADR-008, ADR-009, ADR-010)
+### 4.2 Decisiones justificadas (Stack Oficial — ADR-008, ADR-009, ADR-010, ADR-011)
 
 | Aspecto | Tecnología Seleccionada | Justificación |
 |---|---|---|
 | **Lenguaje / Runtime** | **Node.js (NestJS con TypeScript)** | Arquitectura modular nativa con inyección de dependencias (`@Module()`), tipado 100% compartido con Next.js vía monorepo PNPM Workspaces (`@koda/types`), y OpenAPI generado automáticamente (`ADR-008`). |
-| **Arquitectura interna** | **Monolito Modular Hexagonal con Domain Events** | Puertos y adaptadores ligeros por contexto delimitado; comunicación inter-módulo asíncrona mediante `@nestjs/event-emitter` (`ADR-010`). |
-| **Persistencia Híbrida** | **Supabase PostgreSQL + MongoDB** | PostgreSQL para transacciones ACID (usuarios, progreso, estrellas, ledger XP); MongoDB para entrega $O(1)$ de cursos, módulos y lecciones (`ADR-009`). |
-| **Caché y Aceleración** | **Cache-Aside L2 con Redis** | Entrega de lecciones y catálogo en $< 2\text{ ms}$ con TTL escalonado e invalidación reactiva ante publicación (`ADR-010`). |
+| **Arquitectura interna** | **Hexagonal Modular con Domain Events y BullMQ** | Puertos y adaptadores ligeros; eventos persistentes tolerantes a fallos con BullMQ sobre Redis (`ADR-010`, `ADR-011`). |
+| **Persistencia Híbrida** | **Supabase PostgreSQL + MongoDB** | PostgreSQL para transacciones ACID (usuarios, progreso, estrellas, ledger XP, SM-2); MongoDB para entrega $O(1)$ de cursos, módulos y lecciones (`ADR-009`, `ADR-011`). |
+| **Caché y Aceleración** | **Cache-Aside L2 Inmutable Versionada (Redis)** | Entrega de lecciones en $< 2\text{ ms}$ con claves versionadas `koda:lesson:{slug}:v{version}` sin carreras de concurrencia (`ADR-011`). |
 | **Validación y DTOs** | **Zod / class-validator + DTOs estrictos** | Validación estricta en servidor de entradas antes de llegar a los motores (`RNF-009`, `RNF-036`). |
-| **Autenticación** | **JWT Stateless (15 min) + Refresh rotativo en HttpOnly Cookie** | Stateless para escalabilidad (`RNF-005`); refresh rotativo con detección de reuso mitiga robo de token (`19_SECURITY.md`). |
-| **Motor de Ejecución Multi-Lenguaje** | **Interfaz `ICodeRunner` (Wasm + Sandbox Judge0/Piston)** | Ejecución cliente (Wasm) para Python/JS; delegación a sandbox seguro en Docker para lenguajes compilados (`ADR-006`). |
+| **Autenticación** | **Supabase Auth IdP + NestJS Gateway (JWT con Supabase Secret)** | Interoperabilidad 100% con Row-Level Security (RLS) en PostgreSQL; refresh rotativo HttpOnly (`ADR-011`). |
+| **Motor de Ejecución Multi-Lenguaje** | **Interfaz `ICodeRunner` (Wasm en cliente + Servidor Determinista)** | Feedback interactivo Wasm en cliente y validación autoritativa en servidor con assertions cerradas antes de otorgar XP (`ADR-006`, `ADR-011`). |
 
 ### 4.3 Patrones de Diseño Clave (Arquitectura de Alto Rendimiento)
 
 1. **Patrón Repository & Ports (Hexagonal Ligero):** Los servicios de aplicación interactúan exclusivamente con interfaces de repositorio (`ICourseRepository`, `IProgressRepository`), desacoplándose de los drivers de Mongoose y PostgreSQL.
-2. **Patrón Domain Events (Desacoplamiento Temporal):** La finalización de lecciones emite `LessonCompletedEvent` en el bus en memoria. Gamificación y Rachas se calculan en background sin bloquear la respuesta HTTP (< 50 ms).
+2. **Patrón Domain Events Resiliente con BullMQ:** La finalización de lecciones encola tareas persistentes en Redis. Gamificación, Rachas y Logros se calculan de forma asíncrona con reintentos y DLQ sin bloquear la respuesta HTTP (< 50 ms) ni perder datos ante caídas (`ADR-011`).
 3. **Patrón Strategy & Factory (`ICodeRunner` y Evaluadores):** `CodeExecutionFactory` resuelve la estrategia de ejecución (Wasm vs. Docker sandbox); `QuestionEvaluatorFactory` despacha la evaluación determinista según el tipo de reactivo (`SingleChoice`, `PredictOutput`, `FillBlank`).
-4. **Patrón Cache-Aside (Redis L2):** Consultas de lecciones y grafo DAG consultan primero Redis; si hay *Cache Miss*, recuperan de MongoDB, pueblan la caché con TTL 24h y retornan.
-5. **Patrón Outbox / Job Queue (Worker Asíncrono para Diplomas):** La subida a Google Drive API v3 (`ADR-003`) se encola como tarea diferida con reintentos exponenciales, evitando bloqueos de red en el cliente.
-6. **Patrón Idempotency Key con Redis:** Bloqueo de claves concurrentes (`SET NX`) en endpoints de mutación (`POST /intentos`) para evitar duplicación de XP ante reintentos de red.
+4. **Patrón Cache-Aside Inmutable Versionado (Redis L2):** Consultas de lecciones y grafo DAG consultan primero Redis con clave `koda:lesson:{slug}:v{version}`; si hay *Cache Miss*, recuperan de MongoDB, pueblan la caché y retornan en $O(1)$.
+5. **Algoritmo de Repetición Espaciada (SuperMemo SM-2):** El Cuaderno de Errores recalcula adaptativamente `interval_days`, `ease_factor` y `next_review_at` en cada intento remediado (`ADR-011`).
+6. **Patrón Outbox / Job Queue (Worker Asíncrono para Diplomas):** La subida a Google Drive API v3 (`ADR-003`) se encola como tarea diferida con reintentos exponenciales, evitando bloqueos de red en el cliente.
+7. **Patrón Idempotency Key con Redis:** Bloqueo de claves concurrentes (`SET NX`) en endpoints de mutación (`POST /intentos`) para evitar duplicación de XP ante reintentos de red.
 
 ### 4.4 Estructura de carpetas (Backend NestJS Monolito Modular)
 
@@ -392,7 +393,7 @@ Contrato estable entre frontend y backend. Versionada, autenticada y documentada
 | Languages | `/languages` | JWT | RF-LANG |
 | Learning | `/languages/{id}/modules`, `/sections`, `/lessons`, `/ruta`, `/diagnostico` | JWT | RF-LVL/DIAG/RUTA/MOD/SEC/LEC |
 | Questions | `/questions` (admin) | RBAC | RF-PREG/ADM |
-| Evapythontion | `/quizzes`, `/examenes`, `/intentos` | JWT | RF-QUIZ/EXAM/EVAL |
+| Evaluation | `/quizzes`, `/examenes`, `/intentos` | JWT | RF-QUIZ/EXAM/EVAL |
 | Progress | `/progress` | JWT | RF-PROG |
 | Gamification | `/gamification/xp`, `/rachas`, `/logros` | JWT | RF-XP/RACHA/LOGRO |
 | Repaso | `/repaso` | JWT | RF-REP |
@@ -468,11 +469,11 @@ sequenceDiagram
 | Prerrequisitos | `estado de módulos` | Bloqueo/desbloqueo del siguiente módulo; respeta punto de entrada adaptativo | RF-RUTA-004 |
 | Progresión de lección | `lección actual` + `progreso intra-lección` | Siguiente lección/ejercicio; `sección completada` solo si obligatorios finalizados | RF-LEC-001/004, RF-SEC-003 |
 | Reanudación | `user_id` + `language_id` | Posición exacta `módulo/sección/lección/ejercicio` | RF-RUTA-005, RF-LEC-002 |
-| Repaso (orquestación) | `historial de errores` + `evapythonción` | Solicita a `Evapythontion Engine` conceptos débiles; delega generación a `Question Engine` | RF-REP-001/002, RF-RUTA-003 |
+| Repaso (orquestación) | `historial de errores` + `evaluación` | Solicita a `Evaluation Engine` conceptos débiles; delega generación a `Question Engine` | RF-REP-001/002, RF-RUTA-003 |
 
 **Reglas:**
 
-- Nunca aprueba un módulo; solo `Evapythontion Engine` lo hace (`RNF-030`).
+- Nunca aprueba un módulo; solo `Evaluation Engine` lo hace (`RNF-030`).
 - Lee contenido únicamente vía `Content Engine` (versión vigente); no hardcodea IDs de módulos.
 - Recalcula recomendaciones tras cada intento sin bloquear el feedback (< 1 s).
 
@@ -484,7 +485,7 @@ sequenceDiagram
 
 | Capacidad | Detalle | RF |
 |---|---|---|
-| Tipos soportados | Selección múltiple, V/F, completar código/línea, predecir output, identificar errores, ordenar líneas, seleccionar código correcto, relacionar conceptos, escribir código (evapythondo sin runner en MVP), resolver pequeños problemas | RF-PREG-001 |
+| Tipos soportados | Selección múltiple, V/F, completar código/línea, predecir output, identificar errores, ordenar líneas, seleccionar código correcto, relacionar conceptos, escribir código (evaluado sin runner en MVP), resolver pequeños problemas | RF-PREG-001 |
 | Metadatos | `lenguaje, módulo, sección, lección, tipo, dificultad, categoría, respuestas válidas, explicación, puntaje, versión` | RF-PREG-002 |
 | Entrega | Anclada a lección/sección actual; nunca aleatoria global | RF-PREG-003 |
 | Validación | En servidor, inmediata, con explicación y XP | RF-PREG-004 |
@@ -507,7 +508,7 @@ interface QuestionEngine {
 
 ---
 
-## 10. Motor de evapythonción (Evapythontion Engine)
+## 10. Motor de evaluación (Evaluation Engine)
 
 **Responsabilidad:** calificar de forma **determinista, auditable y en servidor**.
 
@@ -520,12 +521,12 @@ interface QuestionEngine {
 | Invariante | Calificación nunca depende del cliente; el servidor recalcula y prevalece | RF-EVAL-006 |
 | Composición | Quiz/Examen se componen según distribución configurable por `Content Engine` | RF-QUIZ-001, RF-EXAM-002 |
 | Reintentos | Quiz y examen permiten reintentos ilimitados; desbloqueo exige un intento aprobado, no promedio | RF-QUIZ-005, RF-EXAM-005 |
-| Rendimiento | Resultado < 2 s p95 (`RNF-012`); evapythonción no bloquea persistencia de progreso | RNF-012, RNF-033 |
+| Rendimiento | Resultado < 2 s p95 (`RNF-012`); evaluación no bloquea persistencia de progreso | RNF-012, RNF-033 |
 
 **Flujo:**
 
 ```
-Preguntas (versión) → Respuestas del usuario → Evapythontion Engine
+Preguntas (versión) → Respuestas del usuario → Evaluation Engine
   → { puntaje, %, detalle_por_pregunta, conceptos_débiles, aprobado: bool, umbral_aplicado }
   → Progress Engine (persistir) + Gamification Engine (XP) + Learning Engine (desbloqueo)
 ```
@@ -534,7 +535,7 @@ Preguntas (versión) → Respuestas del usuario → Evapythontion Engine
 
 ## 11. Motor de gamificación (Gamification Engine)
 
-**Responsabilidad:** motivar sin distorsionar la evapythonción.
+**Responsabilidad:** motivar sin distorsionar la evaluación.
 
 | Función | Detalle | RF |
 |---|---|---|
@@ -649,7 +650,7 @@ interface PaymentProvider {
 | Banco | Preguntas con tipos, dificultad, respuestas, explicaciones, versionado | RF-ADM-002, RF-PREG-006 |
 | Publicación | Publicar/ocultar sin deploy, inmediato o programado | RF-ADM-003 |
 | Configuración | Umbrales, XP, orden de módulos, composición de quizzes/exámenes sin código | RF-ADM-004 |
-| Versionado | Todo contenido publicado versionado; intentos guardan versión evapythonda | RF-ADM-005, RNF-035 |
+| Versionado | Todo contenido publicado versionado; intentos guardan versión evaluada | RF-ADM-005, RNF-035 |
 | Validación | IDs únicos, prerrequisitos sin ciclos, referencias íntegras, tipos válidos — bloquea publicación si falla | RF-ADM-006, RNF-036 |
 | RBAC | Solo `admin` autenticado; auditoría `quién/qué/cuándo/versión` | RF-ADM-007/008 |
 | Flujo Post-MVP | `borrador → revisión → publicado` con roles autor/revisor/publicador | RF-ADM-009 |
@@ -684,14 +685,14 @@ content/
 |---|---|---|---|
 | **Frontend** | Render, navegación, accesibilidad, reanudación visual | Calificación, XP, certificación | API |
 | **API Gateway** | Versionado, auth, rate limit, `request_id`, idempotencia, cache | Reglas de negocio | Motores |
-| **Auth** | Identidad, hash, tokens, RBAC, auditoría | Contenido, evapythonción | BD, KV, Email |
-| **Learning Engine** | Ruta, prerrequisitos, recomendación, reanudación | Calificar, otorgar XP | Content, Evapythontion, Progress |
+| **Auth** | Identidad, hash, tokens, RBAC, auditoría | Contenido, evaluación | BD, KV, Email |
+| **Learning Engine** | Ruta, prerrequisitos, recomendación, reanudación | Calificar, otorgar XP | Content, Evaluation, Progress |
 | **Question Engine** | Banco, versionado, entrega anclada | Calificar, progresar | Content, BD |
-| **Evapythontion Engine** | Calificar, umbrales, desglose, conceptos débiles | Persistir progreso, XP | Question, Content |
+| **Evaluation Engine** | Calificar, umbrales, desglose, conceptos débiles | Persistir progreso, XP | Question, Content |
 | **Progress Engine** | Persistencia atómica, % por lenguaje/módulo, historial | Calificar, gamificar | BD |
 | **Gamification Engine** | XP, niveles, rachas, logros | Calificar, certificar | Progress, Config |
-| **Certification Engine** | Condición, ID `KODA-*`, QR, PDF, verificación | Enseñar, evapythonr | Progress, Storage |
-| **Monetization** | Ads (gratuito) / Premium (sin ads) + pagos abstractos | Contenido, evapythonción | Ads/Pay providers |
+| **Certification Engine** | Condición, ID `KODA-*`, QR, PDF, verificación | Enseñar, evaluar | Progress, Storage |
+| **Monetization** | Ads (gratuito) / Premium (sin ads) + pagos abstractos | Contenido, evaluación | Ads/Pay providers |
 | **Content Engine** | CRUD, versionado, validación, publicación, config | Calificar, progresar | BD, KV |
 
 > Test de arquitectura en CI: el grafo de imports debe respetar esta tabla. Cualquier dependencia inversa es defecto.
@@ -711,11 +712,11 @@ Registro (RF-AUTH-001) → Verificación email (async)
   → Ruta visualizada (RF-RUTA-002)
 ```
 
-### 17.2 Lección → Evapythonción → Progreso → Gamificación
+### 17.2 Lección → Evaluación → Progreso → Gamificación
 
 ```
 Lección (Content Engine) → Pregunta (Question Engine, anclada)
-  → Respuesta → Evapythontion Engine (servidor, < 1s)
+  → Respuesta → Evaluation Engine (servidor, < 1s)
   → Progress Engine (atómico, Idempotency-Key)
   → Gamification Engine (XP/racha/logro, si aplica)
   → Frontend (feedback + recompensa)
@@ -726,7 +727,7 @@ Lección (Content Engine) → Pregunta (Question Engine, anclada)
 
 ```
 Quiz/Examen compuesto (Content config + Question Engine)
-  → Envío → Evapythontion Engine (umbral vigente, < 2s)
+  → Envío → Evaluation Engine (umbral vigente, < 2s)
   → Progress Engine (intento inmutable + versión)
   → Si aprobado → Learning Engine desbloquea siguiente módulo
   → Si reprobado → Revisión + Repaso sugerido, módulo sigue bloqueado
@@ -784,7 +785,7 @@ flowchart LR
     subgraph Núcleo["Núcleo (no se toca)"]
         LE["Learning Engine"]
         QE["Question Engine"]
-        EE["Evapythontion Engine"]
+        EE["Evaluation Engine"]
         CE["Content Engine"]
     end
 
@@ -809,7 +810,7 @@ flowchart LR
 
 ## 19. Decisiones justificadas — tabla consolidada
 
-| Decisión | Elección Oficial Koda | Alternativa evapythonda | Justificación y Ventajas |
+| Decisión | Elección Oficial Koda | Alternativa evaluada | Justificación y Ventajas |
 |---|---|---|---|
 | **Estilo arquitectónico** | **Monolito modular desacoplado** | Microservicios distribuidos | Menor sobrecarga operativa en MVP; fronteras limpias por motor permiten extraer módulos independientes si la carga lo demanda. |
 | **Frontend** | **Next.js 14+/15 (App Router, TypeScript)** | React Vite SPA puro | SEO nativo / OpenGraph para catálogo y verificación pública de diplomas (`/verificar/[code]`) + componentes interactivos `"use client"` para lecciones. |
@@ -874,7 +875,7 @@ Referencia completa en `19_SECURITY.md`; aquí los invariantes arquitectónicos:
 | Auth + JWT + RBAC | RF-AUTH/USR | RNF-008/009/037–039 | OT-06 | — |
 | Learning Engine | RF-LANG/LVL/DIAG/RUTA/MOD/SEC/LEC | RNF-006/030/031 | OT-01/02/03 | PS-04/07/09 |
 | Question Engine | RF-PREG | RNF-031/035/036 | OT-01 | PS-03/10 |
-| Evapythontion Engine | RF-EVAL/QUIZ/EXAM | RNF-010/012/033 | OT-01 | PS-05 |
+| Evaluation Engine | RF-EVAL/QUIZ/EXAM | RNF-010/012/033 | OT-01 | PS-05 |
 | Progress Engine | RF-PROG | RNF-023/033/034 | OT-01 | PS-06 |
 | Gamification Engine | RF-XP/RACHA/LOGRO/REP | — | OT-01 | PS-08 |
 | Certification Engine | RF-CERT/PDF | RNF-004/043 | OE-06 | PS-06 |
@@ -889,8 +890,8 @@ Referencia completa en `19_SECURITY.md`; aquí los invariantes arquitectónicos:
 | Riesgo | Impacto | Mitigación arquitectónica |
 |---|---|---|
 | Contenido hardcodeado en frontend/motor | Rompe `RNF-006` y `RNF-031`; agregar lenguaje exige deploy | Grep en CI + ensayo `RNF-006` + Content Engine como única fuente |
-| Evapythonción en cliente | Fraude de XP/certificados | `RF-EVAL-006`: calificación solo en servidor; cliente nunca decide aprobación |
-| Acoplamiento entre motores | Cambio en Gamificación rompe Evapythonción | Linter de grafo de imports en CI + contratos por interfaz (`RNF-030`) |
+| Evaluación en cliente | Fraude de XP/certificados | `RF-EVAL-006`: calificación solo en servidor; cliente nunca decide aprobación |
+| Acoplamiento entre motores | Cambio en Gamificación rompe Evaluación | Linter de grafo de imports en CI + contratos por interfaz (`RNF-030`) |
 | Publicidad bloquea aprendizaje | Viola `RF-ADS-002` y `RNF-014` | Wrapper async + degradado; test de caos con ads deshabilitados |
 | Certificados duplicados o falsos | Pérdida de confianza | ID `KODA-*` con lock + un vigente por lenguaje + verificación interna + PDF bit-a-bit |
 | Pérdida de progreso por fallo de red | Abandono | Persistencia atómica + `Idempotency-Key` + reanudación `RNF-023/044` |

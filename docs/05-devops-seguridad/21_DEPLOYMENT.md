@@ -71,7 +71,7 @@ Este documento define **cómo se despliega, opera, observa y recupera** la plata
 
 > Ninguna elección se asume. Cada fila propone una opción para MVP y exige ADR si es arquitectónica (`11` §19). La alternativa queda documentada para no re-decidir sin evidencia.
 
-| Capa | Opciones evapythondas | Decisión Oficial Koda | Justificación | ADR Vinculante |
+| Capa | Opciones evaluadas | Decisión Oficial Koda | Justificación | ADR Vinculante |
 |---|---|---|---|---|
 | **Contenedores** | Docker + Compose / Podman / sin contenedores | **Docker + Compose** | Artefacto inmutable (P-02), paridad `dev`≈`staging`≈`prod`, `Dockerfile` multi-stage cacheable; evita deriva de "funciona en mi máquina". | Decidido por P-02 |
 | **Orquestación MVP** | Compose en VM / Kubernetes (k3s/EKS/GKE) / PaaS | **Compose en VM (1–2 nodos) + reverse proxy** | Menor costo operativo en MVP con 100 concurrentes (`06` RNF-001); cumple `RNF-005` con 2 réplicas tras balanceador. | No requiere K8s en MVP |
@@ -80,7 +80,7 @@ Este documento define **cómo se despliega, opera, observa y recupera** la plata
 | **BD** | PostgreSQL ≥15 / MySQL 8 | **Supabase (PostgreSQL 15+)** | Triggers PL/pgSQL transaccionales para recálculo de estrellas y candados ($\ge 80\%$), JSONB indexable y RLS. | [`ADR-002`](adr/ADR-002-persistencia-supabase-postgresql.md) |
 | **Migraciones** | Flyway / Liquibase / Supabase Migrations | **Migraciones SQL versionadas (`V*.sql`)** | Migraciones reproducibles `V{YYYYMMDD}_{NNN}__*.sql` (`12` §2.1) gestionadas con Supabase CLI o script de arranque. | [`ADR-002`](adr/ADR-002-persistencia-supabase-postgresql.md) |
 | **KV / Cache** | Redis / Memcached / KV embebido | **Redis (o equivalente KV)** | Rate limit por ventana deslizante, tokens rotativos, caché de progreso e idempotencia. | Aprobado (`11` §5.2) |
-| **Storage de Certificados** | S3 / R2 / Google Drive API | **Google Drive API v3 (Service Account)** | Emisión 100% en backend, sin egress fees en MVP, carpetas estructuradas y deduplicación por `pdf_sha256`. | [`ADR-003`](adr/ADR-003-certificados-backend-google-drive-storage.md) |
+| **Storage de Certificados** | S3 / R2 / Supabase Storage | **Supabase Storage (Bucket CDN)** | Emisión 100% en backend, CDN global, bucket público y deduplicación por `pdf_sha256`. | [`ADR-003`](../adr/ADR-003-certificados-backend-supabase-storage.md) |
 | **Motor Gráfico Mascotas** | CSS / Three.js / PixiJS | **PixiJS v7 (WebGL 2D Acelerado)** | 60 FPS estables para Koda 🦊, física de flotación continua, expresiones emocionales en tiempo real y emisión de confeti. | [`ADR-004`](adr/ADR-004-motor-grafico-pixijs-mascota-koda.md) |
 | **Imágenes / build** | `node:20-alpine` multi-stage | **Multi-stage (`node:20-alpine`)** | Imagen final sin toolchain de desarrollo; `pnpm prune --prod`. Reduce superficie y tiempo de pull. | No |
 | **CI/CD** | GitHub Actions / GitLab CI | **GitHub Actions** | Pipeline declarativo (lint → test → build → scan → push → deploy) con pnpm cacheado. | Operativo |

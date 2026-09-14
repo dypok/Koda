@@ -3,8 +3,8 @@ import React from 'react';
 export const SkillTreeDefs: React.FC = () => (
   <>
     <defs>
-      <filter id="glow-cyan" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="3.5" result="blur" />
+      <filter id="glow-soft" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="3" result="blur" />
         <feMerge>
           <feMergeNode in="blur" />
           <feMergeNode in="SourceGraphic" />
@@ -17,27 +17,18 @@ export const SkillTreeDefs: React.FC = () => (
           <feMergeNode in="SourceGraphic" />
         </feMerge>
       </filter>
-      <filter id="glow-purple" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="3.5" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-      <filter id="glow-green" x="-50%" y="-50%" width="200%" height="200%">
-        <feGaussianBlur stdDeviation="3.5" result="blur" />
-        <feMerge>
-          <feMergeNode in="blur" />
-          <feMergeNode in="SourceGraphic" />
-        </feMerge>
-      </filter>
-      <filter id="glow-red" x="-50%" y="-50%" width="200%" height="200%">
+      <filter id="glow-strong" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="5" result="blur" />
         <feMerge>
           <feMergeNode in="blur" />
           <feMergeNode in="SourceGraphic" />
         </feMerge>
       </filter>
+
+      <radialGradient id="halo-amber">
+        <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.35" />
+        <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+      </radialGradient>
 
       <linearGradient id="grad-cyan-to-amber" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stopColor="#06b6d4" />
@@ -62,15 +53,15 @@ export const SkillTreeDefs: React.FC = () => (
       </linearGradient>
     </defs>
 
-    <g className="opacity-25 text-slate-400">
-      <circle cx="30" cy="30" r="1" fill="currentColor" />
-      <circle cx="90" cy="195" r="1" fill="currentColor" />
-      <circle cx="260" cy="35" r="1" fill="currentColor" />
-      <circle cx="320" cy="225" r="1.5" fill="currentColor" />
-      <circle cx="470" cy="30" r="1" fill="currentColor" />
-      <circle cx="530" cy="195" r="1" fill="currentColor" />
-      <path d="M 65 45 L 71 45 M 68 42 L 68 48" stroke="currentColor" strokeWidth="0.8" />
-      <path d="M 480 220 L 486 220 M 483 217 L 483 223" stroke="currentColor" strokeWidth="0.8" />
+    <g className="text-slate-400">
+      <circle cx="30" cy="30" r="1.2" fill="currentColor" className="st-twinkle" />
+      <circle cx="90" cy="195" r="1" fill="currentColor" className="st-twinkle" style={{ animationDelay: '-1s' }} />
+      <circle cx="160" cy="200" r="1.5" fill="currentColor" className="st-twinkle" style={{ animationDelay: '-2s' }} />
+      <circle cx="260" cy="35" r="1" fill="currentColor" className="st-twinkle" style={{ animationDelay: '-0.5s' }} />
+      <circle cx="320" cy="225" r="1.5" fill="currentColor" className="st-twinkle" style={{ animationDelay: '-1.6s' }} />
+      <circle cx="470" cy="30" r="1.2" fill="currentColor" className="st-twinkle" style={{ animationDelay: '-2.4s' }} />
+      <circle cx="530" cy="195" r="1" fill="currentColor" className="st-twinkle" style={{ animationDelay: '-0.8s' }} />
+      <circle cx="230" cy="220" r="1" fill="currentColor" className="st-twinkle" style={{ animationDelay: '-1.9s' }} />
     </g>
   </>
 );

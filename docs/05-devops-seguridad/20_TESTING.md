@@ -97,7 +97,7 @@ flowchart LR
 
 | Métrica | Objetivo | Verificación |
 |---|---|---|
-| Cobertura de líneas en `learning/question/evapythontion/progress/gamification/certification/content` | ≥ 70% (`06` RNF-016) | Reporte `coverage/lcov` en CI; falla si < umbral |
+| Cobertura de líneas en `learning/question/evaluation/progress/gamification/certification/content` | ≥ 70% (`06` RNF-016) | Reporte `coverage/lcov` en CI; falla si < umbral |
 | `TC` P0 | 100% pasan | Pipeline en rojo si alguno falla |
 | `TC` P1 | ≥ 95% pasan | Nightly report |
 | Defectos P0 abiertos | 0 | Board del sprint |
@@ -139,7 +139,7 @@ flowchart LR
 
 | Flujo integrado | Qué se verifica | Invariante |
 |---|---|---|
-| `POST /lessons/{id}/answer` → `Question.validate` → `Evapythontion.calificar` → `Progress.persistirAttempt` → `Gamification.otorgarXP` → `Streak.registrar` | Transacción ACID; evento `xp_granted` con `config_version` | `06` RNF-033, `05` regla 3 |
+| `POST /lessons/{id}/answer` → `Question.validate` → `Evaluation.calificar` → `Progress.persistirAttempt` → `Gamification.otorgarXP` → `Streak.registrar` | Transacción ACID; evento `xp_granted` con `config_version` | `06` RNF-033, `05` regla 3 |
 | `POST /quiz/{id}/attempt` y `POST /exam/{id}/attempt` (dos envíos con mismo `Idempotency-Key`) | Idempotencia: segundo `POST` no duplica `attempts`, `xp_transactions` ni `streaks` | `06` RNF-042, `05` RF-XP-005 |
 | `Learning.liberarSiguienteModulo` tras `Exam APROBADO` | `M(i+1)` pasa `BLOQUEADO → DISPONIBLE`; `M(i)` → `APROBADO` | `14` §4.1, `05` RF-RUTA-004 |
 | `Content.publish` con IDs duplicados / ciclo en `prerequisite_module_id` | Rechazo con `CONTENT_VALIDATION_FAILED` y detalle | `05` RF-ADM-006 |
@@ -159,7 +159,7 @@ flowchart LR
 | Auth | `POST /auth/register`, `/auth/login`, `/auth/refresh`, `/auth/logout`, `/auth/forgot-password`, `/auth/reset-password`, `/auth/verify-email` | `201/200/204`, `400 VALIDATION_ERROR`, `409 EMAIL_TAKEN`, `401 INVALID_CREDENTIALS`, `429 RATE_LIMITED` con `Retry-After`, hash no en claro, `X-Request-Id` presente |
 | Catálogo | `GET /languages`, `GET /languages/{id}/modules`, `GET /modules/{id}` | Paginación `RNF-003` (≤100 ítems), `200` con `progress.percent`, `422 LANGUAGE_NOT_AVAILABLE` si `coming_soon` |
 | Aprendizaje | `POST /users/me/level`, `POST /diagnostics`, `POST /diagnostics/{id}/attempt`, `GET /lessons/{id}`, `POST /lessons/{id}/answer`, `POST /lessons/{id}/complete` | Feedback < 1 s `RNF-010`, XP `+10` sección / `+5` ejercicio, `ads.show_interstitial` solo si gratuito |
-| Evapythonción | `POST /quiz/{id}/attempt`, `POST /exam/{id}/attempt`, `GET /quiz/{id}/attempts` | Calificación < 2 s `RNF-012`, `threshold_aplicado` persistido, `% = round(P_obt/P_max*100,2)`, `APROBADO ≥70/80` |
+| Evaluación | `POST /quiz/{id}/attempt`, `POST /exam/{id}/attempt`, `GET /quiz/{id}/attempts` | Calificación < 2 s `RNF-012`, `threshold_aplicado` persistido, `% = round(P_obt/P_max*100,2)`, `APROBADO ≥70/80` |
 | Progreso/Gamif. | `GET /users/me/progress`, `GET /users/me/achievements`, `GET /progress/streak` | Aislamiento por `user_id` del token (`IDOR` → `403`), `level` derivado determinista |
 | Certificación | `GET /users/me/certificates`, `GET /certificates/{id}`, `GET /certificates/{id}/pdf`, `POST /certificates/verify` | `KODA-PY-000001` formato, `403 NOT_CERTIFICATE_OWNER` si no titular, `410 CERTIFICATE_OBSOLETE`, PDF bit-a-bit |
 | Admin | `/admin/*` CRUD + `POST /admin/content/publish` | `403 ADMIN_REQUIRED` sin rol, `422 CONTENT_VALIDATION_FAILED`, auditoría `quién/qué/cuándo/versión` |
@@ -228,7 +228,7 @@ flowchart LR
 | `TC-LEARN-009` | `14` RN-03 | Re-diagnóstico con `M1=APROBADO, M2=APROBADO` | `M1,M2` permanecen `APROBADO`; nueva recomendación solo sobre `M3..M12` |
 | `TC-LEARN-010` | `14` §4.4 Quiz no bloquea | Quiz `65% REPROBADO` → intentar iniciar `Siguiente sección` | Permitido; solo sugiere repaso |
 
-### 4.7 Tests de Evapythonción (Quiz / Examen — `15_QUIZ_EXAM_SYSTEM.md`)
+### 4.7 Tests de Evaluación (Quiz / Examen — `15_QUIZ_EXAM_SYSTEM.md`)
 
 | ID | Regla `15` | Caso | Esperado |
 |---|---|---|---|
@@ -458,7 +458,7 @@ jobs:
     - zap baseline scan
   gate:
     needs: [lint, unit, integration, api, e2e, security]
-    - coverage gate ≥70% en learning/question/evapythontion/progress/gamification/certification/content
+    - coverage gate ≥70% en learning/question/evaluation/progress/gamification/certification/content
     - zero P0 failures
 ```
 
@@ -498,7 +498,7 @@ Rollback automático si `error rate >1%` en 5 min post-deploy (`06` RNF-002/015)
 | `TC-001..TC-007` (Auth) | `OE-01, OE-08` | `OT-04, OT-06, OUX-04` | — |
 | `TC-008..TC-012` (Onboarding/Diagnóstico) | `OE-02, OE-03` | `OED-03, OT-01` | `PS-04, PS-07` |
 | `TC-013..TC-015` (Lecciones/Secciones) | `OE-01, OE-03` | `OED-01/02, OUX-03` | `PS-01, PS-03, PS-10` |
-| `TC-016..TC-021` (Quiz/Examen/Evapythonción) | `OE-04` | `OED-05, OUX-03` | `PS-05` |
+| `TC-016..TC-021` (Quiz/Examen/Evaluación) | `OE-04` | `OED-05, OUX-03` | `PS-05` |
 | `TC-022..TC-026` (Progreso/Gamificación/Repaso) | `OE-05` | `OED-04, OT-01` | `PS-06, PS-08` |
 | `TC-027..TC-028` (Certificación/PDF) | `OE-06` | `OT-05` | `PS-06` (demostrabilidad) |
 | `TC-029..TC-030` (Ads/Premium) | `OE-07` | `OUX-07` | — |
@@ -528,7 +528,7 @@ Cada `TC` se considera **terminado** solo si:
 | Riesgo | Impacto | Mitigación en este doc |
 |---|---|---|
 | Flakiness en E2E | Falsos rojos, pérdida de confianza | Page Objects + `auto-wait` de Playwright; sin `sleep`; reintento 1 con `trace`; golden datasets versionados |
-| Cobertura 70% con tests triviales | Falsa seguridad | Gate por **motor** (`RNF-016`): cada uno de `learning/question/evapythontion/progress/gamification/certification` ≥70%, no solo total repo |
+| Cobertura 70% con tests triviales | Falsa seguridad | Gate por **motor** (`RNF-016`): cada uno de `learning/question/evaluation/progress/gamification/certification` ≥70%, no solo total repo |
 | Banco insuficiente (`B_min`) | Exámenes repetitivos | `TC-EVAL-004` bloquea publicación; nightly genera 5 sets y valida `overlap` |
 | Repaso mal priorizado | Usuario no refuerza lo que más falla | `TC-LEARN-006` con golden de `Score_repaso`; `TC-REG-004` lo protege |
 | Certificados duplicados bajo concurrencia | Pérdida de confianza | `TC-BD-006` + `TC-CERT-004` con 10 workers concurrentes |
