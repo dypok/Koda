@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { SquaresFour, Terminal } from '@phosphor-icons/react';
+import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 import { LanguageOption, TechCategory } from '@/models/register/register.model';
 import { LanguageCard } from './LanguageCard';
 import { TerminalLanguagePicker } from './TerminalLanguagePicker';
@@ -24,6 +25,24 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
 }) => {
   const reduceMotion = useReducedMotion();
   const [view, setView] = useState<'grid' | 'terminal'>('grid');
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  // V8: stagger GSAP de entrada cada vez que cambia el filtro.
+  useLayoutEffect(() => {
+    if (view !== 'grid' || prefersReducedMotion()) return;
+    const { gsap } = getGsap();
+    const ctx = gsap.context(() => {
+      gsap.from(gridRef.current?.querySelectorAll('[data-vrow]') ?? [], {
+        y: 14,
+        opacity: 0,
+        duration: 0.45,
+        stagger: 0.04,
+        ease: 'power3.out',
+        clearProps: 'transform,opacity',
+      });
+    }, gridRef);
+    return () => ctx.revert();
+  }, [languages, view]);
 
   useEffect(() => {
     try {
@@ -126,27 +145,42 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
         onSelectLanguage={onSelectLanguage}
       />
     ) : (
-    /* Grid of Technologies ampliado horizontalmente */
+    /* Grid de tecnologías con índice por track (V12) */
+    <div ref={gridRef}>
     <motion.div layout={reduceMotion ? false : true} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
       <AnimatePresence mode="popLayout">
-        {languages.map((item) => (
-          <motion.div
-            key={item.id}
-            layout={reduceMotion ? false : true}
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
-          >
-            <LanguageCard
-              option={item}
-              isSelected={selectedLanguageId === item.id}
-              onSelect={onSelectLanguage}
-            />
-          </motion.div>
-        ))}
+        {(['language', 'framework', 'tools'] as const).flatMap((cat) => {
+          const list = languages.filter((item) => item.category === cat);
+          if (!list.length) return [];
+          return [
+            <p
+              key={`idx-${cat}`}
+              aria-hidden="true"
+              className="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-500 md:col-span-2 xl:col-span-3"
+            >
+              {cat}/ <span className="text-amber-400">[{String(list.length).padStart(2, '0')}]</span>
+            </p>,
+            ...list.map((item) => (
+              <motion.div
+                key={item.id}
+                layout={reduceMotion ? false : true}
+                initial={false}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
+              >
+                <LanguageCard
+                  option={item}
+                  isSelected={selectedLanguageId === item.id}
+                  onSelect={onSelectLanguage}
+                />
+              </motion.div>
+            )),
+          ];
+        })}
       </AnimatePresence>
     </motion.div>
+    </div>
     )}
   </div>
   );
