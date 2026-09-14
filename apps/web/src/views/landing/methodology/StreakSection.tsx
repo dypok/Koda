@@ -28,9 +28,6 @@ export const StreakSection: React.FC = () => {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="lg:col-span-7 space-y-5 text-left"
         >
-          <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-orange-400">
-            Pilar 1 · Constancia
-          </p>
           <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
             Rachas que encienden tu hábito diario
           </h3>

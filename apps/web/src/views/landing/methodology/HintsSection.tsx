@@ -37,9 +37,6 @@ export const HintsSection: React.FC = () => {
       transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
       className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-6 relative"
     >
-      <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-emerald-400">
-        Pilar 4 · Razonamiento
-      </p>
       <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] max-w-3xl mx-auto">
         Pistas que te enseñan a{' '}
         <Highlight>

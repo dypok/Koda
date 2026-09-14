@@ -32,9 +32,6 @@ export const RoadmapSection: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
           className="lg:col-span-7 order-1 lg:order-2 space-y-5 text-left"
         >
-          <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-amber-400">
-            Pilar 2 · Ruta
-          </p>
           <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
             Un roadmap claro, paso a paso
           </h3>
