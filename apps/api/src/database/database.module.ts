@@ -11,6 +11,8 @@ import {
   QuestionBank, QuestionBankSchema,
 } from './schemas';
 
+import { SupabaseService } from './supabase.service';
+
 @Global()
 @Module({
   imports: [
@@ -31,6 +33,7 @@ import {
       { name: QuestionBank.name, schema: QuestionBankSchema },
     ]),
   ],
-  exports: [MongooseModule],
+  providers: [SupabaseService],
+  exports: [MongooseModule, SupabaseService],
 })
 export class DatabaseModule {}

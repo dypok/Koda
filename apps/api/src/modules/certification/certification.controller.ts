@@ -17,8 +17,8 @@ export class CertificationController {
   }
 
   @Get(':id/download-info')
-  @ApiOperation({ summary: 'Obtener información de streaming y caché en Google Drive' })
-  @ApiResponse({ status: 200, description: 'Metadatos de Google Drive File ID' })
+  @ApiOperation({ summary: 'Obtener información de descarga y almacenamiento en Supabase Storage' })
+  @ApiResponse({ status: 200, description: 'Metadatos de Supabase Storage Path y URL pública' })
   getDownloadInfo(@Param('id') id: string) {
     return this.certificationService.getDownloadInfo(id);
   }

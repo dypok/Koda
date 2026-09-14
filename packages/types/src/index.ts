@@ -480,7 +480,8 @@ export interface Certificate {
   holder_document_masked: string;
   language_name: string;
   qr_payload: string;
-  google_drive_file_id?: string;
+  storage_path?: string;
+  storage_url?: string;
   pdf_sha256?: string;
 }
 
