@@ -1,14 +1,16 @@
 # 13 — Especificación de API (API Specification)
 
-> **Estado:** Aprobado · **Versión del documento:** 2.1.0 · **Fecha:** 2026-09-10  
-> **Complementa a:** `docs/01-producto-negocio/`, `docs/02-requisitos-ux/`, `11_SYSTEM_ARCHITECTURE.md`, `12_DATABASE_DESIGN.md` (v3.0.0), `ADR-007` (Roadmap DAG), `ADR-008` (NestJS Oficial) y `ADR-009` (Persistencia Híbrida MongoDB + Supabase).  
+> **Estado:** Aprobado · **Versión del documento:** 2.2.0 · **Fecha:** 2026-09-14  
+> **Complementa a:** `docs/01-producto-negocio/`, `docs/02-requisitos-ux/`, `11_SYSTEM_ARCHITECTURE.md`, `12_DATABASE_DESIGN.md` (v3.0.0), `ADR-007` (Roadmap DAG), `ADR-008` (NestJS Oficial), `ADR-009` (Persistencia Híbrida), `ADR-010` (Hexagonal + Eventos) y `ADR-012` (Arquitectura Híbrida GraphQL y REST).  
 > **Zona horaria de timestamps de API:** `America/Bogota` (UTC-5).
 
 ---
 
 ## 1. Propósito y alcance
 
-Este documento especifica el **contrato HTTP REST** de la plataforma educativa gamificada implementado en NestJS (`ADR-008`). Define qué expone el sistema, los modelos de datos de entrada/salida, los códigos de estado, las reglas de negocio en cada operación y la interacción entre el almacenamiento de contenido en MongoDB y la persistencia de usuario en Supabase PostgreSQL (`ADR-009`).
+Este documento especifica el **contrato HTTP REST (`/api/v1`)** de la plataforma educativa gamificada en NestJS. Conforme a la arquitectura híbrida aprobada en **ADR-012**, REST se reserva de forma exclusiva para operaciones que requieren estándares HTTP nativos (autenticación y sesiones OAuth, subida de archivos binarios, ejecución de sandbox y webhooks de infraestructura), mientras que las pantallas interactivas de usuario, vistas agregadas (Dashboard, Roadmap DAG) y mutaciones formativas son consumidas a través del endpoint primario **GraphQL (`/graphql`)**.
+
+Define qué expone el sistema vía REST, los modelos de datos de entrada/salida, los códigos de estado, las reglas de negocio en cada operación y la interacción entre el almacenamiento de contenido en MongoDB y la persistencia de usuario en Supabase PostgreSQL (`ADR-009`).
 
 **Sí incluye:**
 - Base URL y versionado semántico (`/api/v1`).

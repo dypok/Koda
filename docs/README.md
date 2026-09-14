@@ -40,7 +40,7 @@ graph LR
     subgraph D4["4. Arquitectura & Backend"]
         A1["11 System Architecture"]
         A2["12 Database Design"]
-        A3["13 API REST Spec"]
+        A3["13 API Spec (REST + GraphQL)"]
         A4["17 Certificación"]
         A5["25 Admin System"]
         ADR["ADRs (docs/adr/)"]
@@ -77,9 +77,9 @@ Para optimizar el tiempo de incorporación al proyecto (*onboarding*), consulta 
 1. [`01_PROJECT_OVERVIEW.md`](01-producto-negocio/01_PROJECT_OVERVIEW.md) — Principios del sistema y reglas de negocio.
 2. [`11_SYSTEM_ARCHITECTURE.md`](04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md) — Arquitectura modular NestJS (`ADR-008`), motores y dependencias.
 3. [`12_DATABASE_DESIGN.md`](04-arquitectura-backend/12_DATABASE_DESIGN.md) — Persistencia híbrida (`ADR-009`): Supabase PostgreSQL (transacciones) + MongoDB (contenido).
-4. [`13_API_SPECIFICATION.md`](04-arquitectura-backend/13_API_SPECIFICATION.md) — Endpoints OpenAPI 3.0.3, DTOs y respuestas.
+4. [`13_API_SPECIFICATION.md`](04-arquitectura-backend/13_API_SPECIFICATION.md) — Contratos REST OpenAPI 3.0.3, límites híbridos con GraphQL (`ADR-012`) y DTOs.
 5. [`17_CERTIFICATION.md`](04-arquitectura-backend/17_CERTIFICATION.md) — Emisión de certificados con Google Drive Service Account (`ADR-003`).
-6. [`docs/adr/`](adr/README.md) — Decisiones de arquitectura formalizadas (ADR-001 a ADR-009).
+6. [`docs/adr/`](adr/README.md) — Decisiones de arquitectura formalizadas (ADR-001 a ADR-012).
 7. [`apps/api/README.md`](../apps/api/README.md) — Estructura NestJS, controladores y Swagger.
 
 ### ✍️ Diseñador Instruccional / Creador de Contenido (Python & Tracks)
@@ -132,12 +132,12 @@ Para optimizar el tiempo de incorporación al proyecto (*onboarding*), consulta 
 ### ⚙️ [Dominio 4 — Arquitectura & Backend](04-arquitectura-backend/README.md)
 | Código | Documento | Versión | Estado | Descripción Principal |
 |:---:|---|:---:|:---:|---|
-| **11** | [`11_SYSTEM_ARCHITECTURE.md`](04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md) | 2.1.0 | ✅ Aprobado | Arquitectura técnica modular: Next.js 15 + NestJS (`ADR-008`) + Supabase + MongoDB (`ADR-009`). |
+| **11** | [`11_SYSTEM_ARCHITECTURE.md`](04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md) | 2.3.0 | ✅ Aprobado | Arquitectura técnica: Monolito Hexagonal EDD, híbrido GraphQL/REST (`ADR-012`), Supabase + MongoDB. |
 | **12** | [`12_DATABASE_DESIGN.md`](04-arquitectura-backend/12_DATABASE_DESIGN.md) | 3.0.0 | ✅ Aprobado | Persistencia híbrida políglota: Supabase (PostgreSQL 15+) transaccional + MongoDB para contenido. |
-| **13** | [`13_API_SPECIFICATION.md`](04-arquitectura-backend/13_API_SPECIFICATION.md) | 2.1.0 | ✅ Aprobado | Especificación REST OpenAPI 3.0.3 (endpoints, DTOs y códigos de error). |
+| **13** | [`13_API_SPECIFICATION.md`](04-arquitectura-backend/13_API_SPECIFICATION.md) | 2.2.0 | ✅ Aprobado | Especificación de contratos REST OpenAPI 3.0.3 y fronteras con GraphQL (`ADR-012`). |
 | **17** | [`17_CERTIFICATION.md`](04-arquitectura-backend/17_CERTIFICATION.md) | 2.0.0 | ✅ Aprobado | Pipeline backend de generación de PDF, QR ISO 18004 y Google Drive storage (`ADR-003`). |
 | **25** | [`25_ADMIN_SYSTEM.md`](04-arquitectura-backend/25_ADMIN_SYSTEM.md) | 1.0.0 | ✅ Aprobado | Consola de administración, publicación sin despliegue y auditoría inmutable. |
-| **ADR** | [`docs/adr/`](adr/README.md) | — | 🟢 Activo | Registro formal de Decisiones de Arquitectura (ADR-001 a ADR-009). |
+| **ADR** | [`docs/adr/`](adr/README.md) | — | 🟢 Activo | Registro formal de Decisiones de Arquitectura (ADR-001 a ADR-012). |
 
 ### 🛡️ [Dominio 5 — Seguridad & DevOps](05-devops-seguridad/README.md)
 | Código | Documento | Versión | Estado | Descripción Principal |

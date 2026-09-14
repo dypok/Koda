@@ -122,7 +122,7 @@ Cuando se menciona una técnica o herramienta (ej. CDN, caché, WAF, S3-compatib
 |---|---|---|---|---|---|
 | RNF-030 | Separación de responsabilidades por motor. | Obligatorio | Motores `Learning`, `Question`, `Evapythontion`, `Progress`, `Gamification`, `Certification` desacoplados con contratos estables (ver `01` §24, `03` OT-01, `11`). Cambio en Gamificación no exige cambiar Evapythontion. | Revisión de `11_SYSTEM_ARCHITECTURE.md`; análisis de dependencias (import graph) en CI que falla si hay acoplamiento prohibido. | MVP |
 | RNF-031 | Contenido desacoplado del código. | Obligatorio | Contenido en formato declarativo versionado (`23`); ningún texto de lección ni pregunta hardcodeado en UI/motor. | Grep en CI que falla si se detectan literales de contenido fuera de `23`; ensayo `RNF-006`. | MVP |
-| RNF-032 | Contratos de API versionados y documentados. | Obligatorio | API REST versionada (`/v1`), autenticada y documentada en OpenAPI (`13`); cambio breaking exige nueva versión, no ruptura silenciosa (ver `03` OT-04). | Lint de OpenAPI en CI; test de compatibilidad de contrato; revisión de `13`. | MVP |
+| RNF-032 | Contratos de API versionados y documentados. | Obligatorio | API híbrida (`ADR-012`): esquema GraphQL (`/graphql`) fuertemente tipado y API REST versionada (`/v1`) documentada en OpenAPI (`13`); cambio breaking exige nueva versión. | Lint de OpenAPI en CI; verificación de schema GraphQL; test de contrato; revisión de `13`. | MVP |
 
 ### 3.11 Integridad de datos
 
