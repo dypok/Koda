@@ -1,12 +1,14 @@
 import React from 'react';
 import { IconDeviceDesktop, IconServer, IconBrandDocker, IconBrandPython } from '@tabler/icons-react';
+import { Moon } from 'lucide-react';
 import { GraphDataset } from '../roadmap-graph.types';
 import { FRONTEND_COURSES_DATASET } from './frontend-track.mock';
 import { BACKEND_COURSES_DATASET } from './backend-track.mock';
 import { DEVOPS_COURSES_DATASET } from './devops-track.mock';
 import { PYTHON_COURSES_DATASET } from './python-track.mock';
+import { LUA_COURSES_DATASET, LUA_TRACK_TOTALS } from './lua-track.mock';
 
-export type CareerBranchId = 'frontend' | 'backend' | 'devops' | 'python';
+export type CareerBranchId = 'frontend' | 'backend' | 'devops' | 'python' | 'lua';
 
 export interface CareerBranchInfo {
   id: CareerBranchId;
@@ -79,5 +81,19 @@ export const CAREER_BRANCHES: CareerBranchInfo[] = [
     completedCourses: 1,
     totalCourses: 6,
     dataset: PYTHON_COURSES_DATASET,
+  },
+  {
+    id: 'lua',
+    title: 'Lua Specialist',
+    tagline: 'Tablas, Metatablas & Corrutinas',
+    technologies: 'Lua, Tables, POO, Corrutinas',
+    icon: Moon,
+    color: '#8FA8FF',
+    progressPercent: 8,
+    earnedStars: 0,
+    totalStars: LUA_TRACK_TOTALS.totalStars,
+    completedCourses: 0,
+    totalCourses: LUA_TRACK_TOTALS.totalCourses,
+    dataset: LUA_COURSES_DATASET,
   },
 ];
