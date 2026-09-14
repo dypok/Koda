@@ -57,7 +57,7 @@ export const WipeButton: React.FC<WipeButtonProps> = ({
       <span
         aria-hidden="true"
         className={cn(
-          'absolute -left-4 -top-10 h-40 w-[130%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
+          'absolute -left-8 -top-16 h-64 w-[160%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
           'delay-150 group-hover:delay-0 group-hover:scale-x-100 motion-reduce:hidden',
           b1
         )}
@@ -65,7 +65,7 @@ export const WipeButton: React.FC<WipeButtonProps> = ({
       <span
         aria-hidden="true"
         className={cn(
-          'absolute -left-4 -top-10 h-40 w-[130%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
+          'absolute -left-8 -top-16 h-64 w-[160%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
           'delay-75 group-hover:delay-75 group-hover:scale-x-100 motion-reduce:hidden',
           b2
         )}
@@ -73,7 +73,7 @@ export const WipeButton: React.FC<WipeButtonProps> = ({
       <span
         aria-hidden="true"
         className={cn(
-          'absolute -left-4 -top-10 h-40 w-[130%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
+          'absolute -left-8 -top-16 h-64 w-[160%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
           'delay-0 group-hover:delay-150 group-hover:scale-x-100 motion-reduce:hidden',
           b3
         )}
