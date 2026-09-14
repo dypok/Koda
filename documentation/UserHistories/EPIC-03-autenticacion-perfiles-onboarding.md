@@ -1,116 +1,120 @@
 # 🟣 EPIC 3 — Autenticación, Perfiles de Usuario y Onboarding
-`Sprint 2 · v1.0 · Color Jira: Morado · Código: AUTH`
+`Sprint 2 · v2.0 · Color Jira: Morado · Código: AUTH`
 
-> Esta épica cubre el ciclo de vida de identidad del usuario en Koda 🦊: registro seguro, inicio de sesión mediante JWT stateless con refresh rotativo HttpOnly, prueba diagnóstica inicial, configuración de perfil y persistencia en Supabase Auth (`19_SECURITY.md`, `05_FUNCTIONAL_REQUIREMENTS.md` RF-AUTH-*).
+> Esta épica cubre el ciclo de vida de identidad del usuario en Koda 🦊: registro seguro e inicio de sesión mediante **Supabase Auth** (`auth.users`), aprovisionamiento automático sin redundancia hacia la tabla relacional consolidada `public.users` (`ADR-002`, `ADR-009`), Wizard de Onboarding interactivo de 5 pasos en el frontend (`apps/web`), prueba diagnóstica inicial opcional, gestión de perfil unificado y métricas en tiempo real.
 
 ---
 
-### AUTH-01 — Registro de usuario e inicio de sesión con JWT rotativo
+### AUTH-01 — Registro de usuario y autenticación con Supabase Auth (Sin Redundancia)
 **Tipo:** Story | **SP:** 5 | **Prioridad:** Muy Alta | **Asignado:** Backend Lead + Frontend Developer  
-**Rama sugerida:** `feature/auth-jwt-supabase`
+**Rama sugerida:** `feature/auth-jwt-supabase`  
+**Trazabilidad:** `ADR-002`, `ADR-009`, `19_SECURITY.md`
 
 **Historia de usuario:**
-> "Como nuevo estudiante, quiero crear una cuenta e iniciar sesión con credenciales seguras,
-> para que mi progreso de aprendizaje, estrellas y racha queden guardados de forma permanente."
+> "Como nuevo estudiante, quiero crear una cuenta e iniciar sesión mediante Supabase Auth con credenciales seguras,
+> para que mi identidad se gestione de forma segura y mi perfil en Koda se aprovisione automáticamente sin duplicar contraseñas."
 
 **Criterios de aceptación:**
 - Registro con validación de: nombre completo, correo electrónico válido (RFC 5322) y contraseña segura (mínimo 8 caracteres, al menos 1 número y 1 carácter especial).
-- Hash de contraseñas con Argon2id / bcrypt gestionado por Supabase Auth (`RNF-009`).
-- Emisión de Access Token JWT (15 minutos de expiración) y Refresh Token rotativo almacenado en cookie `HttpOnly`, `Secure`, `SameSite=Lax` con TTL de 7 días (`19` §6).
-- Detección de reuso de Refresh Token: invalida todas las sesiones activas en cascada si un token previamente rotado es reutilizado.
-- Cierre de sesión (`POST /auth/logout`): revoca el token en el backend y limpia el almacenamiento en el cliente.
-- Manejo de respuestas 401 Unauthorized sin fugas de información.
+- Gestión exclusiva de contraseñas mediante **Supabase Auth** (`auth.users`) con cifrado Argon2id / bcrypt (`RNF-009`). Cero almacenamiento de contraseñas o hashes en `public.users`.
+- Clave foránea directa: `public.users.id` referencia a `auth.users.id` con `ON DELETE CASCADE`.
+- Trigger automático de Postgres `on_auth_user_created` en Supabase: ante cualquier registro en `auth.users`, inserta automáticamente la fila en `public.users` con la metadata de onboarding (`raw_user_meta_data`).
+- Emisión de Access Token JWT (15 minutos) y Refresh Token rotativo almacenado de forma segura con rotación automática.
+- Cierre de sesión (`POST /auth/logout` o `supabase.auth.signOut()`): revoca la sesión y limpia el almacenamiento en el cliente.
+- Políticas de Row Level Security (RLS) habilitadas en `public.users` con acceso exclusivo para el usuario autenticado (`auth.uid() = id`) y visualización pública de datos de leaderboard (`status = 'active'`).
 
 **Subtasks:**
-- [ ] [BD] Configurar Supabase Auth con proveedores Email/Password y tabla `auth.users` vinculada a `public.profiles`.
-- [ ] [BACKEND] Implementar `AuthModule` en `apps/api/src/modules/auth/` con endpoints `POST /auth/register`, `POST /auth/login`, `POST /auth/refresh`, `POST /auth/logout`.
-- [ ] [BACKEND] Configurar `JwtAuthGuard` y decorador `@CurrentUser()` para inyección de usuario autenticado en controladores.
-- [ ] [BACKEND] Implementar servicio de rotación de Refresh Tokens con almacenamiento de hash en tabla de sesiones.
-- [ ] [FRONTEND] Configurar interceptor en `apiClient` para auto-renovación silenciosa del token al recibir 401.
-- [x] [FRONTEND] Diseñar formulario de registro interactivo en `apps/web/src/app/(auth)/` con validación Zod, feedback de errores, paleta Dark Navy y React Hook Form (`feat/register-frontend`).
-- [ ] [FRONTEND] Persistir estado de autenticación en Zustand `authStore` y sincronizar con cookie de sesión.
+- [x] [BD] Configurar tabla consolidada `public.users` vinculada a `auth.users(id)` con RLS y trigger `on_auth_user_created`.
+- [ ] [BACKEND] Implementar `AuthModule` en `apps/api/src/modules/auth/` con verificación de tokens Supabase y guards de autenticación.
+- [ ] [BACKEND] Configurar `JwtAuthGuard` y decorador `@CurrentUser()` para inyección del usuario autenticado en controladores NestJS.
+- [ ] [FRONTEND] Configurar cliente de Supabase (`@supabase/ssr` / `@supabase/supabase-js`) en `apps/web` para sesión persistente.
+- [x] [FRONTEND] Diseñar formulario de autenticación interactivo en `apps/web/src/app/login/page.tsx` y `apps/web/src/views/login/` con validación Zod y React Hook Form.
+- [x] [FRONTEND] Persistir estado de autenticación en Zustand `auth.store.ts`.
 
 **DoD adicional para esta US:**
-- Flujo completo probado: registro $\rightarrow$ login $\rightarrow$ navegación protegida $\rightarrow$ refresh silencioso $\rightarrow$ logout verificado en Swagger `/api/docs`.
+- Flujo completo probado: registro en Supabase Auth $\rightarrow$ verificación de fila creada en `public.users` $\rightarrow$ sesión activa en el frontend $\rightarrow$ logout exitoso.
 
 ---
 
-### AUTH-02 — Declaración de nivel y Evaluación Diagnóstica Inicial
+### AUTH-02 — Wizard de Onboarding Pedagógico de 5 Pasos y Evaluación Diagnóstica
 **Tipo:** Story | **SP:** 5 | **Prioridad:** Alta | **Asignado:** Fullstack Developer  
-**Rama sugerida:** `feature/onboarding-diagnostico`
+**Rama sugerida:** `feature/onboarding-diagnostico`  
+**Trazabilidad:** `ADR-005`, `docs/01-producto-negocio/01_PROJECT_OVERVIEW.md` §8
 
 **Historia de usuario:**
-> "Como estudiante nuevo, quiero autodeclarar mi nivel y responder un breve test diagnóstico opcional de 12 preguntas,
-> para que Koda recomiende mi punto de entrada ideal en la ruta de Python sin obligarme a repetir conceptos que ya domino."
+> "Como estudiante nuevo, quiero completar un asistente interactivo de 5 pasos al registrarme (lenguaje, nivel, motivación, meta diaria y cuenta),
+> para personalizar mi experiencia de aprendizaje y recibir una ruta adaptada a mi ritmo diario de estudio."
 
 **Criterios de aceptación:**
-- Selector de nivel declarado en pantalla de onboarding: *Principiante Absoluto*, *Intermedio*, *Semi-Pro*, *Profesional* (`01` §8, `14` §5).
-- Si el usuario declara nivel Principiante, es asignado directamente al Módulo 01 (Fundamentos) sin examen forzado.
-- Si declara nivel superior, se activa el test diagnóstico estratificado de 12 preguntas de opción única cubriendo los 4 primeros módulos de Python.
-- Algoritmo de cálculo de punto de entrada (`14` §5.4):
-  - $\ge 80\%$ en Bloque B1 (M01-M03) $\rightarrow$ desbloquea Módulo 04.
-  - $\ge 80\%$ en Bloque B2 (M04-M06) $\rightarrow$ desbloquea Módulo 07.
-  - Clamping por nivel declarado para evitar desbloqueos accidentales por adivinación.
-- Los módulos aprobados por diagnóstico quedan marcados con bandera `unlocked_by_diagnostic=true` con 3 estrellas simbólicas.
-- Opción clara de "Omitir diagnóstico y empezar desde cero".
+- **Wizard de Onboarding Interactivo de 5 Pasos (`apps/web`):**
+  1. **Paso 1 (Lenguaje):** Selección de la tecnología base (Python 3.12 como pista fundacional obligatoria).
+  2. **Paso 2 (Nivel de experiencia):** Autodeclaración entre *Principiante Absoluto* (`beginner`), *Elemental* (`elementary`), *Intermedio* (`intermediate`) o *Avanzado* (`advanced`).
+  3. **Paso 3 (Estilo de aprendizaje):** Selección de enfoque preferido: *Práctico en Consola* (`hands-on`), *Guiado Paso a Paso* (`guided`), *Proyectos Reales* (`projects`) o *Gamificado/Lúdico* (`gamified`).
+  4. **Paso 4 (Meta diaria de estudio):** Selección de compromiso diario en minutos:
+     - *Casual:* 5 min/día (`casual`).
+     - *Regular:* 10 min/día (`regular`, opción recomendada por defecto).
+     - *Enfocado:* 15 min/día (`focused`).
+     - *Intenso:* 20 min/día (`intense`).
+  5. **Paso 5 (Cuenta):** Formulario integrado de registro de credenciales que envía las respuestas acumuladas de los pasos 1 a 4 dentro del payload `raw_user_meta_data` hacia Supabase Auth.
+- **Persistencia en Base de Datos:**
+  - `public.users` almacena: `initial_language_slug`, `experience_level`, `learning_style`, `daily_goal_id`, `daily_goal_minutes`.
+- **Evaluación Diagnóstica Inicial (Opcional):**
+  - Si el usuario declara nivel intermedio o superior, se ofrece un test diagnóstico de 12 preguntas de Python (`POST /api/v1/learning/diagnostic/submit`).
+  - Al aprobar con $\ge 80\%$, se marcan los módulos básicos como aprobados (`unlocked_by_diagnostic = true`) con opción de saltar directamente al siguiente bloque.
 
 **Subtasks:**
-- [ ] [BACKEND] Endpoint `POST /api/v1/learning/diagnostic/submit` que evalúa respuestas del test diagnóstico y calcula el `recommended_module_id`.
-- [ ] [BACKEND] Endpoint `GET /api/v1/learning/diagnostic/questions` que entrega 12 preguntas calibradas sin revelar las respuestas correctas.
-- [ ] [FRONTEND] Diseñar pantalla de onboarding `apps/web/src/app/onboarding/page.tsx` con cards interactivas de autodeclaración de nivel.
-- [ ] [FRONTEND] Implementar vista del test diagnóstico con stepper de progreso y temporizador formativo.
-- [ ] [FRONTEND] Modal de resultados con animación de Koda 🦊 celebrando el módulo de entrada recomendado.
-
-**DoD adicional para esta US:**
-- Cobertura de tests unitarios verificando los 4 casos del algoritmo de clamping y determinación de módulo de inicio.
+- [x] [FRONTEND] Implementar flujo multi-paso del Wizard de registro en `apps/web/src/app/register/page.tsx` con stepper dinámico y animaciones.
+- [x] [FRONTEND] Integrar selector de metas diarias (5, 10, 15, 20 minutos) con micro-animación de Koda 🦊.
+- [ ] [BACKEND] Endpoint `POST /api/v1/learning/diagnostic/submit` que evalúa respuestas diagnósticas y calcula el módulo de entrada.
+- [ ] [BACKEND] Endpoint `GET /api/v1/learning/diagnostic/questions` con 12 reactivos calibrados de fundamentos de Python.
+- [ ] [TEST] Pruebas unitarias para validar la inserción de las preferencias de onboarding en `public.users` al registrarse.
 
 ---
 
-### AUTH-03 — Gestión de Perfil de Usuario y Preferencias
-**Tipo:** Story | **SP:** 3 | **Prioridad:** Media | **Asignado:** Frontend Developer  
-**Rama sugerida:** `feature/perfil-usuario`
+### AUTH-03 — Gestión de Perfil de Usuario Consolidado y Métricas en Tiempo Real
+**Tipo:** Story | **SP:** 3 | **Prioridad:** Media | **Asignado:** Frontend Developer + Backend Developer  
+**Rama sugerida:** `feature/perfil-usuario`  
+**Trazabilidad:** `12_DATABASE_DESIGN.md`, `19_SECURITY.md`
 
 **Historia de usuario:**
-> "Como usuario de Koda, quiero ver y editar mi perfil personal (nombre, avatar de Koda, número de documento para certificados),
-> para personalizar mi experiencia y asegurar que mis futuros diplomas salgan con mi nombre oficial correcto."
+> "Como usuario de Koda, quiero consultar y editar mi perfil unificado (nombre, avatar de Koda, documento legal para certificados y meta de minutos),
+> para mantener mis datos actualizados y asegurar que mis diplomas oficiales se expidan con mi identidad legal correcta."
 
 **Criterios de aceptación:**
-- Endpoint `GET /api/v1/users/me` entrega: nombre, email, avatar, fecha de registro, XP total, nivel actual, racha y documento enmascarado (`CC ***678`).
-- Endpoint `PATCH /api/v1/users/me` permite modificar: `full_name`, `avatar_id`, `theme_preference` y `document_number` (cifrado simétrico en BD `19` §14).
-- Selector de avatares oficiales con expresiones de Koda 🦊 (Koda Clásico, Koda Detective, Koda Astronauta, Koda Hacker).
-- Visualización de estadísticas del estudiante: lecciones completadas, porcentaje de maestría en Python 3.12, certificados obtenidos.
+- Endpoint `GET /api/v1/users/me` entrega la entidad consolidada de `public.users`:
+  - Identidad: `id`, `email`, `display_name`, `avatar_url`, `document_type`, documento enmascarado (`CC ***678`), `bio`, `timezone`, `locale`.
+  - Preferencias: `initial_language_slug`, `experience_level`, `learning_style`, `daily_goal_id`, `daily_goal_minutes`.
+  - Gamificación y Hábitos: `total_xp`, `current_level`, `current_streak`, `longest_streak`, `streak_freeze_count`, `total_study_time_seconds`, `last_study_date`.
+- Endpoint `PATCH /api/v1/users/me` permite actualizar: `display_name`, `avatar_url`, `bio`, `document_number`, `document_type`, `daily_goal_minutes` y `timezone`.
+- Cifrado o protección estricta de `document_number` para cumplimiento de privacidad (`RNF-008`).
+- Selector de avatares oficiales con las 4 expresiones de la mascota Koda 🦊.
+- RLS en Supabase: solo el titular de la sesión (`auth.uid() = id`) puede emitir `UPDATE` sobre su registro.
 
 **Subtasks:**
-- [ ] [BD] Verificar tabla `user_profiles` en Supabase con función `pgp_sym_encrypt` para número de identificación legal.
-- [ ] [BACKEND] Controlador `UsersController` con endpoints de lectura y actualización parcial de perfil.
-- [ ] [FRONTEND] Pantalla `apps/web/src/app/perfil/page.tsx` con grid de estadísticas, badge de nivel y selector de avatares.
-- [ ] [FRONTEND] Formulario de edición con validación de nombre y cédula/pasaporte.
-- [ ] [FRONTEND] Toast interactivo de confirmación al actualizar datos.
-
-**DoD adicional para esta US:**
-- El número de documento se transmite con TLS y se devuelve enmascarado en la API pública.
+- [x] [BD] Definir columnas de perfil y preferencias directamente en `public.users` con constraints de formato y longitud.
+- [ ] [BACKEND] Controlador `UsersController` con endpoints de lectura y actualización parcial de perfil en NestJS.
+- [ ] [FRONTEND] Pantalla de perfil en `apps/web` con panel de estadísticas (tiempo total de estudio, racha actual, XP y nivel).
+- [ ] [FRONTEND] Selector de avatares SVG de Koda y formulario de datos personales con validación.
 
 ---
 
-### AUTH-04 — Recuperación de Contraseña y Verificación de Correo
+### AUTH-04 — Recuperación de Contraseña y Verificación de Correo en Supabase Auth
 **Tipo:** Story | **SP:** 3 | **Prioridad:** Media | **Asignado:** Backend Developer  
-**Rama sugerida:** `feature/recuperacion-password`
+**Rama sugerida:** `feature/recuperacion-password`  
+**Trazabilidad:** `19_SECURITY.md` §10
 
 **Historia de usuario:**
-> "Como usuario que olvidó su contraseña, quiero recibir un enlace temporal en mi correo electrónico,
-> para restablecer mi acceso a la plataforma sin perder mi progreso educativo."
+> "Como usuario que olvidó su contraseña, quiero recibir un enlace temporal en mi correo electrónico a través de Supabase Auth,
+> para restablecer mi acceso a la plataforma sin perder mi progreso educativo ni mi racha acumulada."
 
 **Criterios de aceptación:**
-- Endpoint `POST /auth/forgot-password`: recibe email y envía token firmado de restablecimiento con TTL de 15 minutos.
-- Endpoint `POST /auth/reset-password`: valida token de un solo uso y actualiza la contraseña en Supabase Auth.
-- Prevención de enumeración de cuentas: el endpoint siempre devuelve el mismo mensaje genérico ("Si el correo existe, recibirás un enlace de recuperación").
-- Rate limiting estricto: máximo 3 solicitudes de recuperación por IP por hora (`19` §10).
+- Endpoint o flujo frontend con `supabase.auth.resetPasswordForEmail()`: envía email con enlace temporal seguro (TTL 15 minutos).
+- Prevención de enumeración de cuentas: la UI responde siempre con el mismo mensaje neutral confirmando el envío.
+- Pantalla de restablecimiento de contraseña en `apps/web`: valida la nueva clave (mínimo 8 caracteres, alfanumérica y carácter especial) y la actualiza mediante `supabase.auth.updateUser()`.
+- Rate limiting estricto para mitigar ataques de denegación o saturación de emails.
 
 **Subtasks:**
-- [ ] [BACKEND] Configurar plantilla de email transaccional en Supabase Auth / Resend con diseño institucional Koda.
-- [ ] [BACKEND] Implementar endpoints de solicitud y confirmación de reset con validación de token seguro.
-- [ ] [FRONTEND] Pantalla `apps/web/src/app/(auth)/recuperar/page.tsx` con input de email y feedback amigable.
-- [ ] [FRONTEND] Pantalla `apps/web/src/app/(auth)/nueva-clave/page.tsx` para digitar y confirmar nueva contraseña.
-
-**DoD adicional para esta US:**
-- Token invalidado inmediatamente tras ser consumido una vez.
+- [ ] [SUPABASE] Configurar plantilla de email de recuperación en Supabase Auth con identidad visual oficial de Koda.
+- [ ] [FRONTEND] Pantalla `apps/web/src/app/recuperar-password/page.tsx` con formulario amigable de solicitud.
+- [ ] [FRONTEND] Pantalla `apps/web/src/app/actualizar-password/page.tsx` para captura y validación de nueva clave.
+- [ ] [TEST] Validación end-to-end del flujo de reseteo y comprobación de expiración del enlace.

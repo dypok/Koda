@@ -21,6 +21,9 @@ Todas las historias de usuario de este backlog se fundamentan en las decisiones 
 - **ADR-007:** Arquitectura de Grafo DAG por Ramas de Carrera (*Frontend, Backend, DevOps, Python*), Paneo/Zoom a 120 FPS y Prerrequisitos `RQ`.
 - **ADR-008:** Adopción Definitiva de NestJS como Motor de Backend.
 - **ADR-009:** Persistencia Híbrida Políglota (MongoDB Contenido + Supabase Transacciones).
+- **ADR-010:** Catálogo de Efectos Visuales y Shaders GPU para Conexiones y Aristas DAG.
+- **ADR-011:** Persistencia Híbrida Desacoplada, Enlace por Slugs Inmutables, BullMQ, Caché Versionada y Repetición Espaciada SM-2.
+
 
 ---
 
