@@ -13,45 +13,45 @@ import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 /** Cierre de película: negro total, frase letra por letra, Koda y un solo CTA. */
 export const CinematicFinale: React.FC = () => {
   const reduceMotion = useReducedMotion();
-  const eclipseRef = useRef<HTMLDivElement>(null);
+  const ringRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
     if (prefersReducedMotion()) return;
-    const { gsap } = getGsap();
+    const { gsap, ScrollTrigger } = getGsap();
     const ctx = gsap.context(() => {
-      gsap.fromTo(
-        '.st-eclipse-ring',
-        { scale: 0.55, opacity: 0.25 },
-        {
-          scale: 1,
-          opacity: 1,
-          ease: 'none',
-          scrollTrigger: { trigger: eclipseRef.current, start: 'top 80%', end: 'top 35%', scrub: 0.6 },
-        }
+      // Una sola timeline y un solo ScrollTrigger: antes dos tweens con scrub
+      // peleaban por el mismo `scale` en rangos solapados y el anillo saltaba.
+      const tl = gsap.timeline({
+        defaults: { ease: 'none' },
+        scrollTrigger: { trigger: sectionRef.current, start: 'top 80%', end: 'bottom 25%', scrub: 0.6 },
+      });
+      tl.fromTo(
+        ringRef.current,
+        { scale: 0.55, opacity: 0.25, transformOrigin: '50% 50%' },
+        { scale: 1, opacity: 1, duration: 1 }
       );
       // Salida: el eclipse crece tapando todo y el contenido se funde; el footer emerge del brillo.
-      gsap.to('.st-eclipse-ring', {
-        scale: 3.2,
-        ease: 'none',
-        scrollTrigger: { trigger: sectionRef.current, start: 'bottom 85%', end: 'bottom 15%', scrub: 0.6 },
-      });
-      gsap.to(contentRef.current, {
-        opacity: 0.15,
-        y: -60,
-        ease: 'none',
-        scrollTrigger: { trigger: sectionRef.current, start: 'bottom 85%', end: 'bottom 15%', scrub: 0.6 },
-      });
+      tl.to(ringRef.current, { scale: 3.2, duration: 1.2 }, '>10%');
+      tl.to(contentRef.current, { opacity: 0.15, y: -60, duration: 1.2 }, '<');
     }, sectionRef);
-    return () => ctx.revert();
+    // Las imágenes y fuentes mueven el layout tras medir los triggers:
+    // recalcula al terminar la carga para que el anillo siga al scroll.
+    const refresh = () => ScrollTrigger.refresh();
+    if (document.readyState === 'complete') refresh();
+    else window.addEventListener('load', refresh);
+    return () => {
+      window.removeEventListener('load', refresh);
+      ctx.revert();
+    };
   }, []);
 
   return (
     <section ref={sectionRef} id="finale" aria-labelledby="finale-title" className="relative overflow-hidden bg-black py-28 md:py-40 border-t border-slate-900 scroll-mt-20">
       <div aria-hidden="true" data-glow="8" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[420px] bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.10)_0%,transparent_70%)] pointer-events-none" />
-      <div ref={eclipseRef} aria-hidden="true" className="absolute left-1/2 top-24 -translate-x-1/2 pointer-events-none">
-        <div className="st-eclipse-ring relative h-60 w-60 rounded-full bg-black border border-amber-400/70 shadow-[0_0_80px_10px_rgba(245,158,11,0.25)] will-change-transform" />
+      <div aria-hidden="true" className="absolute left-1/2 top-24 -ml-[7.5rem] pointer-events-none">
+        <div ref={ringRef} className="st-eclipse-ring relative h-60 w-60 rounded-full bg-black border border-amber-400/70 shadow-[0_0_80px_10px_rgba(245,158,11,0.25)] will-change-transform" />
       </div>
       <div ref={contentRef} className="mx-auto max-w-4xl px-4 sm:px-6 text-center space-y-8 relative z-10 will-change-transform">
         <motion.div
