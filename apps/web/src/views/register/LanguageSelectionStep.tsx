@@ -3,11 +3,10 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { MagnifyingGlass, SquaresFour, Terminal, X } from '@phosphor-icons/react';
+import { MagnifyingGlass, X } from '@phosphor-icons/react';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 import { LanguageOption, TechCategory } from '@/models/register/register.model';
 import { LanguageCard } from './LanguageCard';
-import { TerminalLanguagePicker } from './TerminalLanguagePicker';
 import { cn } from '@/lib/utils';
 
 interface LanguageSelectionStepProps {
@@ -24,7 +23,6 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
   selectedLanguageId, onSelectLanguage,
 }) => {
   const reduceMotion = useReducedMotion();
-  const [view, setView] = useState<'grid' | 'terminal'>('grid');
   const gridRef = useRef<HTMLDivElement>(null);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -52,7 +50,7 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
 
   // Stagger GSAP de entrada cada vez que cambia el filtro.
   useLayoutEffect(() => {
-    if (view !== 'grid' || prefersReducedMotion()) return;
+    if (prefersReducedMotion()) return;
     const { gsap } = getGsap();
     const ctx = gsap.context(() => {
       gsap.from(gridRef.current?.querySelectorAll('[data-vrow]') ?? [], {
@@ -65,25 +63,7 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
       });
     }, gridRef);
     return () => ctx.revert();
-  }, [languages, view]);
-
-  useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem('koda-lang-view');
-      if (saved === 'terminal' || saved === 'grid') setView(saved);
-    } catch {
-      // sin almacenamiento, grid por defecto
-    }
-  }, []);
-
-  const switchView = (next: 'grid' | 'terminal') => {
-    setView(next);
-    try {
-      window.localStorage.setItem('koda-lang-view', next);
-    } catch {
-      // solo sesión
-    }
-  };
+  }, [languages]);
 
   return (
   <div className="w-full max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-6 animate-fadeIn">
@@ -115,8 +95,8 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
       </div>
     </div>
 
-    {/* Category Pills + vista */}
-    <div className="flex items-center justify-between gap-2">
+    {/* Category Pills */}
+    <div className="flex items-center gap-2">
     <div role="tablist" aria-label="Filtrar por categoría" className="flex flex-1 items-center gap-2 overflow-x-auto pb-1">
       {categories.map((cat) => (
         <button
@@ -136,34 +116,10 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
         </button>
       ))}
     </div>
-      <div role="group" aria-label="Vista de selección" className="flex shrink-0 items-center gap-1 rounded-full border border-slate-800 bg-slate-900/60 p-1 ml-2">
-        {(
-          [
-            { id: 'grid', label: 'Cuadrícula', Icon: SquaresFour },
-            { id: 'terminal', label: 'Terminal', Icon: Terminal },
-          ] as const
-        ).map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => switchView(id)}
-            aria-pressed={view === id}
-            aria-label={`Vista ${label}`}
-            title={label}
-            className={cn(
-              'inline-flex min-h-[32px] min-w-[32px] items-center justify-center rounded-full transition-colors',
-              view === id ? 'bg-amber-400 text-slate-950' : 'text-slate-400 hover:text-white'
-            )}
-          >
-            <Icon aria-hidden="true" className="w-4 h-4" />
-          </button>
-        ))}
-      </div>
     </div>
 
     {/* Buscador expandible debajo de las categorías */}
-    {view === 'grid' && (
-      <motion.div
+    <motion.div
         layout={reduceMotion ? false : true}
         animate={{ width: searchOpen ? '100%' : '11rem' }}
         transition={{ type: 'spring', stiffness: 380, damping: 34 }}
@@ -210,16 +166,8 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
           </>
         )}
       </motion.div>
-    )}
 
-    {view === 'terminal' ? (
-      <TerminalLanguagePicker
-        languages={languages}
-        selectedLanguageId={selectedLanguageId}
-        onSelectLanguage={onSelectLanguage}
-      />
-    ) : (
-    /* Grid of Technologies ampliado horizontalmente */
+    {/* Grid of Technologies ampliado horizontalmente */}
     <div ref={gridRef}>
     <motion.div layout={reduceMotion ? false : true} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
       <AnimatePresence mode="popLayout">
@@ -248,7 +196,6 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
       </p>
     )}
     </div>
-    )}
   </div>
   );
 };
