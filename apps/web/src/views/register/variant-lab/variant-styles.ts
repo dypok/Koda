@@ -18,7 +18,7 @@ export interface VariantTokens {
   metaTable: boolean;
   installLine: boolean;
   logLocked: boolean;
-  radix: boolean;
+  radio: boolean;
   note?: string;
 }
 
@@ -62,7 +62,7 @@ export const VARIANTS: VariantDef[] = [
       metaTable: false,
       installLine: false,
       logLocked: false,
-      radix: false,
+      radio: false,
     },
   },
   {
@@ -84,14 +84,14 @@ export const VARIANTS: VariantDef[] = [
       metaTable: false,
       installLine: false,
       logLocked: false,
-      radix: false,
+      radio: false,
     },
   },
   {
-    id: 'radix-real',
+    id: 'radio-real',
     num: 3,
-    label: 'Radix real',
-    blurb: 'Mismo visual terminal pero con RadioGroup: flechas, roving tabindex y aria-checked.',
+    label: 'Radio nativo',
+    blurb: 'Mismo visual terminal pero con radiogroup nativo: flechas, roving tabindex y aria-checked.',
     tokens: {
       card: 'flex items-center gap-3 px-3.5 py-3 rounded-[8px] border border-slate-800 bg-slate-950 text-left transition-colors focus-visible:ring-2 focus-visible:ring-amber-400/70 outline-none',
       cardSelected: 'border-amber-400/60 border-l-2 border-l-amber-400 bg-amber-400/[0.07]',
@@ -106,7 +106,7 @@ export const VARIANTS: VariantDef[] = [
       metaTable: false,
       installLine: false,
       logLocked: false,
-      radix: true,
+      radio: true,
     },
   },
   {
@@ -128,7 +128,7 @@ export const VARIANTS: VariantDef[] = [
       metaTable: false,
       installLine: false,
       logLocked: false,
-      radix: false,
+      radio: false,
     },
   },
   {
@@ -150,7 +150,7 @@ export const VARIANTS: VariantDef[] = [
       metaTable: false,
       installLine: false,
       logLocked: false,
-      radix: false,
+      radio: false,
     },
   },
   {
@@ -172,7 +172,7 @@ export const VARIANTS: VariantDef[] = [
       metaTable: false,
       installLine: true,
       logLocked: false,
-      radix: false,
+      radio: false,
     },
   },
   {
@@ -194,7 +194,7 @@ export const VARIANTS: VariantDef[] = [
       metaTable: false,
       installLine: false,
       logLocked: true,
-      radix: false,
+      radio: false,
     },
   },
   {
@@ -216,7 +216,7 @@ export const VARIANTS: VariantDef[] = [
       metaTable: false,
       installLine: false,
       logLocked: false,
-      radix: false,
+      radio: false,
     },
   },
   {
@@ -238,7 +238,7 @@ export const VARIANTS: VariantDef[] = [
       metaTable: false,
       installLine: false,
       logLocked: false,
-      radix: false,
+      radio: false,
     },
   },
   {
@@ -260,7 +260,7 @@ export const VARIANTS: VariantDef[] = [
       metaTable: true,
       installLine: false,
       logLocked: false,
-      radix: false,
+      radio: false,
     },
   },
   {
@@ -282,7 +282,7 @@ export const VARIANTS: VariantDef[] = [
       metaTable: false,
       installLine: false,
       logLocked: true,
-      radix: false,
+      radio: false,
       note: '$ koda --select-stack --view terminal  # el grid queda como vista secundaria',
     },
   },
@@ -305,7 +305,7 @@ export const VARIANTS: VariantDef[] = [
       metaTable: false,
       installLine: false,
       logLocked: false,
-      radix: false,
+      radio: false,
     },
   },
 ];

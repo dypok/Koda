@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useLayoutEffect, useRef } from 'react';
-import * as RadioGroup from '@radix-ui/react-radio-group';
 import { Check, Lock } from '@phosphor-icons/react';
 import { LanguageOption } from '@/models/register/register.model';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
@@ -117,19 +116,45 @@ export const VariantGrid: React.FC<VariantGridProps> = ({ variantId, tokens, ite
     );
   };
 
+  // Radiogroup nativo: flechas mueven selección y foco entre opciones habilitadas.
+  const onGroupKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) return;
+    const btns = Array.from(
+      rootRef.current?.querySelectorAll<HTMLButtonElement>('[role="radio"]:not(:disabled)') ?? []
+    );
+    const at = btns.indexOf(document.activeElement as HTMLButtonElement);
+    if (at === -1) return;
+    e.preventDefault();
+    const dir = e.key === 'ArrowUp' || e.key === 'ArrowLeft' ? -1 : 1;
+    const next = btns[(at + dir + btns.length) % btns.length];
+    next.focus();
+    next.click();
+  };
+
   const grid = (list: LanguageOption[], offset = 0) => (
     <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
       {list.map((option, i) => {
         const index = offset + i;
         const selected = selectedId === option.id;
         const cls = cn(tokens.card, selected ? tokens.cardSelected : option.isAvailable ? '' : tokens.cardLocked);
-        if (tokens.radix) {
+        if (tokens.radio) {
+          const selectedInList = list.some((o) => o.id === selectedId);
+          const firstId = list.find((o) => o.isAvailable)?.id;
           return (
-            <RadioGroup.Item key={option.id} value={option.id} disabled={!option.isAvailable} asChild>
-              <button type="button" data-vrow aria-label={option.name} className={cls}>
-                {renderButton(option, index)}
-              </button>
-            </RadioGroup.Item>
+            <button
+              key={option.id}
+              type="button"
+              data-vrow
+              role="radio"
+              aria-checked={selected}
+              aria-label={option.name}
+              tabIndex={selected || (!selectedInList && option.id === firstId) ? 0 : -1}
+              disabled={!option.isAvailable}
+              onClick={() => option.isAvailable && onSelect(option.id)}
+              className={cls}
+            >
+              {renderButton(option, index)}
+            </button>
           );
         }
         return (
@@ -193,12 +218,10 @@ export const VariantGrid: React.FC<VariantGridProps> = ({ variantId, tokens, ite
     body
   );
 
-  if (tokens.radix) {
+  if (tokens.radio) {
     return (
-      <div ref={rootRef}>
-        <RadioGroup.Root value={selectedId} onValueChange={onSelect} aria-label="Vista previa de tecnologías">
-          {framed}
-        </RadioGroup.Root>
+      <div ref={rootRef} role="radiogroup" aria-label="Vista previa de tecnologías" onKeyDown={onGroupKeyDown}>
+        {framed}
       </div>
     );
   }
