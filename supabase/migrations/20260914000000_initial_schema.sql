@@ -523,8 +523,18 @@ ALTER TABLE certificates ENABLE ROW LEVEL SECURITY;
 ALTER TABLE subscriptions ENABLE ROW LEVEL SECURITY;
 
 -- Políticas de aislamiento por usuario (auth.uid() = user_id)
+CREATE POLICY "Users can access own account"
+  ON users FOR ALL
+  USING (auth.uid() = id)
+  WITH CHECK (auth.uid() = id);
+
 CREATE POLICY "Users can view and edit own profile"
   ON user_profiles FOR ALL
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can access own branch enrollment"
+  ON user_branch_enrollment FOR ALL
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
@@ -540,6 +550,16 @@ CREATE POLICY "Users can access own stars"
 
 CREATE POLICY "Users can access own attempts"
   ON attempts FOR ALL
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can access own attempt answers"
+  ON attempt_answers FOR ALL
+  USING (EXISTS (SELECT 1 FROM attempts WHERE attempts.id = attempt_answers.attempt_id AND attempts.user_id = auth.uid()))
+  WITH CHECK (EXISTS (SELECT 1 FROM attempts WHERE attempts.id = attempt_answers.attempt_id AND attempts.user_id = auth.uid()));
+
+CREATE POLICY "Users can access own review queue"
+  ON review_queue_items FOR ALL
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
 
@@ -579,3 +599,4 @@ ALTER TABLE achievements ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Public read for achievements"
   ON achievements FOR SELECT
   USING (is_active = true);
+

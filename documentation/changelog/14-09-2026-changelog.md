@@ -1,3 +1,5 @@
 # Changelog: 14-09-2026
 
 - [Monday]-[14/09/2026]-[06:41]-[Dylan Gamero] : Implementación del modelado final de la base de datos híbrida: generación de la migración DDL maestra en supabase/migrations/20260914000000_initial_schema.sql con 14 tablas relacionales transaccionales, triggers automáticos de actividad (racha, metas y tiempo de estudio) y políticas Row Level Security (RLS); implementación de esquemas Mongoose en apps/api/src/database/schemas/ para la capa NoSQL (Track, Course en grafo DAG con topología tier/lane, Module, Section, Lesson con la Tríada Evaluativa de 3 ítems y VisualEffect con catálogo GPU); configuración de DatabaseModule en NestJS y semillas iniciales de efectos visuales y pista fundacional de Python.
+- [Monday]-[14/09/2026]-[07:28]-[Dylan Gamero] : Conexión con Supabase MCP para el proyecto Koda; despliegue exitoso de migraciones DDL con 16 tablas relacionales protegidas por RLS, triggers de inmutabilidad y cálculo de rachas, semillas de lenguajes y logros; generación de archivos de variables de entorno (.env en apps/api y raíz) con credenciales y URLs de Supabase.
+
