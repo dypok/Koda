@@ -96,7 +96,7 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
           aria-hidden="true"
           className={cn(
             'absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/25 transition-all duration-[800ms] ease-[cubic-bezier(0.19,1,0.22,1)]',
-            pressed ? 'h-[340px] w-[340px] opacity-100' : 'opacity-0 group-hover/glare:h-[340px] group-hover/glare:w-[340px] group-hover/glare:opacity-100'
+            pressed ? 'h-[640px] w-[640px] opacity-100' : 'opacity-0 group-hover/glare:h-[640px] group-hover/glare:w-[640px] group-hover/glare:opacity-100'
           )}
         />
       )}
