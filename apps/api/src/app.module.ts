@@ -7,6 +7,7 @@ import { LanguagesModule } from './modules/languages/languages.module';
 import { LearningModule } from './modules/learning/learning.module';
 import { CertificationModule } from './modules/certification/certification.module';
 import { NotebookModule } from './modules/notebook/notebook.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { NotebookModule } from './modules/notebook/notebook.module';
         limit: 100,  // Máximo 100 peticiones por IP por minuto
       },
     ]),
+    DatabaseModule,
     LanguagesModule,
     LearningModule,
     CertificationModule,
