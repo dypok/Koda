@@ -19,24 +19,24 @@ export interface HeroStrings {
 
 const STRINGS: Record<LandingLang, HeroStrings> = {
   es: {
-    eyebrow: 'Micro-lecciones de Python 3.12 · 40–70 palabras',
+    eyebrow: 'Micro-lecciones de Python 3.12 y Lua · 40–70 palabras',
     titleA: 'Aprende a programar',
     titleAccent: 'como juegas',
     titleB: '. Cero frustración.',
     sub: 'Tú lees una idea corta, la ves en código real y la practicas al instante. Si fallas, recibes una pista sin spoilers y la repasas al final. Así avanzas por 12 módulos sin muros de texto.',
     ctaPrimary: 'Comenzar Ahora',
     ctaSecondary: 'Ya tengo una cuenta',
-    trust: 'Gratis · Sin instalación · Python 3.12 · +10 XP por sección',
+    trust: 'Gratis · Sin instalación · Python 3.12 y Lua · +10 XP por sección',
   },
   en: {
-    eyebrow: 'Python 3.12 micro-lessons · 40–70 words',
+    eyebrow: 'Python 3.12 and Lua micro-lessons · 40–70 words',
     titleA: 'Learn to code',
     titleAccent: 'like you play',
     titleB: '. Zero frustration.',
     sub: 'You read one short idea, see it in real code and practice it instantly. If you fail, you get a spoiler-free hint and review it at the end. That is how you move through 12 modules with no walls of text.',
     ctaPrimary: 'Start Now',
     ctaSecondary: 'I already have an account',
-    trust: 'Free · No setup · Python 3.12 · +10 XP per section',
+    trust: 'Free · No setup · Python 3.12 and Lua · +10 XP per section',
   },
 };
 

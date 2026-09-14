@@ -9,7 +9,7 @@ import { KodaPeek } from '@/components/landing/KodaPeek';
 import { cn } from '@/lib/utils';
 
 const FREE = [
-  'Temario completo de Python',
+  'Temario completo de Python y Lua',
   'Micro-lecciones + práctica en navegador',
   'XP, rachas, logros y cuaderno',
   'Certificado con QR verificable',

@@ -7,9 +7,10 @@ import {
   IconBrandFlutter, IconBrandDjango, IconBrandDocker, IconBrandMysql, IconBrandGit,
   IconBrandGraphql, IconBrandMongodb, IconCoffee
 } from '@tabler/icons-react';
+import { Moon } from 'lucide-react';
 
 export type TechCategory = 'lang' | 'fw' | 'tool';
-export type TechStatus = 'soon' | 'alpha';
+export type TechStatus = 'soon' | 'alpha' | 'live';
 
 export interface TechItem {
   name: string;
@@ -22,7 +23,8 @@ export interface TechItem {
 }
 
 export const UPCOMING_TECHS: TechItem[] = [
-  { name: 'Python', icon: IconBrandPython, color: '#3776AB', category: 'lang', progress: 90, status: 'alpha' },
+  { name: 'Python', icon: IconBrandPython, color: '#3776AB', category: 'lang', progress: 100, status: 'live' },
+  { name: 'Lua', icon: Moon, color: '#8FA8FF', category: 'lang', progress: 100, status: 'live' },
   { name: 'HTML', icon: IconBrandHtml5, color: '#E34F26', category: 'lang', progress: 70, status: 'soon' },
   { name: 'CSS', icon: IconBrandCss3, color: '#1572B6', category: 'lang', progress: 70, status: 'soon' },
   { name: 'JavaScript', icon: IconBrandJavascript, color: '#FACC15', category: 'lang', progress: 60, status: 'soon' },

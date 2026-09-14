@@ -33,7 +33,7 @@ export const CertificateSection: React.FC = () => {
               </Highlight>
             </h2>
             <p className="text-slate-400 text-base sm:text-lg lg:text-xl leading-relaxed font-sans max-w-xl">
-              Al completar Python recibes un certificado con código único y QR que cualquiera
+              Al completar Python o Lua recibes un certificado con código único y QR que cualquiera
               puede verificar. Sin letra pequeña, sin costo extra.
             </p>
             <ul className="space-y-2.5 text-sm text-slate-200">
