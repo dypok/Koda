@@ -44,6 +44,8 @@ Los estados válidos son:
 | [**ADR-008**](ADR-008-adopcion-definitiva-nestjs-backend.md) | Adopción Definitiva de NestJS como Motor de Backend | ✅ Aprobado | 2026-09-10 | Estandarización de TypeScript, arquitectura monolito modular, DTOs compartidos y Swagger. |
 | [**ADR-009**](ADR-009-persistencia-hibrida-poliglota-mongodb-supabase.md) | Persistencia Híbrida Políglota (MongoDB Contenido + Supabase Transacciones) | ✅ Aprobado | 2026-09-10 | MongoDB para lecciones, cursos y grafo; Supabase (PostgreSQL 15+) para usuarios, progreso y estado. |
 | [**ADR-010**](ADR-010-arquitectura-backend-hexagonal-modular-eventos-dominio-cache.md) | Arquitectura Hexagonal Modular con Eventos de Dominio y Cache-Aside | ✅ Aprobado | 2026-09-11 | Desacoplamiento asíncrono con EventEmitter2, puertos y adaptadores, y caché Redis L2. |
+| [**ADR-011**](ADR-011-refinamiento-arquitectura-backend-eventos-persistencia-cache.md) | Refinamiento de Arquitectura Backend (BullMQ, Persistencia Desacoplada, Caché Versionada, DAG) | ✅ Aprobado | 2026-09-11 | BullMQ para eventos persistentes, desacoplamiento estricto Mongo/Postgres, claves versionadas y contratos DAG. |
+| [**ADR-012**](ADR-012-adopcion-arquitectura-hibrida-graphql-rest.md) | Adopción de Arquitectura Híbrida GraphQL y REST en Backend NestJS | ✅ Aprobado | 2026-09-14 | GraphQL para vistas agregadas/interactivas de UI y REST para auth, uploads, webhooks y tareas de sistema. |
 
 ---
 
