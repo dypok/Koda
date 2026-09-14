@@ -7,6 +7,7 @@ import { InteractivePreview } from '@/components/landing/InteractivePreview';
 import { MethodologySection } from '@/components/landing/MethodologySection';
 import { Footer } from '@/components/landing/Footer';
 import { LenisProvider } from '@/components/landing/LenisProvider';
+import { SectionSnap } from '@/components/landing/SectionSnap';
 import { ScrollProgress } from '@/components/landing/ScrollProgress';
 import { AnnouncementBar } from '@/components/landing/AnnouncementBar';
 import { StickyMobileCta } from '@/components/landing/StickyMobileCta';
@@ -35,6 +36,7 @@ import { PartyMode } from '@/components/landing/PartyMode';
 export default function HomePage() {
   return (
     <LenisProvider>
+      <SectionSnap />
       <ScrollProgress />
       <Preloader />
       <AuroraProvider />
