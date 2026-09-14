@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { IconRadio, IconChevronUp, IconChevronDown, IconSparkles } from '@tabler/icons-react';
+import { RadioButton, CaretUp, CaretDown, Sparkle } from '@phosphor-icons/react';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { cn } from '@/lib/utils';
 
@@ -91,7 +91,7 @@ export function RoadmapSidebarKoda() {
                 title="Siguiente consejo de Koda"
                 className="p-1 rounded-md text-cyan-400/80 hover:text-cyan-200 hover:bg-cyan-500/10 transition-colors"
               >
-                <IconSparkles className="w-3.5 h-3.5" />
+                <Sparkle className="w-3.5 h-3.5" />
               </button>
               <button
                 type="button"
@@ -100,9 +100,9 @@ export function RoadmapSidebarKoda() {
                 className="p-1 rounded-md text-cyan-400/80 hover:text-cyan-200 hover:bg-cyan-500/10 transition-colors"
               >
                 {isExpanded ? (
-                  <IconChevronUp className="w-3.5 h-3.5" />
+                  <CaretUp className="w-3.5 h-3.5" />
                 ) : (
-                  <IconChevronDown className="w-3.5 h-3.5" />
+                  <CaretDown className="w-3.5 h-3.5" />
                 )}
               </button>
             </div>
@@ -112,7 +112,7 @@ export function RoadmapSidebarKoda() {
           {isExpanded && (
             <div className="p-3 relative z-10 space-y-2">
               <div className="flex items-start gap-2">
-                <IconRadio className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5 animate-pulse" />
+                <RadioButton className="w-3.5 h-3.5 text-cyan-400 shrink-0 mt-0.5 animate-pulse" />
                 <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
                   {currentTip}
                 </p>
@@ -145,7 +145,7 @@ export function RoadmapSidebarKoda() {
           {/* Tooltip on hover for small screens */}
           <div className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-3 py-2 rounded-xl bg-slate-950/95 border border-cyan-500/40 shadow-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-all duration-200 z-50 w-56 backdrop-blur-md">
             <div className="flex items-center gap-1.5 text-[10px] font-mono font-bold text-cyan-300">
-              <IconSparkles className="w-3 h-3 text-cyan-400" />
+              <Sparkle className="w-3 h-3 text-cyan-400" />
               <span>Koda Holo-Comms</span>
             </div>
             <p className="text-[10px] font-mono text-slate-300 mt-1 leading-snug">

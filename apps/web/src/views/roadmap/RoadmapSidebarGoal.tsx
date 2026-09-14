@@ -1,16 +1,7 @@
 'use client';
 
 import React from 'react';
-import {
-  IconFlame,
-  IconTarget,
-  IconLock,
-  IconSnowflake,
-  IconShieldCheck,
-  IconBolt,
-  IconSkull,
-  IconSparkles,
-} from '@tabler/icons-react';
+import { Flame, Target, Lock, Snowflake, ShieldCheck, Lightning, Skull, Sparkle } from '@phosphor-icons/react';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { cn } from '@/lib/utils';
@@ -88,7 +79,7 @@ export function RoadmapSidebarGoal() {
             </svg>
             {/* Center icon / percentage */}
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-              <IconBolt className="w-4 h-4 text-amber-400 fill-amber-400" />
+              <Lightning className="w-4 h-4 text-amber-400 fill-amber-400" />
               <span className="text-[9px] font-mono font-bold text-slate-200 leading-none mt-0.5">
                 {dailyProgressPercent}%
               </span>
@@ -112,7 +103,7 @@ export function RoadmapSidebarGoal() {
                 className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[10px] font-mono font-bold"
                 title="Racha de estudio activa"
               >
-                <IconFlame className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+                <Flame className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                 <span>{streakDays} d</span>
               </div>
 
@@ -121,7 +112,7 @@ export function RoadmapSidebarGoal() {
                 className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-cyan-500/15 border border-cyan-500/35 text-cyan-300 text-[10px] font-mono font-bold"
                 title="Escudo de Racha Criogénico: protege tu racha si descansas hoy (1/2 almacenados)"
               >
-                <IconSnowflake className="w-3.5 h-3.5 text-cyan-400" />
+                <Snowflake className="w-3.5 h-3.5 text-cyan-400" />
                 <span>{activeFreezes}/2</span>
               </div>
             </div>
@@ -129,11 +120,11 @@ export function RoadmapSidebarGoal() {
         </div>
       </div>
 
-      {/* 2. Route progress overall progress bar */}
+      {/* 2. Path progress overall progress bar */}
       <div className="space-y-1.5 px-0.5">
         <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500">
           <span className="flex items-center gap-1.5 text-slate-400">
-            <IconSparkles className="w-3.5 h-3.5 text-cyan-400" />
+            <Sparkle className="w-3.5 h-3.5 text-cyan-400" />
             <span>Avance de Ruta</span>
           </span>
           <span className="text-slate-400 tabular-nums font-mono">
@@ -152,7 +143,7 @@ export function RoadmapSidebarGoal() {
       <div className="space-y-1.5 px-0.5">
         <div className="flex items-center justify-between text-[10px] font-mono font-bold uppercase tracking-widest text-slate-500">
           <span className="flex items-center gap-1.5 text-cyan-400">
-            <IconTarget className="w-3.5 h-3.5" />
+            <Target className="w-3.5 h-3.5" />
             <span>Siguiente Hito</span>
           </span>
           {nextMilestone?.xp ? (
@@ -178,9 +169,9 @@ export function RoadmapSidebarGoal() {
               )}
             >
               {nextMilestone.variant === 'boss' ? (
-                <IconSkull className="w-4 h-4" />
+                <Skull className="w-4 h-4" />
               ) : (
-                <IconLock className="w-4 h-4" />
+                <Lock className="w-4 h-4" />
               )}
             </div>
             <div className="flex flex-col min-w-0 flex-1">
@@ -196,7 +187,7 @@ export function RoadmapSidebarGoal() {
           </button>
         ) : (
           <div className="p-2.5 rounded-xl bg-emerald-950/30 border border-emerald-500/30 text-[11px] font-mono text-emerald-300 text-center flex items-center justify-center gap-1.5">
-            <IconShieldCheck className="w-4 h-4 text-emerald-400" />
+            <ShieldCheck className="w-4 h-4 text-emerald-400" />
             <span>Ruta estelar dominada al 100%</span>
           </div>
         )}

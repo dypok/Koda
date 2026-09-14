@@ -1,17 +1,7 @@
 'use client';
 
 import React from 'react';
-import {
-  IconFlame,
-  IconStar,
-  IconPlayerPlay,
-  IconShieldCheck,
-  IconCheck,
-  IconLock,
-  IconBolt,
-  IconAtom2,
-  IconSparkles,
-} from '@tabler/icons-react';
+import { Flame, Star, Play, ShieldCheck, Check, Lock, Lightning, Atom, Sparkle } from '@phosphor-icons/react';
 import { useAuthStore } from '@/stores/auth.store';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { cn } from '@/lib/utils';
@@ -59,7 +49,7 @@ export function RoadmapLegend() {
         <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-slate-900/85 border border-orange-500/40 shadow-[0_0_15px_rgba(249,115,22,0.2)] group cursor-default">
           {/* Núcleo del Reactor con Pulso de Plasma */}
           <div className="relative w-6 h-6 rounded-lg bg-gradient-to-br from-orange-500/30 to-amber-500/20 border border-orange-400/60 flex items-center justify-center shrink-0 overflow-hidden">
-            <IconFlame className="w-3.5 h-3.5 text-orange-400 fill-orange-500 drop-shadow-[0_0_6px_rgba(249,115,22,0.9)] animate-pulse" />
+            <Flame className="w-3.5 h-3.5 text-orange-400 fill-orange-500 drop-shadow-[0_0_6px_rgba(249,115,22,0.9)] animate-pulse" />
             <div
               className="absolute inset-0 opacity-40 bg-orange-400 blur-sm pointer-events-none animate-ping"
               style={{ animationDuration: '3s' }}
@@ -79,7 +69,7 @@ export function RoadmapLegend() {
         {/* Tacómetro de XP Segmentado (Matrix Gauge) */}
         <div className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-amber-500/30 shadow-[0_0_12px_rgba(245,158,11,0.1)] group cursor-default">
           <div className="w-6 h-6 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center shrink-0">
-            <IconStar className="w-3.5 h-3.5 fill-amber-400 text-amber-300" />
+            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-300" />
           </div>
 
           <div className="flex flex-col leading-none">
@@ -112,7 +102,7 @@ export function RoadmapLegend() {
         className="hidden md:flex items-center gap-3.5 px-4 py-1.5 rounded-2xl bg-slate-950/80 border border-slate-800/90 shadow-[inset_0_2px_4px_rgba(0,0,0,0.8)]"
       >
         <div className="flex items-center gap-2">
-          <IconAtom2 className="w-3.5 h-3.5 text-cyan-400 animate-spin" style={{ animationDuration: '10s' }} />
+          <Atom className="w-3.5 h-3.5 text-cyan-400 animate-spin" style={{ animationDuration: '10s' }} />
           <span className="text-[10px] font-bold text-slate-400 tracking-wider uppercase">
             ORBIT SYNC
           </span>
@@ -160,9 +150,9 @@ export function RoadmapLegend() {
                 {/* Icono miniatura centrado en la gema */}
                 <div className="-rotate-45 flex items-center justify-center">
                   {isCompleted ? (
-                    <IconCheck className="w-2.5 h-2.5 text-slate-950 stroke-[3]" />
+                    <Check className="w-2.5 h-2.5 text-slate-950 stroke-[3]" />
                   ) : !isUnlocked ? (
-                    <IconLock className="w-2 h-2 text-slate-500" />
+                    <Lock className="w-2 h-2 text-slate-500" />
                   ) : (
                     <span className="text-[7px] font-mono font-bold text-slate-950 leading-none">
                       {node.code}
@@ -190,7 +180,7 @@ export function RoadmapLegend() {
             title="Herramienta de desarrollo: simula completar y desbloquear el siguiente nodo"
           >
             <span className="text-[8px] opacity-40 group-hover:opacity-75 tracking-tighter">///</span>
-            <IconPlayerPlay className="w-3 h-3 text-amber-400 group-hover:scale-110 transition-transform" />
+            <Play className="w-3 h-3 text-amber-400 group-hover:scale-110 transition-transform" />
             <span className="hidden sm:inline">OVERRIDE DEV</span>
           </button>
         ) : null}
@@ -203,7 +193,7 @@ export function RoadmapLegend() {
           }}
         >
           <div className="w-5 h-5 rounded-md bg-cyan-500/15 border border-cyan-400/40 flex items-center justify-center shrink-0">
-            <IconShieldCheck className="w-3.5 h-3.5 text-cyan-300" />
+            <ShieldCheck className="w-3.5 h-3.5 text-cyan-300" />
           </div>
 
           <div className="flex flex-col leading-none">

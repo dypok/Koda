@@ -3,7 +3,7 @@
 import React from 'react';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { useRoadmapStore } from '@/stores/roadmap.store';
-import { Bolt, Lock, LockOpen, Check, X, Sparkles, Crosshair } from 'lucide-react';
+import { Lightning, Lock, LockOpen, Check, X, Sparkle, Crosshair } from '@phosphor-icons/react';
 import { AnimatedCounter } from '@/components/ui/animated-counter';
 import gsap from 'gsap';
 
@@ -209,7 +209,7 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
           <div className="bg-slate-900/60 border border-slate-800/80 rounded p-2.5">
             <span className="text-[10px] text-slate-400 block mb-0.5">RECOMPENSA XP</span>
             <div className="flex items-center gap-1.5 text-amber-400 font-bold">
-              <Sparkles aria-hidden="true" className="w-3.5 h-3.5" />
+              <Sparkle aria-hidden="true" className="w-3.5 h-3.5" />
               <span className="flex items-center">
                 +<AnimatedCounter to={node.xp || 150} duration={0.6} />&nbsp;XP
               </span>
@@ -276,7 +276,7 @@ export function RoadmapNodeInspector({ node, onClose, onDeploy }: RoadmapNodeIns
                   : 'bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black shadow-cyan-950/50'
               }`}
             >
-              <Bolt className="w-4 h-4 fill-current" />
+              <Lightning className="w-4 h-4 fill-current" />
               <span>{isBoss ? 'DESAFIAR APEX GATE →' : 'INICIAR PROTOCOLO →'}</span>
             </button>
           ) : (

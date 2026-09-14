@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Loader2 } from 'lucide-react';
+import { ArrowRight, CircleNotch } from '@phosphor-icons/react';
 import { GradientButton } from '@/components/ui/gradient-button';
 
 interface RegisterBottomBarProps {
@@ -34,7 +34,7 @@ export const RegisterBottomBar: React.FC<RegisterBottomBarProps> = ({
           >
             {isLoading ? (
               <>
-                <Loader2 aria-hidden="true" className="w-4 h-4 animate-spin stroke-[2.5]" />
+                <CircleNotch aria-hidden="true" className="w-4 h-4 animate-spin stroke-[2.5]" />
                 <span>Creando cuenta...</span>
               </>
             ) : (

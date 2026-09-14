@@ -1,19 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  IconArrowRight,
-  IconLock,
-  IconCheck,
-  IconStar,
-  IconSparkles,
-  IconChevronUp,
-  IconChevronDown,
-  IconLayoutSidebarRightCollapse,
-  IconLayoutSidebarRightExpand,
-  IconSkull,
-  IconAlertTriangle,
-} from '@tabler/icons-react';
+import { ArrowRight, Lock, Check, Star, Sparkle, CaretUp, CaretDown, SidebarSimple, Sidebar, Skull, Warning } from '@phosphor-icons/react';
 import { GraphDataset, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 import { useRoadmapStore } from '@/stores/roadmap.store';
@@ -506,7 +494,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
             className="absolute -left-3 top-4 z-30 p-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-900/90 border border-slate-800 shadow-md transition-colors cursor-pointer"
             title="Colapsar tarjeta"
           >
-            <IconLayoutSidebarRightCollapse className="w-3.5 h-3.5" />
+            <SidebarSimple className="w-3.5 h-3.5" />
           </button>
 
           {nodes.map((node, index) => {
@@ -547,7 +535,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
                   <span className="text-[10px] font-mono font-bold tracking-widest text-slate-400 uppercase flex items-center gap-1.5">
                     {isBoss ? (
                       <>
-                        <IconAlertTriangle className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
+                        <Warning className="w-3.5 h-3.5 text-rose-400 animate-pulse" />
                         <span className="text-rose-400 font-black">AMENAZA OMEGA // {node.code}</span>
                       </>
                     ) : (
@@ -644,7 +632,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
                     </span>
                     {!isBoss && (
                       <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-cyan-300 bg-cyan-500/10 px-2 py-0.5 rounded-full border border-cyan-500/20">
-                        <IconStar className="w-3 h-3 fill-cyan-400" />
+                        <Star className="w-3 h-3 fill-cyan-400" />
                         <span>★ {node.stars ?? 0}/{node.maxStars ?? 9}</span>
                       </span>
                     )}
@@ -662,7 +650,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
 
                   {isLocked ? (
                     <div className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-500 font-mono text-[11px] font-bold">
-                      <IconLock className="w-3 h-3" />
+                      <Lock className="w-3 h-3" />
                       <span>{isBoss ? 'Desafío Bloqueado' : 'Restringido'}</span>
                     </div>
                   ) : (
@@ -681,7 +669,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
                       }}
                     >
                       <span>{isBoss ? 'Enfrentar Apex' : 'Iniciar Protocolo'}</span>
-                      <IconArrowRight className="w-3.5 h-3.5" />
+                      <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
@@ -706,7 +694,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
           className="absolute right-4 top-6 z-20 p-2.5 rounded-xl border border-slate-800/90 bg-slate-950/80 backdrop-blur-md text-slate-300 hover:text-white shadow-xl hover:scale-105 transition-all cursor-pointer"
           title="Abrir tarjeta táctica"
         >
-          <IconLayoutSidebarRightExpand className="w-4 h-4" />
+          <Sidebar className="w-4 h-4" />
         </button>
       )}
 
@@ -743,7 +731,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
             aria-label="Curso anterior"
             className="p-1 rounded text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
           >
-            <IconChevronUp className="w-3.5 h-3.5" />
+            <CaretUp className="w-3.5 h-3.5" />
           </button>
 
           {nodes.map((n, i) => (
@@ -769,7 +757,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
             aria-label="Siguiente curso"
             className="p-1 rounded text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
           >
-            <IconChevronDown className="w-3.5 h-3.5" />
+            <CaretDown className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>

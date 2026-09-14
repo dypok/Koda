@@ -1,13 +1,7 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import {
-  IconCheck,
-  IconLock,
-  IconSkull,
-  IconChevronDown,
-  IconSparkles,
-} from '@tabler/icons-react';
+import { Check, Lock, Skull, CaretDown, Sparkle } from '@phosphor-icons/react';
 import { CAREER_BRANCHES, CareerBranchId } from '@/models/roadmap/tracks/track-catalog';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
@@ -120,7 +114,7 @@ export function RoadmapSidebarTacticalTrack() {
             </div>
           </div>
 
-          <IconChevronDown
+          <CaretDown
             className={cn(
               'hidden lg:block w-3.5 h-3.5 text-slate-400 transition-transform duration-200 shrink-0',
               isBranchDropdownOpen && 'rotate-180 text-white'
@@ -179,7 +173,7 @@ export function RoadmapSidebarTacticalTrack() {
       <div className="space-y-1.5 pt-1">
         <div className="hidden lg:flex items-center justify-between px-1 text-[9px] font-mono font-bold text-slate-500 uppercase tracking-widest">
           <div className="flex items-center gap-1.5">
-            <IconSparkles className="w-3 h-3" style={{ color: activeBranch.color }} />
+            <Sparkle className="w-3 h-3" style={{ color: activeBranch.color }} />
             <span>Trayecto Táctico</span>
           </div>
           <span style={{ color: activeBranch.color }}>{coursesDataset.progressPercent}%</span>
@@ -253,7 +247,7 @@ export function RoadmapSidebarTacticalTrack() {
                         : 'text-slate-400 group-hover:text-slate-200'
                     )}
                   >
-                    {isBoss && <IconSkull className="w-3 h-3 text-rose-400 shrink-0" />}
+                    {isBoss && <Skull className="w-3 h-3 text-rose-400 shrink-0" />}
                     <span className="truncate">{node.label}</span>
                   </span>
                 </div>
@@ -264,7 +258,7 @@ export function RoadmapSidebarTacticalTrack() {
                   </span>
                   {node.variant === 'completed' && (
                     <span className="text-[8px] font-mono font-bold text-emerald-400 flex items-center gap-0.5">
-                      <IconCheck className="w-2.5 h-2.5" />
+                      <Check className="w-2.5 h-2.5" />
                       <span>100%</span>
                     </span>
                   )}

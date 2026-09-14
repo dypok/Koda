@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Check, RotateCcw, Trophy } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy } from '@phosphor-icons/react';
 import { ContentExercise, ContentLesson, ContentModule, loadBank, loadModule, shuffled } from '@/lib/content';
 import { QuestionRenderer } from './QuestionRenderer';
 import { useLessonEngine } from './useLessonEngine';
@@ -146,7 +146,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
               }}
               className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-amber-400 px-6 text-sm font-bold text-slate-950"
             >
-              <RotateCcw aria-hidden="true" className="w-4 h-4" />
+              <ArrowCounterClockwise aria-hidden="true" className="w-4 h-4" />
               Reintentar quiz
             </button>
           ) : null}
@@ -329,7 +329,7 @@ function LessonView({ lesson, onNext, isLast }: { lesson: ContentLesson; onNext:
                       onClick={engine.resetSelection}
                       className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl border border-slate-700 px-4 text-sm font-semibold text-slate-200 hover:border-slate-500"
                     >
-                      <RotateCcw aria-hidden="true" className="w-4 h-4" />
+                      <ArrowCounterClockwise aria-hidden="true" className="w-4 h-4" />
                       Reintentar
                     </button>
                   ) : null}

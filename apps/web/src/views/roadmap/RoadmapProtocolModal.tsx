@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { useRoadmapStore } from '@/stores/roadmap.store';
-import { IconX, IconSparkles, IconCheck, IconTerminal, IconPlayerPlay } from '@tabler/icons-react';
+import { X, Sparkle, Check, Terminal, Play } from '@phosphor-icons/react';
 
 interface RoadmapProtocolModalProps {
   node: GraphNode | null;
@@ -65,7 +65,7 @@ export function RoadmapProtocolModal({ node, isOpen, onClose }: RoadmapProtocolM
 
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-[11px] font-bold">
-              <IconSparkles className="w-3.5 h-3.5" />
+              <Sparkle className="w-3.5 h-3.5" />
               <span>+{node.xp || 200} XP</span>
             </div>
 
@@ -75,7 +75,7 @@ export function RoadmapProtocolModal({ node, isOpen, onClose }: RoadmapProtocolM
               className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
               title="Cerrar Misión"
             >
-              <IconX className="w-4 h-4" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         </header>
@@ -139,7 +139,7 @@ export function RoadmapProtocolModal({ node, isOpen, onClose }: RoadmapProtocolM
                     >
                       <span className="font-mono">{option.text}</span>
                       {isSubmitted && option.isCorrect && (
-                        <IconCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <Check className="w-4 h-4 text-emerald-400 shrink-0" />
                       )}
                     </button>
                   );
@@ -153,7 +153,7 @@ export function RoadmapProtocolModal({ node, isOpen, onClose }: RoadmapProtocolM
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1.5">
-                  <IconTerminal className="w-3.5 h-3.5" />
+                  <Terminal className="w-3.5 h-3.5" />
                   <span>FASE 2 // AUTO-TEST RUNNER</span>
                 </span>
                 <span className="text-[9px] text-slate-500 font-mono">RUNTIME: SANDBOX</span>
@@ -179,7 +179,7 @@ export function RoadmapProtocolModal({ node, isOpen, onClose }: RoadmapProtocolM
                 disabled={testRan && testPassed}
                 className="w-full py-2.5 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(6,182,212,0.3)] cursor-pointer disabled:opacity-75"
               >
-                <IconPlayerPlay className="w-3.5 h-3.5 fill-current" />
+                <Play className="w-3.5 h-3.5 fill-current" />
                 <span>{testPassed ? 'PRUEBAS VERIFICADAS ✓' : 'EJECUTAR CÓDIGO // RUN TESTS'}</span>
               </button>
 
@@ -187,7 +187,7 @@ export function RoadmapProtocolModal({ node, isOpen, onClose }: RoadmapProtocolM
               {testRan && (
                 <div className="p-3.5 rounded-xl bg-slate-950 border border-emerald-500/40 text-[11px] space-y-1.5">
                   <div className="text-emerald-400 font-bold flex items-center gap-1.5">
-                    <IconCheck className="w-3.5 h-3.5" />
+                    <Check className="w-3.5 h-3.5" />
                     <span>OUTPUT: 100</span>
                   </div>
                   <div className="text-slate-400 text-[10px]">

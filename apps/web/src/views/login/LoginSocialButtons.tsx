@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { IconBrandGoogle, IconBrandGithub } from '@tabler/icons-react';
+import { GoogleLogo, GithubLogo } from '@phosphor-icons/react';
 
 interface LoginSocialButtonsProps {
   onSocial: (provider: 'google' | 'github') => void;
@@ -18,7 +18,7 @@ export const LoginSocialButtons: React.FC<LoginSocialButtonsProps> = ({ onSocial
           disabled={disabled}
           className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700/60 text-xs font-bold text-slate-200 transition-all active:scale-[0.985]"
         >
-          <IconBrandGoogle className="w-4 h-4 text-rose-400" />
+          <GoogleLogo className="w-4 h-4 text-rose-400" />
           <span>Google</span>
         </button>
         <button
@@ -27,7 +27,7 @@ export const LoginSocialButtons: React.FC<LoginSocialButtonsProps> = ({ onSocial
           disabled={disabled}
           className="flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-700/60 text-xs font-bold text-slate-200 transition-all active:scale-[0.985]"
         >
-          <IconBrandGithub className="w-4 h-4 text-slate-100" />
+          <GithubLogo className="w-4 h-4 text-slate-100" />
           <span>GitHub</span>
         </button>
       </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useRef, useState } from 'react';
-import { ArrowRight, Lock } from 'lucide-react';
+import { ArrowRight, Lock } from '@phosphor-icons/react';
 import { GraphDataset, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { RoadmapNodeIcon } from './RoadmapNodeIcon';
 import { cn } from '@/lib/utils';

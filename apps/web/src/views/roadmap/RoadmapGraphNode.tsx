@@ -5,7 +5,7 @@ import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { RoadmapNodeRings } from './RoadmapNodeRings';
 import { RoadmapNodeIcon } from './RoadmapNodeIcon';
 import { useRoadmapStore } from '@/stores/roadmap.store';
-import { IconLock, IconLockOpen } from '@tabler/icons-react';
+import { Lock, LockOpen } from '@phosphor-icons/react';
 import gsap from 'gsap';
 
 interface RoadmapGraphNodeProps {
@@ -269,9 +269,9 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
         <foreignObject x="-6" y="-6" width="12" height="12" className="pointer-events-none">
           <div className="w-full h-full flex items-center justify-center">
             {node.isUnlocked ? (
-              <IconLock className="w-2.5 h-2.5 text-rose-400" />
+              <Lock className="w-2.5 h-2.5 text-rose-400" />
             ) : (
-              <IconLockOpen className="w-2.5 h-2.5 text-cyan-300" />
+              <LockOpen className="w-2.5 h-2.5 text-cyan-300" />
             )}
           </div>
         </foreignObject>

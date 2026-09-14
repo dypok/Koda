@@ -1,15 +1,7 @@
 'use client';
+import { ArrowLeft, List, ShareNetwork, Stack, Crosshair, Flame, Lightning } from '@phosphor-icons/react';
 
 import React, { useMemo } from 'react';
-import { ArrowLeft } from 'lucide-react';
-import {
-  IconLayoutList,
-  IconAffiliate,
-  IconLayersIntersect,
-  IconRadar2,
-  IconFlame,
-  IconBolt,
-} from '@tabler/icons-react';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 import { cn } from '@/lib/utils';
@@ -129,7 +121,7 @@ export function RoadmapTopHud({
               borderColor: `${branchColor}40`,
             }}
           >
-            <IconRadar2
+            <Crosshair
               className="w-4 h-4 animate-spin text-white"
               style={{
                 color: branchColor,
@@ -193,7 +185,7 @@ export function RoadmapTopHud({
                     : 'bg-slate-600'
                 )}
               />
-              <IconLayoutList className="w-3.5 h-3.5" />
+              <List className="w-3.5 h-3.5" />
               <span className="text-[11px]">Pin Lateral</span>
             </button>
 
@@ -219,7 +211,7 @@ export function RoadmapTopHud({
                     : 'bg-slate-600'
                 )}
               />
-              <IconAffiliate className="w-3.5 h-3.5" />
+              <ShareNetwork className="w-3.5 h-3.5" />
               <span className="text-[11px]">Constelación</span>
             </button>
 
@@ -245,7 +237,7 @@ export function RoadmapTopHud({
                     : 'bg-slate-600'
                 )}
               />
-              <IconLayersIntersect className="w-3.5 h-3.5 text-cyan-400" />
+              <Stack className="w-3.5 h-3.5 text-cyan-400" />
               <span className="text-[11px] text-cyan-300">Fusión</span>
             </button>
           </div>
@@ -273,7 +265,7 @@ export function RoadmapTopHud({
             }}
           />
 
-          <IconBolt className="w-4 h-4 fill-white text-white group-hover:scale-110 transition-transform" />
+          <Lightning className="w-4 h-4 fill-white text-white group-hover:scale-110 transition-transform" />
 
           <div className="flex flex-col text-left leading-none">
             <span className="text-[8px] opacity-75 font-mono tracking-widest text-slate-200">

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { IconCheck, IconLock, IconPlayerPlay, IconStar } from '@tabler/icons-react';
+import { Check, Lock, Play, Star } from '@phosphor-icons/react';
 import { RoadmapLesson } from '@/models/roadmap/roadmap.types';
 import { cn } from '@/lib/utils';
 
@@ -40,11 +40,11 @@ export const RoadmapLessonNode: React.FC<RoadmapLessonNodeProps> = ({
         )}
       >
         {lesson.isCompleted ? (
-          <IconCheck className="w-5 h-5 stroke-[2.5]" />
+          <Check className="w-5 h-5 stroke-[2.5]" />
         ) : isAvailable ? (
-          <IconPlayerPlay className="w-4 h-4 fill-current ml-0.5" />
+          <Play className="w-4 h-4 fill-current ml-0.5" />
         ) : (
-          <IconLock className="w-4 h-4 transition-transform duration-200 group-hover:-rotate-12 group-hover:scale-110" />
+          <Lock className="w-4 h-4 transition-transform duration-200 group-hover:-rotate-12 group-hover:scale-110" />
         )}
       </div>
 
@@ -62,7 +62,7 @@ export const RoadmapLessonNode: React.FC<RoadmapLessonNodeProps> = ({
 
         <div className="flex items-center gap-1 shrink-0">
           {[1, 2, 3].map((starIdx) => (
-            <IconStar
+            <Star
               key={starIdx}
               className={cn(
                 'w-4 h-4 transition-colors',

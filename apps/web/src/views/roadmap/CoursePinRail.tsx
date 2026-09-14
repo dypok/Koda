@@ -1,15 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import {
-  IconArrowRight,
-  IconLock,
-  IconCheck,
-  IconStar,
-  IconSparkles,
-  IconChevronUp,
-  IconChevronDown,
-} from '@tabler/icons-react';
+import { ArrowRight, Lock, Check, Star, Sparkle, CaretUp, CaretDown } from '@phosphor-icons/react';
 import { GraphDataset, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 import { useRoadmapStore } from '@/stores/roadmap.store';
@@ -144,7 +136,7 @@ export const CoursePinRail: React.FC<CoursePinRailProps> = ({ dataset, onDeploy 
                 className="flex items-center gap-2 text-[10px] font-mono font-bold tracking-widest uppercase"
                 style={{ color: branchColor }}
               >
-                <IconSparkles className="w-3.5 h-3.5" />
+                <Sparkle className="w-3.5 h-3.5" />
                 <span>{activeBranch.title}</span>
               </div>
               <h2 className="font-display text-2xl sm:text-3xl font-bold tracking-tight text-white leading-tight">
@@ -218,7 +210,7 @@ export const CoursePinRail: React.FC<CoursePinRailProps> = ({ dataset, onDeploy 
                       </span>
                       {node.variant === 'completed' && (
                         <span className="text-[9px] font-mono font-bold text-emerald-400 flex items-center gap-0.5">
-                          <IconCheck className="w-2.5 h-2.5" />
+                          <Check className="w-2.5 h-2.5" />
                           <span>100%</span>
                         </span>
                       )}
@@ -336,7 +328,7 @@ export const CoursePinRail: React.FC<CoursePinRailProps> = ({ dataset, onDeploy 
                         +{node.xp ?? 100} XP
                       </span>
                       <span className="flex items-center gap-1 text-[11px] font-mono font-bold text-cyan-300 bg-cyan-500/10 px-2.5 py-0.5 rounded-full border border-cyan-500/20">
-                        <IconStar className="w-3.5 h-3.5 fill-cyan-400" />
+                        <Star className="w-3.5 h-3.5 fill-cyan-400" />
                         <span>★ {node.stars ?? 0}/{node.maxStars ?? 9}</span>
                       </span>
                     </div>
@@ -353,7 +345,7 @@ export const CoursePinRail: React.FC<CoursePinRailProps> = ({ dataset, onDeploy 
 
                     {isLocked ? (
                       <div className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-500 font-mono text-xs font-bold">
-                        <IconLock className="w-3.5 h-3.5" />
+                        <Lock className="w-3.5 h-3.5" />
                         <span>Restringido</span>
                       </div>
                     ) : (
@@ -367,7 +359,7 @@ export const CoursePinRail: React.FC<CoursePinRailProps> = ({ dataset, onDeploy 
                         }}
                       >
                         <span>Iniciar Protocolo</span>
-                        <IconArrowRight className="w-3.5 h-3.5" />
+                        <ArrowRight className="w-3.5 h-3.5" />
                       </button>
                     )}
                   </div>
@@ -420,7 +412,7 @@ export const CoursePinRail: React.FC<CoursePinRailProps> = ({ dataset, onDeploy 
             aria-label="Curso anterior"
             className="p-1 rounded text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
           >
-            <IconChevronUp className="w-4 h-4" />
+            <CaretUp className="w-4 h-4" />
           </button>
 
           {nodes.map((n, i) => (
@@ -446,7 +438,7 @@ export const CoursePinRail: React.FC<CoursePinRailProps> = ({ dataset, onDeploy 
             aria-label="Siguiente curso"
             className="p-1 rounded text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
           >
-            <IconChevronDown className="w-4 h-4" />
+            <CaretDown className="w-4 h-4" />
           </button>
         </div>
       </div>

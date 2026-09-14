@@ -1,6 +1,5 @@
+import { Monitor, Database, Cube, CodeSimple, Moon } from '@phosphor-icons/react';
 import React from 'react';
-import { IconDeviceDesktop, IconServer, IconBrandDocker, IconBrandPython } from '@tabler/icons-react';
-import { Moon } from 'lucide-react';
 import { GraphDataset } from '../roadmap-graph.types';
 import { FRONTEND_COURSES_DATASET } from './frontend-track.mock';
 import { BACKEND_COURSES_DATASET } from './backend-track.mock';
@@ -31,7 +30,7 @@ export const CAREER_BRANCHES: CareerBranchInfo[] = [
     title: 'Frontend Developer',
     tagline: 'Interfaces Web & DOM',
     technologies: 'HTML, CSS, JS DOM, React',
-    icon: IconDeviceDesktop,
+    icon: Monitor,
     color: '#38BDF8',
     progressPercent: 18,
     earnedStars: 6,
@@ -45,7 +44,7 @@ export const CAREER_BRANCHES: CareerBranchInfo[] = [
     title: 'Backend Developer',
     tagline: 'Lógica, APIs & Concurrencia',
     technologies: 'Python, SQL, FastAPI, Go',
-    icon: IconServer,
+    icon: Database,
     color: '#10B981',
     progressPercent: 24,
     earnedStars: 8,
@@ -59,7 +58,7 @@ export const CAREER_BRANCHES: CareerBranchInfo[] = [
     title: 'DevOps & Cloud',
     tagline: 'Infraestructura & CI/CD',
     technologies: 'Linux, Git, Docker, K8s',
-    icon: IconBrandDocker,
+    icon: Cube,
     color: '#A855F7',
     progressPercent: 12,
     earnedStars: 3,
@@ -73,7 +72,7 @@ export const CAREER_BRANCHES: CareerBranchInfo[] = [
     title: 'Python Specialist',
     tagline: 'Sintaxis, OOP & Algoritmos',
     technologies: 'Python 3, POO, Scripts, FastAPI',
-    icon: IconBrandPython,
+    icon: CodeSimple,
     color: '#F59E0B',
     progressPercent: 28,
     earnedStars: 10,

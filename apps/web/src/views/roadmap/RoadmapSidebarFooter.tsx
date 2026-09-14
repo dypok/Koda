@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useRouter } from 'next/navigation';
-import { IconLogout, IconSettings, IconShield } from '@tabler/icons-react';
+import { SignOut, Gear, Shield } from '@phosphor-icons/react';
 import { useAuthStore } from '@/stores/auth.store';
 
 export function RoadmapSidebarFooter() {
@@ -63,7 +63,7 @@ export function RoadmapSidebarFooter() {
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" title="Sesión activa en línea" />
           </div>
           <div className="flex items-center gap-1 text-[9px] font-mono text-cyan-400/90 truncate">
-            <IconShield className="w-2.5 h-2.5 text-cyan-400 shrink-0" />
+            <Shield className="w-2.5 h-2.5 text-cyan-400 shrink-0" />
             <span className="truncate">{rankTitle}</span>
           </div>
         </div>
@@ -77,7 +77,7 @@ export function RoadmapSidebarFooter() {
           title="Ajustes de Perfil"
           aria-label="Ajustes de perfil"
         >
-          <IconSettings className="w-4 h-4" />
+          <Gear className="w-4 h-4" />
         </button>
         <button
           type="button"
@@ -86,7 +86,7 @@ export function RoadmapSidebarFooter() {
           title="Cerrar sesión"
           aria-label="Cerrar sesión"
         >
-          <IconLogout className="w-4 h-4" />
+          <SignOut className="w-4 h-4" />
         </button>
       </div>
     </div>

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Plus, Minus, LocateFixed } from 'lucide-react';
+import { Plus, Minus, Crosshair } from '@phosphor-icons/react';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 
 export function RoadmapCanvasControls() {
@@ -51,7 +51,7 @@ export function RoadmapCanvasControls() {
           className="px-2.5 min-h-[44px] flex items-center gap-1.5 rounded hover:bg-cyan-950/60 hover:text-cyan-300 border border-transparent hover:border-cyan-500/40 active:scale-95 transition-all text-[11px] font-bold cursor-pointer"
           title="Recentrar y Restablecer Zoom"
         >
-          <LocateFixed aria-hidden="true" className="w-3.5 h-3.5 text-cyan-400 pointer-events-none" />
+          <Crosshair aria-hidden="true" className="w-3.5 h-3.5 text-cyan-400 pointer-events-none" />
           <span className="pointer-events-none tabular-nums">{zoomLevel}%</span>
         </button>
       </div>

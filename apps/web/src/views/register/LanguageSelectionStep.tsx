@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { LayoutGrid, Terminal } from 'lucide-react';
+import { SquaresFour, Terminal } from '@phosphor-icons/react';
 import { LanguageOption, TechCategory } from '@/models/register/register.model';
 import { LanguageCard } from './LanguageCard';
 import { TerminalLanguagePicker } from './TerminalLanguagePicker';
@@ -97,7 +97,7 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
       <div role="group" aria-label="Vista de selección" className="flex shrink-0 items-center gap-1 rounded-full border border-slate-800 bg-slate-900/60 p-1 ml-2">
         {(
           [
-            { id: 'grid', label: 'Cuadrícula', Icon: LayoutGrid },
+            { id: 'grid', label: 'Cuadrícula', Icon: SquaresFour },
             { id: 'terminal', label: 'Terminal', Icon: Terminal },
           ] as const
         ).map(({ id, label, Icon }) => (

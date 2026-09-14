@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from '@phosphor-icons/react';
 import { AnimatedCounter } from '@/components/ui/animated-counter';
 
 interface RegisterHeaderBarProps {
