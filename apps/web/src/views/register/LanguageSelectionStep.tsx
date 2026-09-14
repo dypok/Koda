@@ -1,9 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { LayoutGrid, Terminal } from 'lucide-react';
 import { LanguageOption, TechCategory } from '@/models/register/register.model';
 import { LanguageCard } from './LanguageCard';
+import { TerminalLanguagePicker } from './TerminalLanguagePicker';
 import { cn } from '@/lib/utils';
 
 interface LanguageSelectionStepProps {
@@ -18,20 +21,47 @@ interface LanguageSelectionStepProps {
 export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
   languages, categories, selectedCategory, onSelectCategory,
   selectedLanguageId, onSelectLanguage,
-}) => (
+}) => {
+  const reduceMotion = useReducedMotion();
+  const [view, setView] = useState<'grid' | 'terminal'>('grid');
+
+  useEffect(() => {
+    try {
+      const saved = window.localStorage.getItem('koda-lang-view');
+      if (saved === 'terminal' || saved === 'grid') setView(saved);
+    } catch {
+      // sin almacenamiento, grid por defecto
+    }
+  }, []);
+
+  const switchView = (next: 'grid' | 'terminal') => {
+    setView(next);
+    try {
+      window.localStorage.setItem('koda-lang-view', next);
+    } catch {
+      // solo sesión
+    }
+  };
+
+  return (
   <div className="w-full max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-6 animate-fadeIn">
     {/* Koda Welcome & Header */}
     <div className="flex items-center gap-4 text-left">
-      <div className="relative h-14 w-14 sm:h-16 sm:w-16 shrink-0">
-        <Image
-          src="/brand/koda-mascot-cartoon-2d.svg"
-          alt="Koda Mascot"
-          width={64}
-          height={64}
-          className="object-contain"
-          style={{ width: 'auto', height: 'auto' }}
-          priority
-        />
+      <div className="relative shrink-0 flex flex-col items-center">
+        <div className="relative h-14 w-14 sm:h-16 sm:w-16">
+          <Image
+            src="/brand/koda-mascot-cartoon-2d.svg"
+            alt="Koda, tu guía de registro"
+            width={64}
+            height={64}
+            className="object-contain"
+            style={{ width: 'auto', height: 'auto' }}
+            priority
+          />
+        </div>
+        <span aria-hidden="true" className="mt-1 max-w-[120px] rounded-xl rounded-tl-sm border border-amber-400/30 bg-amber-400/10 px-2 py-1 text-center text-[10px] font-bold leading-tight text-amber-200">
+          ¡Elige tu arma! 🐍
+        </span>
       </div>
       <div className="space-y-0.5">
         <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
@@ -43,12 +73,15 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
       </div>
     </div>
 
-    {/* Category Pills */}
-    <div className="flex items-center gap-2 overflow-x-auto pb-1">
+    {/* Category Pills + vista */}
+    <div className="flex items-center justify-between gap-2">
+    <div role="tablist" aria-label="Filtrar por categoría" className="flex flex-1 items-center gap-2 overflow-x-auto pb-1">
       {categories.map((cat) => (
         <button
           key={cat.id}
           type="button"
+          role="tab"
+          aria-selected={selectedCategory === cat.id}
           onClick={() => onSelectCategory(cat.id)}
           className={cn(
             'px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border',
@@ -61,17 +94,60 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
         </button>
       ))}
     </div>
-
-    {/* Grid of Technologies ampliado horizontalmente */}
-    <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
-      {languages.map((item) => (
-        <LanguageCard
-          key={item.id}
-          option={item}
-          isSelected={selectedLanguageId === item.id}
-          onSelect={onSelectLanguage}
-        />
-      ))}
+      <div role="group" aria-label="Vista de selección" className="flex shrink-0 items-center gap-1 rounded-full border border-slate-800 bg-slate-900/60 p-1 ml-2">
+        {(
+          [
+            { id: 'grid', label: 'Cuadrícula', Icon: LayoutGrid },
+            { id: 'terminal', label: 'Terminal', Icon: Terminal },
+          ] as const
+        ).map(({ id, label, Icon }) => (
+          <button
+            key={id}
+            type="button"
+            onClick={() => switchView(id)}
+            aria-pressed={view === id}
+            aria-label={`Vista ${label}`}
+            title={label}
+            className={cn(
+              'inline-flex min-h-[32px] min-w-[32px] items-center justify-center rounded-full transition-colors',
+              view === id ? 'bg-amber-400 text-slate-950' : 'text-slate-400 hover:text-white'
+            )}
+          >
+            <Icon aria-hidden="true" className="w-4 h-4" />
+          </button>
+        ))}
+      </div>
     </div>
+
+    {view === 'terminal' ? (
+      <TerminalLanguagePicker
+        languages={languages}
+        selectedLanguageId={selectedLanguageId}
+        onSelectLanguage={onSelectLanguage}
+      />
+    ) : (
+    /* Grid of Technologies ampliado horizontalmente */
+    <motion.div layout={reduceMotion ? false : true} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
+      <AnimatePresence mode="popLayout">
+        {languages.map((item) => (
+          <motion.div
+            key={item.id}
+            layout={reduceMotion ? false : true}
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
+          >
+            <LanguageCard
+              option={item}
+              isSelected={selectedLanguageId === item.id}
+              onSelect={onSelectLanguage}
+            />
+          </motion.div>
+        ))}
+      </AnimatePresence>
+    </motion.div>
+    )}
   </div>
-);
+  );
+};

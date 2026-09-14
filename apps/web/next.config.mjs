@@ -2,6 +2,9 @@
 const nextConfig = {
   transpilePackages: ['@koda/types'],
   reactStrictMode: true,
+  images: {
+    formats: ['image/avif', 'image/webp'],
+  },
   async headers() {
     return [
       {

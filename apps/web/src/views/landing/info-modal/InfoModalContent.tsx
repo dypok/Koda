@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { InfoModalTab } from '@/models/landing/info-modal.model';
 import { FaqsTab } from './FaqsTab';
 import { SchoolsTab } from './SchoolsTab';
@@ -14,24 +15,47 @@ interface InfoModalContentProps {
 }
 
 export const InfoModalContent: React.FC<InfoModalContentProps> = ({ activeTab }) => {
+  let tab: React.ReactNode = null;
   switch (activeTab) {
     case 'faqs':
-      return <FaqsTab />;
+      tab = <FaqsTab />;
+      break;
     case 'schools':
-      return <SchoolsTab />;
+      tab = <SchoolsTab />;
+      break;
     case 'tests':
-      return <TestsTab />;
+      tab = <TestsTab />;
+      break;
     case 'guidelines':
-      return <GuidelinesTab />;
+      tab = <GuidelinesTab />;
+      break;
     case 'terms':
-      return <TermsTab />;
+      tab = <TermsTab />;
+      break;
     case 'privacy':
-      return <PrivacyTab />;
+      tab = <PrivacyTab />;
+      break;
     case 'data-rights':
-      return <DataRightsTab />;
+      tab = <DataRightsTab />;
+      break;
     case 'social':
-      return <SocialTab />;
+      tab = <SocialTab />;
+      break;
     default:
-      return null;
+      tab = null;
   }
+
+  return (
+    <motion.section
+      key={activeTab}
+      role="tabpanel"
+      id={`info-panel-${activeTab}`}
+      aria-labelledby={`info-tab-${activeTab}`}
+      initial={{ opacity: 0, x: 12 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {tab}
+    </motion.section>
+  );
 };
