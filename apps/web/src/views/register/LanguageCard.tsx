@@ -71,6 +71,13 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
           : 'border-slate-800/40 bg-slate-900/30 opacity-60 cursor-not-allowed'
       )}
     >
+      {/* Círculo expansivo desde el centro (FlowButton) */}
+      {isClickable && !isSelected && (
+        <span
+          aria-hidden="true"
+          className="absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-400 opacity-0 transition-all duration-[800ms] ease-[cubic-bezier(0.19,1,0.22,1)] group-hover/glare:h-[340px] group-hover/glare:w-[340px] group-hover/glare:opacity-100"
+        />
+      )}
       {/* Icono con aceleración GPU */}
       <IconComponent
         className={cn(
@@ -83,15 +90,15 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
       {/* Contenido con nombre y badge */}
       <div className="flex-1 min-w-0 pr-2 relative z-0">
         <div className="flex items-center gap-2 mb-1.5 flex-nowrap">
-          <h3 className="text-sm sm:text-base font-bold text-white tracking-tight leading-none whitespace-nowrap">
+          <h3 className="text-sm sm:text-base font-bold text-white tracking-tight leading-none whitespace-nowrap transition-colors duration-500 group-hover/glare:text-slate-950">
             {name}
           </h3>
           {option.badge && (
             <span
               className={cn(
-                'text-xs font-semibold px-2.5 py-0.5 rounded-full border tracking-wide whitespace-nowrap shrink-0',
+                'text-xs font-semibold px-2.5 py-0.5 rounded-full border tracking-wide whitespace-nowrap shrink-0 transition-colors duration-500',
                 option.isAvailable
-                  ? 'text-emerald-300 bg-emerald-500/15 border-emerald-500/40'
+                  ? 'text-emerald-300 bg-emerald-500/15 border-emerald-500/40 group-hover/glare:border-slate-950/40 group-hover/glare:bg-transparent group-hover/glare:text-slate-950'
                   : 'text-slate-400 bg-slate-800/70 border-slate-700/50'
               )}
             >
@@ -99,7 +106,7 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
             </span>
           )}
         </div>
-        <p className="text-xs sm:text-[13px] text-slate-300/85 leading-relaxed">
+        <p className="text-xs sm:text-[13px] text-slate-300/85 leading-relaxed transition-colors duration-500 group-hover/glare:text-slate-800">
           {option.description}
         </p>
       </div>
