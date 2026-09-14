@@ -10,6 +10,23 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-13 15:00] [Added] **Acabado visual del registro `/register` (rama `feat/frontend-visual-experience`):**
+  - Transiciones de layout FLIP, fondo narrativo por paso, CTA contextual por paso, Koda reactivo al formulario, handoff animado al roadmap, terminal de idiomas con toggle y variante express `?v=express` con evento analytics stub.
+  - Detalle por commit en `documentation/changelog/13-09-2026-changelog.md`.
+- [2026-09-13 14:35] [Added] **Renovación del registro `/register` (rama `feat/frontend-visual-experience`):**
+  - `SelectableCard` radio único + `StepLayout` con stagger (-78 líneas, fuera 3 cards duplicadas), progressbar real, persistencia del wizard, flechas de teclado y bottom bar con hint.
+  - Form real (submit Enter, labels, errores por campo, medidor de fuerza, ojo accesible), social auth honesto con loading por provider, success modal accesible con confeti y CTA a roadmap, slide direccional + odómetro, Koda buddy por paso, Tu plan revisable, `AVAILABLE_IDS` como única fuente y fondo vivo por paso.
+  - Detalle por commit en `documentation/changelog/13-09-2026-changelog.md`.
+- [2026-09-13 14:15] [Added] **Transiciones 2.5D entre secciones + fondo 3D (rama `feat/frontend-visual-experience`):**
+  - Tanda F: glows con parallax propio, wipe ámbar, shine del diploma, skew por velocidad, lift de testimonios, metodología apilada, demo y diploma pineados, focos del mapa por scrub, eclipse-wipe al footer, hilo de ruta continuo, actos temáticos (`body[data-act]`), hero pineado 200vh, premium elevada y Koda guía narradora.
+  - Tanda D: fondo 3D full-page con Three.js (`CosmicBackground` ssr:false, 3.500/1.200/700 partículas según dispositivo, twinkle por shader, dolly + warp por Lenis, intensidad por acto, `UnrealBloomPass` lazy y guardián de fps con relevo del sky 2D).
+  - Detalle por commit en `documentation/changelog/13-09-2026-changelog.md`.
+- [2026-09-13 13:40] [Added] **Landing page renovada (rama `feat/frontend-visual-experience`, 45 commits):**
+  - Base L1-L6: copy pedagógico del hero, Navbar con anchors, mini-lección interactiva real, metodología con ritmo, CTA/Footer/InfoModal pulidos, iconografía lucide y logo que vuelve a la landing (`/?landing=true`).
+  - Scroll y motion S1-S5 + W1-W15: Lenis, GSAP ScrollTrigger con parallax del hero, scroll-spy de pilares, reveals variados, micro-interacciones (magnetic, counters spring, burst, shake/pop), split-text, typewriter, highlights dibujados, odómetro, marquesina por velocidad, grain, cursor glow, confeti de código, onda divisoria, KodaPeeks, pillar strip pineada, View Transitions, skill-tree que se dibuja, carrusel 3D de testimonios y finale cinematográfico con eclipse.
+  - Contenido y confianza: carrusel tech con pills, skill-tree vivo y accesible, selector de idioma premium, InfoModal accesible (tablist, focus trap, acordeón), footer honesto, kit de conversión (anuncio, testimonios, pricing, CTA sticky, exit-intent), kit lúdico (Koda emocional, racha simulada, sonido opt-in), certificado demo, i18n ES/EN del hero, páginas 404/error y espectáculo E1-E10 (preloader, aurora, mapa mundial, rayos, clima por sección, konami).
+  - Rendimiento: imágenes AVIF/WebP, fuera `three`/`ogl` sin uso, sky adaptativo (estrellas y DPR por dispositivo), `reduced-motion` en toda animación y `next build` verde.
+  - Detalle por commit en `documentation/changelog/12-09-2026-changelog.md` y `13-09-2026-changelog.md`.
 - [2026-09-07 08:46] [Changed] **Reestructuración Editorial Multi-Lenguaje de la Landing Page:**
   - Se reformuló la narrativa y textos en todos los componentes (`layout.tsx`, `Navbar`, `HeroSection`, `InteractivePreview`, `MethodologySection`, `CurriculumSection`, `FaqSection`, `CtaSection` y `Footer`).
   - Se reposicionó a Python 3.12 como el **Track Inaugural Piloto** de una plataforma diseñada para ser multi-lenguaje, incorporando avisos de roadmap oficial para JavaScript/TypeScript, Go y Rust.

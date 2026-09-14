@@ -39,7 +39,8 @@ export function useHeroSkyCanvasLoop(opts: CanvasLoopOptions) {
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
       const { width: w, height: h } = rectRef.current;
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const coarse = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches;
+      const dpr = Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2);
       const ptr = pointerRef.current;
       const px = ptr.inside ? ptr.x / w : -1, py = ptr.inside ? ptr.y / h : -1;
       const dist = ptr.inside ? Math.hypot(px - realStar.x, py - realStar.y) : 1;

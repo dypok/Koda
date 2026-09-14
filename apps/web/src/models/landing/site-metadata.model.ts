@@ -43,9 +43,8 @@ export const siteMetadata: Metadata = {
     siteName: 'KodaAcademy',
     images: [
       {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
+        // TODO(diseño): generar og-image.png 1200x630 de marca y revertir este fallback.
+        url: '/icon.png',
         alt: 'KodaAcademy — Plataforma Interactiva de Programación',
       },
     ],
@@ -55,6 +54,6 @@ export const siteMetadata: Metadata = {
     title: 'KodaAcademy — Aprende a Programar como juegas',
     description:
       'Plataforma interactiva de programación con micro-lecciones de práctica inmediata y certificación digital. Aprende a programar desde cero a tu propio ritmo.',
-    images: ['/og-image.png'],
+    images: ['/icon.png'],
   },
 };
