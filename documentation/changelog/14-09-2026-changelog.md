@@ -1,3 +1,4 @@
 # Changelog: 14-09-2026
 
 - [Monday]-[14/09/2026]-[08:20] - Daniel Echeverría : Redacción y formalización de ADR-012 (Adopción de Arquitectura Híbrida GraphQL y REST en Backend NestJS); actualización del índice general de ADRs especificando el uso pragmático de GraphQL para consultas y agregaciones interactivas de UI frente a REST para autenticación, archivos, webhooks y tareas de sistema.
+- [Monday]-[14/09/2026]-[08:54] - Daniel Echeverría : Creación del documento técnico COMPARATIVA_ARQUITECTURA_MODULAR_VS_HEXAGONAL_EDD.md en Dominio 4 (docs/04-arquitectura-backend/); análisis exhaustivo entre la arquitectura modular nativa de NestJS frente al monolito hexagonal basado en EDD (ADR-010/ADR-011), detallando la integración de GraphQL como adaptador primario (driving adapter), análisis de latencia (RNF-010), mitigación de dependencias circulares (RNF-030) y propuesta del enfoque "Hexagonal Pragmático".

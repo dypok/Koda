@@ -13,6 +13,7 @@
 | [**13_API_SPECIFICATION.md**](13_API_SPECIFICATION.md) | Especificación de API REST | Contratos OpenAPI 3.0.3, autenticación JWT stateless + refresh rotativo, códigos de error y endpoints. |
 | [**17_CERTIFICATION.md**](17_CERTIFICATION.md) | Pipeline de Certificación | Emisión de diplomas en backend con código correlativo `CQ-*`, código QR ISO 18004 y Google Drive API v3 (`ADR-003`). |
 | [**25_ADMIN_SYSTEM.md**](25_ADMIN_SYSTEM.md) | Sistema de Administración | Consola de administración, gestión RBAC (USER vs. ADMIN), auditoría de cambios y publicación sin despliegue. |
+| [**COMPARATIVA_ARQUITECTURA_MODULAR_VS_HEXAGONAL_EDD.md**](COMPARATIVA_ARQUITECTURA_MODULAR_VS_HEXAGONAL_EDD.md) | Comparativa de Arquitectura Backend | Estudio comparativo y veredicto: Arquitectura Modular Nativa de NestJS vs. Monolito Hexagonal basado en EDD. |
 
 ---
 
@@ -27,3 +28,7 @@ Las decisiones técnicas estructurales de este dominio están formalizadas en la
 - **ADR-007:** Arquitectura de Grafo DAG por Ramas de Carrera y Prerrequisitos
 - **ADR-008:** Adopción Definitiva de NestJS como Motor de Backend
 - **ADR-009:** Persistencia Híbrida Políglota (MongoDB Contenido + Supabase Transacciones)
+- **ADR-010:** Arquitectura Backend Hexagonal Modular con Eventos de Dominio y Cache-Aside
+- **ADR-011:** Refinamiento de Arquitectura Backend (BullMQ, Persistencia Desacoplada, Caché Versionada, DAG)
+- **ADR-012:** Adopción de Arquitectura Híbrida GraphQL y REST en Backend NestJS
+
