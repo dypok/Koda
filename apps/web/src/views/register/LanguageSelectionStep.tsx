@@ -27,7 +27,7 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
   const [view, setView] = useState<'grid' | 'terminal'>('grid');
   const gridRef = useRef<HTMLDivElement>(null);
 
-  // V8: stagger GSAP de entrada cada vez que cambia el filtro.
+  // Stagger GSAP de entrada cada vez que cambia el filtro.
   useLayoutEffect(() => {
     if (view !== 'grid' || prefersReducedMotion()) return;
     const { gsap } = getGsap();
@@ -145,39 +145,27 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
         onSelectLanguage={onSelectLanguage}
       />
     ) : (
-    /* Grid de tecnologías con índice por track (V12) */
+    /* Grid of Technologies ampliado horizontalmente */
     <div ref={gridRef}>
     <motion.div layout={reduceMotion ? false : true} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
       <AnimatePresence mode="popLayout">
-        {(['language', 'framework', 'tools'] as const).flatMap((cat) => {
-          const list = languages.filter((item) => item.category === cat);
-          if (!list.length) return [];
-          return [
-            <p
-              key={`idx-${cat}`}
-              aria-hidden="true"
-              className="font-mono text-[11px] font-bold uppercase tracking-widest text-slate-500 md:col-span-2 xl:col-span-3"
-            >
-              {cat}/ <span className="text-amber-400">[{String(list.length).padStart(2, '0')}]</span>
-            </p>,
-            ...list.map((item) => (
-              <motion.div
-                key={item.id}
-                layout={reduceMotion ? false : true}
-                initial={false}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
-                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
-              >
-                <LanguageCard
-                  option={item}
-                  isSelected={selectedLanguageId === item.id}
-                  onSelect={onSelectLanguage}
-                />
-              </motion.div>
-            )),
-          ];
-        })}
+        {languages.map((item) => (
+          <motion.div
+            key={item.id}
+            data-vrow
+            layout={reduceMotion ? false : true}
+            initial={false}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
+          >
+            <LanguageCard
+              option={item}
+              isSelected={selectedLanguageId === item.id}
+              onSelect={onSelectLanguage}
+            />
+          </motion.div>
+        ))}
       </AnimatePresence>
     </motion.div>
     </div>
