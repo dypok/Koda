@@ -1,7 +1,7 @@
-# 🟡 EPIC 9 — Pipeline de Certificación, Generación PDF, QR y Google Drive
+# 🟡 EPIC 9 — Pipeline de Certificación, Generación PDF, QR y Supabase Storage
 `Sprint 4 · v1.0 · Color Jira: Dorado · Código: CERT`
 
-> Esta épica implementa el **Certification Engine** de Koda (`17_CERTIFICATION.md`, `ADR-003`, `05_FUNCTIONAL_REQUIREMENTS.md` RF-CERT-*): la emisión atómica de diplomas digitales, generación 100% en backend de PDF vectorial con código QR ISO 18004, almacenamiento seguro en Google Drive API v3 (Service Account) y portal de verificación pública sin login.
+> Esta épica implementa el **Certification Engine** de Koda (`17_CERTIFICATION.md`, `ADR-003`, `05_FUNCTIONAL_REQUIREMENTS.md` RF-CERT-*): la emisión atómica de diplomas digitales, generación 100% en backend de PDF vectorial con código QR ISO 18004, almacenamiento seguro en Supabase Storage (bucket público `certificates` con CDN global) y portal de verificación pública sin login.
 
 ---
 
@@ -65,32 +65,31 @@
 
 ---
 
-### CERT-03 — Almacenamiento en la Nube con Google Drive API v3 (Service Account)
+### CERT-03 — Almacenamiento en la Nube con Supabase Storage (Bucket CDN)
 **Tipo:** Story | **SP:** 5 | **Prioridad:** Alta | **Asignado:** Backend Lead & DevOps  
-**Rama sugerida:** `feature/storage-google-drive-api`
+**Rama sugerida:** `feature/storage-supabase-certificates`
 
 **Historia de usuario:**
-> "Como arquitecto del sistema, quiero almacenar los certificados en Google Drive mediante una Service Account y streaming directo,
-> para asegurar persistencia ilimitada de diplomas a costo $0 sin saturar el almacenamiento de Supabase."
+> "Como arquitecto del sistema, quiero almacenar los certificados en Supabase Storage con distribución CDN y enlaces públicos,
+> para asegurar persistencia confiable de diplomas, alta disponibilidad sin latencia y cero fricción de credenciales externas."
 
 **Criterios de aceptación:**
-- Integración oficial con **Google Drive API v3** mediante credenciales de cuenta de servicio (`service-account.json` en variables de entorno seguras `ADR-003`).
-- Subida automática del binario PDF a la carpeta centralizada `Koda_Certificados`:
-  - Nombre de archivo estandarizado: `Certificado_KODA-PY-{SEQ}.pdf`.
-  - Tipo MIME: `application/pdf`.
-- Persistencia del identificador de archivo devuelto en la columna `google_drive_file_id` de la tabla `certificates`.
-- **Streaming Inteligente de Descargas:** al solicitar la descarga (`GET /api/v1/certificates/:id/download`):
-  - El backend verifica si ya existe `google_drive_file_id`. Si existe, transmite el archivo por streaming directo con cabecera `Content-Disposition: attachment; filename="..."` sin volver a generar el PDF.
-  - Si el archivo no existiera por contingencia, lo regenera y vuelve a subir automáticamente.
+- Integración oficial con **Supabase Storage** mediante el bucket público `certificates`:
+  - Límite de tamaño por archivo de 5 MB con restricción estricta de tipo MIME `application/pdf`.
+  - Subida automática del binario PDF a la ruta: `certificates/KODA-PY-{SEQ}.pdf`.
+- Persistencia de la ruta (`storage_path`) y URL pública (`storage_url`) en la tabla `certificates` de Supabase.
+- **Acceso Directo y Seguro de Descargas:** al solicitar la descarga (`GET /api/v1/certificates/:id/download-info`):
+  - El backend devuelve la URL pública directa con CDN global y metadatos de verificación criptográfica (`pdf_sha256`).
+  - La descarga directa no requiere autenticación de Google ni intermediarios.
 
 **Subtasks:**
-- [ ] [DEVOPS] Crear proyecto en Google Cloud Console, habilitar Drive API v3 y generar clave JSON de Service Account.
-- [ ] [BACKEND] Implementar `GoogleDriveStorageService` en `apps/api/src/modules/certification/` con autenticación JWT de Google.
-- [ ] [BACKEND] Endpoint de descarga con streaming de chunks y cabeceras de caché HTTP.
-- [ ] [TEST] Test de integración subiendo un archivo de prueba a Drive y descargándolo de vuelta sin corrupción de bytes.
+- [x] [BD] Crear bucket `certificates` en `storage.buckets` con políticas RLS de lectura pública y subida autorizada.
+- [x] [BACKEND] Implementar `SupabaseService` en `apps/api/src/database/` con métodos de subida, obtención de URL y eliminación.
+- [x] [BACKEND] Actualizar `CertificationService` y `CertificationController` para entregar `storage_path` y `storage_url`.
+- [ ] [TEST] Test de integración subiendo un archivo PDF de prueba a Supabase Storage y verificando su URL pública.
 
 **DoD adicional para esta US:**
-- Credenciales de la Service Account inyectadas como string base64 en variable de entorno (nunca commiteadas al repositorio).
+- Descarga pública inmediata en menos de 200 ms gracias a la CDN global de Supabase.
 
 ---
 
