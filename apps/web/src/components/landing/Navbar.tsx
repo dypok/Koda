@@ -2,9 +2,9 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { LanguageSelector } from './LanguageSelector';
+import { KodaLogo } from './KodaLogo';
 import { WipeButton } from '@/components/ui/wipe-button';
 import { cn } from '@/lib/utils';
 
@@ -35,16 +35,7 @@ export const Navbar: React.FC = () => {
     >
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
         {/* Left: Brand Logo (k{}da wordmark) */}
-        <Link href="/" className="flex shrink-0 items-center focus:outline-none" aria-label="Koda - inicio">
-          <Image
-            src="/brand/logo.svg"
-            alt="Koda"
-            width={498}
-            height={185}
-            className="h-6 sm:h-7 w-auto object-contain select-none"
-            priority
-          />
-        </Link>
+        <KodaLogo imgClassName="h-6 w-auto sm:h-7" />
 
         {/* Center: Desktop nav */}
         <nav aria-label="Principal" className="hidden md:flex items-center gap-1 text-sm font-medium text-slate-300">
