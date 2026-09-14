@@ -76,3 +76,4 @@
 - [Sunday]-[13/09/2026]-[16:36]-[Brandon Carranza] : M14 boss con doble anillo, flicker, shake al intentarlo y tooltip de requisitos.
 - [Sunday]-[13/09/2026]-[16:37]-[Brandon Carranza] : M15 ticks vivos por nodo en la leyenda.
 - [Sunday]-[13/09/2026]-[17:55]-[Brandon Carranza] : Resurrección de Lua (M01 9x10=90 + M02 10x10=100 lecciones, manifest 12 módulos, metodología 28 y ADR-005-lua adaptados a la estructura actual).
+- [Sunday]-[13/09/2026]-[18:05]-[Brandon Carranza] : Lua como segunda especialidad (elegible en registro con icono luna, pill live 100% en carrusel, copy ES/EN con Python y Lua).

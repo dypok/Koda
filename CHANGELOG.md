@@ -10,6 +10,9 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-13 18:05] [Added] **Lua como segunda especialidad:**
+  - Elegible en el paso 1 del registro (badge Disponible, icono luna, `techAvailability`).
+  - Pill `live` 100% en el carrusel de la landing y copy ES/EN con Python y Lua (hero, pricing, certificado).
 - [2026-09-13 17:55] [Added] **Resurrección del currículo Lua (rama `feat/frontend-visual-experience`):**
   - `content/languages/lua/` con M01 (9 secciones x 10 = 90 lecciones) y M02 (10 x 10 = 100) publicados, manifest de 12 módulos (M03-M12 `coming_soon`) y configs heredados.
   - Metodología en `docs/03-pedagogia-contenido/28_LUA_CURRICULUM.md` y `docs/adr/ADR-005-lua-curriculo-piloto-validacion-pedagogica.md`.
