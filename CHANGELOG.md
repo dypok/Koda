@@ -10,6 +10,10 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-13 17:55] [Added] **Resurrección del currículo Lua (rama `feat/frontend-visual-experience`):**
+  - `content/languages/lua/` con M01 (9 secciones x 10 = 90 lecciones) y M02 (10 x 10 = 100) publicados, manifest de 12 módulos (M03-M12 `coming_soon`) y configs heredados.
+  - Metodología en `docs/03-pedagogia-contenido/28_LUA_CURRICULUM.md` y `docs/adr/ADR-005-lua-curriculo-piloto-validacion-pedagogica.md`.
+  - Visores legacy `test_m*.html` no revividos (sustituidos por la app Next.js).
 - [2026-09-13 16:40] [Added] **Roadmap: clicks fiables y datos honestos (rama `feat/frontend-visual-experience`):**
   - Fix del inspector (capture diferido, fallback por `elementFromPoint`, sync anti-bucle).
   - Avance real, TopHud con barra segmentada, debug solo en dev, avance persistido, ramas accesibles, servicio sin doble `/api/v1`, canvas legible y calmado, inspector cinematográfico, camino ámbar, warp con bypass, boss con presencia y leyenda con ticks.
