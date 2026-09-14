@@ -64,6 +64,7 @@ interface RoadmapStoreState {
   setPanOffset: (pan: { x: number; y: number }) => void;
   setZoomLevel: (zoom: number | ((prev: number) => number)) => void;
   hydrateProgress: () => void;
+  completeSectionNode: (nodeId: string, stars: number) => void;
   zoomIn: () => void;
   zoomOut: () => void;
   resetZoom: () => void;
@@ -316,6 +317,21 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   hydrateProgress: () => {
     if (typeof window === 'undefined') return;
     set({ coursesDataset: restoreProgress(get().coursesDataset) });
+  },
+  completeSectionNode: (nodeId: string, stars: number) => {
+    const dataset = get().lessonsDataset;
+    const idx = dataset.nodes.findIndex((n) => n.id === nodeId);
+    if (idx < 0) return;
+    const nodes = dataset.nodes.map((n, i) => {
+      if (i === idx) {
+        return { ...n, variant: 'completed' as const, stars: Math.max(n.stars ?? 0, stars), statusText: 'COMPLETADA' };
+      }
+      if (i === idx + 1 && !n.isUnlocked) {
+        return { ...n, isUnlocked: true, variant: 'unlocked' as const, statusText: 'DISPONIBLE' };
+      }
+      return n;
+    });
+    set({ lessonsDataset: { ...dataset, nodes } });
   },
   setZoomLevel: (zoom) =>
     set((s) => ({

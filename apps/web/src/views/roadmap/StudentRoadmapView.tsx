@@ -11,9 +11,11 @@ import { LessonRail } from './LessonRail';
 import { CoursePinRail } from './CoursePinRail';
 import { RoadmapFusionView } from './RoadmapFusionView';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
+import { useRouter } from 'next/navigation';
 
 export const StudentRoadmapView: React.FC = () => {
-  const { openCourseLessons, getCurrentDataset, viewMode, retreatTrigger, returnToCourses, setActiveNode, isLoading, hydrateProgress } = useRoadmapStore();
+  const router = useRouter();
+  const { openCourseLessons, getCurrentDataset, viewMode, retreatTrigger, returnToCourses, setActiveNode, isLoading, hydrateProgress, selectedCourseId } = useRoadmapStore();
 
   React.useEffect(() => {
     hydrateProgress();
@@ -39,9 +41,10 @@ export const StudentRoadmapView: React.FC = () => {
 
   const handleDeployLesson = (node: GraphNode) => {
     setActiveNode(node.id);
-    if (node.targetCourseId) {
-      void openCourseLessons(node.targetCourseId);
-    }
+    if (!node.isUnlocked) return;
+    const tail = node.id.split('-').pop() ?? '';
+    const sectionRef = /^s\d+$/.test(tail) ? tail : node.id;
+    router.push(`/app/curso/${selectedCourseId}/seccion/${sectionRef}`);
   };
 
   return (
