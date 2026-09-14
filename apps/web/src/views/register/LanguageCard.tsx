@@ -90,12 +90,12 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
           : 'border-slate-800/40 bg-slate-900/30 opacity-60 cursor-not-allowed'
       )}
     >
-      {/* Círculo expansivo: al click se queda fundiéndose al seleccionado */}
+      {/* Círculo expansivo al mismo tono del seleccionado: hover y click un solo color */}
       {isClickable && (!isSelected || pressed) && (
         <span
           aria-hidden="true"
           className={cn(
-            'absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-400 transition-all duration-[800ms] ease-[cubic-bezier(0.19,1,0.22,1)]',
+            'absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/25 transition-all duration-[800ms] ease-[cubic-bezier(0.19,1,0.22,1)]',
             pressed ? 'h-[340px] w-[340px] opacity-100' : 'opacity-0 group-hover/glare:h-[340px] group-hover/glare:w-[340px] group-hover/glare:opacity-100'
           )}
         />
@@ -112,15 +112,15 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
       {/* Contenido con nombre y badge */}
       <div className="flex-1 min-w-0 pr-2 relative z-0">
         <div className="flex items-center gap-2 mb-1.5 flex-nowrap">
-          <h3 className="text-sm sm:text-base font-bold text-white tracking-tight leading-none whitespace-nowrap transition-colors duration-500 group-hover/glare:text-slate-950">
+          <h3 className="text-sm sm:text-base font-bold text-white tracking-tight leading-none whitespace-nowrap">
             {name}
           </h3>
           {option.badge && (
             <span
               className={cn(
-                'text-xs font-semibold px-2.5 py-0.5 rounded-full border tracking-wide whitespace-nowrap shrink-0 transition-colors duration-500',
+                'text-xs font-semibold px-2.5 py-0.5 rounded-full border tracking-wide whitespace-nowrap shrink-0',
                 option.isAvailable
-                  ? 'text-emerald-300 bg-emerald-500/15 border-emerald-500/40 group-hover/glare:border-slate-950/40 group-hover/glare:bg-transparent group-hover/glare:text-slate-950'
+                  ? 'text-emerald-300 bg-emerald-500/15 border-emerald-500/40'
                   : 'text-slate-400 bg-slate-800/70 border-slate-700/50'
               )}
             >
@@ -128,7 +128,7 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
             </span>
           )}
         </div>
-        <p className="text-xs sm:text-[13px] text-slate-300/85 leading-relaxed transition-colors duration-500 group-hover/glare:text-slate-800">
+        <p className="text-xs sm:text-[13px] text-slate-300/85 leading-relaxed">
           {option.description}
         </p>
       </div>
