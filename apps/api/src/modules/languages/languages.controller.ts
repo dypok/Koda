@@ -11,7 +11,7 @@ export class LanguagesController {
   @Get()
   @ApiOperation({ summary: 'Obtener catálogo de lenguajes disponibles' })
   @ApiResponse({ status: 200, description: 'Lista de lenguajes activos' })
-  findAll(): ProgrammingLanguage[] {
+  findAll(): Promise<ProgrammingLanguage[]> {
     return this.languagesService.findAll();
   }
 
@@ -19,7 +19,7 @@ export class LanguagesController {
   @ApiOperation({ summary: 'Obtener detalle de un lenguaje por su slug' })
   @ApiResponse({ status: 200, description: 'Detalle del lenguaje' })
   @ApiResponse({ status: 404, description: 'Lenguaje no encontrado' })
-  findBySlug(@Param('slug') slug: string): ProgrammingLanguage {
+  findBySlug(@Param('slug') slug: string): Promise<ProgrammingLanguage> {
     return this.languagesService.findBySlug(slug);
   }
 }
