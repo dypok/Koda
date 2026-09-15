@@ -1,0 +1,12 @@
+﻿// ==============================================================================
+// KODA PLATFORM — PRISMA SCHEMA FOR SUPABASE POSTGRESQL 15+ (ADR-013)
+// ==============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
