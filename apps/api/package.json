@@ -10,7 +10,8 @@
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-    "test": "jest"
+    "test": "jest",
+    "db:seed": "ts-node -r tsconfig-paths/register src/database/seed.ts"
   },
   "dependencies": {
     "@koda/types": "workspace:*",
@@ -38,6 +39,7 @@
     "@nestjs/testing": "^10.4.15",
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.4",
+    "dotenv": "^16.4.7",
     "source-map-support": "^0.5.21",
     "ts-loader": "^9.5.2",
     "ts-node": "^10.9.2",

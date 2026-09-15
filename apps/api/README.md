@@ -47,12 +47,45 @@ Cuando el servidor está en ejecución (puerto por defecto: `4000`):
 
 ---
 
-## 🔑 Variables de Entorno
+## 🗄️ Persistencia: Supabase (PostgreSQL) + MongoDB
 
-Copia el archivo de ejemplo para configurar tus credenciales locales:
+El backend usa **persistencia híbrida poliglota** (`ADR-009`):
+
+- **Supabase PostgreSQL** — cuentas, progreso, estrellas, intentos, XP, rachas, certificados y suscripciones (con RLS activado). Requiere un proyecto real en [supabase.com](https://supabase.com).
+- **MongoDB** — contenido curricular (tracks, cursos, módulos, secciones y lecciones), consultado con Mongoose.
+
+### 1. Variables de entorno
 
 ```bash
 cp .env.example .env
 ```
+
+Completa `SUPABASE_URL`, `SUPABASE_ANON_KEY` y `SUPABASE_SERVICE_ROLE_KEY` con los valores de **Settings → API** de tu proyecto Supabase. La API **no arranca** si faltan (falla rápido con un mensaje explícito en vez de usar credenciales por defecto).
+
+### 2. Levantar MongoDB local
+
+```bash
+# Desde la raíz del monorepo
+pnpm db:up      # docker compose up -d mongo
+```
+
+### 3. Aplicar las migraciones SQL en Supabase
+
+Las migraciones viven en `supabase/migrations/` (orden cronológico por nombre de archivo). Aplícalas con el [Supabase CLI](https://supabase.com/docs/guides/cli):
+
+```bash
+supabase link --project-ref <tu-project-ref>
+supabase db push
+```
+
+O pégalas en orden en el **SQL Editor** del dashboard de Supabase si no usas el CLI.
+
+### 4. Sembrar contenido curricular en MongoDB
+
+```bash
+pnpm db:seed
+```
+
+Inserta (de forma idempotente, vía `upsert`) las pistas, el curso y la lección de ejemplo definidos en `src/database/seeds/`.
 
 Consulta [`../../docs/05-devops-seguridad/21_DEPLOYMENT.md`](../../docs/05-devops-seguridad/21_DEPLOYMENT.md) para más detalles sobre cada variable requerida.
