@@ -24,6 +24,7 @@ Todas las historias de usuario de este backlog se fundamentan en las decisiones 
 - **ADR-010:** Arquitectura Backend Hexagonal Modular con Comunicación Basada en Eventos de Dominio y Patrón Cache-Aside.
 - **ADR-011:** Refinamiento de Arquitectura Backend (BullMQ para Eventos Persistentes, Caché Versionada y Contratos DAG).
 - **ADR-012:** Adopción de Arquitectura Híbrida GraphQL y REST en Backend NestJS.
+- **ADR-013:** Adopción de Prisma ORM para Persistencia Relacional en Supabase PostgreSQL.
 
 ---
 

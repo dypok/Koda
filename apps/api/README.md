@@ -1,17 +1,21 @@
 # ⚙️ Koda Backend API (`apps/api`) 🦊
 
-> Servicio backend monolito hexagonal basado en EDD construido con **NestJS**, **TypeScript**, **GraphQL** y **OpenAPI 3.0.3 (Swagger)** y diseñado para desacoplar los motores pedagógico, de certificación, gamificación y analítica (`ADR-010`, `ADR-012`).
+> Servicio backend monolito hexagonal basado en EDD construido con **NestJS**, **TypeScript**, **GraphQL** y **OpenAPI 3.0.3 (Swagger)**, persistencia híbrida políglota con **Prisma ORM** (Supabase PostgreSQL) y **Mongoose** (MongoDB), diseñado para desacoplar los motores pedagógico, de certificación, gamificación y analítica (`ADR-010`, `ADR-012`, `ADR-013`).
 
 ---
 
-## 🏗️ Arquitectura Modular
+## 🏗️ Arquitectura Modular y Persistencia
 
-La API se organiza en módulos de dominio cohesivos dentro de `src/modules/`:
+La API se organiza en módulos de dominio cohesivos dentro de `src/modules/` y adaptadores de infraestructura desacoplados:
 
 - **`languages/`:** Catálogo y consulta de lenguajes de programación y sus hojas de ruta.
 - **`learning/`:** Entrega de micro-lecciones, verificación de respuestas y máquina de estados pedagógica.
-- **`notebook/`:** Gestión del cuaderno de errores persistente (+5 XP al remediar) y cola de repaso activa.
-- **`certification/`:** Generación backend de certificados con QR, streaming y caché con Google Drive API v3.
+- **`notebook/`:** Gestión del cuaderno de errores persistente (+5 XP al remediar) y cola de repaso activa (SM-2).
+- **`certification/`:** Generación backend de certificados con QR, streaming y storage en Supabase Storage (`ADR-003`).
+
+### 💾 Capas de Persistencia (`ADR-009`, `ADR-013`)
+- **Supabase (PostgreSQL 15+):** Mapeado con **Prisma ORM** (`apps/api/prisma/schema.prisma`) para usuarios, progreso, transacciones ACID de XP y certificaciones.
+- **MongoDB (NoSQL):** Mapeado con **Mongoose** (`@nestjs/mongoose`) para catálogo curricular, pistas, cursos y lecciones con Tríada Evaluativa.
 
 ---
 
