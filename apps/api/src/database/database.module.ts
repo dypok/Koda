@@ -1,4 +1,4 @@
-import { Module, Global } from '@nestjs/common';
+import { Module, Global, Logger } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import {
@@ -19,9 +19,24 @@ import { SupabaseService } from './supabase.service';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: async (configService: ConfigService) => ({
-        uri: configService.get<string>('MONGODB_URI') || 'mongodb://localhost:27017/koda',
-      }),
+      useFactory: async (configService: ConfigService) => {
+        const logger = new Logger('MongooseModule');
+        const uri = configService.get<string>('MONGODB_URI') || 'mongodb://localhost:27017/koda';
+        return {
+          uri,
+          serverSelectionTimeoutMS: 5000,
+          connectionFactory: (connection) => {
+            connection.on('connected', () => logger.log(`MongoDB conectado (${uri})`));
+            connection.on('error', (err: Error) =>
+              logger.error(
+                `No se pudo conectar a MongoDB en ${uri}. ¿Está corriendo? ` +
+                  `Ejecuta "docker compose up -d mongo" o define MONGODB_URI en tu .env. Detalle: ${err.message}`,
+              ),
+            );
+            return connection;
+          },
+        };
+      },
     }),
     MongooseModule.forFeature([
       { name: Track.name, schema: TrackSchema },

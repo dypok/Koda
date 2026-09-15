@@ -9,13 +9,18 @@ export class SupabaseService {
   private readonly certificatesBucket: string;
 
   constructor(private readonly configService: ConfigService) {
-    const supabaseUrl =
-      this.configService.get<string>('SUPABASE_URL') ||
-      'https://sertfbduqivvjrmeblvh.supabase.co';
+    const supabaseUrl = this.configService.get<string>('SUPABASE_URL');
     const supabaseKey =
       this.configService.get<string>('SUPABASE_SERVICE_ROLE_KEY') ||
-      this.configService.get<string>('SUPABASE_ANON_KEY') ||
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlcnRmYmR1cWl2dmpybWVibHZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkzNDY3MjcsImV4cCI6MjEwNDkyMjcyN30.jC5gwZVgxqsA_VFbS6OAHOFKsmVdcpNhuH175KZ3Q3E';
+      this.configService.get<string>('SUPABASE_ANON_KEY');
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error(
+        'Faltan variables de entorno de Supabase. Define SUPABASE_URL y ' +
+          'SUPABASE_SERVICE_ROLE_KEY (o SUPABASE_ANON_KEY) en tu .env antes de iniciar la API. ' +
+          'Copia apps/api/.env.example y completa tus credenciales del proyecto.',
+      );
+    }
 
     this.certificatesBucket =
       this.configService.get<string>('SUPABASE_STORAGE_CERTIFICATES_BUCKET') ||
