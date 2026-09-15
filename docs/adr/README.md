@@ -48,6 +48,7 @@ Los estados válidos son:
 | [**ADR-012**](ADR-012-adopcion-arquitectura-hibrida-graphql-rest.md) | Adopción de Arquitectura Híbrida GraphQL y REST en Backend NestJS | ✅ Aprobado | 2026-09-14 | GraphQL para vistas agregadas/interactivas de UI y REST para auth, uploads, webhooks y tareas de sistema. |
 | [**ADR-013**](ADR-013-adopcion-prisma-orm-persistencia-relacional-supabase.md) | Adopción de Prisma ORM para Persistencia Relacional en Supabase PostgreSQL | ✅ Aprobado | 2026-09-15 | Prisma para Supabase (PostgreSQL 15+) transaccional y Mongoose para MongoDB en arquitectura hexagonal. |
 | [**ADR-014**](ADR-014-organizacion-directorios-backend-hexagonal-path-aliases-infraestructura-local.md) | Organización de Directorios Backend Hexagonal, Path Aliases y Orquestación Local | ✅ Aprobado | 2026-09-15 | Estandarización de domain/infra/presentation, path aliases de TypeScript y Redis en Docker Compose. |
+| [**ADR-015**](ADR-015-gobernanza-autoskills-flujo-ramas-entregables-done.md) | Gobernanza de Autoskills, Flujo de Ramas por Rol y Entregables en documentation/done/ | ✅ Aprobado | 2026-09-15 | Estandarización de ramas feat/backend-*, feat/frontend-*, autoskills en /autoskills y entregables en done/. |
 
 ---
 
