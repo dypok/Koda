@@ -21,7 +21,7 @@
 Las decisiones técnicas estructurales de este dominio están formalizadas en la subcarpeta [`adr/`](../adr/README.md):
 - **ADR-001:** Monorepo con PNPM Workspaces
 - **ADR-002:** Persistencia Relacional con Supabase (PostgreSQL 15+)
-- **ADR-003:** Pipeline de Certificación en Backend y Storage en Google Drive API v3
+- **ADR-003:** Pipeline de Certificación en Backend y Storage en Supabase Storage
 - **ADR-004:** Renderizado WebGL de Mascota Koda con PixiJS v7
 - **ADR-005:** Adopción de Python 3.12 como Lenguaje Oficial del MVP
 - **ADR-006:** Motor de Ejecución de Código Híbrido (`ICodeRunner`)
@@ -31,4 +31,5 @@ Las decisiones técnicas estructurales de este dominio están formalizadas en la
 - **ADR-010:** Arquitectura Backend Hexagonal Modular con Eventos de Dominio y Cache-Aside
 - **ADR-011:** Refinamiento de Arquitectura Backend (BullMQ, Persistencia Desacoplada, Caché Versionada, DAG)
 - **ADR-012:** Adopción de Arquitectura Híbrida GraphQL y REST en Backend NestJS
+- **ADR-013:** Adopción de Prisma ORM para Persistencia Relacional en Supabase PostgreSQL
 

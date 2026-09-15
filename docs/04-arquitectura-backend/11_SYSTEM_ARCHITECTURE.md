@@ -314,10 +314,10 @@ apps/api/src/
 │
 ├── infra/                          # Adaptadores de infraestructura externa
 │   ├── database/
-│   │   ├── postgres/               # Conexión Supabase / TypeORM / Drizzle
-│   │   └── mongo/                  # Conexión Mongoose (@nestjs/mongoose)
-│   ├── cache/                      # RedisModule (Cache-Aside, Rate Limit)
-│   └── storage/                    # GoogleDriveStorageAdapter (Service Account)
+│   │   ├── postgres/               # Prisma ORM para Supabase PostgreSQL (ADR-013)
+│   │   └── mongo/                  # Conexión Mongoose (@nestjs/mongoose, ADR-009)
+│   ├── cache/                      # RedisModule (Cache-Aside, Rate Limit, ADR-010)
+│   └── storage/                    # SupabaseStorageAdapter (Bucket público 'certificates', ADR-003)
 │
 ├── app.module.ts                   # Orquestador raíz con EventEmitterModule
 └── main.ts                         # Bootstrap con Helmet, Swagger y Pipes globales
@@ -338,8 +338,9 @@ Persistencia autoritativa (source of truth) de usuarios, progreso, estrellas, ca
 | Aspecto | Tecnología Seleccionada | Justificación |
 |---|---|---|
 | **Base de Datos Principal** | **Supabase (PostgreSQL 15+)** | Soporte nativo de transacciones ACID, tipos `JSONB` para preguntas polimórficas, triggers PL/pgSQL para recálculo de maestría y desbloqueo de módulos, e índices para consultas $p95 < 100\text{ ms}$ (`RNF-007`). |
-| **ORM / Acceso a Datos** | **Prisma ORM o Drizzle ORM** | Tipado estricto end-to-end con TypeScript, migraciones versionadas y consultas optimizadas. |
-| **Almacenamiento de Certificados (PDF)** | **Google Drive API v3 (Service Account)** | Guardado automático 100% en backend en carpetas organizadas (`Koda_Certificados/{lang}/`). Caching por `google_drive_file_id` para evitar re-generaciones y entrega mediante streaming autenticado. |
+| **ORM / Acceso Relacional** | **Prisma ORM** (`ADR-013`) | Tipado estricto end-to-end con TypeScript, introspección automática de Supabase (`prisma db pull`), transacciones interactivas y desacoplamiento limpio en adaptadores de infraestructura hexagonal. |
+| **ODM / Catálogo Curricular** | **Mongoose (@nestjs/mongoose)** (`ADR-009`) | Modelado tipado de documentos jerárquicos BSON en MongoDB para tracks, courses (grafo DAG con topología tier/lane), módulos y lecciones con Tríada Evaluativa. |
+| **Almacenamiento de Certificados (PDF)** | **Supabase Storage (Bucket 'certificates')** (`ADR-003`) | CDN global pública con latencia < 200 ms, límite de 5 MB por PDF y políticas RLS sin intermediarios externos. |
 | **Caché y Rate Limiting** | **Redis** | Rate limit en ventanas deslizantes y caché de contenido publicado sin sobrecargar la base de datos. |
 
 ### 5.3 Entidades principales (resumen — detalle en `12_DATABASE_DESIGN.md`)
