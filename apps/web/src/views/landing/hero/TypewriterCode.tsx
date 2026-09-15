@@ -48,7 +48,10 @@ export const TypewriterCode: React.FC = () => {
         <span>{CODE.slice(0, chars)}</span>
         <span aria-hidden="true" className="inline-block w-[8px] h-[18px] bg-amber-400 animate-pulse" />
       </p>
-      <p className={`text-emerald-300 pl-8 transition-opacity duration-300 ${showOutput ? 'opacity-100' : 'opacity-0'}`}>
+      <p
+        aria-hidden={!showOutput}
+        className={`text-emerald-300 pl-8 transition-opacity duration-300 ${showOutput ? 'opacity-100' : 'opacity-0'}`}
+      >
         {OUTPUT}
       </p>
     </div>

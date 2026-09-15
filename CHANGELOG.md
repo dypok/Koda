@@ -10,6 +10,21 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-14 23:56] [Added] **Motor de render PixiJS compartido + migración landing (`lib/pixi/engine.ts`):**
+  - Import dinámico en chunk aparte, DPR capado, textura glow compartida y tickers pausados fuera de pantalla.
+  - Sky del hero, `WeatherLayer` y `CodeConfetti` migrados a Pixi; fondo del roadmap a órbita kepleriana + espiral ASCII (`OrbitFieldBackground`).
+  - Detalle por commit en `documentation/changelog/14-09-2026-changelog.md`.
+- [2026-09-14 23:56] [Added] **Roadmap Fusión en Pixi con multiruta Lua:**
+  - `RoadmapPixiGraph`: medallones hexagonales con iconos vectoriales, haz doble + pulso en conexiones, onda expansiva al desbloquear, cámara con pan y retícula.
+  - Lua con topología tronco → ramas Flujo/Datos → convergencia (campo `route` en `GraphNode`).
+  - Sub-roadmap de secciones igualado a Fusión con transición de entrada/salida; bloqueo/desbloqueo a voluntad desde el panel.
+  - Laboratorio `/preview-roadmap` con 32 propuestas conmutables en vivo.
+  - Detalle por commit en `documentation/changelog/14-09-2026-changelog.md`.
+- [2026-09-14 23:56] [Added] **Rediseños landing (vórtice metodología, pipeline de rachas, pricing con haz):**
+  - `MethodologyHub` con vórtice ASCII, beacon y timeline; `StreakSection` como pipeline secuencial con consola git; `PricingSection` con borde eléctrico y checks dibujados.
+  - Pases polish en Hero, Navbar, Metodología e InteractivePreview (contraste, targets 44px, a11y).
+  - Detalle por commit en `documentation/changelog/14-09-2026-changelog.md`.
+
 - [2026-09-13 18:30] [Added] **Workspace de lección con enunciados y quiz:**
   - Loader de contenido con code-split por módulo, ruta `/app/curso/[course]/seccion/[section]`, split teoría/práctica con stepper y atajos, renderer por tipo, XP +5/+2 con repaso sin spoilers, quiz por composition (70%) con desbloqueo siguiente y rail conectado.
 - [2026-09-13 18:05] [Added] **Lua como segunda especialidad:**
@@ -59,6 +74,16 @@ Zona horaria: America/Bogota (UTC-5)
   - Se generaron iconos del sistema: `favicon.ico` multirresolución (16, 32, 48px), `icon.png` (192px) para PWA, y `apple-icon.png` (180px) para dispositivos Apple.
   - Se generó la imagen de portada y redes sociales `og-image.png` (1200x630) y `koda-scene.png`.
   - Se implementó un selector de modo visual en `HeroSection` permitiendo alternar entre el "Render 3D Oficial" flotante y la animación interactiva "WebGL 2D" que sigue el cursor.
+
+### Changed
+- [2026-09-14 23:56] [Changed] **Cromo del roadmap a píldoras flotantes:**
+  - TopHud y Legend como píldoras (título + continuar, racha, XP); panel de detalle a `top-16`; lienzo a todo ancho.
+  - Detalle por commit en `documentation/changelog/14-09-2026-changelog.md`.
+
+### Removed
+- [2026-09-14 23:56] [Removed] **Limpieza de fondo 3D, sidebar y vistas legacy:**
+  - `CosmicBackground` + `cosmic-field.ts` + deps `three`/`@types/three`; sidebar del roadmap (6 archivos) con píldoras de rama y perfil; `LessonRail`, `StreakPreview`, `HeroRealStar`, loop y renderer del sky canvas2D, `useHeroSkyController`, lluvia matrix sin uso.
+  - Detalle por commit en `documentation/changelog/14-09-2026-changelog.md`.
 
 ### Fixed
 - [2026-09-07 08:06] [Fixed] **Resolución del error 500 en servidor de desarrollo Next.js:**

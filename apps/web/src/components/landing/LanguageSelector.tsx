@@ -35,7 +35,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
         aria-expanded={isOpen}
         aria-label={`Idioma actual: ${selectedLanguage.name}`}
         className={cn(
-          'group flex h-9 items-center gap-2 px-3 rounded-full text-sm font-medium transition-colors select-none cursor-pointer',
+          'group flex h-10 items-center gap-2 px-3 rounded-full text-sm font-medium transition-colors select-none cursor-pointer',
           'text-slate-300 border border-white/10 bg-white/5 hover:bg-white/10 hover:border-amber-500/40',
           'focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-500/40',
           isOpen && 'text-white bg-white/10 border-amber-500/40'

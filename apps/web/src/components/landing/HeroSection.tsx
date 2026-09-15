@@ -58,15 +58,6 @@ export const HeroSection: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
           {/* Left Column: Headlines & CTA */}
           <div ref={copyRef} className="lg:col-span-7 flex flex-col items-center lg:items-start text-center lg:text-left space-y-6 will-change-transform">
-            <motion.p
-              initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.6, ease: [...EASE] }}
-              className="font-mono text-[11px] sm:text-xs font-bold uppercase tracking-widest text-amber-300/90"
-            >
-              {t.eyebrow}
-            </motion.p>
             <h1
               id="koda-hero-title"
               className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-white leading-[1.12] transform-gpu"
@@ -93,7 +84,7 @@ export const HeroSection: React.FC = () => {
           </div>
 
           {/* Right Column: Mascota Oficial Koda */}
-          <div ref={mascotRef} className="order-first lg:order-none lg:col-span-5 will-change-transform">
+          <div ref={mascotRef} className="lg:col-span-5 will-change-transform">
             <HeroMascot />
           </div>
         </div>

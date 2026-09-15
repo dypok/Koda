@@ -35,7 +35,6 @@ export const MiniLessonPreview: React.FC<{ demo?: DemoId }> = ({ demo }) => {
       gsap.from(cardRef.current, {
         y: 32,
         opacity: 0,
-        clipPath: 'inset(12% 4% 12% 4%)',
         duration: 0.8,
         ease: 'power3.out',
         scrollTrigger: { trigger: cardRef.current, start: 'top 85%', once: true },
@@ -80,7 +79,7 @@ export const MiniLessonPreview: React.FC<{ demo?: DemoId }> = ({ demo }) => {
   return (
     <div
       ref={cardRef}
-      className="relative w-full max-w-md mx-auto lg:mx-0 min-h-[480px] flex flex-col justify-between px-5 py-5 rounded-2xl bg-gradient-to-b from-[#0e1422] via-[#090d16] to-[#06080d] border border-white/[0.06] shadow-2xl overflow-hidden will-change-transform"
+      className="relative w-full max-w-md mx-auto lg:mx-0 sm:min-h-[480px] flex flex-col justify-between px-5 py-5 rounded-2xl bg-gradient-to-b from-[#0e1422] via-[#090d16] to-[#06080d] border border-white/[0.06] shadow-2xl overflow-hidden will-change-transform"
     >
       <div
         aria-hidden="true"
@@ -92,7 +91,7 @@ export const MiniLessonPreview: React.FC<{ demo?: DemoId }> = ({ demo }) => {
           <span className="text-[11px] font-mono tracking-widest uppercase text-amber-400 font-medium">
             Prueba rápida
           </span>
-          <h3 className="text-xl sm:text-2xl font-semibold text-white tracking-tight leading-snug mt-1.5">
+          <h3 className="text-xl sm:text-2xl font-semibold text-white tracking-tight leading-snug text-balance mt-1.5">
             ¿Qué muestra este código en pantalla?
           </h3>
         </div>
@@ -104,10 +103,10 @@ export const MiniLessonPreview: React.FC<{ demo?: DemoId }> = ({ demo }) => {
               <span className="w-2 h-2 rounded-full bg-white/20" />
               <span className="w-2 h-2 rounded-full bg-white/20" />
             </div>
-            <span className="text-[11px] font-mono text-slate-500 tracking-wide">main.py</span>
+            <span className="text-[11px] font-mono text-slate-400 tracking-wide">main.py</span>
           </div>
           <div className="p-4 sm:p-5 font-mono text-[14px] sm:text-[15px] leading-relaxed flex items-center bg-[#07090e]">
-            <span aria-hidden="true" className="select-none text-slate-600 pr-4 text-xs">
+            <span aria-hidden="true" className="select-none text-slate-500 pr-4 text-xs">
               1
             </span>
             <p className="text-slate-100">

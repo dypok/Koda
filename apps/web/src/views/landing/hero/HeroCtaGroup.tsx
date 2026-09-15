@@ -39,8 +39,8 @@ export const HeroCtaGroup: React.FC = () => {
         LinkComponent={TransitionLink}
         ariaLabel="Entrar a mi cuenta de Koda"
         tone="ghost"
-        size="lg"
-        className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-8 py-4 text-base justify-center font-bold group"
+        size="md"
+        className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-6 text-sm justify-center font-bold group"
       >
         <SignIn
           aria-hidden="true"
@@ -49,7 +49,7 @@ export const HeroCtaGroup: React.FC = () => {
         {t.ctaSecondary}
       </WipeButton>
 
-      <p className="text-xs sm:text-sm text-slate-400">
+      <p className="text-xs sm:text-sm text-slate-300">
         {t.trust}
       </p>
     </motion.div>

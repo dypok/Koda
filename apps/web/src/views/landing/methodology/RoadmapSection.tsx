@@ -16,10 +16,10 @@ export const RoadmapSection: React.FC = () => {
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, clipPath: 'inset(0 100% 0 0)' }}
-          whileInView={{ opacity: 1, clipPath: 'inset(0 0% 0 0)' }}
+          initial={reduceMotion ? false : { opacity: 0, x: -35 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="lg:col-span-5 order-2 lg:order-1 flex justify-center lg:justify-start w-full"
         >
           <MiniSkillTree />

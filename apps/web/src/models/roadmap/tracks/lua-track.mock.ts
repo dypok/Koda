@@ -1,14 +1,18 @@
 import { GraphDataset, GraphNode, GraphConnection } from '../roadmap-graph.types';
 
-// Generado desde content/languages/lua/manifest.json — no editar a mano.
+// Topología multiruta curada a mano (tronco → ramas Flujo/Datos → convergencia).
+// Coordenadas en el viewBox 1150×620 de la constelación Fusión.
+// Semilla inicial: módulos 01–02 desde content/languages/lua/manifest.json.
+const ACCENT = '#8FA8FF';
+
 const NODES: GraphNode[] = [
   {
     "id": "lua-m01",
     "code": "01",
     "label": "FUNDAMENTOS DE LUA",
     "subtitle": "90 LECCIONES ATÓMICAS DISEÑADAS PARA PERS…",
-    "x": 90,
-    "y": 310,
+    "x": 100,
+    "y": 100,
     "variant": "active",
     "iconType": "brackets",
     "stars": 0,
@@ -16,15 +20,16 @@ const NODES: GraphNode[] = [
     "xp": 540,
     "statusText": "ACTIVO • EN PROGRESO",
     "targetCourseId": "lua-fundamentos-de-lua",
-    "isUnlocked": true
+    "isUnlocked": true,
+    "route": "trunk"
   },
   {
     "id": "lua-m02",
     "code": "02",
     "label": "VARIABLES Y TIPOS DE DATOS",
     "subtitle": "100 LECCIONES ATÓMICAS QUE CUBREN MEMORIA…",
-    "x": 178,
-    "y": 443,
+    "x": 300,
+    "y": 100,
     "variant": "locked",
     "iconType": "lock",
     "stars": 0,
@@ -32,15 +37,16 @@ const NODES: GraphNode[] = [
     "xp": 600,
     "statusText": "DISPONIBLE • SIN EMPEZAR",
     "targetCourseId": "lua-variables-y-tipos-de-datos",
-    "isUnlocked": false
+    "isUnlocked": false,
+    "route": "trunk"
   },
   {
     "id": "lua-m03",
     "code": "03",
     "label": "OPERADORES",
     "subtitle": "ARITMÉTICOS, RELACIONALES, LÓGICOS (AND/O…",
-    "x": 266,
-    "y": 476,
+    "x": 500,
+    "y": 100,
     "variant": "locked",
     "iconType": "lock",
     "stars": 0,
@@ -48,15 +54,16 @@ const NODES: GraphNode[] = [
     "xp": 480,
     "statusText": "RQ LUA_MOD_02",
     "targetCourseId": "lua-operadores",
-    "isUnlocked": false
+    "isUnlocked": false,
+    "route": "trunk"
   },
   {
     "id": "lua-m04",
     "code": "04",
     "label": "CONDICIONALES",
     "subtitle": "IF/ELSEIF/ELSE, AND/OR COMO TERNARIO Y FA…",
-    "x": 354,
-    "y": 383,
+    "x": 700,
+    "y": 100,
     "variant": "locked",
     "iconType": "lock",
     "stars": 0,
@@ -64,31 +71,34 @@ const NODES: GraphNode[] = [
     "xp": 480,
     "statusText": "RQ LUA_MOD_03",
     "targetCourseId": "lua-condicionales",
-    "isUnlocked": false
+    "isUnlocked": false,
+    "route": "trunk"
   },
   {
     "id": "lua-m05",
     "code": "05",
     "label": "BUCLES",
     "subtitle": "WHILE, REPEAT-UNTIL, FOR NUMÉRICO Y FOR G…",
-    "x": 442,
-    "y": 235,
+    "x": 760,
+    "y": 230,
     "variant": "locked",
     "iconType": "lock",
     "stars": 0,
     "maxStars": 24,
     "xp": 480,
-    "statusText": "RQ LUA_MOD_04",
+    "statusText": "DESDE M04 • RUTA FLUJO",
     "targetCourseId": "lua-bucles",
-    "isUnlocked": false
+    "isUnlocked": false,
+    "route": "flow",
+    "routeLabel": "Ruta Flujo"
   },
   {
     "id": "lua-m06",
     "code": "06",
     "label": "FUNCIONES",
     "subtitle": "DEFINICIÓN, PARÁMETROS, RETORNO MÚLTIPLE,…",
-    "x": 530,
-    "y": 144,
+    "x": 760,
+    "y": 360,
     "variant": "locked",
     "iconType": "lock",
     "stars": 0,
@@ -96,31 +106,35 @@ const NODES: GraphNode[] = [
     "xp": 480,
     "statusText": "RQ LUA_MOD_05",
     "targetCourseId": "lua-funciones",
-    "isUnlocked": false
+    "isUnlocked": false,
+    "route": "flow",
+    "routeLabel": "Ruta Flujo"
   },
   {
     "id": "lua-m07",
     "code": "07",
     "label": "TABLAS COMO ARREGLOS",
     "subtitle": "TABLE ARRAY 1-BASED, OPERADOR #, TABLE.IN…",
-    "x": 618,
-    "y": 179,
+    "x": 960,
+    "y": 230,
     "variant": "locked",
     "iconType": "lock",
     "stars": 0,
     "maxStars": 24,
     "xp": 480,
-    "statusText": "RQ LUA_MOD_06",
+    "statusText": "DESDE M04 • RUTA DATOS",
     "targetCourseId": "lua-tablas-como-arreglos",
-    "isUnlocked": false
+    "isUnlocked": false,
+    "route": "data",
+    "routeLabel": "Ruta Datos"
   },
   {
     "id": "lua-m08",
     "code": "08",
     "label": "TABLAS COMO MAPAS",
     "subtitle": "TABLE MAPA, PAIRS, CLAVES, TABLAS ANIDADA…",
-    "x": 706,
-    "y": 313,
+    "x": 960,
+    "y": 360,
     "variant": "locked",
     "iconType": "lock",
     "stars": 0,
@@ -128,15 +142,17 @@ const NODES: GraphNode[] = [
     "xp": 480,
     "statusText": "RQ LUA_MOD_07",
     "targetCourseId": "lua-tablas-como-mapas",
-    "isUnlocked": false
+    "isUnlocked": false,
+    "route": "data",
+    "routeLabel": "Ruta Datos"
   },
   {
     "id": "lua-m09",
     "code": "09",
     "label": "CADENAS Y LIBRERÍA ESTÁNDAR",
     "subtitle": "STRING.* (SUB, GSUB, FIND, FORMAT, PATRON…",
-    "x": 794,
-    "y": 445,
+    "x": 960,
+    "y": 490,
     "variant": "locked",
     "iconType": "lock",
     "stars": 0,
@@ -144,31 +160,34 @@ const NODES: GraphNode[] = [
     "xp": 480,
     "statusText": "RQ LUA_MOD_08",
     "targetCourseId": "lua-cadenas-y-estandar",
-    "isUnlocked": false
+    "isUnlocked": false,
+    "route": "data",
+    "routeLabel": "Ruta Datos"
   },
   {
     "id": "lua-m10",
     "code": "10",
     "label": "MANEJO DE ERRORES Y MÓDULOS",
     "subtitle": "PCALL/XPCALL/ERROR/ASSERT, REQUIRE, PACKA…",
-    "x": 882,
-    "y": 475,
+    "x": 560,
+    "y": 510,
     "variant": "locked",
     "iconType": "lock",
     "stars": 0,
     "maxStars": 24,
     "xp": 480,
-    "statusText": "RQ LUA_MOD_09",
+    "statusText": "RQ FLUJO + DATOS",
     "targetCourseId": "lua-errores-y-modulos",
-    "isUnlocked": false
+    "isUnlocked": false,
+    "route": "trunk"
   },
   {
     "id": "lua-m11",
     "code": "11",
     "label": "METATABLAS Y POO",
     "subtitle": "SETMETATABLE, __INDEX/__NEWINDEX/__TOSTRI…",
-    "x": 970,
-    "y": 380,
+    "x": 360,
+    "y": 510,
     "variant": "locked",
     "iconType": "lock",
     "stars": 0,
@@ -176,117 +195,48 @@ const NODES: GraphNode[] = [
     "xp": 480,
     "statusText": "RQ LUA_MOD_10",
     "targetCourseId": "lua-metatablas-y-poo",
-    "isUnlocked": false
+    "isUnlocked": false,
+    "route": "trunk"
   },
   {
     "id": "lua-m12",
     "code": "Ω",
     "label": "ARCHIVOS, CORRUTINAS Y PROYECTO FINAL",
     "subtitle": "IO.OPEN/READ/WRITE, OS, COROUTINE.CREATE/…",
-    "x": 1058,
-    "y": 232,
+    "x": 160,
+    "y": 510,
     "variant": "boss",
     "iconType": "skull",
     "stars": 0,
     "xp": 480,
     "statusText": "DESAFÍO FINAL • PROYECTO",
     "targetCourseId": "lua-archivos-corrutinas-proyecto",
-    "isUnlocked": false
+    "isUnlocked": false,
+    "route": "trunk"
   }
 ];
 
+function link(id: string, fromId: string, toId: string, path: string, dashed = true): GraphConnection {
+  return { id, fromId, toId, color: ACCENT, path, ...(dashed ? { isDashed: true } : {}) };
+}
+
 const CONNECTIONS: GraphConnection[] = [
-  {
-    "id": "c-lua-lua-m01-lua-m02",
-    "fromId": "lua-m01",
-    "toId": "lua-m02",
-    "color": "#8FA8FF",
-    "path": "M 90 310 C 134 310, 134 443, 178 443"
-  },
-  {
-    "id": "c-lua-lua-m02-lua-m03",
-    "fromId": "lua-m02",
-    "toId": "lua-m03",
-    "color": "#38BDF8",
-    "path": "M 178 443 C 222 443, 222 476, 266 476",
-    "isDashed": true
-  },
-  {
-    "id": "c-lua-lua-m03-lua-m04",
-    "fromId": "lua-m03",
-    "toId": "lua-m04",
-    "color": "#F59E0B",
-    "path": "M 266 476 C 310 476, 310 383, 354 383",
-    "isDashed": true
-  },
-  {
-    "id": "c-lua-lua-m04-lua-m05",
-    "fromId": "lua-m04",
-    "toId": "lua-m05",
-    "color": "#10B981",
-    "path": "M 354 383 C 398 383, 398 235, 442 235",
-    "isDashed": true
-  },
-  {
-    "id": "c-lua-lua-m05-lua-m06",
-    "fromId": "lua-m05",
-    "toId": "lua-m06",
-    "color": "#A855F7",
-    "path": "M 442 235 C 486 235, 486 144, 530 144",
-    "isDashed": true
-  },
-  {
-    "id": "c-lua-lua-m06-lua-m07",
-    "fromId": "lua-m06",
-    "toId": "lua-m07",
-    "color": "#F472B6",
-    "path": "M 530 144 C 574 144, 574 179, 618 179",
-    "isDashed": true
-  },
-  {
-    "id": "c-lua-lua-m07-lua-m08",
-    "fromId": "lua-m07",
-    "toId": "lua-m08",
-    "color": "#8FA8FF",
-    "path": "M 618 179 C 662 179, 662 313, 706 313",
-    "isDashed": true
-  },
-  {
-    "id": "c-lua-lua-m08-lua-m09",
-    "fromId": "lua-m08",
-    "toId": "lua-m09",
-    "color": "#38BDF8",
-    "path": "M 706 313 C 750 313, 750 445, 794 445",
-    "isDashed": true
-  },
-  {
-    "id": "c-lua-lua-m09-lua-m10",
-    "fromId": "lua-m09",
-    "toId": "lua-m10",
-    "color": "#F59E0B",
-    "path": "M 794 445 C 838 445, 838 475, 882 475",
-    "isDashed": true
-  },
-  {
-    "id": "c-lua-lua-m10-lua-m11",
-    "fromId": "lua-m10",
-    "toId": "lua-m11",
-    "color": "#10B981",
-    "path": "M 882 475 C 926 475, 926 380, 970 380",
-    "isDashed": true
-  },
-  {
-    "id": "c-lua-lua-m11-lua-m12",
-    "fromId": "lua-m11",
-    "toId": "lua-m12",
-    "color": "#A855F7",
-    "path": "M 970 380 C 1014 380, 1014 232, 1058 232",
-    "isDashed": true
-  }
+  link("c-lua-trunk-01-02", "lua-m01", "lua-m02", "M 100 100 C 170 100, 230 100, 300 100", false),
+  link("c-lua-trunk-02-03", "lua-m02", "lua-m03", "M 300 100 C 370 100, 430 100, 500 100"),
+  link("c-lua-trunk-03-04", "lua-m03", "lua-m04", "M 500 100 C 570 100, 630 100, 700 100"),
+  link("c-lua-fork-04-flow", "lua-m04", "lua-m05", "M 700 100 C 740 140, 720 190, 760 230"),
+  link("c-lua-fork-04-data", "lua-m04", "lua-m07", "M 700 100 C 830 130, 830 200, 960 230"),
+  link("c-lua-flow-05-06", "lua-m05", "lua-m06", "M 760 230 C 760 275, 760 315, 760 360"),
+  link("c-lua-data-07-08", "lua-m07", "lua-m08", "M 960 230 C 960 275, 960 315, 960 360"),
+  link("c-lua-data-08-09", "lua-m08", "lua-m09", "M 960 360 C 960 405, 960 445, 960 490"),
+  link("c-lua-join-flow-10", "lua-m06", "lua-m10", "M 760 360 C 760 435, 560 435, 560 510"),
+  link("c-lua-join-data-10", "lua-m09", "lua-m10", "M 960 490 C 830 505, 690 505, 560 510"),
+  link("c-lua-trunk-10-11", "lua-m10", "lua-m11", "M 560 510 C 495 510, 425 510, 360 510"),
+  link("c-lua-trunk-11-12", "lua-m11", "lua-m12", "M 360 510 C 295 510, 225 510, 160 510"),
 ];
 
 export const LUA_COURSES_DATASET: GraphDataset = {
-  sectorTitle: 'LUA · DE FUNDAMENTOS A METATABLAS',
+  sectorTitle: 'LUA · 3 RUTAS · 12 MÓDULOS',
   progressPercent: 8,
   nodes: NODES,
   connections: CONNECTIONS,

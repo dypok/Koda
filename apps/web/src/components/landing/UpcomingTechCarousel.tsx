@@ -20,14 +20,14 @@ const TechPill: React.FC<{ tech: TechItem; hidden?: boolean }> = ({ tech, hidden
         {tech.name}
       </span>
       <span
-        aria-hidden="true"
+        role="img"
+        aria-label={`Avance ${tech.progress}%`}
         className="flex items-center gap-1.5"
-        title={`Avance ${tech.progress}%`}
       >
         <span className="h-1 w-8 overflow-hidden rounded-full bg-slate-700/80">
           <span className="block h-full rounded-full bg-amber-400" style={{ width: `${tech.progress}%` }} />
         </span>
-        <span className="text-[10px] font-bold tabular-nums text-slate-400">{tech.progress}%</span>
+        <span className="text-[11px] font-bold tabular-nums text-slate-300">{tech.progress}%</span>
       </span>
     </div>
   );
@@ -53,7 +53,7 @@ export const UpcomingTechCarousel: React.FC = () => {
           onClick={() => setPaused((p) => !p)}
           aria-pressed={paused}
           aria-label={paused ? 'Reanudar carrusel' : 'Pausar carrusel'}
-          className="ml-2 inline-flex min-h-[32px] min-w-[32px] items-center justify-center rounded-full border border-slate-700 text-slate-400 transition-colors hover:border-amber-400/50 hover:text-amber-300"
+          className="ml-2 inline-flex min-h-[40px] min-w-[40px] items-center justify-center rounded-full border border-slate-700 text-slate-400 transition-colors hover:border-amber-400/50 hover:text-amber-300"
         >
           {paused ? <Play aria-hidden="true" className="w-3.5 h-3.5" /> : <Pause aria-hidden="true" className="w-3.5 h-3.5" />}
         </button>

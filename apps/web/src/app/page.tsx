@@ -24,12 +24,6 @@ import { AuroraProvider } from '@/components/landing/AuroraProvider';
 import { GlowParallax } from '@/components/landing/GlowParallax';
 import { RouteThread } from '@/components/landing/RouteThread';
 import { ActTheme } from '@/components/landing/ActTheme';
-import dynamic from 'next/dynamic';
-
-const CosmicBackground = dynamic(
-  () => import('@/components/landing/CosmicBackground').then((m) => m.CosmicBackground),
-  { ssr: false }
-);
 import { KodaGuide } from '@/components/landing/KodaGuide';
 import { PartyMode } from '@/components/landing/PartyMode';
 
@@ -43,7 +37,6 @@ export default function HomePage() {
       <GlowParallax />
       <RouteThread />
       <ActTheme />
-      <CosmicBackground />
       <KodaGuide />
       <div aria-hidden="true" className="koda-grain" />
       <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">

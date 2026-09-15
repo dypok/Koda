@@ -22,6 +22,9 @@ export interface GraphNode {
   statusText?: string;
   targetCourseId?: string;
   isUnlocked: boolean;
+  /** Carril de ruta para tracks multiruta (p. ej. Lua). Ausente = tronco único. */
+  route?: 'trunk' | 'flow' | 'data';
+  routeLabel?: string;
 }
 
 export interface GraphConnection {

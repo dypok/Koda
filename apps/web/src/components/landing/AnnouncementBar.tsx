@@ -41,7 +41,7 @@ export const AnnouncementBar: React.FC = () => {
         type="button"
         onClick={dismiss}
         aria-label="Cerrar anuncio"
-        className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex min-h-[32px] min-w-[32px] items-center justify-center rounded-full hover:bg-slate-950/10"
+        className="absolute right-1 top-1/2 -translate-y-1/2 inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full hover:bg-slate-950/10"
       >
         <X aria-hidden="true" className="h-4 w-4" />
       </button>
