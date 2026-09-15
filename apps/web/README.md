@@ -40,7 +40,7 @@ pnpm --filter web start
 pnpm --filter web exec tsc --noEmit
 ```
 
-Arranque recomendado del repo completo: `python iniciar_koda.py` (libera :3000/:4000 solo, ver `iniciar_koda.py`).
+Arranque recomendado del repo completo: `python scripts/iniciar_koda.py` (libera :3000/:4000 solo, ver `scripts/iniciar_koda.py`).
 
 ---
 

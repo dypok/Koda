@@ -46,7 +46,7 @@ MIN_PNPM = (9, 0, 0)
 PINNED_PNPM = "9.15.9"  # version JS estable y probada en este repo
 PUERTOS = {"web": 3000, "api": 4000}
 
-REPO_ROOT = Path(__file__).resolve().parent
+REPO_ROOT = Path(__file__).resolve().parent.parent
 # En Windows, `pnpm` a secas resuelve al shim .ps1 (no ejecutable via
 # CreateProcess); hay que llamar a pnpm.cmd / npm.cmd explicitamente.
 PNPM_CMD = "pnpm.cmd" if os.name == "nt" else "pnpm"

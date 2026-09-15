@@ -37,7 +37,7 @@ import urllib.request
 import webbrowser
 from pathlib import Path
 
-REPO = Path(__file__).resolve().parent
+REPO = Path(__file__).resolve().parent.parent
 LOGS = REPO / ".koda-logs"
 PNPM_CMD = "pnpm.cmd" if os.name == "nt" else "pnpm"  # ver instalar_recursos.py
 API_URL = "http://localhost:4000/api/v1/"
