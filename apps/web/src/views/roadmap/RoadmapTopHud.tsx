@@ -100,16 +100,11 @@ export function RoadmapTopHud({
         </div>
       ) : (
         <div className="absolute left-1/2 top-4 z-20 flex w-max max-w-[calc(100%-2rem)] -translate-x-1/2 items-center gap-3 rounded-full border border-slate-800 bg-slate-950/90 py-1.5 pl-4 pr-1.5 backdrop-blur-md">
-          <span
-            aria-hidden="true"
-            className="h-2 w-2 shrink-0 rounded-full"
-            style={{ backgroundColor: branchColor }}
-          />
-          <span className="max-w-40 truncate font-display text-xs font-black uppercase tracking-wide text-white sm:max-w-xs">
-            {displayTitle}
-          </span>
           <span className="shrink-0 font-mono text-[11px] font-bold tabular-nums text-slate-400">
             {Math.round(progressPercent)}%
+          </span>
+          <span className="max-w-40 truncate font-display text-xs font-black uppercase tracking-wide text-white sm:max-w-xs">
+            {displayTitle}
           </span>
           <button
             type="button"

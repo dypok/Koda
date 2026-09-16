@@ -1,9 +1,10 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowRight, CaretDown, CaretUp, Lock, LockOpen, Sidebar, SidebarSimple, Star } from '@phosphor-icons/react';
+import { ArrowRight, Flame, Lock, LockOpen, Sidebar, SidebarSimple, Star } from '@phosphor-icons/react';
 import { GraphDataset, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
+import { useAuthStore } from '@/stores/auth.store';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { RoadmapPixiGraph } from './RoadmapPixiGraph';
 import { RoadmapCanvasControls } from './RoadmapCanvasControls';
@@ -27,6 +28,10 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
     viewMode,
   } = useRoadmapStore();
   const inLessons = viewMode === 'lessons';
+
+  const { user } = useAuthStore();
+  const streak = user?.streak ?? 1;
+  const xp = user?.totalXp ?? 100;
 
   const nodes = dataset.nodes;
   const [showPanel, setShowPanel] = useState(true);
@@ -127,7 +132,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
 
   return (
     <div onWheel={handleWheel} className="relative w-full h-full overflow-hidden select-none">
-      <OrbitFieldBackground />
+      <OrbitFieldBackground className="scale-[1.5]" />
 
       <div
         onPointerDown={handlePointerDown}
@@ -262,51 +267,36 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
         </button>
       )}
 
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-2xl border border-slate-800 bg-slate-950/85 shadow-2xl">
-        <div className="flex items-center gap-2.5">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-2xl border border-slate-800 bg-slate-950/85 shadow-2xl">
+        <div className="flex items-center gap-3">
           <span className="font-mono text-xs font-bold tabular-nums" style={{ color: themeAccentColor }}>
             0{activeIndex + 1} / 0{nodes.length}
           </span>
-          <div
-            role="progressbar"
-            aria-label={`Paso ${activeIndex + 1} de ${nodes.length}`}
-            aria-valuenow={progressPercent}
-            aria-valuemin={0}
-            aria-valuemax={100}
-            className="w-20 sm:w-28 h-[3px] rounded-full bg-slate-800 overflow-hidden"
-          >
-            <div className="h-full rounded-full transition-all duration-300" style={{ width: `${progressPercent}%`, backgroundColor: themeAccentColor }} />
+          <div className="flex items-center gap-1.5" role="list" aria-label={`Paso ${activeIndex + 1} de ${nodes.length}`}>
+            {nodes.map((n, i) => (
+              <button
+                key={n.id}
+                type="button"
+                onClick={() => goTo(i)}
+                aria-label={`Ir a ${n.label}`}
+                role="listitem"
+                className={cn('h-1.5 rounded-full transition-all cursor-pointer', i === activeIndex ? 'w-5' : 'w-1.5 bg-slate-700 hover:bg-slate-500')}
+                style={{ backgroundColor: i === activeIndex ? (n.variant === 'boss' ? '#F43F5E' : branchColor) : undefined }}
+              />
+            ))}
           </div>
         </div>
-        <div className="flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => goTo(activeIndex - 1)}
-            disabled={activeIndex === 0}
-            aria-label="Paso anterior"
-            className="p-1 rounded text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
-          >
-            <CaretUp className="w-3.5 h-3.5" />
-          </button>
-          {nodes.map((n, i) => (
-            <button
-              key={n.id}
-              type="button"
-              onClick={() => goTo(i)}
-              aria-label={`Ir a ${n.label}`}
-              className={cn('h-1.5 rounded-full transition-all cursor-pointer', i === activeIndex ? 'w-5' : 'w-1.5 bg-slate-700 hover:bg-slate-500')}
-              style={{ backgroundColor: i === activeIndex ? (n.variant === 'boss' ? '#F43F5E' : branchColor) : undefined }}
-            />
-          ))}
-          <button
-            type="button"
-            onClick={() => goTo(activeIndex + 1)}
-            disabled={activeIndex === nodes.length - 1}
-            aria-label="Paso siguiente"
-            className="p-1 rounded text-slate-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer transition-colors"
-          >
-            <CaretDown className="w-3.5 h-3.5" />
-          </button>
+        <span aria-hidden="true" className="hidden sm:block w-px h-6 bg-slate-800" />
+        <div className="flex items-center gap-2">
+          <Flame aria-hidden="true" weight="fill" className="h-4 w-4 text-orange-400" />
+          <span className="flex flex-col leading-none">
+            <span className="font-mono text-xs font-black tracking-wider text-orange-300">
+              {streak}D
+            </span>
+            <span className="font-mono text-[9px] font-bold tabular-nums tracking-wide text-amber-300/90">
+              +{xp} XP
+            </span>
+          </span>
         </div>
       </div>
     </div>

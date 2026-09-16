@@ -27,9 +27,10 @@ export const OrbitFieldBackground: React.FC<{ className?: string }> = ({ classNa
 
     let engine = createEngine('kepler-spiral', ctx, 1, 1);
     const fit = () => {
-      const r = mount.getBoundingClientRect();
-      const W = Math.max(1, Math.round(r.width));
-      const H = Math.max(1, Math.round(r.height));
+      // offsetWidth/Height ignoran el `scale` visual del contenedor; así el canvas
+      // se dibuja a tamaño de layout y el scale del wrapper lo agranda de verdad.
+      const W = Math.max(1, mount.offsetWidth);
+      const H = Math.max(1, mount.offsetHeight);
       canvas.width = W;
       canvas.height = H;
       engine = createEngine('kepler-spiral', ctx, W, H);
