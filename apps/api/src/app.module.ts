@@ -9,6 +9,8 @@ import { CertificationModule } from './modules/certification/certification.modul
 import { NotebookModule } from './modules/notebook/notebook.module';
 import { RoadmapModule } from './modules/roadmap/roadmap.module';
 import { DatabaseModule } from './database/database.module';
+import { PrismaModule } from '@infra/database/postgres/prisma.module';
+import { AuthModule } from './presentation/rest/auth/auth.module';
 
 @Module({
   imports: [
@@ -19,7 +21,9 @@ import { DatabaseModule } from './database/database.module';
         limit: 100,  // Máximo 100 peticiones por IP por minuto
       },
     ]),
+    PrismaModule,
     DatabaseModule,
+    AuthModule,
     LanguagesModule,
     LearningModule,
     CertificationModule,

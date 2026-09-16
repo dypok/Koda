@@ -63,3 +63,4 @@ coverage/
 # 3D assets scratch
 *.blend*
 
+.agents/

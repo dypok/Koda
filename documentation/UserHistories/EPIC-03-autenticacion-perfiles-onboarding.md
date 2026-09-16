@@ -25,8 +25,8 @@
 
 **Subtasks:**
 - [x] [BD] Configurar tabla consolidada `public.users` vinculada a `auth.users(id)` con RLS y trigger `on_auth_user_created`.
-- [ ] [BACKEND] Implementar `AuthModule` en `apps/api/src/modules/auth/` con verificación de tokens Supabase y guards de autenticación.
-- [ ] [BACKEND] Configurar `JwtAuthGuard` y decorador `@CurrentUser()` para inyección del usuario autenticado en controladores NestJS.
+- [x] [BACKEND] Implementar `AuthModule` en `apps/api/src/presentation/rest/auth/` con verificación de tokens Supabase y guards de autenticación.
+- [x] [BACKEND] Configurar `SupabaseAuthGuard` y decorador `@CurrentUser()` para inyección del usuario autenticado en controladores NestJS.
 - [ ] [FRONTEND] Configurar cliente de Supabase (`@supabase/ssr` / `@supabase/supabase-js`) en `apps/web` para sesión persistente.
 - [x] [FRONTEND] Diseñar formulario de autenticación interactivo en `apps/web/src/app/login/page.tsx` y `apps/web/src/views/login/` con validación Zod y React Hook Form.
 - [x] [FRONTEND] Persistir estado de autenticación en Zustand `auth.store.ts`.

@@ -7,9 +7,10 @@
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "target": "ES2021",
-    "sourceMap": true,
     "outDir": "./dist",
+    "sourceMap": true,
     "baseUrl": "./",
+    "moduleResolution": "node",
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": false,
@@ -23,7 +24,8 @@
       "@infra/*": ["src/infra/*"],
       "@presentation/*": ["src/presentation/*"],
       "@common/*": ["src/common/*"],
-      "@modules/*": ["src/modules/*"]
+      "@modules/*": ["src/modules/*"],
+      "@koda/types": ["../../packages/types/src/index.ts"]
     }
   },
   "include": ["src/**/*"]
