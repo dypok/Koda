@@ -1,0 +1,2301 @@
+﻿Issue Type,Issue Id,Parent Id,Epic Name,Epic Link,Summary,Description,Component,Priority,Story Points,Sprint,Labels
+Sub-task,DOCS-01-SUB-01,DOCS-01,,,"[DOCS] Redactar `01_PROJECT_OVERVIEW.md` con las 38 secciones maestras (propósito, filosofía, economía XP, certificaciones y visión).","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `01_PROJECT_OVERVIEW.md` con las 38 secciones maestras (propósito, filosofía, economía XP, certificaciones y visión).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-01 — Especificar visión de producto, alcance y requisitos del MVP
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-01`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-01.md`",devops,Highest,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-01-SUB-02,DOCS-01,,,"[DOCS] Documentar el planteamiento del problema en `02_PROBLEM_STATEMENT.md` (frustración, muros de texto y abandono temprano).","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Documentar el planteamiento del problema en `02_PROBLEM_STATEMENT.md` (frustración, muros de texto y abandono temprano).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-01 — Especificar visión de producto, alcance y requisitos del MVP
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-01`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-01.md`",devops,Highest,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-01-SUB-03,DOCS-01,,,"[DOCS] Definir los Objetivos Estratégicos (OE), Técnicos (OT) y de Experiencia (OUX) en `03_OBJECTIVES.md`.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Definir los Objetivos Estratégicos (OE), Técnicos (OT) y de Experiencia (OUX) en `03_OBJECTIVES.md`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-01 — Especificar visión de producto, alcance y requisitos del MVP
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-01`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-01.md`",devops,Highest,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-01-SUB-04,DOCS-01,,,"[DOCS] Delimitar el alcance estricto del MVP en `04_SCOPE.md`: qué entra (Python 3.12, 12 módulos, certificados) y qué queda post-MVP (multilenguaje adicional, sandboxes pesados).","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Delimitar el alcance estricto del MVP en `04_SCOPE.md`: qué entra (Python 3.12, 12 módulos, certificados) y qué queda post-MVP (multilenguaje adicional, sandboxes pesados).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-01 — Especificar visión de producto, alcance y requisitos del MVP
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-01`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-01.md`",devops,Highest,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-01-SUB-05,DOCS-01,,,[DOCS] Redactar la matriz completa de 128 requisitos funcionales en `05_FUNCTIONAL_REQUIREMENTS.md` con trazabilidad a casos de uso (`UC-*`).,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar la matriz completa de 128 requisitos funcionales en `05_FUNCTIONAL_REQUIREMENTS.md` con trazabilidad a casos de uso (`UC-*`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-01 — Especificar visión de producto, alcance y requisitos del MVP
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-01`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-01.md`",devops,Highest,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-01-SUB-06,DOCS-01,,,"[DOCS] Elaborar las 4 máquinas de estado Mermaid en `14_LEARNING_SYSTEM.md` (Módulo, Sección, Sesión y Diagnóstico) y la fórmula del Score de Repaso.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Elaborar las 4 máquinas de estado Mermaid en `14_LEARNING_SYSTEM.md` (Módulo, Sección, Sesión y Diagnóstico) y la fórmula del Score de Repaso.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-01 — Especificar visión de producto, alcance y requisitos del MVP
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-01`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-01.md`",devops,Highest,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-02-SUB-01,DOCS-02,,,"[DOCS] Redactar `11_SYSTEM_ARCHITECTURE.md` con diagramas Mermaid de los 9 motores (Learning, Evaluation, Gamification, Certification, etc.).","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `11_SYSTEM_ARCHITECTURE.md` con diagramas Mermaid de los 9 motores (Learning, Evaluation, Gamification, Certification, etc.).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-02 — Diseñar la arquitectura técnica, modelo de datos Supabase y contratos API
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-02`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-02.md`",devops,Highest,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-02-SUB-02,DOCS-02,,,"[DOCS] Diseñar el modelo ER en `12_DATABASE_DESIGN.md` con soporte para estrellas (1–3⭐), candados secuenciales, cuaderno de errores y triggers de integridad.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Diseñar el modelo ER en `12_DATABASE_DESIGN.md` con soporte para estrellas (1–3⭐), candados secuenciales, cuaderno de errores y triggers de integridad.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-02 — Diseñar la arquitectura técnica, modelo de datos Supabase y contratos API
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-02`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-02.md`",devops,Highest,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-02-SUB-03,DOCS-02,,,[DOCS] Escribir la especificación completa OpenAPI 3.0.3 en `13_API_SPECIFICATION.md` con DTOs de Request/Response y códigos de error por dominio.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Escribir la especificación completa OpenAPI 3.0.3 en `13_API_SPECIFICATION.md` con DTOs de Request/Response y códigos de error por dominio.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-02 — Diseñar la arquitectura técnica, modelo de datos Supabase y contratos API
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-02`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-02.md`",devops,Highest,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-02-SUB-04,DOCS-02,,,[BACKEND] Configurar NestJS con prefijo `/api/v1` y documentación viva Swagger en `/api/docs`.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Configurar NestJS con prefijo `/api/v1` y documentación viva Swagger en `/api/docs`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-02 — Diseñar la arquitectura técnica, modelo de datos Supabase y contratos API
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-docs-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-docs-02.md`",backend,Highest,1,Sprint 0,"subtask, backend, koda-mvp, scrumban"
+Sub-task,DOCS-02-SUB-05,DOCS-02,,,"[TYPES] Crear paquete `packages/types` con las interfaces maestras (`User`, `RoadmapResponse`, `LessonDetail`, `UserStreak`, `Certificate`).","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TYPES] Crear paquete `packages/types` con las interfaces maestras (`User`, `RoadmapResponse`, `LessonDetail`, `UserStreak`, `Certificate`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-02 — Diseñar la arquitectura técnica, modelo de datos Supabase y contratos API
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-docs-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-docs-02.md`",frontend,Highest,1,Sprint 0,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,DOCS-02-SUB-06,DOCS-02,,,[TYPES] Compilar `@koda/types` exitosamente con TypeScript `tsc`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TYPES] Compilar `@koda/types` exitosamente con TypeScript `tsc`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-02 — Diseñar la arquitectura técnica, modelo de datos Supabase y contratos API
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-docs-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-docs-02.md`",frontend,Highest,1,Sprint 0,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,DOCS-03-SUB-01,DOCS-03,,,[DOCS] Crear `docs/adr/README.md` con guía de ciclo de vida (Propuesto $\rightarrow$ Aprobado $\rightarrow$ Reemplazado / Rechazado).,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Crear `docs/adr/README.md` con guía de ciclo de vida (Propuesto $\rightarrow$ Aprobado $\rightarrow$ Reemplazado / Rechazado).
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-03-SUB-02,DOCS-03,,,"[DOCS] Redactar `ADR-001`: Monorepo con PNPM Workspaces (`apps/web`, `apps/api`, `packages/types`).","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `ADR-001`: Monorepo con PNPM Workspaces (`apps/web`, `apps/api`, `packages/types`).
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-03-SUB-03,DOCS-03,,,[DOCS] Redactar `ADR-002`: Persistencia Relacional con Supabase (PostgreSQL 15+).,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `ADR-002`: Persistencia Relacional con Supabase (PostgreSQL 15+).
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-03-SUB-04,DOCS-03,,,[DOCS] Redactar `ADR-003`: Emisión de Certificados en Backend y Almacenamiento en Google Drive API v3.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `ADR-003`: Emisión de Certificados en Backend y Almacenamiento en Google Drive API v3.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-03-SUB-05,DOCS-03,,,[DOCS] Redactar `ADR-004`: Renderizado WebGL de Mascota Koda 🦊 y Confeti con PixiJS v7.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `ADR-004`: Renderizado WebGL de Mascota Koda 🦊 y Confeti con PixiJS v7.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-03-SUB-06,DOCS-03,,,[DOCS] Redactar `ADR-005`: Adopción de Python 3.12 como Lenguaje Oficial de Lanzamiento del MVP.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `ADR-005`: Adopción de Python 3.12 como Lenguaje Oficial de Lanzamiento del MVP.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-03-SUB-07,DOCS-03,,,[DOCS] Redactar `ADR-006`: Motor de Ejecución de Código Híbrido (`ICodeRunner`).,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `ADR-006`: Motor de Ejecución de Código Híbrido (`ICodeRunner`).
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-03-SUB-08,DOCS-03,,,[DOCS] Redactar `ADR-007`: Arquitectura de Grafo DAG por Ramas de Carrera y Prerrequisitos.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `ADR-007`: Arquitectura de Grafo DAG por Ramas de Carrera y Prerrequisitos.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-03-SUB-09,DOCS-03,,,[DOCS] Redactar `ADR-008`: Adopción Definitiva de NestJS como Motor de Backend.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `ADR-008`: Adopción Definitiva de NestJS como Motor de Backend.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-03-SUB-10,DOCS-03,,,[DOCS] Redactar `ADR-009`: Persistencia Híbrida Políglota (MongoDB Contenido + Supabase Transacciones).,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `ADR-009`: Persistencia Híbrida Políglota (MongoDB Contenido + Supabase Transacciones).
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-03-SUB-11,DOCS-03,,,"[DOCS] Organizar `docs/` en 5 subdirectorios (`01-producto-negocio`, `02-requisitos-ux`, `03-pedagogia-contenido`, `04-arquitectura-backend`, `05-devops-seguridad`) con índices `README.md`.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Organizar `docs/` en 5 subdirectorios (`01-producto-negocio`, `02-requisitos-ux`, `03-pedagogia-contenido`, `04-arquitectura-backend`, `05-devops-seguridad`) con índices `README.md`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-03-SUB-12,DOCS-03,,,"[DOCS] Crear `docs/README.md` con mapa conceptual Mermaid, catálogo maestro de 27 documentos y rutas por rol.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Crear `docs/README.md` con mapa conceptual Mermaid, catálogo maestro de 27 documentos y rutas por rol.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-04-SUB-01,DOCS-04,,,"[DOCS] Formalizar las directrices pedagógicas en `24_CONTENT_AUTHORING_GUIDE.md` (micro-lecciones de 40-70 palabras, sin spoilers, feedback inteligente).","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Formalizar las directrices pedagógicas en `24_CONTENT_AUTHORING_GUIDE.md` (micro-lecciones de 40-70 palabras, sin spoilers, feedback inteligente).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-04 — Estructurar el currículo pedagógico declarativo de Python 3.12
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-04`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-04.md`",devops,Highest,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-04-SUB-02,DOCS-04,,,[DOCS] Formalizar los esquemas JSON y validaciones en `23_CONTENT_SPECIFICATION.md`.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Formalizar los esquemas JSON y validaciones en `23_CONTENT_SPECIFICATION.md`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-04 — Estructurar el currículo pedagógico declarativo de Python 3.12
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-04`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-04.md`",devops,Highest,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-04-SUB-03,DOCS-04,,,[CONTENT] Crear `content/languages/python/manifest.json` con los 12 módulos canónicos de Python 3.12.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [CONTENT] Crear `content/languages/python/manifest.json` con los 12 módulos canónicos de Python 3.12.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-04 — Estructurar el currículo pedagógico declarativo de Python 3.12
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-docs-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-docs-04.md`",frontend,Highest,1,Sprint 0,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,DOCS-04-SUB-04,DOCS-04,,,"[CONTENT] Crear archivos de configuración en `content/languages/python/config/`: `thresholds.json` (Quiz 70%, Examen 80%), `xp.json` y `compositions.json`.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [CONTENT] Crear archivos de configuración en `content/languages/python/config/`: `thresholds.json` (Quiz 70%, Examen 80%), `xp.json` y `compositions.json`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-04 — Estructurar el currículo pedagógico declarativo de Python 3.12
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-docs-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-docs-04.md`",frontend,Highest,1,Sprint 0,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,DOCS-04-SUB-05,DOCS-04,,,"[CONTENT] Implementar `content/languages/python/modules/01_fundamentos/module.json` con lecciones atómicas de print(), cadenas, números y comentarios.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [CONTENT] Implementar `content/languages/python/modules/01_fundamentos/module.json` con lecciones atómicas de print(), cadenas, números y comentarios.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-04 — Estructurar el currículo pedagógico declarativo de Python 3.12
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-docs-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-docs-04.md`",frontend,Highest,1,Sprint 0,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,DOCS-04-SUB-06,DOCS-04,,,[CONTENT] Crear banco de preguntas en `content/languages/python/modules/01_fundamentos/bank.json`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [CONTENT] Crear banco de preguntas en `content/languages/python/modules/01_fundamentos/bank.json`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-04 — Estructurar el currículo pedagógico declarativo de Python 3.12
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-docs-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-docs-04.md`",frontend,Highest,1,Sprint 0,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,DOCS-04-SUB-07,DOCS-04,,,[DOCS] Crear `content/README.md` documentando la jerarquía de contenidos y validaciones.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Crear `content/README.md` documentando la jerarquía de contenidos y validaciones.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-04 — Estructurar el currículo pedagógico declarativo de Python 3.12
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-04`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-04.md`",devops,Highest,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-05-SUB-01,DOCS-05,,,"[DOCS] Redactar `16_GAMIFICATION.md` con economía de 10 acciones XP, sistema de estrellas 1–3⭐ y reglas anti-gaming.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `16_GAMIFICATION.md` con economía de 10 acciones XP, sistema de estrellas 1–3⭐ y reglas anti-gaming.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-05 — Especificar gamificación, pipeline de certificados, seguridad y UI/UX
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-05`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-05.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-05-SUB-02,DOCS-05,,,"[DOCS] Redactar `17_CERTIFICATION.md` con pipeline backend, identificador `KODA-PY-{SEQ}`, verificación pública y Google Drive Storage.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `17_CERTIFICATION.md` con pipeline backend, identificador `KODA-PY-{SEQ}`, verificación pública y Google Drive Storage.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-05 — Especificar gamificación, pipeline de certificados, seguridad y UI/UX
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-05`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-05.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-05-SUB-03,DOCS-05,,,"[DOCS] Redactar `19_SECURITY.md` con matriz STRIDE, 20 controles de seguridad y almacenamiento anonimizado de datos personales.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `19_SECURITY.md` con matriz STRIDE, 20 controles de seguridad y almacenamiento anonimizado de datos personales.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-05 — Especificar gamificación, pipeline de certificados, seguridad y UI/UX
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-05`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-05.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-05-SUB-04,DOCS-05,,,"[DOCS] Redactar `27_UI_UX_SPECIFICATION.md` con el diseño split-screen 50/50, sistema de atajos de teclado (`1-4`, `A-D`, `Enter`, flechas) y animaciones WebGL de Koda.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Redactar `27_UI_UX_SPECIFICATION.md` con el diseño split-screen 50/50, sistema de atajos de teclado (`1-4`, `A-D`, `Enter`, flechas) y animaciones WebGL de Koda.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-05 — Especificar gamificación, pipeline de certificados, seguridad y UI/UX
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-05`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-05.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,DOCS-05-SUB-05,DOCS-05,,,[DOCS] Actualizar `21_DEPLOYMENT.md` y `22_ROADMAP.md` sincronizándolos con el stack y las fases vigentes.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Actualizar `21_DEPLOYMENT.md` y `22_ROADMAP.md` sincronizándolos con el stack y las fases vigentes.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* DOCS-05 — Especificar gamificación, pipeline de certificados, seguridad y UI/UX
+* *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-docs-05`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-docs-05.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
+Sub-task,LAND-01-SUB-01,LAND-01,,,"[DISEÑO] Diseñar la distribución del Hero en Figma con la paleta Koda (fondo `#0B0F19`, gradientes violeta/ámbar sutiles).","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [DISEÑO] Diseñar la distribución del Hero en Figma con la paleta Koda (fondo `#0B0F19`, gradientes violeta/ámbar sutiles).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-01 — Construir Hero Section interactivo con Mascota Koda 🦊 en WebGL
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-01.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-01-SUB-02,LAND-01,,,[FRONTEND] Crear el componente `HeroSection.tsx` en `apps/web/src/components/landing/`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear el componente `HeroSection.tsx` en `apps/web/src/components/landing/`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-01 — Construir Hero Section interactivo con Mascota Koda 🦊 en WebGL
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-01.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-01-SUB-03,LAND-01,,,[FRONTEND] Integrar el componente `KodaMascot.tsx` en el Hero con contenedor responsive y dimensiones adaptativas.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Integrar el componente `KodaMascot.tsx` en el Hero con contenedor responsive y dimensiones adaptativas.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-01 — Construir Hero Section interactivo con Mascota Koda 🦊 en WebGL
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-01.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-01-SUB-04,LAND-01,,,[FRONTEND] Añadir eventos de puntero (pointermove) para que los ojos/orejas de Koda sigan sutilmente la posición del cursor.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Añadir eventos de puntero (pointermove) para que los ojos/orejas de Koda sigan sutilmente la posición del cursor.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-01 — Construir Hero Section interactivo con Mascota Koda 🦊 en WebGL
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-01.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-01-SUB-05,LAND-01,,,[FRONTEND] Implementar botones de llamada a la acción (CTA) con micro-animaciones en Tailwind (`hover:scale-105 transition-all`).,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Implementar botones de llamada a la acción (CTA) con micro-animaciones en Tailwind (`hover:scale-105 transition-all`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-01 — Construir Hero Section interactivo con Mascota Koda 🦊 en WebGL
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-01.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-01-SUB-06,LAND-01,,,"[TEST] Verificar rendimiento de renderizado a 60 FPS en navegadores Chromium, Safari y Firefox en móvil y escritorio.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Verificar rendimiento de renderizado a 60 FPS en navegadores Chromium, Safari y Firefox en móvil y escritorio.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-01 — Construir Hero Section interactivo con Mascota Koda 🦊 en WebGL
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-01.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-02-SUB-01,LAND-02,,,[FRONTEND] Crear componente `MethodologySection.tsx` en `apps/web/src/components/landing/`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear componente `MethodologySection.tsx` en `apps/web/src/components/landing/`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-02 — Desarrollar sección de Metodología y Diferenciadores Pedagógicos
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-02.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-02-SUB-02,LAND-02,,,"[FRONTEND] Maquetar el grid responsive (1 columna en móvil, 2 en tablet, 4 en desktop).","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Maquetar el grid responsive (1 columna en móvil, 2 en tablet, 4 en desktop).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-02 — Desarrollar sección de Metodología y Diferenciadores Pedagógicos
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-02.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-02-SUB-03,LAND-02,,,[FRONTEND] Crear tarjetas con fondo translúcido (`bg-slate-900/60 backdrop-blur-sm border border-slate-800`).,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear tarjetas con fondo translúcido (`bg-slate-900/60 backdrop-blur-sm border border-slate-800`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-02 — Desarrollar sección de Metodología y Diferenciadores Pedagógicos
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-02.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-02-SUB-04,LAND-02,,,"[FRONTEND] Añadir componente comparativo *""Antes vs. Con Koda""* con badges visuales de frustración vs. éxito.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Añadir componente comparativo *""Antes vs. Con Koda""* con badges visuales de frustración vs. éxito.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-02 — Desarrollar sección de Metodología y Diferenciadores Pedagógicos
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-02.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-02-SUB-05,LAND-02,,,[DOCS] Validar que los textos coincidan exactamente con la filosofía descrita en `01_PROJECT_OVERVIEW.md` §6.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Validar que los textos coincidan exactamente con la filosofía descrita en `01_PROJECT_OVERVIEW.md` §6.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-02 — Desarrollar sección de Metodología y Diferenciadores Pedagógicos
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-land-02`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-land-02.md`",devops,High,1,Sprint 1,"subtask, devops, koda-mvp, scrumban"
+Sub-task,LAND-03-SUB-01,LAND-03,,,[BACKEND/TYPES] Asegurar que el catálogo de módulos esté disponible vía `@koda/types` o importación estática de `manifest.json`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [BACKEND/TYPES] Asegurar que el catálogo de módulos esté disponible vía `@koda/types` o importación estática de `manifest.json`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-03 — Implementar visualizador interactivo del Roadmap de Python 3.12
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-03.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-03-SUB-02,LAND-03,,,[FRONTEND] Crear componente `CurriculumShowcase.tsx` en `apps/web/src/components/landing/`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear componente `CurriculumShowcase.tsx` en `apps/web/src/components/landing/`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-03 — Implementar visualizador interactivo del Roadmap de Python 3.12
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-03.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-03-SUB-03,LAND-03,,,[FRONTEND] Implementar tarjetas de módulo con estado visual desbloqueado/bloqueado.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Implementar tarjetas de módulo con estado visual desbloqueado/bloqueado.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-03 — Implementar visualizador interactivo del Roadmap de Python 3.12
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-03.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-03-SUB-04,LAND-03,,,[FRONTEND] Crear diálogo modal accesible (con Radix UI o Headless) para inspeccionar el temario de cada módulo.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear diálogo modal accesible (con Radix UI o Headless) para inspeccionar el temario de cada módulo.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-03 — Implementar visualizador interactivo del Roadmap de Python 3.12
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-03.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-03-SUB-05,LAND-03,,,[FRONTEND] Diseñar el nodo final del certificado con previsualización del diploma Koda 🦊.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Diseñar el nodo final del certificado con previsualización del diploma Koda 🦊.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-03 — Implementar visualizador interactivo del Roadmap de Python 3.12
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-03.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-04-SUB-01,LAND-04,,,"[BD] Crear tabla `waitlist_leads` en Supabase con columnas: `id (UUID)`, `email (VARCHAR UNIQUE)`, `created_at (TIMESTAMPTZ)`, `ip_hash (VARCHAR)`.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Crear tabla `waitlist_leads` en Supabase con columnas: `id (UUID)`, `email (VARCHAR UNIQUE)`, `created_at (TIMESTAMPTZ)`, `ip_hash (VARCHAR)`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-04 — Implementar formulario de Lista de Espera (Waitlist) con Confeti WebGL
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-land-04`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-land-04.md`",devops,Highest,1,Sprint 1,"subtask, devops, koda-mvp, scrumban"
+Sub-task,LAND-04-SUB-02,LAND-04,,,"[BACKEND] Crear módulo `WaitlistModule` en `apps/api/src/modules/waitlist/` con controlador, servicio y DTO de validación (`class-validator`).","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Crear módulo `WaitlistModule` en `apps/api/src/modules/waitlist/` con controlador, servicio y DTO de validación (`class-validator`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-04 — Implementar formulario de Lista de Espera (Waitlist) con Confeti WebGL
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-land-04`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-land-04.md`",backend,Highest,1,Sprint 1,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LAND-04-SUB-03,LAND-04,,,[BACKEND] Proteger endpoint con decorador de Rate Limiting en NestJS.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Proteger endpoint con decorador de Rate Limiting en NestJS.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-04 — Implementar formulario de Lista de Espera (Waitlist) con Confeti WebGL
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-land-04`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-land-04.md`",backend,Highest,1,Sprint 1,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LAND-04-SUB-04,LAND-04,,,"[FRONTEND] Crear componente `WaitlistForm.tsx` con estados: `idle`, `loading`, `success`, `error`.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear componente `WaitlistForm.tsx` con estados: `idle`, `loading`, `success`, `error`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-04 — Implementar formulario de Lista de Espera (Waitlist) con Confeti WebGL
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-04.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-04-SUB-05,LAND-04,,,[FRONTEND] Disparar efecto de confeti acelerado de PixiJS (`Mascota Confetti Engine`) en el estado `success`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Disparar efecto de confeti acelerado de PixiJS (`Mascota Confetti Engine`) en el estado `success`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-04 — Implementar formulario de Lista de Espera (Waitlist) con Confeti WebGL
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-04.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-04-SUB-06,LAND-04,,,[FRONTEND] Guardar bandera en `localStorage` (`koda_waitlist_registered=true`) para recordar al usuario su registro previo.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Guardar bandera en `localStorage` (`koda_waitlist_registered=true`) para recordar al usuario su registro previo.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-04 — Implementar formulario de Lista de Espera (Waitlist) con Confeti WebGL
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-04.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-05-SUB-01,LAND-05,,,[FRONTEND] Crear o actualizar `apps/web/src/middleware.ts` para evaluar la bandera `COMING_SOON_MODE`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear o actualizar `apps/web/src/middleware.ts` para evaluar la bandera `COMING_SOON_MODE`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-05 — Implementar Modo ""Próximamente"" (Coming Soon Gate) para Despliegue Inicial
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-05`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-05.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-05-SUB-02,LAND-05,,,[FRONTEND] Crear componente `ComingSoonBanner.tsx` en la cabecera de la aplicación.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear componente `ComingSoonBanner.tsx` en la cabecera de la aplicación.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-05 — Implementar Modo ""Próximamente"" (Coming Soon Gate) para Despliegue Inicial
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-05`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-05.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-05-SUB-03,LAND-05,,,[FRONTEND] Implementar modal/toast informativo si el usuario fue redirigido por intentar ingresar a una ruta protegida.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Implementar modal/toast informativo si el usuario fue redirigido por intentar ingresar a una ruta protegida.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-05 — Implementar Modo ""Próximamente"" (Coming Soon Gate) para Despliegue Inicial
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-05`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-05.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-05-SUB-04,LAND-05,,,[CONFIG] Añadir `NEXT_PUBLIC_COMING_SOON_MODE=true` en `apps/web/.env.example` y documentar su comportamiento.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [CONFIG] Añadir `NEXT_PUBLIC_COMING_SOON_MODE=true` en `apps/web/.env.example` y documentar su comportamiento.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-05 — Implementar Modo ""Próximamente"" (Coming Soon Gate) para Despliegue Inicial
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-05`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-05.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-05-SUB-05,LAND-05,,,[TEST] Verificar que con la bandera en `true` no es posible acceder al árbol educativo `/app/` y con `false` el acceso es libre.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Verificar que con la bandera en `true` no es posible acceder al árbol educativo `/app/` y con `false` el acceso es libre.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-05 — Implementar Modo ""Próximamente"" (Coming Soon Gate) para Despliegue Inicial
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-05`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-05.md`",frontend,Highest,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-06-SUB-01,LAND-06,,,[FRONTEND] Crear componente `FaqSection.tsx` utilizando acordeón accesible (animación de apertura fluida en CSS/Tailwind).,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear componente `FaqSection.tsx` utilizando acordeón accesible (animación de apertura fluida en CSS/Tailwind).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-06 — Implementar sección de Preguntas Frecuentes (FAQ) y Footer Institucional
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-06`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-06.md`",frontend,Medium,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-06-SUB-02,LAND-06,,,[FRONTEND] Redactar las 6 respuestas con tono empático y motivador acorde al manual de marca.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Redactar las 6 respuestas con tono empático y motivador acorde al manual de marca.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-06 — Implementar sección de Preguntas Frecuentes (FAQ) y Footer Institucional
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-06`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-06.md`",frontend,Medium,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-06-SUB-03,LAND-06,,,"[FRONTEND] Crear componente `Footer.tsx` con navegación a secciones internas (`#metodologia`, `#roadmap`, `#waitlist`, `#faq`).","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear componente `Footer.tsx` con navegación a secciones internas (`#metodologia`, `#roadmap`, `#waitlist`, `#faq`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-06 — Implementar sección de Preguntas Frecuentes (FAQ) y Footer Institucional
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-06`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-06.md`",frontend,Medium,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-06-SUB-04,LAND-06,,,[FRONTEND] Añadir enlace al portal de verificación de certificados (`/verificar`).,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Añadir enlace al portal de verificación de certificados (`/verificar`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-06 — Implementar sección de Preguntas Frecuentes (FAQ) y Footer Institucional
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-06`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-06.md`",frontend,Medium,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-06-SUB-05,LAND-06,,,"[TEST] Verificar accesibilidad del acordeón mediante navegación por teclado (teclas `Tab`, `Enter`, `Espacio`).","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Verificar accesibilidad del acordeón mediante navegación por teclado (teclas `Tab`, `Enter`, `Espacio`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-06 — Implementar sección de Preguntas Frecuentes (FAQ) y Footer Institucional
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-06`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-06.md`",frontend,Medium,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-07-SUB-01,LAND-07,,,[SEO] Generar metadatos dinámicos y OpenGraph tags en `apps/web/src/app/layout.tsx`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [SEO] Generar metadatos dinámicos y OpenGraph tags en `apps/web/src/app/layout.tsx`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-07 — Optimizar SEO, OpenGraph, Rendimiento Lighthouse 95+ y Responsive
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-07`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-07.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-07-SUB-02,LAND-07,,,[DISEÑO/ASSETS] Crear asset gráfico `og-image.png` (1200x630px) con la mascota Koda 🦊 y branding oficial en `apps/web/public/`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [DISEÑO/ASSETS] Crear asset gráfico `og-image.png` (1200x630px) con la mascota Koda 🦊 y branding oficial en `apps/web/public/`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-07 — Optimizar SEO, OpenGraph, Rendimiento Lighthouse 95+ y Responsive
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-07`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-07.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-07-SUB-03,LAND-07,,,[SEO] Crear `apps/web/src/app/robots.ts` y `apps/web/src/app/sitemap.ts` automáticos de Next.js.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [SEO] Crear `apps/web/src/app/robots.ts` y `apps/web/src/app/sitemap.ts` automáticos de Next.js.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-07 — Optimizar SEO, OpenGraph, Rendimiento Lighthouse 95+ y Responsive
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-07`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-07.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-07-SUB-04,LAND-07,,,[PERFORMANCE] Optimizar carga de fuentes tipográficas usando `next/font` con subsets latinos (`Inter` o `Geist`).,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [PERFORMANCE] Optimizar carga de fuentes tipográficas usando `next/font` con subsets latinos (`Inter` o `Geist`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-07 — Optimizar SEO, OpenGraph, Rendimiento Lighthouse 95+ y Responsive
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-07`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-07.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-07-SUB-05,LAND-07,,,[PERFORMANCE] Configurar carga diferida (lazy loading / dynamic import con `ssr: false`) para el motor PixiJS WebGL de modo que no bloquee el First Contentful Paint (FCP).,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [PERFORMANCE] Configurar carga diferida (lazy loading / dynamic import con `ssr: false`) para el motor PixiJS WebGL de modo que no bloquee el First Contentful Paint (FCP).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-07 — Optimizar SEO, OpenGraph, Rendimiento Lighthouse 95+ y Responsive
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-07`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-07.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LAND-07-SUB-06,LAND-07,,,"[TEST] Ejecutar auditoría Lighthouse en modo incógnito sobre el build de producción y validar métricas Core Web Vitals (LCP < 1.5s, CLS < 0.05).","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Ejecutar auditoría Lighthouse en modo incógnito sobre el build de producción y validar métricas Core Web Vitals (LCP < 1.5s, CLS < 0.05).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LAND-07 — Optimizar SEO, OpenGraph, Rendimiento Lighthouse 95+ y Responsive
+* *Épica:* EPIC-2: Landing Page Informativa y Modo ""Próximamente"" para Despliegue
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-land-07`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-land-07.md`",frontend,High,1,Sprint 1,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,AUTH-01-SUB-01,AUTH-01,,,[BD] Configurar tabla consolidada `public.users` vinculada a `auth.users(id)` con RLS y trigger `on_auth_user_created`.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Configurar tabla consolidada `public.users` vinculada a `auth.users(id)` con RLS y trigger `on_auth_user_created`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* AUTH-01 — Registro de usuario y autenticación con Supabase Auth (Sin Redundancia)
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-auth-01`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-auth-01.md`",devops,Highest,1,Sprint 2,"subtask, devops, koda-mvp, scrumban"
+Sub-task,AUTH-01-SUB-02,AUTH-01,,,[BACKEND] Implementar `AuthModule` en `apps/api/src/presentation/rest/auth/` con verificación de tokens Supabase y guards de autenticación.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Implementar `AuthModule` en `apps/api/src/presentation/rest/auth/` con verificación de tokens Supabase y guards de autenticación.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* AUTH-01 — Registro de usuario y autenticación con Supabase Auth (Sin Redundancia)
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-auth-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-auth-01.md`",backend,Highest,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,AUTH-01-SUB-03,AUTH-01,,,[BACKEND] Configurar `SupabaseAuthGuard` y decorador `@CurrentUser()` para inyección del usuario autenticado en controladores NestJS.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Configurar `SupabaseAuthGuard` y decorador `@CurrentUser()` para inyección del usuario autenticado en controladores NestJS.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* AUTH-01 — Registro de usuario y autenticación con Supabase Auth (Sin Redundancia)
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-auth-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-auth-01.md`",backend,Highest,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,AUTH-01-SUB-04,AUTH-01,,,[FRONTEND] Configurar cliente de Supabase (`@supabase/ssr` / `@supabase/supabase-js`) en `apps/web` para sesión persistente.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Configurar cliente de Supabase (`@supabase/ssr` / `@supabase/supabase-js`) en `apps/web` para sesión persistente.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-01 — Registro de usuario y autenticación con Supabase Auth (Sin Redundancia)
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-auth-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-01.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,AUTH-01-SUB-05,AUTH-01,,,[FRONTEND] Diseñar formulario de autenticación interactivo en `apps/web/src/app/login/page.tsx` y `apps/web/src/views/login/` con validación Zod y React Hook Form.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Diseñar formulario de autenticación interactivo en `apps/web/src/app/login/page.tsx` y `apps/web/src/views/login/` con validación Zod y React Hook Form.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* AUTH-01 — Registro de usuario y autenticación con Supabase Auth (Sin Redundancia)
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-auth-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-01.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,AUTH-01-SUB-06,AUTH-01,,,[FRONTEND] Persistir estado de autenticación en Zustand `auth.store.ts`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Persistir estado de autenticación en Zustand `auth.store.ts`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* AUTH-01 — Registro de usuario y autenticación con Supabase Auth (Sin Redundancia)
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-auth-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-01.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,AUTH-02-SUB-01,AUTH-02,,,[FRONTEND] Implementar flujo multi-paso del Wizard de registro en `apps/web/src/app/register/page.tsx` con stepper dinámico y animaciones.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Implementar flujo multi-paso del Wizard de registro en `apps/web/src/app/register/page.tsx` con stepper dinámico y animaciones.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* AUTH-02 — Wizard de Onboarding Pedagógico de 5 Pasos y Evaluación Diagnóstica
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-auth-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-02.md`",frontend,High,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,AUTH-02-SUB-02,AUTH-02,,,"[FRONTEND] Integrar selector de metas diarias (5, 10, 15, 20 minutos) con micro-animación de Koda 🦊.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Integrar selector de metas diarias (5, 10, 15, 20 minutos) con micro-animación de Koda 🦊.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* AUTH-02 — Wizard de Onboarding Pedagógico de 5 Pasos y Evaluación Diagnóstica
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-auth-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-02.md`",frontend,High,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,AUTH-02-SUB-03,AUTH-02,,,[BACKEND] Endpoint `POST /api/v1/learning/diagnostic/submit` que evalúa respuestas diagnósticas y calcula el módulo de entrada.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Endpoint `POST /api/v1/learning/diagnostic/submit` que evalúa respuestas diagnósticas y calcula el módulo de entrada.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-02 — Wizard de Onboarding Pedagógico de 5 Pasos y Evaluación Diagnóstica
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-auth-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-auth-02.md`",backend,High,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,AUTH-02-SUB-04,AUTH-02,,,[BACKEND] Endpoint `GET /api/v1/learning/diagnostic/questions` con 12 reactivos calibrados de fundamentos de Python.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Endpoint `GET /api/v1/learning/diagnostic/questions` con 12 reactivos calibrados de fundamentos de Python.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-02 — Wizard de Onboarding Pedagógico de 5 Pasos y Evaluación Diagnóstica
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-auth-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-auth-02.md`",backend,High,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,AUTH-02-SUB-05,AUTH-02,,,[TEST] Pruebas unitarias para validar la inserción de las preferencias de onboarding en `public.users` al registrarse.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Pruebas unitarias para validar la inserción de las preferencias de onboarding en `public.users` al registrarse.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-02 — Wizard de Onboarding Pedagógico de 5 Pasos y Evaluación Diagnóstica
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-auth-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-02.md`",frontend,High,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,AUTH-03-SUB-01,AUTH-03,,,[BD] Definir columnas de perfil y preferencias en `public.users` enlazadas a `auth.users` con constraints de formato y longitud (migración `20260914000001_consolidate_users_with_auth_users.sql`).,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Definir columnas de perfil y preferencias en `public.users` enlazadas a `auth.users` con constraints de formato y longitud (migración `20260914000001_consolidate_users_with_auth_users.sql`).
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* AUTH-03 — Gestión de Perfil de Usuario Consolidado y Métricas en Tiempo Real
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-auth-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-auth-03.md`",devops,Medium,1,Sprint 2,"subtask, devops, koda-mvp, scrumban"
+Sub-task,AUTH-03-SUB-02,AUTH-03,,,"[BACKEND] Resolver GraphQL `UserResolver` (`Query userProfile`) en `infrastructure/` implementando el puerto `IUserRepository` (`ADR-010`, `ADR-012`).","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Resolver GraphQL `UserResolver` (`Query userProfile`) en `infrastructure/` implementando el puerto `IUserRepository` (`ADR-010`, `ADR-012`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-03 — Gestión de Perfil de Usuario Consolidado y Métricas en Tiempo Real
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-auth-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-auth-03.md`",backend,Medium,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,AUTH-03-SUB-03,AUTH-03,,,"[BACKEND] Controlador REST `UsersController` (`GET /api/v1/users/me`, `PATCH /api/v1/users/me` y subida de avatares).","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Controlador REST `UsersController` (`GET /api/v1/users/me`, `PATCH /api/v1/users/me` y subida de avatares).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-03 — Gestión de Perfil de Usuario Consolidado y Métricas en Tiempo Real
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-auth-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-auth-03.md`",backend,Medium,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,AUTH-03-SUB-04,AUTH-03,,,"[FRONTEND] Pantalla `apps/web/src/app/perfil/page.tsx` con grid de estadísticas (tiempo total de estudio, racha actual, XP y nivel) y badge de nivel.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Pantalla `apps/web/src/app/perfil/page.tsx` con grid de estadísticas (tiempo total de estudio, racha actual, XP y nivel) y badge de nivel.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-03 — Gestión de Perfil de Usuario Consolidado y Métricas en Tiempo Real
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-auth-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-03.md`",frontend,Medium,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,AUTH-03-SUB-05,AUTH-03,,,"[FRONTEND] Selector de avatares SVG de Koda 🦊 y formulario de edición con validación de nombre, bio y cédula/pasaporte.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Selector de avatares SVG de Koda 🦊 y formulario de edición con validación de nombre, bio y cédula/pasaporte.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-03 — Gestión de Perfil de Usuario Consolidado y Métricas en Tiempo Real
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-auth-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-03.md`",frontend,Medium,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,AUTH-03-SUB-06,AUTH-03,,,[FRONTEND] Toast interactivo de confirmación al actualizar datos.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Toast interactivo de confirmación al actualizar datos.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-03 — Gestión de Perfil de Usuario Consolidado y Métricas en Tiempo Real
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-auth-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-03.md`",frontend,Medium,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,AUTH-04-SUB-01,AUTH-04,,,[SUPABASE] Configurar plantilla de email de recuperación en Supabase Auth con identidad visual oficial de Koda.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [SUPABASE] Configurar plantilla de email de recuperación en Supabase Auth con identidad visual oficial de Koda.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-04 — Recuperación de Contraseña y Verificación de Correo en Supabase Auth
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-auth-04`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-auth-04.md`",devops,Medium,1,Sprint 2,"subtask, devops, koda-mvp, scrumban"
+Sub-task,AUTH-04-SUB-02,AUTH-04,,,[FRONTEND] Pantalla `apps/web/src/app/recuperar-password/page.tsx` con formulario amigable de solicitud.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Pantalla `apps/web/src/app/recuperar-password/page.tsx` con formulario amigable de solicitud.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-04 — Recuperación de Contraseña y Verificación de Correo en Supabase Auth
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-auth-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-04.md`",frontend,Medium,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,AUTH-04-SUB-03,AUTH-04,,,[FRONTEND] Pantalla `apps/web/src/app/actualizar-password/page.tsx` para captura y validación de nueva clave.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Pantalla `apps/web/src/app/actualizar-password/page.tsx` para captura y validación de nueva clave.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-04 — Recuperación de Contraseña y Verificación de Correo en Supabase Auth
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-auth-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-04.md`",frontend,Medium,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,AUTH-04-SUB-04,AUTH-04,,,[TEST] Validación end-to-end del flujo de reseteo y comprobación de expiración del enlace.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Validación end-to-end del flujo de reseteo y comprobación de expiración del enlace.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* AUTH-04 — Recuperación de Contraseña y Verificación de Correo en Supabase Auth
+* *Épica:* EPIC-3: Autenticación, Perfiles de Usuario y Onboarding
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-auth-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-04.md`",frontend,Medium,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-01-SUB-01,LEARN-01,,,"[FRONTEND] Implementar hook `useRoadmapPanZoom.ts` con manejo de punteros, rueda del ratón y límites espaciales (ADR-007).","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Implementar hook `useRoadmapPanZoom.ts` con manejo de punteros, rueda del ratón y límites espaciales (ADR-007).
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-01 — Lienzo Interactivo de Grafo DAG con Topología Tier/Lane, Paneo/Zoom y Shaders GPU
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-01.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-01-SUB-02,LEARN-01,,,[FRONTEND] Integrar aceleración `transform` y discriminador de arrastre vs. clic en `RoadmapCanvas.tsx`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Integrar aceleración `transform` y discriminador de arrastre vs. clic en `RoadmapCanvas.tsx`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-01 — Lienzo Interactivo de Grafo DAG con Topología Tier/Lane, Paneo/Zoom y Shaders GPU
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-01.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-01-SUB-03,LEARN-01,,,[FRONTEND] Implementar controles de zoom y botón de recentrado focal en `RoadmapCanvasControls.tsx`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Implementar controles de zoom y botón de recentrado focal en `RoadmapCanvasControls.tsx`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-01 — Lienzo Interactivo de Grafo DAG con Topología Tier/Lane, Paneo/Zoom y Shaders GPU
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-01.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-01-SUB-04,LEARN-01,,,[FRONTEND] Optimizar renderizado de aristas con topología tier/lane y flujos vectoriales GPU en `RoadmapSvgPaths.tsx`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Optimizar renderizado de aristas con topología tier/lane y flujos vectoriales GPU en `RoadmapSvgPaths.tsx`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-01 — Lienzo Interactivo de Grafo DAG con Topología Tier/Lane, Paneo/Zoom y Shaders GPU
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-01.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-01-SUB-05,LEARN-01,,,[FRONTEND] Modularizar canvas de estrellas ambientales y partículas a 120 FPS en `RoadmapAmbientStars.tsx`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Modularizar canvas de estrellas ambientales y partículas a 120 FPS en `RoadmapAmbientStars.tsx`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-01 — Lienzo Interactivo de Grafo DAG con Topología Tier/Lane, Paneo/Zoom y Shaders GPU
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-01.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-02-SUB-01,LEARN-02,,,"[FRONTEND] Crear datasets curriculares mock (`frontend-track.mock.ts`, `backend-track.mock.ts`, `devops-track.mock.ts`, `python-courses-graph.mock.ts`).","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear datasets curriculares mock (`frontend-track.mock.ts`, `backend-track.mock.ts`, `devops-track.mock.ts`, `python-courses-graph.mock.ts`).
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-02 — Especialización Profesional Multi-Rama (Frontend, Backend, DevOps) y Apex Master Gate
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-02.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-02-SUB-02,LEARN-02,,,[FRONTEND] Implementar conmutador de ramas en `RoadmapSidebarBranches.tsx` y sincronizar con `roadmap.store.ts`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Implementar conmutador de ramas en `RoadmapSidebarBranches.tsx` y sincronizar con `roadmap.store.ts`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-02 — Especialización Profesional Multi-Rama (Frontend, Backend, DevOps) y Apex Master Gate
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-02.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-02-SUB-03,LEARN-02,,,[FRONTEND] Diseñar nodo visual terminal `Apex Master Gate` con estilos de alta jerarquía y compuerta final.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Diseñar nodo visual terminal `Apex Master Gate` con estilos de alta jerarquía y compuerta final.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-02 — Especialización Profesional Multi-Rama (Frontend, Backend, DevOps) y Apex Master Gate
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-02.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-02-SUB-04,LEARN-02,,,"[BACKEND] Modelos Mongoose `TrackSchema`, `CourseSchema` con topología `tier`/`lane` y `VisualEffectSchema` en `apps/api/src/database/schemas/`.","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Modelos Mongoose `TrackSchema`, `CourseSchema` con topología `tier`/`lane` y `VisualEffectSchema` en `apps/api/src/database/schemas/`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-02 — Especialización Profesional Multi-Rama (Frontend, Backend, DevOps) y Apex Master Gate
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-learn-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-learn-02.md`",backend,Highest,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LEARN-02-SUB-05,LEARN-02,,,[BACKEND] Definir puerto `ICourseRepository` en capa de dominio y adaptador `MongoCourseRepository` en infraestructura (`ADR-010`).,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Definir puerto `ICourseRepository` en capa de dominio y adaptador `MongoCourseRepository` en infraestructura (`ADR-010`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LEARN-02 — Especialización Profesional Multi-Rama (Frontend, Backend, DevOps) y Apex Master Gate
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-learn-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-learn-02.md`",backend,Highest,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LEARN-02-SUB-06,LEARN-02,,,[BACKEND] Resolver GraphQL `LearningResolver` con `Query roadmapGraph(branch)` y DataLoader para resolver dependencias DAG sin N+1 (`ADR-012`).,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Resolver GraphQL `LearningResolver` con `Query roadmapGraph(branch)` y DataLoader para resolver dependencias DAG sin N+1 (`ADR-012`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LEARN-02 — Especialización Profesional Multi-Rama (Frontend, Backend, DevOps) y Apex Master Gate
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-learn-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-learn-02.md`",backend,Highest,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LEARN-02-SUB-07,LEARN-02,,,[BACKEND] Endpoint REST `GET /api/v1/content/tracks/:slug` con resolución de dependencias DAG.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Endpoint REST `GET /api/v1/content/tracks/:slug` con resolución de dependencias DAG.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LEARN-02 — Especialización Profesional Multi-Rama (Frontend, Backend, DevOps) y Apex Master Gate
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-learn-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-learn-02.md`",backend,Highest,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LEARN-03-SUB-01,LEARN-03,,,[FRONTEND] Estandarizar renderizado de candados y etiquetas `RQ {requisito}` en `RoadmapGraphNode.tsx`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Estandarizar renderizado de candados y etiquetas `RQ {requisito}` en `RoadmapGraphNode.tsx`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-03 — Desbloqueo Progresivo con Candados Estandarizados y Prerrequisitos Compactos `RQ {req}`
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-03.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-03-SUB-02,LEARN-03,,,[FRONTEND] Conectar widget de Siguiente Hito en `RoadmapSidebarGoal.tsx` para reflejar el curso bloqueado real de la rama activa.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Conectar widget de Siguiente Hito en `RoadmapSidebarGoal.tsx` para reflejar el curso bloqueado real de la rama activa.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-03 — Desbloqueo Progresivo con Candados Estandarizados y Prerrequisitos Compactos `RQ {req}`
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-03.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-03-SUB-03,LEARN-03,,,[BACKEND] Guard de NestJS `PrerequisitesGuard` que verifique en Supabase PostgreSQL el cumplimiento de dependencias antes de servir lecciones.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Guard de NestJS `PrerequisitesGuard` que verifique en Supabase PostgreSQL el cumplimiento de dependencias antes de servir lecciones.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LEARN-03 — Desbloqueo Progresivo con Candados Estandarizados y Prerrequisitos Compactos `RQ {req}`
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-learn-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-learn-03.md`",backend,Highest,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LEARN-03-SUB-04,LEARN-03,,,[TEST] Pruebas unitarias en Jest para validación de grafos DAG sin ciclos y evaluación de prerrequisitos múltiples.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Pruebas unitarias en Jest para validación de grafos DAG sin ciclos y evaluación de prerrequisitos múltiples.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LEARN-03 — Desbloqueo Progresivo con Candados Estandarizados y Prerrequisitos Compactos `RQ {req}`
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-03.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-04-SUB-01,LEARN-04,,,"[BD] Tabla `user_section_stars` en Supabase con campos `stars_earned`, `max_stars_earned`, `attempts_count`, RLS y trigger de recálculo de módulo.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Tabla `user_section_stars` en Supabase con campos `stars_earned`, `max_stars_earned`, `attempts_count`, RLS y trigger de recálculo de módulo.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-04 — Sistema de Calificación de 1 a 3 Estrellas (⭐) Vinculado a la Tríada Evaluativa
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-learn-04`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-learn-04.md`",devops,High,1,Sprint 2,"subtask, devops, koda-mvp, scrumban"
+Sub-task,LEARN-04-SUB-02,LEARN-04,,,[BACKEND] Algoritmo en `ProgressService` (NestJS) que compute la tríada de aciertos y persista las estrellas obtenidas.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Algoritmo en `ProgressService` (NestJS) que compute la tríada de aciertos y persista las estrellas obtenidas.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LEARN-04 — Sistema de Calificación de 1 a 3 Estrellas (⭐) Vinculado a la Tríada Evaluativa
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-learn-04`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-learn-04.md`",backend,High,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LEARN-04-SUB-03,LEARN-04,,,[FRONTEND] Componente `StarRatingDisplay.tsx` con animación escalonada de estrellas doradas y feedback según ítems superados.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Componente `StarRatingDisplay.tsx` con animación escalonada de estrellas doradas y feedback según ítems superados.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LEARN-04 — Sistema de Calificación de 1 a 3 Estrellas (⭐) Vinculado a la Tríada Evaluativa
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-04.md`",frontend,High,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LEARN-05-SUB-01,LEARN-05,,,"[BACKEND] Configurar esquemas de Mongoose en `apps/api/src/database/schemas/` (`Track`, `Course`, `Module`, `Section`, `Lesson`, `VisualEffect`) y semillas de datos.","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Configurar esquemas de Mongoose en `apps/api/src/database/schemas/` (`Track`, `Course`, `Module`, `Section`, `Lesson`, `VisualEffect`) y semillas de datos.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-05 — Persistencia Híbrida Políglota y Topología de Rejilla (Tier/Lane)
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-learn-05`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-learn-05.md`",backend,Highest,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LEARN-05-SUB-02,LEARN-05,,,[BD] Migraciones DDL desplegadas en Supabase PostgreSQL con RLS y triggers de inmutabilidad y cálculo de racha.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Migraciones DDL desplegadas en Supabase PostgreSQL con RLS y triggers de inmutabilidad y cálculo de racha.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LEARN-05 — Persistencia Híbrida Políglota y Topología de Rejilla (Tier/Lane)
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-learn-05`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-learn-05.md`",devops,Highest,1,Sprint 2,"subtask, devops, koda-mvp, scrumban"
+Sub-task,LEARN-05-SUB-03,LEARN-05,,,"[BACKEND] Resolver GraphQL `LearningResolver` con `Query roadmapProgress` conectando puertos `ICourseRepository` e `IProgressRepository` (`ADR-010`, `ADR-012`).","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Resolver GraphQL `LearningResolver` con `Query roadmapProgress` conectando puertos `ICourseRepository` e `IProgressRepository` (`ADR-010`, `ADR-012`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LEARN-05 — Persistencia Híbrida Políglota y Topología de Rejilla (Tier/Lane)
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-learn-05`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-learn-05.md`",backend,Highest,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LEARN-05-SUB-04,LEARN-05,,,[BACKEND] Endpoint REST `GET /api/v1/learning/roadmap/progress` que fusiona la telemetría de Supabase con los nodos de MongoDB.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Endpoint REST `GET /api/v1/learning/roadmap/progress` que fusiona la telemetría de Supabase con los nodos de MongoDB.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LEARN-05 — Persistencia Híbrida Políglota y Topología de Rejilla (Tier/Lane)
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-learn-05`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-learn-05.md`",backend,Highest,1,Sprint 2,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LEARN-05-SUB-05,LEARN-05,,,[TEST] Test de rendimiento verificando latencia p95 < 30 ms en la entrega de la hoja de ruta combinada.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Test de rendimiento verificando latencia p95 < 30 ms en la entrega de la hoja de ruta combinada.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LEARN-05 — Persistencia Híbrida Políglota y Topología de Rejilla (Tier/Lane)
+* *Épica:* EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-learn-05`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-learn-05.md`",frontend,Highest,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-01-SUB-01,LESS-01,,,[FRONTEND] Crear layout `LessonWorkspaceLayout.tsx` en `apps/web/src/components/lesson/`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear layout `LessonWorkspaceLayout.tsx` en `apps/web/src/components/lesson/`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-01 — Layout 50/50 Split Desktop y Stepper de 10 Píldoras
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-01.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-01-SUB-02,LESS-01,,,[FRONTEND] Crear componente `SectionStepper.tsx` que reciba el arreglo de 10 lecciones y el índice activo.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear componente `SectionStepper.tsx` que reciba el arreglo de 10 lecciones y el índice activo.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-01 — Layout 50/50 Split Desktop y Stepper de 10 Píldoras
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-01.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-01-SUB-03,LESS-01,,,[FRONTEND] Integrar visor de código con resaltado sintáctico de Python (Shiki / PrismJS en tema oscuro `#0F172A`).,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Integrar visor de código con resaltado sintáctico de Python (Shiki / PrismJS en tema oscuro `#0F172A`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-01 — Layout 50/50 Split Desktop y Stepper de 10 Píldoras
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-01.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-01-SUB-04,LESS-01,,,[FRONTEND] Diseñar consola de salida de texto interactiva con tipografía JetBrains Mono.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Diseñar consola de salida de texto interactiva con tipografía JetBrains Mono.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-01 — Layout 50/50 Split Desktop y Stepper de 10 Píldoras
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-01.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-01-SUB-05,LESS-01,,,[TEST] Verificar renderizado sin scrolls horizontales ni verticales en resolución estándar 1366x768 y 1920x1080.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Verificar renderizado sin scrolls horizontales ni verticales en resolución estándar 1366x768 y 1920x1080.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-01 — Layout 50/50 Split Desktop y Stepper de 10 Píldoras
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-01.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-02-SUB-01,LESS-02,,,[FRONTEND] Implementar hook personalizado `useLessonKeyboardShortcuts.ts` con `useEffect` y listeners de `keydown`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Implementar hook personalizado `useLessonKeyboardShortcuts.ts` con `useEffect` y listeners de `keydown`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-02 — Sistema de Atajos de Teclado Ergonómicos (`1-4`, `A-D`, `Enter`, Flechas)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-02.md`",frontend,High,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-02-SUB-02,LESS-02,,,[FRONTEND] Mostrar etiquetas discretas de teclas sobre las tarjetas de opción en escritorio.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Mostrar etiquetas discretas de teclas sobre las tarjetas de opción en escritorio.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-02 — Sistema de Atajos de Teclado Ergonómicos (`1-4`, `A-D`, `Enter`, Flechas)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-02.md`",frontend,High,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-02-SUB-03,LESS-02,,,[FRONTEND] Añadir indicador visual de tecla presionada con feedback táctil sutil.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Añadir indicador visual de tecla presionada con feedback táctil sutil.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-02 — Sistema de Atajos de Teclado Ergonómicos (`1-4`, `A-D`, `Enter`, Flechas)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-02.md`",frontend,High,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-02-SUB-04,LESS-02,,,[TEST] Tests unitarios con `@testing-library/react` simulando eventos de teclado y transiciones de estado.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Tests unitarios con `@testing-library/react` simulando eventos de teclado y transiciones de estado.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-02 — Sistema de Atajos de Teclado Ergonómicos (`1-4`, `A-D`, `Enter`, Flechas)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-02.md`",frontend,High,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-03-SUB-01,LESS-03,,,[BACKEND] Esquema Mongoose `LessonSchema` en `apps/api/src/database/schemas/lesson.schema.ts` formalizando los 3 ítems y semillas de ejemplo.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Esquema Mongoose `LessonSchema` en `apps/api/src/database/schemas/lesson.schema.ts` formalizando los 3 ítems y semillas de ejemplo.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LESS-03 — Tríada Evaluativa de 3 Ítems por Lección y Puntuación Formativa (1–3⭐)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-less-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-less-03.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LESS-03-SUB-02,LESS-03,,,[BACKEND] Caso de uso `SubmitLessonUseCase` en `application/` y Resolver GraphQL `LearningResolver.submitLessonAnswer()` en `infrastructure/` (`ADR-012`).,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Caso de uso `SubmitLessonUseCase` en `application/` y Resolver GraphQL `LearningResolver.submitLessonAnswer()` en `infrastructure/` (`ADR-012`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-03 — Tríada Evaluativa de 3 Ítems por Lección y Puntuación Formativa (1–3⭐)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-less-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-less-03.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LESS-03-SUB-03,LESS-03,,,[BACKEND] Servicio `LearningService.evaluateTriad()` en NestJS que valide deterministamente los 3 ítems y registre el intento en `attempts`.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Servicio `LearningService.evaluateTriad()` en NestJS que valide deterministamente los 3 ítems y registre el intento en `attempts`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-03 — Tríada Evaluativa de 3 Ítems por Lección y Puntuación Formativa (1–3⭐)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-less-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-less-03.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LESS-03-SUB-04,LESS-03,,,"[BACKEND] Emisión asíncrona del evento de dominio `LessonCompletedEvent` con BullMQ (`ADR-010`, `ADR-011`).","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Emisión asíncrona del evento de dominio `LessonCompletedEvent` con BullMQ (`ADR-010`, `ADR-011`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-03 — Tríada Evaluativa de 3 Ítems por Lección y Puntuación Formativa (1–3⭐)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-less-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-less-03.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LESS-03-SUB-05,LESS-03,,,[BACKEND] Persistencia atómica del intento mediante el puerto `IProgressRepository` en Supabase PostgreSQL.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Persistencia atómica del intento mediante el puerto `IProgressRepository` en Supabase PostgreSQL.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-03 — Tríada Evaluativa de 3 Ítems por Lección y Puntuación Formativa (1–3⭐)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-less-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-less-03.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LESS-03-SUB-06,LESS-03,,,[FRONTEND] Orquestador visual del flujo de la tríada en `LessonWorkspaceLayout.tsx`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Orquestador visual del flujo de la tríada en `LessonWorkspaceLayout.tsx`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-03 — Tríada Evaluativa de 3 Ítems por Lección y Puntuación Formativa (1–3⭐)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-03.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-03-SUB-07,LESS-03,,,"[FRONTEND] Componente `FeedbackBanner.tsx` con estados visuales diferenciados (éxito, error, pista) y animación de Koda 🦊.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Componente `FeedbackBanner.tsx` con estados visuales diferenciados (éxito, error, pista) y animación de Koda 🦊.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-03 — Tríada Evaluativa de 3 Ítems por Lección y Puntuación Formativa (1–3⭐)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-03.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-03-SUB-08,LESS-03,,,[FRONTEND] Actualizar barra de XP en el header global de Zustand al acertar.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Actualizar barra de XP en el header global de Zustand al acertar.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-03 — Tríada Evaluativa de 3 Ítems por Lección y Puntuación Formativa (1–3⭐)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-03.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-04-SUB-01,LESS-04,,,"[BD] Tabla `review_queue_items` en Supabase con estados `pending`, `passed`, `failed` y rondas de repaso.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Tabla `review_queue_items` en Supabase con estados `pending`, `passed`, `failed` y rondas de repaso.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LESS-04 — Ronda de Repaso Final de Sección y Cola de Fallos
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-less-04`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-less-04.md`",devops,High,1,Sprint 3,"subtask, devops, koda-mvp, scrumban"
+Sub-task,LESS-04-SUB-02,LESS-04,,,[FRONTEND] Controlador de la ronda de remediación intra-sección en el frontend.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Controlador de la ronda de remediación intra-sección en el frontend.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-04 — Ronda de Repaso Final de Sección y Cola de Fallos
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-04.md`",frontend,High,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-04-SUB-03,LESS-04,,,[FRONTEND] Pantalla de resumen final de sección con conteo de estrellas ganadas y botón de continuar.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Pantalla de resumen final de sección con conteo de estrellas ganadas y botón de continuar.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-04 — Ronda de Repaso Final de Sección y Cola de Fallos
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-04.md`",frontend,High,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-05-SUB-01,LESS-05,,,[BACKEND] Esquema Mongoose con sub-documentos tipados para cada ítem de la tríada en MongoDB (`ContentModule`).,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Esquema Mongoose con sub-documentos tipados para cada ítem de la tríada en MongoDB (`ContentModule`).
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* LESS-05 — Tipos de Desafío Polimórficos de la Tríada en MongoDB
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-less-05`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-less-05.md`",backend,High,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LESS-05-SUB-02,LESS-05,,,[BACKEND] Resolver GraphQL `LearningResolver.lessonContent` con DataLoader para lecciones anidadas (`ADR-012`).,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Resolver GraphQL `LearningResolver.lessonContent` con DataLoader para lecciones anidadas (`ADR-012`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-05 — Tipos de Desafío Polimórficos de la Tríada en MongoDB
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-less-05`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-less-05.md`",backend,High,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LESS-05-SUB-03,LESS-05,,,"[FRONTEND] Implementar componentes visuales individuales para Consola, Quiz de 4 opciones y Predicción de salida.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Implementar componentes visuales individuales para Consola, Quiz de 4 opciones y Predicción de salida.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-05 — Tipos de Desafío Polimórficos de la Tríada en MongoDB
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-05`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-05.md`",frontend,High,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-05-SUB-04,LESS-05,,,[TEST] Validación con lecciones reales del Módulo 01 de Python 3.12 asegurando que todos los ítems responden correctamente.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Validación con lecciones reales del Módulo 01 de Python 3.12 asegurando que todos los ítems responden correctamente.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-05 — Tipos de Desafío Polimórficos de la Tríada en MongoDB
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-05`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-05.md`",frontend,High,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-06-SUB-01,LESS-06,,,[FRONTEND] Integrar Web Worker con Pyodide para ejecución de Python en cliente sin congelar el hilo principal de la UI.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Integrar Web Worker con Pyodide para ejecución de Python en cliente sin congelar el hilo principal de la UI.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-06 — Motor de Ejecución de Código Híbrido (`ICodeRunner`: Pyodide + Docker Sandbox)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-06`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-06.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,LESS-06-SUB-02,LESS-06,,,[BACKEND] Implementar servicio `CodeExecutionService` con interfaz `ICodeRunner` y driver Docker en NestJS.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Implementar servicio `CodeExecutionService` con interfaz `ICodeRunner` y driver Docker en NestJS.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-06 — Motor de Ejecución de Código Híbrido (`ICodeRunner`: Pyodide + Docker Sandbox)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-less-06`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-less-06.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LESS-06-SUB-03,LESS-06,,,[BACKEND] Controlador REST `SandboxController` (`POST /api/v1/sandbox/run`) con soporte para timeout y límites estrictos (`ADR-012`).,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Controlador REST `SandboxController` (`POST /api/v1/sandbox/run`) con soporte para timeout y límites estrictos (`ADR-012`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-06 — Motor de Ejecución de Código Híbrido (`ICodeRunner`: Pyodide + Docker Sandbox)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-less-06`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-less-06.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,LESS-06-SUB-04,LESS-06,,,[TEST] Pruebas de seguridad verificando que comandos de escape de sandbox (ej. `import os; os.system(...)`) son neutralizados.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Pruebas de seguridad verificando que comandos de escape de sandbox (ej. `import os; os.system(...)`) son neutralizados.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* LESS-06 — Motor de Ejecución de Código Híbrido (`ICodeRunner`: Pyodide + Docker Sandbox)
+* *Épica:* EPIC-5: Workspace de Lección Atómica y Práctica Interactiva
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-less-06`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-less-06.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,EVAL-01-SUB-01,EVAL-01,,,[BACKEND] Endpoint `GET /api/v1/learning/modules/:id/quiz`: genera un intento de quiz con 10 preguntas barajadas sin respuestas correctas.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Endpoint `GET /api/v1/learning/modules/:id/quiz`: genera un intento de quiz con 10 preguntas barajadas sin respuestas correctas.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-01 — Motor de Quizzes Intermedios de Módulo (Umbral $\ge 70\%$)
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-eval-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-eval-01.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,EVAL-01-SUB-02,EVAL-01,,,"[BACKEND] Endpoint `POST /api/v1/learning/quiz/:id/attempt`: recibe las respuestas del usuario, calcula la nota porcentual y persiste el intento inmutable en Supabase.","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Endpoint `POST /api/v1/learning/quiz/:id/attempt`: recibe las respuestas del usuario, calcula la nota porcentual y persiste el intento inmutable en Supabase.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-01 — Motor de Quizzes Intermedios de Módulo (Umbral $\ge 70\%$)
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-eval-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-eval-01.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,EVAL-01-SUB-03,EVAL-01,,,[FRONTEND] Pantalla `apps/web/src/app/evaluaciones/quiz/[id]/page.tsx` con navegación entre preguntas y contador de respondidas.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Pantalla `apps/web/src/app/evaluaciones/quiz/[id]/page.tsx` con navegación entre preguntas y contador de respondidas.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-01 — Motor de Quizzes Intermedios de Módulo (Umbral $\ge 70\%$)
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-eval-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-eval-01.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,EVAL-01-SUB-04,EVAL-01,,,"[FRONTEND] Modal de confirmación: *""¿Estás seguro de enviar tu quiz? Tienes X preguntas sin responder""*.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Modal de confirmación: *""¿Estás seguro de enviar tu quiz? Tienes X preguntas sin responder""*.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-01 — Motor de Quizzes Intermedios de Módulo (Umbral $\ge 70\%$)
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-eval-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-eval-01.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,EVAL-02-SUB-01,EVAL-02,,,[BACKEND] Servicio `EvaluationService.generateExam()` con muestreo estratificado desde `bank.json`.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Servicio `EvaluationService.generateExam()` con muestreo estratificado desde `bank.json`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-02 — Motor de Exámenes Finales de Módulo y Desbloqueo (Umbral $\ge 80\%$)
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-eval-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-eval-02.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,EVAL-02-SUB-02,EVAL-02,,,[BACKEND] Transacción atómica en Supabase: evalúa examen $\rightarrow$ otorga XP $\rightarrow$ desbloquea Módulo $N+1$.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Transacción atómica en Supabase: evalúa examen $\rightarrow$ otorga XP $\rightarrow$ desbloquea Módulo $N+1$.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-02 — Motor de Exámenes Finales de Módulo y Desbloqueo (Umbral $\ge 80\%$)
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-eval-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-eval-02.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,EVAL-02-SUB-03,EVAL-02,,,[FRONTEND] Pantalla `apps/web/src/app/evaluaciones/examen/[id]/page.tsx` con diseño sobrio y temporizador orientativo.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Pantalla `apps/web/src/app/evaluaciones/examen/[id]/page.tsx` con diseño sobrio y temporizador orientativo.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-02 — Motor de Exámenes Finales de Módulo y Desbloqueo (Umbral $\ge 80\%$)
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-eval-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-eval-02.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,EVAL-02-SUB-04,EVAL-02,,,"[FRONTEND] Pantalla de resultado final con desglose por área temática (Sintaxis, Lógica, Depuración) y Koda en estado triunfal (`proud`).","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Pantalla de resultado final con desglose por área temática (Sintaxis, Lógica, Depuración) y Koda en estado triunfal (`proud`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-02 — Motor de Exámenes Finales de Módulo y Desbloqueo (Umbral $\ge 80\%$)
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-eval-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-eval-02.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,EVAL-03-SUB-01,EVAL-03,,,[BACKEND] Endpoint `GET /api/v1/learning/attempts/:attemptId/summary` que entregue el detalle con explicaciones post-evaluación.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Endpoint `GET /api/v1/learning/attempts/:attemptId/summary` que entregue el detalle con explicaciones post-evaluación.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-03 — Pantalla de Revisión Detallada de Respuestas y Aprendizaje del Error
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-eval-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-eval-03.md`",backend,High,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,EVAL-03-SUB-02,EVAL-03,,,"[FRONTEND] Componente `AttemptReviewScreen.tsx` con tabs de filtro: *""Todas (20)""*, *""Aciertos (16)""*, *""Por Mejorar (4)""*.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Componente `AttemptReviewScreen.tsx` con tabs de filtro: *""Todas (20)""*, *""Aciertos (16)""*, *""Por Mejorar (4)""*.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-03 — Pantalla de Revisión Detallada de Respuestas y Aprendizaje del Error
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-eval-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-eval-03.md`",frontend,High,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,EVAL-03-SUB-03,EVAL-03,,,[FRONTEND] Tarjeta expandible por pregunta con el bloque de código de Python analizado.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Tarjeta expandible por pregunta con el bloque de código de Python analizado.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-03 — Pantalla de Revisión Detallada de Respuestas y Aprendizaje del Error
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-eval-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-eval-03.md`",frontend,High,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,EVAL-04-SUB-01,EVAL-04,,,[BD] Constraints de inmutabilidad (evitar `UPDATE` o `DELETE` sobre `user_attempts` cerrados).,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Constraints de inmutabilidad (evitar `UPDATE` o `DELETE` sobre `user_attempts` cerrados).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-04 — Auditoría de Contenido y Versionado Inmutable de Evaluaciones
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-eval-04`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-eval-04.md`",devops,Medium,1,Sprint 3,"subtask, devops, koda-mvp, scrumban"
+Sub-task,EVAL-04-SUB-02,EVAL-04,,,[BACKEND] Inyectar versión de contenido en el payload de calificación en `EvaluationService`.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Inyectar versión de contenido en el payload de calificación en `EvaluationService`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-04 — Auditoría de Contenido y Versionado Inmutable de Evaluaciones
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-eval-04`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-eval-04.md`",backend,Medium,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,EVAL-04-SUB-03,EVAL-04,,,[TEST] Test de regresión garantizando que la actualización de un JSON no altera intentos previos.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Test de regresión garantizando que la actualización de un JSON no altera intentos previos.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* EVAL-04 — Auditoría de Contenido y Versionado Inmutable de Evaluaciones
+* *Épica:* EPIC-6: Sistema de Evaluación: Quizzes y Exámenes Finales
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-eval-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-eval-04.md`",frontend,Medium,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,NOTE-01-SUB-01,NOTE-01,,,"[BD] Tabla `user_mistakes_notebook` desplegada en Supabase con campos `fail_count`, `interval_days`, `ease_factor`, `repetition_count`, `next_review_at` y RLS habilitado (`ADR-011`).","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Tabla `user_mistakes_notebook` desplegada en Supabase con campos `fail_count`, `interval_days`, `ease_factor`, `repetition_count`, `next_review_at` y RLS habilitado (`ADR-011`).
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* NOTE-01 — Pantalla y Gestión del Cuaderno de Errores Personal
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-note-01`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-note-01.md`",devops,High,1,Sprint 3,"subtask, devops, koda-mvp, scrumban"
+Sub-task,NOTE-01-SUB-02,NOTE-01,,,"[BACKEND] Resolver GraphQL `NotebookResolver` con `Query mistakeNotebook` en `infrastructure/` implementando el puerto `INotebookRepository` (`ADR-010`, `ADR-012`).","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Resolver GraphQL `NotebookResolver` con `Query mistakeNotebook` en `infrastructure/` implementando el puerto `INotebookRepository` (`ADR-010`, `ADR-012`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* NOTE-01 — Pantalla y Gestión del Cuaderno de Errores Personal
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-note-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-note-01.md`",backend,High,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,NOTE-01-SUB-03,NOTE-01,,,[BACKEND] Controlador REST `NotebookController` en `apps/api/src/modules/notebook/` con endpoint de listado paginado y conteo de fallos pendientes.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Controlador REST `NotebookController` en `apps/api/src/modules/notebook/` con endpoint de listado paginado y conteo de fallos pendientes.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* NOTE-01 — Pantalla y Gestión del Cuaderno de Errores Personal
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-note-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-note-01.md`",backend,High,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,NOTE-01-SUB-04,NOTE-01,,,[FRONTEND] Pantalla `apps/web/src/app/cuaderno/page.tsx` con grid de tarjetas de errores pendientes.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Pantalla `apps/web/src/app/cuaderno/page.tsx` con grid de tarjetas de errores pendientes.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* NOTE-01 — Pantalla y Gestión del Cuaderno de Errores Personal
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-note-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-note-01.md`",frontend,High,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,NOTE-01-SUB-05,NOTE-01,,,"[FRONTEND] Badge numérico de alerta en el ítem de navegación del Sidebar: *""📓 Cuaderno [ 4 ]""*.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Badge numérico de alerta en el ítem de navegación del Sidebar: *""📓 Cuaderno [ 4 ]""*.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* NOTE-01 — Pantalla y Gestión del Cuaderno de Errores Personal
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-note-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-note-01.md`",frontend,High,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,NOTE-02-SUB-01,NOTE-02,,,[BACKEND] Caso de uso `ResolveMistakeUseCase` en `application/` y Resolver GraphQL `NotebookResolver.resolveMistake()` (`ADR-012`).,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Caso de uso `ResolveMistakeUseCase` en `application/` y Resolver GraphQL `NotebookResolver.resolveMistake()` (`ADR-012`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* NOTE-02 — Sesión de Remediación Interactiva y Bono de Maestría (+5 XP)
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-note-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-note-02.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,NOTE-02-SUB-02,NOTE-02,,,[BACKEND] Endpoint de resolución en `NotebookController` / `NotebookService` con validación de solución y acreditación transaccional de XP en Supabase.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Endpoint de resolución en `NotebookController` / `NotebookService` con validación de solución y acreditación transaccional de XP en Supabase.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* NOTE-02 — Sesión de Remediación Interactiva y Bono de Maestría (+5 XP)
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-note-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-note-02.md`",backend,Highest,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,NOTE-02-SUB-03,NOTE-02,,,"[FRONTEND] Modal de remediación rápida enfocado en el código con atajos de teclado (`1-4`, `Enter`).","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Modal de remediación rápida enfocado en el código con atajos de teclado (`1-4`, `Enter`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* NOTE-02 — Sesión de Remediación Interactiva y Bono de Maestría (+5 XP)
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-note-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-note-02.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,NOTE-02-SUB-04,NOTE-02,,,[FRONTEND] Animación de tachado o disolución de la tarjeta de error cuando el usuario la resuelve con éxito.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Animación de tachado o disolución de la tarjeta de error cuando el usuario la resuelve con éxito.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* NOTE-02 — Sesión de Remediación Interactiva y Bono de Maestría (+5 XP)
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-note-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-note-02.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,NOTE-02-SUB-05,NOTE-02,,,[FRONTEND] Actualizar contador del Sidebar en tiempo real vía Zustand.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Actualizar contador del Sidebar en tiempo real vía Zustand.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* NOTE-02 — Sesión de Remediación Interactiva y Bono de Maestría (+5 XP)
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-note-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-note-02.md`",frontend,Highest,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,NOTE-03-SUB-01,NOTE-03,,,"[BD] Campos `ease_factor`, `interval_days`, `repetition_count`, `next_review_at` e índices correspondientes en Supabase.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Campos `ease_factor`, `interval_days`, `repetition_count`, `next_review_at` e índices correspondientes en Supabase.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* NOTE-03 — Algoritmo SuperMemo SM-2 de Repetición Espaciada
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-note-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-note-03.md`",devops,Medium,1,Sprint 3,"subtask, devops, koda-mvp, scrumban"
+Sub-task,NOTE-03-SUB-02,NOTE-03,,,[BACKEND] Servicio `SpacedRepetitionService` implementando las fórmulas canónicas de SM-2 en NestJS.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Servicio `SpacedRepetitionService` implementando las fórmulas canónicas de SM-2 en NestJS.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* NOTE-03 — Algoritmo SuperMemo SM-2 de Repetición Espaciada
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-note-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-note-03.md`",backend,Medium,1,Sprint 3,"subtask, backend, koda-mvp, scrumban"
+Sub-task,NOTE-03-SUB-03,NOTE-03,,,[FRONTEND] Widget de recordatorio de repaso espaciado en la cabecera del Roadmap.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Widget de recordatorio de repaso espaciado en la cabecera del Roadmap.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* NOTE-03 — Algoritmo SuperMemo SM-2 de Repetición Espaciada
+* *Épica:* EPIC-7: Cuaderno de Errores Persistente y Repaso Adaptativo (SM-2)
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-note-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-note-03.md`",frontend,Medium,1,Sprint 3,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,GAMI-01-SUB-01,GAMI-01,,,[BD] Tabla `xp_transactions` en Supabase con RLS y trigger de inmutabilidad `fn_enforce_xp_immutability()`.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Tabla `xp_transactions` en Supabase con RLS y trigger de inmutabilidad `fn_enforce_xp_immutability()`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* GAMI-01 — Economía de Experiencia (XP) Determinista y Progresión de Niveles
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-gami-01`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-gami-01.md`",devops,Highest,1,Sprint 4,"subtask, devops, koda-mvp, scrumban"
+Sub-task,GAMI-01-SUB-02,GAMI-01,,,[BACKEND] Servicio `GamificationService.awardXp()` con validación anti-farming e idempotencia por request.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Servicio `GamificationService.awardXp()` con validación anti-farming e idempotencia por request.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-01 — Economía de Experiencia (XP) Determinista y Progresión de Niveles
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-gami-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-gami-01.md`",backend,Highest,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,GAMI-01-SUB-03,GAMI-01,,,"[BACKEND] Listener de eventos de dominio `GamificationListener` (`@OnEvent('lesson.completed')` / BullMQ Consumer) que acredita XP y recalcula niveles de forma asíncrona sin bloquear la respuesta de lección (`ADR-010`, `ADR-011`).","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Listener de eventos de dominio `GamificationListener` (`@OnEvent('lesson.completed')` / BullMQ Consumer) que acredita XP y recalcula niveles de forma asíncrona sin bloquear la respuesta de lección (`ADR-010`, `ADR-011`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-01 — Economía de Experiencia (XP) Determinista y Progresión de Niveles
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-gami-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-gami-01.md`",backend,Highest,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,GAMI-01-SUB-04,GAMI-01,,,"[BACKEND] Resolver GraphQL `GamificationResolver` con `Query studentDashboard` para agregar nivel, XP, racha y estado de curso en una sola llamada (`ADR-012`).","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Resolver GraphQL `GamificationResolver` con `Query studentDashboard` para agregar nivel, XP, racha y estado de curso en una sola llamada (`ADR-012`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-01 — Economía de Experiencia (XP) Determinista y Progresión de Niveles
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-gami-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-gami-01.md`",backend,Highest,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,GAMI-01-SUB-05,GAMI-01,,,[FRONTEND] Barra de nivel animada en el Header global con porcentaje de avance hacia el siguiente nivel.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Barra de nivel animada en el Header global con porcentaje de avance hacia el siguiente nivel.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-01 — Economía de Experiencia (XP) Determinista y Progresión de Niveles
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-gami-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-gami-01.md`",frontend,Highest,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,GAMI-01-SUB-06,GAMI-01,,,[FRONTEND] Modal interactivo de subida de nivel con sonido triunfal y tarjeta compartible.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Modal interactivo de subida de nivel con sonido triunfal y tarjeta compartible.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-01 — Economía de Experiencia (XP) Determinista y Progresión de Niveles
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-gami-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-gami-01.md`",frontend,Highest,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,GAMI-02-SUB-01,GAMI-02,,,[BD] Tabla `streaks` en Supabase y trigger automático `trg_attempts_update_streak_and_study_time` ejecutando `fn_handle_user_study_activity()`.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Tabla `streaks` en Supabase y trigger automático `trg_attempts_update_streak_and_study_time` ejecutando `fn_handle_user_study_activity()`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* GAMI-02 — Sistema de Rachas Diarias, Tiempo de Estudio y Freeze Automatizado por Triggers
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-gami-02`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-gami-02.md`",devops,Highest,1,Sprint 4,"subtask, devops, koda-mvp, scrumban"
+Sub-task,GAMI-02-SUB-02,GAMI-02,,,"[BD] Columnas agregadas `total_study_time_seconds`, `current_streak`, `longest_streak`, `streak_freeze_count` en `public.users`.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Columnas agregadas `total_study_time_seconds`, `current_streak`, `longest_streak`, `streak_freeze_count` en `public.users`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* GAMI-02 — Sistema de Rachas Diarias, Tiempo de Estudio y Freeze Automatizado por Triggers
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-gami-02`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-gami-02.md`",devops,Highest,1,Sprint 4,"subtask, devops, koda-mvp, scrumban"
+Sub-task,GAMI-02-SUB-03,GAMI-02,,,"[BACKEND] Listener `StreakListener` que reacciona asíncronamente a `lesson.completed` en BullMQ para auditar la racha del día sin impacto en la latencia de la lección (`ADR-010`, `ADR-011`).","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Listener `StreakListener` que reacciona asíncronamente a `lesson.completed` en BullMQ para auditar la racha del día sin impacto en la latencia de la lección (`ADR-010`, `ADR-011`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-02 — Sistema de Rachas Diarias, Tiempo de Estudio y Freeze Automatizado por Triggers
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-gami-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-gami-02.md`",backend,Highest,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,GAMI-02-SUB-04,GAMI-02,,,[BACKEND] Worker BullMQ programado para evaluar consumos de freeze al cierre de la ventana de gracia (`ADR-011`).,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Worker BullMQ programado para evaluar consumos de freeze al cierre de la ventana de gracia (`ADR-011`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-02 — Sistema de Rachas Diarias, Tiempo de Estudio y Freeze Automatizado por Triggers
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-gami-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-gami-02.md`",backend,Highest,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,GAMI-02-SUB-05,GAMI-02,,,"[FRONTEND] Widget de racha en el Header con tooltip explicativo del estado del día, tiempo invertido y protectores restantes.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Widget de racha en el Header con tooltip explicativo del estado del día, tiempo invertido y protectores restantes.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-02 — Sistema de Rachas Diarias, Tiempo de Estudio y Freeze Automatizado por Triggers
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-gami-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-gami-02.md`",frontend,Highest,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,GAMI-02-SUB-06,GAMI-02,,,"[FRONTEND] Modal de rescate o notificación cuando se consumió un Freeze para salvar la racha: *""¡Tu protector de racha te ha salvado ayer! Continúa hoy para mantener el fuego encendido 🛡️""*.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Modal de rescate o notificación cuando se consumió un Freeze para salvar la racha: *""¡Tu protector de racha te ha salvado ayer! Continúa hoy para mantener el fuego encendido 🛡️""*.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-02 — Sistema de Rachas Diarias, Tiempo de Estudio y Freeze Automatizado por Triggers
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-gami-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-gami-02.md`",frontend,Highest,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,GAMI-03-SUB-01,GAMI-03,,,[BD] Tablas `achievements` y `user_achievements` en Supabase con RLS y semillas iniciales desplegadas.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Tablas `achievements` y `user_achievements` en Supabase con RLS y semillas iniciales desplegadas.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* GAMI-03 — Catálogo de Logros (Achievements) y Medallas Desbloqueables
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-gami-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-gami-03.md`",devops,High,1,Sprint 4,"subtask, devops, koda-mvp, scrumban"
+Sub-task,GAMI-03-SUB-02,GAMI-03,,,"[BACKEND] Event listener en NestJS (`EventEmitter2` / BullMQ) que escuche eventos de lección/examen y evalúe condiciones de logro de forma asíncrona (`ADR-010`, `ADR-011`).","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Event listener en NestJS (`EventEmitter2` / BullMQ) que escuche eventos de lección/examen y evalúe condiciones de logro de forma asíncrona (`ADR-010`, `ADR-011`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-03 — Catálogo de Logros (Achievements) y Medallas Desbloqueables
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-gami-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-gami-03.md`",backend,High,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,GAMI-03-SUB-03,GAMI-03,,,[BACKEND] Resolver GraphQL `GamificationResolver` con `Query myAchievements` (`ADR-012`).,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Resolver GraphQL `GamificationResolver` con `Query myAchievements` (`ADR-012`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-03 — Catálogo de Logros (Achievements) y Medallas Desbloqueables
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-gami-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-gami-03.md`",backend,High,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,GAMI-03-SUB-04,GAMI-03,,,[FRONTEND] Pantalla `apps/web/src/app/logros/page.tsx` con vitrina de medallas.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Pantalla `apps/web/src/app/logros/page.tsx` con vitrina de medallas.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-03 — Catálogo de Logros (Achievements) y Medallas Desbloqueables
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-gami-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-gami-03.md`",frontend,High,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,GAMI-03-SUB-05,GAMI-03,,,[FRONTEND] Componente de notificación emergente `AchievementToast.tsx` con sonido de fanfarria suave.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Componente de notificación emergente `AchievementToast.tsx` con sonido de fanfarria suave.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-03 — Catálogo de Logros (Achievements) y Medallas Desbloqueables
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-gami-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-gami-03.md`",frontend,High,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,GAMI-04-SUB-01,GAMI-04,,,[FRONTEND] Configurar contenedor PixiJS v7 desacoplado en `apps/web/src/components/mascot/KodaMascotCanvas.tsx`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Configurar contenedor PixiJS v7 desacoplado en `apps/web/src/components/mascot/KodaMascotCanvas.tsx`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-04 — Motor Gráfico WebGL PixiJS v7: Mascota Koda 🦊 y Confeti
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-gami-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-gami-04.md`",frontend,Highest,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,GAMI-04-SUB-02,GAMI-04,,,[FRONTEND] Crear máquina de estados de animaciones conectada a eventos del Workspace de Lección.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Crear máquina de estados de animaciones conectada a eventos del Workspace de Lección.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-04 — Motor Gráfico WebGL PixiJS v7: Mascota Koda 🦊 y Confeti
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-gami-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-gami-04.md`",frontend,Highest,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,GAMI-04-SUB-03,GAMI-04,,,[FRONTEND] Sistema de partículas de confeti acelerado por hardware para hitos de 3 estrellas y exámenes aprobados.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Sistema de partículas de confeti acelerado por hardware para hitos de 3 estrellas y exámenes aprobados.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-04 — Motor Gráfico WebGL PixiJS v7: Mascota Koda 🦊 y Confeti
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-gami-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-gami-04.md`",frontend,Highest,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,GAMI-04-SUB-04,GAMI-04,,,[TEST] Verificar desmonte limpio del contexto WebGL en `useEffect` cleanup para evitar fugas de memoria.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Verificar desmonte limpio del contexto WebGL en `useEffect` cleanup para evitar fugas de memoria.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* GAMI-04 — Motor Gráfico WebGL PixiJS v7: Mascota Koda 🦊 y Confeti
+* *Épica:* EPIC-8: Gamificación, Economía XP, Rachas y Mascota Koda 🦊
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-gami-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-gami-04.md`",frontend,Highest,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,CERT-01-SUB-01,CERT-01,,,"[BD] Tabla `certificates` y tabla de secuencias `certificate_sequences` con constraint UNIQUE por `(user_id, language_id)`.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Tabla `certificates` y tabla de secuencias `certificate_sequences` con constraint UNIQUE por `(user_id, language_id)`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-01 — Emisión Atómica y Asignación de Código Correlativo `KODA-PY-{SEQ}`
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-cert-01`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-cert-01.md`",devops,Highest,1,Sprint 4,"subtask, devops, koda-mvp, scrumban"
+Sub-task,CERT-01-SUB-02,CERT-01,,,"[BACKEND] Disparo asíncrono de emisión ante evento de dominio `course.completed` mediante worker BullMQ `GenerateCertificateWorker` (`ADR-010`, `ADR-011`).","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Disparo asíncrono de emisión ante evento de dominio `course.completed` mediante worker BullMQ `GenerateCertificateWorker` (`ADR-010`, `ADR-011`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-01 — Emisión Atómica y Asignación de Código Correlativo `KODA-PY-{SEQ}`
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-cert-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-cert-01.md`",backend,Highest,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,CERT-01-SUB-03,CERT-01,,,"[BACKEND] Servicio `CertificationService.issueCertificate(userId, languageSlug)` con transacción atómica en Supabase.","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Servicio `CertificationService.issueCertificate(userId, languageSlug)` con transacción atómica en Supabase.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-01 — Emisión Atómica y Asignación de Código Correlativo `KODA-PY-{SEQ}`
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-cert-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-cert-01.md`",backend,Highest,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,CERT-01-SUB-04,CERT-01,,,[BACKEND] Generar enlace canónico de verificación: `https://koda.app/verificar/KODA-PY-{SEQ}`.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Generar enlace canónico de verificación: `https://koda.app/verificar/KODA-PY-{SEQ}`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-01 — Emisión Atómica y Asignación de Código Correlativo `KODA-PY-{SEQ}`
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-cert-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-cert-01.md`",backend,Highest,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,CERT-01-SUB-05,CERT-01,,,[TEST] Test de concurrencia validando que dos solicitudes simultáneas de emisión nunca generen el mismo correlativo.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Test de concurrencia validando que dos solicitudes simultáneas de emisión nunca generen el mismo correlativo.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-01 — Emisión Atómica y Asignación de Código Correlativo `KODA-PY-{SEQ}`
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-cert-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-cert-01.md`",frontend,Highest,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,CERT-02-SUB-01,CERT-02,,,[BACKEND] Implementar servicio `PdfGeneratorService` con PDFKit y utilidades de renderizado vectorial.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Implementar servicio `PdfGeneratorService` con PDFKit y utilidades de renderizado vectorial.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-02 — Pipeline de Generación PDF Vectorial con Código QR ISO 18004
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-cert-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-cert-02.md`",backend,Highest,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,CERT-02-SUB-02,CERT-02,,,[BACKEND] Generador de QR dinámico con biblioteca `qrcode` en buffer binario.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Generador de QR dinámico con biblioteca `qrcode` en buffer binario.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-02 — Pipeline de Generación PDF Vectorial con Código QR ISO 18004
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-cert-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-cert-02.md`",backend,Highest,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,CERT-02-SUB-03,CERT-02,,,[BACKEND] Controlador REST `CertificatesController` para streaming de descarga `GET /api/v1/certificates/:id/pdf` (`ADR-012`).,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Controlador REST `CertificatesController` para streaming de descarga `GET /api/v1/certificates/:id/pdf` (`ADR-012`).
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-02 — Pipeline de Generación PDF Vectorial con Código QR ISO 18004
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-cert-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-cert-02.md`",backend,Highest,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,CERT-02-SUB-04,CERT-02,,,[BACKEND] Calcular digest SHA-256 del buffer PDF antes de su almacenamiento en Supabase Storage.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Calcular digest SHA-256 del buffer PDF antes de su almacenamiento en Supabase Storage.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-02 — Pipeline de Generación PDF Vectorial con Código QR ISO 18004
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-cert-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-cert-02.md`",backend,Highest,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,CERT-02-SUB-05,CERT-02,,,[TEST] Verificar legibilidad del QR con escáner móvil físico a 30 cm de distancia.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Verificar legibilidad del QR con escáner móvil físico a 30 cm de distancia.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-02 — Pipeline de Generación PDF Vectorial con Código QR ISO 18004
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-cert-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-cert-02.md`",frontend,Highest,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,CERT-03-SUB-01,CERT-03,,,[BD] Crear bucket `certificates` en `storage.buckets` con políticas RLS de lectura pública y subida autorizada.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Crear bucket `certificates` en `storage.buckets` con políticas RLS de lectura pública y subida autorizada.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* CERT-03 — Almacenamiento en la Nube con Supabase Storage (Bucket CDN)
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-cert-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-cert-03.md`",devops,High,1,Sprint 4,"subtask, devops, koda-mvp, scrumban"
+Sub-task,CERT-03-SUB-02,CERT-03,,,"[BACKEND] Implementar `SupabaseService` en `apps/api/src/database/` con métodos de subida, obtención de URL y eliminación.","h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Implementar `SupabaseService` en `apps/api/src/database/` con métodos de subida, obtención de URL y eliminación.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* CERT-03 — Almacenamiento en la Nube con Supabase Storage (Bucket CDN)
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-cert-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-cert-03.md`",backend,High,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,CERT-03-SUB-03,CERT-03,,,[BACKEND] Actualizar `CertificationService` y `CertificationController` para entregar `storage_path` y `storage_url`.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Actualizar `CertificationService` y `CertificationController` para entregar `storage_path` y `storage_url`.
+* *Estado en backlog documental:* ✅ Completada
+* *Historia de Usuario Padre:* CERT-03 — Almacenamiento en la Nube con Supabase Storage (Bucket CDN)
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-cert-03`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-cert-03.md`",backend,High,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,CERT-03-SUB-04,CERT-03,,,[TEST] Test de integración subiendo un archivo PDF de prueba a Supabase Storage y verificando su URL pública.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Test de integración subiendo un archivo PDF de prueba a Supabase Storage y verificando su URL pública.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-03 — Almacenamiento en la Nube con Supabase Storage (Bucket CDN)
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-cert-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-cert-03.md`",frontend,High,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,CERT-04-SUB-01,CERT-04,,,[BACKEND] Endpoint público `GET /api/v1/certificates/verify/:code` sin guards de autenticación.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Endpoint público `GET /api/v1/certificates/verify/:code` sin guards de autenticación.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-04 — Portal Web de Verificación Pública de Certificados (`/verificar/[code]`)
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-cert-04`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-cert-04.md`",backend,High,1,Sprint 4,"subtask, backend, koda-mvp, scrumban"
+Sub-task,CERT-04-SUB-02,CERT-04,,,[FRONTEND] Página dinámica `apps/web/src/app/verificar/[code]/page.tsx` con Server-Side Rendering (SSR) para SEO.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Página dinámica `apps/web/src/app/verificar/[code]/page.tsx` con Server-Side Rendering (SSR) para SEO.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-04 — Portal Web de Verificación Pública de Certificados (`/verificar/[code]`)
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-cert-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-cert-04.md`",frontend,High,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,CERT-04-SUB-03,CERT-04,,,"[FRONTEND] Metadatos OpenGraph dinámicos: título *""Certificado Koda de [Nombre]""* para preview enriquecida en redes sociales.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Metadatos OpenGraph dinámicos: título *""Certificado Koda de [Nombre]""* para preview enriquecida en redes sociales.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-04 — Portal Web de Verificación Pública de Certificados (`/verificar/[code]`)
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-cert-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-cert-04.md`",frontend,High,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,CERT-04-SUB-04,CERT-04,,,[FRONTEND] Integración del botón de compartir en LinkedIn con parámetros de credencial oficial.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Integración del botón de compartir en LinkedIn con parámetros de credencial oficial.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* CERT-04 — Portal Web de Verificación Pública de Certificados (`/verificar/[code]`)
+* *Épica:* EPIC-9: Pipeline de Certificación, Generación PDF, QR y Supabase Storage
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-cert-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-cert-04.md`",frontend,High,1,Sprint 4,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,MONA-01-SUB-01,MONA-01,,,[BD] Columna `is_premium (BOOLEAN DEFAULT false)` y tabla `subscriptions` en Supabase.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [BD] Columna `is_premium (BOOLEAN DEFAULT false)` y tabla `subscriptions` en Supabase.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-01 — Modelo de Monetización Ético: Plan Gratuito vs. Premium (USD $1)
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-mona-01`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-mona-01.md`",devops,High,1,Sprint 5,"subtask, devops, koda-mvp, scrumban"
+Sub-task,MONA-01-SUB-02,MONA-01,,,[BACKEND] Endpoint webhook `POST /api/v1/payments/webhook` para procesar altas y cancelaciones de suscripción.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Endpoint webhook `POST /api/v1/payments/webhook` para procesar altas y cancelaciones de suscripción.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-01 — Modelo de Monetización Ético: Plan Gratuito vs. Premium (USD $1)
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-mona-01`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-mona-01.md`",backend,High,1,Sprint 5,"subtask, backend, koda-mvp, scrumban"
+Sub-task,MONA-01-SUB-03,MONA-01,,,[FRONTEND] Componente `SponsoredBanner.tsx` renderizado condicionalmente en la pantalla de transición entre secciones si `!user.is_premium`.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Componente `SponsoredBanner.tsx` renderizado condicionalmente en la pantalla de transición entre secciones si `!user.is_premium`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-01 — Modelo de Monetización Ético: Plan Gratuito vs. Premium (USD $1)
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-mona-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-mona-01.md`",frontend,High,1,Sprint 5,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,MONA-01-SUB-04,MONA-01,,,"[FRONTEND] Modal informativo *""Koda Premium""* con desglose de beneficios y botón de pago integrado.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Modal informativo *""Koda Premium""* con desglose de beneficios y botón de pago integrado.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-01 — Modelo de Monetización Ético: Plan Gratuito vs. Premium (USD $1)
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-mona-01`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-mona-01.md`",frontend,High,1,Sprint 5,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,MONA-02-SUB-01,MONA-02,,,[BACKEND] Guard de autorización `RolesGuard` verificando `role === 'ADMIN'` en rutas `/api/v1/admin/*`.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Guard de autorización `RolesGuard` verificando `role === 'ADMIN'` en rutas `/api/v1/admin/*`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-02 — Consola de Administración y Publicación de Contenidos sin Despliegue
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-mona-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-mona-02.md`",backend,Highest,1,Sprint 5,"subtask, backend, koda-mvp, scrumban"
+Sub-task,MONA-02-SUB-02,MONA-02,,,[BACKEND] Servicio `ContentSyncService` que parsea los manifests declarativos de Python 3.12 y ejecuta transacciones de upsert en PostgreSQL.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Servicio `ContentSyncService` que parsea los manifests declarativos de Python 3.12 y ejecuta transacciones de upsert en PostgreSQL.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-02 — Consola de Administración y Publicación de Contenidos sin Despliegue
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-mona-02`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-mona-02.md`",backend,Highest,1,Sprint 5,"subtask, backend, koda-mvp, scrumban"
+Sub-task,MONA-02-SUB-03,MONA-02,,,[FRONTEND] Layout administrativo `apps/web/src/app/admin/layout.tsx` con navegación propia e indicadores de salud del sistema.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Layout administrativo `apps/web/src/app/admin/layout.tsx` con navegación propia e indicadores de salud del sistema.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-02 — Consola de Administración y Publicación de Contenidos sin Despliegue
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-mona-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-mona-02.md`",frontend,Highest,1,Sprint 5,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,MONA-02-SUB-04,MONA-02,,,"[FRONTEND] Vista de sincronización de contenidos con botón *""Sincronizar Cursos en Vivo""* y log de salida.","h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [FRONTEND] Vista de sincronización de contenidos con botón *""Sincronizar Cursos en Vivo""* y log de salida.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-02 — Consola de Administración y Publicación de Contenidos sin Despliegue
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-mona-02`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-mona-02.md`",frontend,Highest,1,Sprint 5,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,MONA-03-SUB-01,MONA-03,,,[DEVOPS] Crear archivo de workflow `.github/workflows/ci.yml` configurando Node.js 20 y pnpm 9+.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DEVOPS] Crear archivo de workflow `.github/workflows/ci.yml` configurando Node.js 20 y pnpm 9+.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-03 — Pipeline de Integración Continua (CI/CD) con GitHub Actions
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-mona-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-mona-03.md`",devops,Highest,1,Sprint 5,"subtask, devops, koda-mvp, scrumban"
+Sub-task,MONA-03-SUB-02,MONA-03,,,[DEVOPS] Configurar caché de `pnpm store` y `.next/cache` en las acciones de GitHub.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DEVOPS] Configurar caché de `pnpm store` y `.next/cache` en las acciones de GitHub.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-03 — Pipeline de Integración Continua (CI/CD) con GitHub Actions
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-mona-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-mona-03.md`",devops,Highest,1,Sprint 5,"subtask, devops, koda-mvp, scrumban"
+Sub-task,MONA-03-SUB-03,MONA-03,,,[DEVOPS] Proteger rama `main` en los ajustes del repositorio requiriendo status check de CI en verde.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DEVOPS] Proteger rama `main` en los ajustes del repositorio requiriendo status check de CI en verde.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-03 — Pipeline de Integración Continua (CI/CD) con GitHub Actions
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-mona-03`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-mona-03.md`",devops,Highest,1,Sprint 5,"subtask, devops, koda-mvp, scrumban"
+Sub-task,MONA-03-SUB-04,MONA-03,,,[TEST] Abrir PR de prueba y verificar ejecución exitosa de todas las fases del pipeline.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Abrir PR de prueba y verificar ejecución exitosa de todas las fases del pipeline.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-03 — Pipeline de Integración Continua (CI/CD) con GitHub Actions
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-mona-03`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-mona-03.md`",frontend,Highest,1,Sprint 5,"subtask, frontend, koda-mvp, scrumban"
+Sub-task,MONA-04-SUB-01,MONA-04,,,[DEVOPS] Configurar proyecto en Vercel apuntando al directorio `apps/web` con comando de build monorepo.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DEVOPS] Configurar proyecto en Vercel apuntando al directorio `apps/web` con comando de build monorepo.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-04 — Despliegue Cloud en Producción y Monitoreo de Salud (`/api/v1`)
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-mona-04`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-mona-04.md`",devops,Highest,1,Sprint 5,"subtask, devops, koda-mvp, scrumban"
+Sub-task,MONA-04-SUB-02,MONA-04,,,[DEVOPS] Configurar servicio en Render / Railway para `apps/api` con script `pnpm --filter api build && pnpm --filter api start:prod`.,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DEVOPS] Configurar servicio en Render / Railway para `apps/api` con script `pnpm --filter api build && pnpm --filter api start:prod`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-04 — Despliegue Cloud en Producción y Monitoreo de Salud (`/api/v1`)
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-mona-04`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-mona-04.md`",devops,Highest,1,Sprint 5,"subtask, devops, koda-mvp, scrumban"
+Sub-task,MONA-04-SUB-03,MONA-04,,,[BACKEND] Configurar orígenes permitidos en CORS dinámicamente según variable `FRONTEND_URL`.,"h3. 🛠️ Subtarea Técnica (BACKEND)
+* *Tarea:* [BACKEND] Configurar orígenes permitidos en CORS dinámicamente según variable `FRONTEND_URL`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-04 — Despliegue Cloud en Producción y Monitoreo de Salud (`/api/v1`)
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/backend-mona-04`
+* Entregable requerido al finalizar: `documentation/done/backend/backend-mona-04.md`",backend,Highest,1,Sprint 5,"subtask, backend, koda-mvp, scrumban"
+Sub-task,MONA-04-SUB-04,MONA-04,,,"[DEVOPS] Inyectar variables de producción: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `GOOGLE_SERVICE_ACCOUNT_BASE64`, `JWT_SECRET`.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DEVOPS] Inyectar variables de producción: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`, `GOOGLE_SERVICE_ACCOUNT_BASE64`, `JWT_SECRET`.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-04 — Despliegue Cloud en Producción y Monitoreo de Salud (`/api/v1`)
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/devops-mona-04`
+* Entregable requerido al finalizar: `documentation/done/devops/devops-mona-04.md`",devops,Highest,1,Sprint 5,"subtask, devops, koda-mvp, scrumban"
+Sub-task,MONA-04-SUB-05,MONA-04,,,[TEST] Verificar comunicación end-to-end entre la URL de producción del frontend y la API cloud.,"h3. 🛠️ Subtarea Técnica (FRONTEND)
+* *Tarea:* [TEST] Verificar comunicación end-to-end entre la URL de producción del frontend y la API cloud.
+* *Estado en backlog documental:* ⏳ Pendiente
+* *Historia de Usuario Padre:* MONA-04 — Despliegue Cloud en Producción y Monitoreo de Salud (`/api/v1`)
+* *Épica:* EPIC-10: Monetización, Consola de Administración y Despliegue Cloud
+
+h3. 🏛️ Reglas de Flujo Koda
+* Rama base: `develop`
+* Nomenclatura sugerida: `feat/frontend-mona-04`
+* Entregable requerido al finalizar: `documentation/done/frontend/frontend-mona-04.md`",frontend,Highest,1,Sprint 5,"subtask, frontend, koda-mvp, scrumban"
