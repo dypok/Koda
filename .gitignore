@@ -50,6 +50,7 @@ apps/api/config/
 .DS_Store
 .idea/
 .vscode/
+.agents/
 *.suo
 *.ntvs*
 *.njsproj
