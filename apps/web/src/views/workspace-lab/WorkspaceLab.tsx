@@ -32,21 +32,21 @@ interface ButtonProposal {
 }
 
 const BUTTON_PROPOSALS: ButtonProposal[] = [
-  { id: 'b01', num: '01', name: 'Quantum Circuit PCB', tagline: 'Pistas de circuito impreso dorado con corriente eléctrica vectorial en dashoffset.', badge: 'Hardware PCB', svgHighlight: 'Circuito integrado + pulsos' },
-  { id: 'b02', num: '02', name: 'Cyber Hexagon Mesh', tagline: 'Malla hexagonal con esquinas biseladas 45°, retícula HUD y scanlines cruzadas.', badge: 'Hex Matrix', svgHighlight: 'Panal reactivo + retícula' },
-  { id: 'b03', num: '03', name: 'Arc Reactor Core', tagline: 'Anillos concéntricos dentados en contrarrotación magnética y núcleo de plasma.', badge: 'Fusion Core', svgHighlight: 'Engranajes vectoriales duales' },
-  { id: 'b04', num: '04', name: 'Solar Flare Waveform', tagline: 'Curva sinusoidal Bézier interactiva que modula amplitud y frecuencia de audio.', badge: 'Audio Synth', svgHighlight: 'Osciloscopio espectral' },
-  { id: 'b05', num: '05', name: 'Origami Fox Matrix', tagline: 'Máscara geométrica Low-Poly de Koda 🦊 con polígonos que se encienden.', badge: 'Koda Vector', svgHighlight: 'Facetado 3D origami' },
-  { id: 'b06', num: '06', name: 'Isometric Tesseract', tagline: 'Hipercubo isométrico 3D flotante que se descompone en capas holográficas.', badge: 'Holo 3D', svgHighlight: 'Proyección isométrica' },
-  { id: 'b07', num: '07', name: 'Constellation Gate', tagline: 'Mapa estelar orbital kepleriano con glifos y nebulosa de partículas doradas.', badge: 'Astro Star', svgHighlight: 'Órbitas elípticas trazadas' },
-  { id: 'b08', num: '08', name: 'Hydraulic Mech Clamp', tagline: 'Pistones mecatrónicos vectoriales y placas de titanio angulares con compresión.', badge: 'Heavy Mech', svgHighlight: 'Pistones + pernos' },
-  { id: 'b09', num: '09', name: 'Neural Synapse Graph', tagline: 'Red neuronal con propagación de pesos sinápticos que viajan al centro [Enter].', badge: 'AI Synapse', svgHighlight: 'Nodos + axones activos' },
-  { id: 'b10', num: '10', name: 'Liquid Mercury Morph', tagline: 'Gotas de metal líquido fundido (SVG Gooey Filter) que se atraen y estiran.', badge: 'Liquid Metal', svgHighlight: 'Filtro SVG feGaussianBlur' },
-  { id: 'b11', num: '11', name: 'Tachometer Redline', tagline: 'Tacómetro de competición con aguja analógica que se dispara a 9.000 RPM.', badge: 'Telemetry RPM', svgHighlight: 'Arco graduado 180°' },
-  { id: 'b12', num: '12', name: 'Radar Sweep Sonar', tagline: 'Pantalla de sonar orbital 360° con haz giratorio y detección de objetivo.', badge: 'Sonar 360°', svgHighlight: 'Haz giratorio continuo' },
-  { id: 'b13', num: '13', name: 'Bioluminescent Abyss', tagline: 'Filamentos de fibra óptica orgánica con pulsos de luz abisal cian/ámbar.', badge: 'Bio Abyss', svgHighlight: 'Tentáculos y gradientes' },
-  { id: 'b14', num: '14', name: 'Prism Crystal Flare', tagline: 'Facetas de cristal reflectante con refracción y dispersión espectral de luz.', badge: 'Prism Glass', svgHighlight: 'Geometría refractiva' },
-  { id: 'b15', num: '15', name: 'Matrix Data Stream', tagline: 'Cascada vertical de glifos de código binario y lambdas que se solidifican.', badge: 'Binary Rain', svgHighlight: 'Rieles de código de flujo' },
+  { id: 'm01', num: '01', name: 'Liquid Chrome Gooey Fusion', tagline: 'Filtro SVG feGaussianBlur + feColorMatrix con fusión orgánica de dos gotas de mercurio.', badge: 'Metaball SVG', svgHighlight: 'Fusión de gotas feColorMatrix' },
+  { id: 'm02', num: '02', name: 'Magnetic Ferrofluid Spikes', tagline: 'Líquido ferrohidrodinámico que despliega espinas afiladas al activarse el campo magnético.', badge: 'Ferrofluid', svgHighlight: 'Espinas Bézier polares' },
+  { id: 'm03', num: '03', name: 'Molten Amber Meniscus Wave', tagline: 'Cámara hidrostática con onda de menisco senoidal y burbujas de lava ámbar ascendentes.', badge: 'Meniscus Wave', svgHighlight: 'Onda sinusoidal + ebullición' },
+  { id: 'm04', num: '04', name: 'Cyber Viscous Coalescence', tagline: 'Gotas de mercurio en riel capilar que colapsan por tensión superficial en un solo orbe.', badge: 'Surface Tension', svgHighlight: 'Gotas colapsantes en riel' },
+  { id: 'm05', num: '05', name: 'Vortex Hydro-Centrifuge', tagline: 'Remolino líquido centrífugo con espirales logarítmicas que convergen en el núcleo.', badge: 'Vortex Swirl', svgHighlight: 'Espirales de succión fluida' },
+  { id: 'm06', num: '06', name: 'Biomorphic Amoeba Membrane', tagline: 'Membrana orgánica con border-radius ondulante y orgánulos citoplasmáticos flotantes.', badge: 'Bio Membrane', svgHighlight: 'Deformación celular elástica' },
+  { id: 'm07', num: '07', name: 'Chromium Solder Ribbon', tagline: 'Cinta perimétrica de soldadura líquida con destello de mercurio cromado en órbita.', badge: 'Liquid Ribbon', svgHighlight: 'Pista perimétrica fluida' },
+  { id: 'm08', num: '08', name: 'Alchemical Glass Ampoule', tagline: 'Ampolleta de cristal pirex con nivel milimétrico, líquido reactivo y microburbujas.', badge: 'Bio Ampoule', svgHighlight: 'Cámara volumétrica de vidrio' },
+  { id: 'm09', num: '09', name: 'Surface Tension Dewdrop Lens', tagline: 'Gota de agua esférica de tensión superficial con lente cáustica y destello Fresnel.', badge: 'Dewdrop Lens', svgHighlight: 'Lente esférica y cáusticas' },
+  { id: 'm10', num: '10', name: 'Laminar Flow Twin Jet', tagline: 'Chorros laminares sin turbulencia con inestabilidad de Rayleigh-Plateau en los bordes.', badge: 'Laminar Stream', svgHighlight: 'Líneas de corriente paralelas' },
+  { id: 'm11', num: '11', name: 'Ferro-Magnetic Core Pulsar', tagline: 'Núcleo de mercurio suspendido en levitación magnética con corona de plasma líquido.', badge: 'Levitating Core', svgHighlight: 'Corona magnética orbital' },
+  { id: 'm12', num: '12', name: 'High-Speed Splash Crown', tagline: 'Corona de impacto hidrodinámico (Worthington Jet) congelada en alta velocidad.', badge: 'Splash Crown', svgHighlight: 'Corona de gotas satélite' },
+  { id: 'm13', num: '13', name: 'Hydrogel Plasma Capsule', tagline: 'Cápsula de hidrogel elástica con núcleo viscoso luminiscente y refracción interna.', badge: 'Hydrogel Slime', svgHighlight: 'Núcleo gelatinoso táctil' },
+  { id: 'm14', num: '14', name: 'Obsidian Dark Matter Ooze', tagline: 'Líquido de obsidiana viscosa con microfisuras radiactivas de magma ámbar.', badge: 'Dark Ooze', svgHighlight: 'Fisuras de magma viscoso' },
+  { id: 'm15', num: '15', name: 'Superfluid Zero-Viscosity Film', tagline: 'Película de Rollin cuántica trepando por las paredes del botón sin fricción.', badge: 'Superfluidity', svgHighlight: 'Flujo perimétrico cuántico' },
 ];
 
 const MOCK_EXERCISE = {
@@ -106,6 +106,22 @@ export const WorkspaceLab: React.FC = () => {
     <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden">
       <HeroSkyBackground starCount={90} interactive={false} className="fixed inset-0 pointer-events-none -z-10" />
 
+      {/* SVG Global Filters for Gooey Metaball effects */}
+      <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
+        <defs>
+          <filter id="liquid-goo-filter">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
+            <feBlend in="SourceGraphic" in2="goo" />
+          </filter>
+          <filter id="liquid-high-viscosity">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -9" result="goo" />
+            <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+          </filter>
+        </defs>
+      </svg>
+
       {/* Header Fijo con Selector Ergonómico de 15 Botones */}
       <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
         <div className="mx-auto max-w-7xl flex flex-col gap-3">
@@ -121,19 +137,19 @@ export const WorkspaceLab: React.FC = () => {
               </Link>
               <div className="flex items-center gap-2">
                 <span className="font-mono text-xs font-black uppercase tracking-wider text-orange-400">
-                  Button Lab
+                  Liquid Mercury Lab
                 </span>
                 <span className="text-slate-600 font-mono">/</span>
-                <span className="font-mono text-xs text-slate-400">15 Propuestas SVG Complejas</span>
+                <span className="font-mono text-xs text-slate-400">15 Variaciones Fluidas</span>
               </div>
             </div>
 
             <div className="text-[11px] font-mono text-slate-400 hidden md:block">
-              Usa <kbd className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">Alt + ←/→</kbd> para ciclar botones rápidamente.
+              Usa <kbd className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">Alt + ←/→</kbd> para ciclar variantes fluidas.
             </div>
           </div>
 
-          {/* Carrusel/Grid Compacto de Píldoras B01 a B15 */}
+          {/* Carrusel/Grid Compacto de Píldoras M01 a M15 */}
           <div className="flex items-center gap-1.5 overflow-x-auto max-w-full pb-1 scrollbar-none" role="tablist">
             {BUTTON_PROPOSALS.map((btn, idx) => (
               <button
@@ -174,7 +190,7 @@ export const WorkspaceLab: React.FC = () => {
         </div>
       </header>
 
-      {/* Espacio de Lección Principal (Base: Roadmap Fusion HUD) */}
+      {/* Espacio de Lección Principal */}
       <main className="flex-1 p-4 md:p-6 lg:p-8 flex items-center justify-center">
         <div className="w-full max-w-6xl space-y-4 font-sans">
           
@@ -249,7 +265,7 @@ export const WorkspaceLab: React.FC = () => {
               </div>
             </div>
 
-            {/* Columna Derecha: Práctica & Los 15 Botones SVG */}
+            {/* Columna Derecha: Práctica & Los 15 Botones Líquidos */}
             <div className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col justify-between gap-6 shadow-2xl">
               <div className="space-y-4">
                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
@@ -305,25 +321,25 @@ export const WorkspaceLab: React.FC = () => {
                 </div>
               </div>
 
-              {/* Renderizado del Botón SVG Activo (B01 a B15) */}
+              {/* Renderizado del Botón Líquido Activo (M01 a M15) */}
               <div className="space-y-3 pt-2">
                 {!checked ? (
                   <div className="w-full">
-                    {activeBtnIndex === 0 && <SvgBtn01QuantumPCB disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 1 && <SvgBtn02HexagonMesh disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 2 && <SvgBtn03ArcReactor disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 3 && <SvgBtn04SolarWaveform disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 4 && <SvgBtn05OrigamiFox disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 5 && <SvgBtn06IsometricTesseract disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 6 && <SvgBtn07ConstellationGate disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 7 && <SvgBtn08HydraulicMech disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 8 && <SvgBtn09NeuralSynapse disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 9 && <SvgBtn10LiquidMercury disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 10 && <SvgBtn11TachometerRedline disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 11 && <SvgBtn12RadarSonar disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 12 && <SvgBtn13BioluminescentAbyss disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 13 && <SvgBtn14PrismCrystal disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 14 && <SvgBtn15MatrixStream disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 0 && <FluidBtn01ChromeGooey disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 1 && <FluidBtn02FerrofluidSpikes disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 2 && <FluidBtn03MoltenMeniscus disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 3 && <FluidBtn04ViscousCoalesce disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 4 && <FluidBtn05HydroVortex disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 5 && <FluidBtn06AmoebaMembrane disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 6 && <FluidBtn07ChromiumRibbon disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 7 && <FluidBtn08AlchemicalAmpoule disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 8 && <FluidBtn09DewdropLens disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 9 && <FluidBtn10LaminarJets disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 10 && <FluidBtn11MagneticPulsar disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 11 && <FluidBtn12SplashCrown disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 12 && <FluidBtn13HydrogelPlasma disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 13 && <FluidBtn14DarkMatterOoze disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 14 && <FluidBtn15SuperfluidFilm disabled={!selectedOpt} onClick={() => setChecked(true)} />}
                   </div>
                 ) : (
                   <div className={cn(
@@ -361,33 +377,31 @@ export const WorkspaceLab: React.FC = () => {
 };
 
 /* =========================================================================
-   B01 — QUANTUM CIRCUIT PCB (Placa de Circuito Impreso con Pistas Vectoriales)
+   M01 — LIQUID CHROME GOOEY FUSION (Evolución de Propuesta 10 con Filtro SVG)
    ========================================================================= */
-function SvgBtn01QuantumPCB({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function FluidBtn01ChromeGooey({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border border-amber-500/50 bg-slate-950 px-5 font-mono text-xs font-bold text-amber-300 shadow-[0_0_15px_rgba(245,158,11,0.15)] hover:border-amber-400 hover:shadow-[0_0_25px_rgba(245,158,11,0.4)] transition-all duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-orange-400/80 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-[length:200%_auto] px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_25px_rgba(255,106,0,0.5)] hover:shadow-[0_0_35px_rgba(255,106,0,0.8)] hover:bg-right hover:scale-[1.01] transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
-      {/* SVG Circuit Tracks Background */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity duration-300" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,26 L60,26 L80,10 L180,10 L200,26 L360,26 L380,42 L500,42" fill="none" stroke="#F59E0B" strokeWidth="1.5" strokeDasharray="4,6" className="group-hover:animate-[dash_1.5s_linear_infinite]" />
-        <path d="M40,52 L120,52 L140,36 L240,36 L260,52 L450,52" fill="none" stroke="#F97316" strokeWidth="1" strokeDasharray="3,5" />
-        <circle cx="80" cy="10" r="3" fill="#FBBF24" />
-        <circle cx="200" cy="26" r="3" fill="#FBBF24" />
-        <circle cx="380" cy="42" r="3" fill="#FBBF24" />
-      </svg>
-
-      <div className="relative z-10 flex items-center gap-2.5">
-        <Cpu className="w-4 h-4 text-amber-400 group-hover:rotate-90 transition-transform duration-500" />
-        <span className="uppercase tracking-wider">COMPROBAR ORDEN [PCB]</span>
+      <div className="relative z-10 flex items-center gap-3">
+        {/* SVG Gooey Metaballs */}
+        <div 
+          className="relative h-7 w-14 flex items-center justify-center pointer-events-none"
+          style={{ filter: 'url(#liquid-goo-filter)' }}
+        >
+          <span className="h-5 w-5 rounded-full bg-slate-950 group-hover:translate-x-3 transition-transform duration-500 ease-out" />
+          <span className="h-4 w-4 rounded-full bg-slate-950 -ml-1 group-hover:-translate-x-3 transition-transform duration-500 ease-out" />
+          <span className="h-3 w-3 rounded-full bg-slate-950 absolute opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-300" />
+        </div>
+        <span className="text-slate-950 font-black tracking-widest text-sm">COMPROBAR RESPUESTA</span>
       </div>
 
       <div className="relative z-10 flex items-center gap-2">
-        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 group-hover:animate-ping" />
-        <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-amber-500/50 bg-amber-500/10 text-[10px] text-amber-200">
+        <kbd className="hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded-lg border border-slate-950/40 bg-slate-950/15 text-[10px] font-bold text-slate-950">
           Enter ↵
         </kbd>
       </div>
@@ -396,120 +410,270 @@ function SvgBtn01QuantumPCB({ disabled, onClick }: { disabled: boolean; onClick:
 }
 
 /* =========================================================================
-   B02 — CYBER HEXAGON MESH (Panal Hexagonal Biselado con Scanline HUD)
+   M02 — MAGNETIC FERROFLUID SPIKES (Espinas Bézier Ferrohidrodinámicas)
    ========================================================================= */
-function SvgBtn02HexagonMesh({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function FluidBtn02FerrofluidSpikes({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border border-orange-500/60 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-6 font-mono text-xs font-black uppercase tracking-widest text-orange-400 shadow-[0_0_18px_rgba(255,106,0,0.2)] hover:border-orange-400 hover:text-white hover:shadow-[0_0_28px_rgba(255,106,0,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border-2 border-amber-500 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:border-orange-400 hover:shadow-[0_0_30px_rgba(255,106,0,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
-      {/* SVG Hexagon Pattern */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-25 group-hover:opacity-60 transition-opacity" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="hex-pattern" width="16" height="27.7" patternUnits="userSpaceOnUse">
-            <path d="M8 0 L16 4.6 L16 13.9 L8 18.5 L0 13.9 L0 4.6 Z M0 27.7 L8 23.1 L16 27.7" fill="none" stroke="#FF6A00" strokeWidth="0.8" />
-          </pattern>
-        </defs>
-        <rect width="100%" height="100%" fill="url(#hex-pattern)" />
+      {/* SVG Ferrofluid Dynamic Spikes */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity" viewBox="0 0 400 60" preserveAspectRatio="none">
+        <path
+          d="M0,30 Q30,10 60,30 T120,30 T180,30 T240,30 T300,30 T360,30 T400,30"
+          fill="none"
+          stroke="#F59E0B"
+          strokeWidth="3"
+          className="group-hover:stroke-[#FF6A00] transition-colors"
+        />
+        <path
+          d="M20,60 L30,40 L40,60 M100,60 L110,35 L120,60 M220,60 L230,30 L240,60 M320,60 L330,38 L340,60"
+          fill="#FF6A00"
+          className="group-hover:scale-y-125 origin-bottom transition-transform duration-300"
+        />
       </svg>
 
-      <span className="relative z-10 flex items-center gap-2">
-        <Target className="w-4 h-4 text-orange-400 group-hover:rotate-180 transition-transform duration-500" />
-        <span>VERIFICAR RETÍCULA HEX</span>
-      </span>
-
-      <span className="relative z-10 font-mono text-[10px] px-2 py-0.5 rounded border border-orange-500/60 bg-orange-500/20 text-orange-200">
-        [ 0x01_ENTER ]
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   B03 — ARC REACTOR CORE (Núcleo Arc con Anillos Dentados en Contrarrotación)
-   ========================================================================= */
-function SvgBtn03ArcReactor({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-cyan-500/40 bg-slate-950 px-6 font-mono text-xs font-bold text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.2)] hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(6,182,212,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
       <div className="relative z-10 flex items-center gap-3">
-        {/* SVG Arc Reactor Gears */}
-        <div className="relative h-7 w-7 shrink-0">
-          <svg viewBox="0 0 40 40" className="absolute inset-0 w-full h-full group-hover:animate-spin" style={{ animationDuration: '4s' }}>
-            <circle cx="20" cy="20" r="16" fill="none" stroke="#06B6D4" strokeWidth="1.5" strokeDasharray="6,4" />
-          </svg>
-          <svg viewBox="0 0 40 40" className="absolute inset-0 w-full h-full group-hover:animate-[spin_3s_linear_infinite_reverse]">
-            <circle cx="20" cy="20" r="10" fill="none" stroke="#F59E0B" strokeWidth="1.5" strokeDasharray="3,3" />
-          </svg>
-          <div className="absolute inset-2.5 rounded-full bg-cyan-400/30 group-hover:bg-cyan-400 shadow-[0_0_10px_#06B6D4] transition-colors" />
-        </div>
-        <span className="uppercase tracking-wider font-black text-white">IGNICIÓN ARC REACTOR</span>
+        <div className="h-4 w-4 rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 shadow-[0_0_12px_#F59E0B] group-hover:scale-125 transition-transform" />
+        <span className="text-white font-black tracking-wider">FERROFLUID MAGNÉTICO</span>
       </div>
 
-      <span className="relative z-10 font-mono text-[10px] text-cyan-400 border border-cyan-500/40 px-2 py-0.5 rounded bg-cyan-950/40">
-        [ENTER ↵]
+      <span className="relative z-10 text-[10px] font-mono border border-amber-500/50 bg-amber-500/20 px-2 py-0.5 rounded text-amber-200">
+        MAGNETIC_ENTER [↵]
       </span>
     </button>
   );
 }
 
 /* =========================================================================
-   B04 — SOLAR FLARE WAVEFORM (Onda Sinusoidal Bézier Audio/Energía)
+   M03 — MOLTEN AMBER MENISCUS WAVE (Cámara de Lava con Menisco Senoidal)
    ========================================================================= */
-function SvgBtn04SolarWaveform({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function FluidBtn03MoltenMeniscus({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border border-amber-500/50 bg-gradient-to-r from-amber-950/40 via-slate-950 to-orange-950/40 px-6 font-mono text-xs font-bold text-amber-200 shadow-[0_0_18px_rgba(245,158,11,0.2)] hover:border-amber-400 hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-orange-500/70 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-orange-200 shadow-[0_0_22px_rgba(255,106,0,0.3)] hover:border-orange-400 hover:shadow-[0_0_32px_rgba(255,106,0,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
-      {/* SVG Sine Waves Animated */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 group-hover:opacity-90 transition-opacity" viewBox="0 0 400 50" preserveAspectRatio="none">
-        <path d="M0,25 Q50,5 100,25 T200,25 T300,25 T400,25" fill="none" stroke="#F59E0B" strokeWidth="2" className="group-hover:stroke-amber-300 transition-colors" />
-        <path d="M0,25 Q50,45 100,25 T200,25 T300,25 T400,25" fill="none" stroke="#FF6A00" strokeWidth="1.5" opacity="0.6" />
+      {/* SVG Molten Fluid Wave Level */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-60 group-hover:opacity-90 transition-opacity" viewBox="0 0 300 50" preserveAspectRatio="none">
+        <path
+          d="M0,25 Q50,15 100,25 T200,25 T300,25 L300,50 L0,50 Z"
+          fill="url(#molten-grad)"
+          className="group-hover:translate-y-[-4px] transition-transform duration-500"
+        />
+        <defs>
+          <linearGradient id="molten-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#EA580C" stopOpacity="0.8" />
+            <stop offset="50%" stopColor="#F59E0B" stopOpacity="0.9" />
+            <stop offset="100%" stopColor="#FF6A00" stopOpacity="0.8" />
+          </linearGradient>
+        </defs>
+        {/* Floating heat bubbles */}
+        <circle cx="45" cy="30" r="2.5" fill="#FFF" className="group-hover:animate-bounce" />
+        <circle cx="160" cy="35" r="3" fill="#FFF" className="group-hover:animate-bounce" style={{ animationDelay: '150ms' }} />
+        <circle cx="250" cy="28" r="2" fill="#FFF" className="group-hover:animate-bounce" style={{ animationDelay: '300ms' }} />
       </svg>
 
-      <span className="relative z-10 font-black uppercase tracking-wider text-white">
-        MODULACIÓN SINTÉTICA
-      </span>
+      <div className="relative z-10 flex items-center gap-2">
+        <Flame className="w-4 h-4 text-amber-400 group-hover:scale-125 transition-transform" />
+        <span className="text-white font-black tracking-widest">MENISCO TERMODINÁMICO</span>
+      </div>
 
-      <span className="relative z-10 flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-[10px] text-amber-300 font-mono">
-        <Lightning className="w-3.5 h-3.5 text-amber-400" />
-        <span>RUN [↵]</span>
+      <span className="relative z-10 font-mono text-[10px] text-slate-950 font-black bg-amber-400 px-2 py-0.5 rounded shadow">
+        BOIL [↵]
       </span>
     </button>
   );
 }
 
 /* =========================================================================
-   B05 — ORIGAMI FOX MATRIX (Máscara Vectorial Geométrica de Koda 🦊)
+   M04 — CYBER VISCOUS COALESCENCE (Gotas en Riel de Tensión Superficial)
    ========================================================================= */
-function SvgBtn05OrigamiFox({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function FluidBtn04ViscousCoalesce({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-orange-500/70 bg-gradient-to-r from-orange-600 to-amber-500 px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_22px_rgba(255,106,0,0.4)] hover:brightness-115 hover:scale-[1.01] transition-all duration-200 cursor-pointer disabled:opacity-40"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-amber-400 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-6 font-mono text-xs font-bold text-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.2)] hover:border-amber-300 hover:shadow-[0_0_30px_rgba(251,191,36,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <div className="relative z-10 flex items-center gap-3">
+        {/* SVG Capillary Rail */}
+        <svg className="w-16 h-6 shrink-0" viewBox="0 0 60 24">
+          <line x1="4" y1="12" x2="56" y2="12" stroke="#475569" strokeWidth="2" strokeDasharray="2,2" />
+          <circle cx="10" cy="12" r="4" fill="#FF6A00" className="group-hover:translate-x-5 transition-transform duration-500" />
+          <circle cx="50" cy="12" r="4" fill="#FBBF24" className="group-hover:-translate-x-5 transition-transform duration-500" />
+          <circle cx="30" cy="12" r="6" fill="#FFF" className="opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-500" />
+        </svg>
+        <span className="uppercase tracking-wider font-black text-white">COALESCENCIA CAPILAR</span>
+      </div>
+
+      <span className="relative z-10 text-[10px] font-mono border border-amber-500/50 bg-amber-500/20 px-2 py-0.5 rounded text-amber-200">
+        FUSION [↵]
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   M05 — VORTEX HYDRO-CENTRIFUGE (Remolino de Succión Centrífuga)
+   ========================================================================= */
+function FluidBtn05HydroVortex({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-cyan-500/60 bg-slate-950 px-6 font-mono text-xs font-bold text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:border-cyan-400 hover:shadow-[0_0_32px_rgba(6,182,212,0.55)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <div className="relative z-10 flex items-center gap-3">
+        {/* SVG Vortex Spiral */}
+        <div className="relative h-7 w-7 shrink-0">
+          <svg viewBox="0 0 40 40" className="w-full h-full group-hover:animate-spin" style={{ animationDuration: '2.5s' }}>
+            <circle cx="20" cy="20" r="16" fill="none" stroke="#06B6D4" strokeWidth="1.5" strokeDasharray="8,6" />
+            <path d="M20,4 A16,16 0 0,1 36,20 A10,10 0 0,1 20,30 A6,6 0 0,1 20,20" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
+          </svg>
+          <div className="absolute inset-2.5 rounded-full bg-cyan-400/40 group-hover:bg-cyan-300 shadow-[0_0_12px_#06B6D4] transition-all" />
+        </div>
+        <span className="uppercase tracking-wider font-black text-white">VÓRTICE HIDROCÊNTRICO</span>
+      </div>
+
+      <span className="relative z-10 font-mono text-[10px] text-cyan-300 border border-cyan-500/50 px-2 py-0.5 rounded bg-cyan-950/60">
+        SWIRL_ENTER ↵
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   M06 — BIOMORPHIC AMOEBA MEMBRANE (Membrana Celular Ondulante)
+   ========================================================================= */
+function FluidBtn06AmoebaMembrane({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden border-2 border-orange-500/80 bg-gradient-to-r from-orange-600 to-amber-500 px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_22px_rgba(255,106,0,0.4)] hover:shadow-[0_0_35px_rgba(255,106,0,0.7)] transition-all duration-500 cursor-pointer disabled:opacity-40"
+      style={{
+        borderRadius: '24px 12px 28px 14px / 14px 28px 12px 24px'
+      }}
     >
       <div className="flex items-center gap-3">
-        {/* SVG Low-Poly Fox Mask */}
-        <svg viewBox="0 0 32 32" className="w-6 h-6 shrink-0 fill-slate-950 group-hover:scale-110 transition-transform">
-          <polygon points="16,2 8,14 16,18 24,14" />
-          <polygon points="8,14 2,22 16,30 16,18" />
-          <polygon points="24,14 30,22 16,30 16,18" />
-          <polygon points="8,14 16,18 16,2" fill="#FFE8C8" />
-          <polygon points="24,14 16,18 16,2" fill="#FFC078" />
-        </svg>
-        <span className="text-slate-950 font-black tracking-widest">COMPROBAR CON KODA 🦊</span>
+        {/* SVG Organelles */}
+        <div className="relative h-6 w-8">
+          <span className="absolute top-1 left-1 h-3 w-3 rounded-full bg-slate-950 group-hover:translate-x-3 group-hover:scale-125 transition-all duration-500" />
+          <span className="absolute bottom-1 right-1 h-2.5 w-2.5 rounded-full bg-slate-950/70 group-hover:-translate-x-3 transition-transform duration-500" />
+        </div>
+        <span className="font-black text-slate-950 tracking-widest text-sm">MEMBRANA BIOMÓRFICA</span>
+      </div>
+
+      <kbd className="hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-bold text-slate-950">
+        Enter ↵
+      </kbd>
+    </button>
+  );
+}
+
+/* =========================================================================
+   M07 — CHROMIUM SOLDER RIBBON (Cinta de Mercurio Cromado Perimétrico)
+   ========================================================================= */
+function FluidBtn07ChromiumRibbon({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-slate-700 bg-slate-950 px-6 font-mono text-xs font-bold text-slate-100 shadow-xl hover:border-amber-400 hover:shadow-[0_0_28px_rgba(251,191,36,0.4)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      {/* SVG Liquid Ribbon Stroke */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+        <rect
+          x="2"
+          y="2"
+          width="calc(100% - 4px)"
+          height="calc(100% - 4px)"
+          rx="14"
+          fill="none"
+          stroke="url(#ribbon-grad)"
+          strokeWidth="2"
+          strokeDasharray="40 120"
+          className="group-hover:animate-[dash_2s_linear_infinite]"
+        />
+        <defs>
+          <linearGradient id="ribbon-grad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#F59E0B" />
+            <stop offset="50%" stopColor="#FFF" />
+            <stop offset="100%" stopColor="#FF6A00" />
+          </linearGradient>
+        </defs>
+      </svg>
+
+      <div className="relative z-10 flex items-center gap-3">
+        <div className="h-3 w-3 rounded-full bg-amber-400 shadow-[0_0_10px_#F59E0B] group-hover:scale-150 transition-transform" />
+        <span className="uppercase tracking-wider font-black text-white">SOLDADURA CROMADA</span>
+      </div>
+
+      <span className="relative z-10 text-[10px] font-mono border border-slate-700 bg-slate-900 px-2 py-0.5 rounded text-slate-300 group-hover:border-amber-400 group-hover:text-amber-300">
+        [FLOW_ENTER]
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   M08 — ALCHEMICAL GLASS AMPOULE (Ampolleta de Vidrio con Microburbujas)
+   ========================================================================= */
+function FluidBtn08AlchemicalAmpoule({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-full border border-amber-500/50 bg-slate-900/80 px-6 font-mono text-xs font-bold text-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:border-amber-300 hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      {/* SVG Volumetric Graduations */}
+      <svg className="absolute left-4 top-0 bottom-0 w-8 h-full pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity" viewBox="0 0 30 50">
+        <line x1="2" y1="12" x2="12" y2="12" stroke="#FBBF24" strokeWidth="1.5" />
+        <line x1="2" y1="25" x2="18" y2="25" stroke="#FBBF24" strokeWidth="2" />
+        <line x1="2" y1="38" x2="12" y2="38" stroke="#FBBF24" strokeWidth="1.5" />
+      </svg>
+
+      <div className="relative z-10 ml-6 flex items-center gap-2.5">
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-400 animate-ping" />
+        <span className="font-black tracking-wider uppercase text-white">AMPOLLETA ALQUÍMICA</span>
+      </div>
+
+      <span className="relative z-10 text-[10px] font-mono border border-amber-500/60 bg-amber-500/20 px-2.5 py-0.5 rounded-full text-amber-200">
+        50mL · REAGENTE [↵]
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   M09 — SURFACE TENSION DEWDROP LENS (Gota Esférica con Refracción Fresnel)
+   ========================================================================= */
+function FluidBtn09DewdropLens({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-orange-400/60 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-400 px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_24px_rgba(255,106,0,0.4)] hover:brightness-110 hover:shadow-[0_0_36px_rgba(255,106,0,0.7)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <div className="flex items-center gap-3">
+        {/* SVG Dewdrop Specular Sphere */}
+        <div className="relative h-6 w-6 shrink-0 rounded-full bg-slate-950 shadow-inner group-hover:scale-125 transition-transform duration-300">
+          <div className="absolute top-1 left-1.5 h-2 w-2 rounded-full bg-white opacity-90" />
+          <div className="absolute bottom-1 right-1.5 h-1 w-1 rounded-full bg-amber-400 opacity-80" />
+        </div>
+        <span className="text-slate-950 font-black tracking-widest text-sm">LENTE GOTA FRESNEL</span>
       </div>
 
       <kbd className="hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded border border-slate-950/40 bg-slate-950/15 text-[10px] font-bold text-slate-950">
@@ -520,156 +684,84 @@ function SvgBtn05OrigamiFox({ disabled, onClick }: { disabled: boolean; onClick:
 }
 
 /* =========================================================================
-   B06 — ISOMETRIC TESSERACT (Hipercubo Isométrico 3D en Capas)
+   M10 — LAMINAR FLOW TWIN JET (Chorros Fluidos Paralelos Sin Turbulencia)
    ========================================================================= */
-function SvgBtn06IsometricTesseract({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function FluidBtn10LaminarJets({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border border-slate-700/80 bg-slate-900/90 px-6 font-mono text-xs font-bold text-slate-200 shadow-xl hover:border-amber-400 hover:text-amber-200 hover:shadow-[0_0_25px_rgba(251,191,36,0.3)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-teal-500/50 bg-slate-950 px-6 font-mono text-xs font-bold text-teal-200 shadow-[0_0_20px_rgba(20,184,166,0.2)] hover:border-teal-400 hover:shadow-[0_0_30px_rgba(20,184,166,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
-      <div className="flex items-center gap-3">
-        {/* SVG Isometric Cube */}
-        <svg viewBox="0 0 30 30" className="w-5 h-5 shrink-0 group-hover:rotate-45 transition-transform duration-500">
-          <polygon points="15,2 27,9 15,16 3,9" fill="#F59E0B" fillOpacity="0.8" />
-          <polygon points="3,9 15,16 15,28 3,21" fill="#D97706" fillOpacity="0.6" />
-          <polygon points="27,9 15,16 15,28 27,21" fill="#B45309" fillOpacity="0.9" />
-        </svg>
-        <span className="uppercase tracking-wider font-mono font-bold">DESPLEGAR HIPERCUBO</span>
-      </div>
-
-      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-400 group-hover:border-amber-400/50 group-hover:text-amber-300">
-        [ 3D_ENTER ]
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   B07 — CONSTELLATION GATE (Portal Estelar Kepleriano con Órbitas Elípticas)
-   ========================================================================= */
-function SvgBtn07ConstellationGate({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border border-amber-500/40 bg-slate-950 px-6 font-mono text-xs font-bold text-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:border-amber-300 hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
-      {/* SVG Kepler Orbit Ellipses */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30 group-hover:opacity-80 transition-opacity" viewBox="0 0 300 60">
-        <ellipse cx="150" cy="30" rx="130" ry="22" fill="none" stroke="#FBBF24" strokeWidth="1" strokeDasharray="5,4" className="group-hover:animate-[spin_10s_linear_infinite]" />
-        <ellipse cx="150" cy="30" rx="90" ry="14" fill="none" stroke="#F97316" strokeWidth="1" />
-        <circle cx="50" cy="20" r="2" fill="#FFF" />
-        <circle cx="220" cy="38" r="2.5" fill="#FBBF24" />
-      </svg>
-
-      <span className="relative z-10 flex items-center gap-2 font-black uppercase tracking-wider text-white">
-        <Sparkle className="w-4 h-4 text-amber-400" />
-        <span>TRANSMISIÓN KEPLER</span>
-      </span>
-
-      <span className="relative z-10 text-[10px] font-mono border border-amber-500/50 bg-amber-500/10 px-2 py-0.5 rounded text-amber-300">
-        GLYPH_ENTER ↵
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   B08 — HYDRAULIC MECH CLAMP (Pistones Mecatrónicos y Blindaje Pesado)
-   ========================================================================= */
-function SvgBtn08HydraulicMech({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border-2 border-slate-700 bg-slate-900 px-6 font-mono text-xs font-black uppercase tracking-widest text-slate-100 shadow-xl hover:border-orange-500 hover:text-orange-400 hover:shadow-[0_0_25px_rgba(255,106,0,0.35)] transition-all duration-200 cursor-pointer disabled:opacity-40"
-    >
-      {/* SVG Mech Bolts & Pistones */}
-      <svg className="absolute left-2 top-0 bottom-0 w-6 h-full pointer-events-none" viewBox="0 0 20 50">
-        <circle cx="10" cy="12" r="3" fill="#64748B" />
-        <circle cx="10" cy="38" r="3" fill="#64748B" />
-        <line x1="10" y1="15" x2="10" y2="35" stroke="#475569" strokeWidth="2" />
-      </svg>
-
-      <svg className="absolute right-2 top-0 bottom-0 w-6 h-full pointer-events-none" viewBox="0 0 20 50">
-        <circle cx="10" cy="12" r="3" fill="#64748B" />
-        <circle cx="10" cy="38" r="3" fill="#64748B" />
-        <line x1="10" y1="15" x2="10" y2="35" stroke="#475569" strokeWidth="2" />
-      </svg>
-
-      <span className="ml-4 flex items-center gap-2">
-        <ShieldCheck className="w-4 h-4 text-orange-400" />
-        <span>PINZA HIDRÁULICA [MECH]</span>
-      </span>
-
-      <span className="mr-4 text-[10px] px-2 py-0.5 rounded bg-slate-950 border border-slate-800 text-slate-400 group-hover:border-orange-500/50 group-hover:text-orange-300">
-        LOCK_ENTER
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   B09 — NEURAL SYNAPSE GRAPH (Red Neuronal con Axones y Pesos Vectoriales)
-   ========================================================================= */
-function SvgBtn09NeuralSynapse({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border border-violet-500/40 bg-gradient-to-r from-slate-950 via-violet-950/30 to-slate-950 px-6 font-mono text-xs font-bold text-violet-300 shadow-[0_0_20px_rgba(139,92,246,0.2)] hover:border-violet-400 hover:shadow-[0_0_30px_rgba(139,92,246,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
-      {/* SVG Neural Graph */}
+      {/* SVG Laminar Streamlines */}
       <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 group-hover:opacity-90 transition-opacity" viewBox="0 0 350 50">
-        <line x1="20" y1="15" x2="90" y2="35" stroke="#A78BFA" strokeWidth="1" />
-        <line x1="20" y1="35" x2="90" y2="15" stroke="#A78BFA" strokeWidth="1" />
-        <line x1="90" y1="35" x2="180" y2="25" stroke="#F59E0B" strokeWidth="1.5" />
-        <line x1="180" y1="25" x2="280" y2="25" stroke="#F97316" strokeWidth="1.5" strokeDasharray="4,4" className="group-hover:animate-[dash_1s_linear_infinite]" />
-        <circle cx="20" cy="15" r="3" fill="#C4B5FD" />
-        <circle cx="20" cy="35" r="3" fill="#C4B5FD" />
-        <circle cx="90" cy="35" r="3.5" fill="#FBBF24" />
-        <circle cx="180" cy="25" r="4" fill="#F97316" />
-        <circle cx="280" cy="25" r="3.5" fill="#34D399" />
+        <path d="M0,15 L120,15 Q180,35 240,35 L350,35" fill="none" stroke="#2DD4BF" strokeWidth="2" />
+        <path d="M0,35 L120,35 Q180,15 240,15 L350,15" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
       </svg>
 
       <span className="relative z-10 font-black uppercase tracking-wider text-white">
-        PROPAGACIÓN SINÁPTICA
+        FLUJO LAMINAR PURO
       </span>
 
-      <span className="relative z-10 text-[10px] font-mono border border-violet-500/50 bg-violet-500/20 px-2 py-0.5 rounded text-violet-200">
-        FIRE_AXON [↵]
+      <span className="relative z-10 text-[10px] font-mono border border-teal-500/60 bg-teal-950/60 px-2 py-0.5 rounded text-teal-300">
+        REYNOLDS [↵]
       </span>
     </button>
   );
 }
 
 /* =========================================================================
-   B10 — LIQUID MERCURY MORPH (Metaballs Líquidas con Filtro SVG Gooey)
+   M11 — FERRO-MAGNETIC CORE PULSAR (Núcleo en Levitación Magnética)
    ========================================================================= */
-function SvgBtn10LiquidMercury({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function FluidBtn11MagneticPulsar({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border border-orange-500/50 bg-gradient-to-r from-orange-500 to-amber-400 px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_20px_rgba(255,106,0,0.4)] hover:shadow-[0_0_30px_rgba(255,106,0,0.7)] hover:scale-[1.01] transition-all duration-200 cursor-pointer disabled:opacity-40"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-orange-500/70 bg-gradient-to-r from-slate-950 via-orange-950/40 to-slate-950 px-6 font-mono text-xs font-bold text-orange-200 shadow-[0_0_22px_rgba(255,106,0,0.3)] hover:border-orange-400 hover:shadow-[0_0_34px_rgba(255,106,0,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
-      <div className="flex items-center gap-3">
-        {/* SVG Liquid Goo Animation */}
-        <div className="relative h-6 w-12 flex items-center">
-          <span className="h-4 w-4 rounded-full bg-slate-950 group-hover:translate-x-6 transition-transform duration-500 ease-out" />
-          <span className="h-3 w-3 rounded-full bg-slate-950 opacity-80 ml-1 group-hover:-translate-x-3 transition-transform duration-500" />
+      <div className="relative z-10 flex items-center gap-3">
+        {/* SVG Levitating Core & Corona */}
+        <div className="relative h-7 w-7 shrink-0">
+          <svg viewBox="0 0 36 36" className="w-full h-full group-hover:rotate-180 transition-transform duration-700">
+            <circle cx="18" cy="18" r="14" fill="none" stroke="#FF6A00" strokeWidth="1" strokeDasharray="4,4" />
+          </svg>
+          <div className="absolute inset-1.5 rounded-full bg-gradient-to-tr from-orange-500 to-amber-300 shadow-[0_0_14px_#FF6A00] group-hover:scale-110 transition-transform" />
         </div>
-        <span>FUSIÓN MERCURIO LÍQUIDO</span>
+        <span className="uppercase tracking-wider font-black text-white">NÚCLEO EN LEVITACIÓN</span>
       </div>
 
-      <kbd className="hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded border border-slate-950/40 bg-slate-950/15 text-[10px] font-bold">
+      <span className="relative z-10 text-[10px] font-mono border border-orange-500/60 bg-orange-500/20 px-2 py-0.5 rounded text-orange-200">
+        PULSAR_EXEC [↵]
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   M12 — HIGH-SPEED SPLASH CROWN (Corona de Impacto Hidrodinámico)
+   ========================================================================= */
+function FluidBtn12SplashCrown({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-amber-500/80 bg-gradient-to-r from-orange-500 to-amber-400 px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_22px_rgba(255,106,0,0.4)] hover:shadow-[0_0_35px_rgba(255,106,0,0.7)] transition-all duration-200 cursor-pointer disabled:opacity-40"
+    >
+      <div className="flex items-center gap-3">
+        {/* SVG Splash Crown */}
+        <svg viewBox="0 0 32 24" className="w-7 h-5 shrink-0 fill-slate-950 group-hover:scale-125 transition-transform duration-300">
+          <path d="M2,20 C8,18 10,6 12,6 C14,6 14,14 16,14 C18,14 18,4 20,4 C22,4 24,18 30,20 Z" />
+          <circle cx="12" cy="3" r="1.5" />
+          <circle cx="20" cy="1.5" r="1.5" />
+        </svg>
+        <span className="font-black text-slate-950 tracking-widest text-sm">CORONA DE IMPACTO</span>
+      </div>
+
+      <kbd className="hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded border border-slate-950/40 bg-slate-950/15 text-[10px] font-bold text-slate-950">
         Enter ↵
       </kbd>
     </button>
@@ -677,152 +769,80 @@ function SvgBtn10LiquidMercury({ disabled, onClick }: { disabled: boolean; onCli
 }
 
 /* =========================================================================
-   B11 — TACHOMETER REDLINE (Tacómetro Analógico con Aguja a 9.000 RPM)
+   M13 — HYDROGEL PLASMA CAPSULE (Cápsula Elástica de Hidrogel)
    ========================================================================= */
-function SvgBtn11TachometerRedline({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function FluidBtn13HydrogelPlasma({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border border-rose-500/40 bg-slate-950 px-6 font-mono text-xs font-bold text-slate-200 shadow-[0_0_18px_rgba(244,63,94,0.15)] hover:border-rose-500 hover:shadow-[0_0_28px_rgba(244,63,94,0.4)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-3xl border-2 border-amber-400 bg-slate-950/90 px-6 font-mono text-xs font-black uppercase tracking-wider text-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:scale-[1.02] hover:shadow-[0_0_32px_rgba(251,191,36,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
       <div className="flex items-center gap-3">
-        {/* SVG Tachometer Dial */}
-        <svg viewBox="0 0 40 24" className="w-8 h-5 shrink-0">
-          <path d="M4,22 A16,16 0 0,1 36,22" fill="none" stroke="#334155" strokeWidth="3" />
-          <path d="M28,8 A16,16 0 0,1 36,22" fill="none" stroke="#F43F5E" strokeWidth="3" />
-          {/* Needle */}
-          <line x1="20" y1="22" x2="10" y2="10" stroke="#F43F5E" strokeWidth="2" strokeLinecap="round" className="group-hover:origin-bottom group-hover:rotate-45 transition-transform duration-300" />
-          <circle cx="20" cy="22" r="2.5" fill="#FFF" />
-        </svg>
-        <span className="uppercase tracking-wider font-black text-white">REDLINE 9000 RPM</span>
+        <div className="h-5 w-5 rounded-full bg-gradient-to-r from-orange-500 to-amber-300 shadow-[0_0_12px_#F59E0B] group-hover:scale-125 group-hover:rotate-45 transition-all" />
+        <span className="text-white font-black tracking-wider">CÁPSULA HIDROGEL</span>
       </div>
 
-      <span className="text-[10px] font-mono border border-rose-500/50 bg-rose-500/20 px-2 py-0.5 rounded text-rose-300">
-        SHIFT_ENTER ↵
+      <span className="text-[10px] font-mono border border-amber-400/50 bg-amber-400/20 px-2 py-0.5 rounded-full text-amber-200">
+        GEL_EXEC [↵]
       </span>
     </button>
   );
 }
 
 /* =========================================================================
-   B12 — RADAR SWEEP SONAR (Sonar Táctico Orbital 360°)
+   M14 — OBSIDIAN DARK MATTER OOZE (Obsidiana con Fisuras de Magma)
    ========================================================================= */
-function SvgBtn12RadarSonar({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function FluidBtn14DarkMatterOoze({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border border-emerald-500/40 bg-slate-950 px-6 font-mono text-xs font-bold text-emerald-300 shadow-[0_0_18px_rgba(16,185,129,0.15)] hover:border-emerald-400 hover:shadow-[0_0_30px_rgba(16,185,129,0.4)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-rose-500/50 bg-slate-950 px-6 font-mono text-xs font-bold text-rose-200 shadow-[0_0_20px_rgba(244,63,94,0.2)] hover:border-rose-400 hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
-      <div className="flex items-center gap-3">
-        {/* SVG Radar Sweep */}
-        <div className="relative h-6 w-6 shrink-0">
-          <svg viewBox="0 0 30 30" className="w-full h-full">
-            <circle cx="15" cy="15" r="13" fill="none" stroke="#10B981" strokeWidth="1" strokeOpacity="0.4" />
-            <circle cx="15" cy="15" r="7" fill="none" stroke="#10B981" strokeWidth="1" strokeOpacity="0.3" />
-            <line x1="15" y1="2" x2="15" y2="28" stroke="#10B981" strokeWidth="0.5" strokeOpacity="0.5" />
-            <line x1="2" y1="15" x2="28" y2="15" stroke="#10B981" strokeWidth="0.5" strokeOpacity="0.5" />
-          </svg>
-          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-emerald-500/40 to-transparent group-hover:animate-spin" style={{ animationDuration: '2s' }} />
-        </div>
-        <span className="uppercase tracking-wider font-black text-white">BARRIDO SONAR 360°</span>
-      </div>
-
-      <span className="text-[10px] font-mono border border-emerald-500/40 bg-emerald-950/40 px-2 py-0.5 rounded text-emerald-300">
-        PING_TARGET [↵]
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   B13 — BIOLUMINESCENT ABYSS (Filamentos y Tentáculos de Fibra Óptica)
-   ========================================================================= */
-function SvgBtn13BioluminescentAbyss({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border border-teal-500/40 bg-gradient-to-r from-slate-950 via-teal-950/30 to-slate-950 px-6 font-mono text-xs font-bold text-teal-200 shadow-[0_0_20px_rgba(20,184,166,0.2)] hover:border-teal-400 hover:shadow-[0_0_30px_rgba(20,184,166,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
-      {/* SVG Bioluminescent Curves */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30 group-hover:opacity-80 transition-opacity" viewBox="0 0 300 50">
-        <path d="M10,25 C80,5 120,45 200,20 S280,40 320,15" fill="none" stroke="#2DD4BF" strokeWidth="1.5" />
-        <path d="M10,35 C90,15 140,55 220,15 S260,35 300,25" fill="none" stroke="#F59E0B" strokeWidth="1" />
+      {/* SVG Magma Veins */}
+      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity" viewBox="0 0 300 50">
+        <path d="M10,25 Q70,5 130,30 T250,20 T300,35" fill="none" stroke="#F43F5E" strokeWidth="1.5" />
+        <path d="M30,45 Q110,20 180,40 T290,15" fill="none" stroke="#FB923C" strokeWidth="1" strokeDasharray="4,4" />
       </svg>
 
       <span className="relative z-10 font-black uppercase tracking-wider text-white">
-        FILAMENTO BIOLUMINISCENTE
+        OBSIDIANA MAGMÁTICA
       </span>
 
-      <span className="relative z-10 text-[10px] font-mono border border-teal-500/50 bg-teal-500/20 px-2 py-0.5 rounded text-teal-200">
-        PULSE [↵]
+      <span className="relative z-10 text-[10px] font-mono border border-rose-500/60 bg-rose-950/60 px-2 py-0.5 rounded text-rose-200">
+        OOZE [↵]
       </span>
     </button>
   );
 }
 
 /* =========================================================================
-   B14 — PRISM CRYSTAL FLARE (Refracción de Cristal y Espectro Cromático)
+   M15 — SUPERFLUID ZERO-VISCOSITY FILM (Película Cuántica de Rollin)
    ========================================================================= */
-function SvgBtn14PrismCrystal({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function FluidBtn15SuperfluidFilm({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border border-white/20 bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 px-6 font-mono text-xs font-bold text-slate-100 shadow-xl hover:border-amber-400 hover:shadow-[0_0_30px_rgba(255,255,255,0.2)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-cyan-400/80 bg-gradient-to-r from-orange-500 via-amber-400 to-cyan-400 px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_25px_rgba(6,182,212,0.4)] hover:shadow-[0_0_38px_rgba(255,106,0,0.8)] transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
       <div className="flex items-center gap-3">
-        {/* SVG Prism Facets */}
-        <svg viewBox="0 0 30 26" className="w-6 h-5 shrink-0 group-hover:scale-110 transition-transform">
-          <polygon points="15,2 28,24 2,24" fill="none" stroke="#FFF" strokeWidth="1.5" />
-          <line x1="2" y1="16" x2="15" y2="16" stroke="#F59E0B" strokeWidth="1" />
-          <line x1="15" y1="16" x2="26" y2="12" stroke="#06B6D4" strokeWidth="1" />
-          <line x1="15" y1="16" x2="28" y2="20" stroke="#F43F5E" strokeWidth="1" />
-        </svg>
-        <span className="uppercase tracking-wider font-black text-white">REFRACCIÓN PRISMÁTICA</span>
+        {/* SVG Superfluid creeping beads */}
+        <div className="flex items-center gap-1">
+          <span className="h-3 w-3 rounded-full bg-slate-950 group-hover:-translate-y-2 transition-transform duration-300" />
+          <span className="h-4 w-4 rounded-full bg-slate-950 group-hover:translate-y-2 transition-transform duration-300" />
+          <span className="h-2.5 w-2.5 rounded-full bg-slate-950 group-hover:-translate-y-2 transition-transform duration-300" />
+        </div>
+        <span className="font-black text-slate-950 tracking-widest text-sm">SUPERFLUIDO CUÁNTICO</span>
       </div>
 
-      <span className="text-[10px] font-mono border border-amber-400/50 bg-amber-400/10 px-2 py-0.5 rounded text-amber-300">
-        REFRACT [↵]
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   B15 — MATRIX DATA STREAM (Cascada de Glifos y Rieles de Código Binario)
-   ========================================================================= */
-function SvgBtn15MatrixStream({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[52px] w-full items-center justify-between overflow-hidden rounded-xl border border-emerald-500/50 bg-slate-950 px-6 font-mono text-xs font-bold text-emerald-400 shadow-[0_0_18px_rgba(16,185,129,0.2)] hover:border-emerald-400 hover:shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
-      {/* SVG Binary Matrix Columns */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-20 group-hover:opacity-70 transition-opacity" viewBox="0 0 300 50">
-        <text x="20" y="15" fill="#10B981" fontSize="9" fontFamily="monospace">1 0 1</text>
-        <text x="20" y="32" fill="#10B981" fontSize="9" fontFamily="monospace">0 1 0</text>
-        <text x="140" y="20" fill="#F59E0B" fontSize="9" fontFamily="monospace">λ fn()</text>
-        <text x="240" y="15" fill="#10B981" fontSize="9" fontFamily="monospace">0 0 1</text>
-        <text x="240" y="35" fill="#10B981" fontSize="9" fontFamily="monospace">1 1 0</text>
-      </svg>
-
-      <span className="relative z-10 flex items-center gap-2 font-black uppercase tracking-wider text-white">
-        <Code className="w-4 h-4 text-emerald-400" />
-        <span>STREAM MATRIX LUA</span>
-      </span>
-
-      <span className="relative z-10 text-[10px] font-mono border border-emerald-500/60 bg-emerald-950/60 px-2 py-0.5 rounded text-emerald-300">
-        0xEXEC [↵]
-      </span>
+      <kbd className="hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-bold text-slate-950">
+        Enter ↵
+      </kbd>
     </button>
   );
 }
