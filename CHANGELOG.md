@@ -10,6 +10,11 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-17 09:32] [Added] **Sistema de atajos de teclado ergonómicos y keycaps táctiles (`KA-152` / `LESS-02`):**
+  - Hook modular `useLessonKeyboardShortcuts` con soporte para selección rápida (`1-4`, `A-D`), validación/avance con `Enter` / `Espacio` y navegación con flechas.
+  - Badges táctiles mecanizadas `<kbd>` en `QuestionRenderer` con micro-animaciones de hundimiento (`translate-y-0.5`) y resplandor lumínico ámbar/cyan.
+  - Integración completa tanto en el flujo de lecciones teóricas como en el modo `QuizMode` de `LessonWorkspace.tsx`.
+  - Detalle en `documentation/changelog/17-09-2026-changelog.md`.
 - [2026-09-14 23:56] [Added] **Motor de render PixiJS compartido + migración landing (`lib/pixi/engine.ts`):**
   - Import dinámico en chunk aparte, DPR capado, textura glow compartida y tickers pausados fuera de pantalla.
   - Sky del hero, `WeatherLayer` y `CodeConfetti` migrados a Pixi; fondo del roadmap a órbita kepleriana + espiral ASCII (`OrbitFieldBackground`).
