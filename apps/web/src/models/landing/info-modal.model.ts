@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  CircleHelp,
-  School,
-  Award,
-  Users,
-  FileText,
-  ShieldCheck,
-  UserCheck,
-  Newspaper,
-} from 'lucide-react';
+import { Question, GraduationCap, Medal, Users, FileText, ShieldCheck, UserCheck, Newspaper } from '@phosphor-icons/react';
 
 export type InfoModalTab =
   | 'faqs'
@@ -35,9 +26,9 @@ export const MODAL_CATEGORIES: ModalCategory[] = [
   {
     name: 'Ayuda y Soporte',
     items: [
-      { id: 'faqs', label: 'Preguntas Frecuentes', icon: CircleHelp },
-      { id: 'schools', label: 'Koda para Escuelas', icon: School },
-      { id: 'tests', label: 'Certificación & Evaluaciones', icon: Award },
+      { id: 'faqs', label: 'Preguntas Frecuentes', icon: Question },
+      { id: 'schools', label: 'Koda para Escuelas', icon: GraduationCap },
+      { id: 'tests', label: 'Certificación & Evaluaciones', icon: Medal },
     ],
   },
   {

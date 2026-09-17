@@ -16,10 +16,10 @@ export const RoadmapSection: React.FC = () => {
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, clipPath: 'inset(0 100% 0 0)' }}
-          whileInView={{ opacity: 1, clipPath: 'inset(0 0% 0 0)' }}
+          initial={reduceMotion ? false : { opacity: 0, x: -35 }}
+          whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="lg:col-span-5 order-2 lg:order-1 flex justify-center lg:justify-start w-full"
         >
           <MiniSkillTree />
@@ -32,9 +32,6 @@ export const RoadmapSection: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
           className="lg:col-span-7 order-1 lg:order-2 space-y-5 text-left"
         >
-          <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-amber-400">
-            Pilar 2 · Ruta
-          </p>
           <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
             Un roadmap claro, paso a paso
           </h3>

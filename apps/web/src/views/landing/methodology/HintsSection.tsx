@@ -7,7 +7,7 @@ export const HintsSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-  <section id="pistas" className="py-28 md:py-36 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20 sticky top-[188px] z-[25] rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.5)]">
+  <section id="pistas" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20 sticky top-[188px] z-[25] rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.5)]">
     <WeatherLayer type="fireflies" count={12} />
     <div aria-hidden="true" data-glow="10" className="absolute -top-16 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
@@ -30,16 +30,13 @@ export const HintsSection: React.FC = () => {
       </svg>
     </div>
 
-    <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 32, scale: 0.98, rotate: -1 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+      <motion.div
+        initial={reduceMotion ? false : { opacity: 0, y: 32 }}
+        whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
       className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-6 relative"
     >
-      <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-emerald-400">
-        Pilar 4 · Razonamiento
-      </p>
       <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] max-w-3xl mx-auto">
         Pistas que te enseñan a{' '}
         <Highlight>
@@ -53,7 +50,7 @@ export const HintsSection: React.FC = () => {
       </p>
 
       <div className="pt-4 max-w-md mx-auto">
-        <p className="text-xs sm:text-sm font-sans italic text-slate-400/80 border-t border-slate-900 pt-4">
+        <p className="text-xs sm:text-sm font-sans italic text-slate-400 border-t border-slate-900 pt-4">
           &quot;El objetivo no es que copies código, es que entiendas cómo resolverlo.&quot;
         </p>
       </div>

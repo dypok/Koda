@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { User, Mail, Lock, Eye, EyeOff } from 'lucide-react';
+import { User, Envelope, Lock, Eye, EyeSlash } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 
 interface ProfileFormFieldsProps {
@@ -69,7 +69,7 @@ export const ProfileFormFields: React.FC<ProfileFormFieldsProps> = ({
         Correo electrónico
       </label>
       <div className="relative">
-        <Mail aria-hidden="true" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
+        <Envelope aria-hidden="true" className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500 pointer-events-none" />
         <input
           id="register-email"
           type="email"
@@ -122,7 +122,7 @@ export const ProfileFormFields: React.FC<ProfileFormFieldsProps> = ({
           aria-pressed={showPassword}
           className="absolute right-2 top-1/2 -translate-y-1/2 inline-flex min-h-[36px] min-w-[36px] items-center justify-center rounded-lg text-slate-400 hover:text-slate-200"
         >
-          {showPassword ? <EyeOff aria-hidden="true" className="w-4 h-4" /> : <Eye aria-hidden="true" className="w-4 h-4" />}
+          {showPassword ? <EyeSlash aria-hidden="true" className="w-4 h-4" /> : <Eye aria-hidden="true" className="w-4 h-4" />}
         </button>
       </div>
       <div

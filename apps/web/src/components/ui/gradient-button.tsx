@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
@@ -68,18 +67,35 @@ export interface GradientButtonProps
   asChild?: boolean;
 }
 
+function mergeRefs<T>(...refs: Array<React.Ref<T> | undefined>) {
+  return (value: T | null) => {
+    for (const ref of refs) {
+      if (typeof ref === "function") ref(value);
+      else if (ref) (ref as React.MutableRefObject<T | null>).current = value;
+    }
+  };
+}
+
 const GradientButton = React.forwardRef<HTMLButtonElement, GradientButtonProps>(
   ({ className, variant, size, asChild = false, children, ...props }, ref) => {
-    const Comp = asChild ? Slot : "button";
+    const classes = cn(gradientButtonVariants({ variant, size, className }));
+    // Composición nativa: clona el hijo único (Link) fusionando clases y ref.
+    if (asChild && React.isValidElement(children)) {
+      const child = children as React.ReactElement<{
+        className?: string;
+        ref?: React.Ref<unknown>;
+      }>;
+      return React.cloneElement(child, {
+        ...props,
+        className: cn(classes, child.props.className),
+        ref: mergeRefs(ref, child.props.ref),
+      });
+    }
 
     return (
-      <Comp
-        className={cn(gradientButtonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      >
+      <button className={classes} ref={ref} {...props}>
         {children}
-      </Comp>
+      </button>
     );
   }
 );

@@ -1,29 +1,27 @@
 'use client';
 
 import React from 'react';
-import { IconFlame, IconStar, IconShieldCheck } from '@tabler/icons-react';
-import { useAuthStore } from '@/stores/auth.store';
+import { useRoadmapStore } from '@/stores/roadmap.store';
 
+/** HUD inferior: solo el botón de desarrollo. La racha y el XP viven en la barra de Fusión. */
 export function RoadmapLegend() {
-  const { user } = useAuthStore();
+  const { simulateCompleteAndUnlockNext, animatingConnectionId } = useRoadmapStore();
+
+  if (process.env.NODE_ENV === 'production') return null;
 
   return (
-    <footer className="h-12 border-t border-slate-900/90 bg-slate-950/80 backdrop-blur-md px-6 flex items-center justify-between text-xs font-mono z-20 shrink-0 select-none">
-      <div className="flex items-center gap-6">
-        <div className="flex items-center gap-2 text-orange-400 font-bold">
-          <IconFlame className="w-4 h-4 fill-orange-500" />
-          <span>{user?.streak || 1} días de racha</span>
-        </div>
-        <div className="flex items-center gap-2 text-amber-300 font-bold">
-          <IconStar className="w-4 h-4 fill-amber-400" />
-          <span>{user?.totalXp || 50} XP acumulados</span>
-        </div>
-      </div>
-
-      <div className="flex items-center gap-2 text-cyan-400 font-bold">
-        <IconShieldCheck className="w-4 h-4 text-cyan-400" />
-        <span>Nivel {user?.level || 4} Architect</span>
-      </div>
-    </footer>
+    <div className="absolute bottom-4 left-4 z-20">
+      <button
+        type="button"
+        onClick={simulateCompleteAndUnlockNext}
+        disabled={Boolean(animatingConnectionId)}
+        title="Herramienta de desarrollo: simula completar y desbloquear el siguiente nodo"
+        className="rounded-full border border-amber-500/40 bg-slate-950/80 px-3 py-1 font-mono text-[10px] uppercase font-bold tracking-wider text-amber-300 backdrop-blur-md transition-all hover:bg-amber-900/40 disabled:opacity-40 cursor-pointer"
+      >
+        Override dev
+      </button>
+    </div>
   );
 }
+
+export default RoadmapLegend;

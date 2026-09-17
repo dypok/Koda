@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { LayoutGrid, Terminal } from 'lucide-react';
+import { MagnifyingGlass, X } from '@phosphor-icons/react';
+import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 import { LanguageOption, TechCategory } from '@/models/register/register.model';
 import { LanguageCard } from './LanguageCard';
-import { TerminalLanguagePicker } from './TerminalLanguagePicker';
 import { cn } from '@/lib/utils';
 
 interface LanguageSelectionStepProps {
@@ -23,25 +23,47 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
   selectedLanguageId, onSelectLanguage,
 }) => {
   const reduceMotion = useReducedMotion();
-  const [view, setView] = useState<'grid' | 'terminal'>('grid');
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return languages;
+    return languages.filter(
+      (l) =>
+        l.name.toLowerCase().includes(q) ||
+        l.slug.toLowerCase().includes(q) ||
+        l.description.toLowerCase().includes(q)
+    );
+  }, [query, languages]);
 
   useEffect(() => {
-    try {
-      const saved = window.localStorage.getItem('koda-lang-view');
-      if (saved === 'terminal' || saved === 'grid') setView(saved);
-    } catch {
-      // sin almacenamiento, grid por defecto
-    }
-  }, []);
+    if (searchOpen) searchInputRef.current?.focus();
+  }, [searchOpen]);
 
-  const switchView = (next: 'grid' | 'terminal') => {
-    setView(next);
-    try {
-      window.localStorage.setItem('koda-lang-view', next);
-    } catch {
-      // solo sesión
-    }
+  const closeSearch = () => {
+    setSearchOpen(false);
+    setQuery('');
   };
+
+  // Stagger GSAP de entrada cada vez que cambia el filtro.
+  useLayoutEffect(() => {
+    if (prefersReducedMotion()) return;
+    const { gsap } = getGsap();
+    const ctx = gsap.context(() => {
+      gsap.from(gridRef.current?.querySelectorAll('[data-vrow]') ?? [], {
+        y: 14,
+        opacity: 0,
+        duration: 0.45,
+        stagger: 0.04,
+        ease: 'power3.out',
+        clearProps: 'transform,opacity',
+      });
+    }, gridRef);
+    return () => ctx.revert();
+  }, [languages]);
 
   return (
   <div className="w-full max-w-6xl mx-auto px-4 py-4 sm:py-6 space-y-6 animate-fadeIn">
@@ -73,8 +95,8 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
       </div>
     </div>
 
-    {/* Category Pills + vista */}
-    <div className="flex items-center justify-between gap-2">
+    {/* Category Pills */}
+    <div className="flex items-center gap-2">
     <div role="tablist" aria-label="Filtrar por categoría" className="flex flex-1 items-center gap-2 overflow-x-auto pb-1">
       {categories.map((cat) => (
         <button
@@ -94,46 +116,67 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
         </button>
       ))}
     </div>
-      <div role="group" aria-label="Vista de selección" className="flex shrink-0 items-center gap-1 rounded-full border border-slate-800 bg-slate-900/60 p-1 ml-2">
-        {(
-          [
-            { id: 'grid', label: 'Cuadrícula', Icon: LayoutGrid },
-            { id: 'terminal', label: 'Terminal', Icon: Terminal },
-          ] as const
-        ).map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            type="button"
-            onClick={() => switchView(id)}
-            aria-pressed={view === id}
-            aria-label={`Vista ${label}`}
-            title={label}
-            className={cn(
-              'inline-flex min-h-[32px] min-w-[32px] items-center justify-center rounded-full transition-colors',
-              view === id ? 'bg-amber-400 text-slate-950' : 'text-slate-400 hover:text-white'
-            )}
-          >
-            <Icon aria-hidden="true" className="w-4 h-4" />
-          </button>
-        ))}
-      </div>
     </div>
 
-    {view === 'terminal' ? (
-      <TerminalLanguagePicker
-        languages={languages}
-        selectedLanguageId={selectedLanguageId}
-        onSelectLanguage={onSelectLanguage}
-      />
-    ) : (
-    /* Grid of Technologies ampliado horizontalmente */
+    {/* Buscador expandible debajo de las categorías */}
+    <motion.div
+        layout={reduceMotion ? false : true}
+        animate={{ width: searchOpen ? '100%' : '11rem' }}
+        transition={{ type: 'spring', stiffness: 380, damping: 34 }}
+        className={cn(
+          'flex items-center gap-2 overflow-hidden rounded-[8px] border bg-slate-950 font-mono text-xs',
+          searchOpen ? 'border-amber-400/50 px-3 py-2' : 'border-slate-800 px-3 py-2 cursor-pointer hover:border-slate-600'
+        )}
+        onClick={() => !searchOpen && setSearchOpen(true)}
+        role={searchOpen ? undefined : 'button'}
+        tabIndex={searchOpen ? undefined : 0}
+        aria-label={searchOpen ? undefined : 'Abrir búsqueda'}
+        onKeyDown={(e) => !searchOpen && (e.key === 'Enter' || e.key === ' ') && setSearchOpen(true)}
+      >
+        {searchOpen ? (
+          <>
+            <span aria-hidden="true" className="text-emerald-400 select-none">$</span>
+            <input
+              ref={searchInputRef}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => e.key === 'Escape' && closeSearch()}
+              placeholder="buscar tecnología…"
+              aria-label="Buscar tecnología en el grid"
+              autoComplete="off"
+              spellCheck={false}
+              className="flex-1 bg-transparent text-amber-300 placeholder:text-slate-600 focus:outline-none min-h-[28px]"
+            />
+            <span aria-hidden="true" className="text-[11px] text-slate-600 select-none">
+              {visible.length}/{languages.length}
+            </span>
+            <button
+              type="button"
+              onClick={closeSearch}
+              aria-label="Cerrar búsqueda"
+              className="inline-flex min-h-[28px] min-w-[28px] items-center justify-center rounded-[6px] text-slate-400 transition-colors hover:text-white"
+            >
+              <X aria-hidden="true" className="w-3.5 h-3.5" />
+            </button>
+          </>
+        ) : (
+          <>
+            <MagnifyingGlass aria-hidden="true" className="w-4 h-4 shrink-0 text-slate-500" />
+            <span className="text-slate-500 select-none">$ buscar…</span>
+          </>
+        )}
+      </motion.div>
+
+    {/* Grid of Technologies ampliado horizontalmente */}
+    <div ref={gridRef}>
     <motion.div layout={reduceMotion ? false : true} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
       <AnimatePresence mode="popLayout">
-        {languages.map((item) => (
+        {visible.map((item) => (
           <motion.div
             key={item.id}
+            data-vrow
             layout={reduceMotion ? false : true}
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.94 }}
+            initial={false}
             animate={{ opacity: 1, scale: 1 }}
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1], layout: { duration: 0.35, ease: [0.16, 1, 0.3, 1] } }}
@@ -147,7 +190,12 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
         ))}
       </AnimatePresence>
     </motion.div>
+    {visible.length === 0 && (
+      <p className="rounded-[8px] border border-dashed border-slate-800 px-4 py-6 text-center font-mono text-xs text-slate-500">
+        {'// sin coincidencias para "'}{query.trim()}{'" — prueba "python"'}
+      </p>
     )}
+    </div>
   </div>
   );
 };

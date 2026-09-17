@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Loader2 } from 'lucide-react';
+import { CircleNotch } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 
 interface ProfileSocialAuthProps {
@@ -54,7 +54,7 @@ export const ProfileSocialAuth: React.FC<ProfileSocialAuthProps> = ({
         className="flex items-center justify-center gap-2.5 py-2.5 px-4 min-h-[44px] rounded-xl bg-slate-900/80 hover:bg-slate-800/80 border border-slate-700/60 hover:border-amber-500/40 text-slate-200 text-xs font-bold transition-all shadow-sm hover:shadow-[0_0_15px_rgba(245,158,11,0.15)] disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {busy ? (
-          <Loader2 aria-hidden="true" className="w-4 h-4 animate-spin" />
+          <CircleNotch aria-hidden="true" className="w-4 h-4 animate-spin" />
         ) : (
           <Mark className={cn('w-4 h-4', markCls)} />
         )}

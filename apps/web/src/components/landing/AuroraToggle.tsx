@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Palette } from 'lucide-react';
+import { Palette } from '@phosphor-icons/react';
 
 const STORAGE_KEY = 'koda-aurora';
 

@@ -1,20 +1,11 @@
+'use client';
+
 import { useState, useMemo, useCallback } from 'react';
 import { RegisterProfileForm } from '@/models/register/register.model';
-import { RegisterRequestDto, ExperienceLevel, LearningStyle, DailyGoalId } from '@koda/types';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export interface RegistrationContextData {
-  selectedLanguageId?: string | null;
-  selectedExperienceId?: string | null;
-  selectedStyleId?: string | null;
-  selectedGoalId?: string | null;
-}
-
-export function useRegisterProfileController(
-  onSuccess?: (payload: RegisterRequestDto) => void,
-  contextData?: RegistrationContextData
-) {
+export function useRegisterProfileController(onSuccess?: () => void) {
   const [form, setForm] = useState<RegisterProfileForm>({
     fullName: '',
     email: '',
@@ -81,23 +72,12 @@ export function useRegisterProfileController(
     setTouched({ fullName: true, email: true, password: true });
     if (!isFormValid || isSubmitting) return;
     setIsSubmitting(true);
-
-    const payload: RegisterRequestDto = {
-      fullName: form.fullName.trim(),
-      email: form.email.trim().toLowerCase(),
-      password: form.password,
-      selectedLanguageId: contextData?.selectedLanguageId || 'python',
-      selectedExperienceId: (contextData?.selectedExperienceId || 'beginner') as ExperienceLevel,
-      selectedStyleId: (contextData?.selectedStyleId || 'hands-on') as LearningStyle,
-      selectedGoalId: (contextData?.selectedGoalId || 'regular') as DailyGoalId,
-    };
-
-    // Simular registro seguro de estudiante con payload completo de onboarding
+    // Simular registro seguro de estudiante
     await new Promise((resolve) => setTimeout(resolve, 800));
     setIsSubmitting(false);
     setIsSuccess(true);
-    onSuccess?.(payload);
-  }, [isFormValid, isSubmitting, onSuccess, form, contextData]);
+    onSuccess?.();
+  }, [isFormValid, isSubmitting, onSuccess]);
 
   return {
     form,

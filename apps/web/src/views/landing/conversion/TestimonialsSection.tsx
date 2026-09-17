@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Quote, Flame, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Quotes, Flame, CaretLeft, CaretRight } from '@phosphor-icons/react';
 import { Highlight } from '@/components/ui/highlight';
 import { cn } from '@/lib/utils';
 
@@ -100,7 +100,7 @@ export const TestimonialsSection: React.FC = () => {
                     : 'border-slate-800 opacity-70'
                 )}
               >
-                <Quote aria-hidden="true" className="w-6 h-6 text-amber-400/60" />
+                <Quotes aria-hidden="true" className="w-6 h-6 text-amber-400/60" />
                 <blockquote className="text-sm sm:text-base text-slate-200 leading-relaxed flex-1">
                   {t.quote}
                 </blockquote>
@@ -127,7 +127,7 @@ export const TestimonialsSection: React.FC = () => {
               aria-label="Testimonio anterior"
               className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-slate-700 text-slate-300 transition-colors hover:border-amber-400/50 hover:text-amber-300"
             >
-              <ChevronLeft aria-hidden="true" className="w-5 h-5" />
+              <CaretLeft aria-hidden="true" className="w-5 h-5" />
             </button>
             <div className="flex items-center gap-2" role="tablist" aria-label="Elegir testimonio">
               {TESTIMONIALS.map((t, i) => (
@@ -151,7 +151,7 @@ export const TestimonialsSection: React.FC = () => {
               aria-label="Testimonio siguiente"
               className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-slate-700 text-slate-300 transition-colors hover:border-amber-400/50 hover:text-amber-300"
             >
-              <ChevronRight aria-hidden="true" className="w-5 h-5" />
+              <CaretRight aria-hidden="true" className="w-5 h-5" />
             </button>
           </div>
         </div>

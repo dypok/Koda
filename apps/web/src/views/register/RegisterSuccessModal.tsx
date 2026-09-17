@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { Sparkles, ArrowRight, Flame } from 'lucide-react';
+import { Sparkle, ArrowRight, Flame } from '@phosphor-icons/react';
 import { GradientButton } from '@/components/ui/gradient-button';
 import { TransitionLink } from '@/components/ui/transition-link';
 import { CodeConfetti } from '@/views/landing/preview/CodeConfetti';
@@ -90,7 +90,7 @@ export const RegisterSuccessModal: React.FC<RegisterSuccessModalProps> = ({
 
             <div className="space-y-2">
               <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/30">
-                <Sparkles aria-hidden="true" className="w-3.5 h-3.5" />
+                <Sparkle aria-hidden="true" className="w-3.5 h-3.5" />
                 ¡Perfil Guardado con Éxito!
               </span>
               <h2 id="register-success-title" className="text-2xl font-black text-white tracking-tight">
@@ -111,7 +111,7 @@ export const RegisterSuccessModal: React.FC<RegisterSuccessModalProps> = ({
             </div>
 
             <GradientButton asChild className="w-full py-3 text-sm gap-2">
-              <TransitionLink ref={ctaRef} href="/?roadmap=true" onClick={() => setHandoff(true)}>
+              <TransitionLink ref={ctaRef} href="/app/ruta" onClick={() => setHandoff(true)}>
                 <span>Comenzar a Programar</span>
                 <ArrowRight aria-hidden="true" className="w-4 h-4" />
               </TransitionLink>
@@ -141,7 +141,7 @@ export const RegisterSuccessModal: React.FC<RegisterSuccessModalProps> = ({
                     className="object-contain select-none"
                   />
                 </motion.div>
-                <p className="font-display font-black text-amber-300">¡A la ruta! 🚀</p>
+                <p className="font-display font-black text-amber-300">{'> ruta_desbloqueada'}</p>
               </motion.div>
             )}
           </AnimatePresence>

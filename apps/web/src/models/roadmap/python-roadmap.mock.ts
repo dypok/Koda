@@ -1,6 +1,4 @@
-import {
-  IconBrandPython, IconBrandJavascript, IconBrandTypescript, IconBrandRust, IconBrandGolang
-} from '@tabler/icons-react';
+import { CodeSimple, BracketsCurly, Gear } from '@phosphor-icons/react';
 import { LanguageTrack, RoadmapCourse, SidebarLanguageItem } from './roadmap.types';
 
 const BASIC_LESSONS = [
@@ -47,14 +45,14 @@ export const PYTHON_FRAMEWORK_BRANCHES = [
 ];
 
 export const PYTHON_TRACK: LanguageTrack = {
-  id: 'python', name: 'Python', slug: 'python', color: '#38BDF8', icon: IconBrandPython, isAvailable: true,
+  id: 'python', name: 'Python', slug: 'python', color: '#38BDF8', icon: CodeSimple, isAvailable: true,
   mainCourses: PYTHON_MAIN_COURSES, frameworkBranches: PYTHON_FRAMEWORK_BRANCHES,
 };
 
 export const SIDEBAR_LANGUAGES: SidebarLanguageItem[] = [
-  { id: 'python', name: 'Python', icon: IconBrandPython, color: '#38BDF8', isAvailable: true, totalStars: 54, earnedStars: 8, completedCourses: 1, totalCourses: 5, progressPercent: 24, currentStage: '01 Básico' },
-  { id: 'javascript', name: 'JavaScript', icon: IconBrandJavascript, color: '#FACC15', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
-  { id: 'typescript', name: 'TypeScript', icon: IconBrandTypescript, color: '#60A5FA', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
-  { id: 'rust', name: 'Rust', icon: IconBrandRust, color: '#FB923C', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
-  { id: 'go', name: 'Go', icon: IconBrandGolang, color: '#22D3EE', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
+  { id: 'python', name: 'Python', icon: CodeSimple, color: '#38BDF8', isAvailable: true, totalStars: 54, earnedStars: 8, completedCourses: 1, totalCourses: 5, progressPercent: 24, currentStage: '01 Básico' },
+  { id: 'javascript', name: 'JavaScript', icon: BracketsCurly, color: '#FACC15', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
+  { id: 'typescript', name: 'TypeScript', icon: BracketsCurly, color: '#60A5FA', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
+  { id: 'rust', name: 'Rust', icon: Gear, color: '#FB923C', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
+  { id: 'go', name: 'Go', icon: CodeSimple, color: '#22D3EE', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
 ];

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Code, Compass, Flame, Pencil } from 'lucide-react';
+import { Code, Compass, Flame, PencilSimple } from '@phosphor-icons/react';
 
 interface ProfileSummaryBadgeProps {
   techName?: string;
@@ -51,7 +51,7 @@ export const ProfileSummaryBadge: React.FC<ProfileSummaryBadgeProps> = ({
                 aria-label={`Editar ${row.label.toLowerCase()}`}
                 className="inline-flex min-h-[28px] min-w-[28px] items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/70 transition-colors"
               >
-                <Pencil aria-hidden="true" className="w-3.5 h-3.5" />
+                <PencilSimple aria-hidden="true" className="w-3.5 h-3.5" />
               </button>
             )}
           </li>

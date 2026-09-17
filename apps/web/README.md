@@ -2,7 +2,7 @@
 
 > Aplicación web construida con **Next.js 16 (App Router)**, **React 19**, **Tailwind CSS**, **Zustand**, **Lenis**, **GSAP ScrollTrigger**, **Three.js** y **framer-motion**.
 
-Rutas actuales: `/` (landing con override `?landing=true` / preview `?roadmap=true`), `/login`, `/register` (wizard 5 pasos —o 3 con `?v=express`— con `SelectableCard` + `StepLayout`, terminal de idiomas, persistencia y fondo vivo). Ver mapa completo de pantallas en `docs/02-requisitos-ux/10_INFORMATION_ARCHITECTURE.md`.
+Rutas actuales: `/` (landing con override `?landing=true` / preview `?roadmap=true`), `/login`, `/register` (wizard 5 pasos —o 3 con `?v=express`— con `SelectableCard` + `StepLayout`, terminal de idiomas, persistencia y fondo vivo), `/app/ruta` (roadmap + rail) y `/app/curso/[course]/seccion/[section]` (workspace con quiz). Ver mapa completo de pantallas en `docs/02-requisitos-ux/10_INFORMATION_ARCHITECTURE.md`.
 
 ---
 
@@ -40,7 +40,7 @@ pnpm --filter web start
 pnpm --filter web exec tsc --noEmit
 ```
 
-Arranque recomendado del repo completo: `python scripts/iniciar_koda.py` (libera :3000/:4000 solo, ver `scripts/iniciar_koda.py`).
+Arranque recomendado del repo completo: `python iniciar_koda.py` (libera :3000/:4000 solo, ver `iniciar_koda.py`).
 
 ---
 

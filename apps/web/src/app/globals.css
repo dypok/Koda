@@ -36,6 +36,11 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .animate-bounce,
+  .animate-pulse,
+  .animate-ping,
+  .beam-stroke,
+  .beam-stroke-core,
   .animate-float,
   .animate-marquee,
   .animate-laser-flow,
@@ -83,6 +88,9 @@
   animation: koda-party-hue 6s linear infinite;
 }
 
+/* Escaneo del inspector drone */
+@keyframes scanline { from { transform: translateY(-100%); opacity: 0; } 30% { opacity: 1; } to { transform: translateY(420px); opacity: 0; } }
+
 /* Clima por sección */
 @keyframes wx-rise { 0% { transform: translateY(20px); opacity: 0; } 20% { opacity: 0.9; } 100% { transform: translateY(-120px); opacity: 0; } }
 @keyframes wx-drift { 0%, 100% { transform: translate(0, 0); opacity: 0.3; } 50% { transform: translate(24px, -18px); opacity: 1; } }
@@ -94,6 +102,27 @@
 /* Onda divisoria entre secciones */
 @keyframes koda-wave-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 .koda-wave { animation: koda-wave-drift 14s linear infinite; will-change: transform; }
+
+/* Haz dorado recorriendo el borde de la tarjeta premium */
+@keyframes koda-beam-trace { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+.beam-stroke { stroke-dasharray: 180 820; animation: koda-beam-trace 9s linear infinite; }
+.beam-stroke-core { stroke-dasharray: 80 920; animation: koda-beam-trace 9s linear infinite; }
+
+/* Shimmer diagonal en hover para el CTA premium */
+.btn-shimmer { position: relative; overflow: hidden; }
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, transparent 20%, rgba(255, 255, 255, 0.25) 50%, transparent 80%);
+  transform: rotate(25deg) translateY(-100%);
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.btn-shimmer:hover::after { transform: rotate(25deg) translateY(100%); }
 
 /* Rayos volumétricos del hero (faros barriendo) */
 @keyframes koda-beam-a { 0%, 100% { transform: rotate(-8deg); opacity: 0.5; } 50% { transform: rotate(9deg); opacity: 0.9; } }
@@ -178,5 +207,25 @@ body[data-act='4'] .koda-grain { opacity: 0.08; }
 .animate-wander-3 { animation: wander-3 22s ease-in-out -14s infinite; will-change: transform; }
 .animate-wander-4 { animation: wander-4 28s ease-in-out -5s infinite; will-change: transform; }
 .animate-wander-5 { animation: wander-5 36s ease-in-out -19s infinite; will-change: transform; }
+
+/* Cylindrical Conduit Charge Animations (Amber Quantum Thermal) */
+@keyframes conduit-slug-flow {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -188; }
+}
+@keyframes filament-breathe {
+  0%, 100% { opacity: 0.18; }
+  50% { opacity: 0.38; }
+}
+
+.animate-conduit-slug {
+  animation: conduit-slug-flow 1.8s linear infinite;
+  will-change: stroke-dashoffset;
+}
+.animate-conduit-breathe {
+  animation: filament-breathe 3.5s ease-in-out infinite;
+  will-change: opacity;
+}
+
 
 

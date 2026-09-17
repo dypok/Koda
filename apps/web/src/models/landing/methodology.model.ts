@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flame, Route, SquareTerminal, Lightbulb } from 'lucide-react';
+import { Flame, Path, TerminalWindow, Lightbulb } from '@phosphor-icons/react';
 
 export interface Pillar {
   id: string;
@@ -27,7 +27,7 @@ export const PILLARS: Pillar[] = [
     id: 'roadmap',
     title: 'Roadmap Claro',
     subtitle: 'Paso a paso',
-    icon: Route,
+    icon: Path,
     badgeBorder: 'border-amber-500/30',
     badgeText: 'text-amber-400',
     hoverBorder: 'group-hover:border-amber-400',
@@ -37,7 +37,7 @@ export const PILLARS: Pillar[] = [
     id: 'codigo-real',
     title: 'Código Real',
     subtitle: 'Retención 4x',
-    icon: SquareTerminal,
+    icon: TerminalWindow,
     badgeBorder: 'border-orange-500/30',
     badgeText: 'text-orange-400',
     hoverBorder: 'group-hover:border-orange-400',

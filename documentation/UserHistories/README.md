@@ -14,17 +14,13 @@
 Todas las historias de usuario de este backlog se fundamentan en las decisiones oficiales documentadas en [`docs/adr/`](../../docs/adr/README.md):
 - **ADR-001:** Monorepo con PNPM Workspaces (`apps/web`, `apps/api`, `packages/types`).
 - **ADR-002:** Base de Datos Relacional con Supabase (PostgreSQL 15+).
-- **ADR-003:** Pipeline de Certificación en Backend y Storage en Supabase Storage.
+- **ADR-003:** Pipeline de Certificación en Backend y Storage en Google Drive API v3.
 - **ADR-004:** Renderizado WebGL de Mascota Koda y Efectos con PixiJS v7.
 - **ADR-005:** Adopción de Python 3.12 como Lenguaje Oficial del MVP.
 - **ADR-006:** Motor de Ejecución de Código Híbrido (`ICodeRunner`: Pyodide + Docker Sandbox).
 - **ADR-007:** Arquitectura de Grafo DAG por Ramas de Carrera (*Frontend, Backend, DevOps, Python*), Paneo/Zoom a 120 FPS y Prerrequisitos `RQ`.
 - **ADR-008:** Adopción Definitiva de NestJS como Motor de Backend.
 - **ADR-009:** Persistencia Híbrida Políglota (MongoDB Contenido + Supabase Transacciones).
-- **ADR-010:** Arquitectura Backend Hexagonal Modular con Comunicación Basada en Eventos de Dominio y Patrón Cache-Aside.
-- **ADR-011:** Refinamiento de Arquitectura Backend (BullMQ para Eventos Persistentes, Caché Versionada y Contratos DAG).
-- **ADR-012:** Adopción de Arquitectura Híbrida GraphQL y REST en Backend NestJS.
-- **ADR-013:** Adopción de Prisma ORM para Persistencia Relacional en Supabase PostgreSQL.
 
 ---
 
@@ -40,7 +36,7 @@ Cada épica cuenta con su propio archivo independiente para lectura ergonómica 
 6. [**EPIC 6 — Sistema de Evaluación: Quizzes y Exámenes Finales**](EPIC-06-sistema-evaluacion-quizzes-examenes.md) (`Sprint 3 · 4 Stories · 15 SP`)
 7. [**EPIC 7 — Cuaderno de Errores Persistente y Repaso Adaptativo**](EPIC-07-cuaderno-errores-repaso-adaptativo.md) (`Sprint 3 · 3 Stories · 13 SP`)
 8. [**EPIC 8 — Gamificación, Economía XP, Rachas y Mascota Koda 🦊**](EPIC-08-gamificacion-rachas-mascota-koda.md) (`Sprint 4 · 4 Stories · 18 SP`)
-9. [**EPIC 9 — Pipeline de Certificación, Generación PDF, QR y Supabase Storage**](EPIC-09-certificacion-pdf-qr-supabase-storage.md) (`Sprint 4 · 4 Stories · 18 SP`)
+9. [**EPIC 9 — Pipeline de Certificación, Generación PDF, QR y Google Drive**](EPIC-09-certificacion-pdf-qr-google-drive.md) (`Sprint 4 · 4 Stories · 18 SP`)
 10. [**EPIC 10 — Monetización, Consola de Administración y Despliegue Cloud**](EPIC-10-monetizacion-admin-despliegue.md) (`Sprint 5 · 4 Stories · 16 SP`)
 
 ---
@@ -55,9 +51,7 @@ Antes de mover cualquier Story a **"Done"** en el tablero de Jira, se deben cump
 - [ ] Los criterios de aceptación de la US están cumplidos al 100% y verificados manualmente por el desarrollador y/o QA.
 - [ ] La suite de tipos compila sin errores (`pnpm --filter "@koda/types" build` exitoso).
 - [ ] No hay advertencias críticas ni errores en la consola del navegador (`F12`) ni en los logs del servidor NestJS (`apps/api`).
-- [ ] El backend compila con `nest build`: los endpoints REST están documentados en Swagger (`/api/docs`), y el esquema GraphQL (`/graphql`) compila sin errores tipado con Code Generator.
-- [ ] Las mutaciones y endpoints de evaluación responden con latencia $p95 < 50\text{ ms}$ delegando efectos secundarios a eventos de dominio o colas BullMQ (`RNF-010`, `ADR-010`).
-- [ ] Las consultas con relaciones anidadas en GraphQL implementan DataLoaders para neutralizar el problema N+1.
+- [ ] El backend compila con `nest build` y todos los endpoints nuevos están tipados y documentados en Swagger (`/api/docs`).
 - [ ] El frontend compila con `next build` generando las páginas estáticas o dinámicas sin fallas de hidratación.
 - [ ] Los componentes visuales respetan la paleta oficial (Dark Navy `#0B0F19`, Slate, Violeta, Acento Dorado/Naranja Koda 🦊) y son responsivos (Mobile, Tablet, Desktop).
 - [ ] Las variables de entorno sensibles están documentadas en `.env.example` y los archivos `.env` reales **nunca** se suben a Git.
@@ -78,6 +72,6 @@ Antes de mover cualquier Story a **"Done"** en el tablero de Jira, se deben cump
 | **Épica 6 — Sistema de Evaluación & Quizzes** | `EVAL` | Sprint 3 | 4 | 15 | ⚪ Refinada | [`EPIC-06-sistema-evaluacion-quizzes-examenes.md`](EPIC-06-sistema-evaluacion-quizzes-examenes.md) |
 | **Épica 7 — Cuaderno de Errores & Repaso** | `NOTE` | Sprint 3 | 3 | 13 | ⚪ Refinada | [`EPIC-07-cuaderno-errores-repaso-adaptativo.md`](EPIC-07-cuaderno-errores-repaso-adaptativo.md) |
 | **Épica 8 — Gamificación & Mascota Koda 🦊** | `GAMI` | Sprint 4 | 4 | 18 | ⚪ Refinada (ADR-004) | [`EPIC-08-gamificacion-rachas-mascota-koda.md`](EPIC-08-gamificacion-rachas-mascota-koda.md) |
-| **Épica 9 — Certificación, PDF & Supabase Storage** | `CERT` | Sprint 4 | 4 | 18 | 🟢 Refinada (Supabase Storage) | [`EPIC-09-certificacion-pdf-qr-supabase-storage.md`](EPIC-09-certificacion-pdf-qr-supabase-storage.md) |
+| **Épica 9 — Certificación, PDF & Drive Storage** | `CERT` | Sprint 4 | 4 | 18 | ⚪ Refinada (ADR-003) | [`EPIC-09-certificacion-pdf-qr-google-drive.md`](EPIC-09-certificacion-pdf-qr-google-drive.md) |
 | **Épica 10 — Monetización, Admin & Despliegue** | `MONA` | Sprint 5 | 4 | 16 | ⚪ Refinada | [`EPIC-10-monetizacion-admin-despliegue.md`](EPIC-10-monetizacion-admin-despliegue.md) |
 | **TOTAL PLANIFICADO** | | | **46** | **182** | | |

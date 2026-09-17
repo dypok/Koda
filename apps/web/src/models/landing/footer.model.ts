@@ -1,19 +1,5 @@
 import React from 'react';
-import {
-  Instagram,
-  Music2,
-  Twitter,
-  Youtube,
-  Linkedin,
-  Newspaper,
-  CircleHelp,
-  School,
-  Award,
-  Users,
-  FileText,
-  ShieldCheck,
-  UserCheck,
-} from 'lucide-react';
+import { InstagramLogo, TiktokLogo, XLogo, YoutubeLogo, LinkedinLogo, Newspaper, Question, GraduationCap, Medal, Users, FileText, ShieldCheck, UserCheck } from '@phosphor-icons/react';
 import { InfoModalTab } from '@/models/landing/info-modal.model';
 
 export interface FooterLinkItem {
@@ -27,9 +13,9 @@ export interface FooterLinkItem {
 }
 
 export const FOOTER_SUPPORT_LINKS: FooterLinkItem[] = [
-  { id: 'faqs', label: 'Preguntas Frecuentes (FAQs)', tab: 'faqs', icon: CircleHelp },
-  { id: 'schools', label: 'Koda para Escuelas', tab: 'schools', icon: School },
-  { id: 'tests', label: 'Certificación & Evaluaciones', tab: 'tests', icon: Award },
+  { id: 'faqs', label: 'Preguntas Frecuentes (FAQs)', tab: 'faqs', icon: Question },
+  { id: 'schools', label: 'Koda para Escuelas', tab: 'schools', icon: GraduationCap },
+  { id: 'tests', label: 'Certificación & Evaluaciones', tab: 'tests', icon: Medal },
 ];
 
 export const FOOTER_LEGAL_LINKS: FooterLinkItem[] = [
@@ -41,9 +27,9 @@ export const FOOTER_LEGAL_LINKS: FooterLinkItem[] = [
 
 export const FOOTER_SOCIAL_LINKS: FooterLinkItem[] = [
   { id: 'blog', label: 'Blog Oficial', tab: 'social', icon: Newspaper },
-  { id: 'instagram', label: 'Instagram', tab: 'social', icon: Instagram, href: 'https://instagram.com', external: true },
-  { id: 'tiktok', label: 'TikTok', tab: 'social', icon: Music2, href: 'https://tiktok.com', external: true },
-  { id: 'x', label: 'Twitter / X', tab: 'social', icon: Twitter, href: 'https://x.com', external: true },
-  { id: 'youtube', label: 'YouTube', tab: 'social', icon: Youtube, href: 'https://youtube.com', external: true },
-  { id: 'linkedin', label: 'LinkedIn', tab: 'social', icon: Linkedin, href: 'https://linkedin.com', external: true },
+  { id: 'instagram', label: 'InstagramLogo', tab: 'social', icon: InstagramLogo, href: 'https://instagram.com', external: true },
+  { id: 'tiktok', label: 'TikTok', tab: 'social', icon: TiktokLogo, href: 'https://tiktok.com', external: true },
+  { id: 'x', label: 'XLogo / X', tab: 'social', icon: XLogo, href: 'https://x.com', external: true },
+  { id: 'youtube', label: 'YouTube', tab: 'social', icon: YoutubeLogo, href: 'https://youtube.com', external: true },
+  { id: 'linkedin', label: 'LinkedIn', tab: 'social', icon: LinkedinLogo, href: 'https://linkedin.com', external: true },
 ];

@@ -1,43 +1,31 @@
 # 🦊 Koda — Duolingo de Programación
 
-> Plataforma educativa interactiva y gamificada para aprender a programar desde cero, diseñada sin asunciones previas, sin fricción cognitiva, con micro-lecciones atómicas y un roadmap interactivo en grafo acíclico dirigido (DAG).
+> Plataforma educativa interactiva y gamificada para aprender a programar desde cero, diseñada sin asunciones previas, sin fricción cognitiva y con micro-lecciones atómicas ultra accesibles.
 
-[![Monorepo](https://img.shields.io/badge/Monorepo-pnpm%20workspaces-orange.svg)](docs/adr/ADR-001-monorepo-pnpm-workspaces.md)
-[![Frontend](https://img.shields.io/badge/Frontend-Next.js%2015%20(React%2019)-black.svg?logo=next.js)](apps/web)
-[![Backend](https://img.shields.io/badge/Backend-NestJS%2010+-red.svg?logo=nestjs)](apps/api)
-[![Base de Datos](https://img.shields.io/badge/Database-Híbrida%20(Supabase%20%2B%20MongoDB)-emerald.svg)](docs/04-arquitectura-backend/12_DATABASE_DESIGN.md)
-[![Eventos Asíncronos](https://img.shields.io/badge/Eventos-BullMQ%20%2B%20Redis-critical.svg?logo=redis)](docs/adr/ADR-011-refinamiento-arquitectura-backend-eventos-persistencia-cache.md)
-[![Ramas de Carrera](https://img.shields.io/badge/Ramas-Frontend%20|%20Backend%20|%20DevOps-blueviolet.svg)](docs/adr/ADR-007-arquitectura-roadmap-ramas-carrera-grafo-dag.md)
-[![Documentación](https://img.shields.io/badge/Docs-ADR--001%20a%20ADR--011-purple.svg)](docs/README.md)
+[![Python Version](https://img.shields.io/badge/Python-3.12-blue.svg?logo=python&logoColor=white)](https://www.python.org)
+[![Módulo 01](https://img.shields.io/badge/Módulo%2001-Fundamentos-success.svg)](content/languages/python/modules/01_fundamentos/module.json)
+[![Ruta Oficial](https://img.shields.io/badge/Ruta-12%20Módulos-blueviolet.svg)](content/languages/python/manifest.json)
+[![Arquitectura](https://img.shields.io/badge/Arquitectura-Monolito%20Modular%20(Next.js%20%2B%20NestJS)-indigo.svg)](docs/04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md)
+[![Base de Datos](https://img.shields.io/badge/Database-H%C3%ADbrida%20(Supabase%20%2B%20MongoDB)-emerald.svg)](docs/04-arquitectura-backend/12_DATABASE_DESIGN.md)
+[![Documentación](https://img.shields.io/badge/Docs-Hub%20de%20Especificaciones-purple.svg)](docs/README.md)
 [![Licencia](https://img.shields.io/badge/Licencia-MIT-green.svg)](LICENSE)
 
 > [!IMPORTANT]
-> ### ⚠️ Estado del Proyecto y Arquitectura Actual
-> Koda cuenta con una arquitectura moderna formalizada bajo **11 Decisiones de Arquitectura (ADR-001 a ADR-011)**:
-> - **Monorepo Operativo:** Next.js 15 (React 19, Turbopack, PixiJS v7) en `apps/web`, NestJS en `apps/api` y contratos TypeScript compartidos en `@koda/types`.
-> - **Persistencia Híbrida Políglota:** Supabase (PostgreSQL 15+ ACID con RLS) para transacciones de usuarios, racha, progreso y cuaderno de errores; y **MongoDB 7+** para almacenamiento desacoplado de contenido educativo, currículos y grafos de carrera sin necesidad de JOINs relacionales costosos.
-> - **Eventos Asíncronos Resilientes:** Procesamiento desacoplado mediante colas persistentes con **BullMQ** sobre Redis para XP, rachas, logros y emisión de certificados.
-> - **Caché Inmutable Versionada:** Estrategia Cache-Aside en Redis con claves por versión de contenido (`koda:lesson:{slug}:v{version}`).
-> - **Roadmap Interactivo en Grafo DAG:** Canvas navegable con Pan y Zoom (50% a 200%), selección de ramas profesionales y topología de rejilla relativa (`tier` y `lane`).
+> ### ⚠️ Aviso sobre el Estado del Proyecto
+> El repositorio contiene la arquitectura completa, monorepo funcional con Next.js 15 y NestJS, contratos compartidos `@koda/types`, especificaciones REST v2.0.0, modelo relacional en Supabase y el currículo de **Python 3.12** como lenguaje oficial de lanzamiento.
 
 ---
 
 ## 🎯 Visión y Filosofía Pedagógica de Koda
 
-La mayoría de plataformas asumen conocimientos previos, emplean jerga intimidante o presentan muros de texto que provocan frustración y abandono temprano. **Koda** reimagina el aprendizaje combinando gamificación formativa, la ergonomía de herramientas modernas como Linear y VS Code, y los principios pedagógicos más rigurosos:
+La mayoría de cursos de programación asumen conocimientos previos, emplean jerga intimidante o presentan muros de texto que provocan frustración y abandono temprano. **Koda** reimagina el aprendizaje combinando la psicología de gamificación de Duolingo, la ergonomía de herramientas como Linear y VS Code, y los principios de diseño instruccional más rigurosos:
 
-- **Micro-Lecciones Atómicas:** Cada lección consta de 40 a 70 palabras redactadas en segunda persona (*"tú"*), introduciendo un único concepto sin abstracciones inexplicadas.
-- **Tríada Evaluativa por Lección (3 Ítems Formativos):**
-  1. **Ítem 1 (Desafío de Consola / Código):** Escritura y ejecución de código interactivo evaluado mediante casos de prueba automatizados en tiempo real (Wasm con Pyodide en cliente o sandbox Docker seguro).
-  2. **Ítem 2 (Pregunta Conceptual Teórica):** Selección múltiple con exactamente 4 opciones estructuradas (A, B, C, D) y retroalimentación pedagógica contextual por distractor.
-  3. **Ítem 3 (Predicción de Salida / Bug Hunting):** Razonamiento lógico donde el estudiante debe predecir la salida de un fragmento o identificar un error de sintaxis/lógica.
-- **Sistema de 1 a 3 Estrellas (⭐) por Desempeño:**
-  - ⭐⭐⭐ **(3 Estrellas):** Los 3 ítems aprobados al primer intento (100% de precisión).
-  - ⭐⭐ **(2 Estrellas):** 2 ítems aprobados al primer intento y 1 resuelto con apoyo formativo.
-  - ⭐ **(1 Estrella):** 1 ítem aprobado al primer intento y superación tras el ciclo de reintentos.
-- **Ronda de Repaso Final y Feedback sin Spoilers:** Al equivocarse, el estudiante recibe una pista inteligente pero **jamás la respuesta correcta**. Las preguntas falladas se encolan para la Ronda de Repaso Final con opciones barajadas aleatoriamente.
-- **Cuaderno de Errores con Algoritmo SuperMemo SM-2:** Los fallos persistentes se guardan en el cuaderno personal (`user_mistakes_notebook`), donde el algoritmo de repetición espaciada **SM-2** programa repasos óptimos (`interval_days`, `ease_factor`, `next_review_at`) para consolidar la memoria a largo plazo.
-- **Gamificación Formativa y No Punitiva:** Rachas diarias (`daily_streaks`), congeladores de racha para prevenir abandono, economía de XP determinista y animaciones reactivas de la mascota **🦊 Koda** en WebGL.
+- **Micro-Lecciones Atómicas:** Cada lección tiene entre 40 y 70 palabras explicadas en segunda persona (*"tú"*), estructurada en un máximo de 3 pasos lógicos.
+- **Un Concepto, Una Lección, Una Práctica Inmediata:** Cada lección enseña una única idea atómica y la evalúa al instante mediante un desafío interactivo.
+- **Sin Bloqueo Cognitivo:** Cero conceptos abstractos sin explicar. Se introducen mediante analogías visuales cotidianas.
+- **Sistema de Errores Formativo y Sin Spoilers:** Al equivocarse, el estudiante recibe una pista inteligente pero **nunca se le revela la respuesta correcta**. La pregunta se encola en la **Ronda de Repaso Final** con **opciones barajadas** aleatoriamente, otorgando +2 XP de recuperación.
+- **Cuaderno de Errores Persistente:** Los fallos no resueltos se guardan en el cuaderno personal para permitir práctica deliberada posterior (+5 XP al remediar).
+- **Gamificación Formativa y No Punitiva:** Sistema de 1 a 3 estrellas (⭐) por sección según precisión, candados de progresión secuencial, economía de XP determinista, rachas diarias y reacciones emocionales en tiempo real con la mascota **🦊 Koda**.
 
 ---
 
@@ -47,196 +35,159 @@ La mayoría de plataformas asumen conocimientos previos, emplean jerga intimidan
 ┌──────────────────────────────────────────────────────────────────────────────┐
 │                            ARQUITECTURA DE KODA                              │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│  Frontend (Next.js 15 App Router + React 19 + TypeScript)                    │
-│  ├── Roadmap Interactivo: Canvas DAG con Pan & Zoom (50% - 200%)             │
-│  │   └── Topología Relativa: Disposición por Tier y Lane con aristas Bezier  │
+│  Frontend (Next.js 14+/15 App Router + TypeScript)                           │
+│  ├── SEO & SSG/ISR: Verificación pública de certificados (/verificar/[code]) │
 │  ├── UI & Estilos: Tailwind CSS + Shadcn UI + Lucide Icons                   │
 │  ├── Estado & Server Cache: Zustand + TanStack Query                         │
-│  ├── Editor & Consola: Monaco Editor / CodeMirror 6 + Pyodide (Wasm)         │
+│  ├── Editor Multi-Lenguaje: Monaco Editor / CodeMirror 6 (+50 lenguajes)     │
 │  └── Motor Gráfico WebGL: PixiJS v7 (Mascota Koda 🦊, confeti y emociones)   │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│  Backend (NestJS Monolito Modular - Arquitectura Hexagonal / Puertos)         │
-│  ├── Core API: REST /api/v1 + OpenAPI 3.0.3 (Swagger)                        │
-│  ├── Autenticación Unificada: Supabase Auth IdP + JWT firmado compatible RLS │
-│  ├── Motor de Eventos Asíncronos: BullMQ sobre Redis (XP, Streaks, Logros)   │
-│  ├── Caché L2 Inmutable Versionada: Redis (koda:lesson:{slug}:v{version})    │
-│  ├── Motor de Ejecución Híbrido (ICoderunner):                               │
-│  │   ├── Cliente Wasm: Pyodide (Python), Web Workers (JavaScript)            │
-│  │   └── Backend Sandbox: Piston / Judge0 aislado en Docker                  │
-│  └── Motor de Certificación: Generación PDF vectorial + QR ISO/IEC 18004     │
+│  Backend (NestJS Monolito Modular con 9 Motores Desacoplados)                │
+│  ├── Core API: REST /api/v1 + OpenAPI 3.0.3 (44 endpoints)                   │
+│  ├── Auth: JWT Stateless (15 min) + Refresh rotativo HttpOnly + Argon2id     │
+│  ├── Motor de Ejecución Híbrido (ICodeRunner):                               │
+│  │   ├── Cliente Wasm: Pyodide (Python), Workers (JS)                        │
+│  │   └── Backend Sandbox: Piston / Judge0 en Docker (Rust, C/C++, C#, Go)   │
+│  └── Motor de Certificación: Generación 100% en backend (Node.js + QR)       │
 ├──────────────────────────────────────────────────────────────────────────────┤
-│  Persistencia Híbrida Políglota & Almacenamiento                             │
-│  ├── Transaccional ACID: Supabase (PostgreSQL 15+) con Row-Level Security    │
-│  │   └── Usuarios, perfiles, compras, XP, racha, progreso y SM-2 Notebook   │
-│  ├── Contenido & Grafos Curriculares: MongoDB 7+ (Lecturas O(1) sin JOINs)   │
-│  │   └── Ramas de carrera, nodos DAG, lecciones con tríada y animaciones     │
+│  Persistencia & Almacenamiento                                               │
+│  ├── Base de Datos: Supabase (PostgreSQL 15+) con triggers y JSONB           │
 │  ├── Storage de Certificados: Google Drive API v3 (Service Account)          │
-│  │   └── Deduplicación por hash SHA-256 y streaming directo                  │
-│  └── Caché & Message Broker: Redis 7+                                        │
+│  │   └── Detección previa & streaming: Entrega inmediata sin re-generar      │
+│  └── Caché & Rate Limiting: Redis                                            │
 └──────────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🗺️ Mapa Curricular: 3 Ramas Profesionales en Grafo DAG
+## 🗺️ Mapa Curricular Oficial (Python 3.12)
 
-Koda supera el modelo de currículo puramente lineal mediante un **Grafo Acíclico Dirigido (DAG)** interactivo. Los estudiantes inician en una pista fundacional común y desbloquean trayectorias de especialización técnica:
+La ruta oficial de Python se compone de **12 módulos canónicos** (`01_PROJECT_OVERVIEW.md` §34) estructurados bajo el estándar de micro-lecciones atómicas:
 
-```mermaid
-graph TD
-    classDef foundation fill:#3b82f6,stroke:#1d4ed8,stroke-width:2px,color:#fff;
-    classDef frontend fill:#10b981,stroke:#047857,stroke-width:2px,color:#fff;
-    classDef backend fill:#8b5cf6,stroke:#6d28d9,stroke-width:2px,color:#fff;
-    classDef devops fill:#f59e0b,stroke:#b45309,stroke-width:2px,color:#fff;
-
-    F0["Pista Fundacional: Algoritmos & Python"]:::foundation
-
-    F0 --> FE1["Frontend: HTML5, CSS3 & Responsive"]:::frontend
-    F0 --> BE1["Backend: Fundamentos de Servidores & APIs"]:::backend
-    F0 --> DO1["DevOps: Linux CLI, Bash & Git Avanzado"]:::devops
-
-    FE1 --> FE2["JavaScript Moderno & TypeScript"]:::frontend
-    FE2 --> FE3["React 19 & Next.js App Router"]:::frontend
-    FE3 --> FE4["Gestión de Estado, UI & Performance"]:::frontend
-
-    BE1 --> BE2["Bases de Datos Relacionales (PostgreSQL)"]:::backend
-    BE2 --> BE3["Bases NoSQL (MongoDB) & Caching (Redis)"]:::backend
-    BE3 --> BE4["Arquitectura Modular, NestJS & Microservicios"]:::backend
-
-    DO1 --> DO2["Contenedores con Docker"]:::devops
-    DO2 --> DO3["Pipelines CI/CD (GitHub Actions)"]:::devops
-    DO3 --> DO4["Orquestación con Kubernetes & Cloud"]:::devops
-```
-
-### Topología de Rejilla Relativa (`tier` y `lane`)
-Para garantizar un lienzo interactivo fluido y responsive en cualquier resolución de pantalla, Koda sustituyó las coordenadas rígidas en píxeles por una **topología relativa de rejilla matricial** (`ADR-011`):
-- **`tier` (Fila / Nivel de Profundidad):** Determina la progresión pedagógica vertical ($0, 1, 2 \dots N$). Los nodos en un tier superior dependen conceptualmente de los tiers previos.
-- **`lane` (Columna / Desplazamiento Horizontal):** Organiza especializaciones y bifurcaciones paralelas (ej. $-2$: DevOps, $0$: Núcleo/Backend, $+2$: Frontend).
-- **Aristas Paramétricas y Efectos Visuales:** Las dependencias entre nodos (`requires`, `unlocks`) se renderizan como curvas de Bézier dinámicas con soporte para estilos visuales (`laser-flow-fast`, `energy-beam`, `pulse-glow`, `dotted-amber`).
+| Módulo | Título Formativo | Foco Pedagógico | Estado |
+|:---:|---|---|:---:|
+| **M01** | **Fundamentos de Python** | Tu primer `print()`, cadenas de texto, números, indentación y comentarios `#` | 🟢 Disponible |
+| **M02** | **Variables y Tipos de Datos** | Almacenamiento en memoria, `int`, `float`, `str`, `bool` y función inspectora `type()` | 🟢 Disponible |
+| **M03** | **Operadores y Expresiones** | Aritmética (`+`, `-`, `*`, `/`, `//`, `%`, `**`), comparadores y operadores lógicos (`and`, `or`, `not`) | 🟡 En roadmap |
+| **M04** | **Condicionales** | Toma de decisiones lógicas con bloques `if`, `elif` y `else` | 🟡 En roadmap |
+| **M05** | **Bucles e Iteración** | Automatización de tareas repetitivas con `for`, `while`, `range()`, `break` y `continue` | 🟡 En roadmap |
+| **M06** | **Funciones y Modularidad** | Creación de bloques reutilizables con `def`, argumentos, parámetros y `return` | 🟡 En roadmap |
+| **M07** | **Listas y Tuplas** | Colecciones ordenadas, indexación `[0]`, slicing `[:]`, métodos `append()` y mutabilidad | 🟡 En roadmap |
+| **M08** | **Diccionarios y Conjuntos** | Mapeo asociativo clave-valor `{key: value}`, métodos `get()` y colecciones únicas con `set` | 🟡 En roadmap |
+| **M09** | **Manejo de Errores** | Prevención de caídas con bloques de control `try`, `except`, `else` y `finally` | 🟡 En roadmap |
+| **M10** | **Módulos y Bibliotecas** | Organización del código con `import`, bibliotecas nativas (`math`, `random`) y paquetes | 🟡 En roadmap |
+| **M11** | **Programación Orientada a Objetos** | Clases, instancias, atributos, métodos y el inicializador constructor `__init__` | 🟡 En roadmap |
+| **M12** | **Proyecto Final Integrador** | Aplicación integral de todos los conceptos, examen final y emisión de certificación | 🟡 En roadmap |
 
 ---
 
 ## 💻 Experiencia de Aprendizaje y Workspace Desktop
 
-El entorno de lección divide la pantalla en un formato **50/50 split** balanceado ergonómicamente para programar y reflexionar simultáneamente:
+Koda implementa una interfaz de escritorio optimizada para el enfoque y la retención pedagógica:
 
 ```
 ┌─────────────────┬────────────────────────────────────────────────────────────────────────┐
-│     🦊 KODA     │ 🧭 Backend › Módulo 02 › Lección 04: Conexión con PostgreSQL [ ⭐⭐⭐ ]  │
+│     🦊 KODA     │ 🧭 Python › Módulo 01 › Sección 02: Tu primer print() [ 50 XP ] [ 🔥 3 ] │
 ├─────────────────┼────────────────────────────────────────────────────────────────────────┤
-│ 🗺️ Roadmap DAG  │ ┌── STEPPER DE LECCIÓN ──────────────────────────────────────────────┐ │
-│ 📖 Lección (*)  │ │ Ítem 1: Código [✓]  │  Ítem 2: Quiz [●]  │  Ítem 3: Predicción [ ]   │ │
+│ 🗺️ Ruta         │ ┌── STEPPER DE SECCIÓN ──────────────────────────────────────────────┐ │
+│ 📖 Lección (*)  │ │ S02: Tu primer print() │ [✓] [✓] [✓] [●] [5] [6] [7] [8] [9] [10]  │ │
 │ 📓 Cuaderno     │ └────────────────────────────────────────────────────────────────────┘ │
 │ 🏆 Logros       │ ┌───────────────────────────────┐ ┌──────────────────────────────────┐ │
-│ 📜 Certificados │ │ 📖 TEORÍA & EDITOR (Izq 50%)  │ │ 🧠 TRÍADA EVALUATIVA (Der 50%)   │ │
-│                 │ │ • Explicación atómica (60 pal)│ │ • Ítem Activo: Quiz Conceptual   │ │
-│ [🦊 Koda WebGL] │ │ • Editor con resaltado syntax │ │ • [A] Opción 1       (tecla 1)   │ │
-│                 │ │ • Consola interactiva en vivo │ │ • [B] Opción 2       (tecla 2)   │ │
-│                 │ │ • Casos de prueba automáticos │ │ • [C] Opción 3       (tecla 3)   │ │
+│ 📜 Certificados │ │ 📖 TEORÍA & CÓDIGO (Izq 50%)  │ │ 🧠 DESAFÍO INTERACTIVO (Der 50%) │ │
+│                 │ │ • Micro-explicación paso a paso│ │ • Enunciado claro y sin spoilers │ │
+│ [🦊 Koda WebGL] │ │ • Editor con sintaxis Python  │ │ • [A] Opción 1       (tecla 1)   │ │
+│                 │ │ • Consola de salida en vivo   │ │ • [B] Opción 2       (tecla 2)   │ │
+│                 │ │ • Tip formativo               │ │ • [C] Opción 3       (tecla 3)   │ │
 │                 │ │                               │ │ • [D] Opción 4       (tecla 4)   │ │
-│                 │ │ [ ▶ Ejecutar Código (Ctrl+↵) ]│ │ [ Comprobar Respuesta (Enter) ]  │ │
+│                 │ │                               │ │ • Feedback / Pista inteligente   │ │
 │                 │ └───────────────────────────────┘ └──────────────────────────────────┘ │
 └─────────────────┴────────────────────────────────────────────────────────────────────────┘
 ```
 
-### Características Principales del Workspace:
-- **Flujo Progresivo en 3 Etapas:** Cada micro-lección valida la competencia práctica (código), conceptual (quiz de 4 opciones) y analítica (predicción/depuración) antes de otorgar estrellas.
-- **Atajos de Teclado Productivos:** `1`-`4` o `A`-`D` para seleccionar opciones, `Ctrl + Enter` para compilar/ejecutar y `Enter` para verificar respuestas.
-- **Mascota 🦊 Koda en WebGL (PixiJS v7):** Renderizado acelerado por GPU con animaciones dinámicas según el éxito de las respuestas, racha activa y eventos especiales.
+### Características del Workspace Desktop:
+- **Espacio Dividido 50/50:** Teoría y código a la izquierda; práctica interactiva a la derecha sin scrolls molestos.
+- **Stepper de 10 Píldoras:** Visualización del estado en tiempo real de cada micro-lección (`✓` completada, `●` activa).
+- **Atajos de Teclado:** Teclas `1`-`4` o `A`-`D` para seleccionar opciones, `Enter` para verificar y flechas `←` / `→` para navegar.
+- **Mascota 🦊 Koda en WebGL (PixiJS v7):** Animación en tiempo real con físicas de flotación, confeti acelerado y reacciones emocionales según los aciertos o equivocaciones.
 
 ---
 
 ## 📂 Estructura del Repositorio
 
-El proyecto está organizado como un monorepo administrado con **pnpm workspaces**:
-
 ```
 DuolingoProgramacion/
-├── apps/                               # Aplicaciones ejecutables
-│   ├── api/                            # Backend NestJS (REST API v2, BullMQ, Swagger)
-│   └── web/                            # Frontend Next.js 15 (React 19, Canvas DAG, PixiJS)
-├── packages/                           # Paquetes y contratos compartidos
-│   └── types/                          # Contratos TypeScript oficiales (@koda/types)
-├── content/                            # Cursos declarativos y semillas pedagógicas
-│   ├── languages/                      # Rutas por lenguaje (Python, JS, etc.)
-│   └── careers/                        # Estructura de carreras y grafos DAG
-├── docs/                               # Hub de Documentación Técnica Modular
-│   ├── README.md                       # Índice maestro y mapa de navegación
-│   ├── adr/                            # Decisiones de Arquitectura (ADR-001 a ADR-011)
-│   ├── 01-producto-negocio/            # Visión, alcance, monetización y roadmap
-│   ├── 02-requisitos-ux/               # Requisitos RF/RNF, historias de usuario y UI/UX
-│   ├── 03-pedagogia-contenido/         # Learning system, SM-2, quizzes y especificaciones
-│   ├── 04-arquitectura-backend/        # Arquitectura modular, persistencia híbrida y API
-│   └── 05-devops-seguridad/            # STRIDE, seguridad, pruebas y despliegue
-├── documentation/                      # Gestión de proyecto y bitácora
-│   ├── UserHistories/                  # Historias de usuario detalladas (Jira-ready)
-│   └── changelog/                      # Bitácora diaria de cambios por fecha
-├── CONTRIBUTING.md                     # Guía de contribución y convenciones
+├── apps/                               # Aplicaciones del Monorepo
+│   ├── api/                            # Backend NestJS (REST API v2 + Swagger OpenAPI)
+│   └── web/                            # Frontend Next.js 15 (React 19 + PixiJS + Tailwind)
+├── packages/                           # Paquetes y Contratos Compartidos
+│   └── types/                          # Definiciones TypeScript compartidas (@koda/types)
+├── content/                            # Contenido pedagógico declarativo desacoplado
+│   └── languages/
+│       └── python/
+│           ├── manifest.json           # Registro oficial del curso y 12 módulos
+│           ├── config/                 # Umbrales, XP y composiciones de examen
+│           └── modules/
+│               └── 01_fundamentos/     # Lecciones atómicas con print, variables y tipos
+├── docs/                               # Hub de Documentación y Especificaciones
+│   ├── README.md                       # Índice maestro y mapa de lectura por rol
+│   ├── adr/                            # Registro de decisiones de arquitectura (ADR-001..006)
+│   ├── 01_PROJECT_OVERVIEW.md          # Visión general y filosofía pedagógica
+│   ├── 11_SYSTEM_ARCHITECTURE.md       # Arquitectura técnica, motores y stack oficial
+│   ├── 12_DATABASE_DESIGN.md           # Modelo relacional Supabase v2.0.0
+│   ├── 13_API_SPECIFICATION.md         # Especificación REST v2.0.0 (44 endpoints)
+│   ├── 14_LEARNING_SYSTEM.md           # Máquinas de estado y lógica pedagógica
+│   ├── 16_GAMIFICATION.md              # Economía de XP, rachas y estrellas
+│   ├── 17_CERTIFICATION.md             # Motor de certificación y Google Drive
+│   └── 27_UI_UX_SPECIFICATION.md       # Sistema de diseño de interfaz
+├── CONTRIBUTING.md                     # Guía de contribución y estándares de código
+├── CHANGELOG.md                        # Bitácora estricta de cambios (America/Bogota)
 ├── LICENSE                             # Licencia de código abierto MIT
-└── README.md                           # Visión general del proyecto
+└── README.md                           # Documentación principal del proyecto
 ```
 
 ---
 
-## 🛠️ Inicio Rápido en Desarrollo Local
+## 🛠️ Inicio Rápido con el Monorepo (Next.js + NestJS)
 
-Para levantar el entorno completo de desarrollo:
+Para ejecutar la aplicación completa en tu entorno local:
 
 ### 1. Requisitos Previos
 - **Node.js** `>= 20.0.0`
-- **pnpm** `>= 9.0.0` (`npm i -g pnpm`)
-- **Docker & Docker Compose** (para PostgreSQL, MongoDB y Redis locales)
+- **pnpm** `>= 9.0.0` (recomendado: `npm i -g pnpm`)
 
-### 2. Instalación y Compilación de Contratos
+### 2. Instalación y Compilación
 ```bash
-# 1. Clonar el repositorio
-git clone https://github.com/nastex123/DuolingoProgramacion.git
-cd DuolingoProgramacion
-
-# 2. Instalar dependencias de todo el monorepo
+# Instalar todas las dependencias del monorepo
 pnpm install
 
-# 3. Compilar el paquete de tipos compartidos
+# Compilar los paquetes de contratos TypeScript
 pnpm --filter "@koda/types" build
 ```
 
-### 3. Configuración de Variables de Entorno
-Copia los archivos `.env.example` en `apps/api` y `apps/web`:
+### 3. Ejecución en Desarrollo
 ```bash
-cp apps/api/.env.example apps/api/.env
-cp apps/web/.env.example apps/web/.env
-```
-
-Variables clave requeridas:
-- `apps/api/.env`: `DATABASE_URL` (Supabase PostgreSQL), `MONGODB_URI` (MongoDB 7+), `REDIS_HOST` & `REDIS_PORT`, `SUPABASE_JWT_SECRET`.
-- `apps/web/.env`: `NEXT_PUBLIC_API_URL` (por defecto `http://localhost:4000/api/v1`).
-
-### 4. Ejecución de Servicios
-```bash
-# Iniciar frontend y backend en paralelo
+# Iniciar frontend y backend en paralelo (con precompilación de contratos)
 pnpm dev
 
 # O iniciar servicios de forma individual:
-pnpm dev:web    # Next.js 15 en http://localhost:3000
-pnpm dev:api    # NestJS API en http://localhost:4000
+pnpm dev:web    # Inicia Next.js en http://localhost:3000
+pnpm dev:api    # Inicia NestJS en http://localhost:4000
 ```
 
-- 🌐 **Frontend Web:** [http://localhost:3000](http://localhost:3000)
-- ⚙️ **Backend REST API:** [http://localhost:4000/api/v1](http://localhost:4000/api/v1)
-- 📚 **Documentación Swagger / OpenAPI:** [http://localhost:4000/api/docs](http://localhost:4000/api/docs)
+- 🌐 **Frontend (Next.js):** [http://localhost:3000](http://localhost:3000)
+- ⚙️ **Backend API (REST v2):** [http://localhost:4000/api/v1](http://localhost:4000/api/v1)
+- 📚 **Swagger UI (OpenAPI 3.0):** [http://localhost:4000/api/docs](http://localhost:4000/api/docs)
 
 ---
 
-## 🤝 Contribuciones y Estándares
+## 🤝 Contribuciones y Colaboración
 
-Las contribuciones son bienvenidas y deben respetar los estándares arquitectónicos del proyecto:
-1. Toda nueva característica debe apegarse a los contratos TypeScript de `@koda/types`.
-2. Las decisiones arquitectónicas estructurales deben formalizarse mediante un nuevo **ADR** en [`docs/adr/`](docs/adr/).
-3. Todo cambio en el código o la documentación debe registrarse en la bitácora diaria correspondiente en [`documentation/changelog/`](documentation/changelog/).
-4. Consulta [`CONTRIBUTING.md`](CONTRIBUTING.md) para más detalles sobre ramas y mensajes de commit convencionales.
+¡Las contribuciones son bienvenidas! Consulta [`CONTRIBUTING.md`](CONTRIBUTING.md) para conocer las pautas de estilo, convención de commits y el flujo de trabajo con ramas.
+
+Para proponer nuevo contenido pedagógico, consulta la guía de autoría en [`docs/03-pedagogia-contenido/24_CONTENT_AUTHORING_GUIDE.md`](docs/03-pedagogia-contenido/24_CONTENT_AUTHORING_GUIDE.md).
 
 ---
 
 ## 📜 Licencia
 
-Este proyecto está bajo la Licencia **MIT**. Consulta el archivo [`LICENSE`](LICENSE) para mayores detalles.
+Distribuido bajo la Licencia **MIT**. Consulta el archivo [`LICENSE`](LICENSE) para más detalles.

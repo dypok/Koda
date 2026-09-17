@@ -43,3 +43,7 @@ Toda lección y ejercicio añadido a este directorio debe apegarse estrictamente
 - **Python 3.12 (`languages/python/`):**
   - **Módulo 01:** *Fundamentos de Python* (`modules/01_fundamentos/`) — Lecciones atómicas con print(), textos, números y comentarios.
   - **Ruta Completa:** 12 módulos canónicos declarados en `manifest.json`.
+- **Lua (`languages/lua/`):**
+  - **Módulo 01:** *Fundamentos de Lua* (`modules/01_fundamentos/`) — 9 secciones x 10 lecciones (90) con chunks, print, comentarios y errores.
+  - **Módulo 02:** *Variables y Tipos de Datos* (`modules/02_variables/`) — 10 secciones x 10 lecciones (100) con `local`, los 8 tipos, nil y proyecto RPG.
+  - **Ruta Completa:** 12 módulos idiomáticos declarados en `manifest.json` (M03-M12 `coming_soon`). Metodología en `docs/03-pedagogia-contenido/28_LUA_CURRICULUM.md`.

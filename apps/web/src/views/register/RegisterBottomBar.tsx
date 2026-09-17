@@ -2,8 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { ArrowRight, Loader2 } from 'lucide-react';
-import { GradientButton } from '@/components/ui/gradient-button';
+import { ArrowRight, CircleNotch } from '@phosphor-icons/react';
+import { WipeButton } from '@/components/ui/wipe-button';
 
 interface RegisterBottomBarProps {
   canContinue: boolean;
@@ -25,16 +25,15 @@ export const RegisterBottomBar: React.FC<RegisterBottomBarProps> = ({
       <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
         {/* Continue Action */}
         <div className="w-full sm:w-auto flex flex-col items-stretch sm:items-end justify-end order-1 sm:order-2 gap-1.5">
-          <GradientButton
+          {/* Wipe diagonal simétrico: mismo CTA en los 5 pasos */}
+          <WipeButton
             onClick={onContinue}
             disabled={!canContinue || isLoading}
-            aria-disabled={!canContinue || isLoading}
-            size="lg"
             className="w-full sm:w-56 py-3 text-sm gap-2"
           >
             {isLoading ? (
               <>
-                <Loader2 aria-hidden="true" className="w-4 h-4 animate-spin stroke-[2.5]" />
+                <CircleNotch aria-hidden="true" className="w-4 h-4 animate-spin stroke-[2.5]" />
                 <span>Creando cuenta...</span>
               </>
             ) : (
@@ -43,7 +42,7 @@ export const RegisterBottomBar: React.FC<RegisterBottomBarProps> = ({
                 <ArrowRight aria-hidden="true" className="w-4 h-4 stroke-[2.5]" />
               </>
             )}
-          </GradientButton>
+          </WipeButton>
           {!canContinue && !isLoading && (
             <p aria-live="polite" className="text-[11px] text-slate-500">
               {blockedHint}

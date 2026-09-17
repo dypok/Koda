@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { X, Check } from 'lucide-react';
+import { X, Check } from '@phosphor-icons/react';
 import { MiniLessonPreview } from './MiniLessonPreview';
 import { Highlight } from '@/components/ui/highlight';
 
@@ -23,7 +23,7 @@ export const LiveCodeComparisonSection: React.FC = () => {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-7 space-y-5 text-left"
           >
-            <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
+            <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] text-balance">
               Código Real{' '}
               <Highlight>
                 en Vivo

@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileText } from 'lucide-react';
+import { FileText } from '@phosphor-icons/react';
 
 export const TermsTab: React.FC = () => (
   <div className="space-y-6 animate-fadeIn">

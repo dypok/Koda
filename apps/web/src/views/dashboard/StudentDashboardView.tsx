@@ -3,7 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { IconFlame, IconStar, IconLogout, IconCode, IconArrowRight } from '@tabler/icons-react';
+import { Flame, Star, SignOut, Code, ArrowRight } from '@phosphor-icons/react';
 import { GradientButton } from '@/components/ui/gradient-button';
 import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
 import { useAuthStore } from '@/stores/auth.store';
@@ -28,11 +28,11 @@ export const StudentDashboardView: React.FC = () => {
 
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 text-xs font-bold">
-              <IconFlame className="w-4 h-4 fill-orange-500" />
+              <Flame className="w-4 h-4 fill-orange-500" />
               {user?.streak || 1} días
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold">
-              <IconStar className="w-4 h-4 fill-amber-400" />
+              <Star className="w-4 h-4 fill-amber-400" />
               {user?.totalXp || 50} XP
             </span>
             <button
@@ -40,7 +40,7 @@ export const StudentDashboardView: React.FC = () => {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-rose-400 hover:bg-slate-800/40 transition-colors"
               title="Cerrar sesión"
             >
-              <IconLogout className="w-4 h-4" />
+              <SignOut className="w-4 h-4" />
               <span>Cerrar sesión</span>
             </button>
           </div>
@@ -60,14 +60,14 @@ export const StudentDashboardView: React.FC = () => {
           </div>
           <GradientButton onClick={() => alert('Próximamente: Lección Interactiva')} className="py-2.5 px-5 text-sm gap-2">
             <span>Continuar Ruta</span>
-            <IconArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4" />
           </GradientButton>
         </div>
 
         {/* Current Module Overview - Integrated into page, NO CARDS */}
         <div className="space-y-3 pb-6 border-b border-slate-800/60">
           <div className="flex items-center justify-between text-xs font-bold text-slate-400 uppercase tracking-wider">
-            <span className="flex items-center gap-2"><IconCode className="w-4 h-4 text-amber-400" /> Módulo 01: Fundamentos</span>
+            <span className="flex items-center gap-2"><Code className="w-4 h-4 text-amber-400" /> Módulo 01: Fundamentos</span>
             <span className="text-emerald-400">En progreso · 35%</span>
           </div>
           <h2 className="text-xl font-bold text-white">Variables, tipos de datos y operadores en Python</h2>

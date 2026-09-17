@@ -1,10 +1,5 @@
 import React from 'react';
-import {
-  IconDeviceGamepad2,
-  IconTerminal2,
-  IconFlame,
-  IconCertificate,
-} from '@tabler/icons-react';
+import { GameController, Terminal, Flame, Certificate } from '@phosphor-icons/react';
 
 export interface ShowcaseSlide {
   id: string;
@@ -24,7 +19,7 @@ export const SHOWCASE_SLIDES: ShowcaseSlide[] = [
     description: 'Micro-lecciones interactivas con práctica inmediata. Sin teoría aburrida, código real desde el primer segundo.',
     stat: '+120 Desafíos interactivos',
     color: '#F59E0B',
-    icon: IconDeviceGamepad2,
+    icon: GameController,
   },
   {
     id: 'terminal',
@@ -33,7 +28,7 @@ export const SHOWCASE_SLIDES: ShowcaseSlide[] = [
     description: 'Escribe y ejecuta código en múltiples lenguajes directamente en tu navegador sin instalar herramientas ni lidiar con dependencias.',
     stat: 'Ejecución Multi-lenguaje',
     color: '#38BDF8',
-    icon: IconTerminal2,
+    icon: Terminal,
   },
   {
     id: 'streak',
@@ -42,7 +37,7 @@ export const SHOWCASE_SLIDES: ShowcaseSlide[] = [
     description: 'Gamificación inspirada en Duolingo: mantén encendida tu llama, compite sanamente y acumula puntos de XP.',
     stat: 'Rachas y Multiplicadores',
     color: '#F97316',
-    icon: IconFlame,
+    icon: Flame,
   },
   {
     id: 'cert',
@@ -51,6 +46,6 @@ export const SHOWCASE_SLIDES: ShowcaseSlide[] = [
     description: 'Demuestra tus habilidades al completar cada ruta con un certificado digital con código QR de validación pública.',
     stat: 'Verificación QR 24/7',
     color: '#10B981',
-    icon: IconCertificate,
+    icon: Certificate,
   },
 ];

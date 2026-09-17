@@ -1,9 +1,44 @@
 import { create } from 'zustand';
-import { GraphViewMode, GraphDataset } from '@/models/roadmap/roadmap-graph.types';
+import { GraphViewMode, GraphDataset, NodeVariant, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { PYTHON_BASIC_LESSONS_DATASET } from '@/models/roadmap/python-lessons-graph.mock';
 import { CareerBranchId, CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 import { FRONTEND_COURSES_DATASET } from '@/models/roadmap/tracks/frontend-track.mock';
 import { RoadmapService } from '@/services/roadmap/roadmap.service';
+
+const PROGRESS_KEY = 'koda_roadmap_progress';
+
+function persistProgress(dataset: GraphDataset) {
+  try {
+    const unlockedIds = dataset.nodes.filter((n) => n.isUnlocked).map((n) => n.id);
+    window.localStorage.setItem(
+      PROGRESS_KEY,
+      JSON.stringify({ progressPercent: dataset.progressPercent, unlockedIds })
+    );
+  } catch {
+    // sin almacenamiento, el avance vive solo en memoria
+  }
+}
+
+function restoreProgress(dataset: GraphDataset): GraphDataset {
+  try {
+    const raw = window.localStorage.getItem(PROGRESS_KEY);
+    if (!raw) return dataset;
+    const saved = JSON.parse(raw) as { progressPercent?: number; unlockedIds?: string[] };
+    if (!Array.isArray(saved.unlockedIds)) return dataset;
+    const unlocked = new Set(saved.unlockedIds);
+    return {
+      ...dataset,
+      progressPercent: typeof saved.progressPercent === 'number' ? saved.progressPercent : dataset.progressPercent,
+      nodes: dataset.nodes.map((n) =>
+        unlocked.has(n.id) && !n.isUnlocked
+          ? { ...n, isUnlocked: true, variant: (n.variant === 'locked' ? 'unlocked' : n.variant) as NodeVariant }
+          : n
+      ),
+    };
+  } catch {
+    return dataset;
+  }
+}
 
 interface RoadmapStoreState {
   viewMode: GraphViewMode;
@@ -15,12 +50,21 @@ interface RoadmapStoreState {
   isLoading: boolean;
   coursesDataset: GraphDataset;
   lessonsDataset: GraphDataset;
+  retreatTrigger: number;
+  triggerRetreatToCourses: () => void;
+  animatingConnectionId: string | null;
+  unlockingNodeId: string | null;
+  simulateCompleteAndUnlockNext: () => void;
+  toggleNodeLock: (nodeId: string) => void;
+  unlockNodeWithCinematic: (nodeId: string) => void;
   openCourseLessons: (courseId: string) => Promise<void>;
   returnToCourses: () => void;
   setActiveNode: (id: string | null) => void;
   setBranch: (branchId: CareerBranchId) => void;
   setPanOffset: (pan: { x: number; y: number }) => void;
   setZoomLevel: (zoom: number | ((prev: number) => number)) => void;
+  hydrateProgress: () => void;
+  completeSectionNode: (nodeId: string, stars: number) => void;
   zoomIn: () => void;
   zoomOut: () => void;
   resetZoom: () => void;
@@ -37,6 +81,218 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   isLoading: false,
   coursesDataset: FRONTEND_COURSES_DATASET,
   lessonsDataset: PYTHON_BASIC_LESSONS_DATASET,
+  retreatTrigger: 0,
+  triggerRetreatToCourses: () => set((s) => ({ retreatTrigger: s.retreatTrigger + 1 })),
+  animatingConnectionId: null,
+  unlockingNodeId: null,
+  simulateCompleteAndUnlockNext: () => {
+    const dataset = get().coursesDataset;
+    const activeNode = dataset.nodes.find((n) => n.variant === 'active');
+    if (!activeNode) return;
+
+    // Encontrar conexión saliente desde el nodo activo hacia el siguiente nodo bloqueado
+    const nextConnection = dataset.connections.find((c) => c.fromId === activeNode.id);
+    if (!nextConnection) return;
+    const targetNodeId = nextConnection.toId;
+
+    // 1. Iniciar encendido del haz láser
+    set({ animatingConnectionId: nextConnection.id });
+
+    // 2. Al llegar el rayo (0.85s), marcar el nodo anterior como completado y activar la rotura de candado del nodo destino
+    setTimeout(() => {
+      set({ unlockingNodeId: targetNodeId });
+
+      // Actualizar los datos del dataset
+      const updatedNodes = dataset.nodes.map((n) => {
+        if (n.id === activeNode.id) {
+          return { ...n, variant: 'completed' as const, stars: n.maxStars || 9, statusText: 'DOMINADO • 100%' };
+        }
+        if (n.id === targetNodeId) {
+          return {
+            ...n,
+            isUnlocked: true,
+            variant: 'active' as const,
+            iconType: 'brackets' as const,
+            statusText: 'ACTIVO • EN PROGRESO',
+          };
+        }
+        return n;
+      });
+
+      const updatedConnections = dataset.connections.map((c) => {
+        if (c.id === nextConnection.id) {
+          return { ...c, isDashed: false };
+        }
+        return c;
+      });
+
+      set({
+        coursesDataset: {
+          ...dataset,
+          progressPercent: Math.min(100, dataset.progressPercent + 20),
+          nodes: updatedNodes,
+          connections: updatedConnections,
+        },
+        activeNodeId: targetNodeId,
+      });
+      persistProgress({
+        ...dataset,
+        progressPercent: Math.min(100, dataset.progressPercent + 20),
+        nodes: updatedNodes,
+        connections: updatedConnections,
+      });
+
+      // 3. Limpiar banderas de animación tras completarse la cinemática
+      setTimeout(() => {
+        set({ animatingConnectionId: null, unlockingNodeId: null });
+      }, 1200);
+    }, 850);
+  },
+  toggleNodeLock: (nodeId: string) => {
+    const isCourses = get().viewMode === 'courses';
+    const dataset = isCourses ? get().coursesDataset : get().lessonsDataset;
+
+    const targetNode = dataset.nodes.find((n) => n.id === nodeId);
+    if (!targetNode) return;
+
+    const willUnlock = !targetNode.isUnlocked;
+
+    if (willUnlock) {
+      // Buscar la conexión entrante hacia este nodo para animar el láser
+      const incomingConn = dataset.connections.find((c) => c.toId === nodeId);
+
+      if (incomingConn) {
+        // 1. Iniciar encendido del haz láser desde el predecesor
+        set({ animatingConnectionId: incomingConn.id });
+
+        // 2. Al llegar el láser al nodo (0.85s), activar rotura de candado y desbloquear
+        setTimeout(() => {
+          const currentDataset = isCourses ? get().coursesDataset : get().lessonsDataset;
+          set({ unlockingNodeId: nodeId });
+
+          const updatedNodes: GraphNode[] = currentDataset.nodes.map((n) => {
+            if (n.id === nodeId) {
+              return {
+                ...n,
+                isUnlocked: true,
+                variant: (n.variant === 'locked' || n.variant === 'branch' ? 'unlocked' : n.variant) as NodeVariant,
+                iconType: n.iconType === 'lock' ? 'code' : n.iconType,
+                statusText: 'DISPONIBLE • DESBLOQUEADO',
+              };
+            }
+            return n;
+          });
+
+          const updatedConnections = currentDataset.connections.map((c) => {
+            if (c.id === incomingConn.id) {
+              return { ...c, isDashed: false };
+            }
+            return c;
+          });
+
+          if (isCourses) {
+            const next = { ...currentDataset, nodes: updatedNodes, connections: updatedConnections };
+            set({ coursesDataset: next });
+            persistProgress(next);
+          } else {
+            set({ lessonsDataset: { ...currentDataset, nodes: updatedNodes, connections: updatedConnections } });
+          }
+
+          // 3. Limpiar banderas tras culminar el pulso de rotura
+          setTimeout(() => {
+            set({ animatingConnectionId: null, unlockingNodeId: null });
+          }, 1200);
+        }, 850);
+      } else {
+        // Desbloqueo directo para nodos raíz sin conexión previa
+        set({ unlockingNodeId: nodeId });
+        const updatedNodes: GraphNode[] = dataset.nodes.map((n) => {
+          if (n.id === nodeId) {
+            return {
+              ...n,
+              isUnlocked: true,
+              variant: (n.variant === 'locked' || n.variant === 'branch' ? 'unlocked' : n.variant) as NodeVariant,
+              iconType: n.iconType === 'lock' ? 'code' : n.iconType,
+              statusText: 'DISPONIBLE • DESBLOQUEADO',
+            };
+          }
+          return n;
+        });
+
+        if (isCourses) {
+          const next = { ...dataset, nodes: updatedNodes };
+          set({ coursesDataset: next });
+          persistProgress(next);
+        } else {
+          set({ lessonsDataset: { ...dataset, nodes: updatedNodes } });
+        }
+
+        setTimeout(() => {
+          set({ unlockingNodeId: null });
+        }, 1200);
+      }
+    } else {
+      // Bloquear nodo manualmente: restablecer a estado restringido y desconectar haz
+      const updatedNodes: GraphNode[] = dataset.nodes.map((n) => {
+        if (n.id === nodeId) {
+          return {
+            ...n,
+            isUnlocked: false,
+            variant: n.variant === 'boss' ? 'boss' : ('locked' as const),
+            iconType: n.variant === 'boss' ? 'skull' : ('lock' as const),
+            statusText: 'BLOQUEADO • RESTRINGIDO',
+          };
+        }
+        return n;
+      });
+
+      const updatedConnections = dataset.connections.map((c) => {
+        if (c.fromId === nodeId || c.toId === nodeId) {
+          return { ...c, isDashed: true };
+        }
+        return c;
+      });
+
+      if (isCourses) {
+        const next = { ...dataset, nodes: updatedNodes, connections: updatedConnections };
+        set({ coursesDataset: next });
+        persistProgress(next);
+      } else {
+        set({ lessonsDataset: { ...dataset, nodes: updatedNodes, connections: updatedConnections } });
+      }
+    }
+  },
+  unlockNodeWithCinematic: (nodeId: string) => {
+    const isCourses = get().viewMode === 'courses';
+    const dataset = isCourses ? get().coursesDataset : get().lessonsDataset;
+    const target = dataset.nodes.find((n) => n.id === nodeId);
+    // Solo anima desbloqueos; si ya está abierto o hay cinemática en curso, no hace nada.
+    if (!target || target.isUnlocked || get().unlockingNodeId) return;
+    set({ unlockingNodeId: nodeId });
+
+    // La animación del nodo dura ~1.35s (shake + flash + estallido + rebote).
+    setTimeout(() => {
+      const current = isCourses ? get().coursesDataset : get().lessonsDataset;
+      const updatedNodes: GraphNode[] = current.nodes.map((n) =>
+        n.id === nodeId
+          ? {
+              ...n,
+              isUnlocked: true,
+              variant: (n.variant === 'locked' || n.variant === 'branch' ? 'unlocked' : n.variant) as NodeVariant,
+              iconType: n.iconType === 'lock' ? 'code' : n.iconType,
+              statusText: 'DISPONIBLE • DESBLOQUEADO',
+            }
+          : n
+      );
+      if (isCourses) {
+        const next = { ...current, nodes: updatedNodes };
+        set({ coursesDataset: next, unlockingNodeId: null });
+        persistProgress(next);
+      } else {
+        set({ lessonsDataset: { ...current, nodes: updatedNodes }, unlockingNodeId: null });
+      }
+    }, 1400);
+  },
   openCourseLessons: async (courseId) => {
     const courseNode = get().coursesDataset.nodes.find((n) => n.targetCourseId === courseId || n.id === courseId);
     if (courseNode && !courseNode.isUnlocked) return;
@@ -58,6 +314,25 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     });
   },
   setPanOffset: (pan) => set({ panOffset: pan }),
+  hydrateProgress: () => {
+    if (typeof window === 'undefined') return;
+    set({ coursesDataset: restoreProgress(get().coursesDataset) });
+  },
+  completeSectionNode: (nodeId: string, stars: number) => {
+    const dataset = get().lessonsDataset;
+    const idx = dataset.nodes.findIndex((n) => n.id === nodeId);
+    if (idx < 0) return;
+    const nodes = dataset.nodes.map((n, i) => {
+      if (i === idx) {
+        return { ...n, variant: 'completed' as const, stars: Math.max(n.stars ?? 0, stars), statusText: 'COMPLETADA' };
+      }
+      if (i === idx + 1 && !n.isUnlocked) {
+        return { ...n, isUnlocked: true, variant: 'unlocked' as const, statusText: 'DISPONIBLE' };
+      }
+      return n;
+    });
+    set({ lessonsDataset: { ...dataset, nodes } });
+  },
   setZoomLevel: (zoom) =>
     set((s) => ({
       zoomLevel: Math.max(50, Math.min(200, typeof zoom === 'function' ? zoom(s.zoomLevel) : zoom)),

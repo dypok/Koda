@@ -27,20 +27,14 @@ export const HeroMascot: React.FC = () => {
           className="relative z-10 max-h-[200px] sm:max-h-[280px] lg:max-h-[320px] object-contain animate-float select-none transform-gpu will-change-transform drop-shadow-[0_20px_45px_rgba(249,115,22,0.35)]"
           priority
         />
-        <div
-          aria-hidden="true"
-          className="absolute -left-1 top-6 sm:left-2 rounded-full border border-emerald-400/30 bg-slate-950/80 px-2.5 py-1 text-[11px] font-bold text-emerald-300 backdrop-blur"
-        >
+        <div aria-hidden="true" className="pointer-events-none absolute -left-1 top-6 font-mono text-[11px] font-bold uppercase tracking-widest text-emerald-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:left-2">
           +10 XP
         </div>
-        <div
-          aria-hidden="true"
-          className="absolute -right-1 bottom-8 sm:right-2 rounded-full border border-amber-400/30 bg-slate-950/80 px-2.5 py-1 text-[11px] font-bold text-amber-300 backdrop-blur"
-        >
-          🔥 racha diaria
+        <div aria-hidden="true" className="pointer-events-none absolute -right-1 bottom-8 font-mono text-[11px] font-bold uppercase tracking-widest text-amber-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:right-2">
+          racha_diaria
         </div>
       </div>
-      <p className="mt-3 text-xs sm:text-sm text-slate-400">
+      <p className="mt-3 text-xs sm:text-sm text-slate-300">
         Koda te acompaña: celebra tus aciertos y te da pistas sin spoilers.
       </p>
     </motion.div>

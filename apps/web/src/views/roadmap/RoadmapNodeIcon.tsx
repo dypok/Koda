@@ -1,24 +1,21 @@
 'use client';
 
 import React from 'react';
-import {
-  IconBrackets, IconCode, IconGitFork, IconAtom, IconLock,
-  IconSkull, IconGift, IconServer, IconDatabase
-} from '@tabler/icons-react';
+import { BracketsSquare, Code, GitFork, Atom, Lock, Skull, Gift, Database } from '@phosphor-icons/react';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 
 export function RoadmapNodeIcon({ iconType, className }: { iconType: GraphNode['iconType']; className?: string }) {
   switch (iconType) {
-    case 'brackets': return <IconBrackets className={className} />;
-    case 'code': return <IconCode className={className} />;
+    case 'brackets': return <BracketsSquare className={className} />;
+    case 'code': return <Code className={className} />;
     case 'matrix':
-    case 'flow': return <IconGitFork className={className} />;
-    case 'atom': return <IconAtom className={className} />;
-    case 'lock': return <IconLock className={className} />;
-    case 'skull': return <IconSkull className={className} />;
-    case 'chest': return <IconGift className={className} />;
-    case 'server': return <IconServer className={className} />;
-    case 'database': return <IconDatabase className={className} />;
-    default: return <IconCode className={className} />;
+    case 'flow': return <GitFork className={className} />;
+    case 'atom': return <Atom className={className} />;
+    case 'lock': return <Lock className={className} />;
+    case 'skull': return <Skull className={className} />;
+    case 'chest': return <Gift className={className} />;
+    case 'server': return <Database className={className} />;
+    case 'database': return <Database className={className} />;
+    default: return <Code className={className} />;
   }
 }

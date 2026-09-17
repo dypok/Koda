@@ -17,12 +17,7 @@ import { useRegisterProfileController } from '@/controllers/register/useRegister
 
 export default function RegisterPage() {
   const stepper = useRegisterStepperController();
-  const profile = useRegisterProfileController(undefined, {
-    selectedLanguageId: stepper.selectedLanguageId,
-    selectedExperienceId: stepper.selectedExperienceId,
-    selectedStyleId: stepper.selectedStyleId,
-    selectedGoalId: stepper.selectedGoalId,
-  });
+  const profile = useRegisterProfileController();
 
   const isLast = stepper.currentStep === 5;
   const canContinue = isLast ? profile.isFormValid : stepper.canContinue;

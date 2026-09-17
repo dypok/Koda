@@ -3,7 +3,7 @@
 import React, { useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
-import { X } from 'lucide-react';
+import { X } from '@phosphor-icons/react';
 import { InfoModalTab } from '@/models/landing/info-modal.model';
 import { useInfoModalController } from '@/controllers/landing/useInfoModalController';
 import { InfoModalSidebar } from '@/views/landing/info-modal/InfoModalSidebar';

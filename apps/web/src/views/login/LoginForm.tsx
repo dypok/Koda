@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { IconMail, IconLock, IconEye, IconEyeOff, IconLoader2, IconArrowRight } from '@tabler/icons-react';
+import { Envelope, Lock, Eye, EyeSlash, CircleNotch, ArrowRight } from '@phosphor-icons/react';
 import { GradientButton } from '@/components/ui/gradient-button';
 import { useAuthStore } from '@/stores/auth.store';
 import { LoginSocialButtons } from './LoginSocialButtons';
@@ -24,13 +24,13 @@ export const LoginForm: React.FC = () => {
     if (!email.trim() || !password) { setError('Ingresa tu correo y contraseña.'); return; }
     setError(''); setIsSubmitting(true);
     await new Promise((r) => setTimeout(r, 550));
-    login(email); setIsSubmitting(false); router.replace('/');
+    login(email); setIsSubmitting(false); router.replace('/app/ruta');
   };
 
   const handleSocial = async (provider: 'google' | 'github') => {
     setIsSubmitting(true);
     await new Promise((r) => setTimeout(r, 450));
-    loginSocial(provider); setIsSubmitting(false); router.replace('/');
+    loginSocial(provider); setIsSubmitting(false); router.replace('/app/ruta');
   };
 
   return (
@@ -48,7 +48,7 @@ export const LoginForm: React.FC = () => {
         <div>
           <label className="block text-xs sm:text-sm font-semibold text-slate-300 mb-1.5">Correo electrónico</label>
           <div className="relative">
-            <IconMail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <Envelope className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
             <input
               type="email" value={email} onChange={(e) => setEmail(e.target.value)}
               placeholder="tu@correo.com" required
@@ -60,14 +60,14 @@ export const LoginForm: React.FC = () => {
         <div>
           <label className="block text-xs sm:text-sm font-semibold text-slate-300 mb-1.5">Contraseña</label>
           <div className="relative">
-            <IconLock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
             <input
               type={showPassword ? 'text' : 'password'} value={password} onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••" required
               className="w-full pl-11 pr-11 py-3 bg-slate-900/80 border border-slate-700/70 rounded-xl text-sm sm:text-base text-white placeholder:text-slate-500 focus:outline-none focus:border-amber-500 transition-colors"
             />
             <button type="button" onClick={() => setShowPassword(!showPassword)} tabIndex={-1} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-200">
-              {showPassword ? <IconEyeOff className="w-4 h-4" /> : <IconEye className="w-4 h-4" />}
+              {showPassword ? <EyeSlash className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
         </div>
@@ -81,7 +81,7 @@ export const LoginForm: React.FC = () => {
         </div>
 
         <GradientButton type="submit" disabled={isSubmitting} className="w-full py-3.5 text-base gap-2 mt-2 font-bold">
-          {isSubmitting ? <><IconLoader2 className="w-4 h-4 animate-spin stroke-[2.5]" /><span>Iniciando...</span></> : <><span>Iniciar Sesión</span><IconArrowRight className="w-4 h-4 stroke-[2.5]" /></>}
+          {isSubmitting ? <><CircleNotch className="w-4 h-4 animate-spin stroke-[2.5]" /><span>Iniciando...</span></> : <><span>Iniciar Sesión</span><ArrowRight className="w-4 h-4 stroke-[2.5]" /></>}
         </GradientButton>
       </form>
 

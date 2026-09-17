@@ -15,7 +15,7 @@ export const LiveCodeSection: React.FC = () => {
           initial={reduceMotion ? false : { opacity: 0, scale: 0.9, y: 20 }}
           whileInView={{ opacity: 1, scale: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
-          transition={{ type: 'spring', stiffness: 90, damping: 14 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="lg:col-span-5 order-2 lg:order-1 flex flex-col items-start lg:items-start justify-center text-left space-y-2"
         >
           <AnimatedCounter
@@ -37,9 +37,6 @@ export const LiveCodeSection: React.FC = () => {
           transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
           className="lg:col-span-7 order-1 lg:order-2 space-y-5 text-left"
         >
-          <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-orange-400">
-            Pilar 3 · Práctica
-          </p>
           <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
             1 concepto = 1 reto en código real
           </h3>

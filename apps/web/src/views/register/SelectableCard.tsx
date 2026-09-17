@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Check } from 'lucide-react';
+import { Check } from '@phosphor-icons/react';
 import { GlareHover } from '@/components/ui/glare-hover';
 import { cn } from '@/lib/utils';
 
