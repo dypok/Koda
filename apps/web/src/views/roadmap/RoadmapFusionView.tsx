@@ -158,7 +158,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
       {activeNode && (
         <aside
           className={cn(
-            'absolute right-4 sm:right-6 top-16 sm:top-16 z-20 w-80 sm:w-96 max-w-[calc(100%-2rem)] max-h-[calc(100%-9rem)] overflow-y-auto rounded-2xl border bg-slate-900/60 backdrop-blur-xl p-6 flex flex-col gap-4 shadow-2xl transition-all duration-300',
+            'absolute right-4 sm:right-6 top-16 sm:top-16 z-20 w-80 sm:w-96 max-w-[calc(100%-2rem)] max-h-[calc(100%-9rem)] overflow-y-auto rounded-2xl border bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col gap-4 shadow-2xl transition-all duration-300',
             showPanel ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'
           )}
           style={{ borderColor: isBoss ? 'rgba(244,63,94,0.5)' : 'rgba(255,106,0,0.35)' }}
@@ -265,13 +265,13 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
           type="button"
           onClick={() => setShowPanel(true)}
           aria-label="Mostrar detalle"
-          className="absolute right-4 top-16 z-20 p-2.5 rounded-xl border border-slate-700/50 bg-slate-900/60 backdrop-blur-xl text-slate-300 hover:text-orange-400 hover:border-orange-500/50 shadow-xl transition-colors cursor-pointer"
+          className="absolute right-4 top-16 z-20 p-2.5 rounded-xl border border-slate-700/50 bg-slate-900/40 backdrop-blur-xl text-slate-300 hover:text-orange-400 hover:border-orange-500/50 shadow-xl transition-colors cursor-pointer"
         >
           <Sidebar className="w-4 h-4" />
         </button>
       )}
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-2xl border border-slate-700/50 bg-slate-900/60 backdrop-blur-xl shadow-2xl">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-2xl border border-slate-700/50 bg-slate-900/40 backdrop-blur-xl shadow-2xl">
         <div className="flex items-center gap-3">
           <span className="font-mono text-xs font-bold tabular-nums text-orange-400">
             0{activeIndex + 1} / 0{nodes.length}

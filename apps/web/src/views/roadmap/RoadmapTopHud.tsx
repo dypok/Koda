@@ -50,7 +50,7 @@ export function RoadmapTopHud({
       <div
         role="tablist"
         aria-label="Vista del roadmap"
-        className="hidden md:flex items-center gap-1 rounded-full border border-slate-700/50 bg-slate-900/60 p-1 backdrop-blur-xl shadow-xl"
+        className="hidden md:flex items-center gap-1 rounded-full border border-slate-700/50 bg-slate-900/40 p-1 backdrop-blur-xl shadow-xl"
       >
         {(
           [
@@ -84,7 +84,7 @@ export function RoadmapTopHud({
   return (
     <>
       {inLessons ? (
-        <div className="absolute left-4 top-4 z-20 flex w-max max-w-[calc(100%-2rem)] items-center gap-2 rounded-full border border-slate-700/50 bg-slate-900/60 py-1.5 pl-1.5 pr-4 backdrop-blur-xl shadow-xl">
+        <div className="absolute left-4 top-4 z-20 flex w-max max-w-[calc(100%-2rem)] items-center gap-2 rounded-full border border-slate-700/50 bg-slate-900/40 py-1.5 pl-1.5 pr-4 backdrop-blur-xl shadow-xl">
           <button
             type="button"
             onClick={triggerRetreatToCourses}
@@ -101,7 +101,7 @@ export function RoadmapTopHud({
           </span>
         </div>
       ) : (
-        <div className="absolute left-1/2 top-4 z-20 flex w-max max-w-[calc(100%-2rem)] -translate-x-1/2 items-center gap-3 rounded-full border border-slate-700/50 bg-slate-900/60 py-1.5 pl-4 pr-1.5 backdrop-blur-xl shadow-xl">
+        <div className="absolute left-1/2 top-4 z-20 flex w-max max-w-[calc(100%-2rem)] -translate-x-1/2 items-center gap-3 rounded-full border border-slate-700/50 bg-slate-900/40 py-1.5 pl-4 pr-1.5 backdrop-blur-xl shadow-xl">
           <span className="shrink-0 font-mono text-[11px] font-bold tabular-nums text-orange-400/90">
             {Math.round(progressPercent)}%
           </span>

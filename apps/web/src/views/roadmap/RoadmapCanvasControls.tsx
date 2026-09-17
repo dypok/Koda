@@ -16,7 +16,7 @@ export function RoadmapCanvasControls() {
       onMouseUp={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="flex items-center bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-xl p-1 text-slate-300 font-mono text-xs shadow-2xl gap-1">
+      <div className="flex items-center bg-slate-900/40 backdrop-blur-xl border border-slate-700/50 rounded-xl p-1 text-slate-300 font-mono text-xs shadow-2xl gap-1">
         <button
           type="button"
           onClick={(e) => {
