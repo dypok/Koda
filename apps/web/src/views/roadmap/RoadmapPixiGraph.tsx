@@ -814,51 +814,64 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
           }
         } else if (edge.style === 'cylindrical') {
           // =========================================================================
-          // CYLINDRICAL CONDUIT CHARGE SLUGS & AMBER THERMAL SLEEVES (Lua Core Prototipo)
+          // CONDUCTOS CILÍNDRICOS DE CARGA CUÁNTICA TÉRMICA (Prototipo Lua Core)
           // =========================================================================
           slugLayer.clear();
           const { edgeDesign: design } = propsRef.current;
-          const SLUG_LEN = 0.24; // Longitud del slug térmico cilíndrico (24% de la trayectoria)
-          const speed = 0.28;
+          const SLUG_LEN = 0.28; // Longitud proporcional de la cápsula (28% de la curva)
+          const speed = 0.26;
+
+          // Modulación senoidal sutil de la respiración idle en la capa base
+          connLayer.alpha = 0.82 + 0.18 * Math.sin(time * 2.4);
 
           for (const c of edge.curves) {
             if (!c.lit || c.pts.length < 2) continue;
 
             const tHead = (time * speed + c.phase) % 1;
-            const tTail = Math.max(0, tHead - SLUG_LEN);
-            const numSteps = 14;
-            const stepDelta = (tHead - tTail) / numSteps;
+            const tTail = tHead - SLUG_LEN;
 
-            const subPts: [number, number][] = [];
-            for (let sIdx = 0; sIdx <= numSteps; sIdx++) {
-              const curT = tTail + sIdx * stepDelta;
-              subPts.push(at(c.pts, curT));
-            }
+            // Manejar segmentos continuos incluyendo el wrapping circular en los bordes
+            const intervals: [number, number][] =
+              tTail < 0 ? [[0, tHead], [1 + tTail, 1]] : [[tTail, tHead]];
 
-            const lists = design === 'twin' && c.pts2 ? [subPts, subPts.map((p, idx) => {
-              const curT = tTail + idx * stepDelta;
-              return at(c.pts2!, curT);
-            })] : [subPts];
+            for (const [startT, endT] of intervals) {
+              if (endT - startT < 0.005) continue;
+              const numSteps = Math.max(3, Math.round((endT - startT) * 36));
+              const stepDelta = (endT - startT) / numSteps;
 
-            for (const pts of lists) {
-              if (pts.length < 2) continue;
-              const p0 = pts[0];
-              if (!p0) continue;
+              const subPts: [number, number][] = [];
+              for (let sIdx = 0; sIdx <= numSteps; sIdx++) {
+                subPts.push(at(c.pts, startT + sIdx * stepDelta));
+              }
 
-              // 1. Halo difuminado exterior
-              slugLayer.lineStyle(10, c.color, 0.22, 0.5, true);
-              slugLayer.moveTo(p0[0], p0[1]);
-              for (let pi = 1; pi < pts.length; pi++) slugLayer.lineTo(pts[pi][0], pts[pi][1]);
+              const lists =
+                design === 'twin' && c.pts2
+                  ? [
+                      subPts,
+                      subPts.map((_, idx) => at(c.pts2!, startT + idx * stepDelta)),
+                    ]
+                  : [subPts];
 
-              // 2. Manga Térmica Cilíndrica (Charge Sleeve - Ámbar cuántico / color de rama)
-              slugLayer.lineStyle(6.5, c.color, 0.92, 0.5, true);
-              slugLayer.moveTo(p0[0], p0[1]);
-              for (let pi = 1; pi < pts.length; pi++) slugLayer.lineTo(pts[pi][0], pts[pi][1]);
+              for (const pts of lists) {
+                if (pts.length < 2) continue;
+                const p0 = pts[0];
+                if (!p0) continue;
 
-              // 3. Núcleo Plasma Blanco de Alta Densidad (Charge Core)
-              slugLayer.lineStyle(2.2, 0xffffff, 1.0, 0.5, true);
-              slugLayer.moveTo(p0[0], p0[1]);
-              for (let pi = 1; pi < pts.length; pi++) slugLayer.lineTo(pts[pi][0], pts[pi][1]);
+                // 1. Halo difuminado exterior de alta dispersión térmica
+                slugLayer.lineStyle(12, c.color, 0.2, 0.5, true);
+                slugLayer.moveTo(p0[0], p0[1]);
+                for (let pi = 1; pi < pts.length; pi++) slugLayer.lineTo(pts[pi][0], pts[pi][1]);
+
+                // 2. Manga Térmica Cilíndrica (Charge Sleeve - Ámbar cuántico / color de rama)
+                slugLayer.lineStyle(6.5, c.color, 0.95, 0.5, true);
+                slugLayer.moveTo(p0[0], p0[1]);
+                for (let pi = 1; pi < pts.length; pi++) slugLayer.lineTo(pts[pi][0], pts[pi][1]);
+
+                // 3. Núcleo Plasma Blanco de Alta Densidad (Charge Core)
+                slugLayer.lineStyle(2.2, 0xffffff, 1.0, 0.5, true);
+                slugLayer.moveTo(p0[0], p0[1]);
+                for (let pi = 1; pi < pts.length; pi++) slugLayer.lineTo(pts[pi][0], pts[pi][1]);
+              }
             }
           }
         }
