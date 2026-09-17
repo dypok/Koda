@@ -362,28 +362,44 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
           const a = byId.get(c.fromId);
           const b = byId.get(c.toId);
           const lit = (a?.isUnlocked || a?.variant === 'completed') && (b?.isUnlocked || b?.variant === 'completed');
-          // En modo cilíndrico o fusions, los filamentos bloqueados tienen un tono técnico titanio sutil
-          const color = lit ? c.color : '#252f3f';
-          const alpha = lit ? (style === 'cylindrical' ? 0.35 : 0.55) : 0.45;
           const cubic = parsePath(c.path);
-          if (design === 'twin') {
+
+          if (lit) {
+            // =========================================================================
+            // GLOW AMBIENTAL PERMANENTE EN RUTAS DESBLOQUEADAS (Estilo Mapa SVG)
+            // =========================================================================
             const pts = sampleCurve(cubic, a, b);
-            strokeSamples(pts, color, alpha, 1.5, null, 0);
-            strokeSamples(offsetPts(pts, 3.5), color, alpha * 0.7, 1.5, null, 0);
-            continue;
-          }
-          const morse = design === 'morse' && c.isDashed;
-          if (cubic && !c.isDashed && !morse) {
-            const [x0, y0, x1, y1, x2, y2, x3, y3] = cubic;
-            connLayer.lineStyle(2, color, alpha);
-            connLayer.moveTo(x0, y0);
-            connLayer.bezierCurveTo(x1, y1, x2, y2, x3, y3);
-          } else if (cubic) {
-            strokeSamples(sampleCurve(cubic, a, b), color, alpha, 2, morse ? [12, 5, 3, 5] : [8, 8], 0);
-          } else if (a && b) {
-            connLayer.lineStyle(2, color, alpha);
-            connLayer.moveTo(a.x, a.y);
-            connLayer.lineTo(b.x, b.y);
+            const lists = design === 'twin' ? [pts, offsetPts(pts, 3.5)] : [pts];
+
+            for (const pList of lists) {
+              // 1. Halo difuso grueso envolvente (9px)
+              strokeSamples(pList, c.color, 0.24, 9, null, 0);
+              // 2. Trazo central conductor nítido (2px)
+              strokeSamples(pList, c.color, 0.65, 2, null, 0);
+            }
+          } else {
+            // Filamento en reposo / bloqueado: trazo discreto titanio
+            const color = '#252f3f';
+            const alpha = 0.45;
+            if (design === 'twin') {
+              const pts = sampleCurve(cubic, a, b);
+              strokeSamples(pts, color, alpha, 1.5, null, 0);
+              strokeSamples(offsetPts(pts, 3.5), color, alpha * 0.7, 1.5, null, 0);
+              continue;
+            }
+            const morse = design === 'morse' && c.isDashed;
+            if (cubic && !c.isDashed && !morse) {
+              const [x0, y0, x1, y1, x2, y2, x3, y3] = cubic;
+              connLayer.lineStyle(2, color, alpha);
+              connLayer.moveTo(x0, y0);
+              connLayer.bezierCurveTo(x1, y1, x2, y2, x3, y3);
+            } else if (cubic) {
+              strokeSamples(sampleCurve(cubic, a, b), color, alpha, 2, morse ? [12, 5, 3, 5] : [8, 8], 0);
+            } else if (a && b) {
+              connLayer.lineStyle(2, color, alpha);
+              connLayer.moveTo(a.x, a.y);
+              connLayer.lineTo(b.x, b.y);
+            }
           }
         }
       };
@@ -410,8 +426,24 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
           const boss = n.variant === 'boss';
           const active = n.id === activeId;
           const R = active ? 14 : 12;
-          const coreColor = st === 'done' ? 0x34d399 : st === 'active' ? (boss ? 0xf43f5e : accentNum) : st === 'open' ? 0x94a3b8 : 0x0f172a;
-          const ringColor = st === 'done' ? 0x34d399 : st === 'active' ? (boss ? 0xf43f5e : accentNum) : boss ? 0xf43f5e : 0x475569;
+          const coreColor =
+            st === 'done'
+              ? 0x34d399
+              : st === 'active'
+              ? (boss ? 0xf43f5e : accentNum)
+              : st === 'open'
+              ? 0xff6a00
+              : 0x0f172a;
+          const ringColor =
+            st === 'done'
+              ? 0x34d399
+              : st === 'active'
+              ? (boss ? 0xf43f5e : accentNum)
+              : st === 'open'
+              ? 0xffa338
+              : boss
+              ? 0xf43f5e
+              : 0x475569;
 
           const holder = new PIXI.Container();
           holder.position.set(n.x, n.y);
@@ -428,12 +460,20 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
             // =========================================================================
             // MÓDULO IRIS B CARTOGRAPHY & VERNIER SCALE (Prototipo Lua Core)
             // =========================================================================
-            // 1. Halo cuántico de alta tensión en nodos activos / completados
+            // 1. Halo cuántico de alta tensión en nodos activos / completados / desbloqueados
             const halo = new PIXI.Sprite(glowTex);
             halo.anchor.set(0.5);
-            const haloBase = st === 'active' ? 0.75 : st === 'done' ? 0.45 : 0.08;
+            const haloBase = st === 'active' ? 0.75 : st === 'done' ? 0.45 : st === 'open' ? 0.35 : 0.08;
             halo.scale.set(((R * 6) / GLOW_TEXTURE_SIZE) * 2);
-            halo.tint = boss ? 0xf43f5e : st === 'active' ? 0xffa338 : st === 'done' ? 0xff6a00 : 0x1b2330;
+            halo.tint = boss
+              ? 0xf43f5e
+              : st === 'active'
+              ? 0xffa338
+              : st === 'done'
+              ? 0xff6a00
+              : st === 'open'
+              ? 0xff6a00
+              : 0x1b2330;
             halo.alpha = haloBase;
             holder.addChild(halo);
             animRef.current.halos.push({ obj: halo, base: haloBase, phase: idx * 0.9 });
@@ -446,22 +486,30 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
 
             // 3. Escala Vernier micrométrica rotativa exterior (r = 30, stroke-dasharray 1 5)
             const vernier = new PIXI.Graphics();
-            vernier.lineStyle(2.5, st === 'active' ? 0xffa338 : st === 'done' ? 0xff6a00 : 0x4b586b, st === 'locked' ? 0.35 : 0.85);
+            vernier.lineStyle(
+              2.5,
+              st === 'active' ? 0xffa338 : st === 'done' ? 0xff6a00 : st === 'open' ? 0xffa338 : 0x4b586b,
+              st === 'locked' ? 0.35 : 0.85
+            );
             dashedCircle(vernier, 30, 48, 2);
             holder.addChild(vernier);
             animRef.current.rings.push({
               obj: vernier,
-              speed: st === 'active' ? 0.008 : st === 'done' ? 0.003 : 0.001,
+              speed: st === 'active' ? 0.008 : st === 'done' ? 0.003 : st === 'open' ? 0.0025 : 0.001,
             });
 
             // 4. Diafragma Iris mecánico concéntrico (r = 23, stroke-dasharray 10 4)
             const iris = new PIXI.Graphics();
-            iris.lineStyle(2.2, st === 'active' ? 0xff6a00 : st === 'done' ? 0xffa338 : 0x313d4f, st === 'locked' ? 0.5 : 0.95);
+            iris.lineStyle(
+              2.2,
+              st === 'active' ? 0xff6a00 : st === 'done' ? 0xffa338 : st === 'open' ? 0xff6a00 : 0x313d4f,
+              st === 'locked' ? 0.5 : 0.95
+            );
             dashedCircle(iris, 23, 24, 3);
             holder.addChild(iris);
             animRef.current.rings.push({
               obj: iris,
-              speed: st === 'active' ? -0.005 : st === 'done' ? -0.002 : -0.0008,
+              speed: st === 'active' ? -0.005 : st === 'done' ? -0.002 : st === 'open' ? -0.0018 : -0.0008,
             });
 
             // 5. Anillo Shockwave expansivo para detonación mecánica (r = 22)
@@ -482,6 +530,9 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
             } else if (st === 'done') {
               core.beginFill(0x0f1520, 1);
               core.lineStyle(1.8, 0xff6a00, 0.95);
+            } else if (st === 'open') {
+              core.beginFill(0x130e0a, 1);
+              core.lineStyle(1.8, 0xff6a00, 0.9);
             } else {
               core.beginFill(0x0a0e15, 1);
               core.lineStyle(1.8, 0x4b586b, 0.8);
@@ -495,7 +546,13 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
             drawIcon(
               hicon,
               n.iconType,
-              st === 'locked' ? 0x4b586b : st === 'active' ? 0xffffff : st === 'done' ? 0xffa338 : 0x94a3b8
+              st === 'locked'
+                ? 0x4b586b
+                : st === 'active'
+                ? 0xffffff
+                : st === 'done'
+                ? 0xffa338
+                : 0xf1f5f9
             );
             holder.addChild(hicon);
 
@@ -614,7 +671,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
             fontFamily: '"JetBrains Mono", ui-monospace, monospace',
             fontSize: 10,
             fontWeight: '700',
-            fill: st === 'active' ? '#ffa338' : st === 'done' ? '#ff6a00' : n.isUnlocked ? '#94a3b8' : '#475569',
+            fill: st === 'active' ? '#ffa338' : st === 'done' ? '#ff6a00' : st === 'open' ? '#ffa338' : '#475569',
           });
           code.anchor.set(0.5, 1);
           const topOffset = nodeStyle === 'hex' ? -42 : -R - 16;
@@ -625,7 +682,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
             fontFamily: 'Rajdhani, Inter, sans-serif',
             fontSize: 12,
             fontWeight: '600',
-            fill: st === 'active' ? '#ffffff' : n.isUnlocked ? '#f1f5f9' : '#64748b',
+            fill: st === 'active' ? '#ffffff' : n.isUnlocked ? '#f8fafc' : '#64748b',
           });
           label.anchor.set(0.5, 0);
           const bottomOffset = nodeStyle === 'hex' ? 40 : R + 14;
