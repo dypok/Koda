@@ -65,24 +65,24 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
               disabled={disabled}
               onClick={() => onToggle(opt.id)}
               className={cn(
-                'group relative flex w-full items-center justify-between gap-3 rounded-xl border px-4 py-3.5 text-left text-sm transition-all duration-100 min-h-[52px] select-none',
+                'group relative flex w-full items-center justify-between gap-3 rounded-xl border px-4 py-3.5 text-left text-sm transition-all duration-200 min-h-[54px] select-none cursor-pointer',
                 isPressed
-                  ? 'scale-[0.98] border-amber-400 bg-amber-400/20 text-white shadow-[0_0_16px_rgba(251,191,36,0.35)] ring-2 ring-amber-400/40'
+                  ? 'scale-[0.98] border-orange-500 bg-orange-500/25 text-white shadow-[0_0_20px_rgba(255,106,0,0.4)] ring-2 ring-orange-500/60 translate-x-1.5'
                   : active
-                  ? 'border-amber-400/80 bg-amber-400/10 text-white shadow-[0_0_12px_rgba(251,191,36,0.15)] ring-1 ring-amber-400/30'
-                  : 'border-slate-800 bg-slate-950/70 text-slate-200 hover:border-slate-600 hover:bg-slate-900/80',
-                disabled && 'opacity-60 cursor-default'
+                  ? 'border-orange-500/90 bg-orange-500/15 text-white shadow-[0_0_22px_rgba(255,106,0,0.35)] ring-1 ring-orange-500/50 translate-x-1.5'
+                  : 'border-slate-800 bg-slate-950/60 text-slate-200 hover:border-orange-500/60 hover:bg-slate-900/90 hover:translate-x-1.5 hover:shadow-[0_0_16px_rgba(255,106,0,0.2)]',
+                disabled && 'opacity-60 cursor-default hover:translate-x-0 hover:shadow-none'
               )}
             >
               <div className="flex items-center gap-3 min-w-0">
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'flex h-7 w-7 shrink-0 items-center justify-center border text-xs font-mono font-bold transition-colors',
+                    'flex h-7 w-7 shrink-0 items-center justify-center border text-xs font-mono font-bold transition-all duration-200',
                     multi ? 'rounded-md' : 'rounded-lg',
                     isPressed || active
-                      ? 'border-amber-400 bg-amber-400 text-slate-950 shadow-sm'
-                      : 'border-slate-700 bg-slate-900 text-slate-400 group-hover:border-slate-500 group-hover:text-slate-200'
+                      ? 'border-orange-500 bg-orange-500 text-slate-950 shadow-sm'
+                      : 'border-slate-700 bg-slate-900 text-slate-400 group-hover:border-orange-400 group-hover:text-orange-300 group-hover:bg-orange-500/10'
                   )}
                 >
                   {multi && active ? (
@@ -91,7 +91,7 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
                     opt.label ?? shortcutChar
                   )}
                 </span>
-                <span className="font-mono text-sm leading-snug break-words">{opt.body}</span>
+                <span className="font-mono text-xs sm:text-sm leading-snug break-words group-hover:text-white transition-colors">{opt.body}</span>
               </div>
 
               {/* Keycap Badge táctil visible en desktop */}
@@ -103,10 +103,10 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
                   className={cn(
                     'inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded border text-[10px] font-mono font-semibold transition-all shadow-sm',
                     isPressed
-                      ? 'border-amber-400 bg-amber-400 text-slate-950 translate-y-0.5'
+                      ? 'border-orange-400 bg-orange-400 text-slate-950 translate-y-0.5'
                       : active
-                      ? 'border-amber-400/50 bg-amber-400/20 text-amber-300'
-                      : 'border-slate-700/80 bg-slate-900/90 text-slate-400 group-hover:border-slate-600 group-hover:text-slate-300'
+                      ? 'border-orange-400 bg-orange-400 text-slate-950 translate-y-0.5'
+                      : 'border-slate-700 bg-slate-800 text-slate-400 group-hover:border-orange-400/60 group-hover:text-amber-200'
                   )}
                 >
                   {shortcutNum}
