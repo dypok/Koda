@@ -377,30 +377,47 @@ Identidad canónica. Aísla autenticación de perfil (`RF-USR-005`, `RNF-008`–
 
 ### 6.2 UserProfile — `user_profiles`
 
-Datos visibles y preferencias. Separado de `users` para minimizar PII en joins de autenticación (`RNF-037`).
+Datos visibles, preferencias pedagógicas configuradas en el registro del frontend (`apps/web/src/views/register/`), métricas agregadas $O(1)$ de tiempo de estudio y racha diaria activa. Separado de `users` para minimizar PII en joins de autenticación (`RNF-037`).
 
 | Campo | Tipo | Restricción | Descripción |
 |---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL`, `UNIQUE` | 1:1 estricto |
-| `display_name` | `VARCHAR(80)` | `NOT NULL`, `CHECK (char_length(display_name) BETWEEN 2 AND 80)` | `RF-USR-001/002` |
-| `avatar_url` | `VARCHAR(512)` | `NULL`, `CHECK (avatar_url ~* '^https?://')` | `RF-PROF-002`; por defecto URL de avatar genérico en app |
-| `avatar_object_key` | `VARCHAR(512)` | `NULL` | Clave en storage S3-compatible si se sube archivo |
-| `document_number` | `VARCHAR(50)` | `NULL`, `CHECK (char_length(document_number) BETWEEN 5 AND 50)` | Solo para certificado (`RF-CERT-002`); cifrable con `pgp_sym_encrypt` si se exige |
-| `timezone` | `VARCHAR(50)` | `NOT NULL`, `DEFAULT 'America/Bogota'` | `RF-RACHA-004`; corte diario de racha |
-| `locale` | `VARCHAR(10)` | `NOT NULL`, `DEFAULT 'es-CO'` |  |
-| `bio` | `VARCHAR(500)` | `NULL` | Opcional futuro perfil público Post-MVP |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
+| `id` | `UUID` | **PK** | Identificador único del perfil |
+| `user_id` | `UUID` | **FK → users.id**, `NOT NULL`, `UNIQUE` | Relación 1:1 estricta con la cuenta de usuario |
+| `display_name` | `VARCHAR(80)` | `NOT NULL`, `CHECK (char_length(display_name) BETWEEN 2 AND 80)` | Nombre visible del estudiante (`RF-USR-001/002`) |
+| `avatar_url` | `VARCHAR(512)` | `NULL`, `CHECK (avatar_url ~* '^https?://')` | URL de avatar genérico o personalizado (`RF-PROF-002`) |
+| `avatar_object_key` | `VARCHAR(512)` | `NULL` | Clave en storage S3/GCS si se sube archivo personalizado |
+| `document_number` | `VARCHAR(50)` | `NULL`, `CHECK (char_length(document_number) BETWEEN 5 AND 50)` | Documento de identidad para certificados oficiales (`RF-CERT-002`) |
+| `document_type` | `VARCHAR(20)` | `NULL`, `CHECK (document_type IN ('CC','TI','CE','PASSPORT'))` | Tipo de documento para validación legal |
+| `timezone` | `VARCHAR(50)` | `NOT NULL`, `DEFAULT 'America/Bogota'` | `RF-RACHA-004`; corte diario de medianoche para racha |
+| `locale` | `VARCHAR(10)` | `NOT NULL`, `DEFAULT 'es-CO'` | Idioma y localización regional de la interfaz |
+| `bio` | `VARCHAR(500)` | `NULL` | Biografía breve para perfil público |
+| `initial_language_slug` | `VARCHAR(50)` | `NOT NULL`, `DEFAULT 'python'` | Paso 1 del Onboarding: Lenguaje/Tecnología inicial seleccionada |
+| `experience_level` | `VARCHAR(30)` | `NOT NULL`, `DEFAULT 'beginner'`, `CHECK (experience_level IN ('beginner','elementary','intermediate','advanced'))` | Paso 2 del Onboarding: Nivel previo declarado (`RF-USR-001`) |
+| `learning_style` | `VARCHAR(30)` | `NOT NULL`, `DEFAULT 'hands-on'`, `CHECK (learning_style IN ('hands-on','guided','projects','gamified'))` | Paso 3 del Onboarding: Cómo estudia mejor (práctica, guiado, proyectos, gamificado) |
+| `daily_goal_id` | `VARCHAR(20)` | `NOT NULL`, `DEFAULT 'regular'`, `CHECK (daily_goal_id IN ('casual','regular','focused','intense'))` | Paso 4 del Onboarding: Identificador de la meta diaria |
+| `daily_goal_minutes` | `SMALLINT` | `NOT NULL`, `DEFAULT 10`, `CHECK (daily_goal_minutes BETWEEN 5 AND 120)` | Minutos diarios requeridos de estudio (5, 10, 15, 20) |
+| `total_xp` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (total_xp >= 0)` | Experiencia total acumulada ($O(1)$) |
+| `current_level` | `INTEGER` | `NOT NULL`, `DEFAULT 1`, `CHECK (current_level >= 1)` | Nivel del estudiante según fórmula de XP |
+| `current_streak` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (current_streak >= 0)` | Días consecutivos activos de racha vigentes |
+| `longest_streak` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (longest_streak >= 0)` | Récord histórico de racha del estudiante |
+| `streak_freeze_count` | `SMALLINT` | `NOT NULL`, `DEFAULT 1`, `CHECK (streak_freeze_count BETWEEN 0 AND 5)` | Congeladores de racha disponibles en inventario |
+| `total_study_time_seconds` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (total_study_time_seconds >= 0)` | Tiempo total invertido en la plataforma (en segundos) |
+| `last_study_date` | `DATE` | `NULL` | Última fecha en la que completó actividad válida |
+| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
+| `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
 
 **Relaciones:** N:1 `users`.
 
 **Restricciones:**
 - `CHECK (timezone IN (SELECT name FROM pg_timezone_names))` o lista blanca en app + validación en `RF-ADM-006`.
 - `document_number` no se expone en listados; solo en PDF y verificación interna (`RNF-037`).
+- `daily_goal_minutes` mapeado a `daily_goal_id` (`casual=5`, `regular=10`, `focused=15`, `intense=20`).
 
 **Índices:**
 - `uq_user_profiles_user_id` — `UNIQUE (user_id)`.
+- `idx_user_profiles_streak` — `(current_streak DESC)` para rankings y ligas.
+- `idx_user_profiles_xp` — `(total_xp DESC)` para tabla global de posiciones.
+- `idx_user_profiles_study_time` — `(total_study_time_seconds DESC)`.
 - `idx_user_profiles_display_name` — `GIN (display_name gin_trgm_ops)` para búsqueda admin (opcional).
 
 ---
@@ -932,18 +949,24 @@ Ledger inmutable de XP (`RF-XP-003`, `RF-XP-005`, `RNF-034`). Cada fila es un ev
 
 ### 6.15 Streak — `streaks`
 
-Historial diario para rachas (`RF-RACHA-*`, `01` §18). Una fila por usuario y día con actividad válida.
+Historial diario para rachas, registro de tiempo de estudio y cumplimiento de metas (`RF-RACHA-*`, `01` §18). Una fila por usuario y día con actividad válida.
 
 | Campo | Tipo | Restricción | Descripción |
 |---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` |  |
-| `activity_date` | `DATE` | `NOT NULL` | Fecha en `timezone` del usuario (`RF-RACHA-004`) |
-| `timezone` | `VARCHAR(50)` | `NOT NULL` | Zona con la que se calculó `activity_date` |
-| `activity_count` | `INTEGER` | `NOT NULL`, `DEFAULT 1`, `CHECK (activity_count > 0)` | Actividades válidas ese día |
-| `first_activity_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `last_activity_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
+| `id` | `UUID` | **PK** | Identificador único del registro de actividad diaria |
+| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` | Referencia al estudiante |
+| `activity_date` | `DATE` | `NOT NULL` | Fecha local en `timezone` del usuario (`RF-RACHA-004`) |
+| `timezone` | `VARCHAR(50)` | `NOT NULL`, `DEFAULT 'America/Bogota'` | Zona horaria con la que se resolvió el corte diario |
+| `activity_count` | `INTEGER` | `NOT NULL`, `DEFAULT 1`, `CHECK (activity_count > 0)` | Número total de interacciones/ejercicios realizados |
+| `study_time_seconds` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (study_time_seconds >= 0)` | Tiempo efectivo de estudio acumulado en el día (en segundos) |
+| `lessons_completed_count` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (lessons_completed_count >= 0)` | Número de micro-lecciones aprobadas en la jornada |
+| `xp_earned_today` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (xp_earned_today >= 0)` | Total de puntos de experiencia ganados ese día |
+| `daily_goal_met` | `BOOLEAN` | `NOT NULL`, `DEFAULT false` | `true` si `study_time_seconds >= daily_goal_minutes * 60` |
+| `freeze_used` | `BOOLEAN` | `NOT NULL`, `DEFAULT false` | `true` si la racha fue salvada ese día usando un congelador |
+| `first_activity_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Timestamp del primer intento/evento del día |
+| `last_activity_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Timestamp del último intento/evento del día |
+| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
+| `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
 
 **Relaciones:** N:1 `users`.
 
@@ -956,6 +979,7 @@ Historial diario para rachas (`RF-RACHA-*`, `01` §18). Una fila por usuario y d
 - `uq_streaks_user_date` — `UNIQUE (user_id, activity_date)`.
 - `idx_streaks_user_date_desc` — `(user_id, activity_date DESC)` — racha actual/máxima `RF-RACHA-003`.
 - `idx_streaks_date` — `(activity_date)` para DAU/WAU `26`.
+- `idx_streaks_goal_met` — `(user_id, daily_goal_met) WHERE daily_goal_met = true`.
 
 **Cálculo de racha:** no se persiste `current_streak`/`max_streak` como columna mutable; se deriva de `streaks` con ventana:
 ```sql
@@ -1471,6 +1495,70 @@ CREATE TABLE users (
 );
 CREATE UNIQUE INDEX uq_users_email ON users (email) WHERE deleted_at IS NULL;
 
+-- User Profiles (Perfil, Preferencias Pedagógicas de Onboarding, Rachas y Tiempo de Estudio)
+CREATE TABLE user_profiles (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  display_name VARCHAR(80) NOT NULL CHECK (char_length(display_name) BETWEEN 2 AND 80),
+  avatar_url VARCHAR(512) CHECK (avatar_url IS NULL OR avatar_url ~* '^https?://'),
+  avatar_object_key VARCHAR(512),
+  document_number VARCHAR(50) CHECK (document_number IS NULL OR char_length(document_number) BETWEEN 5 AND 50),
+  document_type VARCHAR(20) CHECK (document_type IS NULL OR document_type IN ('CC', 'TI', 'CE', 'PASSPORT')),
+  bio VARCHAR(500),
+  timezone VARCHAR(50) NOT NULL DEFAULT 'America/Bogota',
+  locale VARCHAR(10) NOT NULL DEFAULT 'es-CO',
+
+  -- Preferencias pedagógicas de onboarding (Frontend Register)
+  initial_language_slug VARCHAR(50) NOT NULL DEFAULT 'python',
+  experience_level VARCHAR(30) NOT NULL DEFAULT 'beginner'
+    CHECK (experience_level IN ('beginner','elementary','intermediate','advanced')),
+  learning_style VARCHAR(30) NOT NULL DEFAULT 'hands-on'
+    CHECK (learning_style IN ('hands-on','guided','projects','gamified')),
+  daily_goal_id VARCHAR(20) NOT NULL DEFAULT 'regular'
+    CHECK (daily_goal_id IN ('casual','regular','focused','intense')),
+  daily_goal_minutes SMALLINT NOT NULL DEFAULT 10
+    CHECK (daily_goal_minutes BETWEEN 5 AND 120),
+
+  -- Métricas agregadas O(1) de gamificación, racha y tiempo de estudio
+  total_xp INTEGER NOT NULL DEFAULT 0 CHECK (total_xp >= 0),
+  current_level INTEGER NOT NULL DEFAULT 1 CHECK (current_level >= 1),
+  current_streak INTEGER NOT NULL DEFAULT 0 CHECK (current_streak >= 0),
+  longest_streak INTEGER NOT NULL DEFAULT 0 CHECK (longest_streak >= 0),
+  streak_freeze_count SMALLINT NOT NULL DEFAULT 1 CHECK (streak_freeze_count BETWEEN 0 AND 5),
+  total_study_time_seconds INTEGER NOT NULL DEFAULT 0 CHECK (total_study_time_seconds >= 0),
+  last_study_date DATE,
+
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT uq_user_profiles_user_id UNIQUE (user_id)
+);
+CREATE INDEX idx_user_profiles_streak ON user_profiles (current_streak DESC);
+CREATE INDEX idx_user_profiles_xp ON user_profiles (total_xp DESC);
+CREATE INDEX idx_user_profiles_study_time ON user_profiles (total_study_time_seconds DESC);
+
+-- Streaks (Historial diario de actividad, tiempo de estudio y cumplimiento de meta)
+CREATE TABLE streaks (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  activity_date DATE NOT NULL,
+  timezone VARCHAR(50) NOT NULL DEFAULT 'America/Bogota',
+  activity_count INTEGER NOT NULL DEFAULT 1 CHECK (activity_count > 0),
+  study_time_seconds INTEGER NOT NULL DEFAULT 0 CHECK (study_time_seconds >= 0),
+  lessons_completed_count INTEGER NOT NULL DEFAULT 0 CHECK (lessons_completed_count >= 0),
+  xp_earned_today INTEGER NOT NULL DEFAULT 0 CHECK (xp_earned_today >= 0),
+  daily_goal_met BOOLEAN NOT NULL DEFAULT false,
+  freeze_used BOOLEAN NOT NULL DEFAULT false,
+  first_activity_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  last_activity_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  CONSTRAINT uq_streaks_user_date UNIQUE (user_id, activity_date),
+  CONSTRAINT chk_streaks_activity_order CHECK (last_activity_at >= first_activity_at)
+);
+CREATE INDEX idx_streaks_user_date_desc ON streaks (user_id, activity_date DESC);
+CREATE INDEX idx_streaks_date ON streaks (activity_date);
+CREATE INDEX idx_streaks_goal_met ON streaks (user_id, daily_goal_met) WHERE daily_goal_met = true;
+
 -- Programming languages
 CREATE TABLE programming_languages (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -1704,6 +1792,105 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_after_section_stars_upsert
 AFTER INSERT OR UPDATE OF max_stars_earned ON user_section_stars
 FOR EACH ROW EXECUTE FUNCTION fn_recalculate_module_progress();
+
+-- Trigger Function: Actualizar racha diaria, tiempo de estudio y meta al completar un intento
+CREATE OR REPLACE FUNCTION fn_handle_user_study_activity()
+RETURNS TRIGGER AS $$
+DECLARE
+  v_tz VARCHAR(50);
+  v_today DATE;
+  v_daily_goal_min SMALLINT;
+  v_time_spent INT;
+  v_xp_awarded INT;
+  v_is_passed BOOLEAN;
+  v_last_date DATE;
+  v_curr_streak INT;
+  v_long_streak INT;
+  v_freezes SMALLINT;
+BEGIN
+  -- Obtener configuración y estado actual del perfil
+  SELECT timezone, daily_goal_minutes, last_study_date, current_streak, longest_streak, streak_freeze_count
+  INTO v_tz, v_daily_goal_min, v_last_date, v_curr_streak, v_long_streak, v_freezes
+  FROM user_profiles
+  WHERE user_id = NEW.user_id;
+
+  IF NOT FOUND THEN
+    RETURN NEW;
+  END IF;
+
+  v_today := (NEW.completed_at AT TIME ZONE COALESCE(v_tz, 'America/Bogota'))::DATE;
+  v_time_spent := COALESCE(NEW.time_spent_seconds, 0);
+  v_xp_awarded := COALESCE(NEW.xp_awarded, 0);
+  v_is_passed := COALESCE(NEW.is_passed, false);
+
+  -- 1. Upsert en la tabla diaria de streaks
+  INSERT INTO streaks (
+    user_id, activity_date, timezone, activity_count, study_time_seconds,
+    lessons_completed_count, xp_earned_today, daily_goal_met, first_activity_at, last_activity_at
+  ) VALUES (
+    NEW.user_id, v_today, v_tz, 1, v_time_spent,
+    CASE WHEN v_is_passed THEN 1 ELSE 0 END,
+    v_xp_awarded,
+    (v_time_spent >= (v_daily_goal_min * 60)),
+    NEW.completed_at, NEW.completed_at
+  )
+  ON CONFLICT (user_id, activity_date) DO UPDATE SET
+    activity_count = streaks.activity_count + 1,
+    study_time_seconds = streaks.study_time_seconds + v_time_spent,
+    lessons_completed_count = streaks.lessons_completed_count + (CASE WHEN v_is_passed THEN 1 ELSE 0 END),
+    xp_earned_today = streaks.xp_earned_today + v_xp_awarded,
+    daily_goal_met = (streaks.study_time_seconds + v_time_spent >= (v_daily_goal_min * 60)),
+    last_activity_at = NEW.completed_at,
+    updated_at = now();
+
+  -- 2. Actualizar contadores de racha en user_profiles
+  IF v_last_date IS NULL THEN
+    v_curr_streak := 1;
+    v_long_streak := GREATEST(v_long_streak, 1);
+  ELSIF v_last_date = v_today THEN
+    -- Mismo día, no incrementa el contador pero acumula tiempo
+    NULL;
+  ELSIF v_last_date = v_today - 1 THEN
+    -- Día consecutivo
+    v_curr_streak := v_curr_streak + 1;
+    v_long_streak := GREATEST(v_long_streak, v_curr_streak);
+    -- Recompensa: 1 freeze cada 7 días de racha consecutiva (máximo 2 almacenados)
+    IF v_curr_streak % 7 = 0 AND v_freezes < 2 THEN
+      v_freezes := v_freezes + 1;
+    END IF;
+  ELSE
+    -- Faltó al menos un día
+    IF v_freezes > 0 AND v_last_date = v_today - 2 THEN
+      -- Se consume 1 freeze automático y se preserva la racha
+      v_freezes := v_freezes - 1;
+      v_curr_streak := v_curr_streak + 1;
+      v_long_streak := GREATEST(v_long_streak, v_curr_streak);
+      UPDATE streaks SET freeze_used = true WHERE user_id = NEW.user_id AND activity_date = v_today - 1;
+    ELSE
+      -- Racha se reinicia a 1
+      v_curr_streak := 1;
+    END IF;
+  END IF;
+
+  UPDATE user_profiles SET
+    total_study_time_seconds = total_study_time_seconds + v_time_spent,
+    total_xp = total_xp + v_xp_awarded,
+    current_streak = v_curr_streak,
+    longest_streak = v_long_streak,
+    streak_freeze_count = v_freezes,
+    last_study_date = v_today,
+    updated_at = now()
+  WHERE user_id = NEW.user_id;
+
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_attempts_update_streak_and_study_time
+AFTER INSERT OR UPDATE OF is_passed ON attempts
+FOR EACH ROW
+WHEN (NEW.completed_at IS NOT NULL)
+EXECUTE FUNCTION fn_handle_user_study_activity();
 ```
 
 > El DDL completo (22 entidades + 5 tablas de soporte) se genera a partir de este documento y se versiona en `migrations/` con `V__` + `COMMENT ON TABLE/COLUMN` para trazabilidad `RF-*`.

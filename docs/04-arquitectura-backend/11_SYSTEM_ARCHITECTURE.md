@@ -46,8 +46,8 @@ Este documento define **cómo está estructurado el sistema**, no qué hace (ver
 │  Frontend (Web responsive) · Admin Console · Verificación QR     │
 ├─────────────────────────────────────────────────────────────────┤
 │                          CAPA DE API                            │
-│  API Gateway / REST v1 · Auth middleware · Rate limiting ·      │
-│  Validación · Idempotency-Key · Versionado de contenido         │
+│  GraphQL (/graphql) · REST (/api/v1) · Auth middleware ·        │
+│  Rate limiting · Validación · Idempotency-Key · Versionado       │
 ├─────────────────────────────────────────────────────────────────┤
 │                         CAPA DE DOMINIO                         │
 │  Auth · Learning Engine · Question Engine · Evaluation Engine   │
@@ -73,7 +73,7 @@ flowchart TB
     end
 
     subgraph Edge["Edge / API"]
-        GW["API Gateway\n/api/v1 · OpenAPI"]
+        GW["API Gateway / Transport\nGraphQL (/graphql) + REST (/api/v1)"]
         AUTH_MW["Auth Middleware\nJWT + Refresh + RBAC"]
         RL["Rate Limit\n+ Idempotency"]
     end
@@ -376,7 +376,7 @@ Contrato estable entre frontend y backend. Versionada, autenticada y documentada
 
 | Aspecto | Opciones | Recomendación | Por qué |
 |---|---|---|---|
-| Estilo | REST / GraphQL / gRPC | **REST** | `03` OT-04; cacheable, simple, OpenAPI maduro. gRPC solo interno si se extraen servicios Post-MVP. |
+| Estilo | REST / GraphQL / gRPC | **Híbrido: GraphQL (UI) + REST (Auth/Media/Sondas)** (`ADR-012`) | GraphQL optimiza vistas compuestas sin over/under-fetching; REST para flujos HTTP estándar y webhooks. |
 | Versionado | URL (`/v1`) / header / media type | **URL `/api/v1`** | Explícito, fácil de rutear y cachear; breaking change exige `/v2`. |
 | Documentación | OpenAPI / manual | **OpenAPI 3.1 auto-generado + lint en CI** | `RNF-032` — contrato que falla el build si se rompe. |
 | Auth | Bearer JWT / cookies | **Bearer JWT (access) + httpOnly cookie (refresh)** | Stateless + rotativo; CSRF solo aplica si se usan cookies para mutaciones — se mitiga con `SameSite` + `CSRF token` donde aplique. |
