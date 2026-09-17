@@ -54,16 +54,16 @@ const MOCK_EXERCISE = {
 
 const CATEGORIES = [
   'Todos (100)',
-  'Fuego & Plasma',
-  'Cyber & HUD',
-  'Arcade 3D',
-  'Obsidian Glass',
-  'Terminal Hacker',
-  'Sci-Fi Holodeck',
-  'Brutalismo',
-  'Shimmer & Láser',
-  'Split Capsules',
-  'Líquido & Morphing',
+  'Bisel & Profundidad 3D',
+  'Gradientes & Magma',
+  'Halos & Glow Térmico',
+  'Keycap Enter ↵',
+  'Bordes & Siluetas',
+  'Física & Micro-Interacción',
+  'Texturas & Superficies',
+  'Tipografía & Señalética',
+  'Estados Dinámicos HUD',
+  'Fusiones Maestras 3D',
 ];
 
 export const WorkspaceLab: React.FC = () => {
