@@ -19,7 +19,7 @@ import {
 const VIEW_W = 1150;
 const VIEW_H = 620;
 
-export type EdgeStyle = 'static' | 'flow' | 'packets' | 'pulse';
+export type EdgeStyle = 'static' | 'flow' | 'packets' | 'pulse' | 'cylindrical';
 export type NodeStyle = 'medallion' | 'hex' | 'donut';
 export type EdgeDesign = 'curve' | 'twin' | 'morse';
 export type UnlockStyle = 'shockwave' | 'ignition';
@@ -246,11 +246,12 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
 
       const world = new PIXI.Container();
       const connLayer = new PIXI.Graphics();
+      const slugLayer = new PIXI.Graphics();
       const edgeOverlay = new PIXI.Container();
       const nodeLayer = new PIXI.Container();
       const reticle = new PIXI.Container();
       const fxLayer = new PIXI.Graphics();
-      world.addChild(connLayer, edgeOverlay, nodeLayer, reticle, fxLayer);
+      world.addChild(connLayer, slugLayer, edgeOverlay, nodeLayer, reticle, fxLayer);
       app.stage.addChild(world);
       const glowTex = getGlowTexture(PIXI);
 
@@ -296,7 +297,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
             phase: (ci * 0.37) % 1,
           };
           curves.push(entry);
-          if (!lit) return;
+          if (!lit || style === 'cylindrical') return;
           const count = style === 'packets' ? 2 : 4;
           for (let k = 0; k < count; k++) {
             const sp = new PIXI.Sprite(glowTex);
@@ -355,14 +356,15 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
       };
 
       const drawConnections = () => {
-        const { dataset: ds, edgeDesign: design } = propsRef.current;
+        const { dataset: ds, edgeDesign: design, edgeStyle: style } = propsRef.current;
         connLayer.clear();
         for (const c of ds.connections) {
           const a = byId.get(c.fromId);
           const b = byId.get(c.toId);
           const lit = (a?.isUnlocked || a?.variant === 'completed') && (b?.isUnlocked || b?.variant === 'completed');
-          const color = lit ? c.color : '#1e293b';
-          const alpha = lit ? 0.55 : 0.8;
+          // En modo cilíndrico o fusions, los filamentos bloqueados tienen un tono técnico titanio sutil
+          const color = lit ? c.color : '#252f3f';
+          const alpha = lit ? (style === 'cylindrical' ? 0.35 : 0.55) : 0.45;
           const cubic = parsePath(c.path);
           if (design === 'twin') {
             const pts = sampleCurve(cubic, a, b);
@@ -810,6 +812,55 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
               sp.alpha = edge.style === 'packets' ? Math.sin(t * Math.PI) * 0.95 : [0.95, 0.55, 0.3, 0.15][k] ?? 0.2;
             });
           }
+        } else if (edge.style === 'cylindrical') {
+          // =========================================================================
+          // CYLINDRICAL CONDUIT CHARGE SLUGS & AMBER THERMAL SLEEVES (Lua Core Prototipo)
+          // =========================================================================
+          slugLayer.clear();
+          const { edgeDesign: design } = propsRef.current;
+          const SLUG_LEN = 0.24; // Longitud del slug térmico cilíndrico (24% de la trayectoria)
+          const speed = 0.28;
+
+          for (const c of edge.curves) {
+            if (!c.lit || c.pts.length < 2) continue;
+
+            const tHead = (time * speed + c.phase) % 1;
+            const tTail = Math.max(0, tHead - SLUG_LEN);
+            const numSteps = 14;
+            const stepDelta = (tHead - tTail) / numSteps;
+
+            const subPts: [number, number][] = [];
+            for (let sIdx = 0; sIdx <= numSteps; sIdx++) {
+              const curT = tTail + sIdx * stepDelta;
+              subPts.push(at(c.pts, curT));
+            }
+
+            const lists = design === 'twin' && c.pts2 ? [subPts, subPts.map((p, idx) => {
+              const curT = tTail + idx * stepDelta;
+              return at(c.pts2!, curT);
+            })] : [subPts];
+
+            for (const pts of lists) {
+              if (pts.length < 2) continue;
+              const p0 = pts[0];
+              if (!p0) continue;
+
+              // 1. Halo difuminado exterior
+              slugLayer.lineStyle(10, c.color, 0.22, 0.5, true);
+              slugLayer.moveTo(p0[0], p0[1]);
+              for (let pi = 1; pi < pts.length; pi++) slugLayer.lineTo(pts[pi][0], pts[pi][1]);
+
+              // 2. Manga Térmica Cilíndrica (Charge Sleeve - Ámbar cuántico / color de rama)
+              slugLayer.lineStyle(6.5, c.color, 0.92, 0.5, true);
+              slugLayer.moveTo(p0[0], p0[1]);
+              for (let pi = 1; pi < pts.length; pi++) slugLayer.lineTo(pts[pi][0], pts[pi][1]);
+
+              // 3. Núcleo Plasma Blanco de Alta Densidad (Charge Core)
+              slugLayer.lineStyle(2.2, 0xffffff, 1.0, 0.5, true);
+              slugLayer.moveTo(p0[0], p0[1]);
+              for (let pi = 1; pi < pts.length; pi++) slugLayer.lineTo(pts[pi][0], pts[pi][1]);
+            }
+          }
         }
         applyWorld();
       };
@@ -916,84 +967,20 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
     else app.ticker.stop();
   }, [visible, reduceMotion]);
 
-  // Pulso GSAP & Cinemática Mecánica Iris B al cambiar de nodo + recentrado
+  // Pulso GSAP sutil de selección al cambiar de nodo + recentrado (la cinemática de apertura Iris B es exclusiva de unlockingNodeId)
   useEffect(() => {
     const app = appRef.current as unknown as { __refresh?: (animate: boolean) => void } | null;
     app?.__refresh?.(false);
     const { activeNodeId: activeId } = propsRef.current;
     const holder = activeId ? animRef.current.holders[activeId] : undefined;
-    const irisSet = activeId ? animRef.current.irisNodes[activeId] : undefined;
 
-    if (!reduceMotion) {
-      if (irisSet) {
-        // Cinemática de apertura Iris B completa (Fórmula de la maqueta Lua Core)
-        const tl = gsap.timeline();
-        gsap.killTweensOf([irisSet.vernier, irisSet.iris, irisSet.shock, irisSet.core, irisSet.glyph]);
-
-        // 1. Giro Vernier 360°
-        tl.to(irisSet.vernier, {
-          rotation: '+=6.28318', // 360 grados en radianes
-          duration: 0.7,
-          ease: 'power2.inOut',
-        });
-
-        // 2. Rotación inversa y contracción del diafragma Iris
-        tl.to(
-          irisSet.iris,
-          {
-            rotation: '-=3.14159', // -180 grados
-            duration: 0.45,
-            ease: 'power3.in',
-          },
-          '-=0.6'
-        );
-        tl.fromTo(
-          irisSet.iris.scale,
-          { x: 1, y: 1 },
-          { x: 0.15, y: 0.15, duration: 0.35, ease: 'power2.in' },
-          '-=0.55'
-        );
-        tl.to(irisSet.iris.scale, {
-          x: 1.4,
-          y: 1.4,
-          duration: 0.28,
-          ease: 'power2.out',
-        });
-        tl.to(irisSet.iris.scale, {
-          x: 1,
-          y: 1,
-          duration: 0.2,
-          ease: 'power1.out',
-        });
-
-        // 3. Shockwave pulso expansivo
-        tl.fromTo(
-          irisSet.shock,
-          { alpha: 1 },
-          { alpha: 0, duration: 0.45, ease: 'power2.out' },
-          '-=0.35'
-        );
-        tl.fromTo(
-          irisSet.shock.scale,
-          { x: 0.8, y: 0.8 },
-          { x: 1.7, y: 1.7, duration: 0.45, ease: 'power2.out' },
-          '-=0.45'
-        );
-
-        // 4. Glifo interior y núcleo con rebote
-        tl.fromTo(
-          irisSet.glyph.scale,
-          { x: 0.4, y: 0.4 },
-          { x: 1, y: 1, duration: 0.35, ease: 'back.out(2)' },
-          '-=0.3'
-        );
-      } else if (holder) {
-        gsap.fromTo(
-          holder.scale,
-          { x: 1, y: 1 },
-          { x: 1.18, y: 1.18, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out', overwrite: 'auto' }
-        );
-      }
+    if (!reduceMotion && holder) {
+      // Feedback sutil y rápido de selección, sin disparar la detonación/apertura de desbloqueo
+      gsap.fromTo(
+        holder.scale,
+        { x: 1, y: 1 },
+        { x: 1.08, y: 1.08, duration: 0.15, yoyo: true, repeat: 1, ease: 'power2.out', overwrite: 'auto' }
+      );
     }
   }, [activeNodeId, reduceMotion]);
 
