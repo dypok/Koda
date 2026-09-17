@@ -21,10 +21,10 @@ export const RoadmapProfilePill: React.FC = () => {
   };
 
   return (
-    <div className="absolute right-4 top-4 z-20 flex items-center gap-1 rounded-full border border-slate-800 bg-slate-950/90 py-1.5 pl-1.5 pr-1 backdrop-blur-md">
-      <span className="relative flex h-8 w-8 items-center justify-center rounded-full border border-cyan-500/40 bg-slate-900 font-mono text-[11px] font-bold text-cyan-300">
+    <div className="absolute right-4 top-4 z-20 flex items-center gap-1 rounded-full border border-slate-700/50 bg-slate-900/60 py-1.5 pl-1.5 pr-1 backdrop-blur-xl shadow-xl">
+      <span className="relative flex h-8 w-8 items-center justify-center rounded-full border border-orange-500/40 bg-slate-800/80 font-mono text-[11px] font-bold text-orange-300">
         {initials}
-        <span className="absolute -bottom-1 -right-1 rounded-md border border-amber-500/60 bg-slate-950 px-1 font-mono text-[8px] font-bold leading-none text-amber-400">
+        <span className="absolute -bottom-1 -right-1 rounded-md border border-orange-500/60 bg-slate-950 px-1 font-mono text-[8px] font-bold leading-none text-orange-400">
           {level}
         </span>
       </span>
@@ -33,7 +33,7 @@ export const RoadmapProfilePill: React.FC = () => {
         onClick={handleLogout}
         aria-label="Cerrar sesión"
         title="Cerrar sesión"
-        className="flex h-8 w-8 items-center justify-center rounded-full text-slate-500 transition-colors hover:bg-slate-800 hover:text-rose-400 cursor-pointer"
+        className="flex h-8 w-8 items-center justify-center rounded-full text-slate-400 transition-colors hover:bg-orange-500/20 hover:text-rose-400 cursor-pointer"
       >
         <SignOut className="h-4 w-4" />
       </button>

@@ -34,11 +34,11 @@ export const RoadmapBranchPill: React.FC = () => {
 
   return (
     <div ref={boxRef} className="absolute left-4 top-4 z-20">
-      <div className="flex items-center gap-1 rounded-full border border-slate-800 bg-slate-950/90 py-1.5 pl-1.5 pr-1 backdrop-blur-md">
+      <div className="flex items-center gap-1 rounded-full border border-slate-700/50 bg-slate-900/60 py-1.5 pl-1.5 pr-1 backdrop-blur-xl shadow-xl">
         <Link
           href="/"
           aria-label="Koda - volver a la landing"
-          className="flex h-8 w-8 items-center justify-center rounded-full font-display text-sm font-black text-amber-400 transition-colors hover:bg-slate-800"
+          className="flex h-8 w-8 items-center justify-center rounded-full font-display text-sm font-black text-orange-400 transition-colors hover:bg-orange-500/20"
         >
           K
         </Link>
@@ -48,7 +48,7 @@ export const RoadmapBranchPill: React.FC = () => {
           disabled={isLoading}
           aria-expanded={open}
           aria-label={`Rama activa: ${activeBranch.title}. Cambiar de rama`}
-          className="flex items-center gap-2 rounded-full py-1.5 pl-1 pr-2.5 transition-colors hover:bg-slate-800 cursor-pointer"
+          className="flex items-center gap-2 rounded-full py-1.5 pl-1 pr-2.5 transition-colors hover:bg-slate-800/60 cursor-pointer"
         >
           <span
             className="flex h-7 w-7 items-center justify-center rounded-full border"
@@ -64,8 +64,8 @@ export const RoadmapBranchPill: React.FC = () => {
       </div>
 
       {open && (
-        <div className="absolute left-0 top-full z-50 mt-2 w-64 space-y-1 rounded-2xl border border-slate-800 bg-slate-950/95 p-1.5 shadow-2xl backdrop-blur-xl">
-          <p className="px-2 py-1 font-mono text-[9px] uppercase tracking-wider text-slate-500">
+        <div className="absolute left-0 top-full z-50 mt-2 w-64 space-y-1 rounded-2xl border border-slate-700/50 bg-slate-900/90 p-1.5 shadow-2xl backdrop-blur-xl">
+          <p className="px-2 py-1 font-mono text-[9px] uppercase tracking-wider text-slate-400">
             Cambiar especialidad
           </p>
           {CAREER_BRANCHES.map((b) => {
@@ -79,7 +79,7 @@ export const RoadmapBranchPill: React.FC = () => {
                 aria-current={current || undefined}
                 className={cn(
                   'flex w-full items-center gap-2.5 rounded-xl p-2 text-left transition-colors cursor-pointer',
-                  current ? 'bg-slate-900 text-white' : 'text-slate-400 hover:bg-slate-900/60 hover:text-white'
+                  current ? 'bg-orange-500/15 border border-orange-500/30 text-white' : 'text-slate-400 hover:bg-slate-800/50 hover:text-white'
                 )}
               >
                 <span

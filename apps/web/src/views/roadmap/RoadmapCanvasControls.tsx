@@ -16,7 +16,7 @@ export function RoadmapCanvasControls() {
       onMouseUp={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="flex items-center bg-slate-900/90 backdrop-blur-md border border-cyan-500/30 rounded-lg p-1 text-slate-300 font-mono text-xs shadow-[0_0_15px_rgba(0,0,0,0.6)] gap-1">
+      <div className="flex items-center bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-xl p-1 text-slate-300 font-mono text-xs shadow-2xl gap-1">
         <button
           type="button"
           onClick={(e) => {
@@ -24,7 +24,7 @@ export function RoadmapCanvasControls() {
             zoomIn();
           }}
           aria-label="Acercar"
-          className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded hover:bg-cyan-950/60 hover:text-cyan-300 border border-transparent hover:border-cyan-500/40 active:scale-90 transition-all cursor-pointer"
+          className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-lg text-slate-300 hover:bg-orange-500/20 hover:text-orange-400 border border-transparent hover:border-orange-500/40 active:scale-90 transition-all cursor-pointer"
           title="Acercar (Zoom In)"
         >
           <Plus aria-hidden="true" className="w-4 h-4 pointer-events-none" />
@@ -36,7 +36,7 @@ export function RoadmapCanvasControls() {
             zoomOut();
           }}
           aria-label="Alejar"
-          className="min-w-[44px] min-h-[44px] flex items-center justify-center rounded hover:bg-cyan-950/60 hover:text-cyan-300 border border-transparent hover:border-cyan-500/40 active:scale-90 transition-all cursor-pointer"
+          className="min-w-[40px] min-h-[40px] flex items-center justify-center rounded-lg text-slate-300 hover:bg-orange-500/20 hover:text-orange-400 border border-transparent hover:border-orange-500/40 active:scale-90 transition-all cursor-pointer"
           title="Alejar (Zoom Out)"
         >
           <Minus aria-hidden="true" className="w-4 h-4 pointer-events-none" />
@@ -48,11 +48,11 @@ export function RoadmapCanvasControls() {
             resetZoom();
           }}
           aria-label={`Restablecer zoom y centrar (actual ${zoomLevel}%)`}
-          className="px-2.5 min-h-[44px] flex items-center gap-1.5 rounded hover:bg-cyan-950/60 hover:text-cyan-300 border border-transparent hover:border-cyan-500/40 active:scale-95 transition-all text-[11px] font-bold cursor-pointer"
+          className="px-2.5 min-h-[40px] flex items-center gap-1.5 rounded-lg text-slate-300 hover:bg-orange-500/20 hover:text-orange-300 border border-transparent hover:border-orange-500/40 active:scale-95 transition-all text-[11px] font-bold cursor-pointer"
           title="Recentrar y Restablecer Zoom"
         >
-          <Crosshair aria-hidden="true" className="w-3.5 h-3.5 text-cyan-400 pointer-events-none" />
-          <span className="pointer-events-none tabular-nums">{zoomLevel}%</span>
+          <Crosshair aria-hidden="true" className="w-3.5 h-3.5 text-orange-400 pointer-events-none" />
+          <span className="pointer-events-none tabular-nums text-orange-400/90">{zoomLevel}%</span>
         </button>
       </div>
     </div>

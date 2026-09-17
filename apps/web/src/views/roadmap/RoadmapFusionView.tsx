@@ -158,10 +158,10 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
       {activeNode && (
         <aside
           className={cn(
-            'absolute right-4 sm:right-6 top-16 sm:top-16 z-20 w-80 sm:w-96 max-w-[calc(100%-2rem)] max-h-[calc(100%-9rem)] overflow-y-auto rounded-2xl border bg-slate-950/90 backdrop-blur-md p-6 flex flex-col gap-4 shadow-2xl transition-all duration-300',
+            'absolute right-4 sm:right-6 top-16 sm:top-16 z-20 w-80 sm:w-96 max-w-[calc(100%-2rem)] max-h-[calc(100%-9rem)] overflow-y-auto rounded-2xl border bg-slate-900/60 backdrop-blur-xl p-6 flex flex-col gap-4 shadow-2xl transition-all duration-300',
             showPanel ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'
           )}
-          style={{ borderColor: isBoss ? 'rgba(244,63,94,0.5)' : `${branchColor}40` }}
+          style={{ borderColor: isBoss ? 'rgba(244,63,94,0.5)' : 'rgba(255,106,0,0.35)' }}
           aria-label={`Detalle del módulo ${activeNode.label}`}
         >
           <div className="flex items-center justify-between">
@@ -176,7 +176,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
                     ? 'bg-rose-500/20 border-rose-500/50 text-rose-300'
                     : isLocked
                       ? 'bg-rose-500/10 border-rose-500/30 text-rose-400'
-                      : 'bg-emerald-500/10 border-emerald-500/30 text-emerald-300'
+                      : 'bg-orange-500/10 border-orange-500/30 text-orange-300'
                 )}
               >
                 {isBoss ? 'PROYECTO FINAL' : isLocked ? 'BLOQUEADO' : activeNode.statusText || 'DISPONIBLE'}
@@ -185,7 +185,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
                 type="button"
                 onClick={() => setShowPanel(false)}
                 aria-label="Ocultar detalle"
-                className="p-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-900 border border-slate-800 transition-colors cursor-pointer"
+                className="p-1.5 rounded-lg text-slate-300 hover:text-orange-400 bg-slate-800/60 border border-slate-700/60 hover:border-orange-500/50 transition-colors cursor-pointer"
               >
                 <SidebarSimple className="w-3.5 h-3.5" />
               </button>
@@ -210,7 +210,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
               </span>
             )}
             {!isBoss && (
-              <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-slate-300 bg-slate-900 px-2 py-0.5 rounded-full border border-slate-800">
+              <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-slate-300 bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-700/60">
                 <Star className="w-3 h-3 fill-amber-400 text-amber-300" />
                 <span className="tabular-nums">
                   {activeNode.stars ?? 0}/{activeNode.maxStars ?? 9}
@@ -219,9 +219,9 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
             )}
           </div>
 
-          <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+          <div className="pt-3 border-t border-slate-700/50 flex items-center justify-between gap-2">
             {isLocked ? (
-              <div className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-500 font-mono text-[11px] font-bold">
+              <div className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-400 font-mono text-[11px] font-bold">
                 <Lock className="w-3.5 h-3.5" />
                 <span>{activeNode.statusText || 'Bloqueado'}</span>
               </div>
@@ -229,8 +229,12 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
               <button
                 type="button"
                 onClick={() => onDeploy(activeNode)}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl font-mono text-xs font-bold text-slate-950 transition-transform hover:scale-[1.03] active:scale-95 cursor-pointer"
-                style={{ backgroundColor: isBoss ? '#F43F5E' : branchColor, color: isBoss ? '#fff' : '#020617' }}
+                className={cn(
+                  'inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-mono text-xs font-black transition-all hover:scale-[1.03] active:scale-95 cursor-pointer shadow-lg hover:brightness-110',
+                  isBoss
+                    ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-rose-500/30 hover:shadow-rose-500/50'
+                    : 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 shadow-[0_0_18px_rgba(255,106,0,0.45)] hover:shadow-[0_0_24px_rgba(255,106,0,0.65)]'
+                )}
               >
                 <span>{isBoss ? 'Abrir proyecto final' : inLessons ? 'Iniciar lección' : 'Abrir módulo'}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
@@ -243,7 +247,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
               aria-pressed={!isLocked}
               aria-label={isLocked ? `Desbloquear ${activeNode.label}` : `Bloquear ${activeNode.label}`}
               title="Bloquear o desbloquear a voluntad"
-              className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-700 font-mono text-[11px] font-bold text-slate-300 transition-colors hover:border-amber-400/60 hover:text-amber-300 disabled:cursor-wait disabled:opacity-50 cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl border border-orange-500/30 bg-orange-500/10 font-mono text-[11px] font-bold text-orange-300 transition-all hover:bg-orange-500/20 hover:border-orange-500/60 hover:text-orange-200 disabled:cursor-wait disabled:opacity-50 cursor-pointer shadow-[0_0_10px_rgba(255,106,0,0.15)]"
             >
               {isLocked ? (
                 <LockOpen aria-hidden="true" className="w-3.5 h-3.5" />
@@ -261,15 +265,15 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
           type="button"
           onClick={() => setShowPanel(true)}
           aria-label="Mostrar detalle"
-          className="absolute right-4 top-16 z-20 p-2.5 rounded-xl border border-slate-800 bg-slate-950/80 text-slate-300 hover:text-white transition-colors cursor-pointer"
+          className="absolute right-4 top-16 z-20 p-2.5 rounded-xl border border-slate-700/50 bg-slate-900/60 backdrop-blur-xl text-slate-300 hover:text-orange-400 hover:border-orange-500/50 shadow-xl transition-colors cursor-pointer"
         >
           <Sidebar className="w-4 h-4" />
         </button>
       )}
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-2xl border border-slate-800 bg-slate-950/85 shadow-2xl">
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-2xl border border-slate-700/50 bg-slate-900/60 backdrop-blur-xl shadow-2xl">
         <div className="flex items-center gap-3">
-          <span className="font-mono text-xs font-bold tabular-nums" style={{ color: themeAccentColor }}>
+          <span className="font-mono text-xs font-bold tabular-nums text-orange-400">
             0{activeIndex + 1} / 0{nodes.length}
           </span>
           <div className="flex items-center gap-1.5" role="list" aria-label={`Paso ${activeIndex + 1} de ${nodes.length}`}>
@@ -280,15 +284,20 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
                 onClick={() => goTo(i)}
                 aria-label={`Ir a ${n.label}`}
                 role="listitem"
-                className={cn('h-1.5 rounded-full transition-all cursor-pointer', i === activeIndex ? 'w-5' : 'w-1.5 bg-slate-700 hover:bg-slate-500')}
-                style={{ backgroundColor: i === activeIndex ? (n.variant === 'boss' ? '#F43F5E' : branchColor) : undefined }}
+                className={cn(
+                  'h-1.5 rounded-full transition-all cursor-pointer',
+                  i === activeIndex
+                    ? 'w-5 shadow-[0_0_8px_rgba(255,106,0,0.8)]'
+                    : 'w-1.5 bg-slate-700/70 hover:bg-orange-500/50'
+                )}
+                style={{ backgroundColor: i === activeIndex ? (n.variant === 'boss' ? '#F43F5E' : '#FF6A00') : undefined }}
               />
             ))}
           </div>
         </div>
-        <span aria-hidden="true" className="hidden sm:block w-px h-6 bg-slate-800" />
+        <span aria-hidden="true" className="hidden sm:block w-px h-6 bg-slate-700/60" />
         <div className="flex items-center gap-2">
-          <Flame aria-hidden="true" weight="fill" className="h-4 w-4 text-orange-400" />
+          <Flame aria-hidden="true" weight="fill" className="h-4 w-4 text-orange-500" />
           <span className="flex flex-col leading-none">
             <span className="font-mono text-xs font-black tracking-wider text-orange-300">
               {streak}D
