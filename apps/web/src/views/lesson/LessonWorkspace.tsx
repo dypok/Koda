@@ -10,7 +10,7 @@ import { useLessonKeyboardShortcuts } from '@/hooks/useLessonKeyboardShortcuts';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { cn } from '@/lib/utils';
 
-import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
+import { OrbitFieldBackground } from '@/components/landing/OrbitFieldBackground';
 
 interface LessonWorkspaceProps {
   courseId: string;
@@ -99,7 +99,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   if (!parsed || !module || !section) {
     return (
       <div className="relative isolate min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4 px-4 text-center">
-        <HeroSkyBackground starCount={80} interactive={false} className="fixed inset-0 pointer-events-none -z-10" />
+        <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
         <p className="font-display text-2xl font-bold text-white">Sección no disponible todavía</p>
         <p className="text-sm text-slate-400 max-w-md">
           Este curso aún no tiene contenido interactivo. Vuelve al roadmap y sigue con Python o Lua publicados.
@@ -136,7 +136,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     const passed = quizScore.ok / Math.max(1, quizScore.total) >= 0.7;
     return (
       <div className="relative isolate min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-6 px-4 text-center">
-        <HeroSkyBackground starCount={90} interactive={false} className="fixed inset-0 pointer-events-none -z-10" />
+        <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
         {passed ? (
           <div className="relative">
             <div className="absolute -inset-6 rounded-full bg-orange-500/20 blur-2xl animate-pulse" />
@@ -182,7 +182,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   const lesson = section.lessons[lessonIdx] ?? null;
   return (
     <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
-      <HeroSkyBackground starCount={90} interactive={false} className="fixed inset-0 pointer-events-none -z-10" />
+      <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
 
       {/* Header Fijo de Navegación HUD */}
       <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
@@ -533,7 +533,7 @@ function QuizMode({
   if (questions.length === 0) {
     return (
       <div className="relative isolate min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4 px-4 text-center">
-        <HeroSkyBackground starCount={80} interactive={false} className="fixed inset-0 pointer-events-none -z-10" />
+        <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
         <p className="font-display text-2xl font-bold text-white">Quiz en camino</p>
         <p className="text-sm text-slate-400">Esta sección aún no tiene banco de preguntas.</p>
         <Link
@@ -548,7 +548,7 @@ function QuizMode({
 
   return (
     <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
-      <HeroSkyBackground starCount={90} interactive={false} className="fixed inset-0 pointer-events-none -z-10" />
+      <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
 
       <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
         <div className="mx-auto max-w-4xl space-y-2.5">

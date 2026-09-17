@@ -28,7 +28,7 @@ import {
   Compass,
   Play
 } from '@phosphor-icons/react';
-import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
+import { OrbitFieldBackground } from '@/components/landing/OrbitFieldBackground';
 import { cn } from '@/lib/utils';
 import { BUTTON_CATALOG, ButtonVariantItem } from './button-catalog-data';
 
@@ -136,7 +136,7 @@ export const WorkspaceLab: React.FC = () => {
 
   return (
     <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
-      <HeroSkyBackground starCount={90} interactive={false} className="fixed inset-0 pointer-events-none -z-10" />
+      <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
 
       {/* Header Fijo de Control */}
       <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
