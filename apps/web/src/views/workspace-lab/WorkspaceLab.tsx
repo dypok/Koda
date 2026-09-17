@@ -1,8 +1,5 @@
-'use client';
-
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import gsap from 'gsap';
 import { 
   ArrowLeft, 
   Check, 
@@ -10,14 +7,12 @@ import {
   Key, 
   Sparkle, 
   ShieldCheck, 
-  Sliders, 
-  Code, 
+  Drop,
+  Waves,
   Lightning, 
-  Compass, 
-  Play, 
-  Cpu, 
+  Atom,
   Target,
-  ArrowCounterClockwise
+  CircleNotch
 } from '@phosphor-icons/react';
 import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
 import { cn } from '@/lib/utils';
@@ -32,21 +27,21 @@ interface ButtonProposal {
 }
 
 const BUTTON_PROPOSALS: ButtonProposal[] = [
-  { id: 'm01', num: '01', name: 'Liquid Chrome Gooey Fusion', tagline: 'Filtro SVG feGaussianBlur + feColorMatrix con fusión orgánica de dos gotas de mercurio.', badge: 'Metaball SVG', svgHighlight: 'Fusión de gotas feColorMatrix' },
-  { id: 'm02', num: '02', name: 'Magnetic Ferrofluid Spikes', tagline: 'Líquido ferrohidrodinámico que despliega espinas afiladas al activarse el campo magnético.', badge: 'Ferrofluid', svgHighlight: 'Espinas Bézier polares' },
-  { id: 'm03', num: '03', name: 'Molten Amber Meniscus Wave', tagline: 'Cámara hidrostática con onda de menisco senoidal y burbujas de lava ámbar ascendentes.', badge: 'Meniscus Wave', svgHighlight: 'Onda sinusoidal + ebullición' },
-  { id: 'm04', num: '04', name: 'Cyber Viscous Coalescence', tagline: 'Gotas de mercurio en riel capilar que colapsan por tensión superficial en un solo orbe.', badge: 'Surface Tension', svgHighlight: 'Gotas colapsantes en riel' },
-  { id: 'm05', num: '05', name: 'Vortex Hydro-Centrifuge', tagline: 'Remolino líquido centrífugo con espirales logarítmicas que convergen en el núcleo.', badge: 'Vortex Swirl', svgHighlight: 'Espirales de succión fluida' },
-  { id: 'm06', num: '06', name: 'Biomorphic Amoeba Membrane', tagline: 'Membrana orgánica con border-radius ondulante y orgánulos citoplasmáticos flotantes.', badge: 'Bio Membrane', svgHighlight: 'Deformación celular elástica' },
-  { id: 'm07', num: '07', name: 'Chromium Solder Ribbon', tagline: 'Cinta perimétrica de soldadura líquida con destello de mercurio cromado en órbita.', badge: 'Liquid Ribbon', svgHighlight: 'Pista perimétrica fluida' },
-  { id: 'm08', num: '08', name: 'Alchemical Glass Ampoule', tagline: 'Ampolleta de cristal pirex con nivel milimétrico, líquido reactivo y microburbujas.', badge: 'Bio Ampoule', svgHighlight: 'Cámara volumétrica de vidrio' },
-  { id: 'm09', num: '09', name: 'Surface Tension Dewdrop Lens', tagline: 'Gota de agua esférica de tensión superficial con lente cáustica y destello Fresnel.', badge: 'Dewdrop Lens', svgHighlight: 'Lente esférica y cáusticas' },
-  { id: 'm10', num: '10', name: 'Laminar Flow Twin Jet', tagline: 'Chorros laminares sin turbulencia con inestabilidad de Rayleigh-Plateau en los bordes.', badge: 'Laminar Stream', svgHighlight: 'Líneas de corriente paralelas' },
-  { id: 'm11', num: '11', name: 'Ferro-Magnetic Core Pulsar', tagline: 'Núcleo de mercurio suspendido en levitación magnética con corona de plasma líquido.', badge: 'Levitating Core', svgHighlight: 'Corona magnética orbital' },
-  { id: 'm12', num: '12', name: 'High-Speed Splash Crown', tagline: 'Corona de impacto hidrodinámico (Worthington Jet) congelada en alta velocidad.', badge: 'Splash Crown', svgHighlight: 'Corona de gotas satélite' },
-  { id: 'm13', num: '13', name: 'Hydrogel Plasma Capsule', tagline: 'Cápsula de hidrogel elástica con núcleo viscoso luminiscente y refracción interna.', badge: 'Hydrogel Slime', svgHighlight: 'Núcleo gelatinoso táctil' },
-  { id: 'm14', num: '14', name: 'Obsidian Dark Matter Ooze', tagline: 'Líquido de obsidiana viscosa con microfisuras radiactivas de magma ámbar.', badge: 'Dark Ooze', svgHighlight: 'Fisuras de magma viscoso' },
-  { id: 'm15', num: '15', name: 'Superfluid Zero-Viscosity Film', tagline: 'Película de Rollin cuántica trepando por las paredes del botón sin fricción.', badge: 'Superfluidity', svgHighlight: 'Flujo perimétrico cuántico' },
+  { id: 'l01', num: '01', name: 'Chrome Liquid Gooey', tagline: 'Metaballs de mercurio líquido en órbita continua con fusión orgánica y estiramiento.', badge: 'Liquid Mercury', svgHighlight: 'Filtro SVG feColorMatrix Gooey' },
+  { id: 'l02', num: '02', name: 'Molten Solar Magma', tagline: 'Olas de lava incandescente en doble fase senoidal con flujo continuo de convección.', badge: 'Solar Magma', svgHighlight: 'Ondas senoidales duales en bucle' },
+  { id: 'l03', num: '03', name: 'Ferrofluid Magnetic Flux', tagline: 'Agujas magnéticas de ferrofluido negro que oscilan en frecuencia armónica.', badge: 'Ferrofluid Spikes', svgHighlight: 'Picos magnéticos oscilantes' },
+  { id: 'l04', num: '04', name: 'Deep Space Liquid Vortex', tagline: 'Remolino de plasma fluido en rotación vorticial continua con disco de acreción.', badge: 'Fluid Vortex', svgHighlight: 'Vórtice espiral centrípeto' },
+  { id: 'l05', num: '05', name: 'Bioluminescent Abyss Goo', tagline: 'Burbujas bioluminiscentes cian/esmeralda que ascienden en flotabilidad infinita.', badge: 'Bio Abyss Goo', svgHighlight: 'Gotas con flotación continua' },
+  { id: 'l06', num: '06', name: 'Quantum Mercury Beads', tagline: 'Esferas de mercurio entrelazadas que se deslizan, colisionan y fusionan sin cesar.', badge: 'Mercury Beads', svgHighlight: 'Microgotas en colisión elástica' },
+  { id: 'l07', num: '07', name: 'Molten Gold Viscosity', tagline: 'Olas de oro líquido de 24K con densidad viscosa y reflejo metálico persistente.', badge: 'Molten Gold', svgHighlight: 'Parallax de fluidos dorados' },
+  { id: 'l08', num: '08', name: 'Liquid Caustic Interference', tagline: 'Malla refractiva de cáusticas subacuáticas de mercurio con turbulencia SVG dinámica.', badge: 'Caustic Waves', svgHighlight: 'Filtro feTurbulence animado' },
+  { id: 'l09', num: '09', name: 'Mercury Rain & Splash Pool', tagline: 'Lluvia vertical de microgotas de mercurio que caen e impactan en un estanque líquido.', badge: 'Rain & Ripple', svgHighlight: 'Salpicaduras y ondas de impacto' },
+  { id: 'l10', num: '10', name: 'Dark Void Slime Surge', tagline: 'Masa de fluido oscuro violeta que respira y proyecta tentáculos líquidos peristálticos.', badge: 'Dark Slime', svgHighlight: 'Pulso orgánico peristáltico' },
+  { id: 'l11', num: '11', name: 'Cryo-Nitrogen Sub-Zero', tagline: 'Fluido criogénico en ebullición helada con estelas de vapor y condensación fluida.', badge: 'Cryo Sub-Zero', svgHighlight: 'Vapor y ebullición fría' },
+  { id: 'l12', num: '12', name: 'Radial Mercury Shockwaves', tagline: 'Ondas de choque circulares concéntricas que emanan continuamente desde el centro.', badge: 'Sonar Shockwave', svgHighlight: 'Anillos de choque continuos' },
+  { id: 'l13', num: '13', name: 'Hydrodynamic Glass Capsule', tagline: 'Cápsula de cristal con nivel de mercurio líquido que chapotea con inercia hidrodinámica.', badge: 'Glass Capsule', svgHighlight: 'Nivel oleaginoso en vaivén' },
+  { id: 'l14', num: '14', name: 'Liquid Plasma Conduit', tagline: 'Conducto translúcido con un río de plasma líquido a hipervelocidad y chispas de ionización.', badge: 'Plasma Conduit', svgHighlight: 'Corriente continua hiperbólica' },
+  { id: 'l15', num: '15', name: 'Toxic Hyper-Ooze Drip', tagline: 'Gotas de limo radioactivo ultra-viscoso que gotean, se estiran y retraen en bucle.', badge: 'Hyper-Ooze', svgHighlight: 'Estiramiento y rebote de gota' },
 ];
 
 const MOCK_EXERCISE = {
@@ -106,17 +101,99 @@ export const WorkspaceLab: React.FC = () => {
     <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden">
       <HeroSkyBackground starCount={90} interactive={false} className="fixed inset-0 pointer-events-none -z-10" />
 
-      {/* SVG Global Filters for Gooey Metaball effects */}
-      <svg className="absolute w-0 h-0 pointer-events-none" aria-hidden="true">
+      {/* Estilos CSS Keyframes para Animaciones de Fondo Continuas en Hover */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes liquidWave1 {
+          0% { transform: translateX(0) scaleY(1); }
+          50% { transform: translateX(-25%) scaleY(1.2); }
+          100% { transform: translateX(-50%) scaleY(1); }
+        }
+        @keyframes liquidWave2 {
+          0% { transform: translateX(0) scaleY(1.1); }
+          50% { transform: translateX(-35%) scaleY(0.9); }
+          100% { transform: translateX(-70%) scaleY(1.1); }
+        }
+        @keyframes orbFloat1 {
+          0% { transform: translate(0px, 0px) scale(1); }
+          33% { transform: translate(45px, -8px) scale(1.3); }
+          66% { transform: translate(90px, 6px) scale(0.9); }
+          100% { transform: translate(0px, 0px) scale(1); }
+        }
+        @keyframes orbFloat2 {
+          0% { transform: translate(0px, 0px) scale(1.1); }
+          33% { transform: translate(-55px, 8px) scale(0.85); }
+          66% { transform: translate(-30px, -6px) scale(1.25); }
+          100% { transform: translate(0px, 0px) scale(1.1); }
+        }
+        @keyframes orbFloat3 {
+          0% { transform: translate(0px, 0px); }
+          50% { transform: translate(60px, -12px); }
+          100% { transform: translate(0px, 0px); }
+        }
+        @keyframes magneticSpike {
+          0%, 100% { transform: scaleY(1); }
+          50% { transform: scaleY(1.8) scaleX(1.1); }
+        }
+        @keyframes vortexSpin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+        @keyframes bubbleRise {
+          0% { transform: translateY(30px) scale(0.6); opacity: 0; }
+          20% { opacity: 0.9; }
+          80% { opacity: 0.9; }
+          100% { transform: translateY(-30px) scale(1.2); opacity: 0; }
+        }
+        @keyframes shimmerPan {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+        @keyframes mercuryRain {
+          0% { transform: translateY(-40px); opacity: 0; }
+          20% { opacity: 1; }
+          90% { transform: translateY(30px); opacity: 1; }
+          100% { transform: translateY(35px) scaleX(2) scaleY(0.2); opacity: 0; }
+        }
+        @keyframes slimePulse {
+          0%, 100% { transform: scale(1) rotate(0deg); }
+          33% { transform: scale(1.08, 0.92) rotate(2deg); }
+          66% { transform: scale(0.94, 1.06) rotate(-2deg); }
+        }
+        @keyframes shockwaveRipple {
+          0% { r: 6px; opacity: 0.9; stroke-width: 3px; }
+          100% { r: 90px; opacity: 0; stroke-width: 0.5px; }
+        }
+        @keyframes capsuleSlosh {
+          0%, 100% { transform: rotate(0deg) translateY(0); }
+          25% { transform: rotate(2.5deg) translateY(-2px); }
+          75% { transform: rotate(-2.5deg) translateY(2px); }
+        }
+        @keyframes oozeDrip {
+          0% { transform: scaleY(0.2) translateY(-10px); }
+          40% { transform: scaleY(1.6) translateY(5px); }
+          70% { transform: scaleY(2.2) translateY(18px); }
+          80% { transform: scaleY(0.4) translateY(24px); opacity: 0; }
+          100% { transform: scaleY(0.2) translateY(-10px); opacity: 0; }
+        }
+        @keyframes causticJitter {
+          0% { transform: translate(0, 0) scale(1); }
+          25% { transform: translate(-3px, 2px) scale(1.02); }
+          50% { transform: translate(2px, -3px) scale(0.98); }
+          75% { transform: translate(-2px, -1px) scale(1.01); }
+          100% { transform: translate(0, 0) scale(1); }
+        }
+      ` }} />
+
+      {/* Definición de Filtros SVG Gooey y Fluidos */}
+      <svg className="absolute w-0 h-0 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
         <defs>
-          <filter id="liquid-goo-filter">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="blur" />
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo" />
-            <feBlend in="SourceGraphic" in2="goo" />
-          </filter>
-          <filter id="liquid-high-viscosity">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="7" result="blur" />
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -9" result="goo" />
+          <filter id="koda-goo-filter" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+            <feColorMatrix in="blur" mode="matrix" values="
+              1 0 0 0 0  
+              0 1 0 0 0  
+              0 0 1 0 0  
+              0 0 0 20 -9" result="goo" />
             <feComposite in="SourceGraphic" in2="goo" operator="atop" />
           </filter>
         </defs>
@@ -137,19 +214,19 @@ export const WorkspaceLab: React.FC = () => {
               </Link>
               <div className="flex items-center gap-2">
                 <span className="font-mono text-xs font-black uppercase tracking-wider text-orange-400">
-                  Liquid Mercury Lab
+                  Liquid Lab
                 </span>
                 <span className="text-slate-600 font-mono">/</span>
-                <span className="font-mono text-xs text-slate-400">15 Variaciones Fluidas</span>
+                <span className="font-mono text-xs text-slate-400">15 Variaciones de Mercurio Líquido (#10)</span>
               </div>
             </div>
 
             <div className="text-[11px] font-mono text-slate-400 hidden md:block">
-              Usa <kbd className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">Alt + ←/→</kbd> para ciclar variantes fluidas.
+              Usa <kbd className="px-1.5 py-0.5 rounded bg-slate-800 text-slate-300">Alt + ←/→</kbd> para ciclar fluidos.
             </div>
           </div>
 
-          {/* Carrusel/Grid Compacto de Píldoras M01 a M15 */}
+          {/* Selector de Píldoras L01 a L15 */}
           <div className="flex items-center gap-1.5 overflow-x-auto max-w-full pb-1 scrollbar-none" role="tablist">
             {BUTTON_PROPOSALS.map((btn, idx) => (
               <button
@@ -163,7 +240,7 @@ export const WorkspaceLab: React.FC = () => {
                 className={cn(
                   'group flex items-center gap-1.5 px-3 py-1.5 rounded-full font-mono text-xs font-bold transition-all shrink-0 cursor-pointer',
                   activeBtnIndex === idx
-                    ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 shadow-[0_0_16px_rgba(255,106,0,0.5)] font-black scale-[1.03]'
+                    ? 'bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 text-slate-950 shadow-[0_0_18px_rgba(255,106,0,0.5)] font-black scale-[1.03]'
                     : 'border border-slate-800 bg-slate-900/60 text-slate-400 hover:text-slate-200 hover:border-slate-600 hover:bg-slate-800/80'
                 )}
               >
@@ -173,7 +250,7 @@ export const WorkspaceLab: React.FC = () => {
             ))}
           </div>
 
-          {/* Sub-barra informativa con detalles del SVG y de la interacción */}
+          {/* Sub-barra informativa */}
           <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] font-mono text-slate-400 border-t border-slate-800/40 pt-2">
             <div className="flex items-center gap-2">
               <span className="px-2 py-0.5 rounded bg-orange-500/10 border border-orange-500/30 text-orange-300 font-bold text-[10px]">
@@ -183,14 +260,14 @@ export const WorkspaceLab: React.FC = () => {
               <span className="text-slate-300 hidden sm:inline">{activeProposal.tagline}</span>
             </div>
             <div className="text-amber-300/90 font-medium">
-              SVG: {activeProposal.svgHighlight}
+              Física: {activeProposal.svgHighlight}
             </div>
           </div>
 
         </div>
       </header>
 
-      {/* Espacio de Lección Principal */}
+      {/* Espacio de Lección Principal (Base: Roadmap Fusion HUD) */}
       <main className="flex-1 p-4 md:p-6 lg:p-8 flex items-center justify-center">
         <div className="w-full max-w-6xl space-y-4 font-sans">
           
@@ -321,25 +398,25 @@ export const WorkspaceLab: React.FC = () => {
                 </div>
               </div>
 
-              {/* Renderizado del Botón Líquido Activo (M01 a M15) */}
+              {/* Renderizado del Botón Líquido Activo (L01 a L15) */}
               <div className="space-y-3 pt-2">
                 {!checked ? (
                   <div className="w-full">
-                    {activeBtnIndex === 0 && <FluidBtn01ChromeGooey disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 1 && <FluidBtn02FerrofluidSpikes disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 2 && <FluidBtn03MoltenMeniscus disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 3 && <FluidBtn04ViscousCoalesce disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 4 && <FluidBtn05HydroVortex disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 5 && <FluidBtn06AmoebaMembrane disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 6 && <FluidBtn07ChromiumRibbon disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 7 && <FluidBtn08AlchemicalAmpoule disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 8 && <FluidBtn09DewdropLens disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 9 && <FluidBtn10LaminarJets disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 10 && <FluidBtn11MagneticPulsar disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 11 && <FluidBtn12SplashCrown disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 12 && <FluidBtn13HydrogelPlasma disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 13 && <FluidBtn14DarkMatterOoze disabled={!selectedOpt} onClick={() => setChecked(true)} />}
-                    {activeBtnIndex === 14 && <FluidBtn15SuperfluidFilm disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 0 && <SvgBtn01LiquidChrome disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 1 && <SvgBtn02MoltenMagma disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 2 && <SvgBtn03FerrofluidFlux disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 3 && <SvgBtn04LiquidVortex disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 4 && <SvgBtn05BioluminescentGoo disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 5 && <SvgBtn06QuantumBeads disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 6 && <SvgBtn07MoltenGold disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 7 && <SvgBtn08LiquidCaustics disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 8 && <SvgBtn09MercuryRain disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 9 && <SvgBtn10DarkVoidSlime disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 10 && <SvgBtn11CryoNitrogen disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 11 && <SvgBtn12MercuryShockwave disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 12 && <SvgBtn13HydroCapsule disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 13 && <SvgBtn14PlasmaConduit disabled={!selectedOpt} onClick={() => setChecked(true)} />}
+                    {activeBtnIndex === 14 && <SvgBtn15ToxicHyperOoze disabled={!selectedOpt} onClick={() => setChecked(true)} />}
                   </div>
                 ) : (
                   <div className={cn(
@@ -377,203 +454,220 @@ export const WorkspaceLab: React.FC = () => {
 };
 
 /* =========================================================================
-   M01 — LIQUID CHROME GOOEY FUSION (Evolución de Propuesta 10 con Filtro SVG)
+   L01 — CHROME LIQUID GOOEY (Metaballs Líquidas en Órbita Continua)
    ========================================================================= */
-function FluidBtn01ChromeGooey({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function SvgBtn01LiquidChrome({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-orange-400/80 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-[length:200%_auto] px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_25px_rgba(255,106,0,0.5)] hover:shadow-[0_0_35px_rgba(255,106,0,0.8)] hover:bg-right hover:scale-[1.01] transition-all duration-300 cursor-pointer disabled:opacity-40"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-orange-500/60 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_20px_rgba(255,106,0,0.3)] hover:shadow-[0_0_35px_rgba(255,106,0,0.7)] hover:border-orange-400 transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
+      <div 
+        className="absolute inset-0 bg-gradient-to-r from-orange-600 via-amber-400 to-orange-500 opacity-90 group-hover:opacity-100 transition-opacity"
+        style={{ filter: 'url(#koda-goo-filter)' }}
+      >
+        <div className="absolute left-[15%] top-[25%] w-10 h-10 rounded-full bg-amber-300" style={{ animation: 'orbFloat1 4s ease-in-out infinite' }} />
+        <div className="absolute left-[45%] top-[35%] w-12 h-12 rounded-full bg-orange-500" style={{ animation: 'orbFloat2 5s ease-in-out infinite' }} />
+        <div className="absolute left-[70%] top-[20%] w-9 h-9 rounded-full bg-amber-400" style={{ animation: 'orbFloat3 3.5s ease-in-out infinite' }} />
+        <div className="absolute left-[30%] bottom-[10%] w-7 h-7 rounded-full bg-orange-400" style={{ animation: 'orbFloat1 6s ease-in-out infinite reverse' }} />
+      </div>
+
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" style={{ backgroundSize: '200% 100%', animation: 'shimmerPan 2s linear infinite' }} />
+
       <div className="relative z-10 flex items-center gap-3">
-        {/* SVG Gooey Metaballs */}
+        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-950/20 text-slate-950 shadow-inner group-hover:rotate-45 transition-transform duration-300">
+          <Drop className="w-4 h-4 fill-current" />
+        </div>
+        <span className="tracking-widest font-black text-slate-950 drop-shadow-sm">COMPROBAR RESPUESTA</span>
+      </div>
+
+      <kbd className="relative z-10 hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-bold text-slate-950 shadow-sm">
+        Enter ↵
+      </kbd>
+    </button>
+  );
+}
+
+/* =========================================================================
+   L02 — MOLTEN SOLAR MAGMA (Olas de Lava Incandescente en Doble Fase)
+   ========================================================================= */
+function SvgBtn02MoltenMagma({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-amber-500/50 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-amber-100 shadow-[0_0_22px_rgba(245,158,11,0.25)] hover:border-amber-400 hover:shadow-[0_0_35px_rgba(255,106,0,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-60 group-hover:opacity-100 transition-opacity duration-300">
+        <svg className="absolute -inset-x-[100%] top-0 h-full w-[300%]" preserveAspectRatio="none" viewBox="0 0 1200 60">
+          <path
+            d="M0,35 C150,15 350,55 600,30 C850,5 1050,45 1200,25 L1200,60 L0,60 Z"
+            fill="rgba(255, 106, 0, 0.45)"
+            style={{ animation: 'liquidWave1 6s linear infinite' }}
+          />
+          <path
+            d="M0,45 C200,60 400,20 600,45 C800,70 1000,25 1200,50 L1200,60 L0,60 Z"
+            fill="rgba(251, 191, 36, 0.35)"
+            style={{ animation: 'liquidWave2 4.5s linear infinite' }}
+          />
+        </svg>
+      </div>
+
+      <div className="relative z-10 flex items-center gap-3">
+        <Flame className="w-4 h-4 text-orange-400 group-hover:scale-125 group-hover:text-amber-300 transition-all duration-300" />
+        <span className="tracking-wider font-black text-white group-hover:text-amber-200 transition-colors">FLUJO DE MAGMA SOLAR</span>
+      </div>
+
+      <span className="relative z-10 font-mono text-[10px] px-2 py-0.5 rounded border border-amber-500/50 bg-amber-500/15 text-amber-300">
+        MAGMA_ENTER ↵
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   L03 — FERROFLUID MAGNETIC FLUX (Agujas Magnéticas de Fluido Negro)
+   ========================================================================= */
+function SvgBtn03FerrofluidFlux({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border-2 border-slate-700 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-100 shadow-[0_0_20px_rgba(0,0,0,0.8)] hover:border-orange-500 hover:text-orange-400 hover:shadow-[0_0_30px_rgba(255,106,0,0.4)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <div className="absolute inset-x-0 top-0 h-3 flex justify-around pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity">
+        {Array.from({ length: 18 }).map((_, i) => (
+          <div
+            key={`top-${i}`}
+            className="w-1.5 h-3 bg-gradient-to-b from-orange-500 to-transparent rounded-b-full origin-top"
+            style={{
+              animation: `magneticSpike ${1.2 + (i % 5) * 0.2}s ease-in-out infinite ${(i % 3) * 0.15}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="absolute inset-x-0 bottom-0 h-3 flex justify-around pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity">
+        {Array.from({ length: 18 }).map((_, i) => (
+          <div
+            key={`bot-${i}`}
+            className="w-1.5 h-3 bg-gradient-to-t from-orange-500 to-transparent rounded-t-full origin-bottom"
+            style={{
+              animation: `magneticSpike ${1.4 + (i % 4) * 0.2}s ease-in-out infinite ${(i % 4) * 0.12}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      <div className="relative z-10 flex items-center gap-3">
+        <Atom className="w-4 h-4 text-orange-400 group-hover:rotate-180 transition-transform duration-700" />
+        <span className="tracking-widest">FERROFLUIDO POLAR</span>
+      </div>
+
+      <span className="relative z-10 text-[10px] font-mono px-2 py-0.5 rounded border border-slate-700 bg-slate-900 text-slate-300 group-hover:border-orange-500 group-hover:text-orange-300">
+        PULSE_FLUX ↵
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   L04 — DEEP SPACE LIQUID VORTEX (Remolino de Plasma Vorticial Continuo)
+   ========================================================================= */
+function SvgBtn04LiquidVortex({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-cyan-500/40 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-cyan-200 shadow-[0_0_20px_rgba(6,182,212,0.2)] hover:border-cyan-400 hover:shadow-[0_0_35px_rgba(6,182,212,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-30 group-hover:opacity-80 transition-opacity">
         <div 
-          className="relative h-7 w-14 flex items-center justify-center pointer-events-none"
-          style={{ filter: 'url(#liquid-goo-filter)' }}
-        >
-          <span className="h-5 w-5 rounded-full bg-slate-950 group-hover:translate-x-3 transition-transform duration-500 ease-out" />
-          <span className="h-4 w-4 rounded-full bg-slate-950 -ml-1 group-hover:-translate-x-3 transition-transform duration-500 ease-out" />
-          <span className="h-3 w-3 rounded-full bg-slate-950 absolute opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-300" />
-        </div>
-        <span className="text-slate-950 font-black tracking-widest text-sm">COMPROBAR RESPUESTA</span>
-      </div>
-
-      <div className="relative z-10 flex items-center gap-2">
-        <kbd className="hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded-lg border border-slate-950/40 bg-slate-950/15 text-[10px] font-bold text-slate-950">
-          Enter ↵
-        </kbd>
-      </div>
-    </button>
-  );
-}
-
-/* =========================================================================
-   M02 — MAGNETIC FERROFLUID SPIKES (Espinas Bézier Ferrohidrodinámicas)
-   ========================================================================= */
-function FluidBtn02FerrofluidSpikes({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border-2 border-amber-500 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-amber-300 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:border-orange-400 hover:shadow-[0_0_30px_rgba(255,106,0,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
-      {/* SVG Ferrofluid Dynamic Spikes */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity" viewBox="0 0 400 60" preserveAspectRatio="none">
-        <path
-          d="M0,30 Q30,10 60,30 T120,30 T180,30 T240,30 T300,30 T360,30 T400,30"
-          fill="none"
-          stroke="#F59E0B"
-          strokeWidth="3"
-          className="group-hover:stroke-[#FF6A00] transition-colors"
+          className="w-48 h-48 rounded-full bg-[conic-gradient(from_0deg,#06B6D4,#FF6A00,#3B82F6,#06B6D4)] blur-lg opacity-60"
+          style={{ animation: 'vortexSpin 6s linear infinite' }}
         />
-        <path
-          d="M20,60 L30,40 L40,60 M100,60 L110,35 L120,60 M220,60 L230,30 L240,60 M320,60 L330,38 L340,60"
-          fill="#FF6A00"
-          className="group-hover:scale-y-125 origin-bottom transition-transform duration-300"
-        />
-      </svg>
-
-      <div className="relative z-10 flex items-center gap-3">
-        <div className="h-4 w-4 rounded-full bg-gradient-to-tr from-amber-500 to-orange-500 shadow-[0_0_12px_#F59E0B] group-hover:scale-125 transition-transform" />
-        <span className="text-white font-black tracking-wider">FERROFLUID MAGNÉTICO</span>
-      </div>
-
-      <span className="relative z-10 text-[10px] font-mono border border-amber-500/50 bg-amber-500/20 px-2 py-0.5 rounded text-amber-200">
-        MAGNETIC_ENTER [↵]
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   M03 — MOLTEN AMBER MENISCUS WAVE (Cámara de Lava con Menisco Senoidal)
-   ========================================================================= */
-function FluidBtn03MoltenMeniscus({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-orange-500/70 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-orange-200 shadow-[0_0_22px_rgba(255,106,0,0.3)] hover:border-orange-400 hover:shadow-[0_0_32px_rgba(255,106,0,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
-      {/* SVG Molten Fluid Wave Level */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-60 group-hover:opacity-90 transition-opacity" viewBox="0 0 300 50" preserveAspectRatio="none">
-        <path
-          d="M0,25 Q50,15 100,25 T200,25 T300,25 L300,50 L0,50 Z"
-          fill="url(#molten-grad)"
-          className="group-hover:translate-y-[-4px] transition-transform duration-500"
-        />
-        <defs>
-          <linearGradient id="molten-grad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#EA580C" stopOpacity="0.8" />
-            <stop offset="50%" stopColor="#F59E0B" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#FF6A00" stopOpacity="0.8" />
-          </linearGradient>
-        </defs>
-        {/* Floating heat bubbles */}
-        <circle cx="45" cy="30" r="2.5" fill="#FFF" className="group-hover:animate-bounce" />
-        <circle cx="160" cy="35" r="3" fill="#FFF" className="group-hover:animate-bounce" style={{ animationDelay: '150ms' }} />
-        <circle cx="250" cy="28" r="2" fill="#FFF" className="group-hover:animate-bounce" style={{ animationDelay: '300ms' }} />
-      </svg>
-
-      <div className="relative z-10 flex items-center gap-2">
-        <Flame className="w-4 h-4 text-amber-400 group-hover:scale-125 transition-transform" />
-        <span className="text-white font-black tracking-widest">MENISCO TERMODINÁMICO</span>
-      </div>
-
-      <span className="relative z-10 font-mono text-[10px] text-slate-950 font-black bg-amber-400 px-2 py-0.5 rounded shadow">
-        BOIL [↵]
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   M04 — CYBER VISCOUS COALESCENCE (Gotas en Riel de Tensión Superficial)
-   ========================================================================= */
-function FluidBtn04ViscousCoalesce({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-amber-400 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 px-6 font-mono text-xs font-bold text-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.2)] hover:border-amber-300 hover:shadow-[0_0_30px_rgba(251,191,36,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
-      <div className="relative z-10 flex items-center gap-3">
-        {/* SVG Capillary Rail */}
-        <svg className="w-16 h-6 shrink-0" viewBox="0 0 60 24">
-          <line x1="4" y1="12" x2="56" y2="12" stroke="#475569" strokeWidth="2" strokeDasharray="2,2" />
-          <circle cx="10" cy="12" r="4" fill="#FF6A00" className="group-hover:translate-x-5 transition-transform duration-500" />
-          <circle cx="50" cy="12" r="4" fill="#FBBF24" className="group-hover:-translate-x-5 transition-transform duration-500" />
-          <circle cx="30" cy="12" r="6" fill="#FFF" className="opacity-0 group-hover:opacity-100 group-hover:scale-125 transition-all duration-500" />
+        <svg viewBox="0 0 100 100" className="absolute w-28 h-28 opacity-80" style={{ animation: 'vortexSpin 4s linear infinite reverse' }}>
+          <path d="M50,10 A40,40 0 0,1 90,50 A40,40 0 0,1 50,90 A40,40 0 0,1 10,50" fill="none" stroke="#06B6D4" strokeWidth="2" strokeDasharray="12,6" />
+          <path d="M50,25 A25,25 0 0,1 75,50 A25,25 0 0,1 50,75 A25,25 0 0,1 25,50" fill="none" stroke="#F59E0B" strokeWidth="1.5" strokeDasharray="6,4" />
         </svg>
-        <span className="uppercase tracking-wider font-black text-white">COALESCENCIA CAPILAR</span>
       </div>
 
-      <span className="relative z-10 text-[10px] font-mono border border-amber-500/50 bg-amber-500/20 px-2 py-0.5 rounded text-amber-200">
-        FUSION [↵]
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   M05 — VORTEX HYDRO-CENTRIFUGE (Remolino de Succión Centrífuga)
-   ========================================================================= */
-function FluidBtn05HydroVortex({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-cyan-500/60 bg-slate-950 px-6 font-mono text-xs font-bold text-cyan-300 shadow-[0_0_20px_rgba(6,182,212,0.25)] hover:border-cyan-400 hover:shadow-[0_0_32px_rgba(6,182,212,0.55)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
       <div className="relative z-10 flex items-center gap-3">
-        {/* SVG Vortex Spiral */}
-        <div className="relative h-7 w-7 shrink-0">
-          <svg viewBox="0 0 40 40" className="w-full h-full group-hover:animate-spin" style={{ animationDuration: '2.5s' }}>
-            <circle cx="20" cy="20" r="16" fill="none" stroke="#06B6D4" strokeWidth="1.5" strokeDasharray="8,6" />
-            <path d="M20,4 A16,16 0 0,1 36,20 A10,10 0 0,1 20,30 A6,6 0 0,1 20,20" fill="none" stroke="#F59E0B" strokeWidth="2" strokeLinecap="round" />
-          </svg>
-          <div className="absolute inset-2.5 rounded-full bg-cyan-400/40 group-hover:bg-cyan-300 shadow-[0_0_12px_#06B6D4] transition-all" />
-        </div>
-        <span className="uppercase tracking-wider font-black text-white">VÓRTICE HIDROCÊNTRICO</span>
+        <CircleNotch className="w-4 h-4 text-cyan-400 animate-spin" />
+        <span className="tracking-widest font-black text-white">VÓRTICE CENTRÍPETO</span>
       </div>
 
-      <span className="relative z-10 font-mono text-[10px] text-cyan-300 border border-cyan-500/50 px-2 py-0.5 rounded bg-cyan-950/60">
-        SWIRL_ENTER ↵
+      <span className="relative z-10 text-[10px] font-mono border border-cyan-500/50 bg-cyan-500/10 px-2 py-0.5 rounded text-cyan-300">
+        VORTEX_ENTER ↵
       </span>
     </button>
   );
 }
 
 /* =========================================================================
-   M06 — BIOMORPHIC AMOEBA MEMBRANE (Membrana Celular Ondulante)
+   L05 — BIOLUMINESCENT ABYSS GOO (Gotas que Ascienden en Flotabilidad Infinita)
    ========================================================================= */
-function FluidBtn06AmoebaMembrane({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function SvgBtn05BioluminescentGoo({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden border-2 border-orange-500/80 bg-gradient-to-r from-orange-600 to-amber-500 px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_22px_rgba(255,106,0,0.4)] hover:shadow-[0_0_35px_rgba(255,106,0,0.7)] transition-all duration-500 cursor-pointer disabled:opacity-40"
-      style={{
-        borderRadius: '24px 12px 28px 14px / 14px 28px 12px 24px'
-      }}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-emerald-500/40 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-emerald-200 shadow-[0_0_20px_rgba(16,185,129,0.2)] hover:border-emerald-400 hover:shadow-[0_0_35px_rgba(16,185,129,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
-      <div className="flex items-center gap-3">
-        {/* SVG Organelles */}
-        <div className="relative h-6 w-8">
-          <span className="absolute top-1 left-1 h-3 w-3 rounded-full bg-slate-950 group-hover:translate-x-3 group-hover:scale-125 transition-all duration-500" />
-          <span className="absolute bottom-1 right-1 h-2.5 w-2.5 rounded-full bg-slate-950/70 group-hover:-translate-x-3 transition-transform duration-500" />
-        </div>
-        <span className="font-black text-slate-950 tracking-widest text-sm">MEMBRANA BIOMÓRFICA</span>
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-40 group-hover:opacity-100 transition-opacity">
+        <div className="absolute left-[12%] bottom-0 w-4 h-4 rounded-full bg-emerald-400 blur-[1px]" style={{ animation: 'bubbleRise 3s ease-in-out infinite' }} />
+        <div className="absolute left-[28%] bottom-0 w-6 h-6 rounded-full bg-cyan-400 blur-[1.5px]" style={{ animation: 'bubbleRise 4.2s ease-in-out infinite 0.7s' }} />
+        <div className="absolute left-[52%] bottom-0 w-3 h-3 rounded-full bg-emerald-300 blur-[1px]" style={{ animation: 'bubbleRise 2.5s ease-in-out infinite 1.2s' }} />
+        <div className="absolute left-[72%] bottom-0 w-5 h-5 rounded-full bg-teal-400 blur-[1.5px]" style={{ animation: 'bubbleRise 3.8s ease-in-out infinite 0.3s' }} />
+        <div className="absolute left-[88%] bottom-0 w-4 h-4 rounded-full bg-emerald-400 blur-[1px]" style={{ animation: 'bubbleRise 3.2s ease-in-out infinite 1.8s' }} />
       </div>
 
-      <kbd className="hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-bold text-slate-950">
+      <div className="relative z-10 flex items-center gap-3">
+        <Sparkle className="w-4 h-4 text-emerald-400 group-hover:scale-125 transition-transform" />
+        <span className="tracking-widest font-black text-white">LIMO BIOLUMINISCENTE</span>
+      </div>
+
+      <span className="relative z-10 text-[10px] font-mono border border-emerald-500/50 bg-emerald-500/15 px-2 py-0.5 rounded text-emerald-300">
+        BIO_VERIFY ↵
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   L06 — QUANTUM MERCURY BEADS (Microgotas en Colisión y Fusión Elástica)
+   ========================================================================= */
+function SvgBtn06QuantumBeads({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-orange-500/50 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-orange-200 shadow-[0_0_20px_rgba(255,106,0,0.25)] hover:border-orange-400 hover:shadow-[0_0_35px_rgba(255,106,0,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <div 
+        className="absolute inset-0 flex items-center pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity"
+        style={{ filter: 'url(#koda-goo-filter)' }}
+      >
+        <div className="absolute left-[10%] w-7 h-7 rounded-full bg-orange-500 shadow-lg" style={{ animation: 'orbFloat1 3s ease-in-out infinite' }} />
+        <div className="absolute left-[30%] w-8 h-8 rounded-full bg-amber-400 shadow-lg" style={{ animation: 'orbFloat2 4s ease-in-out infinite' }} />
+        <div className="absolute left-[50%] w-6 h-6 rounded-full bg-orange-600 shadow-lg" style={{ animation: 'orbFloat1 3.5s ease-in-out infinite 0.5s' }} />
+        <div className="absolute left-[70%] w-8 h-8 rounded-full bg-amber-300 shadow-lg" style={{ animation: 'orbFloat3 4.2s ease-in-out infinite 1s' }} />
+        <div className="absolute left-[85%] w-7 h-7 rounded-full bg-orange-500 shadow-lg" style={{ animation: 'orbFloat2 3.8s ease-in-out infinite 0.3s' }} />
+      </div>
+
+      <div className="relative z-10 flex items-center gap-3">
+        <Atom className="w-4 h-4 text-amber-400 group-hover:rotate-90 transition-transform duration-500" />
+        <span className="tracking-widest font-black text-white">COLISIÓN DE GOTAS HG</span>
+      </div>
+
+      <kbd className="relative z-10 hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded border border-orange-500/50 bg-orange-500/15 text-[10px] font-bold text-orange-300">
         Enter ↵
       </kbd>
     </button>
@@ -581,268 +675,284 @@ function FluidBtn06AmoebaMembrane({ disabled, onClick }: { disabled: boolean; on
 }
 
 /* =========================================================================
-   M07 — CHROMIUM SOLDER RIBBON (Cinta de Mercurio Cromado Perimétrico)
+   L07 — MOLTEN GOLD VISCOSITY (Parallax de Fluidos de Oro 24K)
    ========================================================================= */
-function FluidBtn07ChromiumRibbon({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function SvgBtn07MoltenGold({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-slate-700 bg-slate-950 px-6 font-mono text-xs font-bold text-slate-100 shadow-xl hover:border-amber-400 hover:shadow-[0_0_28px_rgba(251,191,36,0.4)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-yellow-500/60 bg-gradient-to-r from-amber-950/80 via-slate-950 to-amber-950/80 px-6 font-mono text-xs font-black uppercase tracking-wider text-yellow-300 shadow-[0_0_22px_rgba(234,179,8,0.25)] hover:border-yellow-400 hover:shadow-[0_0_35px_rgba(234,179,8,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
-      {/* SVG Liquid Ribbon Stroke */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
-        <rect
-          x="2"
-          y="2"
-          width="calc(100% - 4px)"
-          height="calc(100% - 4px)"
-          rx="14"
-          fill="none"
-          stroke="url(#ribbon-grad)"
-          strokeWidth="2"
-          strokeDasharray="40 120"
-          className="group-hover:animate-[dash_2s_linear_infinite]"
-        />
-        <defs>
-          <linearGradient id="ribbon-grad" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#F59E0B" />
-            <stop offset="50%" stopColor="#FFF" />
-            <stop offset="100%" stopColor="#FF6A00" />
-          </linearGradient>
-        </defs>
-      </svg>
-
-      <div className="relative z-10 flex items-center gap-3">
-        <div className="h-3 w-3 rounded-full bg-amber-400 shadow-[0_0_10px_#F59E0B] group-hover:scale-150 transition-transform" />
-        <span className="uppercase tracking-wider font-black text-white">SOLDADURA CROMADA</span>
-      </div>
-
-      <span className="relative z-10 text-[10px] font-mono border border-slate-700 bg-slate-900 px-2 py-0.5 rounded text-slate-300 group-hover:border-amber-400 group-hover:text-amber-300">
-        [FLOW_ENTER]
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   M08 — ALCHEMICAL GLASS AMPOULE (Ampolleta de Vidrio con Microburbujas)
-   ========================================================================= */
-function FluidBtn08AlchemicalAmpoule({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-full border border-amber-500/50 bg-slate-900/80 px-6 font-mono text-xs font-bold text-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:border-amber-300 hover:shadow-[0_0_30px_rgba(245,158,11,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
-      {/* SVG Volumetric Graduations */}
-      <svg className="absolute left-4 top-0 bottom-0 w-8 h-full pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity" viewBox="0 0 30 50">
-        <line x1="2" y1="12" x2="12" y2="12" stroke="#FBBF24" strokeWidth="1.5" />
-        <line x1="2" y1="25" x2="18" y2="25" stroke="#FBBF24" strokeWidth="2" />
-        <line x1="2" y1="38" x2="12" y2="38" stroke="#FBBF24" strokeWidth="1.5" />
-      </svg>
-
-      <div className="relative z-10 ml-6 flex items-center gap-2.5">
-        <span className="h-2.5 w-2.5 rounded-full bg-amber-400 animate-ping" />
-        <span className="font-black tracking-wider uppercase text-white">AMPOLLETA ALQUÍMICA</span>
-      </div>
-
-      <span className="relative z-10 text-[10px] font-mono border border-amber-500/60 bg-amber-500/20 px-2.5 py-0.5 rounded-full text-amber-200">
-        50mL · REAGENTE [↵]
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   M09 — SURFACE TENSION DEWDROP LENS (Gota Esférica con Refracción Fresnel)
-   ========================================================================= */
-function FluidBtn09DewdropLens({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-orange-400/60 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-400 px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_24px_rgba(255,106,0,0.4)] hover:brightness-110 hover:shadow-[0_0_36px_rgba(255,106,0,0.7)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
-      <div className="flex items-center gap-3">
-        {/* SVG Dewdrop Specular Sphere */}
-        <div className="relative h-6 w-6 shrink-0 rounded-full bg-slate-950 shadow-inner group-hover:scale-125 transition-transform duration-300">
-          <div className="absolute top-1 left-1.5 h-2 w-2 rounded-full bg-white opacity-90" />
-          <div className="absolute bottom-1 right-1.5 h-1 w-1 rounded-full bg-amber-400 opacity-80" />
-        </div>
-        <span className="text-slate-950 font-black tracking-widest text-sm">LENTE GOTA FRESNEL</span>
-      </div>
-
-      <kbd className="hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded border border-slate-950/40 bg-slate-950/15 text-[10px] font-bold text-slate-950">
-        Enter ↵
-      </kbd>
-    </button>
-  );
-}
-
-/* =========================================================================
-   M10 — LAMINAR FLOW TWIN JET (Chorros Fluidos Paralelos Sin Turbulencia)
-   ========================================================================= */
-function FluidBtn10LaminarJets({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-teal-500/50 bg-slate-950 px-6 font-mono text-xs font-bold text-teal-200 shadow-[0_0_20px_rgba(20,184,166,0.2)] hover:border-teal-400 hover:shadow-[0_0_30px_rgba(20,184,166,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
-      {/* SVG Laminar Streamlines */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 group-hover:opacity-90 transition-opacity" viewBox="0 0 350 50">
-        <path d="M0,15 L120,15 Q180,35 240,35 L350,35" fill="none" stroke="#2DD4BF" strokeWidth="2" />
-        <path d="M0,35 L120,35 Q180,15 240,15 L350,15" fill="none" stroke="#F59E0B" strokeWidth="1.5" />
-      </svg>
-
-      <span className="relative z-10 font-black uppercase tracking-wider text-white">
-        FLUJO LAMINAR PURO
-      </span>
-
-      <span className="relative z-10 text-[10px] font-mono border border-teal-500/60 bg-teal-950/60 px-2 py-0.5 rounded text-teal-300">
-        REYNOLDS [↵]
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   M11 — FERRO-MAGNETIC CORE PULSAR (Núcleo en Levitación Magnética)
-   ========================================================================= */
-function FluidBtn11MagneticPulsar({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-orange-500/70 bg-gradient-to-r from-slate-950 via-orange-950/40 to-slate-950 px-6 font-mono text-xs font-bold text-orange-200 shadow-[0_0_22px_rgba(255,106,0,0.3)] hover:border-orange-400 hover:shadow-[0_0_34px_rgba(255,106,0,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
-      <div className="relative z-10 flex items-center gap-3">
-        {/* SVG Levitating Core & Corona */}
-        <div className="relative h-7 w-7 shrink-0">
-          <svg viewBox="0 0 36 36" className="w-full h-full group-hover:rotate-180 transition-transform duration-700">
-            <circle cx="18" cy="18" r="14" fill="none" stroke="#FF6A00" strokeWidth="1" strokeDasharray="4,4" />
-          </svg>
-          <div className="absolute inset-1.5 rounded-full bg-gradient-to-tr from-orange-500 to-amber-300 shadow-[0_0_14px_#FF6A00] group-hover:scale-110 transition-transform" />
-        </div>
-        <span className="uppercase tracking-wider font-black text-white">NÚCLEO EN LEVITACIÓN</span>
-      </div>
-
-      <span className="relative z-10 text-[10px] font-mono border border-orange-500/60 bg-orange-500/20 px-2 py-0.5 rounded text-orange-200">
-        PULSAR_EXEC [↵]
-      </span>
-    </button>
-  );
-}
-
-/* =========================================================================
-   M12 — HIGH-SPEED SPLASH CROWN (Corona de Impacto Hidrodinámico)
-   ========================================================================= */
-function FluidBtn12SplashCrown({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-amber-500/80 bg-gradient-to-r from-orange-500 to-amber-400 px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_22px_rgba(255,106,0,0.4)] hover:shadow-[0_0_35px_rgba(255,106,0,0.7)] transition-all duration-200 cursor-pointer disabled:opacity-40"
-    >
-      <div className="flex items-center gap-3">
-        {/* SVG Splash Crown */}
-        <svg viewBox="0 0 32 24" className="w-7 h-5 shrink-0 fill-slate-950 group-hover:scale-125 transition-transform duration-300">
-          <path d="M2,20 C8,18 10,6 12,6 C14,6 14,14 16,14 C18,14 18,4 20,4 C22,4 24,18 30,20 Z" />
-          <circle cx="12" cy="3" r="1.5" />
-          <circle cx="20" cy="1.5" r="1.5" />
+      <div className="absolute inset-0 pointer-events-none opacity-50 group-hover:opacity-90 transition-opacity">
+        <svg className="absolute -inset-x-[100%] top-0 h-full w-[300%]" preserveAspectRatio="none" viewBox="0 0 1200 60">
+          <path
+            d="M0,20 Q300,5 600,25 T1200,20 L1200,60 L0,60 Z"
+            fill="rgba(234, 179, 8, 0.4)"
+            style={{ animation: 'liquidWave1 8s ease-in-out infinite' }}
+          />
+          <path
+            d="M0,35 Q300,50 600,30 T1200,35 L1200,60 L0,60 Z"
+            fill="rgba(251, 191, 36, 0.5)"
+            style={{ animation: 'liquidWave2 5.5s ease-in-out infinite' }}
+          />
         </svg>
-        <span className="font-black text-slate-950 tracking-widest text-sm">CORONA DE IMPACTO</span>
       </div>
 
-      <kbd className="hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded border border-slate-950/40 bg-slate-950/15 text-[10px] font-bold text-slate-950">
-        Enter ↵
-      </kbd>
-    </button>
-  );
-}
-
-/* =========================================================================
-   M13 — HYDROGEL PLASMA CAPSULE (Cápsula Elástica de Hidrogel)
-   ========================================================================= */
-function FluidBtn13HydrogelPlasma({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-3xl border-2 border-amber-400 bg-slate-950/90 px-6 font-mono text-xs font-black uppercase tracking-wider text-amber-300 shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:scale-[1.02] hover:shadow-[0_0_32px_rgba(251,191,36,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
-    >
-      <div className="flex items-center gap-3">
-        <div className="h-5 w-5 rounded-full bg-gradient-to-r from-orange-500 to-amber-300 shadow-[0_0_12px_#F59E0B] group-hover:scale-125 group-hover:rotate-45 transition-all" />
-        <span className="text-white font-black tracking-wider">CÁPSULA HIDROGEL</span>
+      <div className="relative z-10 flex items-center gap-3">
+        <ShieldCheck className="w-4 h-4 text-yellow-400" />
+        <span className="tracking-widest font-black text-white">ORO FUNDIDO 24K</span>
       </div>
 
-      <span className="text-[10px] font-mono border border-amber-400/50 bg-amber-400/20 px-2 py-0.5 rounded-full text-amber-200">
-        GEL_EXEC [↵]
+      <span className="relative z-10 text-[10px] font-mono border border-yellow-500/50 bg-yellow-500/20 px-2 py-0.5 rounded text-yellow-200">
+        GOLD_CONFIRM ↵
       </span>
     </button>
   );
 }
 
 /* =========================================================================
-   M14 — OBSIDIAN DARK MATTER OOZE (Obsidiana con Fisuras de Magma)
+   L08 — LIQUID CAUSTIC INTERFERENCE (Turbulencia Cáustica Submarina)
    ========================================================================= */
-function FluidBtn14DarkMatterOoze({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function SvgBtn08LiquidCaustics({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-rose-500/50 bg-slate-950 px-6 font-mono text-xs font-bold text-rose-200 shadow-[0_0_20px_rgba(244,63,94,0.2)] hover:border-rose-400 hover:shadow-[0_0_30px_rgba(244,63,94,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-cyan-400/50 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-cyan-200 shadow-[0_0_20px_rgba(34,211,238,0.2)] hover:border-cyan-300 hover:shadow-[0_0_35px_rgba(34,211,238,0.5)] transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
-      {/* SVG Magma Veins */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity" viewBox="0 0 300 50">
-        <path d="M10,25 Q70,5 130,30 T250,20 T300,35" fill="none" stroke="#F43F5E" strokeWidth="1.5" />
-        <path d="M30,45 Q110,20 180,40 T290,15" fill="none" stroke="#FB923C" strokeWidth="1" strokeDasharray="4,4" />
+      <div 
+        className="absolute inset-0 bg-gradient-to-r from-cyan-600/30 via-teal-500/40 to-blue-600/30 opacity-40 group-hover:opacity-100 transition-opacity"
+        style={{ animation: 'causticJitter 2s ease-in-out infinite' }}
+      >
+        <svg className="w-full h-full opacity-60" xmlns="http://www.w3.org/2000/svg">
+          <pattern id="caustic-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <circle cx="10" cy="10" r="8" fill="none" stroke="#22D3EE" strokeWidth="0.8" strokeOpacity="0.6" />
+          </pattern>
+          <rect width="100%" height="100%" fill="url(#caustic-grid)" />
+        </svg>
+      </div>
+
+      <div className="relative z-10 flex items-center gap-3">
+        <Waves className="w-4 h-4 text-cyan-300 group-hover:rotate-12 transition-transform" />
+        <span className="tracking-widest font-black text-white">INTERFERENCIA CÁUSTICA</span>
+      </div>
+
+      <span className="relative z-10 text-[10px] font-mono border border-cyan-400/50 bg-cyan-400/10 px-2 py-0.5 rounded text-cyan-200">
+        CAUSTIC_RUN ↵
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   L09 — MERCURY RAIN & SPLASH POOL (Lluvia de Gotas y Estanque de Salpicaduras)
+   ========================================================================= */
+function SvgBtn09MercuryRain({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-orange-500/50 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-orange-200 shadow-[0_0_20px_rgba(255,106,0,0.25)] hover:border-orange-400 hover:shadow-[0_0_35px_rgba(255,106,0,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 group-hover:opacity-90 transition-opacity">
+        <div className="absolute left-[18%] w-1.5 h-3 rounded-full bg-amber-300" style={{ animation: 'mercuryRain 1.4s linear infinite' }} />
+        <div className="absolute left-[38%] w-2 h-4 rounded-full bg-orange-400" style={{ animation: 'mercuryRain 1.8s linear infinite 0.4s' }} />
+        <div className="absolute left-[62%] w-1.5 h-3 rounded-full bg-amber-400" style={{ animation: 'mercuryRain 1.2s linear infinite 0.7s' }} />
+        <div className="absolute left-[82%] w-2 h-4 rounded-full bg-orange-300" style={{ animation: 'mercuryRain 1.6s linear infinite 0.2s' }} />
+        <div className="absolute inset-x-0 bottom-0 h-2 bg-gradient-to-t from-orange-500/60 to-transparent" />
+      </div>
+
+      <div className="relative z-10 flex items-center gap-3">
+        <Drop className="w-4 h-4 text-orange-400 group-hover:translate-y-1 transition-transform" />
+        <span className="tracking-widest font-black text-white">LLUVIA & SALPICADURA</span>
+      </div>
+
+      <span className="relative z-10 text-[10px] font-mono border border-orange-500/50 bg-orange-500/20 px-2 py-0.5 rounded text-orange-300">
+        DROP_ENTER ↵
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   L10 — DARK VOID SLIME SURGE (Masa Oscura Peristáltica con Pulso)
+   ========================================================================= */
+function SvgBtn10DarkVoidSlime({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-violet-500/50 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-violet-200 shadow-[0_0_20px_rgba(139,92,246,0.25)] hover:border-violet-400 hover:shadow-[0_0_35px_rgba(139,92,246,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <div 
+        className="absolute inset-0 bg-gradient-to-r from-violet-900/60 via-fuchsia-950/40 to-slate-950 opacity-50 group-hover:opacity-100 transition-opacity"
+        style={{ animation: 'slimePulse 4s ease-in-out infinite' }}
+      >
+        <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-24 h-16 rounded-full bg-violet-600/40 blur-md" />
+        <div className="absolute -right-4 top-1/2 -translate-y-1/2 w-24 h-16 rounded-full bg-fuchsia-600/40 blur-md" />
+      </div>
+
+      <div className="relative z-10 flex items-center gap-3">
+        <Sparkle className="w-4 h-4 text-violet-400 group-hover:scale-125 transition-transform" />
+        <span className="tracking-widest font-black text-white">LIMO DEL VACÍO ESTELAR</span>
+      </div>
+
+      <span className="relative z-10 text-[10px] font-mono border border-violet-500/50 bg-violet-500/20 px-2 py-0.5 rounded text-violet-300">
+        VOID_SURGE ↵
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   L11 — CRYO-NITROGEN SUB-ZERO (Fluido Criogénico en Ebullición Helada)
+   ========================================================================= */
+function SvgBtn11CryoNitrogen({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-sky-400/50 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-sky-200 shadow-[0_0_20px_rgba(56,189,248,0.2)] hover:border-sky-300 hover:shadow-[0_0_35px_rgba(56,189,248,0.55)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <div className="absolute inset-0 pointer-events-none opacity-40 group-hover:opacity-90 transition-opacity">
+        <div className="absolute inset-0 bg-gradient-to-r from-sky-500/20 via-cyan-400/30 to-sky-500/20" />
+        <div className="absolute left-[20%] top-0 bottom-0 w-12 bg-white/10 blur-md" style={{ animation: 'liquidWave1 4s ease-in-out infinite' }} />
+        <div className="absolute left-[60%] top-0 bottom-0 w-16 bg-sky-300/10 blur-lg" style={{ animation: 'liquidWave2 5s ease-in-out infinite' }} />
+      </div>
+
+      <div className="relative z-10 flex items-center gap-3">
+        <Sparkle className="w-4 h-4 text-sky-300 group-hover:rotate-90 transition-transform" />
+        <span className="tracking-widest font-black text-white">NITRÓGENO CRIOGÉNICO</span>
+      </div>
+
+      <span className="relative z-10 text-[10px] font-mono border border-sky-400/50 bg-sky-400/20 px-2 py-0.5 rounded text-sky-200">
+        CRYO_ZERO ↵
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   L12 — RADIAL MERCURY SHOCKWAVES (Ondas Concéntricas de Choque)
+   ========================================================================= */
+function SvgBtn12MercuryShockwave({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-amber-500/50 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.2)] hover:border-amber-400 hover:shadow-[0_0_35px_rgba(255,106,0,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30 group-hover:opacity-100 transition-opacity" viewBox="0 0 300 60">
+        <circle cx="150" cy="30" r="10" fill="none" stroke="#FF6A00" style={{ animation: 'shockwaveRipple 2.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite' }} />
+        <circle cx="150" cy="30" r="10" fill="none" stroke="#FBBF24" style={{ animation: 'shockwaveRipple 2.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite 0.8s' }} />
+        <circle cx="150" cy="30" r="10" fill="none" stroke="#F97316" style={{ animation: 'shockwaveRipple 2.5s cubic-bezier(0.1, 0.8, 0.3, 1) infinite 1.6s' }} />
       </svg>
 
-      <span className="relative z-10 font-black uppercase tracking-wider text-white">
-        OBSIDIANA MAGMÁTICA
-      </span>
+      <div className="relative z-10 flex items-center gap-3">
+        <Target className="w-4 h-4 text-amber-400 group-hover:scale-125 transition-transform" />
+        <span className="tracking-widest font-black text-white">ONDA DE CHOQUE MERCURIO</span>
+      </div>
 
-      <span className="relative z-10 text-[10px] font-mono border border-rose-500/60 bg-rose-950/60 px-2 py-0.5 rounded text-rose-200">
-        OOZE [↵]
+      <span className="relative z-10 text-[10px] font-mono border border-amber-500/50 bg-amber-500/20 px-2 py-0.5 rounded text-amber-300">
+        SHOCK_WAVE ↵
       </span>
     </button>
   );
 }
 
 /* =========================================================================
-   M15 — SUPERFLUID ZERO-VISCOSITY FILM (Película Cuántica de Rollin)
+   L13 — HYDRODYNAMIC GLASS CAPSULE (Cápsula de Cristal en Vaivén)
    ========================================================================= */
-function FluidBtn15SuperfluidFilm({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+function SvgBtn13HydroCapsule({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
       disabled={disabled}
-      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-2xl border border-cyan-400/80 bg-gradient-to-r from-orange-500 via-amber-400 to-cyan-400 px-6 font-mono text-xs font-black uppercase tracking-wider text-slate-950 shadow-[0_0_25px_rgba(6,182,212,0.4)] hover:shadow-[0_0_38px_rgba(255,106,0,0.8)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border-2 border-orange-500/40 bg-slate-950/90 px-6 font-mono text-xs font-black uppercase tracking-wider text-orange-200 shadow-[0_0_20px_rgba(255,106,0,0.2)] hover:border-orange-400 hover:shadow-[0_0_35px_rgba(255,106,0,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
     >
-      <div className="flex items-center gap-3">
-        {/* SVG Superfluid creeping beads */}
-        <div className="flex items-center gap-1">
-          <span className="h-3 w-3 rounded-full bg-slate-950 group-hover:-translate-y-2 transition-transform duration-300" />
-          <span className="h-4 w-4 rounded-full bg-slate-950 group-hover:translate-y-2 transition-transform duration-300" />
-          <span className="h-2.5 w-2.5 rounded-full bg-slate-950 group-hover:-translate-y-2 transition-transform duration-300" />
-        </div>
-        <span className="font-black text-slate-950 tracking-widest text-sm">SUPERFLUIDO CUÁNTICO</span>
+      <div 
+        className="absolute inset-0 bg-gradient-to-t from-orange-600/70 via-amber-500/40 to-transparent pointer-events-none opacity-40 group-hover:opacity-90 transition-opacity"
+        style={{ animation: 'capsuleSlosh 3s ease-in-out infinite' }}
+      >
+        <div className="absolute inset-x-0 top-1/3 h-0.5 bg-amber-300/60 shadow-[0_0_8px_#FBBF24]" />
       </div>
 
-      <kbd className="hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-bold text-slate-950">
-        Enter ↵
-      </kbd>
+      <div className="relative z-10 flex items-center gap-3">
+        <Drop className="w-4 h-4 text-amber-300" />
+        <span className="tracking-widest font-black text-white">CÁPSULA HIDRODINÁMICA</span>
+      </div>
+
+      <span className="relative z-10 text-[10px] font-mono border border-orange-500/50 bg-orange-500/20 px-2 py-0.5 rounded text-orange-300">
+        SLOSH_ENTER ↵
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   L14 — LIQUID PLASMA CONDUIT (Conducto con Río de Plasma a Hipervelocidad)
+   ========================================================================= */
+function SvgBtn14PlasmaConduit({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-rose-500/50 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-rose-200 shadow-[0_0_20px_rgba(244,63,94,0.2)] hover:border-rose-400 hover:shadow-[0_0_35px_rgba(244,63,94,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <div 
+        className="absolute inset-0 bg-gradient-to-r from-rose-600 via-orange-500 to-rose-600 opacity-40 group-hover:opacity-90 transition-opacity"
+        style={{
+          backgroundSize: '200% 100%',
+          animation: 'shimmerPan 1.5s linear infinite',
+        }}
+      />
+
+      <div className="relative z-10 flex items-center gap-3">
+        <Lightning className="w-4 h-4 text-rose-400 group-hover:text-amber-300 transition-colors" />
+        <span className="tracking-widest font-black text-white">CONDUCTO DE PLASMA</span>
+      </div>
+
+      <span className="relative z-10 text-[10px] font-mono border border-rose-500/50 bg-rose-500/20 px-2 py-0.5 rounded text-rose-300">
+        PLASMA_FIRE ↵
+      </span>
+    </button>
+  );
+}
+
+/* =========================================================================
+   L15 — TOXIC HYPER-OOZE DRIP (Limo Radioactivo con Estiramiento y Rebote)
+   ========================================================================= */
+function SvgBtn15ToxicHyperOoze({ disabled, onClick }: { disabled: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      className="group relative inline-flex min-h-[54px] w-full items-center justify-between overflow-hidden rounded-xl border border-lime-500/50 bg-slate-950 px-6 font-mono text-xs font-black uppercase tracking-wider text-lime-200 shadow-[0_0_20px_rgba(132,204,22,0.2)] hover:border-lime-400 hover:shadow-[0_0_35px_rgba(132,204,22,0.6)] transition-all duration-300 cursor-pointer disabled:opacity-40"
+    >
+      <div className="absolute inset-0 pointer-events-none opacity-40 group-hover:opacity-100 transition-opacity">
+        <div className="absolute left-[15%] top-0 w-3 h-8 bg-lime-400 rounded-b-full origin-top" style={{ animation: 'oozeDrip 2.2s ease-in-out infinite' }} />
+        <div className="absolute left-[40%] top-0 w-4 h-10 bg-amber-400 rounded-b-full origin-top" style={{ animation: 'oozeDrip 2.8s ease-in-out infinite 0.6s' }} />
+        <div className="absolute left-[70%] top-0 w-3 h-7 bg-lime-300 rounded-b-full origin-top" style={{ animation: 'oozeDrip 2.0s ease-in-out infinite 1.1s' }} />
+      </div>
+
+      <div className="relative z-10 flex items-center gap-3">
+        <Drop className="w-4 h-4 text-lime-400 group-hover:rotate-180 transition-transform duration-500" />
+        <span className="tracking-widest font-black text-white">LIMO TÓXICO RADIOACTIVO</span>
+      </div>
+
+      <span className="relative z-10 text-[10px] font-mono border border-lime-500/50 bg-lime-500/20 px-2 py-0.5 rounded text-lime-300">
+        OOZE_CONFIRM ↵
+      </span>
     </button>
   );
 }
