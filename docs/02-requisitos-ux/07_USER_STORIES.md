@@ -1,7 +1,7 @@
 # 07 — Historias de Usuario
 
-> **Estado:** En planificación · **Versión del documento:** 2.0.0 · **Fecha:** 2026-09-10
-> Complementa a los documentos de `docs/01-producto-negocio/` y `docs/02-requisitos-ux/`. No duplica su contenido; lo materializa en historias verificables. Cada historia mapea a ≥1 `RF-*` y a ≥1 `UC-*`.
+> **Estado:** En planificación · **Versión del documento:** 2.1.0 · **Fecha:** 2026-09-14
+> Complementa a los documentos de `docs/01-producto-negocio/`, `docs/02-requisitos-ux/` y a las decisiones arquitectónicas `ADR-010` (Hexagonal EDD) y `ADR-012` (Transporte Híbrido GraphQL y REST). No duplica su contenido; lo materializa en historias verificables. Cada historia mapea a ≥1 `RF-*` y a ≥1 `UC-*`.
 > **Nota de Backlog Ágil:** Para la descomposición operativa de tareas técnicas, épicas refinadas con subtasks por rol (Frontend, Backend, BD) y Definition of Done (DoD), consulta [`documentation/UserHistories/`](../../documentation/UserHistories/README.md).
 
 ---

@@ -40,11 +40,17 @@ build/
 .env.test.local
 .env.production.local
 *.pem
+*service-account*.json
+*credentials*.json
+config/*.json
+apps/api/config/
+
 
 # IDE & OS
 .DS_Store
 .idea/
 .vscode/
+.agents/
 *.suo
 *.ntvs*
 *.njsproj
@@ -58,3 +64,4 @@ coverage/
 # 3D assets scratch
 *.blend*
 
+.agents/

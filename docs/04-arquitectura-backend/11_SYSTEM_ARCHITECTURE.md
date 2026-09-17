@@ -1,12 +1,13 @@
 # 11 — Arquitectura del Sistema
 
-> **Estado:** Aprobado · **Versión del documento:** 2.2.0 · **Fecha:** 2026-09-11
-> Complementa a `docs/01-producto-negocio/`, `docs/02-requisitos-ux/`, `ADR-001` (Monorepo), `ADR-002` (Supabase), `ADR-007` (Grafo DAG), `ADR-008` (NestJS Oficial), `ADR-009` (Persistencia Híbrida) y `ADR-010` (Arquitectura Hexagonal Modular con Eventos de Dominio y Cache-Aside). Materializa la arquitectura técnica integral:
+> **Estado:** Aprobado · **Versión del documento:** 2.3.0 · **Fecha:** 2026-09-14
+> Complementa a `docs/01-producto-negocio/`, `docs/02-requisitos-ux/`, `ADR-001` (Monorepo), `ADR-002` (Supabase), `ADR-007` (Grafo DAG), `ADR-008` (NestJS Oficial), `ADR-009` (Persistencia Híbrida), `ADR-010` (Hexagonal + Eventos de Dominio), `ADR-011` (BullMQ + Caché Versionada) y `ADR-012` (Arquitectura Híbrida GraphQL y REST). Materializa la arquitectura técnica integral:
 > - **Frontend:** Next.js 15 (App Router, React 19, Tailwind CSS, PixiJS WebGL).
-> - **Backend:** Monolito Modular Hexagonal en NestJS (`apps/api`) con desacoplamiento reactivo vía Domain Events (`@nestjs/event-emitter`).
+> - **Backend:** Monolito Modular Hexagonal en NestJS (`apps/api`) con desacoplamiento reactivo vía Domain Events (`@nestjs/event-emitter` y BullMQ).
+> - **Transporte Externo:** Arquitectura híbrida con GraphQL (`/graphql`) como estándar primario para interacción de UI y REST (`/api/v1`) para flujos HTTP estándar.
 > - **Persistencia Híbrida:** Supabase (PostgreSQL 15+) para transacciones y estado + MongoDB para contenido pedagógico de alto volumen.
 > - **Aceleración L2:** Patrón Cache-Aside en Redis para entrega de lecciones en $O(1)$ (< 2 ms).
-> - **Contratos Compartidos:** Paquete `@koda/types` tipado de extremo a extremo.
+> - **Contratos Compartidos:** Paquete `@koda/types` tipado de extremo a extremo con GraphQL Code Generator.
 
 ---
 
@@ -33,7 +34,7 @@ Este documento define **cómo está estructurado el sistema**, no qué hace (ver
 | Persistencia | **Híbrida Políglota (PostgreSQL + MongoDB)** (`ADR-009`) | PostgreSQL (Supabase) para transacciones ACID y MongoDB para entrega $O(1)$ de lecciones y grafo curricular. |
 | Aceleración | **Cache-Aside L2 en Redis** (`ADR-010`) | Almacena rutas y lecciones en Redis con TTL de 24h e invalidación reactiva ante eventos de publicación. |
 | Comunicación interna | **Eventos de Dominio Asíncronos + Interfaces Tipadas (Ports)** | Elimina dependencias circulares y llamadas bloqueantes en cascada; latencia HTTP de lecciones $p95 < 50\text{ ms}$. |
-| Comunicación externa | **API REST OpenAPI 3.0.3** (`/api/v1`) | Estándar, cacheable, documentada automáticamente mediante Swagger en NestJS (`13_API_SPECIFICATION.md`). |
+| Comunicación externa | **Híbrida: GraphQL (`/graphql`) + API REST OpenAPI 3.0.3 (`/api/v1`)** (`ADR-012`) | GraphQL primario para UI y agregaciones; REST para auth, uploads binarios, sandbox y webhooks. |
 | Estado de sesión | **Stateless** (JWT corto 15 min + refresh rotativo 7d HttpOnly) | Permite balanceo sin sticky sessions (`RNF-005`). |
 
 > Alternativa descartada en MVP: microservicios por motor. Se adopta solo si métricas de `21`/`26` muestran que un motor (ej. Evaluation) es cuello de botella aislado y justifica el costo operativo. La frontera modular ya deja esa puerta abierta.
@@ -313,10 +314,10 @@ apps/api/src/
 │
 ├── infra/                          # Adaptadores de infraestructura externa
 │   ├── database/
-│   │   ├── postgres/               # Conexión Supabase / TypeORM / Drizzle
-│   │   └── mongo/                  # Conexión Mongoose (@nestjs/mongoose)
-│   ├── cache/                      # RedisModule (Cache-Aside, Rate Limit)
-│   └── storage/                    # GoogleDriveStorageAdapter (Service Account)
+│   │   ├── postgres/               # Prisma ORM para Supabase PostgreSQL (ADR-013)
+│   │   └── mongo/                  # Conexión Mongoose (@nestjs/mongoose, ADR-009)
+│   ├── cache/                      # RedisModule (Cache-Aside, Rate Limit, ADR-010)
+│   └── storage/                    # SupabaseStorageAdapter (Bucket público 'certificates', ADR-003)
 │
 ├── app.module.ts                   # Orquestador raíz con EventEmitterModule
 └── main.ts                         # Bootstrap con Helmet, Swagger y Pipes globales
@@ -337,8 +338,9 @@ Persistencia autoritativa (source of truth) de usuarios, progreso, estrellas, ca
 | Aspecto | Tecnología Seleccionada | Justificación |
 |---|---|---|
 | **Base de Datos Principal** | **Supabase (PostgreSQL 15+)** | Soporte nativo de transacciones ACID, tipos `JSONB` para preguntas polimórficas, triggers PL/pgSQL para recálculo de maestría y desbloqueo de módulos, e índices para consultas $p95 < 100\text{ ms}$ (`RNF-007`). |
-| **ORM / Acceso a Datos** | **Prisma ORM o Drizzle ORM** | Tipado estricto end-to-end con TypeScript, migraciones versionadas y consultas optimizadas. |
-| **Almacenamiento de Certificados (PDF)** | **Google Drive API v3 (Service Account)** | Guardado automático 100% en backend en carpetas organizadas (`Koda_Certificados/{lang}/`). Caching por `google_drive_file_id` para evitar re-generaciones y entrega mediante streaming autenticado. |
+| **ORM / Acceso Relacional** | **Prisma ORM** (`ADR-013`) | Tipado estricto end-to-end con TypeScript, introspección automática de Supabase (`prisma db pull`), transacciones interactivas y desacoplamiento limpio en adaptadores de infraestructura hexagonal. |
+| **ODM / Catálogo Curricular** | **Mongoose (@nestjs/mongoose)** (`ADR-009`) | Modelado tipado de documentos jerárquicos BSON en MongoDB para tracks, courses (grafo DAG con topología tier/lane), módulos y lecciones con Tríada Evaluativa. |
+| **Almacenamiento de Certificados (PDF)** | **Supabase Storage (Bucket 'certificates')** (`ADR-003`) | CDN global pública con latencia < 200 ms, límite de 5 MB por PDF y políticas RLS sin intermediarios externos. |
 | **Caché y Rate Limiting** | **Redis** | Rate limit en ventanas deslizantes y caché de contenido publicado sin sobrecargar la base de datos. |
 
 ### 5.3 Entidades principales (resumen — detalle en `12_DATABASE_DESIGN.md`)
@@ -818,7 +820,7 @@ flowchart LR
 | **Editor de Código** | **Monaco Editor / CodeMirror 6** | PrismJS | Soporte universal nativo de sintaxis, auto-completado y coloreado para +50 lenguajes de programación. |
 | **Ejecución de Código** | **Híbrida: Wasm (Python/Python/JS) + Judge0/Piston Sandbox** | Solo servidor | Wasm en navegador para cero latencia y costo $0 en scripting; sandbox seguro en backend para lenguajes compilados (Rust, C, C++, C#, Go). |
 | **Almacenamiento PDFs** | **Google Drive API v3 (Service Account)** | S3 / MinIO / BD Blobs | Generación 100% server-side en NestJS, almacenamiento persistente en Drive y caché por `google_drive_file_id` para descarga instantánea sin re-generar. |
-| **API REST** | **REST `/api/v1` + OpenAPI 3.0.3** | GraphQL | Cacheable con ETag, estándar universal para integraciones y validación por contratos en CI/CD. |
+| **Transporte de API** | **Híbrida: GraphQL (`/graphql`) + REST (`/api/v1`)** (`ADR-012`) | REST puro / GraphQL puro | GraphQL primario para pantallas interactivas de UI; REST para flujos OAuth, subida de archivos y webhooks. |
 | **Auth** | **JWT Stateless (15 min) + Refresh rotativo en HttpOnly Cookie** | Sesión en BD | Escalabilidad horizontal sin estado en backend (`RNF-005`) y protección anti-XSS/CSRF. |
 | **Cache / Rate Limit** | **Redis** | Memcached | Ventana deslizante para rate limiting y caché de lecciones publicadas. |
 | **Contenido** | **JSON/YAML desacoplado + `content_versions`** | CMS headless | Incorporación de nuevos lenguajes como plantilla universal sin modificar código de motores ni frontend. |

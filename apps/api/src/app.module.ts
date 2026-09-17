@@ -7,6 +7,10 @@ import { LanguagesModule } from './modules/languages/languages.module';
 import { LearningModule } from './modules/learning/learning.module';
 import { CertificationModule } from './modules/certification/certification.module';
 import { NotebookModule } from './modules/notebook/notebook.module';
+import { RoadmapModule } from './modules/roadmap/roadmap.module';
+import { DatabaseModule } from './database/database.module';
+import { PrismaModule } from '@infra/database/postgres/prisma.module';
+import { AuthModule } from './presentation/rest/auth/auth.module';
 
 @Module({
   imports: [
@@ -17,10 +21,14 @@ import { NotebookModule } from './modules/notebook/notebook.module';
         limit: 100,  // Máximo 100 peticiones por IP por minuto
       },
     ]),
+    PrismaModule,
+    DatabaseModule,
+    AuthModule,
     LanguagesModule,
     LearningModule,
     CertificationModule,
     NotebookModule,
+    RoadmapModule,
   ],
   controllers: [AppController],
   providers: [
