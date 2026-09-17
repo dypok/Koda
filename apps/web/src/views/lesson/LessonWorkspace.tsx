@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key } from '@phosphor-icons/react';
+import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key, Code } from '@phosphor-icons/react';
 import { ContentExercise, ContentLesson, ContentModule, loadBank, loadModule, shuffled } from '@/lib/content';
 import { QuestionRenderer } from './QuestionRenderer';
 import { useLessonEngine } from './useLessonEngine';
@@ -333,13 +333,13 @@ function LessonView({
               type="button"
               onClick={onNext}
               className={cn(
-                'inline-flex min-h-[48px] items-center gap-2 rounded-xl bg-amber-400 px-6 text-sm font-bold text-slate-950 shadow-md shadow-amber-400/20 hover:bg-amber-300 transition-all',
-                pressedAction === 'next' && 'scale-95 ring-2 ring-amber-400'
+                'group relative inline-flex min-h-[48px] items-center gap-2 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.18em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none select-none',
+                pressedAction === 'next' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-amber-400'
               )}
             >
-              <span>{isLast ? 'Ir al quiz' : 'Siguiente lección'}</span>
+              <span>{isLast ? 'IR AL QUIZ' : 'SIGUIENTE LECCIÓN'}</span>
               <ArrowRight aria-hidden="true" className="w-4 h-4" />
-              <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-950/30 bg-slate-950/10 text-[10px] font-mono font-bold">
+              <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-mono font-bold text-slate-950">
                 Enter ↵
               </kbd>
             </button>
@@ -364,12 +364,13 @@ function LessonView({
                 onClick={() => engine.check()}
                 disabled={engine.selected.length === 0}
                 className={cn(
-                  'group relative inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-amber-400 px-4 text-sm font-bold text-slate-950 shadow-md shadow-amber-400/20 hover:bg-amber-300 transition-all disabled:opacity-40 disabled:cursor-not-allowed',
-                  pressedAction === 'submit' && 'scale-[0.98] ring-2 ring-amber-400'
+                  'group relative inline-flex min-h-[50px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.25em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
+                  pressedAction === 'submit' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-amber-400'
                 )}
               >
-                <span>Comprobar respuesta</span>
-                <kbd className="hidden sm:inline-flex items-center justify-center px-2 py-0.5 rounded border border-slate-950/30 bg-slate-950/10 text-[10px] font-mono font-bold group-disabled:opacity-40">
+                <Code aria-hidden="true" className="w-4 h-4" />
+                <span>C O M P R O B A R</span>
+                <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-mono font-bold text-slate-950 group-disabled:opacity-40">
                   Enter ↵
                 </kbd>
               </button>
@@ -405,11 +406,11 @@ function LessonView({
                     <button
                       type="button"
                       onClick={engine.resetSelection}
-                      className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-4 text-sm font-semibold text-slate-200 hover:border-slate-500 hover:bg-slate-800 transition-colors"
+                      className="group inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl border-t border-slate-600 border-b-4 border-slate-950 bg-slate-800 px-4 text-xs font-mono font-bold text-slate-200 shadow-[0_4px_0_#020617] hover:border-slate-500 hover:bg-slate-750 hover:text-white active:border-b-0 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
                     >
                       <ArrowCounterClockwise aria-hidden="true" className="w-4 h-4" />
-                      <span>Reintentar</span>
-                      <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-700 bg-slate-800 text-[10px] font-mono text-slate-400">
+                      <span>REINTENTAR</span>
+                      <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-700 bg-slate-900 text-[10px] font-mono text-slate-400">
                         Enter ↵
                       </kbd>
                     </button>
@@ -419,13 +420,13 @@ function LessonView({
                     onClick={engine.result.correct ? onNext : () => {}}
                     disabled={!engine.result.correct}
                     className={cn(
-                      'inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-400 px-4 text-sm font-bold text-slate-950 shadow-md shadow-emerald-400/20 hover:bg-emerald-300 transition-all disabled:opacity-40 disabled:cursor-not-allowed',
-                      pressedAction === 'next' && 'scale-[0.98] ring-2 ring-emerald-400'
+                      'group relative inline-flex min-h-[46px] flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-emerald-200 border-b-4 border-emerald-800 shadow-[0_4px_0_#065f46,0_8px_20px_rgba(16,185,129,0.45)] transition-all duration-200 cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
+                      pressedAction === 'next' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-emerald-400'
                     )}
                   >
-                    <span>{isLast ? 'Ir al quiz' : 'Siguiente lección'}</span>
+                    <span>{isLast ? 'IR AL QUIZ' : 'SIGUIENTE LECCIÓN'}</span>
                     <ArrowRight aria-hidden="true" className="w-4 h-4" />
-                    <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-950/30 bg-slate-950/10 text-[10px] font-mono font-bold">
+                    <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-mono font-bold text-slate-950">
                       Enter ↵
                     </kbd>
                   </button>

@@ -67,7 +67,7 @@ const CATEGORIES = [
 ];
 
 export const WorkspaceLab: React.FC = () => {
-  const [activeBtnIndex, setActiveBtnIndex] = useState(0);
+  const [activeBtnIndex, setActiveBtnIndex] = useState(73); // D74: Texto Monospace Espaciado
   const [activeCategory, setActiveCategory] = useState('Todos (100)');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedOpt, setSelectedOpt] = useState<string | null>('opt-a');
