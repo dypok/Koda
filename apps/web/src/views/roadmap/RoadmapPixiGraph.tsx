@@ -166,11 +166,20 @@ function drawIcon(g: PixiGraphics, icon: GraphNode['iconType'], color: number): 
   }
 }
 
+interface IrisNodeRefs {
+  vernier: PixiContainer;
+  iris: PixiContainer;
+  shock: PixiContainer;
+  core: PixiContainer;
+  glyph: PixiContainer;
+}
+
 interface AnimBits {
   rings: { obj: PixiContainer; speed: number }[];
   halos: { obj: PixiContainer; base: number; phase: number }[];
   sats: { obj: PixiContainer; angle: number; radius: number; speed: number }[];
   holders: Record<string, PixiContainer>;
+  irisNodes: Record<string, IrisNodeRefs>;
 }
 
 interface FxBurst {
@@ -198,7 +207,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
   const reduceMotion = useReducedMotion();
   const [mountRef, visible] = useElementVisible<HTMLDivElement>();
   const appRef = useRef<PixiApp | null>(null);
-  const animRef = useRef<AnimBits>({ rings: [], halos: [], sats: [], holders: {} });
+  const animRef = useRef<AnimBits>({ rings: [], halos: [], sats: [], holders: {}, irisNodes: {} });
   const edgeRef = useRef<{ style: EdgeStyle; curves: EdgeCurve[] }>({ style: 'static', curves: [] });
   const fxRef = useRef<{ pending: Omit<FxBurst, 't'> | null; live: FxBurst[] }>({ pending: null, live: [] });
   const stateRef = useRef({ panX: 0, panY: 0, zoom: 100, travelX: 0, travelY: 0, tTravelX: 0, tTravelY: 0 });
@@ -391,7 +400,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
         const { dataset: ds, branchColor: bc, activeNodeId: activeId, onSelect: select, nodeStyle } = propsRef.current;
         gsap.killTweensOf(nodeLayer.children);
         nodeLayer.removeChildren().forEach((c) => c.destroy({ children: true }));
-        animRef.current = { rings: [], halos: [], sats: [], holders: {} };
+        animRef.current = { rings: [], halos: [], sats: [], holders: {}, irisNodes: {} };
         const accentNum = hexToNumber(bc, 0x38bdf8);
 
         ds.nodes.forEach((n, idx) => {
@@ -414,37 +423,96 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
               : 0;
 
           if (nodeStyle === 'hex') {
-            // Hexágono táctico: placa oscura, borde de estado, icono teñido.
-            const hr = R + 6;
-            const hex = new PIXI.Graphics();
-            hex.beginFill(0x0b0f19, 1);
-            hex.lineStyle(2, ringColor, st === 'locked' ? 0.7 : 0.95);
-            for (let k = 0; k <= 6; k++) {
-              const a = (k / 6) * Math.PI * 2 + Math.PI / 6;
-              const px = Math.cos(a) * hr;
-              const py = Math.sin(a) * hr;
-              if (k === 0) hex.moveTo(px, py);
-              else hex.lineTo(px, py);
+            // =========================================================================
+            // MÓDULO IRIS B CARTOGRAPHY & VERNIER SCALE (Prototipo Lua Core)
+            // =========================================================================
+            // 1. Halo cuántico de alta tensión en nodos activos / completados
+            const halo = new PIXI.Sprite(glowTex);
+            halo.anchor.set(0.5);
+            const haloBase = st === 'active' ? 0.75 : st === 'done' ? 0.45 : 0.08;
+            halo.scale.set(((R * 6) / GLOW_TEXTURE_SIZE) * 2);
+            halo.tint = boss ? 0xf43f5e : st === 'active' ? 0xffa338 : st === 'done' ? 0xff6a00 : 0x1b2330;
+            halo.alpha = haloBase;
+            holder.addChild(halo);
+            animRef.current.halos.push({ obj: halo, base: haloBase, phase: idx * 0.9 });
+
+            // 2. Anillo de contención exterior base (r = 34)
+            const outerRim = new PIXI.Graphics();
+            outerRim.lineStyle(1.5, ringColor, st === 'locked' ? 0.4 : 0.9);
+            outerRim.drawCircle(0, 0, 34);
+            holder.addChild(outerRim);
+
+            // 3. Escala Vernier micrométrica rotativa exterior (r = 30, stroke-dasharray 1 5)
+            const vernier = new PIXI.Graphics();
+            vernier.lineStyle(2.5, st === 'active' ? 0xffa338 : st === 'done' ? 0xff6a00 : 0x4b586b, st === 'locked' ? 0.35 : 0.85);
+            dashedCircle(vernier, 30, 48, 2);
+            holder.addChild(vernier);
+            animRef.current.rings.push({
+              obj: vernier,
+              speed: st === 'active' ? 0.008 : st === 'done' ? 0.003 : 0.001,
+            });
+
+            // 4. Diafragma Iris mecánico concéntrico (r = 23, stroke-dasharray 10 4)
+            const iris = new PIXI.Graphics();
+            iris.lineStyle(2.2, st === 'active' ? 0xff6a00 : st === 'done' ? 0xffa338 : 0x313d4f, st === 'locked' ? 0.5 : 0.95);
+            dashedCircle(iris, 23, 24, 3);
+            holder.addChild(iris);
+            animRef.current.rings.push({
+              obj: iris,
+              speed: st === 'active' ? -0.005 : st === 'done' ? -0.002 : -0.0008,
+            });
+
+            // 5. Anillo Shockwave expansivo para detonación mecánica (r = 22)
+            const shock = new PIXI.Graphics();
+            shock.lineStyle(2.5, boss ? 0xf43f5e : 0xffa338, 1);
+            shock.drawCircle(0, 0, 22);
+            shock.alpha = 0;
+            holder.addChild(shock);
+
+            // 6. Núcleo térmico blindado central (node-core, r = 16)
+            const core = new PIXI.Graphics();
+            if (st === 'locked') {
+              core.beginFill(0x05070b, 1);
+              core.lineStyle(1.8, 0x1b2330, 0.9);
+            } else if (st === 'active') {
+              core.beginFill(0x18130d, 1);
+              core.lineStyle(2, boss ? 0xf43f5e : 0xffa338, 1);
+            } else if (st === 'done') {
+              core.beginFill(0x0f1520, 1);
+              core.lineStyle(1.8, 0xff6a00, 0.95);
+            } else {
+              core.beginFill(0x0a0e15, 1);
+              core.lineStyle(1.8, 0x4b586b, 0.8);
             }
-            hex.endFill();
-            holder.addChild(hex);
+            core.drawCircle(0, 0, 16);
+            core.endFill();
+            holder.addChild(core);
+
+            // 7. Glifo vectorial centrado con resplandor
             const hicon = new PIXI.Graphics();
-            drawIcon(hicon, n.iconType, st === 'locked' ? 0x94a3b8 : st === 'open' ? 0xe2e8f0 : coreColor);
+            drawIcon(
+              hicon,
+              n.iconType,
+              st === 'locked' ? 0x4b586b : st === 'active' ? 0xffffff : st === 'done' ? 0xffa338 : 0x94a3b8
+            );
             holder.addChild(hicon);
+
+            // 8. Arco de estrellas / maestría si aplica
             if (frac > 0 && st !== 'locked') {
               const arc = new PIXI.Graphics();
-              arc.lineStyle(2, 0x34d399, 0.9);
-              arc.arc(0, 0, hr + 7, -Math.PI / 2, -Math.PI / 2 + frac * Math.PI * 2);
+              arc.lineStyle(2.5, 0xffa338, 0.95);
+              arc.arc(0, 0, 36, -Math.PI / 2, -Math.PI / 2 + frac * Math.PI * 2);
               holder.addChild(arc);
             }
-            if (active && !reduced) {
-              const sat = new PIXI.Graphics();
-              sat.beginFill(boss ? 0xf43f5e : accentNum, 1);
-              sat.drawCircle(0, 0, 2.5);
-              sat.endFill();
-              holder.addChild(sat);
-              animRef.current.sats.push({ obj: sat, angle: idx, radius: hr + 7, speed: 0.03 });
-            }
+
+            // Registrar referencias para cinemática interactiva Iris B
+            animRef.current.irisNodes[n.id] = {
+              vernier,
+              iris,
+              shock,
+              core,
+              glyph: hicon,
+            };
           } else if (nodeStyle === 'donut') {
             // Dona de progreso: el anillo grueso manda, núcleo mínimo sin icono.
             const track = new PIXI.Graphics();
@@ -537,24 +605,29 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
             }
           }
 
-          // Etiquetas
-          const code = new PIXI.Text(n.code, {
+          // Etiquetas técnicas de telemetría cartográfica
+          const tagSuffix = st === 'done' ? '// OK' : st === 'active' ? '// ACTV' : st === 'locked' ? '// LOCK' : '// OPEN';
+          const codeText = nodeStyle === 'hex' ? `${n.code} ${tagSuffix}` : n.code;
+          const code = new PIXI.Text(codeText, {
             fontFamily: '"JetBrains Mono", ui-monospace, monospace',
             fontSize: 10,
             fontWeight: '700',
-            fill: n.isUnlocked ? '#94a3b8' : '#475569',
+            fill: st === 'active' ? '#ffa338' : st === 'done' ? '#ff6a00' : n.isUnlocked ? '#94a3b8' : '#475569',
           });
           code.anchor.set(0.5, 1);
-          code.position.set(0, -R - 16);
+          const topOffset = nodeStyle === 'hex' ? -42 : -R - 16;
+          code.position.set(0, topOffset);
           holder.addChild(code);
+
           const label = new PIXI.Text(n.label, {
             fontFamily: 'Rajdhani, Inter, sans-serif',
             fontSize: 12,
             fontWeight: '600',
-            fill: n.isUnlocked ? '#f1f5f9' : '#64748b',
+            fill: st === 'active' ? '#ffffff' : n.isUnlocked ? '#f1f5f9' : '#64748b',
           });
           label.anchor.set(0.5, 0);
-          label.position.set(0, R + 14);
+          const bottomOffset = nodeStyle === 'hex' ? 40 : R + 14;
+          label.position.set(0, bottomOffset);
           holder.addChild(label);
 
           holder.on('pointertap', (e) => {
@@ -820,6 +893,20 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
       dur: unlockStyle === 'shockwave' ? 1.1 : 0.9,
     };
     appRef.current?.ticker.start();
+
+    // Si tiene estructura Iris B, disparar la apertura mecánica sincronizada
+    const irisSet = animRef.current.irisNodes[unlockingNodeId];
+    if (irisSet) {
+      const tl = gsap.timeline();
+      tl.to(irisSet.vernier, { rotation: '+=6.28318', duration: 0.7, ease: 'power2.inOut' });
+      tl.to(irisSet.iris, { rotation: '-=3.14159', duration: 0.45, ease: 'power3.in' }, '-=0.6');
+      tl.fromTo(irisSet.iris.scale, { x: 1, y: 1 }, { x: 0.15, y: 0.15, duration: 0.35, ease: 'power2.in' }, '-=0.55');
+      tl.to(irisSet.iris.scale, { x: 1.5, y: 1.5, duration: 0.3, ease: 'power2.out' });
+      tl.to(irisSet.iris.scale, { x: 1, y: 1, duration: 0.2, ease: 'power1.out' });
+      tl.fromTo(irisSet.shock, { alpha: 1 }, { alpha: 0, duration: 0.45, ease: 'power2.out' }, '-=0.35');
+      tl.fromTo(irisSet.shock.scale, { x: 0.8, y: 0.8 }, { x: 1.7, y: 1.7, duration: 0.45, ease: 'power2.out' }, '-=0.45');
+      tl.fromTo(irisSet.glyph.scale, { x: 0.3, y: 0.3 }, { x: 1, y: 1, duration: 0.35, ease: 'back.out(2)' }, '-=0.3');
+    }
   }, [unlockingNodeId, unlockStyle, branchColor, reduceMotion]);
 
   useEffect(() => {
@@ -829,14 +916,84 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
     else app.ticker.stop();
   }, [visible, reduceMotion]);
 
-  // Pulso GSAP al cambiar de nodo + recentrado sin reconstruir con entrada.
+  // Pulso GSAP & Cinemática Mecánica Iris B al cambiar de nodo + recentrado
   useEffect(() => {
     const app = appRef.current as unknown as { __refresh?: (animate: boolean) => void } | null;
     app?.__refresh?.(false);
     const { activeNodeId: activeId } = propsRef.current;
     const holder = activeId ? animRef.current.holders[activeId] : undefined;
-    if (holder && !reduceMotion) {
-      gsap.fromTo(holder.scale, { x: 1, y: 1 }, { x: 1.18, y: 1.18, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out', overwrite: 'auto' });
+    const irisSet = activeId ? animRef.current.irisNodes[activeId] : undefined;
+
+    if (!reduceMotion) {
+      if (irisSet) {
+        // Cinemática de apertura Iris B completa (Fórmula de la maqueta Lua Core)
+        const tl = gsap.timeline();
+        gsap.killTweensOf([irisSet.vernier, irisSet.iris, irisSet.shock, irisSet.core, irisSet.glyph]);
+
+        // 1. Giro Vernier 360°
+        tl.to(irisSet.vernier, {
+          rotation: '+=6.28318', // 360 grados en radianes
+          duration: 0.7,
+          ease: 'power2.inOut',
+        });
+
+        // 2. Rotación inversa y contracción del diafragma Iris
+        tl.to(
+          irisSet.iris,
+          {
+            rotation: '-=3.14159', // -180 grados
+            duration: 0.45,
+            ease: 'power3.in',
+          },
+          '-=0.6'
+        );
+        tl.fromTo(
+          irisSet.iris.scale,
+          { x: 1, y: 1 },
+          { x: 0.15, y: 0.15, duration: 0.35, ease: 'power2.in' },
+          '-=0.55'
+        );
+        tl.to(irisSet.iris.scale, {
+          x: 1.4,
+          y: 1.4,
+          duration: 0.28,
+          ease: 'power2.out',
+        });
+        tl.to(irisSet.iris.scale, {
+          x: 1,
+          y: 1,
+          duration: 0.2,
+          ease: 'power1.out',
+        });
+
+        // 3. Shockwave pulso expansivo
+        tl.fromTo(
+          irisSet.shock,
+          { alpha: 1 },
+          { alpha: 0, duration: 0.45, ease: 'power2.out' },
+          '-=0.35'
+        );
+        tl.fromTo(
+          irisSet.shock.scale,
+          { x: 0.8, y: 0.8 },
+          { x: 1.7, y: 1.7, duration: 0.45, ease: 'power2.out' },
+          '-=0.45'
+        );
+
+        // 4. Glifo interior y núcleo con rebote
+        tl.fromTo(
+          irisSet.glyph.scale,
+          { x: 0.4, y: 0.4 },
+          { x: 1, y: 1, duration: 0.35, ease: 'back.out(2)' },
+          '-=0.3'
+        );
+      } else if (holder) {
+        gsap.fromTo(
+          holder.scale,
+          { x: 1, y: 1 },
+          { x: 1.18, y: 1.18, duration: 0.18, yoyo: true, repeat: 1, ease: 'power2.out', overwrite: 'auto' }
+        );
+      }
     }
   }, [activeNodeId, reduceMotion]);
 
