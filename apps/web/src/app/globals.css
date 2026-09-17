@@ -208,4 +208,24 @@ body[data-act='4'] .koda-grain { opacity: 0.08; }
 .animate-wander-4 { animation: wander-4 28s ease-in-out -5s infinite; will-change: transform; }
 .animate-wander-5 { animation: wander-5 36s ease-in-out -19s infinite; will-change: transform; }
 
+/* Cylindrical Conduit Charge Animations (Amber Quantum Thermal) */
+@keyframes conduit-slug-flow {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -188; }
+}
+@keyframes filament-breathe {
+  0%, 100% { opacity: 0.18; }
+  50% { opacity: 0.38; }
+}
+
+.animate-conduit-slug {
+  animation: conduit-slug-flow 1.8s linear infinite;
+  will-change: stroke-dashoffset;
+}
+.animate-conduit-breathe {
+  animation: filament-breathe 3.5s ease-in-out infinite;
+  will-change: opacity;
+}
+
+
 

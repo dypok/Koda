@@ -78,7 +78,7 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
     toggleNodeLock(node.id);
   };
 
-  // Animación GSAP de ruptura de candado y encendido de baliza
+  // Animación GSAP de apertura mecánica de Iris B y detonación cuántica térmica
   useEffect(() => {
     if (!isUnlocking) return;
     const group = nodeGroupRef.current;
@@ -89,76 +89,76 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
     const ctx = gsap.context(() => {
       const tl = gsap.timeline();
 
-      // 1. Vibración de sobrecarga energética sobre el candado
+      // 1. Vibración de compresión y sobretensión mecánica sobre el núcleo
       tl.to(icon, {
-        x: '+=3',
+        x: '+=2.5',
         yoyo: true,
         repeat: 7,
-        duration: 0.05,
+        duration: 0.045,
         ease: 'power1.inOut',
       });
 
-      // 2. Destello de sobretensión en el núcleo
+      // 2. Onda expansiva mecánica Iris B (Shockwave collapse & burst)
       if (glow) {
         tl.fromTo(
           glow,
-          { r: 10, opacity: 0 },
-          { r: 48, opacity: 0.9, duration: 0.25, ease: 'power2.out' },
+          { r: 8, opacity: 0, stroke: '#FFA338' },
+          { r: 44, opacity: 1, stroke: '#FF6A00', duration: 0.28, ease: 'power2.out' },
           '-=0.15'
         );
-        tl.to(glow, { opacity: 0, r: 60, duration: 0.3, ease: 'power1.out' });
+        tl.to(glow, { opacity: 0, r: 58, stroke: '#FFFFFF', duration: 0.32, ease: 'power1.out' });
       }
 
-      // 3. Estallido cuántico: Dispersión radial de esquirlas de cristal
+      // 3. Estallido cuántico térmico: Dispersión radial de esquirlas ambarinas
       if (shardsRef.current) {
         const shardElements = shardsRef.current.querySelectorAll('.lock-shard');
-        tl.set(shardsRef.current, { opacity: 1 }, '-=0.2');
+        tl.set(shardsRef.current, { opacity: 1 }, '-=0.22');
         shardElements.forEach((shard, idx) => {
           const rad = (idx * 60 * Math.PI) / 180;
-          const dist = 32 + (idx % 2) * 10;
+          const dist = 36 + (idx % 2) * 12;
           tl.fromTo(
             shard,
             { x: 0, y: 0, scale: 1, rotation: 0, opacity: 1 },
             {
               x: Math.cos(rad) * dist,
               y: Math.sin(rad) * dist,
-              rotation: idx % 2 === 0 ? 120 : -120,
+              rotation: idx % 2 === 0 ? 180 : -180,
               scale: 0.1,
               opacity: 0,
-              duration: 0.55,
+              duration: 0.6,
               ease: 'power3.out',
             },
-            '-=0.45'
+            '-=0.48'
           );
         });
       }
 
-      // 4. Estallido y disipación del icono de candado
+      // 4. Apertura del diafragma Iris B: Giro del contenedor y disipación del candado
       tl.to(
         icon,
         {
-          scale: 0,
-          rotation: 45,
+          scale: 0.15,
+          rotation: 90,
           opacity: 0,
-          duration: 0.2,
-          ease: 'back.in(2)',
+          duration: 0.22,
+          ease: 'power2.in',
         },
-        '-=0.3'
+        '-=0.35'
       );
 
-      // 5. Salto de escala de la baliza y reaparición del icono como nodo activo
+      // 5. Salto cinemático de ignición del nodo con retorno elástico suave
       tl.fromTo(
         group,
-        { scale: 0.9 },
-        { scale: 1.15, duration: 0.3, ease: 'back.out(2)' }
+        { scale: 0.88 },
+        { scale: 1.18, duration: 0.32, ease: 'back.out(2.2)' }
       );
-      tl.to(group, { scale: 1.0, duration: 0.25, ease: 'power2.out' });
+      tl.to(group, { scale: 1.0, duration: 0.28, ease: 'power2.out' });
 
-      // 6. El nuevo icono se manifiesta con rebote
+      // 6. Manifestación del nuevo glifo activo / desbloqueado en explosión frontal
       tl.fromTo(
         icon,
-        { scale: 0, rotation: -90, opacity: 0 },
-        { scale: 1, rotation: 0, opacity: 1, duration: 0.35, ease: 'back.out(2)' },
+        { scale: 0.2, rotation: -120, opacity: 0 },
+        { scale: 1, rotation: 0, opacity: 1, duration: 0.38, ease: 'back.out(2)' },
         '-=0.3'
       );
     }, group);
@@ -192,27 +192,27 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
       ) : null}
       {/* Hit-area táctil generosa */}
       <circle r="32" fill="transparent" />
-      {/* Shockwave circle for lock shattering */}
+      {/* Shockwave circle for Iris B mechanical burst */}
       <circle
         ref={lockShatterGlowRef}
         r="0"
         fill="none"
-        stroke="#38BDF8"
+        stroke="#FF6A00"
         strokeWidth="3"
         opacity="0"
         className="pointer-events-none"
       />
 
-      {/* Quantum crystal shards dispersed upon unlocking */}
+      {/* Quantum amber shards dispersed upon Iris B opening */}
       <g ref={shardsRef} className="pointer-events-none opacity-0">
         {[0, 60, 120, 180, 240, 300].map((deg, idx) => (
           <polygon
             key={idx}
             className="lock-shard"
             points="-3,-5 4,-2 2,5 -4,2"
-            fill="#38BDF8"
-            stroke="#BAE6FD"
-            strokeWidth="0.75"
+            fill="#FF6A00"
+            stroke="#FFA338"
+            strokeWidth="0.8"
           />
         ))}
       </g>
@@ -222,9 +222,9 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
 
       {/* Tactical Glass Core Scanline Glaze */}
       <circle
-        r={node.variant === 'boss' ? 28 : 26}
+        r={node.variant === 'boss' ? 28 : 24}
         fill="none"
-        stroke="rgba(255,255,255,0.12)"
+        stroke="rgba(255,163,56,0.15)"
         strokeWidth="0.75"
         strokeDasharray="1 3"
         className="pointer-events-none"
@@ -240,12 +240,12 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
             iconType={!node.isUnlocked && node.variant !== 'boss' ? 'lock' : node.iconType}
             className={`w-4 h-4 transition-all duration-300 ${
               !node.isUnlocked
-                ? 'text-slate-400 group-hover:text-rose-400 group-hover:scale-110'
+                ? 'text-slate-400 group-hover:text-[#FFA338] group-hover:scale-110'
                 : node.variant === 'active'
-                  ? 'text-slate-950 font-black scale-110 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)]'
+                  ? 'text-[#FFA338] font-black scale-110 drop-shadow-[0_0_8px_rgba(255,106,0,0.85)]'
                   : node.variant === 'boss'
-                    ? 'text-rose-200 group-hover:scale-125 transition-transform'
-                    : 'text-slate-200 group-hover:scale-115'
+                    ? 'text-amber-200 group-hover:scale-125 transition-transform drop-shadow-[0_0_10px_rgba(255,106,0,0.9)]'
+                    : 'text-amber-100 group-hover:scale-115'
             }`}
           />
         </div>

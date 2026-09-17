@@ -12,7 +12,7 @@ interface RoadmapSvgPathsProps {
 }
 
 export function RoadmapSvgPaths({ connections, animatingConnectionId, highlightFromId, nodes }: RoadmapSvgPathsProps) {
-  const laserBeamsRef = useRef<{ [key: string]: SVGPathElement | null }>({});
+  const thermalArcRefs = useRef<{ [key: string]: SVGPathElement | null }>({});
 
   const nodeMap = React.useMemo(() => {
     const map = new Map<string, boolean>();
@@ -20,31 +20,39 @@ export function RoadmapSvgPaths({ connections, animatingConnectionId, highlightF
     return map;
   }, [nodes]);
 
-  // Animación cinemática de haz de energía cuando una conexión se enciende
+  // Animación cinemática de arco térmico ultrarrápido al desbloquear una conexión
   useEffect(() => {
     if (!animatingConnectionId) return;
-    const pathEl = laserBeamsRef.current[animatingConnectionId];
-    if (!pathEl) return;
+    const arcEl = thermalArcRefs.current[animatingConnectionId];
+    if (!arcEl) return;
 
-    const length = pathEl.getTotalLength ? pathEl.getTotalLength() : 300;
+    const length = arcEl.getTotalLength ? arcEl.getTotalLength() : 400;
 
     const ctx = gsap.context(() => {
-      // Estado inicial: haz retraído completamente
-      gsap.set(pathEl, {
+      // Estado inicial: arco completamente retraído y brillante
+      gsap.set(arcEl, {
         strokeDasharray: length,
         strokeDashoffset: length,
-        strokeOpacity: 1,
+        opacity: 1,
       });
 
-      // Avance de energía a alta velocidad con GSAP
-      gsap.to(pathEl, {
+      // Detonación térmica de barrido a alta velocidad
+      gsap.to(arcEl, {
         strokeDashoffset: 0,
-        duration: 0.85,
-        ease: 'power2.inOut',
+        duration: 0.75,
+        ease: 'power3.out',
         onComplete: () => {
-          gsap.set(pathEl, {
-            strokeDasharray: undefined,
-            strokeDashoffset: undefined,
+          gsap.to(arcEl, {
+            opacity: 0,
+            duration: 0.35,
+            ease: 'power2.in',
+            onComplete: () => {
+              gsap.set(arcEl, {
+                strokeDasharray: undefined,
+                strokeDashoffset: undefined,
+                opacity: 0,
+              });
+            },
           });
         },
       });
@@ -56,13 +64,24 @@ export function RoadmapSvgPaths({ connections, animatingConnectionId, highlightF
   return (
     <g className="roadmap-connections pointer-events-none">
       <defs>
-        <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="4" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        {/* Filtro de resplandor térmico cuántico ámbar para conductos cilíndricos */}
+        <filter id="cylindrical-glow-amber" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="3.5" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
         </filter>
-        <filter id="glow-orange" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="4" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+
+        {/* Filtro de sobrecalentamiento térmico para arco de ignición */}
+        <filter id="thermal-arc-flare" x="-40%" y="-40%" width="180%" height="180%">
+          <feGaussianBlur stdDeviation="5" result="flare" />
+          <feMerge>
+            <feMergeNode in="flare" />
+            <feMergeNode in="flare" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
         </filter>
       </defs>
 
@@ -71,52 +90,88 @@ export function RoadmapSvgPaths({ connections, animatingConnectionId, highlightF
         const toUnlocked = nodeMap.get(c.toId) ?? false;
         const isRouteUnlocked = fromUnlocked && toUnlocked;
         const isAnimating = animatingConnectionId === c.id;
-        const isGray = !isRouteUnlocked && !isAnimating;
+        const isLocked = !isRouteUnlocked && !isAnimating;
 
         const isActivePath = highlightFromId != null && (c.fromId === highlightFromId || c.toId === highlightFromId);
-        const stroke = isGray ? '#334155' : (isActivePath && !c.isDashed ? '#F59E0B' : c.color);
 
         return (
-          <g key={c.id}>
-            {/* Ambient glow path: Solo si la ruta está desbloqueada o animando */}
-            {!isGray && (
+          <g key={c.id} className="conduit-channel">
+            {/* CAPA 1: Filamento estructural base en reposo (Breathing filament) */}
+            <path
+              d={c.path}
+              fill="none"
+              stroke={isLocked ? '#334155' : '#FF6A00'}
+              strokeWidth={isLocked ? 1.5 : 2}
+              strokeDasharray={isLocked ? '4 8' : undefined}
+              className={isLocked ? 'opacity-30' : 'animate-conduit-breathe'}
+              strokeLinecap="round"
+            />
+
+            {/* CAPA 1.5: Halo de canalización térmica en rutas activas */}
+            {!isLocked && (
               <path
                 d={c.path}
                 fill="none"
-                stroke={stroke}
-                strokeWidth={isActivePath ? 9 : 6}
-                strokeOpacity={isActivePath ? 0.35 : 0.2}
+                stroke="#FF6A00"
+                strokeWidth={isActivePath ? 10 : 7}
+                strokeOpacity={isActivePath ? 0.28 : 0.15}
                 strokeLinecap="round"
+                filter="url(#cylindrical-glow-amber)"
               />
             )}
 
-            {/* Core laser beam: Gris neutro en reposo si la ruta está bloqueada */}
+            {/* CAPA 2: Cápsula Cilíndrica Continua (Charge Slug) - Solo en rutas activas/desbloqueadas */}
+            {!isLocked && (
+              <g className="conduit-charge-slug">
+                {/* Manga exterior térmica de la cápsula (7px naranja ámbar cuántico) */}
+                <path
+                  d={c.path}
+                  fill="none"
+                  stroke="#FF6A00"
+                  strokeWidth="7"
+                  strokeLinecap="round"
+                  strokeDasharray="28 160"
+                  className="animate-conduit-slug"
+                  filter="url(#cylindrical-glow-amber)"
+                  style={{ opacity: 0.95 }}
+                />
+
+                {/* Núcleo de alta densidad de la cápsula (2.2px blanco plasma) */}
+                <path
+                  d={c.path}
+                  fill="none"
+                  stroke="#FFFFFF"
+                  strokeWidth="2.2"
+                  strokeLinecap="round"
+                  strokeDasharray="28 160"
+                  className="animate-conduit-slug"
+                  style={{ opacity: 1 }}
+                />
+              </g>
+            )}
+
+            {/* CAPA 3: Arco Térmico de Ignición Cinemática (Thermal Arc Sweep) */}
             <path
               ref={(el) => {
-                laserBeamsRef.current[c.id] = el;
+                thermalArcRefs.current[c.id] = el;
               }}
               d={c.path}
               fill="none"
-              stroke={stroke}
-              strokeWidth={isGray ? '2' : '2.5'}
-              strokeOpacity={isGray ? '0.4' : (isAnimating ? '1' : '0.85')}
+              stroke="#FFA338"
+              strokeWidth="4"
               strokeLinecap="round"
-              strokeDasharray={isGray ? '5 7' : (c.isDashed && !isAnimating ? '6 8' : undefined)}
-              className={isGray ? undefined : (c.isDashed && !isAnimating ? 'animate-laser-standby' : undefined)}
+              filter="url(#thermal-arc-flare)"
+              className="pointer-events-none opacity-0"
             />
-
-            {/* Forward-traveling energy photon packet: Solo en rutas desbloqueadas activas o animando */}
-            {!isGray && (
+            {/* Núcleo hiper-brillante del arco */}
+            {isAnimating && (
               <path
                 d={c.path}
                 fill="none"
-                stroke={isAnimating ? '#38BDF8' : '#FFFFFF'}
-                strokeWidth="3"
-                strokeOpacity="0.95"
+                stroke="#FFFFFF"
+                strokeWidth="1.8"
                 strokeLinecap="round"
-                strokeDasharray="20 100"
-                className="animate-laser-flow"
-                style={{ filter: `drop-shadow(0 0 6px ${stroke})` }}
+                className="pointer-events-none"
               />
             )}
           </g>
@@ -125,3 +180,4 @@ export function RoadmapSvgPaths({ connections, animatingConnectionId, highlightF
     </g>
   );
 }
+
