@@ -29,9 +29,17 @@ Se implementó el sistema integral de atajos de teclado ergonómicos y feedback 
    - Badges visuales de `Enter ↵` integradas en los botones de "Comprobar respuesta", "Siguiente lección", "Reintentar" y "Continuar".
    - Indicador de atajos disponible en la barra superior.
 
+4. **`WorkspaceLab.tsx` y Catálogo de 100 Navbars (`apps/web/src/views/workspace-lab/`):**
+   - Implementación de catálogo interactivo con 100 variantes únicas de navbars minimalistas y no intrusivos (`navbar-catalog-data.ts`).
+   - 10 familias de diseño cubiertas: Píldoras Flotantes, Hairline Minimal, Terminal Statusline, Micro-Notch & Island, Stepper-First, Breadcrumbs Claros, Insignias en Esquinas, Cyber & Sci-Fi, Zero-UI Zen y Fusiones Maestras (N100 Master Prime).
+   - Doble modo de visualización: `Workspace Real` (montaje en ejercicio en vivo) y `Galería 100` (`?view=gallery`) con buscador, filtros y renderizado en tiempo real.
+   - Fondo unificado `OrbitFieldBackground` (espiral kepleriana ASCII) y botón táctil 3D D74.
+
 ---
 
 ## Verificación
 
-- `pnpm build` en `apps/web`: 100% exitoso con Turbopack (0 errores, 0 warnings).
+- `pnpm build` en `apps/web`: 100% exitoso con Next.js (0 errores, 0 warnings).
 - Navegación fluida y accesible probada en lecciones de Python y Lua.
+- Capturas de pantalla headless verificadas en Workspace Real y Galería 100.
+
