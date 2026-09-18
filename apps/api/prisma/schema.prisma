@@ -30,6 +30,7 @@ model User {
   locale                  String    @default("es-CO") @db.VarChar(10)
 
   // Preferencias de Onboarding
+  onboardingCompleted     Boolean   @default(false) @map("onboarding_completed")
   initialLanguageSlug     String    @default("python") @map("initial_language_slug") @db.VarChar(50)
   experienceLevel         String    @default("beginner") @map("experience_level") @db.VarChar(30)
   learningStyle           String    @default("hands-on") @map("learning_style") @db.VarChar(30)

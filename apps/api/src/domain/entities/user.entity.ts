@@ -1,4 +1,4 @@
-﻿export type UserRole = 'user' | 'admin';
+export type UserRole = 'user' | 'admin';
 export type UserStatus = 'active' | 'suspended' | 'banned';
 export type ExperienceLevel = 'beginner' | 'elementary' | 'intermediate' | 'advanced';
 export type LearningStyle = 'hands-on' | 'guided' | 'projects' | 'gamified';
@@ -18,6 +18,7 @@ export interface UserEntityProps {
   bio?: string | null;
   timezone: string;
   locale: string;
+  onboardingCompleted?: boolean;
   initialLanguageSlug: string;
   experienceLevel: ExperienceLevel;
   learningStyle: LearningStyle;
@@ -148,8 +149,32 @@ export class UserEntity {
     return '***' + doc.slice(-4);
   }
 
+  get onboardingCompleted(): boolean {
+    return this.props.onboardingCompleted ?? false;
+  }
+
   isProfileComplete(): boolean {
-    return Boolean(this.props.displayName && this.props.initialLanguageSlug);
+    return Boolean(this.props.onboardingCompleted || (this.props.displayName && this.props.initialLanguageSlug));
+  }
+
+  completeOnboarding(params: {
+    initialLanguageSlug: string;
+    experienceLevel: ExperienceLevel;
+    learningStyle: LearningStyle;
+    dailyGoalId: DailyGoalId;
+    dailyGoalMinutes: number;
+    displayName?: string;
+  }): void {
+    this.props.onboardingCompleted = true;
+    this.props.initialLanguageSlug = params.initialLanguageSlug;
+    this.props.experienceLevel = params.experienceLevel;
+    this.props.learningStyle = params.learningStyle;
+    this.props.dailyGoalId = params.dailyGoalId;
+    this.props.dailyGoalMinutes = params.dailyGoalMinutes;
+    if (params.displayName) {
+      this.props.displayName = params.displayName;
+    }
+    this.props.updatedAt = new Date();
   }
 
   toPrimitives(): UserEntityProps {

@@ -15,6 +15,7 @@ export class UserSessionResponseDto {
   locale: string;
 
   // Onboarding
+  onboardingCompleted: boolean;
   initialLanguageSlug: string;
   experienceLevel: string;
   learningStyle: string;
@@ -45,6 +46,7 @@ export class UserSessionResponseDto {
     dto.bio = user.bio;
     dto.timezone = user.timezone;
     dto.locale = user.locale;
+    dto.onboardingCompleted = user.onboardingCompleted;
     dto.initialLanguageSlug = user.initialLanguageSlug;
     dto.experienceLevel = user.experienceLevel;
     dto.learningStyle = user.learningStyle;
