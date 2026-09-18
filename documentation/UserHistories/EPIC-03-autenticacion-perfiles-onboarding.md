@@ -127,23 +127,23 @@
 > para acceder de forma rápida y segura a la plataforma, asegurando que mis preferencias de aprendizaje (lenguaje, nivel, estilo y metas diarias) queden guardadas en mi perfil de forma obligatoria e independiente del método seleccionado."
 
 **Criterios de aceptación (Gherkin):**
-- [ ] **Escenario 1 (Registro Tradicional + OTP):**
+- [x] **Escenario 1 (Registro Tradicional + OTP):**
   - **Dado** que el usuario ingresa su nombre, correo y contraseña segura en el formulario de registro,
   - **Cuando** presiona "Crear cuenta",
   - **Entonces** Supabase Auth crea la cuenta en estado pendiente de verificación y envía un código OTP de 6 dígitos a su correo; el usuario visualiza una pantalla/modal para ingresar el código. Al verificar el OTP exitosamente, se inicia la sesión y se consolidan los datos del onboarding en su perfil interno.
-- [ ] **Escenario 2 (Registro con Google OAuth2):**
+- [x] **Escenario 2 (Registro con Google OAuth2):**
   - **Dado** que el usuario selecciona "Continuar con Google",
   - **Cuando** autoriza sus credenciales en la pantalla de consentimiento de Google,
   - **Entonces** Supabase Auth crea la identidad federada; al retornar a la plataforma, el sistema detecta que es un usuario nuevo (`onboarding_completed = false`) y lo transfiere automáticamente a completar las preguntas del onboarding (tecnología, nivel, metas, estilo) antes de permitir el ingreso al roadmap de cursos.
-- [ ] **Escenario 3 (Continuidad del Onboarding Previo):**
+- [x] **Escenario 3 (Continuidad del Onboarding Previo):**
   - **Dado** que el usuario ya seleccionó tecnología, nivel y metas en los primeros pasos del onboarding y en el último paso elige "Continuar con Google",
   - **Cuando** concluye la autenticación externa,
   - **Entonces** las preferencias previas almacenadas temporalmente se sincronizan automáticamente con el backend sin obligarlo a repetir las selecciones.
-- [ ] **Escenario 4 (Persistencia y Sincronización Interna en Supabase):**
+- [x] **Escenario 4 (Persistencia y Sincronización Interna en Supabase):**
   - **Dado** un usuario autenticado por cualquiera de los dos métodos,
   - **Cuando** se completan las preferencias de onboarding,
   - **Entonces** el backend actualiza la tabla `public.users` en PostgreSQL (vía Prisma), sincroniza los metadatos en `auth.users.raw_user_meta_data` y marca `onboarding_completed = true`.
-- [ ] **Escenario 5 (Seguridad y Resiliencia del OTP):**
+- [x] **Escenario 5 (Seguridad y Resiliencia del OTP):**
   - **Dado** que el código OTP expira (TTL 10 min) o se digita incorrectamente,
   - **Cuando** el usuario interactúa con la interfaz,
   - **Entonces** recibe mensaje de error descriptivo con opción de solicitar reenvío (`Resend OTP`), sujeto a rate-limiting (máximo 3 reenvíos por hora).
