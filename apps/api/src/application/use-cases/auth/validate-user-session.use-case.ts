@@ -44,6 +44,7 @@ export class ValidateUserSessionUseCase {
         bio: null,
         timezone: meta.timezone || 'America/Bogota',
         locale: meta.locale || 'es-CO',
+        onboardingCompleted: Boolean(meta.onboarding_completed ?? false),
         initialLanguageSlug: meta.initial_language_slug || 'python',
         experienceLevel: meta.experience_level || 'beginner',
         learningStyle: meta.learning_style || 'hands-on',

@@ -102,4 +102,63 @@ export class SupabaseService {
     }
     return data.user;
   }
+
+  async signUpWithEmail(email: string, password: string, metadata?: Record<string, any>) {
+    const { data, error } = await this.client.auth.signUp({
+      email,
+      password,
+      options: {
+        data: metadata,
+      },
+    });
+
+    if (error) {
+      this.logger.warn(`Error al registrar usuario en Supabase Auth: ${error.message}`);
+      throw error;
+    }
+
+    return data;
+  }
+
+  async verifyOtp(email: string, token: string, type: 'signup' | 'email' = 'signup') {
+    const { data, error } = await this.client.auth.verifyOtp({
+      email,
+      token,
+      type: type as any,
+    });
+
+    if (error) {
+      this.logger.warn(`Error al verificar OTP en Supabase Auth (${email}): ${error.message}`);
+      throw error;
+    }
+
+    return data;
+  }
+
+  async resendOtp(email: string, type: 'signup' | 'email_change' = 'signup') {
+    const { data, error } = await this.client.auth.resend({
+      type: type as any,
+      email,
+    });
+
+    if (error) {
+      this.logger.warn(`Error al reenviar OTP en Supabase Auth (${email}): ${error.message}`);
+      throw error;
+    }
+
+    return data;
+  }
+
+  async updateUserMetadata(userId: string, metadata: Record<string, any>) {
+    const { data, error } = await this.client.auth.admin.updateUserById(userId, {
+      user_metadata: metadata,
+    });
+
+    if (error) {
+      this.logger.warn(`Error al actualizar metadata en Supabase Auth (${userId}): ${error.message}`);
+      throw error;
+    }
+
+    return data;
+  }
 }

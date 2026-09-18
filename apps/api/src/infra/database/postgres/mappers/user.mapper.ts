@@ -24,6 +24,7 @@ export class UserMapper {
       bio: raw.bio,
       timezone: raw.timezone,
       locale: raw.locale,
+      onboardingCompleted: (raw as any).onboardingCompleted ?? false,
       initialLanguageSlug: raw.initialLanguageSlug,
       experienceLevel: (raw.experienceLevel as ExperienceLevel) || 'beginner',
       learningStyle: (raw.learningStyle as LearningStyle) || 'hands-on',
@@ -56,6 +57,7 @@ export class UserMapper {
       bio: p.bio ?? null,
       timezone: p.timezone,
       locale: p.locale,
+      onboardingCompleted: p.onboardingCompleted ?? false,
       initialLanguageSlug: p.initialLanguageSlug,
       experienceLevel: p.experienceLevel,
       learningStyle: p.learningStyle,
@@ -68,6 +70,6 @@ export class UserMapper {
       streakFreezeCount: p.streakFreezeCount,
       totalStudyTimeSeconds: p.totalStudyTimeSeconds,
       lastStudyDate: p.lastStudyDate ?? null,
-    };
+    } as any;
   }
 }
