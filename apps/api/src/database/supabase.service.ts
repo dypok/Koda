@@ -22,9 +22,8 @@ export class SupabaseService {
 
     if (!supabaseUrl || !supabaseKey) {
       throw new Error(
-        'Faltan variables de entorno de Supabase. Define SUPABASE_URL y ' +
-          'SUPABASE_SERVICE_ROLE_KEY (o SUPABASE_ANON_KEY) en tu .env antes de iniciar la API. ' +
-          'Copia apps/api/.env.example y completa tus credenciales del proyecto.',
+        'Faltan variables de entorno requeridas para el servicio de autenticación y base de datos. ' +
+          'Define SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY (o SUPABASE_ANON_KEY) en tu .env antes de iniciar la API.',
       );
     }
 
@@ -107,6 +106,19 @@ export class SupabaseService {
       return null;
     }
     return data.user;
+  }
+
+  async refreshAuthSession(refreshToken: string) {
+    const { data, error } = await this.client.auth.refreshSession({
+      refresh_token: refreshToken,
+    });
+
+    if (error) {
+      this.logger.warn(`Error al renovar sesión de autenticación: ${error.message}`);
+      throw error;
+    }
+
+    return data;
   }
 
   async signUpWithEmail(email: string, password: string, metadata?: Record<string, any>) {

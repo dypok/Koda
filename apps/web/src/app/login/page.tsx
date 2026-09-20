@@ -3,23 +3,38 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
+import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
 import { LoginShowcaseCarousel } from '@/views/login/LoginShowcaseCarousel';
 import { LoginForm } from '@/views/login/LoginForm';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { isAuthenticated, initAuth } = useAuthStore();
+  const { user, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
 
   useEffect(() => {
     initAuth();
   }, [initAuth]);
 
   useEffect(() => {
-    if (isAuthenticated) {
-      router.replace('/app/ruta');
+    if (hasHydrated && isAuthenticated) {
+      if (user && user.onboardingCompleted === false) {
+        router.replace('/register');
+      } else {
+        router.replace('/');
+      }
     }
-  }, [isAuthenticated, router]);
+  }, [hasHydrated, isAuthenticated, user, router]);
+
+  if (hasHydrated && isAuthenticated) {
+    return (
+      <KodaLoadingScreen
+        title="Redirigiendo a tu espacio..."
+        subtitle="Preparando tu ruta de aprendizaje..."
+        terminalHint="> auth :: sesion_activa"
+      />
+    );
+  }
 
   return (
     <div className="relative isolate min-h-screen bg-transparent text-slate-100 flex flex-col lg:flex-row selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden">

@@ -89,10 +89,16 @@ export function useLessonEngine(exercises: ContentExercise[], seed = 42) {
     setIndex((i) => i + 1);
   }, []);
 
+  const prev = useCallback(() => {
+    setSelected([]);
+    setResult(null);
+    setIndex((i) => Math.max(0, i - 1));
+  }, []);
+
   const resetSelection = useCallback(() => {
     setSelected([]);
     setResult(null);
   }, []);
 
-  return { current, selected, result, toggle, check, next, resetSelection, done, index, total: order.length, xp };
+  return { current, selected, result, toggle, check, next, prev, resetSelection, done, index, total: order.length, xp };
 }

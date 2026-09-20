@@ -42,7 +42,7 @@ export class UsersController {
   @ApiOperation({
     summary: 'Actualizar perfil y preferencias del usuario autenticado',
     description:
-      'Permite modificar datos del perfil (nombre a mostrar, avatar oficial, biografía, metas diarias de estudio y número de documento legal) manteniendo el enmascaramiento en la respuesta y sincronizando metadatos con Supabase Auth.',
+      'Permite modificar datos del perfil (nombre a mostrar, avatar oficial, biografía, metas diarias de estudio y número de documento legal) manteniendo el enmascaramiento en la respuesta y sincronizando metadatos de sesión.',
   })
   @ApiResponse({
     status: HttpStatus.OK,

@@ -81,9 +81,6 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
             priority
           />
         </div>
-        <span aria-hidden="true" className="mt-1 max-w-[120px] rounded-xl rounded-tl-sm border border-amber-400/30 bg-amber-400/10 px-2 py-1 text-center text-[10px] font-bold leading-tight text-amber-200">
-          ¡Elige tu arma! 🐍
-        </span>
       </div>
       <div className="space-y-0.5">
         <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
@@ -106,9 +103,9 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
           aria-selected={selectedCategory === cat.id}
           onClick={() => onSelectCategory(cat.id)}
           className={cn(
-            'px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border',
+            'px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all border select-none',
             selectedCategory === cat.id
-              ? 'bg-amber-500 text-slate-950 font-black border-amber-400 shadow-[0_0_14px_rgba(245,158,11,0.35)]'
+              ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-[0_0_14px_rgba(245,158,11,0.35)]'
               : 'bg-slate-900/80 text-slate-300 border-slate-700/80 hover:text-white hover:border-slate-600'
           )}
         >
@@ -169,13 +166,13 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
 
     {/* Grid of Technologies ampliado horizontalmente */}
     <div ref={gridRef}>
-    <motion.div layout={reduceMotion ? false : true} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
+    <motion.div layout={reduceMotion ? false : "position"} className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3.5 sm:gap-4">
       <AnimatePresence mode="popLayout">
         {visible.map((item) => (
           <motion.div
             key={item.id}
             data-vrow
-            layout={reduceMotion ? false : true}
+            layout={reduceMotion ? false : "position"}
             initial={false}
             animate={{ opacity: 1, scale: 1 }}
             exit={reduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.94 }}

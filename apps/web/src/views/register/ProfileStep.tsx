@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
+import { CheckCircle } from '@phosphor-icons/react';
 import { ProfileSummaryBadge } from './ProfileSummaryBadge';
 import { ProfileSocialAuth } from './ProfileSocialAuth';
 import { ProfileFormFields } from './ProfileFormFields';
@@ -15,6 +16,14 @@ interface ProfileStepProps {
   goalMinutes?: number;
   onEditStep?: (step: number) => void;
   profile: ReturnType<typeof useRegisterProfileController>;
+  onboardingData?: {
+    initialLanguageSlug?: string;
+    experienceLevel?: string;
+    learningStyle?: string;
+    dailyGoalId?: string;
+    dailyGoalMinutes?: number;
+  };
+  onSocialClick?: (provider: 'google' | 'github') => void;
 }
 
 export const ProfileStep: React.FC<ProfileStepProps> = ({
@@ -24,6 +33,8 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
   goalMinutes,
   onEditStep,
   profile,
+  onboardingData,
+  onSocialClick,
 }) => {
   const reduceMotion = useReducedMotion();
   const [focusField, setFocusField] = useState<string | null>(null);
@@ -62,17 +73,18 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
               </span>
             )}
           </motion.div>
-          <span aria-hidden="true" className="mt-1 max-w-[110px] rounded-xl rounded-tl-sm border border-amber-400/30 bg-amber-400/10 px-2 py-1 text-center text-[10px] font-bold leading-tight text-amber-200">
-            {'> perfil_casi_listo'}
-          </span>
         </div>
         <div className="flex-1 min-w-0 space-y-2">
           <div>
             <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
-              ¡Crea tu perfil para guardar tu progreso!
+              {profile.isOAuthUser
+                ? '¡Casi listo! Confirma tu perfil'
+                : '¡Crea tu perfil para guardar tu progreso!'}
             </h1>
             <p className="text-xs sm:text-sm text-slate-400 mt-0.5">
-              Guarda tus lecciones de {techName || 'programación'} y asegura tu racha desde hoy.
+              {profile.isOAuthUser
+                ? 'Personaliza tu nombre o alias y confirma para ingresar directamente a tu ruta de aprendizaje.'
+                : `Guarda tus lecciones de ${techName || 'programación'} y asegura tu racha desde hoy.`}
             </p>
           </div>
 
@@ -87,8 +99,24 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
         </div>
       </div>
 
-      {/* Social Auth Options */}
-      <ProfileSocialAuth disabled={profile.isSubmitting} />
+      {/* Social Auth Options o Badge de Cuenta Vinculada */}
+      {profile.isOAuthUser ? (
+        <div className="w-full mb-5 p-3.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 flex items-center gap-3 shadow-[0_0_20px_rgba(16,185,129,0.1)]">
+          <div className="w-9 h-9 rounded-xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 shrink-0">
+            <CheckCircle weight="fill" className="w-5 h-5" />
+          </div>
+          <div className="min-w-0 text-left">
+            <p className="text-xs font-semibold text-emerald-300">
+              Cuenta vinculada con éxito
+            </p>
+            <p className="text-xs text-slate-300 truncate">
+              {profile.form.email || profile.user?.email}
+            </p>
+          </div>
+        </div>
+      ) : (
+        <ProfileSocialAuth onSocialClick={onSocialClick} disabled={profile.isSubmitting} />
+      )}
 
       {/* Direct Registration Form Fields */}
       <form
@@ -96,7 +124,7 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
         noValidate
         onSubmit={(e) => {
           e.preventDefault();
-          profile.submit();
+          profile.submit(onboardingData);
         }}
         onFocusCapture={(e) => {
           const id = (e.target as HTMLElement).id;
@@ -117,6 +145,7 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
           onToggleShowPassword={profile.toggleShowPassword}
           onBlurField={profile.touch}
           disabled={profile.isSubmitting}
+          isOAuthUser={profile.isOAuthUser}
         />
       </form>
     </div>

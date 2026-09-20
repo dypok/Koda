@@ -1,10 +1,10 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Link from 'next/link';
 import { CaretDown } from '@phosphor-icons/react';
 import { CAREER_BRANCHES, CareerBranchId } from '@/models/roadmap/tracks/track-catalog';
 import { useRoadmapStore } from '@/stores/roadmap.store';
+import { KodaLogoSvg } from '@/components/landing/KodaLogoSvg';
 import { cn } from '@/lib/utils';
 
 /** Píldora flotante: marca Koda + selector de rama de carrera. */
@@ -34,32 +34,29 @@ export const RoadmapBranchPill: React.FC = () => {
 
   return (
     <div ref={boxRef} className="absolute left-4 top-4 z-20">
-      <div className="flex items-center gap-1 rounded-full border border-slate-700/50 bg-slate-900/40 py-1.5 pl-1.5 pr-1 backdrop-blur-xl shadow-xl">
-        <Link
-          href="/"
-          aria-label="Koda - volver a la landing"
-          className="flex h-8 w-8 items-center justify-center rounded-full font-display text-sm font-black text-orange-400 transition-colors hover:bg-orange-500/20"
+      <div className="flex items-center gap-2 rounded-xl border border-slate-700/50 bg-slate-900/60 px-2.5 py-1.5 backdrop-blur-xl shadow-xl">
+        <div
+          aria-label="Koda"
+          className="flex items-center select-none px-1.5 py-0.5"
         >
-          K
-        </Link>
+          <KodaLogoSvg className="h-5 w-auto select-none" />
+        </div>
+        <div className="h-4 w-px bg-slate-700/60" aria-hidden="true" />
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           disabled={isLoading}
           aria-expanded={open}
           aria-label={`Rama activa: ${activeBranch.title}. Cambiar de rama`}
-          className="flex items-center gap-2 rounded-full py-1.5 pl-1 pr-2.5 transition-colors hover:bg-slate-800/60 cursor-pointer"
+          className="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-slate-800/60 cursor-pointer"
         >
-          <span
-            className="flex h-7 w-7 items-center justify-center rounded-full border"
-            style={{ backgroundColor: `${activeBranch.color}20`, borderColor: `${activeBranch.color}50`, color: activeBranch.color }}
-          >
-            <BranchIcon className="h-3.5 w-3.5" />
+          <span className="shrink-0 flex items-center justify-center" style={{ color: activeBranch.color }}>
+            <BranchIcon className="h-4 w-4" />
           </span>
-          <span className="hidden max-w-32 truncate font-mono text-[11px] font-bold text-white sm:block">
+          <span className="hidden max-w-36 truncate font-mono text-xs font-bold text-white sm:block">
             {activeBranch.title}
           </span>
-          <CaretDown className={cn('h-3 w-3 text-slate-500 transition-transform', open && 'rotate-180 text-slate-200')} />
+          <CaretDown className={cn('h-3.5 w-3.5 text-slate-400 transition-transform', open && 'rotate-180 text-slate-200')} />
         </button>
       </div>
 

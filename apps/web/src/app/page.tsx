@@ -1,70 +1,70 @@
 'use client';
 
-import React from 'react';
-import { Navbar } from '@/components/landing/Navbar';
-import { HeroSection } from '@/components/landing/HeroSection';
-import { InteractivePreview } from '@/components/landing/InteractivePreview';
-import { MethodologySection } from '@/components/landing/MethodologySection';
-import { Footer } from '@/components/landing/Footer';
-import { LenisProvider } from '@/components/landing/LenisProvider';
-import { SectionSnap } from '@/components/landing/SectionSnap';
-import { ScrollProgress } from '@/components/landing/ScrollProgress';
-import { AnnouncementBar } from '@/components/landing/AnnouncementBar';
-import { StickyMobileCta } from '@/components/landing/StickyMobileCta';
-import { ExitIntentModal } from '@/components/landing/ExitIntentModal';
-import { TestimonialsSection } from '@/views/landing/conversion/TestimonialsSection';
-import { WorldMap } from '@/views/landing/conversion/WorldMap';
-import { PricingSection } from '@/views/landing/conversion/PricingSection';
-import { CertificateSection } from '@/views/landing/conversion/CertificateSection';
-import { GiantMarquee } from '@/components/landing/GiantMarquee';
-import { WaveDivider } from '@/components/landing/WaveDivider';
-import { CinematicFinale } from '@/components/landing/CinematicFinale';
-import { Preloader } from '@/components/landing/Preloader';
-import { AuroraProvider } from '@/components/landing/AuroraProvider';
-import { GlowParallax } from '@/components/landing/GlowParallax';
-import { RouteThread } from '@/components/landing/RouteThread';
-import { ActTheme } from '@/components/landing/ActTheme';
-import { KodaGuide } from '@/components/landing/KodaGuide';
-import { PartyMode } from '@/components/landing/PartyMode';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores/auth.store';
+import { StudentRoadmapView } from '@/views/roadmap/StudentRoadmapView';
+import { LandingPageView } from '@/views/landing/LandingPageView';
+import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
 
 export default function HomePage() {
-  return (
-    <LenisProvider>
-      <SectionSnap />
-      <ScrollProgress />
-      <Preloader />
-      <AuroraProvider />
-      <GlowParallax />
-      <RouteThread />
-      <ActTheme />
-      <KodaGuide />
-      <div aria-hidden="true" className="koda-grain" />
-      <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">
-        <AnnouncementBar />
-        <Navbar />
-        <main className="flex-1">
-          <div className="relative h-[200vh]">
-            <div className="sticky top-0 h-screen overflow-hidden">
-              <HeroSection />
-            </div>
-          </div>
-          <div className="relative z-10 bg-slate-950 shadow-[0_-24px_60px_rgba(0,0,0,0.6)]">
-          <GiantMarquee />
-          <InteractivePreview />
-          <MethodologySection />
-          <WaveDivider />
-          <TestimonialsSection />
-          <WorldMap />
-          <PricingSection />
-          <CertificateSection />
-          <CinematicFinale />
-          </div>
-        </main>
-        <Footer />
-        <StickyMobileCta />
-        <ExitIntentModal />
-        <PartyMode />
-      </div>
-    </LenisProvider>
-  );
+  const router = useRouter();
+  const { user, isAuthenticated, hasEverLoggedIn, hasHydrated, initAuth } = useAuthStore();
+
+  useEffect(() => {
+    initAuth();
+  }, [initAuth]);
+
+  useEffect(() => {
+    if (!hasHydrated) return;
+
+    if (isAuthenticated) {
+      if (user && user.onboardingCompleted === false) {
+        router.replace('/register');
+      }
+    } else if (hasEverLoggedIn) {
+      // Un usuario que ya ha iniciado sesión antes no puede volver a ver la landing page
+      router.replace('/login');
+    }
+  }, [hasHydrated, isAuthenticated, hasEverLoggedIn, user, router]);
+
+  if (!hasHydrated) {
+    return (
+      <KodaLoadingScreen
+        title="Cargando Koda..."
+        subtitle="Verificando tu sesión de aprendizaje..."
+        terminalHint="> auth :: verificando sesion"
+      />
+    );
+  }
+
+  // Si ya inició sesión alguna vez pero no está autenticado, está siendo redirigido a /login
+  if (!isAuthenticated && hasEverLoggedIn) {
+    return (
+      <KodaLoadingScreen
+        title="Redirigiendo al inicio de sesión..."
+        subtitle="Sesión no iniciada. Acceso directo a Koda..."
+        terminalHint="> auth :: redirigiendo a /login"
+      />
+    );
+  }
+
+  // Si el usuario está autenticado y tiene pendiente el onboarding, se está redirigiendo a /register
+  if (isAuthenticated && user?.onboardingCompleted === false) {
+    return (
+      <KodaLoadingScreen
+        title="Completando registro..."
+        subtitle="Te estamos redirigiendo para finalizar tu configuración..."
+        terminalHint="> onboarding :: redirigiendo"
+      />
+    );
+  }
+
+  // Usuario autenticado: el Roadmap vive directamente en la raíz (/)
+  if (isAuthenticated) {
+    return <StudentRoadmapView />;
+  }
+
+  // Visitante primerizo que nunca se ha logueado en la plataforma
+  return <LandingPageView />;
 }

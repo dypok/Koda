@@ -1,33 +1,155 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
 import { WeatherLayer } from '@/components/landing/WeatherLayer';
+import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
 import { RegisterHeaderBar } from '@/views/register/RegisterHeaderBar';
 import { LanguageSelectionStep } from '@/views/register/LanguageSelectionStep';
 import { ExperienceStep } from '@/views/register/ExperienceStep';
 import { StyleStep } from '@/views/register/StyleStep';
 import { GoalStep } from '@/views/register/GoalStep';
 import { ProfileStep } from '@/views/register/ProfileStep';
+import { RegisterOtpModal } from '@/views/register/RegisterOtpModal';
 import { RegisterSuccessModal } from '@/views/register/RegisterSuccessModal';
 import { RegisterBottomBar } from '@/views/register/RegisterBottomBar';
 import { useRegisterStepperController } from '@/controllers/register/useRegisterStepperController';
 import { useRegisterProfileController } from '@/controllers/register/useRegisterProfileController';
+import { AuthService } from '@/services/auth/auth.service';
+import { useAuthStore } from '@/stores/auth.store';
 
 export default function RegisterPage() {
-  const stepper = useRegisterStepperController();
+  const router = useRouter();
+  const { user, token, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
+  const [isOAuthProcessing, setIsOAuthProcessing] = useState(false);
+  const [isCompletingAndRedirecting, setIsCompletingAndRedirecting] = useState(false);
+
+  const isOAuthUser = Boolean(token && user && !user.onboardingCompleted);
+  const totalSteps = isOAuthUser ? 4 : 5;
+  const stepper = useRegisterStepperController(totalSteps);
   const profile = useRegisterProfileController();
 
-  const isLast = stepper.currentStep === 5;
-  const canContinue = isLast ? profile.isFormValid : stepper.canContinue;
-  const handleContinue = isLast ? profile.submit : stepper.nextStep;
+  useEffect(() => {
+    initAuth();
+  }, [initAuth]);
+
+  // Si el usuario ya completó el onboarding, redirigirlo a la ruta
+  useEffect(() => {
+    if (hasHydrated && isAuthenticated && user?.onboardingCompleted === true && !isCompletingAndRedirecting) {
+      setIsCompletingAndRedirecting(true);
+      router.replace('/');
+    }
+  }, [hasHydrated, isAuthenticated, user, router, isCompletingAndRedirecting]);
+
+  const onboardingData = {
+    initialLanguageSlug: stepper.selectedLanguageId || 'python',
+    experienceLevel: stepper.selectedExperienceId || 'beginner',
+    learningStyle: stepper.selectedStyleId || 'hands-on',
+    dailyGoalId: stepper.selectedGoalId || 'regular',
+    dailyGoalMinutes: stepper.selectedGoal?.minutes || 10,
+  };
+
+  // Escuchar retorno de OAuth (Google / GitHub)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const hash = window.location.hash.startsWith('#')
+      ? window.location.hash.substring(1)
+      : window.location.hash;
+
+    if (!hash) return;
+    const params = new URLSearchParams(hash);
+    const accessToken = params.get('access_token');
+    const refreshToken = params.get('refresh_token');
+
+    if (accessToken) {
+      setIsOAuthProcessing(true);
+      const pendingRaw = localStorage.getItem('koda_pending_onboarding');
+      let pending: any = null;
+      if (pendingRaw) {
+        try {
+          pending = JSON.parse(pendingRaw);
+        } catch {
+          // ignore
+        }
+      }
+
+      const syncOAuthUser = async () => {
+        try {
+          if (pending) {
+            await AuthService.completeOnboarding(
+              {
+                initialLanguageSlug: pending.initialLanguageSlug || 'python',
+                experienceLevel: pending.experienceLevel || 'beginner',
+                learningStyle: pending.learningStyle || 'hands-on',
+                dailyGoalId: pending.dailyGoalId || 'regular',
+                dailyGoalMinutes: Number(pending.dailyGoalMinutes) || 10,
+              },
+              accessToken
+            );
+            localStorage.removeItem('koda_pending_onboarding');
+          }
+
+          const session = await AuthService.verifySession(accessToken);
+          useAuthStore.getState().setUserSession(session, accessToken, refreshToken || undefined);
+          window.history.replaceState(null, '', window.location.pathname);
+          if (session.onboardingCompleted) {
+            setIsCompletingAndRedirecting(true);
+            router.replace('/');
+            return;
+          }
+        } catch (e) {
+          console.error('[oauth-sync] Error procesando sesión OAuth:', e);
+        } finally {
+          setIsOAuthProcessing(false);
+        }
+      };
+
+      void syncOAuthUser();
+    }
+  }, [router]);
+
+  const handleSocial = (provider: 'google' | 'github') => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('koda_pending_onboarding', JSON.stringify(onboardingData));
+      window.location.href = AuthService.getOAuthRedirectUrl(provider, `${window.location.origin}/register`);
+    }
+  };
+
+  const isLast = stepper.currentStep === totalSteps;
+  const canContinue = isLast && !isOAuthUser ? profile.isFormValid : stepper.canContinue;
+
+  const handleContinue = async () => {
+    if (isLast) {
+      if (isOAuthUser) {
+        setIsCompletingAndRedirecting(true);
+        try {
+          await profile.submit(onboardingData);
+          router.replace('/');
+        } catch {
+          setIsCompletingAndRedirecting(false);
+        }
+      } else {
+        profile.submit(onboardingData);
+      }
+    } else {
+      stepper.nextStep();
+    }
+  };
+
   const STEP_CTA: Record<number, { text: string; hint: string }> = {
     1: { text: 'Explorar y continuar', hint: 'Elige tu tecnología para continuar' },
     2: { text: 'Confirmar mi nivel', hint: 'Elige tu nivel para continuar' },
     3: { text: 'Confirmar mi estilo', hint: 'Elige tu estilo para continuar' },
-    4: { text: 'Fijar mi meta · 10 min/día', hint: 'Elige tu meta para continuar' },
-    5: { text: 'Crear cuenta y comenzar', hint: 'Completa el formulario para continuar' },
+    4: {
+      text: isOAuthUser ? 'Fijar mi meta y comenzar mi ruta' : 'Fijar mi meta · 10 min/día',
+      hint: 'Elige tu meta para continuar',
+    },
+    5: {
+      text: 'Crear cuenta y comenzar',
+      hint: 'Completa el formulario para continuar',
+    },
   };
   const stepCta = STEP_CTA[stepper.currentStep] ?? STEP_CTA[1];
   const continueText = stepCta.text;
@@ -38,6 +160,16 @@ export default function RegisterPage() {
   useEffect(() => {
     prevStepRef.current = stepper.currentStep;
   }, [stepper.currentStep]);
+
+  if (isOAuthProcessing || isCompletingAndRedirecting) {
+    return (
+      <KodaLoadingScreen
+        title={isCompletingAndRedirecting ? '¡Perfil configurado con éxito!' : 'Conectando tu cuenta con Koda...'}
+        subtitle={isCompletingAndRedirecting ? 'Preparando tu ruta de aprendizaje personalizada...' : 'Sincronizando tus credenciales y preferencias...'}
+        terminalHint={isCompletingAndRedirecting ? '> koda_core :: ruta_desbloqueada' : '> koda_core :: autenticando'}
+      />
+    );
+  }
 
   return (
     <div className="relative isolate min-h-screen bg-transparent text-slate-100 flex flex-col justify-between selection:bg-amber-500/30 selection:text-amber-200">
@@ -101,11 +233,19 @@ export default function RegisterPage() {
             goalMinutes={stepper.selectedGoal?.minutes}
             onEditStep={stepper.goToStep}
             profile={profile}
+            onboardingData={onboardingData}
+            onSocialClick={handleSocial}
           />
         )}
           </motion.div>
         </AnimatePresence>
       </main>
+
+      {profile.submitError && (
+        <div className="mx-auto mb-4 max-w-md w-[90%] p-3.5 bg-rose-500/20 border border-rose-500/40 rounded-2xl text-center text-xs font-semibold text-rose-200 shadow-xl backdrop-blur-md">
+          {profile.submitError}
+        </div>
+      )}
 
       <RegisterBottomBar
         canContinue={canContinue}
@@ -113,10 +253,22 @@ export default function RegisterPage() {
         continueText={continueText}
         blockedHint={blockedHint}
         isLoading={profile.isSubmitting}
+        isOAuthUser={isOAuthUser}
+        userEmail={user?.email}
+      />
+      <RegisterOtpModal
+        isOpen={profile.isOtpModalOpen}
+        email={profile.form.email}
+        isVerifying={profile.isVerifyingOtp}
+        isResending={profile.isResendingOtp}
+        errorMessage={profile.otpError}
+        onVerify={profile.verifyOtp}
+        onResend={profile.resendOtp}
+        onClose={profile.closeOtpModal}
       />
       <RegisterSuccessModal
-        isOpen={profile.isSuccess}
-        studentName={profile.form.fullName}
+        isOpen={profile.isSuccess && !isOAuthUser && !isCompletingAndRedirecting}
+        studentName={profile.form.fullName || user?.fullName || 'Estudiante'}
         techName={stepper.selectedOption?.name}
         goalMinutes={stepper.selectedGoal?.minutes}
       />

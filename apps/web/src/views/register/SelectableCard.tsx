@@ -46,7 +46,7 @@ export const SelectableCard: React.FC<SelectableCardProps> = ({ option, isSelect
       )}
     >
       <IconComponent
-        className="w-8 h-8 shrink-0 transition-transform duration-200 transform-gpu will-change-transform group-hover:scale-110"
+        className="w-8 h-8 shrink-0 transition-transform duration-200 transform-gpu will-change-transform group-hover:scale-105 group-hover:brightness-110"
         style={{ color: option.color }}
       />
 

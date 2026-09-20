@@ -6,7 +6,7 @@ import { GlareHover } from '@/components/ui/glare-hover';
 import { LanguageOption } from '@/models/register/register.model';
 import { cn } from '@/lib/utils';
 
-const SCRAMBLE = '█▓▒░<>/\\|01';
+const SCRAMBLE = '01#_*/&%<>~';
 
 function useScramble(text: string, active: boolean) {
   const [out, setOut] = useState(text);
@@ -16,7 +16,7 @@ function useScramble(text: string, active: boolean) {
       return;
     }
     let frame = 0;
-    const total = 12;
+    const total = 10;
     const id = window.setInterval(() => {
       frame += 1;
       const done = Math.floor((frame / total) * text.length);
@@ -29,8 +29,11 @@ function useScramble(text: string, active: boolean) {
         setOut(text);
         window.clearInterval(id);
       }
-    }, 36);
-    return () => window.clearInterval(id);
+    }, 40);
+    return () => {
+      window.clearInterval(id);
+      setOut(text);
+    };
   }, [active, text]);
   return out;
 }
@@ -81,7 +84,7 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
       transitionDuration={600}
       className={cn(
         'group relative flex items-start gap-4 p-4 sm:p-5 rounded-2xl border select-none text-left outline-none min-h-[102px] h-full transform-gpu',
-        'transition-[border-color,background-color,box-shadow] duration-500 ease-out',
+        'transition-[border-color,background-color,box-shadow] duration-300 ease-out',
         isClickable && 'transition-transform duration-150 active:scale-[0.985]',
         isSelected
           ? 'border-amber-500 bg-amber-500/10 shadow-[0_0_25px_rgba(245,158,11,0.2)] ring-2 ring-amber-500/50 cursor-pointer'
@@ -90,13 +93,16 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
           : 'border-slate-800/40 bg-slate-900/30 opacity-60 cursor-not-allowed'
       )}
     >
-      {/* Círculo expansivo al mismo tono del seleccionado: hover y click un solo color */}
+      {/* Círculo expansivo optimizado con GPU scale y pointer-events-none */}
       {isClickable && (!isSelected || pressed) && (
         <span
           aria-hidden="true"
           className={cn(
-            'absolute left-1/2 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/25 transition-all duration-[800ms] ease-[cubic-bezier(0.19,1,0.22,1)]',
-            pressed ? 'h-[640px] w-[640px] opacity-100' : 'opacity-0 group-hover/glare:h-[640px] group-hover/glare:w-[640px] group-hover/glare:opacity-100'
+            'pointer-events-none absolute left-1/2 top-1/2 h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber-500/20 transform-gpu',
+            'transition-all duration-700 ease-[cubic-bezier(0.19,1,0.22,1)]',
+            pressed
+              ? 'scale-[10] opacity-100'
+              : 'scale-0 opacity-0 group-hover/glare:scale-[10] group-hover/glare:opacity-100'
           )}
         />
       )}
@@ -104,16 +110,28 @@ export const LanguageCard: React.FC<LanguageCardProps> = ({ option, isSelected, 
       <IconComponent
         className={cn(
           'w-8 h-8 shrink-0 mt-0.5 transition-transform duration-200 transform-gpu will-change-transform',
-          isClickable ? 'group-hover:scale-110' : 'grayscale-[40%]'
+          isClickable ? 'group-hover:scale-105' : 'grayscale-[40%]'
         )}
         style={{ color: option.color }}
       />
 
-      {/* Contenido con nombre y badge */}
+      {/* Contenido con nombre estabilizado y badge */}
       <div className="flex-1 min-w-0 pr-2 relative z-0">
         <div className="flex items-center gap-2 mb-1.5 flex-nowrap">
-          <h3 className="text-sm sm:text-base font-bold text-white tracking-tight leading-none whitespace-nowrap">
-            {name}
+          <h3 className="relative text-sm sm:text-base font-bold tracking-tight leading-none whitespace-nowrap">
+            {/* Sizer invisible que mantiene el ancho idéntico a option.name en todo momento */}
+            <span className="invisible select-none" aria-hidden="true">
+              {option.name}
+            </span>
+            {/* Texto animado decode en hover sin alterar el layout */}
+            <span
+              className={cn(
+                'absolute inset-0 flex items-center transition-colors duration-200',
+                hover && isClickable ? 'text-amber-300 font-mono text-sm' : 'text-white'
+              )}
+            >
+              {name}
+            </span>
           </h3>
           {option.badge && (
             <span

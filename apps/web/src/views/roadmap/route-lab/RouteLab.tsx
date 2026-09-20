@@ -80,7 +80,7 @@ export const RouteLab: React.FC = () => {
           <h1 className="mt-1 text-xl font-black tracking-tight text-white sm:text-2xl">32 diseños, un switch</h1>
         </div>
         <Link
-          href="/app/ruta"
+          href="/"
           className="rounded-[8px] border border-slate-700 px-3 py-2 text-xs font-bold text-slate-300 transition-colors hover:border-amber-400/50 hover:text-amber-300"
         >
           ← Volver a la ruta
@@ -117,7 +117,7 @@ export const RouteLab: React.FC = () => {
       </div>
 
       <p className="font-mono text-[11px] text-slate-600">
-        {'// ←/→ para ciclar · #rN compartible · solo preview, /app/ruta no cambia'}
+        {'// ←/→ para ciclar · #rN compartible · solo preview, ruta en / no cambia'}
       </p>
     </div>
   );

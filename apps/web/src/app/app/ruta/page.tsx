@@ -1,27 +1,21 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { StudentRoadmapView } from '@/views/roadmap/StudentRoadmapView';
-import { useAuthStore } from '@/stores/auth.store';
+import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
 
-export default function RutaPage() {
+export default function RutaRedirectPage() {
   const router = useRouter();
-  const { isAuthenticated, hasHydrated, initAuth } = useAuthStore();
 
   useEffect(() => {
-    initAuth();
-  }, [initAuth]);
+    router.replace('/');
+  }, [router]);
 
-  useEffect(() => {
-    if (hasHydrated && !isAuthenticated) {
-      router.replace('/login');
-    }
-  }, [hasHydrated, isAuthenticated, router]);
-
-  if (!hasHydrated || !isAuthenticated) {
-    return <div className="min-h-screen bg-slate-950" />;
-  }
-
-  return <StudentRoadmapView />;
+  return (
+    <KodaLoadingScreen
+      title="Cargando tu ruta..."
+      subtitle="Redirigiendo a tu espacio de aprendizaje..."
+      terminalHint="> ruta :: redirigiendo a /"
+    />
+  );
 }

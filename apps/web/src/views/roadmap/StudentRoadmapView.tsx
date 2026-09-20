@@ -2,14 +2,12 @@
 
 import React from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
+import { RoadmapDynamicBackground } from '@/components/roadmap/RoadmapDynamicBackground';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { RoadmapBranchPill } from './RoadmapBranchPill';
 import { RoadmapProfilePill } from './RoadmapProfilePill';
 import { RoadmapTopHud } from './RoadmapTopHud';
-import { RoadmapCanvas } from './RoadmapCanvas';
 import { RoadmapLegend } from './RoadmapLegend';
-import { CoursePinRail } from './CoursePinRail';
 import { RoadmapFusionView } from './RoadmapFusionView';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { useRouter } from 'next/navigation';
@@ -21,7 +19,6 @@ export const StudentRoadmapView: React.FC = () => {
   React.useEffect(() => {
     hydrateProgress();
   }, [hydrateProgress]);
-  const [coursesDisplayMode, setCoursesDisplayMode] = React.useState<'pin-rail' | 'canvas' | 'fusion'>('fusion');
 
   React.useEffect(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('view=lessons')) {
@@ -57,7 +54,7 @@ export const StudentRoadmapView: React.FC = () => {
 
   return (
     <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex overflow-hidden select-none">
-      <HeroSkyBackground starCount={60} interactive={false} className="fixed inset-0 pointer-events-none -z-10" />
+      <RoadmapDynamicBackground />
 
       {/* Lienzo a todo ancho: la navegación vive en píldoras flotantes */}
       <div className="flex-1 flex flex-col min-w-0 h-screen relative z-10">
@@ -66,8 +63,6 @@ export const StudentRoadmapView: React.FC = () => {
         <RoadmapTopHud
           sectorTitle={dataset.sectorTitle}
           progressPercent={dataset.progressPercent}
-          coursesDisplayMode={coursesDisplayMode}
-          onToggleCoursesDisplayMode={setCoursesDisplayMode}
         />
 
         <main className="flex-1 relative overflow-hidden flex items-center justify-center p-2">
@@ -80,13 +75,7 @@ export const StudentRoadmapView: React.FC = () => {
               exit={{ opacity: 0, x: viewMode === 'lessons' ? -slide : slide }}
               transition={{ duration: reduceMotion ? 0.2 : 0.35, ease: [0.16, 1, 0.3, 1] }}
             >
-              {viewMode === 'lessons' || coursesDisplayMode === 'fusion' ? (
-                <RoadmapFusionView dataset={dataset} onDeploy={handleDeployLesson} />
-              ) : coursesDisplayMode === 'pin-rail' ? (
-                <CoursePinRail dataset={dataset} onDeploy={handleDeployLesson} />
-              ) : (
-                <RoadmapCanvas dataset={dataset} />
-              )}
+              <RoadmapFusionView dataset={dataset} onDeploy={handleDeployLesson} />
             </motion.div>
           </AnimatePresence>
 

@@ -76,7 +76,15 @@ export class VerifyOtpUseCase {
     } catch (error: any) {
       if (error instanceof UnauthorizedException) throw error;
       this.logger.error(`Fallo en verificación OTP: ${error.message}`);
-      throw new BadRequestException(error.message || 'Código OTP inválido o expirado.');
+      const rawMessage = error.message || '';
+      const cleanMessage =
+        rawMessage.toLowerCase().includes('supabase') ||
+        rawMessage.toLowerCase().includes('database') ||
+        rawMessage.toLowerCase().includes('token has expired') ||
+        rawMessage.toLowerCase().includes('otp expired')
+          ? 'Código OTP inválido o expirado.'
+          : rawMessage || 'Código OTP inválido o expirado.';
+      throw new BadRequestException(cleanMessage);
     }
   }
 }

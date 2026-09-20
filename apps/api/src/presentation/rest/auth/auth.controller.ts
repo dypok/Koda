@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Headers, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
+import { Controller, Post, Get, Body, Headers, UseGuards, HttpCode, HttpStatus, UnauthorizedException } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import type { User as SupabaseAuthUser } from '@supabase/supabase-js';
@@ -11,7 +11,9 @@ import { ResetPasswordUseCase, ResetPasswordResponse } from '@application/use-ca
 import { UserSessionResponseDto } from '@application/dto/auth/user-session-response.dto';
 import { SupabaseAuthGuard } from '@common/guards/supabase-auth.guard';
 import { CurrentUser } from '@common/decorators/current-user.decorator';
+import { SupabaseService } from '../../../database/supabase.service';
 import { VerifyTokenDto } from './dto/verify-token.dto';
+import { RefreshSessionDto } from './dto/refresh-session.dto';
 import { RegisterOtpDto } from './dto/register-otp.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { CompleteOnboardingDto } from './dto/complete-onboarding.dto';
@@ -28,13 +30,14 @@ export class AuthController {
     private readonly completeOnboardingUseCase: CompleteOnboardingUseCase,
     private readonly forgotPasswordUseCase: ForgotPasswordUseCase,
     private readonly resetPasswordUseCase: ResetPasswordUseCase,
+    private readonly supabaseService: SupabaseService,
   ) {}
 
   @Post('verify-session')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Verificar y sincronizar sesión de Supabase Auth',
-    description: 'Valida la autenticidad del token JWT de Supabase, aprovisiona la cuenta en public.users si es necesario y entrega el perfil completo con métricas de estudio.',
+    summary: 'Verificar y sincronizar sesión activa',
+    description: 'Valida la autenticidad del token JWT de sesión, aprovisiona la cuenta en el sistema si es necesario y entrega el perfil completo con métricas de estudio.',
   })
   @ApiResponse({ status: 200, description: 'Sesión válida y perfil resuelto.', type: UserSessionResponseDto })
   @ApiResponse({ status: 401, description: 'Token de sesión inválido o expirado.' })
@@ -46,12 +49,42 @@ export class AuthController {
     return this.validateUserSessionUseCase.execute(token);
   }
 
+  @Post('refresh-session')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Renovar sesión y tokens de acceso',
+    description: 'Intercambia un refresh token válido por una nueva sesión activa con access token y refresh token actualizados.',
+  })
+  @ApiResponse({ status: 200, description: 'Sesión renovada exitosamente.' })
+  @ApiResponse({ status: 401, description: 'Sesión inválida o expirada. Por favor, inicia sesión nuevamente.' })
+  async refreshSession(@Body() dto: RefreshSessionDto) {
+    try {
+      const data = await this.supabaseService.refreshAuthSession(dto.refreshToken);
+      if (!data?.session || !data?.user) {
+        throw new UnauthorizedException('Sesión inválida o expirada. Por favor, inicia sesión nuevamente.');
+      }
+      const userProfile = await this.validateUserSessionUseCase.execute(data.session.access_token);
+      return {
+        session: userProfile,
+        accessToken: data.session.access_token,
+        refreshToken: data.session.refresh_token,
+        expiresIn: data.session.expires_in,
+        tokenType: data.session.token_type,
+      };
+    } catch (err: any) {
+      if (err instanceof UnauthorizedException) {
+        throw err;
+      }
+      throw new UnauthorizedException('Sesión inválida o expirada. Por favor, inicia sesión nuevamente.');
+    }
+  }
+
   @Get('session')
   @UseGuards(SupabaseAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Obtener sesión del usuario autenticado',
-    description: 'Consulta los datos del usuario actual a partir del token Bearer validado por SupabaseAuthGuard.',
+    description: 'Consulta los datos del usuario actual a partir del token Bearer de sesión validado.',
   })
   @ApiResponse({ status: 200, description: 'Sesión activa del usuario.', type: UserSessionResponseDto })
   @ApiResponse({ status: 401, description: 'No autenticado.' })
@@ -63,7 +96,7 @@ export class AuthController {
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({
     summary: 'Registrar usuario tradicional con validación OTP',
-    description: 'Crea el usuario en Supabase Auth y despacha un código OTP de 6 dígitos a su correo electrónico.',
+    description: 'Crea el usuario en el sistema de autenticación y despacha un código OTP de 6 dígitos a su correo electrónico.',
   })
   @ApiResponse({ status: 201, description: 'Código OTP enviado exitosamente.' })
   @ApiResponse({ status: 400, description: 'Datos de registro inválidos.' })
@@ -76,7 +109,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Verificar código OTP y emitir sesión',
-    description: 'Valida el código numérico de 6 dígitos con Supabase Auth, aprovisiona la cuenta en PostgreSQL y retorna la sesión con tokens.',
+    description: 'Valida el código numérico de 6 dígitos, aprovisiona la cuenta en el sistema y retorna la sesión con tokens.',
   })
   @ApiResponse({ status: 200, description: 'Código OTP verificado correctamente.' })
   @ApiResponse({ status: 401, description: 'Código OTP inválido o expirado.' })
@@ -90,7 +123,7 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
     summary: 'Completar y sincronizar onboarding del estudiante',
-    description: 'Guarda las preferencias educativas (tecnología, nivel, metas, estilo) en PostgreSQL y sincroniza la metadata en Supabase Auth marcando onboardingCompleted en true.',
+    description: 'Guarda las preferencias educativas (tecnología, nivel, metas, estilo) en PostgreSQL y sincroniza la metadata de la sesión marcando onboardingCompleted en true.',
   })
   @ApiResponse({ status: 200, description: 'Onboarding completado exitosamente.', type: UserSessionResponseDto })
   @ApiResponse({ status: 401, description: 'No autenticado.' })
@@ -142,7 +175,7 @@ export class AuthController {
   @ApiOperation({
     summary: 'Restablecer contraseña con token de recuperación de un solo uso',
     description:
-      'Valida el token temporal de recuperación, exige requisitos de complejidad de contraseña (mínimo 8 caracteres, mayúscula, minúscula, número y símbolo especial) y actualiza las credenciales en Supabase Auth, invalidando el token de inmediato.',
+      'Valida el token temporal de recuperación, exige requisitos de complejidad de contraseña (mínimo 8 caracteres, mayúscula, minúscula, número y símbolo especial) y actualiza las credenciales, invalidando el token de inmediato.',
   })
   @ApiResponse({
     status: 200,

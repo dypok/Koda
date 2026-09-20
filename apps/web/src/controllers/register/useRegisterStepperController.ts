@@ -31,7 +31,7 @@ function loadProgress(): Partial<PersistedProgress> {
   }
 }
 
-export function useRegisterStepperController() {
+export function useRegisterStepperController(maxSteps: number = 5) {
   // false en el primer render (igual que el servidor); se hidrata en efecto.
   const [isExpress, setIsExpress] = useState(false);
   useEffect(() => {
@@ -51,14 +51,14 @@ export function useRegisterStepperController() {
 
   useEffect(() => {
     const saved = loadProgress();
-    if (saved.currentStep != null) setCurrentStep(saved.currentStep);
+    if (saved.currentStep != null) setCurrentStep(Math.min(maxSteps, saved.currentStep));
     if (saved.selectedLanguageId) setSelectedLanguageId(saved.selectedLanguageId);
     if (saved.selectedCategory) setSelectedCategory(saved.selectedCategory);
     if (saved.selectedExperienceId !== undefined) setSelectedExperienceId(saved.selectedExperienceId);
     if (saved.selectedStyleId !== undefined) setSelectedStyleId(saved.selectedStyleId);
     if (saved.selectedGoalId !== undefined) setSelectedGoalId(saved.selectedGoalId);
     // eslint-disable-next-line react-hooks/set-state-in-effect
-  }, []);
+  }, [maxSteps]);
   // Express: defaults visibles en el resumen (pasos 2-4 colapsados).
   const expressDefaults = isExpress;
   const effectiveExperienceId = selectedExperienceId ?? (expressDefaults ? 'beginner' : null);
@@ -121,18 +121,18 @@ export function useRegisterStepperController() {
 
   const nextStep = useCallback(() => {
     if (!canContinue) return;
-    setCurrentStep((prev) => (isExpress && prev === 1 ? 5 : Math.min(5, prev + 1)));
-  }, [canContinue, isExpress]);
+    setCurrentStep((prev) => (isExpress && prev === 1 ? maxSteps : Math.min(maxSteps, prev + 1)));
+  }, [canContinue, isExpress, maxSteps]);
 
   const prevStep = useCallback(() => {
-    setCurrentStep((prev) => (isExpress && prev === 5 ? 1 : Math.max(1, prev - 1)));
-  }, [isExpress]);
+    setCurrentStep((prev) => (isExpress && prev === maxSteps ? 1 : Math.max(1, prev - 1)));
+  }, [isExpress, maxSteps]);
 
   // En express, goToStep recibe el número visible (1-3) y salta al real.
   const goToStep = useCallback((step: number) => {
-    const real = isExpress ? (step >= 3 ? 5 : 1) : step;
-    setCurrentStep(Math.min(5, Math.max(1, Math.round(real))));
-  }, [isExpress]);
+    const real = isExpress ? (step >= 3 ? maxSteps : 1) : step;
+    setCurrentStep(Math.min(maxSteps, Math.max(1, Math.round(real))));
+  }, [isExpress, maxSteps]);
 
   // Flechas del teclado para navegar (fuera de inputs).
   useEffect(() => {
@@ -157,8 +157,8 @@ export function useRegisterStepperController() {
 
   return {
     currentStep,
-    displayStep: isExpress ? (currentStep === 5 ? 3 : 1) : currentStep,
-    totalSteps: isExpress ? 3 : 5,
+    displayStep: isExpress ? (currentStep === maxSteps ? 3 : 1) : currentStep,
+    totalSteps: isExpress ? 3 : maxSteps,
     isExpress,
     categories: TECH_CATEGORIES,
     selectedCategory,

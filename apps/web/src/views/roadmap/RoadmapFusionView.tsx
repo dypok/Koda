@@ -8,7 +8,6 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { RoadmapPixiGraph } from './RoadmapPixiGraph';
 import { RoadmapCanvasControls } from './RoadmapCanvasControls';
-import { OrbitFieldBackground } from '@/components/landing/OrbitFieldBackground';
 import { cn } from '@/lib/utils';
 
 interface RoadmapFusionViewProps {
@@ -80,17 +79,25 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+      const activeTag = document.activeElement?.tagName?.toLowerCase();
+      if (activeTag === 'input' || activeTag === 'textarea') return;
+
+      if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'ArrowRight') {
         e.preventDefault();
         goTo(activeIndex + 1);
-      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      } else if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'ArrowLeft') {
         e.preventDefault();
         goTo(activeIndex - 1);
+      } else if (e.key === 'Enter') {
+        if (activeNode && activeNode.isUnlocked) {
+          e.preventDefault();
+          onDeploy(activeNode);
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeIndex, goTo]);
+  }, [activeIndex, goTo, activeNode, onDeploy]);
 
   // Arrastre para paneo (el zoom vive en el store y lo consume el grafo Pixi).
   const dragRef = useRef<{ px: number; py: number; ox: number; oy: number } | null>(null);
@@ -132,8 +139,6 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
 
   return (
     <div onWheel={handleWheel} className="relative w-full h-full overflow-hidden select-none">
-      <OrbitFieldBackground className="scale-[1.5]" />
-
       <div
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
@@ -158,7 +163,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
       {activeNode && (
         <aside
           className={cn(
-            'absolute right-4 sm:right-6 top-16 sm:top-16 z-20 w-80 sm:w-96 max-w-[calc(100%-2rem)] max-h-[calc(100%-9rem)] overflow-y-auto rounded-2xl border bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col gap-4 shadow-2xl transition-all duration-300',
+            'absolute right-4 sm:right-6 top-20 z-20 w-80 sm:w-96 max-w-[calc(100%-2rem)] max-h-[calc(100%-6.5rem)] overflow-y-auto rounded-2xl border bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col gap-4 shadow-2xl transition-all duration-300',
             showPanel ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'
           )}
           style={{ borderColor: isBoss ? 'rgba(244,63,94,0.5)' : 'rgba(255,106,0,0.35)' }}
@@ -265,7 +270,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
           type="button"
           onClick={() => setShowPanel(true)}
           aria-label="Mostrar detalle"
-          className="absolute right-4 top-16 z-20 p-2.5 rounded-xl border border-slate-700/50 bg-slate-900/40 backdrop-blur-xl text-slate-300 hover:text-orange-400 hover:border-orange-500/50 shadow-xl transition-colors cursor-pointer"
+          className="absolute right-4 top-20 z-20 p-2.5 rounded-xl border border-slate-700/50 bg-slate-900/40 backdrop-blur-xl text-slate-300 hover:text-orange-400 hover:border-orange-500/50 shadow-xl transition-colors cursor-pointer"
         >
           <Sidebar className="w-4 h-4" />
         </button>

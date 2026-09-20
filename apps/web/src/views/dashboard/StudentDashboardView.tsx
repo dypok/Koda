@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Flame, Star, SignOut, Code, ArrowRight } from '@phosphor-icons/react';
-import { GradientButton } from '@/components/ui/gradient-button';
+import { WipeButton } from '@/components/ui/wipe-button';
 import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
 import { useAuthStore } from '@/stores/auth.store';
 
@@ -58,10 +58,10 @@ export const StudentDashboardView: React.FC = () => {
               Tu ruta activa: <strong className="text-amber-400">Python 3.12</strong>. Continúa tu progreso.
             </p>
           </div>
-          <GradientButton onClick={() => alert('Próximamente: Lección Interactiva')} className="py-2.5 px-5 text-sm gap-2">
+          <WipeButton onClick={() => alert('Próximamente: Lección Interactiva')} className="py-2.5 px-5 text-sm gap-2">
             <span>Continuar Ruta</span>
             <ArrowRight className="w-4 h-4" />
-          </GradientButton>
+          </WipeButton>
         </div>
 
         {/* Current Module Overview - Integrated into page, NO CARDS */}
