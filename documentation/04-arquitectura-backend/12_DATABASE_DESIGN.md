@@ -270,6 +270,26 @@ Las estrellas no son cosméticas; miden el rigor en la resolución de la Tríada
 * ⭐ **(1 Estrella - Aprobado Básico):** Aprueba **solo 1 ítem** al primer intento o resolvió la lección tras solicitar pistas y reintentos.
 * **0 Estrellas:** No superó el desafío de consola obligatorio; la lección no se da por completada.
 
+### 5.7 Repositorio Declarativo de Contenido y Seeding Idempotente
+Todo el catálogo curricular y los datos de seed residen como archivos JSON versionables y desacoplados en el directorio raíz `content/` (`P-01` y `P-04` de `23_CONTENT_SPECIFICATION.md`):
+
+```
+content/
+├── tracks.json                          # Colección tracks
+├── visual-effects.json                  # Colección visual_effects
+├── courses.json                         # Colección courses (DAG)
+└── courses/
+    └── python-core/
+        ├── modules.json                 # Colección modules
+        ├── sections.json                # Colección sections
+        ├── lessons.json                 # Colección lessons (Tríada Evaluativa)
+        └── question-banks.json          # Colección question_banks
+```
+
+* **Autocarga Dinámica:** El script `apps/api/src/database/seed.ts` y el inicializador Docker `docker/mongo-init/01-init-mongo.js` escanean recursivamente `content/` y clasifican automáticamente cualquier nuevo curso o documento por estructura y metadatos.
+* **Idempotencia:** Todas las operaciones de carga ejecutan `updateOne({ slug }, { $set }, { upsert: true })`.
+* **Comando de Siembra:** `pnpm --filter api db:seed`.
+
 ---
 
 ## 6. Arquitectura de Conexión y Enlace Híbrido Desacoplado
