@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Envelope, Lock, Eye, EyeSlash, CircleNotch, ArrowRight, CheckCircle } from '@phosphor-icons/react';
 import { GradientButton } from '@/components/ui/gradient-button';
+import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
 import { useAuthStore } from '@/stores/auth.store';
 import { AuthService } from '@/services/auth/auth.service';
 import { LoginSocialButtons } from './LoginSocialButtons';
@@ -17,6 +18,7 @@ export const LoginForm: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isResetting, setIsResetting] = useState(false);
   const [error, setError] = useState('');
   const [resetSent, setResetSent] = useState(false);
 
@@ -95,19 +97,26 @@ export const LoginForm: React.FC = () => {
       return;
     }
     setError('');
-    setIsSubmitting(true);
+    setIsResetting(true);
     try {
       await AuthService.requestPasswordReset(email);
       setResetSent(true);
     } catch (err: any) {
       setError(err.message || 'Error al solicitar recuperación de contraseña.');
     } finally {
-      setIsSubmitting(false);
+      setIsResetting(false);
     }
   };
 
   return (
     <div className="w-full max-w-lg mx-auto space-y-6">
+      {isSubmitting && (
+        <KodaLoadingScreen
+          title="Iniciando sesión..."
+          subtitle="Validando tus credenciales y preparando tu entorno..."
+          terminalHint="> auth :: autenticando"
+        />
+      )}
       <div className="space-y-1.5 text-left">
         <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">¡Hola de nuevo!</h1>
         <p className="text-sm sm:text-base text-slate-400">Inicia sesión para continuar tu progreso en Koda.</p>
