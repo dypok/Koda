@@ -350,11 +350,7 @@ export function DiagnosticTestModal({
               ← Anterior
             </button>
 
-            {isMandatory ? (
-              <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs font-mono text-amber-300">
-                ⚡ Test Obligatorio
-              </span>
-            ) : onSkip ? (
+            {!isMandatory && onSkip ? (
               <button
                 type="button"
                 onClick={onSkip}

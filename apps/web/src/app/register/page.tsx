@@ -175,12 +175,12 @@ export default function RegisterPage() {
     1: { text: 'Explorar y continuar', hint: 'Elige tu tecnología para continuar' },
     2: {
       text: hasPendingDiagnostic
-        ? '⚡ Iniciar Test Obligatorio'
+        ? 'Iniciar test'
         : diagnosticResult
         ? 'Confirmar mi nivel y continuar'
         : 'Confirmar mi nivel',
       hint: hasPendingDiagnostic
-        ? 'Debes completar el test diagnóstico de 12 retos para validar tu nivel'
+        ? 'Realiza el test para validar tu nivel y continuar'
         : 'Elige tu nivel para continuar',
     },
     3: { text: 'Confirmar mi estilo', hint: 'Elige tu estilo para continuar' },

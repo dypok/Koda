@@ -61,12 +61,11 @@ export const ExperienceStep: React.FC<ExperienceStepProps> = ({
           ) : (
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
               <div className="space-y-0.5">
-                <div className="text-xs font-bold text-amber-300 font-mono flex items-center gap-1.5">
-                  <span>⚡</span>
-                  <span>Evaluación Diagnóstica Obligatoria</span>
+                <div className="text-xs font-bold text-amber-300 font-mono">
+                  Evaluación diagnóstica
                 </div>
                 <p className="text-[11px] text-slate-400 font-sans">
-                  Has indicado conocimientos previos. Para calibrar tu nivel y ubicarte en el módulo exacto, es obligatorio realizar el test de 12 retos interactivos.
+                  Responde 12 preguntas para validar tu nivel y calibrar tu ruta de aprendizaje.
                 </p>
               </div>
 
@@ -75,7 +74,7 @@ export const ExperienceStep: React.FC<ExperienceStepProps> = ({
                 onClick={onOpenDiagnostic}
                 className="shrink-0 px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold font-mono transition-colors shadow-sm cursor-pointer"
               >
-                ⚡ Iniciar Test
+                Iniciar test
               </button>
             </div>
           )}
