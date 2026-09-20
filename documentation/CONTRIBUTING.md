@@ -38,7 +38,7 @@ Los mensajes de commit deben seguir el estándar **Conventional Commits**:
 
 Si estás colaborando en la creación de nuevas lecciones o ejercicios en [`content/`](content/):
 
-1. **Consulta obligatoria:** Lee atentamente [`docs/03-pedagogia-contenido/24_CONTENT_AUTHORING_GUIDE.md`](docs/03-pedagogia-contenido/24_CONTENT_AUTHORING_GUIDE.md).
+1. **Consulta obligatoria:** Lee atentamente [`documentation/03-pedagogia-contenido/24_CONTENT_AUTHORING_GUIDE.md`](03-pedagogia-contenido/24_CONTENT_AUTHORING_GUIDE.md).
 2. **Micro-Lecciones Atómicas:**
    - Longitud estricta: entre **40 y 70 palabras** en segunda persona (*"tú"*).
    - Estructura en máximo 3 pasos lógicos.
@@ -47,7 +47,7 @@ Si estás colaborando en la creación de nuevas lecciones o ejercicios en [`cont
    - Al fallar un ejercicio, proporciona una pista orientadora (*hint*) inteligente, pero **nunca reveles la opción correcta**.
    - Los distractores deben originarse en errores mentales verosímiles del principiante.
 4. **Validación del Contenido:**
-   - Asegúrate de que los archivos `module.json` y `bank.json` cumplan con la especificación de [`docs/03-pedagogia-contenido/23_CONTENT_SPECIFICATION.md`](docs/03-pedagogia-contenido/23_CONTENT_SPECIFICATION.md).
+   - Asegúrate de que los archivos `module.json` y `bank.json` cumplan con la especificación de [`documentation/03-pedagogia-contenido/23_CONTENT_SPECIFICATION.md`](03-pedagogia-contenido/23_CONTENT_SPECIFICATION.md).
    - Cada pregunta debe tener `id` único, `concept_id`, `difficulty` (`easy`, `medium`, `hard`) y balance de alternativas.
 
 ---
@@ -80,6 +80,6 @@ pnpm dev
 
 - [ ] ¿El código compila sin errores con `pnpm build`?
 - [ ] ¿Los linters pasan sin advertencias con `pnpm lint`?
-- [ ] ¿Se actualizaron las especificaciones relevantes en `docs/` si hubo cambios arquitectónicos o de datos?
-- [ ] Si se tomó una decisión arquitectónica clave, ¿se añadió su respectivo ADR en `docs/adr/`?
-- [ ] ¿Se registró el cambio en `CHANGELOG.md` con fecha y hora local `America/Bogota`?
+- [ ] ¿Se actualizaron las especificaciones relevantes en `documentation/` si hubo cambios arquitectónicos o de datos?
+- [ ] Si se tomó una decisión arquitectónica clave, ¿se añadió su respectivo ADR en `documentation/adr/`?
+- [ ] ¿Se registró el cambio en `documentation/changelog/` con fecha y hora local `America/Bogota`?

@@ -157,10 +157,10 @@ Story,DOCS-03,EPIC-1,,"EPIC-1: Montado de Documentación, Arquitectura y Goberna
 ""Como equipo técnico, queremos tener un sistema formal de Registro de Decisiones de Arquitectura (ADR) y un Hub central navegable, para registrar el porqué de cada decisión tecnológica y facilitar la incorporación inmediata de nuevos desarrolladores.""
 
 h3. ✅ Criterios de Aceptación
-- Directorio `docs/adr/` configurado con plantilla oficial y ciclo de vida de ADRs formalizado (`RNF-019`).
+- Directorio `documentation/adr/` configurado con plantilla oficial y ciclo de vida de ADRs formalizado (`RNF-019`).
 - Los 9 ADRs oficiales redactados, justificados y aprobados (ADR-001 al ADR-009).
 - Estructura modular de `docs/` organizada en 5 subdirectorios funcionales con sus índices locales `README.md`.
-- `docs/README.md` creado como hub interactivo clasificado en 5 dominios y rutas de lectura sugeridas por rol.
+- `documentation/README.md` creado como hub interactivo clasificado en 5 dominios y rutas de lectura sugeridas por rol.
 
 h3. 🛡️ Definition of Done Específica
 - Todas las 33 referencias rotas de archivos (`12_DATA_MODEL`, `13_API_SPEC`, `27_UI_DESIGN`, `24_QUESTION_SYSTEM`) subsanadas en el 100% de la documentación.
@@ -169,8 +169,8 @@ h3. 🏛️ Gobernanza
 * *Rama sugerida:* `docs/adr-hub-central`
 * *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
 * *DoD Global:* Verificado según checklist de Koda.",devops,High,3,Sprint 0,"story, koda-mvp, scrumban"
-Sub-task,DOCS-03-SUB-01,DOCS-03,,,[DOCS] Crear `docs/adr/README.md` con guía de ciclo de vida (Propuesto $\rightarrow$ Aprobado $\rightarrow$ Reemplazado / Rechazado).,"h3. 🛠️ Subtarea Técnica (DEVOPS)
-* *Tarea:* [DOCS] Crear `docs/adr/README.md` con guía de ciclo de vida (Propuesto $\rightarrow$ Aprobado $\rightarrow$ Reemplazado / Rechazado).
+Sub-task,DOCS-03-SUB-01,DOCS-03,,,[DOCS] Crear `documentation/adr/README.md` con guía de ciclo de vida (Propuesto $\rightarrow$ Aprobado $\rightarrow$ Reemplazado / Rechazado).,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Crear `documentation/adr/README.md` con guía de ciclo de vida (Propuesto $\rightarrow$ Aprobado $\rightarrow$ Reemplazado / Rechazado).
 * *Estado en backlog documental:* ✅ Completada
 * *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
 * *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
@@ -279,8 +279,8 @@ h3. 🏛️ Reglas de Flujo Koda
 * Rama base: `develop`
 * Nomenclatura sugerida: `feat/devops-docs-03`
 * Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
-Sub-task,DOCS-03-SUB-12,DOCS-03,,,"[DOCS] Crear `docs/README.md` con mapa conceptual Mermaid, catálogo maestro de 27 documentos y rutas por rol.","h3. 🛠️ Subtarea Técnica (DEVOPS)
-* *Tarea:* [DOCS] Crear `docs/README.md` con mapa conceptual Mermaid, catálogo maestro de 27 documentos y rutas por rol.
+Sub-task,DOCS-03-SUB-12,DOCS-03,,,"[DOCS] Crear `documentation/README.md` con mapa conceptual Mermaid, catálogo maestro de 27 documentos y rutas por rol.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Crear `documentation/README.md` con mapa conceptual Mermaid, catálogo maestro de 27 documentos y rutas por rol.
 * *Estado en backlog documental:* ✅ Completada
 * *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
 * *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
@@ -821,7 +821,7 @@ h3. ✅ Criterios de Aceptación
   6. *¿Cómo garantizan que realmente aprenda y no solo adivine opciones?* (Sistema formativo con opciones barajadas, rondas de repaso y cuaderno de errores).
 - Footer completo con:
   - Logotipo de Koda con la mascota 🦊.
-  - Enlaces a documentación técnica pública (`docs/README.md`), repositorio GitHub y canal de Discord/Comunidad.
+  - Enlaces a documentación técnica pública (`documentation/README.md`), repositorio GitHub y canal de Discord/Comunidad.
   - Enlace al verificador público de certificados (`/verificar`).
   - Copyright, aviso de privacidad y términos de servicio conformes con la protección de datos personales (`19_SECURITY.md`).
 
@@ -1254,7 +1254,7 @@ h3. 🏛️ Reglas de Flujo Koda
 * Rama base: `develop`
 * Nomenclatura sugerida: `feat/frontend-auth-04`
 * Entregable requerido al finalizar: `documentation/done/frontend/frontend-auth-04.md`",frontend,Medium,1,Sprint 2,"subtask, frontend, koda-mvp, scrumban"
-Epic,EPIC-4,,"EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta",,"EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta","Esta épica materializa el **Learning Engine** de Koda (`docs/03-pedagogia-contenido/14_LEARNING_SYSTEM.md`, `ADR-007`, `ADR-008`, `ADR-009`, `ADR-010`, `ADR-011`): la visualización en Grafo Dirigido Acíclico (DAG) interactivo con Paneo y Zoom a 120 FPS, **Topología de Rejilla Relativa (Tier/Lane)** sin coordenadas absolutas estáticas, aristas con **Catálogo de Efectos Visuales GPU**, soporte multi-rama de especialización profesional (*Frontend, Backend, DevOps y Python*), compuertas maestras *Apex Master Gate*, candados estandarizados `RQ {requisito}`, sistema formativo de 1 a 3 estrellas (⭐) vinculado a la **Tríada Evaluativa** y persistencia híbrida políglota (MongoDB para currículo + Supabase PostgreSQL para progreso).",,High,,Sprint 2,"epic, koda-mvp, scrumban"
+Epic,EPIC-4,,"EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta",,"EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta","Esta épica materializa el **Learning Engine** de Koda (`documentation/03-pedagogia-contenido/14_LEARNING_SYSTEM.md`, `ADR-007`, `ADR-008`, `ADR-009`, `ADR-010`, `ADR-011`): la visualización en Grafo Dirigido Acíclico (DAG) interactivo con Paneo y Zoom a 120 FPS, **Topología de Rejilla Relativa (Tier/Lane)** sin coordenadas absolutas estáticas, aristas con **Catálogo de Efectos Visuales GPU**, soporte multi-rama de especialización profesional (*Frontend, Backend, DevOps y Python*), compuertas maestras *Apex Master Gate*, candados estandarizados `RQ {requisito}`, sistema formativo de 1 a 3 estrellas (⭐) vinculado a la **Tríada Evaluativa** y persistencia híbrida políglota (MongoDB para currículo + Supabase PostgreSQL para progreso).",,High,,Sprint 2,"epic, koda-mvp, scrumban"
 Story,LEARN-01,EPIC-4,,"EPIC-4: Motor de Aprendizaje, Grafo DAG Multi-Rama y Hoja de Ruta","LEARN-01 — Lienzo Interactivo de Grafo DAG con Topología Tier/Lane, Paneo/Zoom y Shaders GPU","h3. 📋 Historia de Usuario
 ""Como estudiante, quiero navegar por mi hoja de ruta como un grafo espacial interactivo con paneo fluido, zoom de 50% a 200% y conexiones animadas en GPU basadas en niveles relativos (tier/lane), para explorar rutas de carrera sin restricciones de coordenadas rígidas, visualizando mis conexiones activas y selladas a 120 FPS.""
 

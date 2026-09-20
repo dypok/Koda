@@ -1,7 +1,7 @@
 # 11 — Arquitectura del Sistema
 
 > **Estado:** Aprobado · **Versión del documento:** 2.3.0 · **Fecha:** 2026-09-14
-> Complementa a `docs/01-producto-negocio/`, `docs/02-requisitos-ux/`, `ADR-001` (Monorepo), `ADR-002` (Supabase), `ADR-007` (Grafo DAG), `ADR-008` (NestJS Oficial), `ADR-009` (Persistencia Híbrida), `ADR-010` (Hexagonal + Eventos de Dominio), `ADR-011` (BullMQ + Caché Versionada) y `ADR-012` (Arquitectura Híbrida GraphQL y REST). Materializa la arquitectura técnica integral:
+> Complementa a `documentation/01-producto-negocio/`, `documentation/02-requisitos-ux/`, `ADR-001` (Monorepo), `ADR-002` (Supabase), `ADR-007` (Grafo DAG), `ADR-008` (NestJS Oficial), `ADR-009` (Persistencia Híbrida), `ADR-010` (Hexagonal + Eventos de Dominio), `ADR-011` (BullMQ + Caché Versionada) y `ADR-012` (Arquitectura Híbrida GraphQL y REST). Materializa la arquitectura técnica integral:
 > - **Frontend:** Next.js 15 (App Router, React 19, Tailwind CSS, PixiJS WebGL).
 > - **Backend:** Monolito Modular Hexagonal en NestJS (`apps/api`) con desacoplamiento reactivo vía Domain Events (`@nestjs/event-emitter` y BullMQ).
 > - **Transporte Externo:** Arquitectura híbrida con GraphQL (`/graphql`) como estándar primario para interacción de UI y REST (`/api/v1`) para flujos HTTP estándar.

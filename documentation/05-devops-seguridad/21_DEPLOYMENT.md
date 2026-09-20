@@ -401,7 +401,7 @@ aws s3 sync s3://app-prod s3://backups-prod/objects/ --storage-class STANDARD_IA
 | 4 | Medir RTO real y comparar con ≤ 4 h | Cada ensayo | Métrica en `21` |
 | 5 | Registrar en `CHANGELOG.md` la fecha del último ensayo exitoso | Cada ensayo | Entrada `Fixed` o `Docs` |
 
-> El backup sin ensayo es defecto bloqueante (`06` RNF-043). El reporte se guarda en `docs/ops/restore-YYYY-MM-DD.md` y se referencia en `CHANGELOG.md`.
+> El backup sin ensayo es defecto bloqueante (`06` RNF-043). El reporte se guarda en `documentation/ops/restore-YYYY-MM-DD.md` y se referencia en `CHANGELOG.md`.
 
 ---
 

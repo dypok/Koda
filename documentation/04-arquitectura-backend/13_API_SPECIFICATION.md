@@ -1,7 +1,7 @@
 # 13 — Especificación de API (API Specification)
 
 > **Estado:** Aprobado · **Versión del documento:** 2.2.0 · **Fecha:** 2026-09-14  
-> **Complementa a:** `docs/01-producto-negocio/`, `docs/02-requisitos-ux/`, `11_SYSTEM_ARCHITECTURE.md`, `12_DATABASE_DESIGN.md` (v3.0.0), `ADR-007` (Roadmap DAG), `ADR-008` (NestJS Oficial), `ADR-009` (Persistencia Híbrida), `ADR-010` (Hexagonal + Eventos) y `ADR-012` (Arquitectura Híbrida GraphQL y REST).  
+> **Complementa a:** `documentation/01-producto-negocio/`, `documentation/02-requisitos-ux/`, `11_SYSTEM_ARCHITECTURE.md`, `12_DATABASE_DESIGN.md` (v3.0.0), `ADR-007` (Roadmap DAG), `ADR-008` (NestJS Oficial), `ADR-009` (Persistencia Híbrida), `ADR-010` (Hexagonal + Eventos) y `ADR-012` (Arquitectura Híbrida GraphQL y REST).  
 > **Zona horaria de timestamps de API:** `America/Bogota` (UTC-5).
 
 ---

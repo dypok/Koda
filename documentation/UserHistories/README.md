@@ -11,7 +11,7 @@
 
 ## 🏛️ Trazabilidad con Decisiones de Arquitectura (ADRs)
 
-Todas las historias de usuario de este backlog se fundamentan en las decisiones oficiales documentadas en [`docs/adr/`](../../docs/adr/README.md):
+Todas las historias de usuario de este backlog se fundamentan en las decisiones oficiales documentadas en [`documentation/adr/`](../adr/README.md):
 - **ADR-001:** Monorepo con PNPM Workspaces (`apps/web`, `apps/api`, `packages/types`).
 - **ADR-002:** Base de Datos Relacional con Supabase (PostgreSQL 15+).
 - **ADR-003:** Pipeline de Certificación en Backend y Storage en Google Drive API v3.

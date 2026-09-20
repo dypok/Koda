@@ -43,7 +43,7 @@ graph LR
         A3["13 API Spec (REST + GraphQL)"]
         A4["17 Certificación"]
         A5["25 Admin System"]
-        ADR["ADRs (docs/adr/)"]
+        ADR["ADRs (documentation/adr/)"]
     end
 
     subgraph D5["5. Seguridad & DevOps"]
@@ -79,7 +79,7 @@ Para optimizar el tiempo de incorporación al proyecto (*onboarding*), consulta 
 3. [`12_DATABASE_DESIGN.md`](04-arquitectura-backend/12_DATABASE_DESIGN.md) — Persistencia híbrida (`ADR-009`): Supabase PostgreSQL (transacciones) + MongoDB (contenido).
 4. [`13_API_SPECIFICATION.md`](04-arquitectura-backend/13_API_SPECIFICATION.md) — Contratos REST OpenAPI 3.0.3, límites híbridos con GraphQL (`ADR-012`) y DTOs.
 5. [`17_CERTIFICATION.md`](04-arquitectura-backend/17_CERTIFICATION.md) — Emisión de certificados con Supabase Storage (`ADR-003`).
-6. [`docs/adr/`](adr/README.md) — Decisiones de arquitectura formalizadas (ADR-001 a ADR-013).
+6. [`documentation/adr/`](adr/README.md) — Decisiones de arquitectura formalizadas (ADR-001 a ADR-016).
 7. [`apps/api/README.md`](../apps/api/README.md) — Estructura NestJS, controladores y Swagger.
 
 ### ✍️ Diseñador Instruccional / Creador de Contenido (Python & Tracks)
@@ -137,7 +137,7 @@ Para optimizar el tiempo de incorporación al proyecto (*onboarding*), consulta 
 | **13** | [`13_API_SPECIFICATION.md`](04-arquitectura-backend/13_API_SPECIFICATION.md) | 2.2.0 | ✅ Aprobado | Especificación de contratos REST OpenAPI 3.0.3 y fronteras con GraphQL (`ADR-012`). |
 | **17** | [`17_CERTIFICATION.md`](04-arquitectura-backend/17_CERTIFICATION.md) | 2.0.0 | ✅ Aprobado | Pipeline backend de generación de PDF, QR ISO 18004 y Supabase Storage (`ADR-003`). |
 | **25** | [`25_ADMIN_SYSTEM.md`](04-arquitectura-backend/25_ADMIN_SYSTEM.md) | 1.0.0 | ✅ Aprobado | Consola de administración, publicación sin despliegue y auditoría inmutable. |
-| **ADR** | [`docs/adr/`](adr/README.md) | — | 🟢 Activo | Registro formal de Decisiones de Arquitectura (ADR-001 a ADR-013). |
+| **ADR** | [`documentation/adr/`](adr/README.md) | — | 🟢 Activo | Registro formal de Decisiones de Arquitectura (ADR-001 a ADR-016). |
 
 ### 🛡️ [Dominio 5 — Seguridad & DevOps](05-devops-seguridad/README.md)
 | Código | Documento | Versión | Estado | Descripción Principal |
@@ -151,6 +151,6 @@ Para optimizar el tiempo de incorporación al proyecto (*onboarding*), consulta 
 
 ## 🏛️ Gobernanza y Mantenimiento de la Documentación
 
-1. **Principio de Trazabilidad:** Todo cambio arquitectónico debe generar o actualizar un ADR en [`docs/adr/`](adr/README.md) y reflejarse en [`documentation/changelog/`](../documentation/changelog/) con autor y hora local.
-2. **Backlog Jira-Ready:** Las historias de usuario desglosadas por capa técnica y Definition of Done (DoD) residen en [`documentation/UserHistories/`](../documentation/UserHistories/README.md).
+1. **Principio de Trazabilidad:** Todo cambio arquitectónico debe generar o actualizar un ADR en [`documentation/adr/`](adr/README.md) y reflejarse en [`documentation/changelog/`](changelog/) con autor y hora local.
+2. **Backlog Jira-Ready:** Las historias de usuario desglosadas por capa técnica y Definition of Done (DoD) residen en [`documentation/UserHistories/`](UserHistories/README.md).
 3. **Invariantes de Contenido:** Ningún documento debe contener supuestos o configuraciones hardcodeadas en código fuente. El motor de aprendizaje se rige por especificaciones desacopladas almacenadas en MongoDB y [`content/`](../content/).

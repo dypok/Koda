@@ -151,7 +151,7 @@
 ### LESS-06 — Motor de Ejecución de Código Híbrido (`ICodeRunner`) y Carga Documental NoSQL
 **Tipo:** Story | **SP:** 5 | **Prioridad:** Muy Alta | **Asignado:** Fullstack Developer  
 **Rama sugerida:** `feature/icoderunner-hybrid-nosql`  
-**Trazabilidad:** `ADR-006`, `ADR-008`, `ADR-009`, `docs/04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md`
+**Trazabilidad:** `ADR-006`, `ADR-008`, `ADR-009`, `documentation/04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md`
 
 **Historia de usuario:**
 > "Como estudiante, quiero ejecutar código Python directamente en mi navegador con retroalimentación instantánea y consultar lecciones sin latencia,
