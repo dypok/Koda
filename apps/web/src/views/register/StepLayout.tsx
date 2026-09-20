@@ -31,11 +31,6 @@ export const StepLayout: React.FC<StepLayoutProps> = ({ title, subtitle, groupLa
               priority
             />
           </div>
-          {kodaSay && (
-            <span aria-hidden="true" className="mt-1 max-w-[120px] rounded-xl rounded-tl-sm border border-amber-400/30 bg-amber-400/10 px-2 py-1 text-center text-[10px] font-bold leading-tight text-amber-200">
-              {kodaSay}
-            </span>
-          )}
         </div>
         <div className="space-y-0.5">
           <h1 className="text-xl sm:text-2xl font-black text-white tracking-tight">
