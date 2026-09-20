@@ -1,0 +1,374 @@
+[
+  {
+    "slug": "py-m01-s01-l01",
+    "section_slug": "py-m01-s01",
+    "title": "Bienvenido al universo Python",
+    "position": 1,
+    "theory": {
+      "step1": "Python es un lenguaje de programación diseñado para ser claro, legible y directo.",
+      "step2": "A diferencia de otros lenguajes, no necesitas caracteres extraños para empezar.",
+      "step3": "Cada instrucción que escribes le indica a la computadora qué acción exacta realizar.",
+      "code_snippet": "print(\"¡Hola, Koda!\")"
+    },
+    "item_1_console": {
+      "prompt": "Imprime el saludo inicial para despertar a Koda usando print(\"¡Hola, Koda!\").",
+      "initial_code": "# Escribe tu código aquí\n",
+      "solution_code": "print(\"¡Hola, Koda!\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "¡Hola, Koda!\n",
+          "description": "Debe imprimir exactamente ¡Hola, Koda!"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál es la principal ventaja de Python para quienes aprenden a programar?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Su sintaxis limpia se asemeja al lenguaje humano cotidiano",
+          "is_correct": true,
+          "feedback": "¡Exacto! Python fue diseñado para que las personas lean y entiendan código fácilmente."
+        },
+        {
+          "id": "b",
+          "text": "Obliga a usar punto y coma al final de cada línea",
+          "is_correct": false,
+          "feedback": "En Python no se utilizan puntos y comas obligatorios."
+        },
+        {
+          "id": "c",
+          "text": "Solo funciona en navegadores web antiguos",
+          "is_correct": false,
+          "feedback": "Python es un lenguaje universal que corre en servidores, computadoras y la nube."
+        },
+        {
+          "id": "d",
+          "text": "No permite manipular números ni textos",
+          "is_correct": false,
+          "feedback": "Python maneja datos de todo tipo con gran versatilidad."
+        }
+      ]
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué resultado mostrará en la terminal el comando print(\"Koda\")?",
+      "code_snippet": "print(\"Koda\")",
+      "target_type": "predict_output",
+      "expected_answer": "Koda",
+      "hint": "La función print() muestra el texto sin las comillas que lo rodean."
+    },
+    "xp_reward": 15,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s01-l02",
+    "section_slug": "py-m01-s01",
+    "title": "Instrucciones en orden secuencial",
+    "position": 2,
+    "theory": {
+      "step1": "La computadora ejecuta las instrucciones una tras otra, de arriba hacia abajo.",
+      "step2": "Cada línea de código representa un paso individual en el programa.",
+      "step3": "El orden de las líneas determina el orden exacto en que ocurren los resultados.",
+      "code_snippet": "print(\"Paso 1\")\nprint(\"Paso 2\")"
+    },
+    "item_1_console": {
+      "prompt": "Escribe dos líneas con print: primero \"Inicio\" y en la siguiente línea \"Fin\".",
+      "initial_code": "# Escribe dos instrucciones print\n",
+      "solution_code": "print(\"Inicio\")\nprint(\"Fin\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Inicio\nFin\n",
+          "description": "Debe imprimir Inicio y luego Fin en líneas separadas"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "Si ejecutas dos instrucciones print(), ¿en qué orden se mostrarán sus mensajes?",
+      "options": [
+        {
+          "id": "a",
+          "text": "De arriba hacia abajo, en el orden en que fueron escritas",
+          "is_correct": true,
+          "feedback": "¡Correcto! Los programas se ejecutan secuencialmente de arriba a abajo."
+        },
+        {
+          "id": "b",
+          "text": "En orden alfabético automático",
+          "is_correct": false,
+          "feedback": "Python no reorganiza tus líneas por orden alfabético."
+        },
+        {
+          "id": "c",
+          "text": "Al azar cada vez que corre el programa",
+          "is_correct": false,
+          "feedback": "El orden de ejecución es determinista y predecible."
+        },
+        {
+          "id": "d",
+          "text": "De abajo hacia arriba siempre",
+          "is_correct": false,
+          "feedback": "El flujo de control lee de la primera línea hacia la última."
+        }
+      ]
+    },
+    "item_3_prediction": {
+      "prompt": "Observa este código. ¿Cuál será la segunda palabra que aparecerá en pantalla?",
+      "code_snippet": "print(\"Uno\")\nprint(\"Dos\")",
+      "target_type": "predict_output",
+      "expected_answer": "Dos",
+      "hint": "La segunda línea se ejecuta inmediatamente después de la primera."
+    },
+    "xp_reward": 15,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s02-l01",
+    "section_slug": "py-m01-s02",
+    "title": "Cadenas de texto y comillas",
+    "position": 1,
+    "theory": {
+      "step1": "Los textos en programación se conocen formalmente como cadenas (strings).",
+      "step2": "Para que Python sepa que es texto, debes envolverlo en comillas dobles \"...\" o simples '...'.",
+      "step3": "Si olvidas las comillas, Python pensará que el texto es el nombre de una variable o función.",
+      "code_snippet": "print(\"Aprendiendo Python\")"
+    },
+    "item_1_console": {
+      "prompt": "Imprime en pantalla la frase: Koda es genial",
+      "initial_code": "# Usa print() con comillas\n",
+      "solution_code": "print(\"Koda es genial\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Koda es genial\n",
+          "description": "Debe imprimir Koda es genial"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de las siguientes líneas define correctamente un texto para imprimir en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "print(\"Hola\")",
+          "is_correct": true,
+          "feedback": "¡Excelente! Las comillas dobles delimitan el texto correctamente."
+        },
+        {
+          "id": "b",
+          "text": "print(Hola)",
+          "is_correct": false,
+          "feedback": "Sin comillas, Python generará un NameError buscando una variable llamada Hola."
+        },
+        {
+          "id": "c",
+          "text": "print<<Hola>>",
+          "is_correct": false,
+          "feedback": "Esa no es la sintaxis de Python para llamar a funciones."
+        },
+        {
+          "id": "d",
+          "text": "print[Hola]",
+          "is_correct": false,
+          "feedback": "Los corchetes se utilizan para indexar listas, no para invocar print."
+        }
+      ]
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué error provocará ejecutar print(Python)? (Tip: falta un elemento de sintaxis)",
+      "code_snippet": "print(Python)",
+      "target_type": "bug_hunt",
+      "expected_answer": "NameError",
+      "hint": "Al no tener comillas, Python busca un identificador con ese nombre y falla al no encontrarlo."
+    },
+    "xp_reward": 15,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s02-l02",
+    "section_slug": "py-m01-s02",
+    "title": "Comillas dobles vs comillas simples",
+    "position": 2,
+    "theory": {
+      "step1": "En Python, las comillas dobles (\"\") y simples ('') son totalmente equivalentes.",
+      "step2": "Puedes usar la que prefieras, siempre que abras y cierres con el mismo tipo de comilla.",
+      "step3": "Si tu texto contiene una comilla simple interna, puedes envolverlo en comillas dobles para evitar conflictos.",
+      "code_snippet": "print('Texto con comilla simple')\nprint(\"It's Koda\")"
+    },
+    "item_1_console": {
+      "prompt": "Imprime la frase: 'Python es divertido' utilizando comillas dobles alrededor.",
+      "initial_code": "# Escribe tu instrucción print\n",
+      "solution_code": "print(\"'Python es divertido'\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "'Python es divertido'\n",
+          "description": "Debe imprimir el texto con las comillas simples internas"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué sucede si abres una cadena con comilla doble y la cierras con comilla simple?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Se genera un SyntaxError porque las comillas no coinciden",
+          "is_correct": true,
+          "feedback": "¡Exacto! Python exige que el carácter de apertura coincida con el de cierre."
+        },
+        {
+          "id": "b",
+          "text": "Python lo corrige automáticamente sin avisar",
+          "is_correct": false,
+          "feedback": "Los lenguajes de programación son estrictos con la sintaxis de cierre."
+        },
+        {
+          "id": "c",
+          "text": "El programa imprime la mitad del texto",
+          "is_correct": false,
+          "feedback": "El intérprete aborta antes de ejecutar debido a un error de sintaxis."
+        },
+        {
+          "id": "d",
+          "text": "Se crea un número entero",
+          "is_correct": false,
+          "feedback": "Un texto mal cerrado jamás se convierte en un número."
+        }
+      ]
+    },
+    "item_3_prediction": {
+      "prompt": "¿Cuál será la salida de print('Hola' + ' ' + 'Mundo')?",
+      "code_snippet": "print('Hola' + ' ' + 'Mundo')",
+      "target_type": "predict_output",
+      "expected_answer": "Hola Mundo",
+      "hint": "El signo + entre cadenas une los textos sin agregar espacios extras por su cuenta."
+    },
+    "xp_reward": 15,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s03-l01",
+    "section_slug": "py-m01-s03",
+    "title": "Imprimiendo números en Python",
+    "position": 1,
+    "theory": {
+      "step1": "Los números en Python no llevan comillas.",
+      "step2": "Si escribes un número entre comillas, Python lo tratará como texto y no como valor numérico.",
+      "step3": "Puedes pasar números directamente a print() para mostrarlos en pantalla.",
+      "code_snippet": "print(42)"
+    },
+    "item_1_console": {
+      "prompt": "Imprime el número 2026 sin usar comillas.",
+      "initial_code": "# Imprime el número directamente\n",
+      "solution_code": "print(2026)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "2026\n",
+          "description": "Debe imprimir el número 2026"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál es la diferencia entre 100 y \"100\" en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "100 es un número entero para operaciones y \"100\" es una cadena de texto",
+          "is_correct": true,
+          "feedback": "¡Perfecto! Los números permiten hacer cálculos matemáticos; los textos solo representan caracteres."
+        },
+        {
+          "id": "b",
+          "text": "No hay ninguna diferencia, Python los trata exactamente igual",
+          "is_correct": false,
+          "feedback": "Tienen tipos de datos completamente distintos (int vs str)."
+        },
+        {
+          "id": "c",
+          "text": "100 es texto y \"100\" es un número",
+          "is_correct": false,
+          "feedback": "Las comillas indican texto, no valores numéricos."
+        },
+        {
+          "id": "d",
+          "text": "\"100\" causa un error de compilación",
+          "is_correct": false,
+          "feedback": "Es perfectamente válido escribir \"100\", es un string de tres caracteres."
+        }
+      ]
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor imprimirá en consola print(10 + 5)?",
+      "code_snippet": "print(10 + 5)",
+      "target_type": "predict_output",
+      "expected_answer": "15",
+      "hint": "Python realiza la suma aritmética antes de pasar el resultado a print()."
+    },
+    "xp_reward": 15,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s03-l02",
+    "section_slug": "py-m01-s03",
+    "title": "Operaciones aritméticas fundamentales",
+    "position": 2,
+    "theory": {
+      "step1": "Python funciona como una calculadora de alta precisión.",
+      "step2": "Los operadores básicos son: suma (+), resta (-), multiplicación (*) y división (/).",
+      "step3": "Python respeta las reglas matemáticas de precedencia (multiplicación antes de suma).",
+      "code_snippet": "print(5 * 4)\nprint(20 / 4)"
+    },
+    "item_1_console": {
+      "prompt": "Calcula e imprime el resultado de multiplicar 7 por 8.",
+      "initial_code": "# Escribe print con la multiplicación\n",
+      "solution_code": "print(7 * 8)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "56\n",
+          "description": "Debe imprimir 56"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué símbolo se usa para multiplicar dos números en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El asterisco (*)",
+          "is_correct": true,
+          "feedback": "¡Exacto! El asterisco * es el operador de multiplicación universal en programación."
+        },
+        {
+          "id": "b",
+          "text": "La letra x",
+          "is_correct": false,
+          "feedback": "La letra x es interpretada como el nombre de una variable, no como multiplicación."
+        },
+        {
+          "id": "c",
+          "text": "El punto (.)",
+          "is_correct": false,
+          "feedback": "El punto se utiliza para números decimales o acceder a propiedades."
+        },
+        {
+          "id": "d",
+          "text": "El signo de porcentaje (%)",
+          "is_correct": false,
+          "feedback": "El signo % se utiliza para obtener el residuo de una división (módulo)."
+        }
+      ]
+    },
+    "item_3_prediction": {
+      "prompt": "¿Cuál es el resultado de print(2 + 3 * 4)?",
+      "code_snippet": "print(2 + 3 * 4)",
+      "target_type": "predict_output",
+      "expected_answer": "14",
+      "hint": "La multiplicación (3 * 4 = 12) se resuelve antes que la suma (+ 2)."
+    },
+    "xp_reward": 15,
+    "is_active": true
+  }
+]

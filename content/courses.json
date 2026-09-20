@@ -1,0 +1,134 @@
+[
+  {
+    "slug": "python-core",
+    "track_slug": "python",
+    "name": "Fundamentos de Programación con Python 3.12",
+    "description": "Aprende los conceptos fundamentales de la programación con la sintaxis más limpia y amigable.",
+    "color": "#38BDF8",
+    "icon": "IconBrandPython",
+    "topology": {
+      "tier": 0,
+      "lane": 0
+    },
+    "prerequisites": [],
+    "edges": [
+      {
+        "target_course_slug": "frontend-core",
+        "connection_type": "unlocks",
+        "visual_effect_code": "energy_beam_solid",
+        "edge_color": "#10B981"
+      },
+      {
+        "target_course_slug": "backend-core",
+        "connection_type": "unlocks",
+        "visual_effect_code": "laser_flow_fast",
+        "edge_color": "#8B5CF6"
+      },
+      {
+        "target_course_slug": "devops-core",
+        "connection_type": "unlocks",
+        "visual_effect_code": "dotted_amber_pulse",
+        "edge_color": "#F59E0B"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "slug": "frontend-core",
+    "track_slug": "frontend",
+    "name": "Frontend Web con React 19 y Next.js",
+    "description": "Desarrollo de interfaces interactivas, componentes atómicos, SSR y Tailwind CSS.",
+    "color": "#10B981",
+    "icon": "IconDeviceDesktop",
+    "topology": {
+      "tier": 1,
+      "lane": -1
+    },
+    "prerequisites": [
+      "python-core"
+    ],
+    "edges": [],
+    "is_active": true
+  },
+  {
+    "slug": "backend-core",
+    "track_slug": "backend",
+    "name": "Backend Engineering con NestJS",
+    "description": "Construcción de arquitecturas modulares y hexagonales, persistencia relacional y APIs robustas.",
+    "color": "#8B5CF6",
+    "icon": "IconServer",
+    "topology": {
+      "tier": 1,
+      "lane": 0
+    },
+    "prerequisites": [
+      "python-core"
+    ],
+    "edges": [
+      {
+        "target_course_slug": "fastapi-async",
+        "connection_type": "unlocks",
+        "visual_effect_code": "laser_flow_fast",
+        "edge_color": "#8B5CF6"
+      },
+      {
+        "target_course_slug": "django-enterprise",
+        "connection_type": "unlocks",
+        "visual_effect_code": "dotted_amber_pulse",
+        "edge_color": "#10B981"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "slug": "devops-core",
+    "track_slug": "devops",
+    "name": "DevOps, Docker & Cloud Infrastructure",
+    "description": "Automatización de pipelines CI/CD, contenedores Docker y monitoreo en la nube.",
+    "color": "#F59E0B",
+    "icon": "IconCloudComputing",
+    "topology": {
+      "tier": 1,
+      "lane": 1
+    },
+    "prerequisites": [
+      "python-core"
+    ],
+    "edges": [],
+    "is_active": true
+  },
+  {
+    "slug": "fastapi-async",
+    "track_slug": "backend",
+    "name": "Microservicios Asíncronos con FastAPI",
+    "description": "APIs ultra rápidas de alto rendimiento con validación Pydantic y concurrencia asyncio.",
+    "color": "#8B5CF6",
+    "icon": "IconServer",
+    "topology": {
+      "tier": 2,
+      "lane": 0
+    },
+    "prerequisites": [
+      "backend-core"
+    ],
+    "edges": [],
+    "is_active": true
+  },
+  {
+    "slug": "django-enterprise",
+    "track_slug": "backend",
+    "name": "Desarrollo Web Empresarial con Django",
+    "description": "Aplicaciones completas con ORM robusto, sistema de autenticación y panel de administración.",
+    "color": "#10B981",
+    "icon": "IconServer",
+    "topology": {
+      "tier": 2,
+      "lane": 1
+    },
+    "prerequisites": [
+      "backend-core"
+    ],
+    "edges": [],
+    "is_active": true
+  }
+]

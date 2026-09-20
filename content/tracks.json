@@ -1,0 +1,42 @@
+[
+  {
+    "slug": "python",
+    "name": "Pista Fundacional: Python",
+    "description": "Algoritmos, sintaxis base y resolución de problemas para programar desde cero.",
+    "icon": "IconBrandPython",
+    "badge": "Fundacional",
+    "color": "#38BDF8",
+    "sort_order": 10,
+    "is_active": true
+  },
+  {
+    "slug": "frontend",
+    "name": "Frontend Developer",
+    "description": "Especialización en interfaces web: HTML5 semántico, CSS moderno, TypeScript, React 19 y Next.js.",
+    "icon": "IconDeviceDesktop",
+    "badge": "Carrera",
+    "color": "#10B981",
+    "sort_order": 20,
+    "is_active": true
+  },
+  {
+    "slug": "backend",
+    "name": "Backend Developer",
+    "description": "Especialización en servidores: APIs REST, NestJS, bases de datos híbridas y microservicios.",
+    "icon": "IconServer",
+    "badge": "Carrera",
+    "color": "#8B5CF6",
+    "sort_order": 30,
+    "is_active": true
+  },
+  {
+    "slug": "devops",
+    "name": "DevOps & Cloud Engineer",
+    "description": "Especialización en infraestructura: Linux CLI, Docker, CI/CD GitHub Actions y Kubernetes.",
+    "icon": "IconCloudComputing",
+    "badge": "Carrera",
+    "color": "#F59E0B",
+    "sort_order": 40,
+    "is_active": true
+  }
+]

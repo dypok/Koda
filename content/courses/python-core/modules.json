@@ -1,0 +1,122 @@
+[
+  {
+    "slug": "fundamentos-de-python",
+    "course_slug": "python-core",
+    "title": "Fundamentos de Python",
+    "objective": "Dominar la función print(), cadenas de texto, números, indentación y comentarios.",
+    "position": 1,
+    "total_sections": 8,
+    "min_stars_percentage": 80,
+    "is_active": true
+  },
+  {
+    "slug": "variables-y-tipos-de-datos",
+    "course_slug": "python-core",
+    "title": "Variables y Tipos de Datos",
+    "objective": "Almacenamiento en memoria, int, float, str, bool y función inspectora type().",
+    "position": 2,
+    "total_sections": 10,
+    "min_stars_percentage": 80,
+    "is_active": true
+  },
+  {
+    "slug": "operadores-y-expresiones",
+    "course_slug": "python-core",
+    "title": "Operadores y Expresiones",
+    "objective": "Aritmética básica, comparadores y operadores lógicos and, or, not.",
+    "position": 3,
+    "total_sections": 8,
+    "min_stars_percentage": 80,
+    "is_active": true
+  },
+  {
+    "slug": "condicionales-y-control-flujo",
+    "course_slug": "python-core",
+    "title": "Condicionales y Control de Flujo",
+    "objective": "Toma de decisiones lógicas con bloques if, elif y else sin anidación excesiva.",
+    "position": 4,
+    "total_sections": 8,
+    "min_stars_percentage": 80,
+    "is_active": true
+  },
+  {
+    "slug": "bucles-e-iteracion",
+    "course_slug": "python-core",
+    "title": "Bucles e Iteración",
+    "objective": "Automatización de tareas repetitivas con for, while, range, break y continue.",
+    "position": 5,
+    "total_sections": 8,
+    "min_stars_percentage": 80,
+    "is_active": true
+  },
+  {
+    "slug": "funciones-y-modularidad",
+    "course_slug": "python-core",
+    "title": "Funciones y Modularidad",
+    "objective": "Creación de bloques de código reutilizables con def, parámetros y valores de retorno.",
+    "position": 6,
+    "total_sections": 8,
+    "min_stars_percentage": 80,
+    "is_active": true
+  },
+  {
+    "slug": "listas-y-tuplas",
+    "course_slug": "python-core",
+    "title": "Estructuras de Datos: Listas y Tuplas",
+    "objective": "Colecciones ordenadas, indexación por corchetes, slicing y mutabilidad.",
+    "position": 7,
+    "total_sections": 8,
+    "min_stars_percentage": 80,
+    "is_active": true
+  },
+  {
+    "slug": "diccionarios-y-conjuntos",
+    "course_slug": "python-core",
+    "title": "Diccionarios y Conjuntos",
+    "objective": "Mapeo asociativo clave-valor, métodos get() y conjuntos únicos set().",
+    "position": 8,
+    "total_sections": 8,
+    "min_stars_percentage": 80,
+    "is_active": true
+  },
+  {
+    "slug": "manejo-de-errores-excepciones",
+    "course_slug": "python-core",
+    "title": "Manejo de Errores y Excepciones",
+    "objective": "Prevención de caídas con bloques de control try, except, else y finally.",
+    "position": 9,
+    "total_sections": 8,
+    "min_stars_percentage": 80,
+    "is_active": true
+  },
+  {
+    "slug": "modulos-paquetes-entornos",
+    "course_slug": "python-core",
+    "title": "Módulos, Paquetes y Entornos",
+    "objective": "Organización modular con import, bibliotecas nativas math/random y entornos venv.",
+    "position": 10,
+    "total_sections": 8,
+    "min_stars_percentage": 80,
+    "is_active": true
+  },
+  {
+    "slug": "programacion-orientada-a-objetos",
+    "course_slug": "python-core",
+    "title": "Programación Orientada a Objetos",
+    "objective": "Modelado con clases, instancias, atributos, métodos y el constructor __init__.",
+    "position": 11,
+    "total_sections": 8,
+    "min_stars_percentage": 80,
+    "is_active": true
+  },
+  {
+    "slug": "proyecto-final-integrador",
+    "course_slug": "python-core",
+    "title": "Proyecto Final Integrador",
+    "objective": "Aplicación integral de todos los conceptos y preparación para la certificación oficial Koda.",
+    "position": 12,
+    "total_sections": 8,
+    "min_stars_percentage": 80,
+    "is_active": true
+  }
+]

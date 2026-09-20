@@ -27,30 +27,38 @@ En estricto cumplimiento de la arquitectura de datos y gobernanza Koda:
 
 ## 2. Componentes Creados y Modificados
 
-### A. Datos Canónicos del Currículo
-- **`apps/api/src/database/seeds/python-curriculum.data.ts`:**
-  - **4 Tracks:** `python` (Especialidad Python & Backend), `frontend` (Frontend Web Moderno), `backend` (Arquitectura de Servidores), `devops` (Infraestructura y Cloud).
-  - **6 Cursos DAG:** `python-core`, `frontend-core`, `backend-core`, `devops-core`, `fastapi-async`, `django-enterprise` con posiciones en tier/lane y prerequisitos definidos.
-  - **12 Módulos Python:** Desde Fundamentos (`py_mod_01`) hasta Testing y Calidad (`py_mod_12`).
-  - **8 Secciones para Módulo 1:** Sintaxis, Variables y Tipos (`py-m01-s01` a `py-m01-s08`).
-  - **6 Lecciones con Tríada Evaluativa:** Variables y Asignación Dinámica (`py-m01-s01-l01`, `py-m01-s01-l02`), Tipos de Datos Primitivos (`py-m01-s02-l01`, `py-m01-s02-l02`), Entrada y Salida Estándar (`py-m01-s03-l01`, `py-m01-s03-l02`).
-  - **3 Bancos de Preguntas Estratificados:** Fácil (`py-m01-qb-easy`), Medio (`py-m01-qb-medium`), Difícil (`py-m01-qb-hard`).
-  - **5 Efectos Visuales para el DAG:** `fx-neon-pulse`, `fx-electric-cyan`, `fx-matrix-rain`, `fx-gold-amber`, `fx-crimson-streak`.
+### A. Datos Canónicos Declarativos en `content/`
+- **Archivos semilla eliminados por obsolescencia:** Se suprimieron `content/languages/python/roadmap-courses.seed.json` y `roadmap-lessons.seed.json` (que usaban coordenadas de píxeles fijas y carecían de la Tríada Evaluativa).
+- **Archivos declarativos JSON desacoplados (P-01 / P-04):**
+  - `content/tracks.json`: 4 Tracks (`python`, `frontend`, `backend`, `devops`).
+  - `content/visual-effects.json`: 5 Efectos de aristas GPU (`laser_flow_fast`, `energy_beam_solid`, etc.).
+  - `content/courses.json`: 6 Cursos DAG (`python-core`, `frontend-core`, `backend-core`, `devops-core`, `fastapi-async`, `django-enterprise`).
+  - `content/courses/python-core/modules.json`: 12 Módulos canónicos de Python 3.12.
+  - `content/courses/python-core/sections.json`: 8 Secciones del Módulo 01.
+  - `content/courses/python-core/lessons.json`: 6 Micro-lecciones con Tríada Evaluativa completa (consola interactiva + test cases, quiz conceptual A/B/C/D y predicción).
+  - `content/courses/python-core/question-banks.json`: 3 Bancos de preguntas (easy, medium, hard).
 
-### B. Orquestador de Seeding (Mongoose)
+### B. Orquestador de Seeding Dinámico (Mongoose)
 - **`apps/api/src/database/seed.ts`:**
-  - Conexión dinámica a `DATABASE_MONGO_URL` o fallback a `mongodb://localhost:27017/koda`.
-  - Operaciones `bulkWrite` y `updateOne` con `{ upsert: true }` para todas las 7 colecciones.
-  - Reporte de estado en consola e invocable directamente mediante `pnpm --filter api db:seed`.
+  - Escaneo recursivo automático de todos los archivos `.json` en `content/` y subcarpetas (`content/courses/<curso>/*`).
+  - Detección polimórfica y tipado por estructura o nombre de archivo (tracks, courses, modules, sections, lessons, question_banks, visual_effects).
+  - Inserción idempotente con `upsert: true` a través de Mongoose.
+  - Permite a creadores de contenido añadir nuevos cursos o lecciones simplemente creando carpetas o JSONs en `content/` sin modificar código TypeScript.
+  - Fallback a seeds estáticos en memoria en caso de no detectarse el directorio `content/`.
 
 ### C. Automatización Docker
 - **`docker/mongo-init/01-init-mongo.js`:**
-  - Script mongosh que se ejecuta automáticamente cuando el contenedor `koda-mongo` se inicializa por primera vez.
-  - Crea índices únicos sobre campos `slug` e `id` en las 7 colecciones.
-  - Inserta los documentos semilla del currículo de manera idempotente.
+  - Script mongosh ejecutado al inicializar el contenedor `koda-mongo`.
+  - Crea índices únicos sobre campos clave en las 7 colecciones.
+  - Escanea dinámicamente `/content` si está montado e inserta todos los JSONs de forma idempotente.
 - **`docker-compose.yml`:**
-  - Montaje de volumen de solo lectura en el servicio `mongo`:
-    `- ./docker/mongo-init:/docker-entrypoint-initdb.d:ro`
+  - Montajes de volúmenes de solo lectura:
+    ```yaml
+    volumes:
+      - koda_mongo_data:/data/db
+      - ./docker/mongo-init:/docker-entrypoint-initdb.d:ro
+      - ./content:/content:ro
+    ```
 
 ---
 

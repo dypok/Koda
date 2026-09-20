@@ -8,21 +8,23 @@
 
 ```
 content/
+├── tracks.json                          # Catálogo de pistas profesionales (python, frontend, backend, devops)
+├── visual-effects.json                  # Catálogo de presets de aristas GPU (laser_flow_fast, etc.)
+├── courses.json                         # Nodos del grafo DAG con topología tier/lane
+├── courses/                             # Estructura modular por curso
+│   └── python-core/
+│       ├── modules.json                 # 12 módulos de Python 3.12
+│       ├── sections.json                # Secciones por módulo
+│       ├── lessons.json                 # Micro-lecciones con Tríada Evaluativa completa
+│       └── question-banks.json          # Bancos estratificados (easy, medium, hard)
 └── languages/
-    └── {slug}/                          # ej. python, javascript, typescript
-        ├── manifest.json                # Metadatos del curso, versión y lista de módulos
-        ├── config/
-        │   ├── thresholds.json          # Umbrales mínimos de aprobación (% quiz y examen)
-        │   ├── xp.json                  # Economía de XP por sección, ejercicio y examen
-        │   └── compositions.json        # Distribución de tipos de pregunta por evaluación
-        └── modules/
-            ├── 01_fundamentos/          # Directorio de módulo
-            │   ├── module.json          # 10 secciones x 10 lecciones con teoría y código
-            │   └── bank.json            # Banco de preguntas para quizzes y exámenes
-            └── 02_variables/
-                ├── module.json
-                └── bank.json
+    └── {slug}/                          # ej. python, lua (especificaciones legacy/adicionales)
+        ├── manifest.json
+        └── config/
 ```
+
+> **Autocarga y Siembra Automática (`pnpm --filter api db:seed`):**
+> Cualquier nuevo archivo JSON que añadas en `content/` o dentro de `content/courses/<nuevo-curso>/` con cursos, módulos, secciones, lecciones (Tríada Evaluativa) o bancos de preguntas es **auto-detectado e importado de forma idempotente (`upsert: true`)** a MongoDB tanto en local como al iniciar los contenedores de Docker.
 
 ---
 
