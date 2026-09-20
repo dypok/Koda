@@ -68,6 +68,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
     const stage = stageRef.current;
     if (!mount || !stage) return;
     let cancelled = false;
+    let ro: ResizeObserver | null = null;
 
     const boot = async () => {
       const PIXI = await loadPixi();
@@ -83,6 +84,14 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
         antialias: true,
         resolution: dprCap(),
       });
+      if (cancelled) {
+        try {
+          app.destroy(true);
+        } catch {
+          /* noop */
+        }
+        return;
+      }
       const view = app.view as unknown as HTMLCanvasElement;
       view.style.position = 'absolute';
       view.style.inset = '0';
@@ -206,11 +215,14 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
       const tick = () => draw(performance.now());
       appRef.current = { app, tick };
 
-      const ro = new ResizeObserver(() => {
+      ro = new ResizeObserver(() => {
+        if (cancelled || !app.renderer) return;
         const r = mount.getBoundingClientRect();
         px.w = Math.max(1, Math.round(r.width));
         px.h = Math.max(1, Math.round(r.height));
-        app.renderer.resize(px.w, px.h);
+        if (app.renderer) {
+          app.renderer.resize(px.w, px.h);
+        }
         if (reduced) draw(performance.now());
       });
       ro.observe(mount);
@@ -225,6 +237,10 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
     void boot();
     return () => {
       cancelled = true;
+      if (ro) {
+        ro.disconnect();
+        ro = null;
+      }
       const entry = appRef.current;
       appRef.current = null;
       if (entry) {
@@ -235,8 +251,12 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
           /* noop */
         }
         const v = entry.app.view as unknown as HTMLElement;
-        if (v.parentNode === stage) stage.removeChild(v);
-        entry.app.destroy(true);
+        if (v && v.parentNode === stage) stage.removeChild(v);
+        try {
+          entry.app.destroy(true);
+        } catch {
+          /* noop */
+        }
       }
     };
   }, [stars, realStar, interactive, reduceMotion, mountRef]);

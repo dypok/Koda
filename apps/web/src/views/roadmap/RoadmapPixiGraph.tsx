@@ -220,6 +220,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
     if (!mount) return;
     let cancelled = false;
     let unsubscribe: (() => void) | null = null;
+    let ro: ResizeObserver | null = null;
 
     const boot = async () => {
       const PIXI = await loadPixi();
@@ -234,6 +235,14 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
         antialias: true,
         resolution: dprCap(),
       });
+      if (cancelled) {
+        try {
+          app.destroy(true);
+        } catch {
+          /* noop */
+        }
+        return;
+      }
       const view = app.view as unknown as HTMLCanvasElement;
       view.style.position = 'absolute';
       view.style.inset = '0';
@@ -949,16 +958,20 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
       unsubscribe = useRoadmapStore.subscribe(syncStore);
       syncStore();
 
-      const ro = new ResizeObserver(() => {
+      ro = new ResizeObserver(() => {
+        if (cancelled || !app.renderer) return;
         const r = mount.getBoundingClientRect();
         W = Math.max(1, Math.round(r.width));
         H = Math.max(1, Math.round(r.height));
-        app.renderer.resize(W, H);
-        applyWorld();
-        app.renderer.render(app.stage);
+        if (app.renderer) {
+          app.renderer.resize(W, H);
+          applyWorld();
+          if (app.stage) {
+            app.renderer.render(app.stage);
+          }
+        }
       });
       ro.observe(mount);
-      (app as unknown as { __ro?: ResizeObserver }).__ro = ro;
 
       refresh(true);
       if (!reduced) app.ticker.add(tick);
@@ -967,6 +980,10 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
     void boot();
     return () => {
       cancelled = true;
+      if (ro) {
+        ro.disconnect();
+        ro = null;
+      }
       unsubscribe?.();
       unsubscribe = null;
       const app = appRef.current;
@@ -982,11 +999,13 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
         } catch {
           /* noop */
         }
-        const ro = (app as unknown as { __ro?: ResizeObserver }).__ro;
-        ro?.disconnect();
         const v = app.view as unknown as HTMLElement;
-        if (v.parentNode === mount) mount.removeChild(v);
-        app.destroy(true);
+        if (v && v.parentNode === mount) mount.removeChild(v);
+        try {
+          app.destroy(true);
+        } catch {
+          /* noop */
+        }
       }
     };
     // Montaje: estilos y rama. Los cambios de dataset entran por refresco sin entrada.

@@ -57,6 +57,7 @@ export const AsciiVortexBackground: React.FC<{ className?: string; density?: num
     const mount = mountRef.current;
     if (!mount || reduceMotion) return;
     let cancelled = false;
+    let ro: ResizeObserver | null = null;
 
     const boot = async () => {
       const PIXI = await loadPixi();
@@ -81,6 +82,14 @@ export const AsciiVortexBackground: React.FC<{ className?: string; density?: num
         antialias: true,
         resolution: dprCap(),
       });
+      if (cancelled) {
+        try {
+          app.destroy(true);
+        } catch {
+          /* noop */
+        }
+        return;
+      }
       const view = app.view as unknown as HTMLCanvasElement;
       view.style.position = 'absolute';
       view.style.inset = '0';
@@ -188,24 +197,30 @@ export const AsciiVortexBackground: React.FC<{ className?: string; density?: num
       };
       app.ticker.add(tick);
 
-      const ro = new ResizeObserver(() => {
+      ro = new ResizeObserver(() => {
+        if (cancelled || !app.renderer) return;
         const r = mount.getBoundingClientRect();
         W = Math.max(1, Math.round(r.width));
         H = Math.max(1, Math.round(r.height));
-        app.renderer.resize(W, H);
+        if (app.renderer) {
+          app.renderer.resize(W, H);
+        }
         for (const p of particles) {
           p.centerX = W * 0.5;
           p.centerY = H * 0.46;
         }
       });
       ro.observe(mount);
-      (app as unknown as { __ro?: ResizeObserver }).__ro = ro;
       (app as unknown as { __tex?: PixiTexture[] }).__tex = textures;
     };
 
     void boot();
     return () => {
       cancelled = true;
+      if (ro) {
+        ro.disconnect();
+        ro = null;
+      }
       const app = appRef.current;
       appRef.current = null;
       if (app) {
@@ -214,8 +229,6 @@ export const AsciiVortexBackground: React.FC<{ className?: string; density?: num
         } catch {
           /* noop */
         }
-        const ro = (app as unknown as { __ro?: ResizeObserver }).__ro;
-        ro?.disconnect();
         const tex = (app as unknown as { __tex?: PixiTexture[] }).__tex;
         tex?.forEach((t) => {
           try {
@@ -225,8 +238,12 @@ export const AsciiVortexBackground: React.FC<{ className?: string; density?: num
           }
         });
         const v = app.view as unknown as HTMLElement;
-        if (v.parentNode === mount) mount.removeChild(v);
-        app.destroy(true);
+        if (v && v.parentNode === mount) mount.removeChild(v);
+        try {
+          app.destroy(true);
+        } catch {
+          /* noop */
+        }
       }
     };
   }, [targetCount, reduceMotion, mountRef]);
