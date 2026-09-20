@@ -48,3 +48,13 @@ Se completó la lógica de desvío y experiencia de usuario cuando un estudiante
 - **TypeScript:** 0 errores de tipado en 6.7s.
 - **Rutas Generadas:** 11/11 rutas estáticas optimizadas.
 - **Aislamiento de Código:** Cumplimiento estricto de `koda-frontend-workflow` sin alterar el backend de `apps/api/` ni migraciones de base de datos.
+
+---
+
+## 4. Estabilización de Animaciones y Pantalla de Carga Koda (`KodaLoadingScreen`)
+
+- **Pantalla de Carga Branded (`KodaLoadingScreen`):** Componente a pantalla completa con la mascota Koda 2D animada (`/brand/koda-mascot-cartoon-2d.svg`), halo ámbar pulsante y status bar. Erradica cualquier parpadeo de pantallas intermedias (Paso 1, Paso 5) o pantallas negras al autenticar vía OAuth o completar el onboarding.
+- **Fix de `WipeButton`:** Se conservó intacta la animación diagonal de 3 bandas, unificando el texto en un único span con transición de color fluida a blanco, eliminando el texto duplicado y el salto de alineación/orientación.
+- **Fix de `LanguageCard`:** Se estabilizó `useScramble` con un sizer invisible que mantiene invariable el ancho del texto en hover, y se migró la onda expansiva a `scale` por GPU con `pointer-events-none`.
+- **Fix de `StepLayout` y Grid:** Se aplicó `layout="position"` en Framer Motion evitando que las tarjetas cambien de tamaño o se hinchen en hover.
+

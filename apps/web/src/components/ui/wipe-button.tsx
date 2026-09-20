@@ -46,7 +46,7 @@ export const WipeButton: React.FC<WipeButtonProps> = ({
   children,
 }) => {
   const [b1, b2, b3] = BANDS[tone];
-  const finalText = tone === 'amber' ? 'text-white' : 'text-amber-300';
+  const hoverTextColor = tone === 'amber' ? 'group-hover:text-white' : 'group-hover:text-amber-300';
   const base =
     tone === 'amber'
       ? 'bg-amber-400 text-slate-950 shadow-[0_4px_20px_-2px_rgba(249,115,22,0.45)]'
@@ -57,7 +57,7 @@ export const WipeButton: React.FC<WipeButtonProps> = ({
       <span
         aria-hidden="true"
         className={cn(
-          'absolute -left-8 -top-16 h-64 w-[160%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
+          'pointer-events-none absolute -left-8 -top-16 h-64 w-[160%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
           'delay-150 group-hover:delay-0 group-hover:scale-x-100 motion-reduce:hidden',
           b1
         )}
@@ -65,7 +65,7 @@ export const WipeButton: React.FC<WipeButtonProps> = ({
       <span
         aria-hidden="true"
         className={cn(
-          'absolute -left-8 -top-16 h-64 w-[160%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
+          'pointer-events-none absolute -left-8 -top-16 h-64 w-[160%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
           'delay-75 group-hover:delay-75 group-hover:scale-x-100 motion-reduce:hidden',
           b2
         )}
@@ -73,25 +73,16 @@ export const WipeButton: React.FC<WipeButtonProps> = ({
       <span
         aria-hidden="true"
         className={cn(
-          'absolute -left-8 -top-16 h-64 w-[160%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
+          'pointer-events-none absolute -left-8 -top-16 h-64 w-[160%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
           'delay-0 group-hover:delay-150 group-hover:scale-x-100 motion-reduce:hidden',
           b3
         )}
       />
-      <span
-        className={cn(
-          'absolute inset-0 z-10 flex items-center justify-center gap-2 opacity-0 transition-opacity duration-300 motion-reduce:hidden',
-          'group-hover:opacity-100',
-          finalText
-        )}
-      >
-        {children}
-      </span>
     </>
   );
 
   const cls = cn(
-    'group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl font-bold',
+    'group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl font-bold select-none',
     'transition-all duration-300 hover:shadow-[0_8px_32px_-2px_rgba(249,115,22,0.65)] active:scale-[0.98]',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300',
     'disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none',
@@ -100,24 +91,32 @@ export const WipeButton: React.FC<WipeButtonProps> = ({
     className
   );
 
+  const content = (
+    <>
+      <span
+        className={cn(
+          'relative z-10 flex items-center justify-center gap-2 transition-colors duration-300 pointer-events-none',
+          hoverTextColor
+        )}
+      >
+        {children}
+      </span>
+      {bands}
+    </>
+  );
+
   if (href && !disabled) {
     const Comp = LinkComponent;
     return (
       <Comp href={href} aria-label={ariaLabel} onClick={onClick} className={cls}>
-        <span className="relative z-10 flex items-center justify-center gap-2 transition-opacity duration-300 group-hover:opacity-0 motion-reduce:group-hover:opacity-100">
-          {children}
-        </span>
-        {bands}
+        {content}
       </Comp>
     );
   }
 
   return (
     <button type="button" onClick={onClick} disabled={disabled} aria-label={ariaLabel} className={cls}>
-      <span className="relative z-10 flex items-center justify-center gap-2 transition-opacity duration-300 group-hover:opacity-0 motion-reduce:group-hover:opacity-100">
-        {children}
-      </span>
-      {bands}
+      {content}
     </button>
   );
 };

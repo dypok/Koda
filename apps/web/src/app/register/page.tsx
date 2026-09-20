@@ -1,10 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
 import { WeatherLayer } from '@/components/landing/WeatherLayer';
+import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
 import { RegisterHeaderBar } from '@/views/register/RegisterHeaderBar';
 import { LanguageSelectionStep } from '@/views/register/LanguageSelectionStep';
 import { ExperienceStep } from '@/views/register/ExperienceStep';
@@ -22,6 +23,9 @@ import { useAuthStore } from '@/stores/auth.store';
 export default function RegisterPage() {
   const router = useRouter();
   const { user, token, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
+  const [isOAuthProcessing, setIsOAuthProcessing] = useState(false);
+  const [isCompletingAndRedirecting, setIsCompletingAndRedirecting] = useState(false);
+
   const isOAuthUser = Boolean(token && user && !user.onboardingCompleted);
   const totalSteps = isOAuthUser ? 4 : 5;
   const stepper = useRegisterStepperController(totalSteps);
@@ -33,10 +37,11 @@ export default function RegisterPage() {
 
   // Si el usuario ya completó el onboarding, redirigirlo a la ruta
   useEffect(() => {
-    if (hasHydrated && isAuthenticated && user?.onboardingCompleted === true) {
+    if (hasHydrated && isAuthenticated && user?.onboardingCompleted === true && !isCompletingAndRedirecting) {
+      setIsCompletingAndRedirecting(true);
       router.replace('/app/ruta');
     }
-  }, [hasHydrated, isAuthenticated, user, router]);
+  }, [hasHydrated, isAuthenticated, user, router, isCompletingAndRedirecting]);
 
   const onboardingData = {
     initialLanguageSlug: stepper.selectedLanguageId || 'python',
@@ -59,6 +64,7 @@ export default function RegisterPage() {
     const refreshToken = params.get('refresh_token');
 
     if (accessToken) {
+      setIsOAuthProcessing(true);
       const pendingRaw = localStorage.getItem('koda_pending_onboarding');
       let pending: any = null;
       if (pendingRaw) {
@@ -89,10 +95,14 @@ export default function RegisterPage() {
           useAuthStore.getState().setUserSession(session, accessToken, refreshToken || undefined);
           window.history.replaceState(null, '', window.location.pathname);
           if (session.onboardingCompleted) {
+            setIsCompletingAndRedirecting(true);
             router.replace('/app/ruta');
+            return;
           }
-        } catch {
-          // Si falla, limpiar estado
+        } catch (e) {
+          console.error('[oauth-sync] Error procesando sesión OAuth:', e);
+        } finally {
+          setIsOAuthProcessing(false);
         }
       };
 
@@ -109,7 +119,25 @@ export default function RegisterPage() {
 
   const isLast = stepper.currentStep === totalSteps;
   const canContinue = isLast && !isOAuthUser ? profile.isFormValid : stepper.canContinue;
-  const handleContinue = isLast ? () => profile.submit(onboardingData) : stepper.nextStep;
+
+  const handleContinue = async () => {
+    if (isLast) {
+      if (isOAuthUser) {
+        setIsCompletingAndRedirecting(true);
+        try {
+          await profile.submit(onboardingData);
+          router.replace('/app/ruta');
+        } catch {
+          setIsCompletingAndRedirecting(false);
+        }
+      } else {
+        profile.submit(onboardingData);
+      }
+    } else {
+      stepper.nextStep();
+    }
+  };
+
   const STEP_CTA: Record<number, { text: string; hint: string }> = {
     1: { text: 'Explorar y continuar', hint: 'Elige tu tecnología para continuar' },
     2: { text: 'Confirmar mi nivel', hint: 'Elige tu nivel para continuar' },
@@ -132,6 +160,16 @@ export default function RegisterPage() {
   useEffect(() => {
     prevStepRef.current = stepper.currentStep;
   }, [stepper.currentStep]);
+
+  if (isOAuthProcessing || isCompletingAndRedirecting) {
+    return (
+      <KodaLoadingScreen
+        title={isCompletingAndRedirecting ? '¡Perfil configurado con éxito!' : 'Conectando tu cuenta con Koda...'}
+        subtitle={isCompletingAndRedirecting ? 'Preparando tu ruta de aprendizaje personalizada...' : 'Sincronizando tus credenciales y preferencias...'}
+        terminalHint={isCompletingAndRedirecting ? '> koda_core :: ruta_desbloqueada' : '> koda_core :: autenticando'}
+      />
+    );
+  }
 
   return (
     <div className="relative isolate min-h-screen bg-transparent text-slate-100 flex flex-col justify-between selection:bg-amber-500/30 selection:text-amber-200">
@@ -229,7 +267,7 @@ export default function RegisterPage() {
         onClose={profile.closeOtpModal}
       />
       <RegisterSuccessModal
-        isOpen={profile.isSuccess}
+        isOpen={profile.isSuccess && !isOAuthUser && !isCompletingAndRedirecting}
         studentName={profile.form.fullName || user?.fullName || 'Estudiante'}
         techName={stepper.selectedOption?.name}
         goalMinutes={stepper.selectedGoal?.minutes}

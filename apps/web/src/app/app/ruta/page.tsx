@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { StudentRoadmapView } from '@/views/roadmap/StudentRoadmapView';
 import { useAuthStore } from '@/stores/auth.store';
+import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
 
 export default function RutaPage() {
   const router = useRouter();
@@ -24,7 +25,13 @@ export default function RutaPage() {
   }, [hasHydrated, isAuthenticated, user, router]);
 
   if (!hasHydrated || !isAuthenticated) {
-    return <div className="min-h-screen bg-slate-950" />;
+    return (
+      <KodaLoadingScreen
+        title="Cargando tu ruta..."
+        subtitle="Sincronizando tus lecciones y desafíos..."
+        terminalHint="> roadmap :: inicializando"
+      />
+    );
   }
 
   return <StudentRoadmapView />;
