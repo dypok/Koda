@@ -10,6 +10,17 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-17 12:22] [Added] **Laboratorio interactivo de 100 propuestas de navbars minimalistas (`/preview-workspace`):**
+  - Catálogo exhaustivo de 100 variantes distribuidas en 10 familias: Píldoras Flotantes, Hairline Minimal, Terminal Statusline, Micro-Notch & Island, Stepper-First, Breadcrumbs Claros, Insignias en Esquinas, Cyber & Sci-Fi, Zero-UI Zen y Fusiones Maestras (`navbar-catalog-data.ts`).
+  - Renderizador reactivo `DynamicNavbarRenderer` con soporte para preview en vivo y montaje en ejercicio real.
+  - Vistas conmutables `Workspace Real` y `Galería 100` (`?view=gallery`) con filtros por categoría, búsqueda instantánea y atajos `←`/`→`.
+  - Integración estética completa con el fondo cósmico `OrbitFieldBackground` (Roadmap Fusion) y el botón táctil 3D D74 (`< / > C O M P R O B A R`).
+  - Detalle en `documentation/changelog/17-09-2026-changelog.md`.
+- [2026-09-17 09:32] [Added] **Sistema de atajos de teclado ergonómicos y keycaps táctiles (`KA-152` / `LESS-02`):**
+  - Hook modular `useLessonKeyboardShortcuts` con soporte para selección rápida (`1-4`, `A-D`), validación/avance con `Enter` / `Espacio` y navegación con flechas.
+  - Badges táctiles mecanizadas `<kbd>` en `QuestionRenderer` con micro-animaciones de hundimiento (`translate-y-0.5`) y resplandor lumínico ámbar/cyan.
+  - Integración completa tanto en el flujo de lecciones teóricas como en el modo `QuizMode` de `LessonWorkspace.tsx`.
+  - Detalle en `documentation/changelog/17-09-2026-changelog.md`.
 - [2026-09-14 23:56] [Added] **Motor de render PixiJS compartido + migración landing (`lib/pixi/engine.ts`):**
   - Import dinámico en chunk aparte, DPR capado, textura glow compartida y tickers pausados fuera de pantalla.
   - Sky del hero, `WeatherLayer` y `CodeConfetti` migrados a Pixi; fondo del roadmap a órbita kepleriana + espiral ASCII (`OrbitFieldBackground`).
