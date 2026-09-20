@@ -64,31 +64,29 @@ export const RoadmapBranchPill: React.FC = () => {
 
   return (
     <div ref={boxRef} className="absolute left-4 top-4 z-20">
-      <div className="flex items-center gap-1 rounded-full border border-slate-700/50 bg-slate-900/40 py-1.5 pl-1.5 pr-1 backdrop-blur-xl shadow-xl">
+      <div className="flex items-center gap-2 rounded-xl border border-slate-700/50 bg-slate-900/60 px-2.5 py-1.5 backdrop-blur-xl shadow-xl">
         <div
           aria-label="Koda"
-          className="flex h-8 w-8 items-center justify-center rounded-full bg-orange-500/10 border border-orange-500/20 select-none shadow-[0_0_12px_rgba(249,115,22,0.12)]"
+          className="flex items-center select-none px-1"
         >
-          <KodaBracesIcon className="h-3.5 w-auto select-none drop-shadow-[0_0_6px_rgba(249,115,22,0.4)]" />
+          <KodaBracesIcon className="h-4.5 w-auto select-none drop-shadow-[0_0_8px_rgba(249,115,22,0.35)]" />
         </div>
+        <div className="h-4 w-px bg-slate-700/60" aria-hidden="true" />
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           disabled={isLoading}
           aria-expanded={open}
           aria-label={`Rama activa: ${activeBranch.title}. Cambiar de rama`}
-          className="flex items-center gap-2 rounded-full py-1.5 pl-1 pr-2.5 transition-colors hover:bg-slate-800/60 cursor-pointer"
+          className="flex items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-slate-800/60 cursor-pointer"
         >
-          <span
-            className="flex h-7 w-7 items-center justify-center rounded-full border"
-            style={{ backgroundColor: `${activeBranch.color}20`, borderColor: `${activeBranch.color}50`, color: activeBranch.color }}
-          >
-            <BranchIcon className="h-3.5 w-3.5" />
+          <span className="shrink-0 flex items-center justify-center" style={{ color: activeBranch.color }}>
+            <BranchIcon className="h-4 w-4" />
           </span>
-          <span className="hidden max-w-32 truncate font-mono text-[11px] font-bold text-white sm:block">
+          <span className="hidden max-w-36 truncate font-mono text-xs font-bold text-white sm:block">
             {activeBranch.title}
           </span>
-          <CaretDown className={cn('h-3 w-3 text-slate-500 transition-transform', open && 'rotate-180 text-slate-200')} />
+          <CaretDown className={cn('h-3.5 w-3.5 text-slate-400 transition-transform', open && 'rotate-180 text-slate-200')} />
         </button>
       </div>
 
