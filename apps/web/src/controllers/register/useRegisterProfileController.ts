@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { RegisterProfileForm } from '@/models/register/register.model';
 import { AuthService, RegisterOtpPayload } from '@/services/auth/auth.service';
 import { useAuthStore } from '@/stores/auth.store';
@@ -16,9 +16,12 @@ export interface RegisterOnboardingData {
 }
 
 export function useRegisterProfileController(onSuccess?: () => void) {
+  const { user, token, refreshToken } = useAuthStore();
+  const isOAuthUser = Boolean(token && user && user.onboardingCompleted === false);
+
   const [form, setForm] = useState<RegisterProfileForm>({
-    fullName: '',
-    email: '',
+    fullName: user?.fullName || '',
+    email: user?.email || '',
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
@@ -26,6 +29,17 @@ export function useRegisterProfileController(onSuccess?: () => void) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [touched, setTouched] = useState({ fullName: false, email: false, password: false });
   const [submitError, setSubmitError] = useState<string | null>(null);
+
+  // Sincronizar datos si el usuario de OAuth o sesión se hidrata posteriormente
+  useEffect(() => {
+    if (user) {
+      setForm((prev) => ({
+        fullName: prev.fullName || user.fullName || '',
+        email: prev.email || user.email || '',
+        password: prev.password,
+      }));
+    }
+  }, [user]);
 
   // Estados específicos de verificación OTP
   const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
@@ -44,15 +58,17 @@ export function useRegisterProfileController(onSuccess?: () => void) {
     : !EMAIL_REGEX.test(form.email.trim())
       ? 'Ese correo no parece válido.'
       : submitError || null;
-  const passwordError = !form.password
+  const passwordError = isOAuthUser
     ? null
-    : form.password.length < 8
-      ? 'Mínimo 8 caracteres.'
-      : null;
+    : !form.password
+      ? null
+      : form.password.length < 8
+        ? 'Mínimo 8 caracteres.'
+        : null;
 
   const isFullNameValid = form.fullName.trim().length >= 2;
   const isEmailValid = EMAIL_REGEX.test(form.email.trim());
-  const isPasswordValid = form.password.length >= 8;
+  const isPasswordValid = isOAuthUser ? true : form.password.length >= 8;
 
   /** Fuerza 0-4: longitud, longitud+, variedad, símbolo. */
   const passwordStrength =
@@ -90,17 +106,43 @@ export function useRegisterProfileController(onSuccess?: () => void) {
   }, []);
 
   /**
-   * Envía los datos de registro al backend NestJS (POST /api/v1/auth/register-otp)
-   * e inicializa el flujo de verificación OTP.
+   * Envía los datos de registro:
+   * - Si es usuario de OAuth (autenticado sin onboarding): completa onboarding vía POST /api/v1/auth/onboarding.
+   * - Si es usuario nuevo tradicional: envía los datos al backend (POST /api/v1/auth/register-otp) e inicia OTP.
    */
   const submit = useCallback(
     async (onboarding?: RegisterOnboardingData) => {
-      setTouched({ fullName: true, email: true, password: true });
+      setTouched({ fullName: true, email: true, password: !isOAuthUser });
       if (!isFormValid || isSubmitting) return;
 
       setIsSubmitting(true);
       setSubmitError(null);
       setSavedOnboarding(onboarding);
+
+      if (isOAuthUser && token) {
+        try {
+          const updatedSession = await AuthService.completeOnboarding(
+            {
+              initialLanguageSlug: onboarding?.initialLanguageSlug || 'python',
+              experienceLevel: onboarding?.experienceLevel || 'beginner',
+              learningStyle: onboarding?.learningStyle || 'hands-on',
+              dailyGoalId: onboarding?.dailyGoalId || 'regular',
+              dailyGoalMinutes: Number(onboarding?.dailyGoalMinutes) || 10,
+              displayName: form.fullName.trim() || user?.fullName || undefined,
+            },
+            token
+          );
+
+          useAuthStore.getState().setUserSession(updatedSession, token, refreshToken || undefined);
+          setIsSuccess(true);
+          onSuccess?.();
+        } catch (err: any) {
+          setSubmitError(err.message || 'No fue posible completar el perfil.');
+        } finally {
+          setIsSubmitting(false);
+        }
+        return;
+      }
 
       const payload: RegisterOtpPayload = {
         fullName: form.fullName.trim(),
@@ -127,7 +169,7 @@ export function useRegisterProfileController(onSuccess?: () => void) {
         setIsSubmitting(false);
       }
     },
-    [form, isFormValid, isSubmitting, onSuccess]
+    [form, isFormValid, isSubmitting, isOAuthUser, token, refreshToken, user, onSuccess]
   );
 
   /**
@@ -211,6 +253,10 @@ export function useRegisterProfileController(onSuccess?: () => void) {
     toggleShowPassword,
     touch,
     submit,
+
+    // OAuth status
+    isOAuthUser,
+    user,
 
     // OTP
     isOtpModalOpen,

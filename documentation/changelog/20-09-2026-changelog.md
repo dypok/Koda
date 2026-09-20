@@ -21,3 +21,4 @@
 
 
 
+- [Sunday]-[20/09/2026]-[04:15]-[Dylan Gamero] : Implementada la redirección automática de usuarios OAuth sin onboarding a /register y adaptado el paso 5 del registro para cuentas autenticadas. En LoginForm y LoginPage, los usuarios que inician sesión con Google pero tienen onboardingCompleted: false son redirigidos de inmediato a /register, impidiendo el acceso prematuro a /app/ruta. En /register, se pre-cargan el nombre y correo del proveedor, se ocultan los campos de contraseña y botones sociales, se valida el formulario sin contraseña y se completa el perfil enviando las preferencias a POST /api/v1/auth/onboarding, validando compilación exitosa en Next.js con 0 errores de TypeScript.

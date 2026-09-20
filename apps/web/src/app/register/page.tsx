@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
 import { WeatherLayer } from '@/components/landing/WeatherLayer';
@@ -19,8 +20,21 @@ import { AuthService } from '@/services/auth/auth.service';
 import { useAuthStore } from '@/stores/auth.store';
 
 export default function RegisterPage() {
+  const router = useRouter();
+  const { user, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
   const stepper = useRegisterStepperController();
   const profile = useRegisterProfileController();
+
+  useEffect(() => {
+    initAuth();
+  }, [initAuth]);
+
+  // Si el usuario ya completó el onboarding, redirigirlo a la ruta
+  useEffect(() => {
+    if (hasHydrated && isAuthenticated && user?.onboardingCompleted === true) {
+      router.replace('/app/ruta');
+    }
+  }, [hasHydrated, isAuthenticated, user, router]);
 
   const onboardingData = {
     initialLanguageSlug: stepper.selectedLanguageId || 'python',
@@ -72,7 +86,9 @@ export default function RegisterPage() {
           const session = await AuthService.verifySession(accessToken);
           useAuthStore.getState().setUserSession(session, accessToken, refreshToken || undefined);
           window.history.replaceState(null, '', window.location.pathname);
-          window.location.href = '/app/ruta';
+          if (session.onboardingCompleted) {
+            router.replace('/app/ruta');
+          }
         } catch {
           // Si falla, limpiar estado
         }
@@ -80,7 +96,7 @@ export default function RegisterPage() {
 
       void syncOAuthUser();
     }
-  }, []);
+  }, [router]);
 
   const handleSocial = (provider: 'google' | 'github') => {
     if (typeof window !== 'undefined') {
@@ -97,7 +113,10 @@ export default function RegisterPage() {
     2: { text: 'Confirmar mi nivel', hint: 'Elige tu nivel para continuar' },
     3: { text: 'Confirmar mi estilo', hint: 'Elige tu estilo para continuar' },
     4: { text: 'Fijar mi meta · 10 min/día', hint: 'Elige tu meta para continuar' },
-    5: { text: 'Crear cuenta y comenzar', hint: 'Completa el formulario para continuar' },
+    5: {
+      text: profile.isOAuthUser ? 'Finalizar perfil y comenzar' : 'Crear cuenta y comenzar',
+      hint: profile.isOAuthUser ? 'Confirma tu nombre para comenzar' : 'Completa el formulario para continuar',
+    },
   };
   const stepCta = STEP_CTA[stepper.currentStep] ?? STEP_CTA[1];
   const continueText = stepCta.text;

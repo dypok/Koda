@@ -40,7 +40,11 @@ export const LoginForm: React.FC = () => {
           setUserSession(session, accessToken, refreshToken || undefined);
           // Limpiar hash de la barra de direcciones
           window.history.replaceState(null, '', window.location.pathname);
-          router.replace('/app/ruta');
+          if (!session.onboardingCompleted) {
+            router.replace('/register');
+          } else {
+            router.replace('/app/ruta');
+          }
         })
         .catch((err: any) => {
           setError(err.message || 'No fue posible validar la sesión del proveedor externo.');
@@ -62,7 +66,11 @@ export const LoginForm: React.FC = () => {
     try {
       const result = await AuthService.loginWithPassword(email, password);
       setUserSession(result.session, result.accessToken, result.refreshToken);
-      router.replace('/app/ruta');
+      if (!result.session.onboardingCompleted) {
+        router.replace('/register');
+      } else {
+        router.replace('/app/ruta');
+      }
     } catch (err: any) {
       setError(err.message || 'Error al iniciar sesión.');
       setIsSubmitting(false);

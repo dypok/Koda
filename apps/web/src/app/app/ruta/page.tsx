@@ -7,17 +7,21 @@ import { useAuthStore } from '@/stores/auth.store';
 
 export default function RutaPage() {
   const router = useRouter();
-  const { isAuthenticated, hasHydrated, initAuth } = useAuthStore();
+  const { user, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
 
   useEffect(() => {
     initAuth();
   }, [initAuth]);
 
   useEffect(() => {
-    if (hasHydrated && !isAuthenticated) {
-      router.replace('/login');
+    if (hasHydrated) {
+      if (!isAuthenticated) {
+        router.replace('/login');
+      } else if (user && user.onboardingCompleted === false) {
+        router.replace('/register');
+      }
     }
-  }, [hasHydrated, isAuthenticated, router]);
+  }, [hasHydrated, isAuthenticated, user, router]);
 
   if (!hasHydrated || !isAuthenticated) {
     return <div className="min-h-screen bg-slate-950" />;

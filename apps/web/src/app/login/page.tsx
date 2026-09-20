@@ -9,7 +9,7 @@ import { useAuthStore } from '@/stores/auth.store';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { isAuthenticated, hasHydrated, initAuth } = useAuthStore();
+  const { user, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
 
   useEffect(() => {
     initAuth();
@@ -17,9 +17,13 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (hasHydrated && isAuthenticated) {
-      router.replace('/app/ruta');
+      if (user && user.onboardingCompleted === false) {
+        router.replace('/register');
+      } else {
+        router.replace('/app/ruta');
+      }
     }
-  }, [hasHydrated, isAuthenticated, router]);
+  }, [hasHydrated, isAuthenticated, user, router]);
 
   return (
     <div className="relative isolate min-h-screen bg-transparent text-slate-100 flex flex-col lg:flex-row selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden">
