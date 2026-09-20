@@ -21,8 +21,10 @@ import { useAuthStore } from '@/stores/auth.store';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { user, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
-  const stepper = useRegisterStepperController();
+  const { user, token, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
+  const isOAuthUser = Boolean(token && user && user.onboardingCompleted === false);
+  const totalSteps = isOAuthUser ? 4 : 5;
+  const stepper = useRegisterStepperController(totalSteps);
   const profile = useRegisterProfileController();
 
   useEffect(() => {
@@ -105,17 +107,20 @@ export default function RegisterPage() {
     }
   };
 
-  const isLast = stepper.currentStep === 5;
-  const canContinue = isLast ? profile.isFormValid : stepper.canContinue;
+  const isLast = stepper.currentStep === totalSteps;
+  const canContinue = isLast && !isOAuthUser ? profile.isFormValid : stepper.canContinue;
   const handleContinue = isLast ? () => profile.submit(onboardingData) : stepper.nextStep;
   const STEP_CTA: Record<number, { text: string; hint: string }> = {
     1: { text: 'Explorar y continuar', hint: 'Elige tu tecnología para continuar' },
     2: { text: 'Confirmar mi nivel', hint: 'Elige tu nivel para continuar' },
     3: { text: 'Confirmar mi estilo', hint: 'Elige tu estilo para continuar' },
-    4: { text: 'Fijar mi meta · 10 min/día', hint: 'Elige tu meta para continuar' },
+    4: {
+      text: isOAuthUser ? 'Fijar mi meta y comenzar mi ruta' : 'Fijar mi meta · 10 min/día',
+      hint: 'Elige tu meta para continuar',
+    },
     5: {
-      text: profile.isOAuthUser ? 'Finalizar perfil y comenzar' : 'Crear cuenta y comenzar',
-      hint: profile.isOAuthUser ? 'Confirma tu nombre para comenzar' : 'Completa el formulario para continuar',
+      text: 'Crear cuenta y comenzar',
+      hint: 'Completa el formulario para continuar',
     },
   };
   const stepCta = STEP_CTA[stepper.currentStep] ?? STEP_CTA[1];
@@ -204,6 +209,8 @@ export default function RegisterPage() {
         continueText={continueText}
         blockedHint={blockedHint}
         isLoading={profile.isSubmitting}
+        isOAuthUser={isOAuthUser}
+        userEmail={user?.email}
       />
       <RegisterOtpModal
         isOpen={profile.isOtpModalOpen}
@@ -217,7 +224,7 @@ export default function RegisterPage() {
       />
       <RegisterSuccessModal
         isOpen={profile.isSuccess}
-        studentName={profile.form.fullName}
+        studentName={profile.form.fullName || user?.fullName || 'Estudiante'}
         techName={stepper.selectedOption?.name}
         goalMinutes={stepper.selectedGoal?.minutes}
       />

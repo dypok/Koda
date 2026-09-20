@@ -41,6 +41,7 @@ export const LoginForm: React.FC = () => {
           // Limpiar hash de la barra de direcciones
           window.history.replaceState(null, '', window.location.pathname);
           if (!session.onboardingCompleted) {
+            localStorage.removeItem('koda-register-progress');
             router.replace('/register');
           } else {
             router.replace('/app/ruta');
