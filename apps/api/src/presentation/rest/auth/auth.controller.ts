@@ -1,10 +1,13 @@
 import { Controller, Post, Get, Body, Headers, UseGuards, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 import type { User as SupabaseAuthUser } from '@supabase/supabase-js';
 import { ValidateUserSessionUseCase } from '@application/use-cases/auth/validate-user-session.use-case';
 import { RegisterWithOtpUseCase, RegisterWithOtpResponse } from '@application/use-cases/auth/register-with-otp.use-case';
 import { VerifyOtpUseCase, VerifyOtpResponse } from '@application/use-cases/auth/verify-otp.use-case';
 import { CompleteOnboardingUseCase } from '@application/use-cases/auth/complete-onboarding.use-case';
+import { ForgotPasswordUseCase, ForgotPasswordResponse } from '@application/use-cases/auth/forgot-password.use-case';
+import { ResetPasswordUseCase, ResetPasswordResponse } from '@application/use-cases/auth/reset-password.use-case';
 import { UserSessionResponseDto } from '@application/dto/auth/user-session-response.dto';
 import { SupabaseAuthGuard } from '@common/guards/supabase-auth.guard';
 import { CurrentUser } from '@common/decorators/current-user.decorator';
@@ -12,6 +15,8 @@ import { VerifyTokenDto } from './dto/verify-token.dto';
 import { RegisterOtpDto } from './dto/register-otp.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { CompleteOnboardingDto } from './dto/complete-onboarding.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -21,6 +26,8 @@ export class AuthController {
     private readonly registerWithOtpUseCase: RegisterWithOtpUseCase,
     private readonly verifyOtpUseCase: VerifyOtpUseCase,
     private readonly completeOnboardingUseCase: CompleteOnboardingUseCase,
+    private readonly forgotPasswordUseCase: ForgotPasswordUseCase,
+    private readonly resetPasswordUseCase: ResetPasswordUseCase,
   ) {}
 
   @Post('verify-session')
@@ -106,5 +113,49 @@ export class AuthController {
   async getOnboardingStatus(@CurrentUser() authUser: SupabaseAuthUser): Promise<{ onboardingCompleted: boolean }> {
     const session = await this.validateUserSessionUseCase.execute(authUser.id);
     return { onboardingCompleted: session.onboardingCompleted };
+  }
+
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 3, ttl: 3600000 } })
+  @ApiOperation({
+    summary: 'Solicitar recuperación de contraseña (OWASP anti-enumeración)',
+    description:
+      'Envía un enlace/token temporal de recuperación de 15 minutos al correo electrónico. Siempre devuelve HTTP 200 con respuesta genérica idéntica para prevenir enumeración de cuentas de usuario. Límite: 3 peticiones por hora por IP.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Respuesta uniforme anti-enumeración (OWASP).',
+    schema: {
+      example: {
+        message: 'Si el correo existe en nuestra plataforma, recibirás un enlace de recuperación con las instrucciones.',
+      },
+    },
+  })
+  @ApiResponse({ status: 429, description: 'Límite de solicitudes de recuperación excedido (máximo 3 por hora).' })
+  async forgotPassword(@Body() dto: ForgotPasswordDto): Promise<ForgotPasswordResponse> {
+    return this.forgotPasswordUseCase.execute(dto);
+  }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Restablecer contraseña con token de recuperación de un solo uso',
+    description:
+      'Valida el token temporal de recuperación, exige requisitos de complejidad de contraseña (mínimo 8 caracteres, mayúscula, minúscula, número y símbolo especial) y actualiza las credenciales en Supabase Auth, invalidando el token de inmediato.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Contraseña actualizada exitosamente.',
+    schema: {
+      example: {
+        message: 'Tu contraseña ha sido actualizada exitosamente. Ya puedes iniciar sesión con tus nuevas credenciales.',
+        success: true,
+      },
+    },
+  })
+  @ApiResponse({ status: 400, description: 'Token de recuperación inválido, expirado o contraseña no cumple requisitos.' })
+  async resetPassword(@Body() dto: ResetPasswordDto): Promise<ResetPasswordResponse> {
+    return this.resetPasswordUseCase.execute(dto);
   }
 }
