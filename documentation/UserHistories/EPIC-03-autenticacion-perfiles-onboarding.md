@@ -81,8 +81,8 @@
 - Visualización de estadísticas del estudiante: lecciones completadas, porcentaje de maestría en Python 3.12, certificados obtenidos.
 
 **Subtasks:**
-- [ ] [BD] Verificar tabla `user_profiles` en Supabase con función `pgp_sym_encrypt` para número de identificación legal.
-- [ ] [BACKEND] Controlador `UsersController` con endpoints de lectura y actualización parcial de perfil.
+- [x] [BD] Verificar tabla `public.users` en PostgreSQL (Supabase) con persistencia de campos `document_type`, `document_number`, `avatar_url`, `bio` y metas de estudio.
+- [x] [BACKEND] Implementar `UsersController` con endpoints de lectura (`GET /api/v1/users/me`) y actualización parcial (`PATCH /api/v1/users/me`), casos de uso hexagonales y enmascaramiento de cédula (Entregable: `documentation/done/backend/backend-03-auth-perfil-usuario.md`).
 - [ ] [FRONTEND] Pantalla `apps/web/src/app/perfil/page.tsx` con grid de estadísticas, badge de nivel y selector de avatares.
 - [ ] [FRONTEND] Formulario de edición con validación de nombre y cédula/pasaporte.
 - [ ] [FRONTEND] Toast interactivo de confirmación al actualizar datos.
