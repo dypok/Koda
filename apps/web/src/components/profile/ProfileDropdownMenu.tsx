@@ -12,6 +12,7 @@ import {
   ShieldCheck,
 } from '@phosphor-icons/react';
 import type { AuthUser } from '@/stores/auth.store';
+import { useAppearanceStore, ACCENT_PALETTES } from '@/stores/appearance.store';
 import type { SettingsTab } from './ProfileSettingsModal';
 
 interface ProfileDropdownMenuProps {
@@ -30,6 +31,8 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
   onLogout,
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
+  const { accentTheme } = useAppearanceStore();
+  const palette = ACCENT_PALETTES[accentTheme] || ACCENT_PALETTES.amber;
 
   // Cerrar al hacer click afuera
   useEffect(() => {
@@ -75,7 +78,10 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
         >
           {/* Header del Usuario */}
           <div className="flex items-center gap-3 rounded-xl bg-slate-950/60 p-3">
-            <div className="relative h-11 w-11 flex-shrink-0 overflow-hidden rounded-full border-2 border-amber-500/60 bg-slate-800 p-0.5 shadow-inner">
+            <div
+              className="relative h-11 w-11 flex-shrink-0 overflow-hidden rounded-full border-2 bg-slate-800 p-0.5 shadow-inner transition-colors"
+              style={{ borderColor: palette.primary }}
+            >
               <img
                 src={avatarSrc}
                 alt={user?.fullName || 'Usuario Koda'}

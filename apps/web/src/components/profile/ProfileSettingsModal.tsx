@@ -805,19 +805,28 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                 </label>
                 <div className="flex gap-2">
                   {[
-                    { id: 'low', label: 'Baja (30)' },
-                    { id: 'medium', label: 'Media (70)' },
-                    { id: 'high', label: 'Alta (130)' },
+                    { id: 'low', label: 'Baja (35)' },
+                    { id: 'medium', label: 'Media (100)' },
+                    { id: 'high', label: 'Alta (240)' },
                   ].map((d) => (
                     <button
                       key={d.id}
                       type="button"
                       onClick={() => setStarDensity(d.id as StarDensity)}
-                      className={`flex-1 rounded-xl border py-2 text-xs font-mono font-medium transition-colors cursor-pointer ${
+                      className={`flex-1 rounded-xl border py-2 text-xs font-mono font-medium transition-all cursor-pointer ${
                         starDensity === d.id
-                          ? 'border-amber-400 bg-amber-500/20 text-amber-300 font-bold'
-                          : 'border-slate-800 bg-slate-950/40 text-slate-400 hover:border-slate-700'
+                          ? 'border-amber-400 bg-amber-500/20 text-amber-300 font-bold shadow-md shadow-amber-500/10'
+                          : 'border-slate-800 bg-slate-950/40 text-slate-400 hover:border-slate-700 hover:bg-slate-850'
                       }`}
+                      style={
+                        starDensity === d.id
+                          ? {
+                              borderColor: 'var(--koda-accent, #f59e0b)',
+                              backgroundColor: 'rgba(var(--koda-accent-rgb, 245, 158, 11), 0.18)',
+                              color: 'var(--koda-accent-light, #fbbf24)',
+                            }
+                          : undefined
+                      }
                     >
                       {d.label}
                     </button>
@@ -836,24 +845,39 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                     { id: 'cyan', name: 'Cian Neón', color: '#06b6d4' },
                     { id: 'violet', name: 'Púrpura Cuántico', color: '#8b5cf6' },
                     { id: 'emerald', name: 'Esmeralda Hacker', color: '#10b981' },
-                  ].map((c) => (
-                    <button
-                      key={c.id}
-                      type="button"
-                      onClick={() => setAccentTheme(c.id as AccentTheme)}
-                      className={`flex items-center gap-2 rounded-xl border p-2.5 transition-colors cursor-pointer ${
-                        accentTheme === c.id
-                          ? 'border-slate-200 bg-slate-800'
-                          : 'border-slate-800 bg-slate-950/40 hover:border-slate-700'
-                      }`}
-                    >
-                      <span
-                        className="h-3.5 w-3.5 rounded-full"
-                        style={{ backgroundColor: c.color }}
-                      />
-                      <span className="text-xs text-slate-200 font-medium">{c.name}</span>
-                    </button>
-                  ))}
+                  ].map((c) => {
+                    const active = accentTheme === c.id;
+                    return (
+                      <button
+                        key={c.id}
+                        type="button"
+                        onClick={() => setAccentTheme(c.id as AccentTheme)}
+                        className={`flex items-center justify-between rounded-xl border p-2.5 transition-all cursor-pointer ${
+                          active
+                            ? 'border-current shadow-md'
+                            : 'border-slate-800 bg-slate-950/40 hover:border-slate-700 hover:bg-slate-800/40'
+                        }`}
+                        style={
+                          active
+                            ? {
+                                borderColor: c.color,
+                                backgroundColor: `${c.color}20`,
+                                boxShadow: `0 0 14px ${c.color}25`,
+                              }
+                            : undefined
+                        }
+                      >
+                        <div className="flex items-center gap-2">
+                          <span
+                            className="h-3.5 w-3.5 rounded-full shadow-sm"
+                            style={{ backgroundColor: c.color, boxShadow: `0 0 8px ${c.color}` }}
+                          />
+                          <span className="text-xs text-slate-100 font-semibold">{c.name}</span>
+                        </div>
+                        {active && <Check className="h-4 w-4" style={{ color: c.color }} weight="bold" />}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -873,6 +897,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                   className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors cursor-pointer ${
                     interactiveCursor ? 'bg-amber-500' : 'bg-slate-700'
                   }`}
+                  style={interactiveCursor ? { backgroundColor: 'var(--koda-accent, #f59e0b)' } : undefined}
                 >
                   <span
                     className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${

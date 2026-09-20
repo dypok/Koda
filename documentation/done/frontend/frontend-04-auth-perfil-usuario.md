@@ -25,11 +25,13 @@ En estricto apego al protocolo de gobernanza `koda-frontend-workflow.md` (ADR-01
      - Catálogo con 8 expresiones oficiales vectoriales SVG de Koda 🦊 (`koda-classic`, `koda-detective`, `koda-astronaut`, `koda-hacker`, `koda-sensei`, `koda-cyberpunk`, `koda-alchemist`, `koda-gamer`) con vista previa en vivo sin badges de rareza.
      - **Opción de subir fotografía personalizada:** Zona interactiva para cargar fotos PNG, JPG, WEBP o SVG (máx. 3MB) con previsualización inmediata y actualización en caliente de la sesión. Se documentó el requerimiento para el backend en `documentation/done/backend/PENDIENTE-backend-avatar-upload.md`.
    - **Tab 3 (Metas de Estudio):** Selección de minutos diarios (5m a 60m), ritmo pedagógico, nivel de experiencia y estilo de aprendizaje preferido.
-   - **Tab 4 (Fondo, Temas y Modos de Visualización):**
-     - **Selector de Modo de Visualización del Roadmap:** Se trasladó la selección de modos (`Fusión`, `Mapa` y `Lista`) desde el HUD superior hacia la configuración visual, permitiendo conmutar la vista espacial en cualquier momento con persistencia local en `useAppearanceStore`.
-     - Selector de atmósfera ambiental (Cielo Cósmico, Luciérnagas, Brasas, Polvo estelar, Lluvia matrix, Órbita kepleriana), densidad de estrellas y paleta de acento.
-     - Se eliminó el `OrbitFieldBackground` hardcodeado en `RoadmapFusionView` que bloqueaba visualmente el fondo, permitiendo que la personalización reaccione en tiempo real y cambie el ambiente de inmediato.
-   - **Tab 5 (Métricas en Vivo):** Telemetría en tiempo real de XP total, nivel actual, racha activa, récord histórico, protectores de racha y horas de estudio, con botón de sincronización directa contra `GET /api/v1/users/me`.
+    - **Tab 4 (Fondo, Temas y Modos de Visualización):**
+      - **Selector de Modo de Visualización del Roadmap:** Se trasladó la selección de modos (`Fusión`, `Mapa` y `Lista`) desde el HUD superior hacia la configuración visual, permitiendo conmutar la vista espacial en cualquier momento con persistencia local en `useAppearanceStore`.
+      - **Color de Acento:** Conexión completa de la paleta (`Ámbar`, `Cian`, `Púrpura`, `Esmeralda`) con variables CSS `:root` (`--koda-accent`, `--koda-accent-rgb`), aura atmosférica ambiental en el fondo, tintes en sprites Pixi y sincronización en la píldora y menú de perfil.
+      - **Densidad de Estrellas y Partículas:** Configuración real de densidad en 3 niveles (Baja: 35 estrellas / 8 partículas; Media: 100 estrellas / 20 partículas; Alta: 240 estrellas / 45 partículas) extendida a todos los presets climáticos.
+      - **Efectos Interactivos con el Ratón:** Lienzo dedicado en Canvas 2D a 60fps (`RoadmapInteractiveCursor.tsx`) que emite estelas de chispas estelares y ondas reactivas con el color de acento al mover el ratón o hacer clic, activable/desactivable en tiempo real.
+      - Se eliminó el `OrbitFieldBackground` hardcodeado en `RoadmapFusionView` que bloqueaba visualmente el fondo, permitiendo que la personalización reaccione en tiempo real y cambie el ambiente de inmediato.
+    - **Tab 5 (Métricas en Vivo):** Telemetría en tiempo real de XP total, nivel actual, racha activa, récord histórico, protectores de racha y horas de estudio, con botón de sincronización directa contra `GET /api/v1/users/me`.
 5. **Resolución de Overlap en Vista Fusión:**
    - Se removió el selector de pestañas del HUD superior (`RoadmapTopHud.tsx`), despejando el cuadrante superior derecho.
    - Se elevó la píldora de perfil (`RoadmapProfilePill.tsx`) a `z-40` y el dropdown a `z-50`.
@@ -43,16 +45,18 @@ En estricto apego al protocolo de gobernanza `koda-frontend-workflow.md` (ADR-01
 ### A. Servicios y Tiendas
 - **`apps/web/src/services/user/user-profile.service.ts` [NEW]:** Cliente HTTP tipado con métodos `getProfile(token)` y `updateProfile(payload, token)`.
 - **`apps/web/src/stores/auth.store.ts` [MODIFY]:** Adición de `updateUserProfile(partial: Partial<AuthUser>)` para sincronizar en caliente el usuario autenticado y su avatar en memoria y `localStorage`.
-- **`apps/web/src/stores/appearance.store.ts` [NEW]:** Tienda Zustand para persistir preferencias de fondo, densidad de estrellas, tema, efectos interactivos y `coursesDisplayMode` (`fusion`, `canvas`, `pin-rail`).
+- **`apps/web/src/stores/appearance.store.ts` [NEW]:** Tienda Zustand para persistir preferencias de fondo, densidad de estrellas, tema, efectos interactivos y `coursesDisplayMode` (`fusion`, `canvas`, `pin-rail`), incorporando `ACCENT_PALETTES` y `applyAccentToDom`.
 
 ### B. Componentes UI
-- **`apps/web/src/components/profile/ProfileSettingsModal.tsx` [NEW]:** Modal responsive de 5 pestañas limpio, sin badges, con CRUD, selector de avatares oficiales, subida de foto personalizada, metas, modos de visualización del roadmap (Fusión, Mapa, Lista), temas y métricas.
-- **`apps/web/src/components/profile/ProfileDropdownMenu.tsx` [NEW]:** Popover desplegable flotante con header del usuario y atajos.
+- **`apps/web/src/components/profile/ProfileSettingsModal.tsx` [NEW]:** Modal responsive de 5 pestañas limpio, sin badges, con CRUD, selector de avatares oficiales, subida de foto personalizada, metas, modos de visualización del roadmap (Fusión, Mapa, Lista), temas interactivos y métricas.
+- **`apps/web/src/components/profile/ProfileDropdownMenu.tsx` [NEW]:** Popover desplegable flotante con header del usuario y atajos sincronizados con el tema de acento.
 - **`apps/web/src/components/profile/ProfileToast.tsx` [NEW]:** Notificaciones flotantes animadas para éxito/error/info.
-- **`apps/web/src/components/roadmap/RoadmapDynamicBackground.tsx` [NEW]:** Fondo ambiental reactivo a `useAppearanceStore` (Pixi + WebGL).
+- **`apps/web/src/components/roadmap/RoadmapDynamicBackground.tsx` [NEW]:** Fondo ambiental reactivo a `useAppearanceStore` (Pixi + WebGL) con aura ambiental y densidad dinámica.
+- **`apps/web/src/components/roadmap/RoadmapInteractiveCursor.tsx` [NEW]:** Canvas reactivo a 60fps con estelas de chispas y ondas al mover el ratón.
 - **`apps/web/src/components/landing/OrbitFieldBackground.tsx` [MODIFY]:** Soporte para `engineKey?: BgKey` con motor de lluvia lenta matrix.
-- **`apps/web/src/components/landing/HeroSkyBackground.tsx` [MODIFY]:** Ajuste de clamp mínimo a 20 estrellas.
-- **`apps/web/src/views/roadmap/RoadmapProfilePill.tsx` [MODIFY]:** Renderizado del avatar real del usuario, eliminación del botón mock de logout, elevación a `z-40` e integración del dropdown.
+- **`apps/web/src/components/landing/HeroSkyBackground.tsx` [MODIFY]:** Soporte para `accentTheme`, ajuste dinámico de estrellas y gradientes reactivos.
+- **`apps/web/src/components/landing/WeatherLayer.tsx` [MODIFY]:** Ampliación del límite de partículas a 50 para reflejar la densidad alta.
+- **`apps/web/src/views/roadmap/RoadmapProfilePill.tsx` [MODIFY]:** Renderizado del avatar real del usuario, eliminación del botón mock de logout, elevación a `z-40`, integración del dropdown y adaptación a `accentTheme`.
 - **`apps/web/src/views/roadmap/RoadmapTopHud.tsx` [MODIFY]:** Eliminación del selector de pestañas de modo, manteniendo únicamente el indicador central y botón continuar.
 - **`apps/web/src/views/roadmap/StudentRoadmapView.tsx` [MODIFY]:** Conexión de `coursesDisplayMode` directo a `useAppearanceStore` y reemplazo de `HeroSkyBackground` por `RoadmapDynamicBackground`.
 - **`apps/web/src/views/roadmap/RoadmapFusionView.tsx` [MODIFY]:** Remoción del fondo hardcodeado y ajuste de posición a `top-20` para evitar overlap con controles superiores.

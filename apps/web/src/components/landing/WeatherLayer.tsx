@@ -42,7 +42,7 @@ export const WeatherLayer: React.FC<{ type: WeatherType; count?: number; classNa
 
   const particles = useMemo<Particle[]>(() => {
     const preset = PRESETS[type];
-    return Array.from({ length: Math.min(14, count) }).map(() => ({
+    return Array.from({ length: Math.min(50, count) }).map(() => ({
       nx: Math.random(),
       y: Math.random(),
       size: 2 + Math.random() * 3,

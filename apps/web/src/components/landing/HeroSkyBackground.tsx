@@ -23,12 +23,14 @@ import {
   useElementVisible,
   type PixiApp,
 } from '@/lib/pixi/engine';
+import { AccentTheme, ACCENT_PALETTES } from '@/stores/appearance.store';
 
 export interface HeroSkyBackgroundProps {
   className?: string;
   starCount?: number;
   seed?: number;
   interactive?: boolean;
+  accentTheme?: AccentTheme;
 }
 
 type Pointer = { x: number; y: number; inside: boolean };
@@ -40,20 +42,17 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
   starCount = STAR_COUNT_DEFAULT,
   seed = 88,
   interactive = true,
+  accentTheme = 'amber',
 }) => {
+  const palette = ACCENT_PALETTES[accentTheme || 'amber'] || ACCENT_PALETTES.amber;
   const reduceMotion = useReducedMotion();
   const [mountRef, visible] = useElementVisible<HTMLDivElement>();
   const stageRef = useRef<HTMLDivElement>(null);
-  const [effectiveCount, setEffectiveCount] = useState(() => clamp(Math.round(starCount), 20, 200));
+  const [effectiveCount, setEffectiveCount] = useState(() => clamp(Math.round(starCount), 15, 350));
 
   useEffect(() => {
-    const compute = () => {
-      const small = window.matchMedia('(max-width: 640px)').matches;
-      setEffectiveCount(saveDataMode() ? 40 : small ? 60 : clamp(Math.round(starCount), 20, 200));
-    };
-    compute();
-    window.addEventListener('resize', compute);
-    return () => window.removeEventListener('resize', compute);
+    const isSaveData = saveDataMode();
+    setEffectiveCount(isSaveData ? Math.min(40, starCount) : clamp(Math.round(starCount), 15, 350));
   }, [starCount]);
 
   const { stars, realStar } = useMemo(() => generateStars(effectiveCount, seed), [effectiveCount, seed]);
@@ -117,10 +116,10 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
 
       const halo = new PIXI.Sprite(texture);
       halo.anchor.set(0.5);
-      halo.tint = 0xf59e0b;
+      halo.tint = palette.pixiHex;
       const core = new PIXI.Sprite(texture);
       core.anchor.set(0.5);
-      core.tint = 0xfcd34d;
+      core.tint = palette.pixiHex;
       core.eventMode = 'static';
       core.cursor = 'pointer';
       layer.addChild(halo, core);
@@ -213,7 +212,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
           rippleGfx.clear();
           if (rip.active) {
             const fade = 1 - rip.t / RIPPLE_DURATION;
-            rippleGfx.lineStyle(2, 0xfbbf24, 0.9 * fade);
+            rippleGfx.lineStyle(2, palette.pixiHex, 0.9 * fade);
             rippleGfx.drawCircle(rip.x * px.w, rip.y * px.h, Math.max(1, ripRad * Math.max(px.w, px.h)));
           }
         }
@@ -267,7 +266,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
         }
       }
     };
-  }, [stars, realStar, interactive, reduceMotion, mountRef]);
+  }, [stars, realStar, interactive, reduceMotion, mountRef, accentTheme]);
 
   useEffect(() => {
     const entry = appRef.current;
@@ -316,7 +315,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
       }
       className={cn(
         'absolute inset-0 overflow-hidden select-none transform-gpu',
-        'bg-[radial-gradient(120%_80%_at_50%_-10%,rgba(245,158,11,0.08),transparent_55%),linear-gradient(165deg,rgba(11,15,25,0.98),rgba(4,5,10,1))]',
+        'bg-[radial-gradient(120%_80%_at_50%_-10%,rgba(var(--koda-accent-rgb,245,158,11),0.12),transparent_55%),linear-gradient(165deg,rgba(11,15,25,0.98),rgba(4,5,10,1))]',
         className
       )}
       aria-hidden="true"
@@ -325,8 +324,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
       <div
         className="pointer-events-none absolute inset-0 transition-opacity duration-700 contain-paint"
         style={{
-          background:
-            'radial-gradient(ellipse 70% 50% at 50% 100%, rgba(234,88,12,0.06), transparent 70%), radial-gradient(ellipse 60% 40% at 80% 20%, rgba(245,158,11,0.04), transparent 60%)',
+          background: `radial-gradient(ellipse 70% 50% at 50% 100%, rgba(${palette.rgb}, 0.08), transparent 70%), radial-gradient(ellipse 60% 40% at 80% 20%, rgba(${palette.rgb}, 0.05), transparent 60%)`,
         }}
       />
       <div
