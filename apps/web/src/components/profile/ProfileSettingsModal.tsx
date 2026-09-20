@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import {
   X,
   User,
+  Smiley,
   Sparkle,
   Compass,
   Palette,
@@ -336,7 +337,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                   : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'
               }`}
             >
-              <Sparkle className="h-4 w-4" weight={activeTab === 'avatars' ? 'fill' : 'regular'} />
+              <Smiley className="h-4 w-4" weight={activeTab === 'avatars' ? 'fill' : 'regular'} />
               <span>Selector de Avatares</span>
             </button>
 
