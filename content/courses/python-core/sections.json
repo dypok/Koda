@@ -1,0 +1,74 @@
+[
+  {
+    "slug": "py-m01-s01",
+    "module_slug": "fundamentos-de-python",
+    "title": "¿Qué es Python y cómo se ejecuta?",
+    "position": 1,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s02",
+    "module_slug": "fundamentos-de-python",
+    "title": "Tu primer print() y texto en pantalla",
+    "position": 2,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s03",
+    "module_slug": "fundamentos-de-python",
+    "title": "Números enteros y operaciones simples",
+    "position": 3,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s04",
+    "module_slug": "fundamentos-de-python",
+    "title": "Comentarios: notas para humanos (#)",
+    "position": 4,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s05",
+    "module_slug": "fundamentos-de-python",
+    "title": "Indentación y estructura visual limpia",
+    "position": 5,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s06",
+    "module_slug": "fundamentos-de-python",
+    "title": "Combinando texto y números en pantalla",
+    "position": 6,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s07",
+    "module_slug": "fundamentos-de-python",
+    "title": "Lectura y comprensión de SyntaxError",
+    "position": 7,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s08",
+    "module_slug": "fundamentos-de-python",
+    "title": "Desafío de consolidación del Módulo 01",
+    "position": 8,
+    "total_lessons": 4,
+    "xp_reward": 100,
+    "is_active": true
+  }
+]

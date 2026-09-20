@@ -12,6 +12,7 @@ import { DatabaseModule } from './database/database.module';
 import { PrismaModule } from '@infra/database/postgres/prisma.module';
 import { AuthModule } from './presentation/rest/auth/auth.module';
 import { UsersModule } from './presentation/rest/users/users.module';
+import { ContentModule } from './presentation/rest/content/content.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UsersModule } from './presentation/rest/users/users.module';
     DatabaseModule,
     AuthModule,
     UsersModule,
+    ContentModule,
     LanguagesModule,
     LearningModule,
     CertificationModule,

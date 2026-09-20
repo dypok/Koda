@@ -1,0 +1,208 @@
+[
+  {
+    "module_slug": "fundamentos-de-python",
+    "difficulty": "easy",
+    "questions": [
+      {
+        "id": "bnk_py_01_01",
+        "prompt": "¿Cuál de las siguientes opciones es la forma correcta de imprimir un mensaje en Python?",
+        "options": [
+          {
+            "id": "a",
+            "text": "print(\"Hola\")",
+            "is_correct": true,
+            "feedback": "¡Correcto! print() con paréntesis y comillas."
+          },
+          {
+            "id": "b",
+            "text": "echo \"Hola\"",
+            "is_correct": false,
+            "feedback": "echo es un comando de Bash/PHP, no de Python."
+          },
+          {
+            "id": "c",
+            "text": "console.log(\"Hola\")",
+            "is_correct": false,
+            "feedback": "console.log() es la función de JavaScript."
+          },
+          {
+            "id": "d",
+            "text": "System.out.println(\"Hola\")",
+            "is_correct": false,
+            "feedback": "Esa es la sintaxis verbose de Java."
+          }
+        ],
+        "explanation": "En Python 3, print() es una función nativa que recibe los argumentos entre paréntesis."
+      },
+      {
+        "id": "bnk_py_01_02",
+        "prompt": "¿Qué carácter se utiliza en Python para escribir un comentario de una sola línea?",
+        "options": [
+          {
+            "id": "a",
+            "text": "El símbolo numeral (#)",
+            "is_correct": true,
+            "feedback": "¡Exacto! Todo lo que siga al # en esa línea será ignorado por Python."
+          },
+          {
+            "id": "b",
+            "text": "Doble barra (//)",
+            "is_correct": false,
+            "feedback": "En Python // es división entera; los comentarios usan #."
+          },
+          {
+            "id": "c",
+            "text": "Signo de exclamación (!)",
+            "is_correct": false,
+            "feedback": "El signo ! no se utiliza para comentarios en Python."
+          },
+          {
+            "id": "d",
+            "text": "Guiones dobles (--)",
+            "is_correct": false,
+            "feedback": "-- es el estándar de comentarios en SQL, no en Python."
+          }
+        ],
+        "explanation": "El símbolo numeral (#) le indica al intérprete de Python que ignore el resto de la línea."
+      },
+      {
+        "id": "bnk_py_01_03",
+        "prompt": "¿Qué tipo de dato representa un valor como \"¡Bienvenido a Koda!\"?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Cadena de texto (string o str)",
+            "is_correct": true,
+            "feedback": "¡Correcto! Todo texto entre comillas es un string."
+          },
+          {
+            "id": "b",
+            "text": "Número entero (int)",
+            "is_correct": false,
+            "feedback": "Un número entero no lleva comillas ni letras."
+          },
+          {
+            "id": "c",
+            "text": "Booleano (bool)",
+            "is_correct": false,
+            "feedback": "Un booleano solo puede ser True o False."
+          },
+          {
+            "id": "d",
+            "text": "Lista (list)",
+            "is_correct": false,
+            "feedback": "Las listas se delimitan con corchetes []."
+          }
+        ],
+        "explanation": "Las cadenas de texto en Python pertenecen a la clase str y se definen con comillas."
+      }
+    ]
+  },
+  {
+    "module_slug": "fundamentos-de-python",
+    "difficulty": "medium",
+    "questions": [
+      {
+        "id": "bnk_py_01_04",
+        "prompt": "¿Cuál será la salida de ejecutar: print(\"3\" + \"4\")?",
+        "code_snippet": "print(\"3\" + \"4\")",
+        "options": [
+          {
+            "id": "a",
+            "text": "\"34\"",
+            "is_correct": true,
+            "feedback": "¡Excelente! Al ser cadenas, el operador + las concatena en vez de sumarlas."
+          },
+          {
+            "id": "b",
+            "text": "7",
+            "is_correct": false,
+            "feedback": "Para obtener 7, los valores deberían ser números sin comillas: 3 + 4."
+          },
+          {
+            "id": "c",
+            "text": "12",
+            "is_correct": false,
+            "feedback": "No se está realizando una multiplicación."
+          },
+          {
+            "id": "d",
+            "text": "SyntaxError",
+            "is_correct": false,
+            "feedback": "Concatenar dos cadenas con + es una operación totalmente válida."
+          }
+        ],
+        "explanation": "El operador + entre dos strings realiza una concatenación textual."
+      },
+      {
+        "id": "bnk_py_01_05",
+        "prompt": "¿Qué sucede si ejecutas una línea de código con indentación aleatoria al inicio sin estar dentro de una estructura?",
+        "code_snippet": "  print(\"Hola\")",
+        "options": [
+          {
+            "id": "a",
+            "text": "Lanza un IndentationError",
+            "is_correct": true,
+            "feedback": "¡Correcto! Python usa la indentación para definir bloques de código."
+          },
+          {
+            "id": "b",
+            "text": "Se ejecuta normalmente ignorando los espacios",
+            "is_correct": false,
+            "feedback": "Python es estricto con los espacios al inicio de cada línea."
+          },
+          {
+            "id": "c",
+            "text": "Imprime el texto con sangría en la terminal",
+            "is_correct": false,
+            "feedback": "El código fallará antes de imprimir nada debido al error de sintaxis."
+          },
+          {
+            "id": "d",
+            "text": "Se crea una función automática",
+            "is_correct": false,
+            "feedback": "Las funciones requieren la palabra clave def."
+          }
+        ],
+        "explanation": "En Python la indentación no es estética, sino parte fundamental de la sintaxis."
+      }
+    ]
+  },
+  {
+    "module_slug": "fundamentos-de-python",
+    "difficulty": "hard",
+    "questions": [
+      {
+        "id": "bnk_py_01_06",
+        "prompt": "¿Cuál de las siguientes expresiones en Python generará un error de tipo (TypeError)?",
+        "options": [
+          {
+            "id": "a",
+            "text": "print(\"Nivel: \" + 5)",
+            "is_correct": true,
+            "feedback": "¡Exacto! Python no permite concatenar automáticamente texto con un número entero."
+          },
+          {
+            "id": "b",
+            "text": "print(\"Nivel: \" + \"5\")",
+            "is_correct": false,
+            "feedback": "Esto es válido porque ambos elementos son cadenas."
+          },
+          {
+            "id": "c",
+            "text": "print(\"Nivel: \", 5)",
+            "is_correct": false,
+            "feedback": "Esto es válido porque print() acepta múltiples argumentos separados por coma."
+          },
+          {
+            "id": "d",
+            "text": "print(\"Nivel: \" + str(5))",
+            "is_correct": false,
+            "feedback": "Esto es válido porque str(5) convierte el número a texto antes de unirlo."
+          }
+        ],
+        "explanation": "En Python la coerción implícita de tipos entre string e int no está permitida al usar el operador +."
+      }
+    ]
+  }
+]

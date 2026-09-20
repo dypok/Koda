@@ -8,9 +8,10 @@ import { USER_REPOSITORY_TOKEN } from '@domain/repositories/user.repository';
 import { PrismaUserRepository } from '@infra/database/postgres/repositories/prisma-user.repository';
 import { OptionalSupabaseAuthGuard } from '@common/guards/optional-supabase-auth.guard';
 import { DatabaseModule } from '../../database/database.module';
+import { ContentModule } from '../../presentation/rest/content/content.module';
 
 @Module({
-  imports: [DatabaseModule],
+  imports: [DatabaseModule, ContentModule],
   controllers: [LearningController, DiagnosticController],
   providers: [
     LearningService,
