@@ -167,4 +167,52 @@ export class SupabaseService {
 
     return data;
   }
+
+  async resetPasswordForEmail(email: string, redirectTo?: string) {
+    const options = redirectTo ? { redirectTo } : undefined;
+    const { data, error } = await this.client.auth.resetPasswordForEmail(email, options);
+
+    if (error) {
+      this.logger.warn(`Error al solicitar restablecimiento de contraseña (${email}): ${error.message}`);
+      throw error;
+    }
+
+    return data;
+  }
+
+  async verifyRecoveryOtp(token: string, email?: string) {
+    let result;
+    if (email) {
+      result = await this.client.auth.verifyOtp({
+        email,
+        token,
+        type: 'recovery',
+      });
+    } else {
+      result = await this.client.auth.verifyOtp({
+        token_hash: token,
+        type: 'recovery',
+      });
+    }
+
+    if (result.error) {
+      this.logger.warn(`Error al verificar OTP de recuperación: ${result.error.message}`);
+      throw result.error;
+    }
+
+    return result.data;
+  }
+
+  async updateUserPassword(userId: string, newPassword: string) {
+    const { data, error } = await this.client.auth.admin.updateUserById(userId, {
+      password: newPassword,
+    });
+
+    if (error) {
+      this.logger.warn(`Error al actualizar contraseña en Supabase Auth (${userId}): ${error.message}`);
+      throw error;
+    }
+
+    return data;
+  }
 }
