@@ -55,8 +55,8 @@
 - Opción clara de "Omitir diagnóstico y empezar desde cero".
 
 **Subtasks:**
-- [ ] [BACKEND] Endpoint `POST /api/v1/learning/diagnostic/submit` que evalúa respuestas del test diagnóstico y calcula el `recommended_module_id`.
-- [ ] [BACKEND] Endpoint `GET /api/v1/learning/diagnostic/questions` que entrega 12 preguntas calibradas sin revelar las respuestas correctas.
+- [x] [BACKEND] Endpoint `POST /api/v1/learning/diagnostic/submit` que evalúa respuestas del test diagnóstico, aplica clamping y calcula el `recommended_module_id` (Entregable: `documentation/done/backend/backend-04-auth-onboarding-diagnostico.md`).
+- [x] [BACKEND] Endpoint `GET /api/v1/learning/diagnostic/questions` que entrega 12 preguntas calibradas sin revelar las respuestas correctas.
 - [ ] [FRONTEND] Diseñar pantalla de onboarding `apps/web/src/app/onboarding/page.tsx` con cards interactivas de autodeclaración de nivel.
 - [ ] [FRONTEND] Implementar vista del test diagnóstico con stepper de progreso y temporizador formativo.
 - [ ] [FRONTEND] Modal de resultados con animación de Koda 🦊 celebrando el módulo de entrada recomendado.
