@@ -9,17 +9,17 @@ import { useAuthStore } from '@/stores/auth.store';
 
 export default function LoginPage() {
   const router = useRouter();
-  const { isAuthenticated, initAuth } = useAuthStore();
+  const { isAuthenticated, hasHydrated, initAuth } = useAuthStore();
 
   useEffect(() => {
     initAuth();
   }, [initAuth]);
 
   useEffect(() => {
-    if (isAuthenticated) {
+    if (hasHydrated && isAuthenticated) {
       router.replace('/app/ruta');
     }
-  }, [isAuthenticated, router]);
+  }, [hasHydrated, isAuthenticated, router]);
 
   return (
     <div className="relative isolate min-h-screen bg-transparent text-slate-100 flex flex-col lg:flex-row selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden">

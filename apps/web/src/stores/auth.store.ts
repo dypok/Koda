@@ -53,19 +53,41 @@ export const useAuthStore = create<AuthState>((set) => ({
       const storedRefreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
       const hasEver = localStorage.getItem(STORAGE_KEYS.HAS_LOGGED) === 'true';
 
-      if (storedUser) {
-        const user = JSON.parse(storedUser);
-        set({
-          user,
-          token: storedToken || null,
-          refreshToken: storedRefreshToken || null,
-          isAuthenticated: true,
-          hasEverLoggedIn: true,
-          hasHydrated: true,
-        });
-        return;
+      // Requerir estrictamente que exista un token JWT real de Supabase/NestJS y descartar mocks
+      const isMockUser = storedUser?.includes('"usr_') || !storedToken;
+
+      if (storedUser && storedToken && !isMockUser) {
+        try {
+          const user = JSON.parse(storedUser);
+          set({
+            user,
+            token: storedToken,
+            refreshToken: storedRefreshToken || null,
+            isAuthenticated: true,
+            hasEverLoggedIn: true,
+            hasHydrated: true,
+          });
+          return;
+        } catch {
+          // JSON corrupto, limpiar
+        }
       }
-      set({ hasEverLoggedIn: hasEver, hasHydrated: true });
+
+      // Si había residuos de mocks sin token real, purgarlos de inmediato
+      if (storedUser && isMockUser) {
+        localStorage.removeItem(STORAGE_KEYS.USER);
+        localStorage.removeItem(STORAGE_KEYS.TOKEN);
+        localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+      }
+
+      set({
+        user: null,
+        token: null,
+        refreshToken: null,
+        isAuthenticated: false,
+        hasEverLoggedIn: hasEver,
+        hasHydrated: true,
+      });
     } catch {
       set({ hasHydrated: true });
     }
@@ -105,35 +127,16 @@ export const useAuthStore = create<AuthState>((set) => ({
     });
   },
 
-  login: (email: string, fullName?: string) => {
-    const cleanName = fullName?.trim() || email.split('@')[0] || 'Estudiante';
-    const capitalized = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
-    const mockUser: AuthUser = {
-      id: `usr_${Date.now().toString(36)}`,
-      email, fullName: capitalized,
-      avatarUrl: '/brand/koda-mascot-cartoon-2d.svg',
-      totalXp: 150, level: 2, streak: 3,
-    };
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(mockUser));
-      localStorage.setItem(STORAGE_KEYS.HAS_LOGGED, 'true');
-    }
-    set({ user: mockUser, isAuthenticated: true, hasEverLoggedIn: true });
+  login: () => {
+    // Deprecated: No se permiten logins simulados sin autenticación real de Supabase
+    // eslint-disable-next-line no-console
+    console.warn('[auth] login() simulado deshabilitado. Autentica con AuthService.loginWithPassword()');
   },
 
-  loginSocial: (provider: 'google' | 'github') => {
-    const name = provider === 'google' ? 'Dev Google' : 'Octocat Dev';
-    const mockUser: AuthUser = {
-      id: `usr_${Date.now().toString(36)}`,
-      email: `${provider}_user@koda.academy`,
-      fullName: name, avatarUrl: '/brand/koda-mascot-cartoon-2d.svg',
-      totalXp: 100, level: 1, streak: 1,
-    };
-    if (typeof window !== 'undefined') {
-      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(mockUser));
-      localStorage.setItem(STORAGE_KEYS.HAS_LOGGED, 'true');
-    }
-    set({ user: mockUser, isAuthenticated: true, hasEverLoggedIn: true });
+  loginSocial: () => {
+    // Deprecated: Redirige a través de AuthService.getOAuthRedirectUrl()
+    // eslint-disable-next-line no-console
+    console.warn('[auth] loginSocial() simulado deshabilitado. Usa AuthService.getOAuthRedirectUrl()');
   },
 
   logout: () => {
