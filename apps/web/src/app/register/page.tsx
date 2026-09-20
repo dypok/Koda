@@ -15,6 +15,8 @@ import { RegisterSuccessModal } from '@/views/register/RegisterSuccessModal';
 import { RegisterBottomBar } from '@/views/register/RegisterBottomBar';
 import { useRegisterStepperController } from '@/controllers/register/useRegisterStepperController';
 import { useRegisterProfileController } from '@/controllers/register/useRegisterProfileController';
+import { AuthService } from '@/services/auth/auth.service';
+import { useAuthStore } from '@/stores/auth.store';
 
 export default function RegisterPage() {
   const stepper = useRegisterStepperController();
@@ -26,6 +28,65 @@ export default function RegisterPage() {
     learningStyle: stepper.selectedStyleId || 'hands-on',
     dailyGoalId: stepper.selectedGoalId || 'regular',
     dailyGoalMinutes: stepper.selectedGoal?.minutes || 10,
+  };
+
+  // Escuchar retorno de OAuth (Google / GitHub)
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const hash = window.location.hash.startsWith('#')
+      ? window.location.hash.substring(1)
+      : window.location.hash;
+
+    if (!hash) return;
+    const params = new URLSearchParams(hash);
+    const accessToken = params.get('access_token');
+    const refreshToken = params.get('refresh_token');
+
+    if (accessToken) {
+      const pendingRaw = localStorage.getItem('koda_pending_onboarding');
+      let pending: any = null;
+      if (pendingRaw) {
+        try {
+          pending = JSON.parse(pendingRaw);
+        } catch {
+          // ignore
+        }
+      }
+
+      const syncOAuthUser = async () => {
+        try {
+          if (pending) {
+            await AuthService.completeOnboarding(
+              {
+                initialLanguageSlug: pending.initialLanguageSlug || 'python',
+                experienceLevel: pending.experienceLevel || 'beginner',
+                learningStyle: pending.learningStyle || 'hands-on',
+                dailyGoalId: pending.dailyGoalId || 'regular',
+                dailyGoalMinutes: Number(pending.dailyGoalMinutes) || 10,
+              },
+              accessToken
+            );
+            localStorage.removeItem('koda_pending_onboarding');
+          }
+
+          const session = await AuthService.verifySession(accessToken);
+          useAuthStore.getState().setUserSession(session, accessToken, refreshToken || undefined);
+          window.history.replaceState(null, '', window.location.pathname);
+          window.location.href = '/app/ruta';
+        } catch {
+          // Si falla, limpiar estado
+        }
+      };
+
+      void syncOAuthUser();
+    }
+  }, []);
+
+  const handleSocial = (provider: 'google' | 'github') => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('koda_pending_onboarding', JSON.stringify(onboardingData));
+      window.location.href = AuthService.getOAuthRedirectUrl(provider, `${window.location.origin}/register`);
+    }
   };
 
   const isLast = stepper.currentStep === 5;
@@ -111,6 +172,7 @@ export default function RegisterPage() {
             onEditStep={stepper.goToStep}
             profile={profile}
             onboardingData={onboardingData}
+            onSocialClick={handleSocial}
           />
         )}
           </motion.div>

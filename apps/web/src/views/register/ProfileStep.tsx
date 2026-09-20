@@ -22,6 +22,7 @@ interface ProfileStepProps {
     dailyGoalId?: string;
     dailyGoalMinutes?: number;
   };
+  onSocialClick?: (provider: 'google' | 'github') => void;
 }
 
 export const ProfileStep: React.FC<ProfileStepProps> = ({
@@ -32,6 +33,7 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
   onEditStep,
   profile,
   onboardingData,
+  onSocialClick,
 }) => {
   const reduceMotion = useReducedMotion();
   const [focusField, setFocusField] = useState<string | null>(null);
@@ -96,7 +98,7 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
       </div>
 
       {/* Social Auth Options */}
-      <ProfileSocialAuth disabled={profile.isSubmitting} />
+      <ProfileSocialAuth onSocialClick={onSocialClick} disabled={profile.isSubmitting} />
 
       {/* Direct Registration Form Fields */}
       <form

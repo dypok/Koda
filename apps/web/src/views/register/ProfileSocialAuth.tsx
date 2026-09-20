@@ -29,17 +29,10 @@ export const ProfileSocialAuth: React.FC<ProfileSocialAuthProps> = ({
   disabled = false,
 }) => {
   const [loading, setLoading] = useState<'google' | 'github' | null>(null);
-  const [notice, setNotice] = useState(false);
-
   const handle = (provider: 'google' | 'github') => {
     if (disabled || loading) return;
     setLoading(provider);
-    setNotice(false);
-    window.setTimeout(() => {
-      setLoading(null);
-      setNotice(true);
-      onSocialClick?.(provider);
-    }, 900);
+    onSocialClick?.(provider);
   };
 
   const btn = (provider: 'google' | 'github', label: string, Mark: React.FC<{ className?: string }>, markCls: string) => {
@@ -51,7 +44,7 @@ export const ProfileSocialAuth: React.FC<ProfileSocialAuthProps> = ({
         onClick={() => handle(provider)}
         disabled={locked}
         aria-busy={busy}
-        className="flex items-center justify-center gap-2.5 py-2.5 px-4 min-h-[44px] rounded-xl bg-slate-900/80 hover:bg-slate-800/80 border border-slate-700/60 hover:border-amber-500/40 text-slate-200 text-xs font-bold transition-all shadow-sm hover:shadow-[0_0_15px_rgba(245,158,11,0.15)] disabled:opacity-50 disabled:cursor-not-allowed"
+        className="flex items-center justify-center gap-2.5 py-2.5 px-4 min-h-[44px] rounded-xl bg-slate-900/80 hover:bg-slate-800/80 border border-slate-700/60 hover:border-amber-500/40 text-slate-200 text-xs font-bold transition-all shadow-sm hover:shadow-[0_0_15px_rgba(245,158,11,0.15)] active:scale-[0.985] disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
       >
         {busy ? (
           <CircleNotch aria-hidden="true" className="w-4 h-4 animate-spin" />
@@ -69,12 +62,6 @@ export const ProfileSocialAuth: React.FC<ProfileSocialAuthProps> = ({
         {btn('google', 'Continuar con Google', GoogleMark, '')}
         {btn('github', 'Continuar con GitHub', GithubMark, 'text-slate-100')}
       </div>
-
-      {notice && (
-        <p role="status" className="text-center text-[11px] text-amber-300/90">
-          El acceso social llegará pronto — por ahora usa tu correo 🦊
-        </p>
-      )}
 
       <div className="relative flex items-center justify-center my-4">
         <div className="absolute inset-0 flex items-center">

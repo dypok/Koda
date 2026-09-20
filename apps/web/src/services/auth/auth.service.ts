@@ -106,11 +106,42 @@ export class AuthService {
   /**
    * Obtiene la URL de redirección para autenticación OAuth (Google / GitHub) en Supabase Auth.
    */
-  public static getOAuthRedirectUrl(provider: 'google' | 'github'): string {
+  public static getOAuthRedirectUrl(provider: 'google' | 'github', redirectTo?: string): string {
     const redirectOrigin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
-    return `${SUPABASE_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${encodeURIComponent(
-      `${redirectOrigin}/login`
-    )}`;
+    const target = redirectTo || `${redirectOrigin}/login`;
+    return `${SUPABASE_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${encodeURIComponent(target)}`;
+  }
+
+  /**
+   * Guarda y sincroniza las preferencias educativas del estudiante en PostgreSQL.
+   */
+  public static async completeOnboarding(
+    payload: {
+      initialLanguageSlug: string;
+      experienceLevel: string;
+      learningStyle: string;
+      dailyGoalId: string;
+      dailyGoalMinutes: number;
+      displayName?: string;
+    },
+    token: string
+  ): Promise<BackendUserSession> {
+    const res = await fetch(`${API_BASE_URL}/auth/onboarding`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const msg = Array.isArray(data?.message) ? data.message[0] : data?.message;
+      throw new Error(msg || 'No fue posible completar el onboarding.');
+    }
+
+    return data as BackendUserSession;
   }
 
   /**
