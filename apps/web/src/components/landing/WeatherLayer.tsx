@@ -103,9 +103,11 @@ export const WeatherLayer: React.FC<{ type: WeatherType; count?: number; classNa
       });
 
       const tick = () => {
+        if (cancelled || !app?.renderer) return;
         const dt = Math.min(0.05, app.ticker.deltaMS / 1000);
         const time = performance.now() / 1000;
         for (const { p, sp } of sprites) {
+          if (!sp || sp.destroyed) continue;
           p.y -= p.speed * dt;
           if (p.y < -0.05) {
             p.y = 1.05;

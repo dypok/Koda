@@ -40,6 +40,8 @@ export const CodeConfetti: React.FC<{ burstKey: number }> = ({ burstKey }) => {
     const mount = mountRef.current;
     if (!mount || reduceMotion) return;
     let cancelled = false;
+    let appInstance: { ticker: { remove: (fn: () => void) => void; stop: () => void }; view: unknown; destroy: (b: boolean) => void } | null = null;
+    let tickFn: (() => void) | null = null;
 
     const boot = async () => {
       const PIXI = await loadPixi();
@@ -54,6 +56,15 @@ export const CodeConfetti: React.FC<{ burstKey: number }> = ({ burstKey }) => {
         antialias: true,
         resolution: dprCap(),
       });
+      if (cancelled) {
+        try {
+          app.destroy(true);
+        } catch {
+          /* noop */
+        }
+        return;
+      }
+      appInstance = app as unknown as typeof appInstance;
       const view = app.view as unknown as HTMLCanvasElement;
       view.style.position = 'absolute';
       view.style.inset = '0';
@@ -77,9 +88,11 @@ export const CodeConfetti: React.FC<{ burstKey: number }> = ({ burstKey }) => {
       });
 
       const tick = () => {
+        if (cancelled || !app?.renderer) return;
         const dt = Math.min(0.05, app.ticker.deltaMS / 1000);
         let alive = 0;
         for (const b of tx) {
+          if (!b?.t || b.t.destroyed) continue;
           b.elapsed += dt;
           const k = Math.min(1, b.elapsed / b.p.dur);
           if (k < 1) alive += 1;
@@ -89,18 +102,45 @@ export const CodeConfetti: React.FC<{ burstKey: number }> = ({ burstKey }) => {
           b.t.alpha = 1 - k;
         }
         if (alive === 0) {
-          app.ticker.stop();
+          try {
+            app.ticker.remove(tick);
+            app.ticker.stop();
+          } catch {
+            /* noop */
+          }
           const v = app.view as unknown as HTMLElement;
-          if (v.parentNode === mount) mount.removeChild(v);
-          app.destroy(true);
+          if (v && v.parentNode === mount) mount.removeChild(v);
+          try {
+            app.destroy(true);
+          } catch {
+            /* noop */
+          }
+          appInstance = null;
         }
       };
+      tickFn = tick;
       app.ticker.add(tick);
     };
 
     void boot();
     return () => {
       cancelled = true;
+      if (appInstance) {
+        try {
+          if (tickFn) appInstance.ticker.remove(tickFn);
+          appInstance.ticker.stop();
+        } catch {
+          /* noop */
+        }
+        const v = appInstance.view as unknown as HTMLElement;
+        if (v && v.parentNode === mount) mount.removeChild(v);
+        try {
+          appInstance.destroy(true);
+        } catch {
+          /* noop */
+        }
+        appInstance = null;
+      }
       mount.replaceChildren();
     };
   }, [burstKey, parts, reduceMotion]);

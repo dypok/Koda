@@ -177,8 +177,10 @@ export const AsciiVortexBackground: React.FC<{ className?: string; density?: num
       });
 
       const tick = () => {
+        if (cancelled || !app?.renderer) return;
         const { minHole } = diskBounds(W, H);
         for (const p of particles) {
+          if (!p?.sprite || p.sprite.destroyed) continue;
           p.angle += p.angularSpeed;
           p.radiusX += p.radialSpeed;
           if (p.radiusX < minHole) spawn(p, false);
