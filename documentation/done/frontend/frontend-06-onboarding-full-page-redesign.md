@@ -22,6 +22,9 @@
 4. **Evaluación Diagnóstica In-Page:**
    - Incorporar la experiencia de la evaluación diagnóstica (12 retos de código con temporizador, snippets en monospace de terminal y atajos de teclado `1-4`, `Enter`, `Flechas`) directamente en la página, sin requerir modales superpuestos reducidos.
    - Pantalla de resultados in-page con la mascota Koda 2D, desglose por bloques curriculares y botón CTA para ingresar al Roadmap.
+5. **Obligatoriedad del Test para Niveles No Básicos:**
+   - Si el estudiante selecciona un nivel diferente a "Principiante Absoluto" (`elementary`, `intermediate` o `advanced`), el test diagnóstico de 12 retos es **estrictamente obligatorio**.
+   - Se eliminaron todos los botones de omisión (`Omitir test` y `Saltar al M01`), impidiendo el bypass y obligando a validar el nivel real para exonerar módulos. Si el usuario no desea tomar la evaluación, puede volver a la selección y elegir Principiante.
 
 ---
 

@@ -36,6 +36,7 @@ interface LevelOption {
   icon: typeof Terminal;
   tags: string[];
   isBeginner: boolean;
+  requiresDiagnostic: boolean;
 }
 
 const LEVEL_OPTIONS: LevelOption[] = [
@@ -47,6 +48,7 @@ const LEVEL_OPTIONS: LevelOption[] = [
     icon: Terminal,
     tags: ['variables', 'print()', 'tipos de datos', 'operadores'],
     isBeginner: true,
+    requiresDiagnostic: false,
   },
   {
     id: 'elementary',
@@ -56,6 +58,7 @@ const LEVEL_OPTIONS: LevelOption[] = [
     icon: Code,
     tags: ['conversión de tipos', 'operadores lógicos', 'strings', 'expresiones'],
     isBeginner: false,
+    requiresDiagnostic: true,
   },
   {
     id: 'intermediate',
@@ -65,6 +68,7 @@ const LEVEL_OPTIONS: LevelOption[] = [
     icon: Cpu,
     tags: ['condicionales', 'bucles for/while', 'funciones def', 'colecciones'],
     isBeginner: false,
+    requiresDiagnostic: true,
   },
   {
     id: 'advanced',
@@ -74,6 +78,7 @@ const LEVEL_OPTIONS: LevelOption[] = [
     icon: Sparkle,
     tags: ['algoritmos', 'estructuras de datos', 'modularidad', 'optimización'],
     isBeginner: false,
+    requiresDiagnostic: true,
   },
 ];
 
@@ -271,6 +276,12 @@ export default function OnboardingPage() {
 
   // Culminar onboarding y comenzar la ruta
   const handleCompleteOnboardingAndStart = async (targetModuleId?: string) => {
+    // Si seleccionó un nivel no básico pero no ha rendido el test diagnóstico, forzar inicio de evaluación
+    if (selectedLevelId !== 'beginner' && !diagnosticResult) {
+      void handleLaunchDiagnostic();
+      return;
+    }
+
     setSubmittingOnboarding(true);
 
     try {
@@ -346,14 +357,21 @@ export default function OnboardingPage() {
                 <span>Python 3.12 · Ruta Oficial</span>
               </div>
 
-              <button
-                type="button"
-                onClick={() => void handleCompleteOnboardingAndStart('py_mod_01')}
-                className="text-xs font-mono text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-800/60 hover:border-slate-700 bg-slate-900/40 cursor-pointer"
-              >
-                <span>Saltar al M01</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+              {selectedOption.isBeginner ? (
+                <button
+                  type="button"
+                  onClick={() => void handleCompleteOnboardingAndStart('py_mod_01')}
+                  className="text-xs font-mono text-slate-400 hover:text-white transition-colors flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-800/60 hover:border-slate-700 bg-slate-900/40 cursor-pointer"
+                >
+                  <span>Saltar al M01</span>
+                  <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              ) : (
+                <div className="text-xs font-mono text-amber-400/90 flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-amber-500/20 bg-amber-500/5">
+                  <Lightning className="w-3.5 h-3.5" weight="fill" />
+                  <span className="hidden sm:inline">Test Obligatorio</span>
+                </div>
+              )}
             </div>
           </header>
 
@@ -403,12 +421,25 @@ export default function OnboardingPage() {
                           </span>
                         </div>
 
-                        <div
-                          className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
-                            isSelected ? 'border-amber-400 bg-amber-500' : 'border-slate-700'
-                          }`}
-                        >
-                          {isSelected && <Check className="w-3.5 h-3.5 text-slate-950 font-bold" weight="bold" />}
+                        <div className="flex items-center gap-2">
+                          {option.requiresDiagnostic ? (
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center gap-1">
+                              <Lightning className="w-3 h-3" weight="fill" />
+                              Test obligatorio
+                            </span>
+                          ) : (
+                            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                              Acceso directo
+                            </span>
+                          )}
+
+                          <div
+                            className={`w-5 h-5 rounded-full border flex items-center justify-center shrink-0 transition-colors ${
+                              isSelected ? 'border-amber-400 bg-amber-500' : 'border-slate-700'
+                            }`}
+                          >
+                            {isSelected && <Check className="w-3.5 h-3.5 text-slate-950 font-bold" weight="bold" />}
+                          </div>
                         </div>
                       </div>
 
@@ -439,12 +470,14 @@ export default function OnboardingPage() {
               <div className="space-y-1.5 max-w-xl">
                 <div className="text-xs font-mono font-bold text-amber-300 flex items-center gap-2">
                   <Lightning className="w-4 h-4 text-amber-400" weight="fill" />
-                  <span>Tu ruta personalizada</span>
+                  <span>
+                    {selectedOption.isBeginner ? 'Ruta de inicio directo' : 'Evaluación diagnóstica obligatoria'}
+                  </span>
                 </div>
                 <p className="text-xs sm:text-sm text-slate-300 font-sans leading-relaxed">
                   {selectedOption.isBeginner
-                    ? 'Comenzarás desde el Módulo 01 con conceptos esenciales paso a paso y ejecución interactiva en consola.'
-                    : 'Puedes tomar nuestra Evaluación de Nivel en 12 retos interactivos para validar conocimientos y comenzar directamente en el Módulo 04 o 07 con 3 estrellas acreditadas (⭐⭐⭐).'}
+                    ? 'Comenzarás desde el Módulo 01 (Fundamentos y Sintaxis) con conceptos esenciales paso a paso y retroalimentación inmediata en consola.'
+                    : 'Has seleccionado un nivel con experiencia previa. Para ubicarte en el módulo adecuado y acreditar tus conocimientos, es obligatorio realizar el test de 12 retos interactivos.'}
                 </p>
               </div>
 
@@ -452,27 +485,17 @@ export default function OnboardingPage() {
                 {selectedOption.isBeginner ? (
                   <WipeButton
                     onClick={() => void handleCompleteOnboardingAndStart('py_mod_01')}
-                    className="w-full sm:w-auto px-8 py-3.5 text-xs font-bold uppercase tracking-wider font-mono"
+                    className="w-full sm:w-auto px-8 py-3.5 text-xs font-bold uppercase tracking-wider font-mono justify-center"
                   >
                     Comenzar Ruta desde M01
                   </WipeButton>
                 ) : (
-                  <>
-                    <WipeButton
-                      onClick={handleLaunchDiagnostic}
-                      className="w-full sm:w-auto px-8 py-3.5 text-xs font-bold uppercase tracking-wider font-mono"
-                    >
-                      ⚡ Iniciar Evaluación de Nivel
-                    </WipeButton>
-
-                    <button
-                      type="button"
-                      onClick={() => void handleCompleteOnboardingAndStart('py_mod_01')}
-                      className="w-full sm:w-auto text-center px-4 py-2.5 text-xs text-slate-400 hover:text-white transition-colors font-mono cursor-pointer"
-                    >
-                      Omitir y empezar desde M01
-                    </button>
-                  </>
+                  <WipeButton
+                    onClick={handleLaunchDiagnostic}
+                    className="w-full sm:w-auto px-8 py-3.5 text-xs font-bold uppercase tracking-wider font-mono justify-center"
+                  >
+                    ⚡ Iniciar Test Obligatorio (12 Retos)
+                  </WipeButton>
                 )}
               </div>
             </div>
@@ -508,13 +531,10 @@ export default function OnboardingPage() {
                   <span>{formattedTime}</span>
                 </div>
 
-                <button
-                  type="button"
-                  onClick={() => void handleCompleteOnboardingAndStart('py_mod_01')}
-                  className="text-xs font-mono text-slate-400 hover:text-amber-300 transition-colors cursor-pointer"
-                >
-                  Omitir test
-                </button>
+                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs font-mono text-amber-300">
+                  <Lightning className="w-3.5 h-3.5" weight="fill" />
+                  <span>Test Obligatorio</span>
+                </div>
               </div>
             </div>
 
