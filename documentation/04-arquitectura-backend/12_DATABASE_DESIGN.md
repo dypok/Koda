@@ -1,7 +1,7 @@
 # 12 — Diseño de Base de Datos
 
 > **Estado:** Aprobado / Actualizado · **Versión del documento:** 3.0.0 · **Fecha:** 2026-09-10
-> Complementa a `docs/01-producto-negocio/`, `docs/02-requisitos-ux/`, `11_SYSTEM_ARCHITECTURE.md`, `ADR-002`, `ADR-007`, `ADR-008` y `ADR-009`. Materializa la **Arquitectura de Persistencia Híbrida Políglota**:
+> Complementa a `documentation/01-producto-negocio/`, `documentation/02-requisitos-ux/`, `11_SYSTEM_ARCHITECTURE.md`, `ADR-002`, `ADR-007`, `ADR-008` y `ADR-009`. Materializa la **Arquitectura de Persistencia Híbrida Políglota**:
 > 1. **Supabase (PostgreSQL 15+):** Núcleo transaccional ACID para usuarios, perfiles, estado de progreso, estrellas (1–3⭐), libro mayor de XP, rachas, cuaderno de errores y diplomas oficiales.
 > 2. **MongoDB:** Almacén documental no relacional de alto volumen para ramas de carrera, grafo DAG de cursos con prerrequisitos `RQ`, módulos, secciones secuenciales, lecciones y bancos de preguntas polimórficos.
 

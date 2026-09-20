@@ -119,8 +119,8 @@ h3. 🏛️ Reglas de Flujo Koda
 * Rama base: `develop`
 * Nomenclatura sugerida: `feat/frontend-docs-02`
 * Entregable requerido al finalizar: `documentation/done/frontend/frontend-docs-02.md`",frontend,Highest,1,Sprint 0,"subtask, frontend, koda-mvp, scrumban"
-Sub-task,DOCS-03-SUB-01,DOCS-03,,,[DOCS] Crear `docs/adr/README.md` con guía de ciclo de vida (Propuesto $\rightarrow$ Aprobado $\rightarrow$ Reemplazado / Rechazado).,"h3. 🛠️ Subtarea Técnica (DEVOPS)
-* *Tarea:* [DOCS] Crear `docs/adr/README.md` con guía de ciclo de vida (Propuesto $\rightarrow$ Aprobado $\rightarrow$ Reemplazado / Rechazado).
+Sub-task,DOCS-03-SUB-01,DOCS-03,,,[DOCS] Crear `documentation/adr/README.md` con guía de ciclo de vida (Propuesto $\rightarrow$ Aprobado $\rightarrow$ Reemplazado / Rechazado).,"h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Crear `documentation/adr/README.md` con guía de ciclo de vida (Propuesto $\rightarrow$ Aprobado $\rightarrow$ Reemplazado / Rechazado).
 * *Estado en backlog documental:* ✅ Completada
 * *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
 * *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica
@@ -229,8 +229,8 @@ h3. 🏛️ Reglas de Flujo Koda
 * Rama base: `develop`
 * Nomenclatura sugerida: `feat/devops-docs-03`
 * Entregable requerido al finalizar: `documentation/done/devops/devops-docs-03.md`",devops,High,1,Sprint 0,"subtask, devops, koda-mvp, scrumban"
-Sub-task,DOCS-03-SUB-12,DOCS-03,,,"[DOCS] Crear `docs/README.md` con mapa conceptual Mermaid, catálogo maestro de 27 documentos y rutas por rol.","h3. 🛠️ Subtarea Técnica (DEVOPS)
-* *Tarea:* [DOCS] Crear `docs/README.md` con mapa conceptual Mermaid, catálogo maestro de 27 documentos y rutas por rol.
+Sub-task,DOCS-03-SUB-12,DOCS-03,,,"[DOCS] Crear `documentation/README.md` con mapa conceptual Mermaid, catálogo maestro de 27 documentos y rutas por rol.","h3. 🛠️ Subtarea Técnica (DEVOPS)
+* *Tarea:* [DOCS] Crear `documentation/README.md` con mapa conceptual Mermaid, catálogo maestro de 27 documentos y rutas por rol.
 * *Estado en backlog documental:* ✅ Completada
 * *Historia de Usuario Padre:* DOCS-03 — Establecer el sistema de ADRs y Hub Central de Documentación
 * *Épica:* EPIC-1: Montado de Documentación, Arquitectura y Gobernanza Técnica

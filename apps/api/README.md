@@ -92,4 +92,4 @@ pnpm db:seed
 
 Inserta (de forma idempotente, vía `upsert`) las pistas, el curso y la lección de ejemplo definidos en `src/database/seeds/`.
 
-Consulta [`../../docs/05-devops-seguridad/21_DEPLOYMENT.md`](../../docs/05-devops-seguridad/21_DEPLOYMENT.md) para más detalles sobre cada variable requerida.
+Consulta [`../../documentation/05-devops-seguridad/21_DEPLOYMENT.md`](../../documentation/05-devops-seguridad/21_DEPLOYMENT.md) para más detalles sobre cada variable requerida.

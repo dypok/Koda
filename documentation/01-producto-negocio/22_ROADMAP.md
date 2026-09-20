@@ -189,7 +189,7 @@ gantt
 - Matriz `RF (128) → UC → US` y criterios anti-scope-creep (`04` §10).
 
 **Entregables:**
-- `docs/01–10` v1.0.0 aprobados y sin contradicciones.
+- `documentation/01–10` v1.0.0 aprobados y sin contradicciones.
 - `04` con IN SCOPE MVP (§2), Post-MVP (§3) y OUT OF SCOPE (§4) firmados.
 - Backlog priorizado Must/Should/Post-MVP (`05` §2).
 
