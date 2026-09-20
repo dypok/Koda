@@ -107,8 +107,8 @@
 - Rate limiting estricto: máximo 3 solicitudes de recuperación por IP por hora (`19` §10).
 
 **Subtasks:**
-- [ ] [BACKEND] Configurar plantilla de email transaccional en Supabase Auth / Resend con diseño institucional Koda.
-- [ ] [BACKEND] Implementar endpoints de solicitud y confirmación de reset con validación de token seguro.
+- [x] [BACKEND] Configurar plantilla de email transaccional en Supabase Auth / Resend con diseño institucional Koda y TTL 15 min.
+- [x] [BACKEND] Implementar endpoints de solicitud y confirmación de reset con validación de token seguro (`POST /api/v1/auth/forgot-password`, `POST /api/v1/auth/reset-password`) con rate limiting y prevención OWASP (Entregable: `documentation/done/backend/backend-05-auth-recuperacion-password.md`).
 - [ ] [FRONTEND] Pantalla `apps/web/src/app/(auth)/recuperar/page.tsx` con input de email y feedback amigable.
 - [ ] [FRONTEND] Pantalla `apps/web/src/app/(auth)/nueva-clave/page.tsx` para digitar y confirmar nueva contraseña.
 
