@@ -86,22 +86,16 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
               />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5">
-                <span className="truncate text-xs font-bold text-slate-100">
-                  {user?.fullName || 'Estudiante Koda'}
-                </span>
-                <ShieldCheck className="h-3.5 w-3.5 flex-shrink-0 text-amber-400" weight="fill" />
-              </div>
+              <span className="block truncate text-xs font-bold text-slate-100">
+                {user?.fullName || 'Estudiante Koda'}
+              </span>
               <p className="truncate text-[11px] text-slate-400 font-mono">
                 {user?.email || 'estudiante@koda.academy'}
               </p>
-              <div className="mt-1 flex items-center gap-2">
-                <span className="rounded-md border border-amber-500/40 bg-amber-500/10 px-1.5 py-0.5 font-mono text-[9px] font-bold text-amber-300">
-                  NIVEL {user?.level || 1}
-                </span>
-                <span className="font-mono text-[10px] text-slate-400">
-                  {user?.totalXp || 0} XP
-                </span>
+              <div className="mt-1 flex items-center gap-1.5 text-[10px] font-mono text-slate-400">
+                <span>Nivel {user?.level || 1}</span>
+                <span>·</span>
+                <span>{user?.totalXp || 0} XP</span>
               </div>
             </div>
           </div>

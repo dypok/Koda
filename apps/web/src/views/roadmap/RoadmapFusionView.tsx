@@ -8,7 +8,6 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { RoadmapPixiGraph } from './RoadmapPixiGraph';
 import { RoadmapCanvasControls } from './RoadmapCanvasControls';
-import { OrbitFieldBackground } from '@/components/landing/OrbitFieldBackground';
 import { cn } from '@/lib/utils';
 
 interface RoadmapFusionViewProps {
@@ -132,8 +131,6 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
 
   return (
     <div onWheel={handleWheel} className="relative w-full h-full overflow-hidden select-none">
-      <OrbitFieldBackground className="scale-[1.5]" />
-
       <div
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}

@@ -44,12 +44,12 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
   const reduceMotion = useReducedMotion();
   const [mountRef, visible] = useElementVisible<HTMLDivElement>();
   const stageRef = useRef<HTMLDivElement>(null);
-  const [effectiveCount, setEffectiveCount] = useState(() => clamp(Math.round(starCount), 80, 200));
+  const [effectiveCount, setEffectiveCount] = useState(() => clamp(Math.round(starCount), 20, 200));
 
   useEffect(() => {
     const compute = () => {
       const small = window.matchMedia('(max-width: 640px)').matches;
-      setEffectiveCount(saveDataMode() ? 60 : small ? 90 : clamp(Math.round(starCount), 80, 200));
+      setEffectiveCount(saveDataMode() ? 40 : small ? 60 : clamp(Math.round(starCount), 20, 200));
     };
     compute();
     window.addEventListener('resize', compute);

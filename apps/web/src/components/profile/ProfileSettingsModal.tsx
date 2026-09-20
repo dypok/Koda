@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { motion } from 'framer-motion';
 import {
   X,
   User,
@@ -10,13 +10,12 @@ import {
   Palette,
   Trophy,
   Check,
-  ShieldCheck,
   Lightning,
   Fire,
   Clock,
   ArrowsClockwise,
-  IdentificationCard,
-  Lock,
+  UploadSimple,
+  ShieldCheck,
 } from '@phosphor-icons/react';
 import { useAuthStore } from '@/stores/auth.store';
 import { useAppearanceStore, BackgroundPreset, StarDensity, AccentTheme } from '@/stores/appearance.store';
@@ -60,14 +59,11 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const [profileData, setProfileData] = useState<UserProfileResponse | null>(null);
   const [toast, setToast] = useState<ToastMessage | null>(null);
 
-  // Form State
+  // Form State (Datos Generales)
   const [displayName, setDisplayName] = useState(user?.fullName || '');
   const [bio, setBio] = useState('');
   const [timezone, setTimezone] = useState('America/Bogota');
   const [locale, setLocale] = useState('es-CO');
-  const [documentType, setDocumentType] = useState<'CC' | 'TI' | 'CE' | 'PASSPORT'>('CC');
-  const [documentNumber, setDocumentNumber] = useState('');
-  const [showEditDoc, setShowEditDoc] = useState(false);
 
   // Pedagogy State
   const [dailyGoalMinutes, setDailyGoalMinutes] = useState(user?.dailyGoalMinutes || 15);
@@ -83,13 +79,14 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const [selectedAvatarUrl, setSelectedAvatarUrl] = useState(
     user?.avatarUrl || '/avatars/koda-classic.svg'
   );
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const showToast = (type: 'success' | 'error' | 'info', text: string) => {
     const id = Math.random().toString();
     setToast({ id, type, text });
     setTimeout(() => {
       setToast((cur) => (cur?.id === id ? null : cur));
-    }, 3800);
+    }, 4000);
   };
 
   // Cargar datos reales desde el backend
@@ -103,9 +100,6 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
       setBio(data.bio || '');
       setTimezone(data.timezone || 'America/Bogota');
       setLocale(data.locale || 'es-CO');
-      if (data.documentType) {
-        setDocumentType(data.documentType as any);
-      }
       if (data.dailyGoalMinutes) {
         setDailyGoalMinutes(data.dailyGoalMinutes);
       }
@@ -123,7 +117,6 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         updateUserProfile({ avatarUrl: data.avatarUrl });
       }
     } catch (err: any) {
-      // Si falla, usar datos locales del store
       // eslint-disable-next-line no-console
       console.warn('No se pudo cargar el perfil del backend:', err?.message);
     } finally {
@@ -154,20 +147,13 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         bio: bio.trim(),
         timezone,
         locale,
-        documentType,
       };
-
-      if (showEditDoc && documentNumber.trim().length >= 3) {
-        payload.documentNumber = documentNumber.trim();
-      }
 
       const updated = await UserProfileService.updateProfile(payload, token);
       setProfileData(updated);
       updateUserProfile({
         fullName: updated.displayName,
       });
-      setShowEditDoc(false);
-      setDocumentNumber('');
       showToast('success', '¡Perfil actualizado con éxito!');
     } catch (err: any) {
       showToast('error', err?.message || 'Error al actualizar el perfil.');
@@ -176,7 +162,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     }
   };
 
-  // Guardar avatar
+  // Guardar avatar oficial
   const handleSelectAvatar = async (avatar: KodaAvatarItem) => {
     setSelectedAvatarUrl(avatar.avatarUrl);
     if (!token) {
@@ -199,6 +185,36 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     } finally {
       setSaving(false);
     }
+  };
+
+  // Subir foto personalizada
+  const handleCustomPhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showToast('error', 'Por favor selecciona un archivo de imagen válido.');
+      return;
+    }
+
+    if (file.size > 3 * 1024 * 1024) {
+      showToast('error', 'La imagen no debe superar los 3MB.');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const result = event.target?.result as string;
+      if (result) {
+        setSelectedAvatarUrl(result);
+        updateUserProfile({ avatarUrl: result });
+        showToast(
+          'info',
+          'Foto personalizada cargada en tu perfil local. La sincronización en la nube se activará cuando el backend habilite el almacenamiento de avatares.'
+        );
+      }
+    };
+    reader.readAsDataURL(file);
   };
 
   // Guardar preferencias de estudio
@@ -231,7 +247,12 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   if (!isOpen) return null;
 
   const currentAvatar =
-    KODA_AVATARS.find((a) => a.avatarUrl === selectedAvatarUrl) || KODA_AVATARS[0];
+    KODA_AVATARS.find((a) => a.avatarUrl === selectedAvatarUrl) || {
+      name: 'Foto Personalizada',
+      subtitle: 'Imagen subida por el usuario',
+      description: 'Tu fotografía personalizada activa en Koda.',
+      avatarUrl: selectedAvatarUrl,
+    };
 
   const totalStudyHours = profileData
     ? (profileData.totalStudyTimeSeconds / 3600).toFixed(1)
@@ -260,7 +281,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         <aside className="flex flex-shrink-0 flex-row border-b border-slate-800 bg-slate-950/50 p-3 md:w-64 md:flex-col md:border-b-0 md:border-r md:p-4">
           {/* Header perfil en sidebar */}
           <div className="hidden items-center gap-3 pb-4 md:flex">
-            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border-2 border-amber-500/50 bg-slate-800 p-0.5 shadow-md">
+            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-amber-500/50 bg-slate-800 p-0.5 shadow-md">
               <img
                 src={selectedAvatarUrl}
                 alt={displayName}
@@ -272,7 +293,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
             </div>
             <div className="min-w-0 flex-1">
               <h3 className="truncate font-semibold text-slate-100 text-sm">{displayName || 'Estudiante'}</h3>
-              <p className="truncate font-mono text-xs text-amber-400">
+              <p className="truncate font-mono text-xs text-slate-400">
                 Nivel {profileData?.currentLevel || user?.level || 1} · {profileData?.totalXp || user?.totalXp || 0} XP
               </p>
             </div>
@@ -305,7 +326,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               }`}
             >
               <Sparkle className="h-4 w-4" weight={activeTab === 'avatars' ? 'fill' : 'regular'} />
-              <span>Avatares Koda</span>
+              <span>Selector de Avatares</span>
             </button>
 
             <button
@@ -365,14 +386,9 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
           {activeTab === 'profile' && (
             <div className="space-y-6 max-w-xl">
               <div>
-                <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-                  <span>Gestión de Perfil</span>
-                  <span className="rounded-md bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 text-[10px] font-mono text-amber-400">
-                    AUTH-03
-                  </span>
-                </h2>
+                <h2 className="text-xl font-bold text-slate-100">Mi Perfil</h2>
                 <p className="text-xs text-slate-400 mt-1">
-                  Actualiza tu identidad pública y datos para diplomas oficiales de Koda.
+                  Actualiza tu información personal y datos de contacto en la plataforma.
                 </p>
               </div>
 
@@ -392,70 +408,15 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                   />
                 </div>
 
-                {/* Correo (Read-only con badge) */}
+                {/* Correo (Read-only) */}
                 <div>
                   <label className="block text-xs font-mono font-medium text-slate-300 mb-1.5">
-                    Correo Electrónico (No modificable)
+                    Correo Electrónico
                   </label>
                   <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950/40 px-3.5 py-2.5 text-sm text-slate-400">
                     <span>{user?.email || profileData?.email || 'estudiante@koda.academy'}</span>
-                    <span className="flex items-center gap-1 text-xs text-emerald-400 font-mono">
-                      <ShieldCheck className="h-4 w-4" weight="fill" />
-                      Verificado
-                    </span>
+                    <span className="text-xs text-slate-500 font-mono">Principal</span>
                   </div>
-                </div>
-
-                {/* Documento de Identidad (Seguridad PII) */}
-                <div className="rounded-xl border border-slate-800 bg-slate-950/50 p-3.5 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-2 text-xs font-mono text-slate-300">
-                      <IdentificationCard className="h-4 w-4 text-amber-400" />
-                      Documento Legal para Certificados
-                    </span>
-                    <span className="font-mono text-xs text-amber-300">
-                      {profileData?.formattedMaskedDocument || 'Sin registrar'}
-                    </span>
-                  </div>
-
-                  {!showEditDoc ? (
-                    <button
-                      type="button"
-                      onClick={() => setShowEditDoc(true)}
-                      className="text-xs text-cyan-400 hover:text-cyan-300 underline font-mono cursor-pointer"
-                    >
-                      Actualizar número de documento
-                    </button>
-                  ) : (
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 pt-2 border-t border-slate-800">
-                      <div>
-                        <label className="block text-[11px] font-mono text-slate-400 mb-1">Tipo</label>
-                        <select
-                          value={documentType}
-                          onChange={(e) => setDocumentType(e.target.value as any)}
-                          className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2 py-1.5 text-xs text-slate-200 focus:border-amber-500"
-                        >
-                          <option value="CC">Cédula (CC)</option>
-                          <option value="TI">Tarjeta Identidad (TI)</option>
-                          <option value="CE">Cédula Extranjería (CE)</option>
-                          <option value="PASSPORT">Pasaporte</option>
-                        </select>
-                      </div>
-
-                      <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-mono text-slate-400 mb-1">
-                          Nuevo Número Legal
-                        </label>
-                        <input
-                          type="text"
-                          value={documentNumber}
-                          onChange={(e) => setDocumentNumber(e.target.value)}
-                          placeholder="Número completo"
-                          className="w-full rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs text-slate-100 placeholder-slate-500 focus:border-amber-500"
-                        />
-                      </div>
-                    </div>
-                  )}
                 </div>
 
                 {/* Biografía */}
@@ -468,7 +429,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                     value={bio}
                     onChange={(e) => setBio(e.target.value.slice(0, 500))}
                     rows={3}
-                    placeholder="Cuéntanos sobre tus pasiones de programación..."
+                    placeholder="Cuéntanos sobre tus proyectos y tecnologías predilectas..."
                     className="w-full rounded-xl border border-slate-700 bg-slate-950/60 px-3.5 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
                   />
                 </div>
@@ -521,24 +482,19 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
             </div>
           )}
 
-          {/* TAB 2: SELECTOR DE AVATARES */}
+          {/* TAB 2: SELECTOR DE AVATARES Y SUBIR FOTO */}
           {activeTab === 'avatars' && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-                  <span>Selector de Avatares Oficiales</span>
-                  <span className="rounded-md bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 text-[10px] font-mono text-amber-400">
-                    8 Expresiones
-                  </span>
-                </h2>
+                <h2 className="text-xl font-bold text-slate-100">Selector de Avatar</h2>
                 <p className="text-xs text-slate-400 mt-1">
-                  Elige la personalidad de Koda 🦊 que te representará en el roadmap y certificados.
+                  Elige un avatar oficial de Koda o sube una fotografía personalizada de tu equipo.
                 </p>
               </div>
 
               {/* Preview Avatar Activo */}
-              <div className="flex items-center gap-4 rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-slate-900 to-slate-900 p-4">
-                <div className="relative h-16 w-16 flex-shrink-0 rounded-2xl border-2 border-amber-400 bg-slate-800 p-1 shadow-lg">
+              <div className="flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-950/50 p-4">
+                <div className="relative h-16 w-16 flex-shrink-0 rounded-2xl border border-amber-400 bg-slate-800 p-1 shadow-lg overflow-hidden">
                   <img
                     src={currentAvatar.avatarUrl}
                     alt={currentAvatar.name}
@@ -546,58 +502,81 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                   />
                 </div>
                 <div>
-                  <div className="flex items-center gap-2">
-                    <span className="font-bold text-slate-100 text-base">{currentAvatar.name}</span>
-                    <span
-                      className="rounded-full px-2 py-0.5 text-[9px] font-mono font-bold tracking-wider uppercase text-white"
-                      style={{ backgroundColor: currentAvatar.accentColor }}
-                    >
-                      {currentAvatar.badgeLabel}
-                    </span>
-                  </div>
+                  <h3 className="font-bold text-slate-100 text-base">{currentAvatar.name}</h3>
                   <p className="text-xs text-slate-300 mt-0.5">{currentAvatar.subtitle}</p>
                   <p className="text-[11px] text-slate-400 mt-1">{currentAvatar.description}</p>
                 </div>
               </div>
 
-              {/* Grid de 8 Avatares */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {KODA_AVATARS.map((avatar) => {
-                  const isSelected = selectedAvatarUrl === avatar.avatarUrl;
-                  return (
-                    <button
-                      key={avatar.id}
-                      type="button"
-                      onClick={() => handleSelectAvatar(avatar)}
-                      className={`group relative flex flex-col items-center rounded-2xl border p-3.5 text-center transition-all cursor-pointer ${
-                        isSelected
-                          ? 'border-amber-400 bg-amber-500/15 shadow-lg shadow-amber-500/10'
-                          : 'border-slate-800 bg-slate-950/40 hover:border-slate-700 hover:bg-slate-800/40'
-                      }`}
-                    >
-                      {isSelected && (
-                        <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 text-slate-950 shadow-sm">
-                          <Check className="h-3 w-3" weight="bold" />
+              {/* Opción de Subir Foto Personalizada */}
+              <div className="rounded-2xl border border-dashed border-slate-700/80 bg-slate-950/40 p-4 transition-colors hover:border-amber-500/50">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-800 text-amber-400">
+                      <UploadSimple className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-slate-100">Subir foto personalizada</h4>
+                      <p className="text-[11px] text-slate-400">Formatos PNG, JPG, WEBP o SVG (máx. 3MB)</p>
+                    </div>
+                  </div>
+                  <label className="inline-flex items-center justify-center gap-1.5 rounded-xl border border-amber-500/40 bg-amber-500/10 px-3.5 py-2 text-xs font-semibold text-amber-300 hover:bg-amber-500/20 transition-colors cursor-pointer">
+                    <UploadSimple className="h-3.5 w-3.5" />
+                    <span>Seleccionar foto</span>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/png,image/jpeg,image/webp,image/svg+xml"
+                      onChange={handleCustomPhotoUpload}
+                      className="hidden"
+                    />
+                  </label>
+                </div>
+              </div>
+
+              {/* Grid de 8 Avatares Oficiales */}
+              <div className="space-y-2">
+                <span className="text-xs font-mono font-medium text-slate-300 block">
+                  Avatares Oficiales de Koda
+                </span>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {KODA_AVATARS.map((avatar) => {
+                    const isSelected = selectedAvatarUrl === avatar.avatarUrl;
+                    return (
+                      <button
+                        key={avatar.id}
+                        type="button"
+                        onClick={() => handleSelectAvatar(avatar)}
+                        className={`group relative flex flex-col items-center rounded-2xl border p-3 text-center transition-all cursor-pointer ${
+                          isSelected
+                            ? 'border-amber-400 bg-amber-500/15 shadow-lg shadow-amber-500/10'
+                            : 'border-slate-800 bg-slate-950/40 hover:border-slate-700 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        {isSelected && (
+                          <span className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-amber-500 text-slate-950 shadow-sm">
+                            <Check className="h-3 w-3" weight="bold" />
+                          </span>
+                        )}
+
+                        <div className="relative mb-2 h-14 w-14 overflow-hidden rounded-xl bg-slate-900/80 p-1 transition-transform group-hover:scale-105">
+                          <img
+                            src={avatar.avatarUrl}
+                            alt={avatar.name}
+                            className="h-full w-full object-contain"
+                          />
+                        </div>
+
+                        <span className="font-semibold text-xs text-slate-100 group-hover:text-amber-300 transition-colors">
+                          {avatar.name}
                         </span>
-                      )}
-
-                      <div className="relative mb-2 h-16 w-16 overflow-hidden rounded-xl bg-slate-900/80 p-1 transition-transform group-hover:scale-105">
-                        <img
-                          src={avatar.avatarUrl}
-                          alt={avatar.name}
-                          className="h-full w-full object-contain"
-                        />
-                      </div>
-
-                      <span className="font-semibold text-xs text-slate-100 group-hover:text-amber-300 transition-colors">
-                        {avatar.name}
-                      </span>
-                      <span className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">
-                        {avatar.subtitle}
-                      </span>
-                    </button>
-                  );
-                })}
+                        <span className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">
+                          {avatar.subtitle}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           )}
@@ -606,9 +585,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
           {activeTab === 'preferences' && (
             <div className="space-y-6 max-w-xl">
               <div>
-                <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-                  <span>Metas y Ritmo Pedagógico</span>
-                </h2>
+                <h2 className="text-xl font-bold text-slate-100">Metas y Ritmo Pedagógico</h2>
                 <p className="text-xs text-slate-400 mt-1">
                   Configura tu compromiso diario para calibrar recordatorios y rachas.
                 </p>
@@ -714,12 +691,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
           {activeTab === 'appearance' && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-                  <span>Personalización Visual y Fondos</span>
-                  <span className="rounded-md bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 text-[10px] font-mono text-amber-400">
-                    Pixi WebGL
-                  </span>
-                </h2>
+                <h2 className="text-xl font-bold text-slate-100">Personalización Visual y Fondos</h2>
                 <p className="text-xs text-slate-400 mt-1">
                   Elige la atmósfera del roadmap: efectos climáticos, partículas y densidad estelar.
                 </p>
@@ -736,7 +708,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                     { id: 'fireflies', name: 'Luciérnagas', desc: 'Partículas de luz verde del bosque' },
                     { id: 'embers', name: 'Brasas de Forja', desc: 'Chispas ardientes flotantes naranja' },
                     { id: 'dust', name: 'Polvo Espacial', desc: 'Destellos dorados flotantes' },
-                    { id: 'matrix-rain', name: 'Lluvia Matrix', desc: 'Lluvia suave de código binario' },
+                    { id: 'matrix-rain', name: 'Lluvia Matrix', desc: 'Lluvia suave de código terminal' },
                     { id: 'kepler-orbit', name: 'Órbita Kepleriana', desc: 'Espiral kepleriana en ASCII' },
                   ].map((preset) => {
                     const active = backgroundPreset === preset.id;
@@ -769,9 +741,9 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                 </label>
                 <div className="flex gap-2">
                   {[
-                    { id: 'low', label: 'Baja (40)' },
-                    { id: 'medium', label: 'Media (80)' },
-                    { id: 'high', label: 'Alta (140)' },
+                    { id: 'low', label: 'Baja (30)' },
+                    { id: 'medium', label: 'Media (70)' },
+                    { id: 'high', label: 'Alta (130)' },
                   ].map((d) => (
                     <button
                       key={d.id}
@@ -792,7 +764,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               {/* Paleta de acento */}
               <div className="space-y-2">
                 <label className="block text-xs font-mono font-medium text-slate-300">
-                  Color de Acento Koda
+                  Color de Acento
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                   {[
@@ -853,12 +825,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-xl font-bold text-slate-100 flex items-center gap-2">
-                    <span>Métricas en Tiempo Real</span>
-                    <span className="rounded-md bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 text-[10px] font-mono text-amber-400">
-                      O(1) Live
-                    </span>
-                  </h2>
+                  <h2 className="text-xl font-bold text-slate-100">Métricas en Tiempo Real</h2>
                   <p className="text-xs text-slate-400 mt-1">
                     Telemetría oficial de aprendizaje sincronizada con el backend.
                   </p>
@@ -877,7 +844,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
               {/* Grid de Métricas */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <div className="rounded-xl border border-amber-500/30 bg-slate-950/60 p-4 shadow-sm">
+                <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4 shadow-sm">
                   <div className="flex items-center gap-2 text-amber-400 text-xs font-mono mb-1">
                     <Lightning className="h-4 w-4" weight="fill" />
                     XP TOTAL
@@ -885,10 +852,10 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                   <div className="text-2xl font-extrabold text-slate-100 font-mono">
                     {profileData?.totalXp ?? user?.totalXp ?? 0}
                   </div>
-                  <p className="text-[10px] text-slate-400 mt-1">Puntos de experiencia ganados</p>
+                  <p className="text-[10px] text-slate-400 mt-1">Puntos acumulados</p>
                 </div>
 
-                <div className="rounded-xl border border-orange-500/30 bg-slate-950/60 p-4 shadow-sm">
+                <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4 shadow-sm">
                   <div className="flex items-center gap-2 text-orange-400 text-xs font-mono mb-1">
                     <Trophy className="h-4 w-4" weight="fill" />
                     NIVEL ACTUAL
@@ -896,10 +863,10 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                   <div className="text-2xl font-extrabold text-slate-100 font-mono">
                     Nivel {profileData?.currentLevel ?? user?.level ?? 1}
                   </div>
-                  <p className="text-[10px] text-slate-400 mt-1">Rango pedagógico en Koda</p>
+                  <p className="text-[10px] text-slate-400 mt-1">Rango pedagógico</p>
                 </div>
 
-                <div className="rounded-xl border border-rose-500/30 bg-slate-950/60 p-4 shadow-sm">
+                <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4 shadow-sm">
                   <div className="flex items-center gap-2 text-rose-400 text-xs font-mono mb-1">
                     <Fire className="h-4 w-4" weight="fill" />
                     RACHA ACTIVA
@@ -908,11 +875,11 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                     {profileData?.currentStreak ?? user?.streak ?? 0} días
                   </div>
                   <p className="text-[10px] text-slate-400 mt-1">
-                    Récord máx: {profileData?.longestStreak ?? 0} días
+                    Récord: {profileData?.longestStreak ?? 0} días
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-cyan-500/30 bg-slate-950/60 p-4 shadow-sm">
+                <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4 shadow-sm">
                   <div className="flex items-center gap-2 text-cyan-400 text-xs font-mono mb-1">
                     <Clock className="h-4 w-4" weight="fill" />
                     TIEMPO DE ESTUDIO
@@ -920,10 +887,10 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                   <div className="text-2xl font-extrabold text-slate-100 font-mono">
                     {totalStudyHours} h
                   </div>
-                  <p className="text-[10px] text-slate-400 mt-1">Horas dedicadas en lecciones</p>
+                  <p className="text-[10px] text-slate-400 mt-1">Horas en lecciones</p>
                 </div>
 
-                <div className="rounded-xl border border-emerald-500/30 bg-slate-950/60 p-4 shadow-sm">
+                <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4 shadow-sm">
                   <div className="flex items-center gap-2 text-emerald-400 text-xs font-mono mb-1">
                     <ShieldCheck className="h-4 w-4" weight="fill" />
                     PROTECTORES RACHA
@@ -931,18 +898,18 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                   <div className="text-2xl font-extrabold text-slate-100 font-mono">
                     {profileData?.streakFreezeCount ?? 0}
                   </div>
-                  <p className="text-[10px] text-slate-400 mt-1">Vidas de reserva ante pausas</p>
+                  <p className="text-[10px] text-slate-400 mt-1">Vidas de reserva</p>
                 </div>
 
-                <div className="rounded-xl border border-violet-500/30 bg-slate-950/60 p-4 shadow-sm">
+                <div className="rounded-xl border border-slate-800 bg-slate-950/60 p-4 shadow-sm">
                   <div className="flex items-center gap-2 text-violet-400 text-xs font-mono mb-1">
                     <Sparkle className="h-4 w-4" weight="fill" />
-                    ESTADO ONBOARDING
+                    CURRÍCULO
                   </div>
                   <div className="text-sm font-bold text-emerald-400 font-mono pt-1">
-                    COMPLETADO
+                    ACTIVO
                   </div>
-                  <p className="text-[10px] text-slate-400 mt-1">Currículo activo y sincronizado</p>
+                  <p className="text-[10px] text-slate-400 mt-1">Ruta sincronizada</p>
                 </div>
               </div>
             </div>

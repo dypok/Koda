@@ -4,10 +4,13 @@ import React, { useEffect, useRef } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useElementVisible } from '@/lib/pixi/engine';
-import { createEngine } from '@/views/roadmap/route-lab/bg-lab/ascii-engines';
+import { createEngine, type BgKey } from '@/views/roadmap/route-lab/bg-lab/ascii-engines';
 
-/** Fondo del roadmap: órbita kepleriana + espiral ASCII en un solo canvas contenido. */
-export const OrbitFieldBackground: React.FC<{ className?: string }> = ({ className }) => {
+/** Fondo del roadmap: órbita kepleriana, lluvia matrix o espiral ASCII en un solo canvas contenido. */
+export const OrbitFieldBackground: React.FC<{ className?: string; engineKey?: BgKey }> = ({
+  className,
+  engineKey = 'kepler-spiral',
+}) => {
   const reduceMotion = useReducedMotion();
   const [mountRef, visible] = useElementVisible<HTMLDivElement>();
   const visibleRef = useRef(visible);
@@ -25,7 +28,7 @@ export const OrbitFieldBackground: React.FC<{ className?: string }> = ({ classNa
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    let engine = createEngine('kepler-spiral', ctx, 1, 1);
+    let engine = createEngine(engineKey, ctx, 1, 1);
     const fit = () => {
       // offsetWidth/Height ignoran el `scale` visual del contenedor; así el canvas
       // se dibuja a tamaño de layout y el scale del wrapper lo agranda de verdad.
@@ -33,7 +36,7 @@ export const OrbitFieldBackground: React.FC<{ className?: string }> = ({ classNa
       const H = Math.max(1, mount.offsetHeight);
       canvas.width = W;
       canvas.height = H;
-      engine = createEngine('kepler-spiral', ctx, W, H);
+      engine = createEngine(engineKey, ctx, W, H);
       engine.frame(0, 0);
     };
     fit();
@@ -73,7 +76,7 @@ export const OrbitFieldBackground: React.FC<{ className?: string }> = ({ classNa
       window.removeEventListener('resize', fit);
       canvas.remove();
     };
-  }, [reduceMotion, mountRef]);
+  }, [reduceMotion, mountRef, engineKey]);
 
   if (reduceMotion) return null;
 
