@@ -4,13 +4,10 @@ import React from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { RoadmapDynamicBackground } from '@/components/roadmap/RoadmapDynamicBackground';
 import { useRoadmapStore } from '@/stores/roadmap.store';
-import { useAppearanceStore } from '@/stores/appearance.store';
 import { RoadmapBranchPill } from './RoadmapBranchPill';
 import { RoadmapProfilePill } from './RoadmapProfilePill';
 import { RoadmapTopHud } from './RoadmapTopHud';
-import { RoadmapCanvas } from './RoadmapCanvas';
 import { RoadmapLegend } from './RoadmapLegend';
-import { CoursePinRail } from './CoursePinRail';
 import { RoadmapFusionView } from './RoadmapFusionView';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { useRouter } from 'next/navigation';
@@ -18,7 +15,6 @@ import { useRouter } from 'next/navigation';
 export const StudentRoadmapView: React.FC = () => {
   const router = useRouter();
   const { openCourseLessons, getCurrentDataset, viewMode, retreatTrigger, returnToCourses, setActiveNode, isLoading, hydrateProgress, selectedCourseId } = useRoadmapStore();
-  const { coursesDisplayMode } = useAppearanceStore();
 
   React.useEffect(() => {
     hydrateProgress();
@@ -79,13 +75,7 @@ export const StudentRoadmapView: React.FC = () => {
               exit={{ opacity: 0, x: viewMode === 'lessons' ? -slide : slide }}
               transition={{ duration: reduceMotion ? 0.2 : 0.35, ease: [0.16, 1, 0.3, 1] }}
             >
-              {viewMode === 'lessons' || coursesDisplayMode === 'fusion' ? (
-                <RoadmapFusionView dataset={dataset} onDeploy={handleDeployLesson} />
-              ) : coursesDisplayMode === 'pin-rail' ? (
-                <CoursePinRail dataset={dataset} onDeploy={handleDeployLesson} />
-              ) : (
-                <RoadmapCanvas dataset={dataset} />
-              )}
+              <RoadmapFusionView dataset={dataset} onDeploy={handleDeployLesson} />
             </motion.div>
           </AnimatePresence>
 

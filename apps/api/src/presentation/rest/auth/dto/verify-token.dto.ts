@@ -3,7 +3,7 @@ import { IsNotEmpty, IsString } from 'class-validator';
 
 export class VerifyTokenDto {
   @ApiProperty({
-    description: 'Token JWT Bearer emitido por Supabase Auth',
+    description: 'Token JWT Bearer de sesión del usuario',
     example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...',
   })
   @IsString()

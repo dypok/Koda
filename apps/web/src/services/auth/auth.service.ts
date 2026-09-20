@@ -62,7 +62,7 @@ const SUPABASE_ANON_KEY =
 
 export class AuthService {
   /**
-   * Inicia sesión con correo y contraseña contra Supabase Auth y sincroniza la sesión con el backend.
+   * Inicia sesión con correo y contraseña contra el servicio de autenticación y sincroniza la sesión con el backend.
    */
   public static async loginWithPassword(email: string, password: string): Promise<VerifyOtpResult> {
     const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
@@ -80,14 +80,16 @@ export class AuthService {
     const data = await res.json().catch(() => ({}));
 
     if (!res.ok) {
-      const desc = data?.error_description || data?.msg || data?.message || '';
-      if (desc.includes('Invalid login credentials')) {
+      const desc = (data?.error_description || data?.msg || data?.message || '').toLowerCase();
+      if (desc.includes('invalid login credentials') || desc.includes('invalid credentials')) {
         throw new Error('Correo electrónico o contraseña incorrectos.');
       }
-      if (desc.includes('Email not confirmed')) {
+      if (desc.includes('email not confirmed')) {
         throw new Error('Debes confirmar tu correo electrónico con el código OTP antes de ingresar.');
       }
-      throw new Error(desc || `Error al iniciar sesión (${res.status})`);
+      const raw = data?.error_description || data?.msg || data?.message || '';
+      const sanitized = raw.replace(/supabase/gi, '').replace(/gotrue/gi, '').trim();
+      throw new Error(sanitized || 'Error al iniciar sesión. Por favor, verifica tus datos.');
     }
 
     const accessToken = data.access_token;
@@ -104,7 +106,52 @@ export class AuthService {
   }
 
   /**
-   * Obtiene la URL de redirección para autenticación OAuth (Google / GitHub) en Supabase Auth.
+   * Renueva el token de acceso JWT utilizando el refresh_token para evitar que la sesión venza.
+   */
+  public static async refreshSession(refreshToken: string): Promise<VerifyOtpResult> {
+    if (!refreshToken) {
+      throw new Error('No se encontró token de renovación.');
+    }
+
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify({
+        refresh_token: refreshToken,
+      }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      const raw = data?.error_description || data?.msg || data?.message || '';
+      const sanitized = raw.replace(/supabase/gi, '').replace(/gotrue/gi, '').trim();
+      throw new Error(sanitized || 'Sesión expirada. Por favor, inicia sesión nuevamente.');
+    }
+
+    const accessToken = data.access_token;
+    const newRefreshToken = data.refresh_token || refreshToken;
+
+    const session = await this.verifySession(accessToken);
+
+    // Actualizar inmediatamente en almacenamiento local si estamos en navegador
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('koda_auth_token', accessToken);
+      localStorage.setItem('koda_auth_refresh_token', newRefreshToken);
+    }
+
+    return {
+      session,
+      accessToken,
+      refreshToken: newRefreshToken,
+    };
+  }
+
+  /**
+   * Obtiene la URL de redirección para autenticación OAuth (Google / GitHub).
    */
   public static getOAuthRedirectUrl(provider: 'google' | 'github', redirectTo?: string): string {
     const redirectOrigin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
@@ -165,7 +212,7 @@ export class AuthService {
     return data;
   }
   /**
-   * Registra al estudiante en el backend con envío de código OTP vía correo (Supabase Auth).
+   * Registra al estudiante en el backend con envío de código OTP vía correo.
    */
   public static async registerWithOtp(payload: RegisterOtpPayload): Promise<RegisterOtpResult> {
     const res = await fetch(`${API_BASE_URL}/auth/register-otp`, {
@@ -189,7 +236,7 @@ export class AuthService {
   }
 
   /**
-   * Verifica el código numérico OTP de 6 dígitos emitido por Supabase Auth.
+   * Verifica el código numérico OTP de 6 dígitos.
    * Retorna la sesión provisionada del usuario y el JWT Bearer token.
    */
   public static async verifyOtp(payload: VerifyOtpPayload): Promise<VerifyOtpResult> {
@@ -238,5 +285,35 @@ export class AuthService {
     }
 
     return data as BackendUserSession;
+  }
+
+  /**
+   * Realiza una petición HTTP autenticada. Si el token está vencido (401),
+   * renueva la sesión automáticamente con el refresh_token y reintenta la petición.
+   */
+  public static async authFetch(url: string, init: RequestInit = {}): Promise<Response> {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('koda_auth_token') : null;
+    const headers = new Headers(init.headers || {});
+    if (token && !headers.has('Authorization')) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    let res = await fetch(url, { ...init, headers });
+
+    // Si responde 401 y tenemos refresh_token, renovar en caliente y reintentar
+    if (res.status === 401 && typeof window !== 'undefined') {
+      const refreshToken = localStorage.getItem('koda_auth_refresh_token');
+      if (refreshToken) {
+        try {
+          const renewed = await this.refreshSession(refreshToken);
+          headers.set('Authorization', `Bearer ${renewed.accessToken}`);
+          res = await fetch(url, { ...init, headers });
+        } catch {
+          // Si el refresh falla, devolver la respuesta original 401
+        }
+      }
+    }
+
+    return res;
   }
 }

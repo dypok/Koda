@@ -21,7 +21,7 @@ export class UpdateUserProfileDto {
   avatarUrl?: string;
 
   @ApiPropertyOptional({
-    description: 'Clave del avatar almacenado en almacenamiento de objetos (S3 o Supabase Storage)',
+    description: 'Clave del avatar almacenado en el almacenamiento de objetos',
     example: 'avatars/d3b07384/koda-astronaut.png',
   })
   @IsOptional()

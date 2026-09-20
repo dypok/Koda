@@ -23,7 +23,7 @@ export class ValidateUserSessionUseCase {
     const authUser = await this.supabaseService.verifyAuthToken(cleanToken);
 
     if (!authUser || !authUser.id) {
-      throw new UnauthorizedException('Token de sesión inválido o expirado en Supabase Auth.');
+      throw new UnauthorizedException('Sesión inválida o expirada. Por favor, inicia sesión nuevamente.');
     }
 
     let user = await this.userRepository.findById(authUser.id);

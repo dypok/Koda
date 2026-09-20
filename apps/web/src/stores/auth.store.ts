@@ -1,6 +1,8 @@
 import { create } from 'zustand';
 import type { BackendUserSession } from '@/services/auth/auth.service';
 
+import { AuthService } from '@/services/auth/auth.service';
+
 export interface AuthUser {
   id: string;
   email: string;
@@ -38,7 +40,51 @@ const STORAGE_KEYS = {
   HAS_LOGGED: 'koda_has_ever_logged_in',
 };
 
-export const useAuthStore = create<AuthState>((set) => ({
+function parseJwtExp(token: string): number | null {
+  try {
+    const base64Url = token.split('.')[1];
+    if (!base64Url) return null;
+    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(
+      atob(base64)
+        .split('')
+        .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
+    );
+    const parsed = JSON.parse(jsonPayload);
+    return typeof parsed.exp === 'number' ? parsed.exp : null;
+  } catch {
+    return null;
+  }
+}
+
+let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+
+function scheduleBackgroundRefresh(token: string | null, refreshToken: string | null, onRefresh: (token: string, refresh: string) => void) {
+  if (refreshTimer) {
+    clearTimeout(refreshTimer);
+    refreshTimer = null;
+  }
+  if (!token || !refreshToken || typeof window === 'undefined') return;
+
+  const exp = parseJwtExp(token);
+  const now = Math.floor(Date.now() / 1000);
+  // Refrescar 5 minutos (300s) antes del vencimiento, o cada 30 minutos (1800s)
+  const secondsUntilRefresh = exp ? Math.max(30, exp - now - 300) : 1800;
+  const ms = secondsUntilRefresh * 1000;
+
+  refreshTimer = setTimeout(async () => {
+    try {
+      const renewed = await AuthService.refreshSession(refreshToken);
+      onRefresh(renewed.accessToken, renewed.refreshToken || refreshToken);
+    } catch {
+      // Reintentar en 60 segundos si hubo fallo de red
+      scheduleBackgroundRefresh(token, refreshToken, onRefresh);
+    }
+  }, ms);
+}
+
+export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   token: null,
   refreshToken: null,
@@ -54,7 +100,6 @@ export const useAuthStore = create<AuthState>((set) => ({
       const storedRefreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
       const hasEver = localStorage.getItem(STORAGE_KEYS.HAS_LOGGED) === 'true';
 
-      // Requerir estrictamente que exista un token JWT real de Supabase/NestJS y descartar mocks
       const isMockUser = storedUser?.includes('"usr_') || !storedToken;
 
       if (storedUser && storedToken && !isMockUser) {
@@ -68,13 +113,34 @@ export const useAuthStore = create<AuthState>((set) => ({
             hasEverLoggedIn: true,
             hasHydrated: true,
           });
+
+          // Verificar si el token ya expiró o vencerá en menos de 5 minutos
+          const exp = parseJwtExp(storedToken);
+          const now = Math.floor(Date.now() / 1000);
+          if (storedRefreshToken && (!exp || exp - now < 300)) {
+            // Renovación inmediata en frío
+            AuthService.refreshSession(storedRefreshToken)
+              .then((result) => {
+                get().setUserSession(result.session, result.accessToken, result.refreshToken);
+              })
+              .catch(() => {
+                // Silencioso; se reintentará en segundo plano
+              });
+          }
+
+          scheduleBackgroundRefresh(storedToken, storedRefreshToken, (newToken, newRefresh) => {
+            set({ token: newToken, refreshToken: newRefresh });
+            scheduleBackgroundRefresh(newToken, newRefresh, (t, r) => {
+              set({ token: t, refreshToken: r });
+            });
+          });
+
           return;
         } catch {
           // JSON corrupto, limpiar
         }
       }
 
-      // Si había residuos de mocks sin token real, purgarlos de inmediato
       if (storedUser && isMockUser) {
         localStorage.removeItem(STORAGE_KEYS.USER);
         localStorage.removeItem(STORAGE_KEYS.TOKEN);
@@ -110,11 +176,13 @@ export const useAuthStore = create<AuthState>((set) => ({
       onboardingCompleted: session.onboardingCompleted,
     };
 
+    const finalRefresh = refreshToken || (typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN) : null);
+
     if (typeof window !== 'undefined') {
       localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
       localStorage.setItem(STORAGE_KEYS.TOKEN, accessToken);
-      if (refreshToken) {
-        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken);
+      if (finalRefresh) {
+        localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, finalRefresh);
       }
       localStorage.setItem(STORAGE_KEYS.HAS_LOGGED, 'true');
     }
@@ -122,9 +190,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({
       user,
       token: accessToken,
-      refreshToken: refreshToken || null,
+      refreshToken: finalRefresh || null,
       isAuthenticated: true,
       hasEverLoggedIn: true,
+    });
+
+    scheduleBackgroundRefresh(accessToken, finalRefresh, (newToken, newRefresh) => {
+      set({ token: newToken, refreshToken: newRefresh });
     });
   },
 
@@ -140,18 +212,18 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
 
   login: () => {
-    // Deprecated: No se permiten logins simulados sin autenticación real de Supabase
-    // eslint-disable-next-line no-console
-    console.warn('[auth] login() simulado deshabilitado. Autentica con AuthService.loginWithPassword()');
+    // Deprecated
   },
 
   loginSocial: () => {
-    // Deprecated: Redirige a través de AuthService.getOAuthRedirectUrl()
-    // eslint-disable-next-line no-console
-    console.warn('[auth] loginSocial() simulado deshabilitado. Usa AuthService.getOAuthRedirectUrl()');
+    // Deprecated
   },
 
   logout: () => {
+    if (refreshTimer) {
+      clearTimeout(refreshTimer);
+      refreshTimer = null;
+    }
     if (typeof window !== 'undefined') {
       localStorage.removeItem(STORAGE_KEYS.USER);
       localStorage.removeItem(STORAGE_KEYS.TOKEN);

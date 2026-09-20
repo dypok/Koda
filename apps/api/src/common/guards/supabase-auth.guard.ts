@@ -22,12 +22,12 @@ export class SupabaseAuthGuard implements CanActivate {
     const token = authHeader?.startsWith('Bearer ') ? authHeader.slice(7).trim() : undefined;
 
     if (!token) {
-      throw new UnauthorizedException('Falta el header "Authorization: Bearer <token>" de Supabase.');
+      throw new UnauthorizedException('No se ha proporcionado el token de autorización.');
     }
 
     const user = await this.supabaseService.verifyAuthToken(token);
     if (!user) {
-      throw new UnauthorizedException('Token de Supabase inválido o expirado.');
+      throw new UnauthorizedException('Sesión inválida o expirada. Por favor, inicia sesión nuevamente.');
     }
 
     request.user = user;

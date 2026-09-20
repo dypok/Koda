@@ -10,14 +10,11 @@ export type BackgroundPreset =
 
 export type StarDensity = 'low' | 'medium' | 'high';
 export type AccentTheme = 'amber' | 'cyan' | 'violet' | 'emerald';
-export type CoursesDisplayMode = 'fusion' | 'canvas' | 'pin-rail';
-
 export interface AppearanceSettings {
   backgroundPreset: BackgroundPreset;
   starDensity: StarDensity;
   accentTheme: AccentTheme;
   interactiveCursor: boolean;
-  coursesDisplayMode: CoursesDisplayMode;
 }
 
 interface AppearanceState extends AppearanceSettings {
@@ -27,7 +24,6 @@ interface AppearanceState extends AppearanceSettings {
   setStarDensity: (density: StarDensity) => void;
   setAccentTheme: (theme: AccentTheme) => void;
   setInteractiveCursor: (interactive: boolean) => void;
-  setCoursesDisplayMode: (mode: CoursesDisplayMode) => void;
   resetAppearance: () => void;
   initAppearance: () => void;
 }
@@ -39,7 +35,6 @@ const DEFAULT_SETTINGS: AppearanceSettings = {
   starDensity: 'medium',
   accentTheme: 'amber',
   interactiveCursor: true,
-  coursesDisplayMode: 'fusion',
 };
 
 export const ACCENT_PALETTES: Record<
@@ -126,7 +121,6 @@ export const useAppearanceStore = create<AppearanceState>((set, get) => ({
           starDensity: parsed.starDensity ?? DEFAULT_SETTINGS.starDensity,
           accentTheme: resolvedTheme,
           interactiveCursor: parsed.interactiveCursor ?? DEFAULT_SETTINGS.interactiveCursor,
-          coursesDisplayMode: parsed.coursesDisplayMode ?? DEFAULT_SETTINGS.coursesDisplayMode,
           hasHydrated: true,
         });
         return;
@@ -145,7 +139,6 @@ export const useAppearanceStore = create<AppearanceState>((set, get) => ({
         starDensity: settings.starDensity ?? state.starDensity,
         accentTheme: settings.accentTheme ?? state.accentTheme,
         interactiveCursor: settings.interactiveCursor ?? state.interactiveCursor,
-        coursesDisplayMode: settings.coursesDisplayMode ?? state.coursesDisplayMode,
       };
       if (typeof window !== 'undefined') {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
@@ -169,10 +162,6 @@ export const useAppearanceStore = create<AppearanceState>((set, get) => ({
 
   setInteractiveCursor: (interactive: boolean) => {
     get().setAppearance({ interactiveCursor: interactive });
-  },
-
-  setCoursesDisplayMode: (mode: CoursesDisplayMode) => {
-    get().setAppearance({ coursesDisplayMode: mode });
   },
 
   resetAppearance: () => {

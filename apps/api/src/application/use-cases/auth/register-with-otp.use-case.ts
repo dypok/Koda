@@ -47,7 +47,14 @@ export class RegisterWithOtpUseCase {
         throw error;
       }
       this.logger.error(`Error en registro con OTP: ${error.message}`);
-      throw new BadRequestException(error.message || 'No fue posible completar el registro.');
+      const rawMessage = error.message || '';
+      const cleanMessage =
+        rawMessage.toLowerCase().includes('supabase') ||
+        rawMessage.toLowerCase().includes('database') ||
+        rawMessage.toLowerCase().includes('duplicate key')
+          ? 'No fue posible completar el registro. Inténtalo de nuevo más tarde.'
+          : rawMessage || 'No fue posible completar el registro.';
+      throw new BadRequestException(cleanMessage);
     }
   }
 }
