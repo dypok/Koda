@@ -14,9 +14,10 @@ interface DiagnosticTestModalProps {
   declaredLevel: string;
   languageSlug?: string;
   userToken?: string;
+  isMandatory?: boolean;
   onClose: () => void;
   onComplete: (result: DiagnosticResultResponse) => void;
-  onSkip: () => void;
+  onSkip?: () => void;
 }
 
 export function DiagnosticTestModal({
@@ -24,6 +25,7 @@ export function DiagnosticTestModal({
   declaredLevel,
   languageSlug = 'python',
   userToken,
+  isMandatory = false,
   onClose,
   onComplete,
   onSkip,
@@ -195,7 +197,12 @@ export function DiagnosticTestModal({
           onClose();
         }}
         onStartFromBeginning={() => {
-          onSkip();
+          onComplete({
+            ...result,
+            recommendedModuleOrder: 1,
+            recommendedModuleCode: 'M01',
+            recommendedModuleTitle: 'Introducción & Fundamentos',
+          });
           onClose();
         }}
       />
@@ -343,13 +350,19 @@ export function DiagnosticTestModal({
               ← Anterior
             </button>
 
-            <button
-              type="button"
-              onClick={onSkip}
-              className="hidden sm:inline-block px-3 py-2 text-xs text-slate-500 hover:text-slate-300 transition-colors"
-            >
-              Omitir test (Módulo 01)
-            </button>
+            {isMandatory ? (
+              <span className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs font-mono text-amber-300">
+                ⚡ Test Obligatorio
+              </span>
+            ) : onSkip ? (
+              <button
+                type="button"
+                onClick={onSkip}
+                className="hidden sm:inline-block px-3 py-2 text-xs text-slate-500 hover:text-slate-300 transition-colors"
+              >
+                Omitir test (Módulo 01)
+              </button>
+            ) : null}
           </div>
 
           <div className="flex items-center gap-3">

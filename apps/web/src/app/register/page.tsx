@@ -32,8 +32,15 @@ export default function RegisterPage() {
 
   const isOAuthUser = Boolean(token && user && !user.onboardingCompleted);
   const totalSteps = isOAuthUser ? 4 : 5;
-  const stepper = useRegisterStepperController(totalSteps);
+  const stepper = useRegisterStepperController(totalSteps, {
+    isDiagnosticCompleted: Boolean(diagnosticResult),
+  });
   const profile = useRegisterProfileController();
+
+  // Si cambia el lenguaje seleccionado, reiniciar el resultado diagnóstico
+  useEffect(() => {
+    setDiagnosticResult(null);
+  }, [stepper.selectedLanguageId]);
 
   useEffect(() => {
     initAuth();
@@ -121,11 +128,33 @@ export default function RegisterPage() {
     }
   };
 
+  const isNonBeginnerExperience =
+    stepper.selectedExperienceId != null && stepper.selectedExperienceId !== 'beginner';
+  const hasPendingDiagnostic =
+    isNonBeginnerExperience && !diagnosticResult;
+
   const isLast = stepper.currentStep === totalSteps;
-  const canContinue = isLast && !isOAuthUser ? profile.isFormValid : stepper.canContinue;
+  const canContinue = isLast && !isOAuthUser
+    ? profile.isFormValid
+    : stepper.currentStep === 2 && hasPendingDiagnostic
+    ? Boolean(stepper.selectedExperienceId)
+    : stepper.canContinue;
 
   const handleContinue = async () => {
+    // Si está en el paso 2 y tiene test diagnóstico obligatorio pendiente, abrir el modal
+    if (stepper.currentStep === 2 && hasPendingDiagnostic) {
+      setIsDiagnosticModalOpen(true);
+      return;
+    }
+
     if (isLast) {
+      // Bloqueo estricto adicional: no se puede completar registro sin el test si es nivel no básico
+      if (hasPendingDiagnostic) {
+        stepper.goToStep(2);
+        setIsDiagnosticModalOpen(true);
+        return;
+      }
+
       if (isOAuthUser) {
         setIsCompletingAndRedirecting(true);
         try {
@@ -144,7 +173,16 @@ export default function RegisterPage() {
 
   const STEP_CTA: Record<number, { text: string; hint: string }> = {
     1: { text: 'Explorar y continuar', hint: 'Elige tu tecnología para continuar' },
-    2: { text: 'Confirmar mi nivel', hint: 'Elige tu nivel para continuar' },
+    2: {
+      text: hasPendingDiagnostic
+        ? '⚡ Iniciar Test Obligatorio'
+        : diagnosticResult
+        ? 'Confirmar mi nivel y continuar'
+        : 'Confirmar mi nivel',
+      hint: hasPendingDiagnostic
+        ? 'Debes completar el test diagnóstico de 12 retos para validar tu nivel'
+        : 'Elige tu nivel para continuar',
+    },
     3: { text: 'Confirmar mi estilo', hint: 'Elige tu estilo para continuar' },
     4: {
       text: isOAuthUser ? 'Fijar mi meta y comenzar mi ruta' : 'Fijar mi meta · 10 min/día',
@@ -281,15 +319,13 @@ export default function RegisterPage() {
       />
       <DiagnosticTestModal
         isOpen={isDiagnosticModalOpen}
-        declaredLevel={stepper.selectedExperienceId || 'medium'}
+        declaredLevel={stepper.selectedExperienceId || 'elementary'}
         languageSlug={stepper.selectedLanguageId || 'python'}
         userToken={token || undefined}
+        isMandatory={isNonBeginnerExperience}
         onClose={() => setIsDiagnosticModalOpen(false)}
         onComplete={(res) => {
           setDiagnosticResult(res);
-          setIsDiagnosticModalOpen(false);
-        }}
-        onSkip={() => {
           setIsDiagnosticModalOpen(false);
         }}
       />

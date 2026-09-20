@@ -25,9 +25,7 @@ export const ExperienceStep: React.FC<ExperienceStepProps> = ({
   recommendedModuleCode,
 }) => {
   const isNonBeginner =
-    selectedExperienceId &&
-    selectedExperienceId !== 'beginner' &&
-    selectedExperienceId !== 'elementary';
+    Boolean(selectedExperienceId && selectedExperienceId !== 'beginner');
 
   return (
     <StepLayout
@@ -65,19 +63,19 @@ export const ExperienceStep: React.FC<ExperienceStepProps> = ({
               <div className="space-y-0.5">
                 <div className="text-xs font-bold text-amber-300 font-mono flex items-center gap-1.5">
                   <span>⚡</span>
-                  <span>Evaluación Diagnóstica Opcional</span>
+                  <span>Evaluación Diagnóstica Obligatoria</span>
                 </div>
                 <p className="text-[11px] text-slate-400 font-sans">
-                  Responde 12 preguntas para validar tu nivel y exonerar módulos iniciales con 3 estrellas (⭐⭐⭐).
+                  Has indicado conocimientos previos. Para calibrar tu nivel y ubicarte en el módulo exacto, es obligatorio realizar el test de 12 retos interactivos.
                 </p>
               </div>
 
               <button
                 type="button"
                 onClick={onOpenDiagnostic}
-                className="shrink-0 px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold font-mono transition-colors"
+                className="shrink-0 px-3.5 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-950 text-xs font-bold font-mono transition-colors shadow-sm cursor-pointer"
               >
-                Hacer Test
+                ⚡ Iniciar Test
               </button>
             </div>
           )}

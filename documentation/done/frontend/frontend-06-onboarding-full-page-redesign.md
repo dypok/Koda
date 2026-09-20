@@ -39,6 +39,22 @@
     2. `diagnostic_test`: Banco interactivo de preguntas calibradas con temporizador regresivo de 15 min, atajos ergonómicos de teclado y snippet de terminal.
     3. `diagnostic_result`: Desglose de aciertos, módulo recomendado (`M01`, `M04`, `M07`) y acreditación de 3 estrellas (⭐⭐⭐).
 
+### B. Wizard de Registro y Stepper (`apps/web/src/app/register/` & `controllers/`)
+- [`apps/web/src/controllers/register/useRegisterStepperController.ts`](file:///home/dypok/Projects/DuolingoProgramacion/apps/web/src/controllers/register/useRegisterStepperController.ts):
+  - Incorporada la opción `RegisterStepperOptions` con `isDiagnosticCompleted?: boolean`.
+  - En `canContinue`, si `currentStep === 2` y `selectedExperienceId !== 'beginner'`, se exige estrictamente `options?.isDiagnosticCompleted === true` para habilitar el avance a los siguientes pasos.
+  - En `goToStep`, se bloquea cualquier salto a pasos mayores a 2 si no se ha completado el diagnóstico obligatorio para niveles no principiantes.
+- [`apps/web/src/views/register/ExperienceStep.tsx`](file:///home/dypok/Projects/DuolingoProgramacion/apps/web/src/views/register/ExperienceStep.tsx):
+  - Corregida la condición `isNonBeginner` para abarcar tanto `elementary` ("Conozco los fundamentos") como `intermediate` ("Nivel intermedio o avanzado").
+  - Modificado el banner informativo a *"⚡ Evaluación Diagnóstica Obligatoria"* con botón directo *"⚡ Iniciar Test"*.
+- [`apps/web/src/app/register/page.tsx`](file:///home/dypok/Projects/DuolingoProgramacion/apps/web/src/app/register/page.tsx):
+  - Integrada la detección reactiva de `hasPendingDiagnostic`.
+  - Transformado el CTA inferior en el paso 2 a *"⚡ Iniciar Test Obligatorio"*, el cual abre automáticamente el modal diagnóstico al ser presionado e impide avanzar al paso 3 sin completarlo.
+  - Si el usuario culmina el test, el botón conmuta a *"Confirmar mi nivel y continuar"*.
+- [`apps/web/src/views/diagnostic/DiagnosticTestModal.tsx`](file:///home/dypok/Projects/DuolingoProgramacion/apps/web/src/views/diagnostic/DiagnosticTestModal.tsx):
+  - Soporte de prop `isMandatory`: oculta el botón de omitir test y muestra la badge `⚡ Test Obligatorio`.
+  - Soporte resiliente para *"Prefiero repasar y empezar desde el inicio (Módulo 01)"*, preservando la acreditación diagnóstica con `recommendedModuleCode: 'M01'`.
+
 ---
 
 ## 3. 🧪 Verificación y Pruebas
