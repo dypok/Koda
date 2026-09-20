@@ -5,8 +5,29 @@
  * - POST /api/v1/learning/diagnostic/submit
  */
 
-const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+const RAW_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
+const DIRECT_BASE_URL = RAW_BASE_URL.replace(/\/$/, '').endsWith('/api/v1')
+  ? RAW_BASE_URL.replace(/\/$/, '')
+  : `${RAW_BASE_URL.replace(/\/$/, '')}/api/v1`;
+
+async function fetchWithFallback(path: string, options: RequestInit = {}): Promise<Response> {
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  const directUrl = `${DIRECT_BASE_URL}${cleanPath}`;
+  const proxyUrl = `/api/v1${cleanPath}`;
+
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch(proxyUrl, options);
+      if (res.status !== 404) {
+        return res;
+      }
+    } catch {
+      // Fallback a conexión directa
+    }
+  }
+
+  return fetch(directUrl, options);
+}
 
 export interface DiagnosticOption {
   id: string;
@@ -44,7 +65,8 @@ export interface BlockScore {
   correctAnswers: number;
   totalQuestions: number;
   scorePercentage: number;
-  isPassed: boolean;
+  isPassed?: boolean;
+  passed?: boolean;
 }
 
 export interface DiagnosticResultResponse {
@@ -71,23 +93,30 @@ export class DiagnosticService {
   public static async getQuestions(
     languageSlug = 'python'
   ): Promise<DiagnosticQuestionsResponse> {
-    const res = await fetch(
-      `${API_BASE_URL}/learning/diagnostic/questions?languageSlug=${encodeURIComponent(
-        languageSlug
-      )}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    try {
+      const res = await fetchWithFallback(
+        `/learning/diagnostic/questions?languageSlug=${encodeURIComponent(
+          languageSlug
+        )}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error(`Error al cargar preguntas diagnósticas (${res.status})`);
       }
-    );
 
-    if (!res.ok) {
-      throw new Error(`Error al cargar preguntas diagnósticas (${res.status})`);
+      return res.json();
+    } catch (err: any) {
+      if (err?.message?.includes('Failed to fetch') || err?.name === 'TypeError') {
+        throw new Error('No se pudo conectar con el servidor de Koda. Verifica que la API esté activa.');
+      }
+      throw err;
     }
-
-    return res.json();
   }
 
   /**
@@ -110,20 +139,27 @@ export class DiagnosticService {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const res = await fetch(`${API_BASE_URL}/learning/diagnostic/submit`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(payload),
-    });
+    try {
+      const res = await fetchWithFallback('/learning/diagnostic/submit', {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(payload),
+      });
 
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) {
-      const msg = Array.isArray(data?.message)
-        ? data.message[0]
-        : data?.message || 'Error al procesar la evaluación diagnóstica.';
-      throw new Error(msg);
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const msg = Array.isArray(data?.message)
+          ? data.message[0]
+          : data?.message || 'Error al procesar la evaluación diagnóstica.';
+        throw new Error(msg);
+      }
+
+      return data as DiagnosticResultResponse;
+    } catch (err: any) {
+      if (err?.message?.includes('Failed to fetch') || err?.name === 'TypeError') {
+        throw new Error('No se pudo conectar con el servidor de Koda. Verifica que la API esté activa.');
+      }
+      throw err;
     }
-
-    return data as DiagnosticResultResponse;
   }
 }

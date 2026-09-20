@@ -97,10 +97,11 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
   // Cargar datos reales desde el backend
   const fetchProfile = useCallback(async () => {
-    if (!token) return;
+    const effectiveToken = token || (typeof window !== 'undefined' ? localStorage.getItem('koda_auth_token') : null);
+    if (!effectiveToken) return;
     setLoading(true);
     try {
-      const data = await UserProfileService.getProfile(token);
+      const data = await UserProfileService.getProfile(effectiveToken);
       setProfileData(data);
       setDisplayName(data.displayName || '');
       setBio(data.bio || '');
@@ -140,7 +141,11 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   // Guardar datos generales de perfil
   const handleSaveGeneral = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!token) return;
+    const effectiveToken = token || (typeof window !== 'undefined' ? localStorage.getItem('koda_auth_token') : null);
+    if (!effectiveToken) {
+      showToast('error', 'Debes iniciar sesión para actualizar tu perfil.');
+      return;
+    }
     if (displayName.trim().length < 2) {
       showToast('error', 'El nombre debe contener al menos 2 caracteres.');
       return;
@@ -155,7 +160,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         locale,
       };
 
-      const updated = await UserProfileService.updateProfile(payload, token);
+      const updated = await UserProfileService.updateProfile(payload, effectiveToken);
       setProfileData(updated);
       updateUserProfile({
         fullName: updated.displayName,
@@ -171,7 +176,8 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   // Guardar avatar oficial
   const handleSelectAvatar = async (avatar: KodaAvatarItem) => {
     setSelectedAvatarUrl(avatar.avatarUrl);
-    if (!token) {
+    const effectiveToken = token || (typeof window !== 'undefined' ? localStorage.getItem('koda_auth_token') : null);
+    if (!effectiveToken) {
       updateUserProfile({ avatarUrl: avatar.avatarUrl });
       showToast('success', `Avatar cambiado a ${avatar.name}`);
       return;
@@ -181,7 +187,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     try {
       const updated = await UserProfileService.updateProfile(
         { avatarUrl: avatar.avatarUrl },
-        token
+        effectiveToken
       );
       setProfileData(updated);
       updateUserProfile({ avatarUrl: updated.avatarUrl || avatar.avatarUrl });
@@ -226,7 +232,11 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   // Guardar preferencias de estudio
   const handleSavePreferences = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!token) return;
+    const effectiveToken = token || (typeof window !== 'undefined' ? localStorage.getItem('koda_auth_token') : null);
+    if (!effectiveToken) {
+      showToast('error', 'Debes iniciar sesión para actualizar tus preferencias.');
+      return;
+    }
     setSaving(true);
     try {
       const payload: UpdateUserProfilePayload = {
@@ -235,7 +245,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         experienceLevel,
         learningStyle,
       };
-      const updated = await UserProfileService.updateProfile(payload, token);
+      const updated = await UserProfileService.updateProfile(payload, effectiveToken);
       setProfileData(updated);
       updateUserProfile({
         dailyGoalMinutes: updated.dailyGoalMinutes,
