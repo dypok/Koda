@@ -9,7 +9,7 @@ import { DiagnosticQuestionsResponseDto } from '@application/dto/diagnostic/diag
 import { SubmitDiagnosticDto } from '@application/dto/diagnostic/submit-diagnostic.dto';
 import { DiagnosticResultResponseDto } from '@application/dto/diagnostic/diagnostic-result-response.dto';
 
-@ApiTags('Auth', 'Diagnostic')
+@ApiTags('Learning & Roadmap', 'Diagnostic', 'Auth')
 @Controller('learning/diagnostic')
 export class DiagnosticController {
   constructor(
