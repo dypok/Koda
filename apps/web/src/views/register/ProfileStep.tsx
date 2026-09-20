@@ -15,6 +15,13 @@ interface ProfileStepProps {
   goalMinutes?: number;
   onEditStep?: (step: number) => void;
   profile: ReturnType<typeof useRegisterProfileController>;
+  onboardingData?: {
+    initialLanguageSlug?: string;
+    experienceLevel?: string;
+    learningStyle?: string;
+    dailyGoalId?: string;
+    dailyGoalMinutes?: number;
+  };
 }
 
 export const ProfileStep: React.FC<ProfileStepProps> = ({
@@ -24,6 +31,7 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
   goalMinutes,
   onEditStep,
   profile,
+  onboardingData,
 }) => {
   const reduceMotion = useReducedMotion();
   const [focusField, setFocusField] = useState<string | null>(null);
@@ -96,7 +104,7 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
         noValidate
         onSubmit={(e) => {
           e.preventDefault();
-          profile.submit();
+          profile.submit(onboardingData);
         }}
         onFocusCapture={(e) => {
           const id = (e.target as HTMLElement).id;

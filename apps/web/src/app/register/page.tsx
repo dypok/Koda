@@ -10,6 +10,7 @@ import { ExperienceStep } from '@/views/register/ExperienceStep';
 import { StyleStep } from '@/views/register/StyleStep';
 import { GoalStep } from '@/views/register/GoalStep';
 import { ProfileStep } from '@/views/register/ProfileStep';
+import { RegisterOtpModal } from '@/views/register/RegisterOtpModal';
 import { RegisterSuccessModal } from '@/views/register/RegisterSuccessModal';
 import { RegisterBottomBar } from '@/views/register/RegisterBottomBar';
 import { useRegisterStepperController } from '@/controllers/register/useRegisterStepperController';
@@ -19,9 +20,17 @@ export default function RegisterPage() {
   const stepper = useRegisterStepperController();
   const profile = useRegisterProfileController();
 
+  const onboardingData = {
+    initialLanguageSlug: stepper.selectedLanguageId || 'python',
+    experienceLevel: stepper.selectedExperienceId || 'beginner',
+    learningStyle: stepper.selectedStyleId || 'hands-on',
+    dailyGoalId: stepper.selectedGoalId || 'regular',
+    dailyGoalMinutes: stepper.selectedGoal?.minutes || 10,
+  };
+
   const isLast = stepper.currentStep === 5;
   const canContinue = isLast ? profile.isFormValid : stepper.canContinue;
-  const handleContinue = isLast ? profile.submit : stepper.nextStep;
+  const handleContinue = isLast ? () => profile.submit(onboardingData) : stepper.nextStep;
   const STEP_CTA: Record<number, { text: string; hint: string }> = {
     1: { text: 'Explorar y continuar', hint: 'Elige tu tecnología para continuar' },
     2: { text: 'Confirmar mi nivel', hint: 'Elige tu nivel para continuar' },
@@ -101,6 +110,7 @@ export default function RegisterPage() {
             goalMinutes={stepper.selectedGoal?.minutes}
             onEditStep={stepper.goToStep}
             profile={profile}
+            onboardingData={onboardingData}
           />
         )}
           </motion.div>
@@ -113,6 +123,16 @@ export default function RegisterPage() {
         continueText={continueText}
         blockedHint={blockedHint}
         isLoading={profile.isSubmitting}
+      />
+      <RegisterOtpModal
+        isOpen={profile.isOtpModalOpen}
+        email={profile.form.email}
+        isVerifying={profile.isVerifyingOtp}
+        isResending={profile.isResendingOtp}
+        errorMessage={profile.otpError}
+        onVerify={profile.verifyOtp}
+        onResend={profile.resendOtp}
+        onClose={profile.closeOtpModal}
       />
       <RegisterSuccessModal
         isOpen={profile.isSuccess}
