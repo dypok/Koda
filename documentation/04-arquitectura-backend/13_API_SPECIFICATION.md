@@ -201,6 +201,30 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
 
 \* Endpoints de lectura pública o verificación sin autenticación. No exponen datos personales sensibles (PII).
 
+### 5B. Catálogo Oficial de Operaciones GraphQL (`/graphql`)
+
+Conforme a la ratificación de **ADR-012**, todas las operaciones interactivas y aquellas categorizadas previamente como indiferentes se exponen a través del endpoint primario `/graphql`:
+
+| Tipo | Operación | Argumentos | Retorno | Descripción |
+|---|---|---|---|---|
+| `Query` | `tracks` | — | `[TrackType!]!` | Catálogo de pistas profesionales (MongoDB) |
+| `Query` | `track` | `slug: String!` | `TrackCoursesType!` | Cursos en topología DAG de una pista |
+| `Query` | `course` | `slug: String!` | `CourseDetailType!` | Estructura modular de un curso (módulos y secciones) |
+| `Query` | `lesson` | `slug: String!` | `LessonType!` | Micro-lección con la Tríada Evaluativa |
+| `Query` | `visualEffects` | — | `[VisualEffectType!]!` | Presets de aristas aceleradas por GPU |
+| `Query` | `roadmapCoursesGraph` | `lang: String!` | `GraphDatasetType!` | Grafo interactivo DAG de cursos para el visualizador |
+| `Query` | `roadmapLessonsGraph` | `courseId: String!` | `GraphDatasetType!` | Grafo interactivo DAG de lecciones |
+| `Query` | `learningRoadmap` | `languageSlug: String!` | `RoadmapResponseType!` | Árbol de roadmap con candados y estrellas |
+| `Query` | `learningLesson` | `lessonId: String!` | `LessonDetailType!` | Detalle de lección interactiva |
+| `Query` | `mistakesNotebook` | — | `[MistakesNotebookItemType!]!` | Cuaderno de errores persistente para práctica |
+| `Query` | `languages` | — | `[LanguageType!]!` | Catálogo de lenguajes disponibles |
+| `Query` | `language` | `slug: String!` | `LanguageType!` | Detalle de un lenguaje por su slug |
+| `Mutation` | `seedRoadmapDataset` | `input: SeedRoadmapInput!` | `Boolean!` | Sembrado de dataset de grafo desde frontend/admin |
+| `Mutation` | `evaluateLessonAnswer` | `input: LessonAnswerInput!` | `LessonAnswerFeedbackType!` | Evaluación de ejercicio con feedback anti-spoilers |
+| `Mutation` | `resolveMistake` | `questionId: String!` | `ResolveMistakeResponseType!` | Remediación de error en cuaderno (+5 XP) |
+
+> **Nota de Coexistencia Hexagonal:** Los controladores REST de currículo y roadmap se mantienen activos como adaptadores secundarios de compatibilidad para evitar regresiones en herramientas legadas, mientras que `/graphql` es el contrato de consumo primario para la experiencia web.
+
 ---
 
 ## 6. Schemas comunes (contratos JSON)

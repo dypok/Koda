@@ -53,9 +53,8 @@
 **Subtasks:**
 - [x] [FRONTEND] Crear datasets curriculares mock (`frontend-track.mock.ts`, `backend-track.mock.ts`, `devops-track.mock.ts`, `python-courses-graph.mock.ts`).
 - [x] [FRONTEND] Implementar conmutador de ramas en `RoadmapSidebarBranches.tsx` y sincronizar con `roadmap.store.ts`.
-- [x] [FRONTEND] Diseñar nodo visual terminal `Apex Master Gate` con estilos de alta jerarquía y compuerta final.
-- [ ] [BACKEND] Modelo Mongoose `TrackSchema` y `CourseSchema` en NestJS `ContentModule` para servir el árbol DAG desde MongoDB.
-- [ ] [BACKEND] Endpoint `GET /api/v1/content/tracks/:slug` con resolución de dependencias DAG.
+- [x] [BACKEND] Modelo Mongoose `TrackSchema` y `CourseSchema` en NestJS `ContentModule` para servir el árbol DAG desde MongoDB.
+- [x] [BACKEND] Endpoint `GET /api/v1/content/tracks/:slug` con resolución de dependencias DAG y adaptadores primarios GraphQL en `/graphql`.
 
 ---
 

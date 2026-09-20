@@ -40,37 +40,38 @@ Sin embargo, migrar la totalidad del backend a GraphQL presentaba serios inconve
 
 ## 3. Decisión Adoptada
 
-Se aprueba formalmente la adopción de una **Arquitectura Híbrida GraphQL y REST**, bajo la directriz estricta de **utilizar GraphQL únicamente donde su capacidad de composición aporte una ventaja tangible a la experiencia de usuario y al rendimiento de red**.
+Se aprueba formalmente la adopción de una **Arquitectura Híbrida GraphQL y REST**, bajo la directriz estricta de:
+1. **Asignar a GraphQL (`/graphql`)** todas las vistas interactivas, consultas de currículo/roadmap, mutaciones de aprendizaje y **todas las operaciones clasificadas previamente como indiferentes/equivalentes** (catálogo de tracks, presets de efectos visuales, lenguajes, preferencias de estudio y metadatos de plataforma), con el fin de consolidar el contrato de consumo del cliente en una sola interfaz fuertemente tipada y declarativa.
+2. **Reservar a REST (`/api/v1`)** de forma estricta y exclusiva las operaciones que requieren estándares HTTP nativos: autenticación y gestión de sesiones con cookies seguras, transferencia de archivos binarios, integración de webhooks externos, ejecución de sandbox y telemetría de infraestructura.
 
 ### Criterios Taxonómicos de Elección de Transporte:
 
 ```mermaid
 flowchart TD
-    Req([Nuevo Requerimiento de API]) --> Q1{¿Es carga de archivos, webhook o auth?}
-    Q1 -- Sí --> REST[Implementar en REST API Controller]
-    Q1 -- No --> Q2{¿Es vista compuesta de UI con datos heterogéneos o anidados?}
-    Q2 -- Sí --> GQL[Implementar en GraphQL Resolver]
-    Q2 -- No --> Q3{¿Requiere caché HTTP/CDN a nivel de URL o CRUD simple?}
-    Q3 -- Sí --> REST
-    Q3 -- No --> GQL
+    Req([Nuevo Requerimiento de API]) --> Q1{¿Es Auth/Sesiones, Archivos/PDF, Webhook, Sandbox o Health?}
+    Q1 -- Sí --> REST[Implementar en REST API Controller /api/v1]
+    Q1 -- No --> GQL[Implementar en GraphQL Resolver /graphql]
 ```
 
-### A. Casos Asignados a GraphQL:
+### A. Casos Asignados a GraphQL (`/graphql`):
+- **Curriculum y Contenido Modular (MongoDB):** Pistas de aprendizaje (`tracks`), cursos con topología DAG (`trackCourses`), detalle de curso con módulos/secciones (`courseDetail`), lecciones atómicas con tríada evaluativa (`lessonDetail`) y presets de efectos visuales acelerados por GPU (`visualEffects`).
+- **Grafo DAG del Roadmap y Árbol de Carrera:** Nodos interactivos espaciales (coordenadas SVG), aristas de progresión y sembrado de datasets.
 - **Pantallas Compuestas del Estudiante:** Dashboard de bienvenida, vista de perfil público, árbol de habilidades y lecciones, tablas de clasificación (*Leaderboards*).
-- **Consultas con Filtrado Dinámico y Granular:** Búsqueda y exploración de cursos con selecciones específicas de campos por parte del cliente.
-- **Mutaciones de Interacción de Gamificación y Aprendizaje:** Envío de respuestas de lección, reclamo de logros y compra de ítems cosméticos.
+- **Mutaciones de Interacción de Gamificación y Aprendizaje:** Envío y evaluación de respuestas de lección con feedback anti-spoilers, resolución de errores en el cuaderno (algoritmo SM-2), reclamo de logros y compra de ítems cosméticos.
+- **Catálogos y Preferencias (Previamente Indiferentes):** Catálogo de lenguajes (`languages`), preferencias pedagógicas del estudiante y metas de estudio diario.
 
-### B. Casos Asignados a REST:
-- **Autenticación e Identidad:** Registro, inicio de sesión, refresh tokens, flujos OAuth con Supabase/Google y sesiones seguras en cookies `httpOnly`.
-- **Gestión de Archivos y Multimedia:** Carga de avatares, exportación/descarga de certificados PDF y material estático (`multipart/form-data`).
-- **Webhooks e Integraciones Externas:** Callbacks de pasarelas de pago (Stripe) y eventos de terceros.
-- **Ejecución y Verificación de Código:** Endpoints de ejecución remota (`ICodeRunner`) con soporte para streaming o timeouts específicos.
-- **Salud y Métricas de Infraestructura:** `/health`, `/metrics`, readiness y liveness probes.
+### B. Casos Asignados a REST (`/api/v1`):
+- **Autenticación e Identidad:** Registro con OTP, verificación de sesión JWT, inicio de sesión, refresh tokens, flujos OAuth con Supabase/Google y sesiones seguras en cookies `httpOnly`.
+- **Gestión de Archivos y Multimedia:** Carga de avatares a Supabase Storage, exportación/descarga de certificados oficiales PDF vía streaming con `Content-Disposition`.
+- **Webhooks e Integraciones Externas:** Callbacks de pasarelas de pago (Stripe) con validación de firmas criptográficas en cabeceras HTTP.
+- **Ejecución y Verificación de Código en Sandbox:** Endpoints de ejecución remota (`ICodeRunner`) con control de timeouts estrictos (2.5s) y streaming SSE de stdout/stderr.
+- **Salud y Métricas de Infraestructura:** `/health`, `/metrics` (Prometheus), probes de Kubernetes y Docker.
 
 ### C. Estándares Técnicos de Implementación:
 1. **Enfoque Code-First en NestJS:** Uso de `@nestjs/graphql` con Apollo Server. Los esquemas se derivan directamente de clases TypeScript decoradas con `@ObjectType()`, `@Field()`, `@InputType()`, garantizando compatibilidad con `@koda/types`.
-2. **Prevención del Problema N+1:** Es obligatorio el uso del patrón **DataLoader** en los resolvers que resuelvan relaciones anidadas (ej. autores de curso, insignias de usuario).
+2. **Prevención del Problema N+1:** Es obligatorio el uso del patrón **DataLoader** en los resolvers que resuelvan relaciones anidadas (ej. módulos por curso, lecciones por sección).
 3. **Seguridad y Costo de Consultas:** Configuración obligatoria de `depthLimit` (máximo 5 niveles de profundidad) y validación de complejidad de query para neutralizar vectores de denegación de servicio.
+4. **Coexistencia Hexagonal:** Los resolvers GraphQL (`presentation/graphql`) y controladores REST (`presentation/rest`) actúan como *Driving Adapters* desacoplados, invocando exactamente los mismos casos de uso de la capa `application/use-cases/`.
 
 ---
 
