@@ -1,102 +1,165 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import type {
   RoadmapResponse,
   LessonDetail,
   LessonAnswerSubmission,
   LessonAnswerFeedback,
+  FourOptionsQuestion,
+  QuestionOption,
 } from '@koda/types';
+import {
+  CURRICULUM_REPOSITORY_TOKEN,
+  ICurriculumRepository,
+} from '../../domain/repositories/curriculum.repository';
 
 @Injectable()
 export class LearningService {
-  getRoadmap(languageSlug: string): RoadmapResponse {
-    if (languageSlug !== 'python') {
-      throw new NotFoundException(`Ruta para el lenguaje '${languageSlug}' no disponible.`);
+  private readonly logger = new Logger(LearningService.name);
+
+  constructor(
+    @Inject(CURRICULUM_REPOSITORY_TOKEN)
+    private readonly curriculumRepository: ICurriculumRepository,
+  ) {}
+
+  async getRoadmap(languageSlug: string): Promise<RoadmapResponse> {
+    const slug = languageSlug.toLowerCase();
+    const track = await this.curriculumRepository.findTrackBySlug(slug);
+
+    const targetCourseSlug = slug === 'python' ? 'python-core' : `${slug}-core`;
+    const modules = await this.curriculumRepository.findModulesByCourse(targetCourseSlug);
+
+    if (modules.length === 0) {
+      throw new NotFoundException(`Ruta curricular para el lenguaje o curso '${languageSlug}' no encontrada en MongoDB.`);
     }
+
+    const roadmapModules = await Promise.all(
+      modules.map(async (mod) => {
+        const sections = await this.curriculumRepository.findSectionsByModule(mod.slug);
+        return {
+          id: mod.slug,
+          code: `M${mod.position.toString().padStart(2, '0')}`,
+          title: mod.title,
+          description: mod.objective,
+          order_index: mod.position,
+          total_sections: mod.totalSections,
+          is_unlocked: mod.position === 1,
+          is_completed: false,
+          mastery_percentage: mod.position === 1 ? 25 : 0,
+          sections: sections.map((sec) => ({
+            id: sec.slug,
+            code: `S${sec.position.toString().padStart(2, '0')}`,
+            title: sec.title,
+            order_index: sec.position,
+            total_lessons: sec.totalLessons,
+            is_unlocked: mod.position === 1 && sec.position === 1,
+            is_completed: false,
+            stars_earned: 0,
+            max_stars_earned: 3,
+          })),
+        };
+      }),
+    );
 
     return {
       language: {
-        id: 'lang_py_01',
-        slug: 'python',
-        name: 'Python 3.12',
-        description: 'Aprende el lenguaje de programación más versátil y popular del mundo desde cero.',
+        id: track?.slug ?? 'python',
+        slug: track?.slug ?? 'python',
+        name: track?.name ?? 'Python 3.12',
+        description: track?.description ?? 'Fundamentos y desarrollo moderno.',
         icon_url: '/icons/python.svg',
-        color: '#3776AB',
-        total_modules: 12,
+        color: track?.color ?? '#38BDF8',
+        total_modules: modules.length,
         is_active: true,
       },
-      overall_progress_percentage: 25,
-      total_stars_earned: 18,
-      max_possible_stars: 360,
-      current_module_id: 'py_mod_01',
-      modules: [
-        {
-          id: 'py_mod_01',
-          code: 'M01',
-          title: 'Fundamentos de Python',
-          description: 'Tu primer print(), cadenas de texto, números, comentarios y sintaxis limpia.',
-          order_index: 1,
-          total_sections: 8,
-          is_unlocked: true,
-          is_completed: true,
-          mastery_percentage: 100,
-          sections: [
-            { id: 's01', code: 'S01', title: '¿Qué es Python?', order_index: 1, total_lessons: 10, is_unlocked: true, is_completed: true, stars_earned: 3, max_stars_earned: 3 },
-            { id: 's02', code: 'S02', title: 'Tu primer print()', order_index: 2, total_lessons: 10, is_unlocked: true, is_completed: true, stars_earned: 3, max_stars_earned: 3 },
-          ],
-        },
-        {
-          id: 'py_mod_02',
-          code: 'M02',
-          title: 'Variables y Tipos de Datos',
-          description: 'Almacenamiento en memoria, int, float, str, bool y la función inspectora type().',
-          order_index: 2,
-          total_sections: 10,
-          is_unlocked: true,
-          is_completed: false,
-          mastery_percentage: 20,
-          sections: [
-            { id: 's01_m2', code: 'S01', title: '¿Qué es una variable?', order_index: 1, total_lessons: 10, is_unlocked: true, is_completed: true, stars_earned: 3, max_stars_earned: 3 },
-          ],
-        },
-      ],
+      overall_progress_percentage: 10,
+      total_stars_earned: 0,
+      max_possible_stars: modules.length * 24,
+      current_module_id: modules[0]?.slug ?? '',
+      modules: roadmapModules,
     };
   }
 
-  getLesson(lessonId: string): LessonDetail {
+  async getLesson(lessonId: string): Promise<LessonDetail> {
+    const lesson = await this.curriculumRepository.findLessonBySlug(lessonId);
+    if (!lesson) {
+      throw new NotFoundException(`Micro-lección '${lessonId}' no encontrada en MongoDB.`);
+    }
+
+    const correctOption = lesson.item2Quiz.options.find((o) => o.isCorrect);
+
+    // Mapeo seguro a tupla de 4 opciones exigida por @koda/types
+    const quizOptions: [QuestionOption, QuestionOption, QuestionOption, QuestionOption] = [
+      { id: lesson.item2Quiz.options[0]?.id ?? 'a', text: lesson.item2Quiz.options[0]?.text ?? '' },
+      { id: lesson.item2Quiz.options[1]?.id ?? 'b', text: lesson.item2Quiz.options[1]?.text ?? '' },
+      { id: lesson.item2Quiz.options[2]?.id ?? 'c', text: lesson.item2Quiz.options[2]?.text ?? '' },
+      { id: lesson.item2Quiz.options[3]?.id ?? 'd', text: lesson.item2Quiz.options[3]?.text ?? '' },
+    ];
+
+    const fourOptionsQuestion: FourOptionsQuestion = {
+      type: 'SINGLE_CHOICE',
+      prompt: lesson.item2Quiz.prompt,
+      options: quizOptions,
+      correct_option_id: correctOption?.id,
+      explanation: correctOption?.feedback,
+    };
+
     return {
-      id: lessonId,
-      section_id: 's01_m2',
-      title: '¿Qué es una variable?',
-      order_index: 1,
-      theory_markdown: 'Una variable es una cajita con una etiqueta en la memoria de la computadora para guardar datos.',
-      code_example: 'nombre = "Koda"\nprint(nombre)',
-      expected_output: 'Koda',
-      tip_markdown: 'En Python las variables se crean al asignarles un valor por primera vez con el signo =.',
-      question: {
-        id: 'q_001',
-        type: 'SINGLE_CHOICE',
-        prompt: '¿Qué valor se guardó en la variable nombre?',
-        hint: 'Mira lo que está a la derecha del signo igual =.',
-        options: [
-          { id: 'opt_1', text: 'Koda' },
-          { id: 'opt_2', text: 'nombre' },
-          { id: 'opt_3', text: 'print' },
-          { id: 'opt_4', text: 'nil' },
-        ],
+      id: lesson.slug,
+      section_id: lesson.sectionSlug,
+      title: lesson.title,
+      order_index: lesson.position,
+      theory_markdown: `${lesson.theory.step1}\n\n${lesson.theory.step2}\n\n${lesson.theory.step3}`,
+      code_example: lesson.theory.codeSnippet ?? '',
+      expected_output: lesson.item1Console.solutionCode,
+      tip_markdown: lesson.item3Prediction.hint,
+      evaluation_triad: {
+        item_1_console: {
+          type: 'CONSOLE_CHALLENGE',
+          instruction: lesson.item1Console.prompt,
+          starter_code: lesson.item1Console.initialCode,
+          solution_code: lesson.item1Console.solutionCode,
+          test_cases: lesson.item1Console.testCases.map((tc) => ({
+            input: tc.input,
+            expected_output: tc.expectedOutput,
+            is_hidden: false,
+          })),
+          timeout_ms: 2500,
+        },
+        item_2_options: fourOptionsQuestion,
+        item_3_prediction: {
+          type: lesson.item3Prediction.targetType === 'bug_hunt' ? 'BUG_HUNT' : 'PREDICT_OUTPUT',
+          prompt: lesson.item3Prediction.prompt,
+          code_snippet: lesson.item3Prediction.codeSnippet,
+          expected_output: lesson.item3Prediction.expectedAnswer,
+          explanation: lesson.item3Prediction.hint,
+        },
       },
     };
   }
 
-  evaluateAnswer(submission: LessonAnswerSubmission): LessonAnswerFeedback {
-    const isCorrect = submission.selected_option_ids.includes('opt_1');
+  async evaluateAnswer(submission: LessonAnswerSubmission): Promise<LessonAnswerFeedback> {
+    const lesson = await this.curriculumRepository.findLessonBySlug(submission.lesson_id);
+    if (!lesson) {
+      throw new NotFoundException(`Lección '${submission.lesson_id}' no encontrada en MongoDB.`);
+    }
+
+    const correctOption = lesson.item2Quiz.options.find((o) => o.isCorrect);
+    const isCorrect = Boolean(
+      correctOption && submission.selected_option_ids.includes(correctOption.id),
+    );
+
+    const feedbackText = isCorrect
+      ? (correctOption?.feedback || '¡Respuesta correcta! Has asimilado el concepto clave.')
+      : (lesson.item2Quiz.options.find((o) => submission.selected_option_ids.includes(o.id))?.feedback ||
+         'Respuesta incorrecta. Revisa la teoría y vuelve a intentarlo.');
 
     return {
       is_correct: isCorrect,
-      xp_earned: isCorrect ? 5 : 0,
-      feedback_message: isCorrect
-        ? '¡Excelente deducción! Guardaste "Koda" en la variable correctamente. +5 XP'
-        : 'Casi lo logras. Recuerda que el valor es el contenido que asignas con el operador =.',
-      hint: isCorrect ? undefined : 'Revisa la asignación nombre = "Koda".',
+      xp_earned: isCorrect ? lesson.xpReward : 0,
+      feedback_message: feedbackText,
+      hint: isCorrect ? undefined : lesson.item3Prediction.hint,
+      explanation: isCorrect ? correctOption?.feedback : undefined,
+      correct_option_ids: isCorrect ? (correctOption ? [correctOption.id] : []) : undefined,
       added_to_review_queue: !isCorrect,
     };
   }
