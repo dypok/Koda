@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
-import { HeroSkyBackground } from '@/components/landing/HeroSkyBackground';
+import { RoadmapDynamicBackground } from '@/components/roadmap/RoadmapDynamicBackground';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { RoadmapBranchPill } from './RoadmapBranchPill';
 import { RoadmapProfilePill } from './RoadmapProfilePill';
@@ -57,7 +57,7 @@ export const StudentRoadmapView: React.FC = () => {
 
   return (
     <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex overflow-hidden select-none">
-      <HeroSkyBackground starCount={60} interactive={false} className="fixed inset-0 pointer-events-none -z-10" />
+      <RoadmapDynamicBackground />
 
       {/* Lienzo a todo ancho: la navegación vive en píldoras flotantes */}
       <div className="flex-1 flex flex-col min-w-0 h-screen relative z-10">

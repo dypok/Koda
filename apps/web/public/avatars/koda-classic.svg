@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="bg-classic" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </radialGradient>
+    <linearGradient id="fur-classic" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fb923c"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+    <linearGradient id="inner-ear" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#fed7aa"/>
+      <stop offset="100%" stop-color="#fdba74"/>
+    </linearGradient>
+    <filter id="glow-classic" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#f97316" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Fondo circular -->
+  <circle cx="100" cy="100" r="92" fill="url(#bg-classic)" stroke="#f97316" stroke-width="4" filter="url(#glow-classic)"/>
+
+  <!-- Orejas de zorro -->
+  <path d="M 46 95 L 30 40 L 82 68 Z" fill="url(#fur-classic)"/>
+  <path d="M 48 85 L 38 48 L 74 68 Z" fill="url(#inner-ear)"/>
+  <path d="M 154 95 L 170 40 L 118 68 Z" fill="url(#fur-classic)"/>
+  <path d="M 152 85 L 162 48 L 126 68 Z" fill="url(#inner-ear)"/>
+
+  <!-- Cabeza de Koda -->
+  <ellipse cx="100" cy="112" rx="58" ry="50" fill="url(#fur-classic)"/>
+
+  <!-- Mejillas blancas de zorro -->
+  <path d="M 44 116 Q 36 136 60 144 Q 85 142 90 120 Z" fill="#fff7ed"/>
+  <path d="M 156 116 Q 164 136 140 144 Q 115 142 110 120 Z" fill="#fff7ed"/>
+
+  <!-- Mechones de frente -->
+  <path d="M 94 65 Q 100 50 106 65 Q 100 68 94 65 Z" fill="#ea580c"/>
+
+  <!-- Ojos grandes y amigables -->
+  <ellipse cx="76" cy="104" rx="10" ry="14" fill="#0f172a"/>
+  <circle cx="73" cy="99" r="4" fill="#ffffff"/>
+  <circle cx="78" cy="110" r="1.8" fill="#ffffff"/>
+
+  <ellipse cx="124" cy="104" rx="10" ry="14" fill="#0f172a"/>
+  <circle cx="121" cy="99" r="4" fill="#ffffff"/>
+  <circle cx="126" cy="110" r="1.8" fill="#ffffff"/>
+
+  <!-- Hocico y nariz -->
+  <ellipse cx="100" cy="124" rx="18" ry="14" fill="#fff7ed"/>
+  <path d="M 94 118 Q 100 114 106 118 Q 100 125 94 118 Z" fill="#0f172a"/>
+
+  <!-- Sonrisa Koda -->
+  <path d="M 93 126 Q 100 134 107 126" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Rubor mejillas -->
+  <circle cx="56" cy="120" r="6" fill="#f43f5e" opacity="0.35"/>
+  <circle cx="144" cy="120" r="6" fill="#f43f5e" opacity="0.35"/>
+</svg>

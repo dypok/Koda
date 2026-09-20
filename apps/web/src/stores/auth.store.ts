@@ -25,6 +25,7 @@ interface AuthState {
   hasHydrated: boolean;
   initAuth: () => void;
   setUserSession: (session: BackendUserSession, accessToken: string, refreshToken?: string) => void;
+  updateUserProfile: (partial: Partial<AuthUser>) => void;
   login: (email: string, fullName?: string) => void;
   loginSocial: (provider: 'google' | 'github') => void;
   logout: () => void;
@@ -124,6 +125,17 @@ export const useAuthStore = create<AuthState>((set) => ({
       refreshToken: refreshToken || null,
       isAuthenticated: true,
       hasEverLoggedIn: true,
+    });
+  },
+
+  updateUserProfile: (partial: Partial<AuthUser>) => {
+    set((state) => {
+      if (!state.user) return state;
+      const updatedUser = { ...state.user, ...partial };
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(updatedUser));
+      }
+      return { user: updatedUser };
     });
   },
 

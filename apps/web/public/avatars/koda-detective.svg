@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="bg-det" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#090d16"/>
+    </radialGradient>
+    <linearGradient id="fur-det" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fb923c"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+    <linearGradient id="hat-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#78716c"/>
+      <stop offset="100%" stop-color="#44403c"/>
+    </linearGradient>
+    <filter id="glow-det" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#eab308" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <!-- Fondo circular -->
+  <circle cx="100" cy="100" r="92" fill="url(#bg-det)" stroke="#eab308" stroke-width="4" filter="url(#glow-det)"/>
+
+  <!-- Orejas detrás del sombrero -->
+  <path d="M 44 96 L 28 46 L 76 72 Z" fill="url(#fur-det)"/>
+  <path d="M 156 96 L 172 46 L 124 72 Z" fill="url(#fur-det)"/>
+
+  <!-- Sombrero de Detective (Deerstalker) -->
+  <path d="M 52 75 C 52 38 148 38 148 75 Z" fill="url(#hat-grad)"/>
+  <path d="M 38 74 C 70 66 130 66 162 74 C 160 82 40 82 38 74 Z" fill="#292524"/>
+  <path d="M 54 70 Q 100 62 146 70" fill="none" stroke="#eab308" stroke-width="4"/>
+
+  <!-- Cabeza de Koda -->
+  <ellipse cx="100" cy="116" rx="56" ry="48" fill="url(#fur-det)"/>
+
+  <!-- Mejillas blancas -->
+  <path d="M 46 120 Q 38 138 62 146 Q 86 144 90 124 Z" fill="#fff7ed"/>
+  <path d="M 154 120 Q 162 138 138 146 Q 114 144 110 124 Z" fill="#fff7ed"/>
+
+  <!-- Ojos curiosos de detective -->
+  <ellipse cx="76" cy="108" rx="10" ry="13" fill="#0f172a"/>
+  <circle cx="73" cy="103" r="4" fill="#ffffff"/>
+  <circle cx="78" cy="114" r="1.8" fill="#ffffff"/>
+
+  <ellipse cx="124" cy="108" rx="10" ry="13" fill="#0f172a"/>
+  <circle cx="121" cy="103" r="4" fill="#ffffff"/>
+  <circle cx="126" cy="114" r="1.8" fill="#ffffff"/>
+
+  <!-- Hocico y nariz -->
+  <ellipse cx="100" cy="128" rx="17" ry="13" fill="#fff7ed"/>
+  <path d="M 94 122 Q 100 118 106 122 Q 100 129 94 122 Z" fill="#0f172a"/>
+  <path d="M 94 130 Q 100 137 106 130" fill="none" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+
+  <!-- Lupa de detective en primer plano -->
+  <circle cx="138" cy="138" r="22" fill="none" stroke="#eab308" stroke-width="4.5"/>
+  <circle cx="138" cy="138" r="18" fill="#38bdf8" fill-opacity="0.25"/>
+  <path d="M 154 154 L 176 176" stroke="#92400e" stroke-width="7" stroke-linecap="round"/>
+</svg>

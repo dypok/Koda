@@ -83,9 +83,10 @@
 **Subtasks:**
 - [x] [BD] Verificar tabla `public.users` en PostgreSQL (Supabase) con persistencia de campos `document_type`, `document_number`, `avatar_url`, `bio` y metas de estudio.
 - [x] [BACKEND] Implementar `UsersController` con endpoints de lectura (`GET /api/v1/users/me`) y actualización parcial (`PATCH /api/v1/users/me`), casos de uso hexagonales y enmascaramiento de cédula (Entregable: `documentation/done/backend/backend-03-auth-perfil-usuario.md`).
-- [ ] [FRONTEND] Pantalla `apps/web/src/app/perfil/page.tsx` con grid de estadísticas, badge de nivel y selector de avatares.
-- [ ] [FRONTEND] Formulario de edición con validación de nombre y cédula/pasaporte.
-- [ ] [FRONTEND] Toast interactivo de confirmación al actualizar datos.
+- [x] [FRONTEND] Pantalla `apps/web/src/app/perfil/page.tsx` con grid de estadísticas, badge de nivel y selector de avatares.
+- [x] [FRONTEND] Formulario de edición con validación de nombre y cédula/pasaporte con enmascaramiento PII.
+- [x] [FRONTEND] Toast interactivo de confirmación al actualizar datos (`ProfileToast`).
+- [x] [FRONTEND] Menú desplegable en el HUD superior derecho (`ProfileDropdownMenu`) y modal de configuración integral (`ProfileSettingsModal`).
 
 **DoD adicional para esta US:**
 - El número de documento se transmite con TLS y se devuelve enmascarado en la API pública.

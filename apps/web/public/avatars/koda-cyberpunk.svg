@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="bg-cyber" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3b0764"/>
+      <stop offset="100%" stop-color="#090514"/>
+    </radialGradient>
+    <linearGradient id="fur-cyber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fb923c"/>
+      <stop offset="100%" stop-color="#ea580c"/>
+    </linearGradient>
+    <linearGradient id="visor-neon" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#06b6d4"/>
+      <stop offset="50%" stop-color="#ec4899"/>
+      <stop offset="100%" stop-color="#8b5cf6"/>
+    </linearGradient>
+    <filter id="glow-cyber" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#a855f7" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Fondo circular -->
+  <circle cx="100" cy="100" r="92" fill="url(#bg-cyber)" stroke="#a855f7" stroke-width="4" filter="url(#glow-cyber)"/>
+
+  <!-- Orejas con implantes cibernéticos -->
+  <path d="M 44 94 L 28 38 L 82 66 Z" fill="url(#fur-cyber)"/>
+  <path d="M 46 84 L 38 48 L 74 66 Z" fill="#06b6d4" opacity="0.4"/>
+  <path d="M 156 94 L 172 38 L 118 66 Z" fill="url(#fur-cyber)"/>
+  <path d="M 154 84 L 162 48 L 126 66 Z" fill="#ec4899" opacity="0.4"/>
+
+  <!-- Cabeza de Koda -->
+  <ellipse cx="100" cy="114" rx="56" ry="48" fill="url(#fur-cyber)"/>
+  <path d="M 46 118 Q 38 136 62 144 Q 86 142 90 122 Z" fill="#fff7ed"/>
+  <path d="M 154 118 Q 162 136 138 144 Q 114 142 110 122 Z" fill="#fff7ed"/>
+
+  <!-- Visor Cyberpunk Neón con gradiente cian-magenta -->
+  <polygon points="40,94 160,94 150,118 50,118" fill="url(#visor-neon)" stroke="#06b6d4" stroke-width="2.5"/>
+  <line x1="48" y1="102" x2="152" y2="102" stroke="#ffffff" stroke-width="1.5" opacity="0.75"/>
+  <circle cx="70" cy="106" r="3" fill="#ffffff"/>
+  <circle cx="130" cy="106" r="3" fill="#ffffff"/>
+
+  <!-- Tatuajes de circuitos luminosos en mejillas -->
+  <path d="M 38 126 L 50 126 L 56 134" stroke="#06b6d4" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="56" cy="134" r="2" fill="#06b6d4"/>
+  <path d="M 162 126 L 150 126 L 144 134" stroke="#ec4899" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="144" cy="134" r="2" fill="#ec4899"/>
+
+  <!-- Hocico y sonrisa pícara -->
+  <ellipse cx="100" cy="126" rx="16" ry="12" fill="#fff7ed"/>
+  <path d="M 95 120 Q 100 117 105 120 Q 100 125 95 120 Z" fill="#0f172a"/>
+  <path d="M 96 128 Q 102 133 106 127" fill="none" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+</svg>
