@@ -44,7 +44,7 @@ export const RoadmapProfilePill: React.FC = () => {
 
   return (
     <>
-      <div className="absolute right-4 top-4 z-20">
+      <div className="absolute right-4 top-4 z-40">
         {/* Trigger de la Píldora de Perfil */}
         <button
           type="button"

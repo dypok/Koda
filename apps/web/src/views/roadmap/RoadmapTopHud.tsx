@@ -1,24 +1,19 @@
 'use client';
-import { ArrowLeft, List, ShareNetwork, Stack } from '@phosphor-icons/react';
+import { ArrowLeft } from '@phosphor-icons/react';
 
 import React, { useMemo } from 'react';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
-import { cn } from '@/lib/utils';
 
 interface RoadmapTopHudProps {
   sectorTitle: string;
   progressPercent?: number;
-  coursesDisplayMode?: 'pin-rail' | 'canvas' | 'fusion';
-  onToggleCoursesDisplayMode?: (mode: 'pin-rail' | 'canvas' | 'fusion') => void;
 }
 
-/** HUD superior en píldoras flotantes: título + continuar al centro, vistas a la derecha. */
+/** HUD superior en píldoras flotantes: título + continuar al centro. */
 export function RoadmapTopHud({
   sectorTitle,
   progressPercent = 0,
-  coursesDisplayMode = 'fusion',
-  onToggleCoursesDisplayMode,
 }: RoadmapTopHudProps) {
   const {
     viewMode,
@@ -44,42 +39,6 @@ export function RoadmapTopHud({
 
   const displayTitle = sectorTitle.replace(/^SECTOR\s+\d+:\s*/i, '');
   const inLessons = viewMode === 'lessons';
-
-  const modeTabs = (
-    inLessons || !onToggleCoursesDisplayMode ? null : (
-      <div
-        role="tablist"
-        aria-label="Vista del roadmap"
-        className="hidden md:flex items-center gap-1 rounded-full border border-slate-700/50 bg-slate-900/40 p-1 backdrop-blur-xl shadow-xl"
-      >
-        {(
-          [
-            { id: 'pin-rail', label: 'Lista', Icon: List },
-            { id: 'canvas', label: 'Mapa', Icon: ShareNetwork },
-            { id: 'fusion', label: 'Fusión', Icon: Stack },
-          ] as const
-        ).map(({ id, label, Icon }) => (
-          <button
-            key={id}
-            type="button"
-            role="tab"
-            aria-selected={coursesDisplayMode === id}
-            onClick={() => onToggleCoursesDisplayMode(id)}
-            title={`Vista ${label}`}
-            className={cn(
-              'flex items-center gap-1.5 rounded-full px-3 py-1.5 font-mono text-[11px] font-bold transition-all cursor-pointer',
-              coursesDisplayMode === id
-                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 shadow-[0_0_12px_rgba(255,106,0,0.4)] font-black'
-                : 'text-slate-400 hover:text-orange-300 hover:bg-slate-800/50'
-            )}
-          >
-            <Icon className="w-3.5 h-3.5" />
-            {label}
-          </button>
-        ))}
-      </div>
-    )
-  );
 
   return (
     <>
@@ -116,9 +75,6 @@ export function RoadmapTopHud({
             Continuar →
           </button>
         </div>
-      )}
-      {modeTabs && (
-        <div className="absolute right-28 top-4 z-20 hidden md:block">{modeTabs}</div>
       )}
     </>
   );

@@ -4,6 +4,7 @@ import React from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { RoadmapDynamicBackground } from '@/components/roadmap/RoadmapDynamicBackground';
 import { useRoadmapStore } from '@/stores/roadmap.store';
+import { useAppearanceStore } from '@/stores/appearance.store';
 import { RoadmapBranchPill } from './RoadmapBranchPill';
 import { RoadmapProfilePill } from './RoadmapProfilePill';
 import { RoadmapTopHud } from './RoadmapTopHud';
@@ -17,11 +18,11 @@ import { useRouter } from 'next/navigation';
 export const StudentRoadmapView: React.FC = () => {
   const router = useRouter();
   const { openCourseLessons, getCurrentDataset, viewMode, retreatTrigger, returnToCourses, setActiveNode, isLoading, hydrateProgress, selectedCourseId } = useRoadmapStore();
+  const { coursesDisplayMode } = useAppearanceStore();
 
   React.useEffect(() => {
     hydrateProgress();
   }, [hydrateProgress]);
-  const [coursesDisplayMode, setCoursesDisplayMode] = React.useState<'pin-rail' | 'canvas' | 'fusion'>('fusion');
 
   React.useEffect(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('view=lessons')) {
@@ -66,8 +67,6 @@ export const StudentRoadmapView: React.FC = () => {
         <RoadmapTopHud
           sectorTitle={dataset.sectorTitle}
           progressPercent={dataset.progressPercent}
-          coursesDisplayMode={coursesDisplayMode}
-          onToggleCoursesDisplayMode={setCoursesDisplayMode}
         />
 
         <main className="flex-1 relative overflow-hidden flex items-center justify-center p-2">

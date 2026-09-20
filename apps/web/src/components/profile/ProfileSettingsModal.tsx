@@ -16,9 +16,18 @@ import {
   ArrowsClockwise,
   UploadSimple,
   ShieldCheck,
+  Stack,
+  ShareNetwork,
+  List,
 } from '@phosphor-icons/react';
 import { useAuthStore } from '@/stores/auth.store';
-import { useAppearanceStore, BackgroundPreset, StarDensity, AccentTheme } from '@/stores/appearance.store';
+import {
+  useAppearanceStore,
+  BackgroundPreset,
+  StarDensity,
+  AccentTheme,
+  CoursesDisplayMode,
+} from '@/stores/appearance.store';
 import {
   UserProfileService,
   UserProfileResponse,
@@ -47,10 +56,12 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     starDensity,
     accentTheme,
     interactiveCursor,
+    coursesDisplayMode,
     setBackgroundPreset,
     setStarDensity,
     setAccentTheme,
     setInteractiveCursor,
+    setCoursesDisplayMode,
   } = useAppearanceStore();
 
   const [activeTab, setActiveTab] = useState<SettingsTab>(initialTab);
@@ -693,8 +704,61 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
               <div>
                 <h2 className="text-xl font-bold text-slate-100">Personalización Visual y Fondos</h2>
                 <p className="text-xs text-slate-400 mt-1">
-                  Elige la atmósfera del roadmap: efectos climáticos, partículas y densidad estelar.
+                  Elige la vista del roadmap y su atmósfera: efectos climáticos, partículas y densidad estelar.
                 </p>
+              </div>
+
+              {/* Modo de Visualización del Roadmap */}
+              <div className="space-y-2">
+                <label className="block text-xs font-mono font-medium text-slate-300">
+                  Modo de Visualización del Roadmap
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  {[
+                    {
+                      id: 'fusion',
+                      name: 'Modo Fusión',
+                      desc: 'Grafo espacial y panel lateral detallado',
+                      Icon: Stack,
+                    },
+                    {
+                      id: 'canvas',
+                      name: 'Modo Mapa',
+                      desc: 'Lienzo espacial interactivo de constelaciones',
+                      Icon: ShareNetwork,
+                    },
+                    {
+                      id: 'pin-rail',
+                      name: 'Modo Lista',
+                      desc: 'Ruta secuencial en riel vertical simplificado',
+                      Icon: List,
+                    },
+                  ].map((mode) => {
+                    const active = coursesDisplayMode === mode.id;
+                    const Icon = mode.Icon;
+                    return (
+                      <button
+                        key={mode.id}
+                        type="button"
+                        onClick={() => setCoursesDisplayMode(mode.id as CoursesDisplayMode)}
+                        className={`rounded-xl border p-3 text-left transition-all cursor-pointer ${
+                          active
+                            ? 'border-amber-400 bg-amber-500/20 shadow-md shadow-amber-500/10'
+                            : 'border-slate-800 bg-slate-950/50 hover:border-slate-700 hover:bg-slate-800/40'
+                        }`}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Icon className={`h-4 w-4 ${active ? 'text-amber-400' : 'text-slate-400'}`} />
+                            <span className="font-semibold text-xs text-slate-100">{mode.name}</span>
+                          </div>
+                          {active && <Check className="h-4 w-4 text-amber-400" weight="bold" />}
+                        </div>
+                        <span className="text-[11px] text-slate-400 block mt-1">{mode.desc}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
 
               {/* Presets de fondo */}
