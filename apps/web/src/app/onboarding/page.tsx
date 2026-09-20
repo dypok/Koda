@@ -81,7 +81,7 @@ type OnboardingViewMode = 'level_select' | 'diagnostic_test' | 'diagnostic_resul
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const { user, token, hasHydrated, updateUserProfile } = useAuthStore();
+  const { user, token, hasHydrated, initAuth, updateUserProfile } = useAuthStore();
 
   const [viewMode, setViewMode] = useState<OnboardingViewMode>('level_select');
   const [selectedLevelId, setSelectedLevelId] = useState<string>('beginner');
@@ -97,12 +97,39 @@ export default function OnboardingPage() {
   const [timeLeft, setTimeLeft] = useState(15 * 60);
   const [diagnosticResult, setDiagnosticResult] = useState<DiagnosticResultResponse | null>(null);
 
+  // Inicializar estado de autenticación desde almacenamiento local
+  useEffect(() => {
+    initAuth();
+  }, [initAuth]);
+
   // Guard: si el usuario ya completó el onboarding, redirigir a /
   useEffect(() => {
     if (hasHydrated && user?.onboardingCompleted) {
       router.replace('/');
+      const fallbackTimer = setTimeout(() => {
+        window.location.replace('/');
+      }, 500);
+      return () => clearTimeout(fallbackTimer);
     }
   }, [hasHydrated, user?.onboardingCompleted, router]);
+
+  // Sincronización en segundo plano con el backend en caso de sesión con perfil desactualizado
+  useEffect(() => {
+    if (!hasHydrated || !token) return;
+    let isMounted = true;
+    AuthService.verifySession(token)
+      .then((session) => {
+        if (!isMounted) return;
+        if (session.onboardingCompleted && !user?.onboardingCompleted) {
+          updateUserProfile({ onboardingCompleted: true });
+        }
+      })
+      .catch(() => null);
+
+    return () => {
+      isMounted = false;
+    };
+  }, [hasHydrated, token, user?.onboardingCompleted, updateUserProfile]);
 
   // Temporizador para el test diagnóstico
   useEffect(() => {
@@ -275,8 +302,25 @@ export default function OnboardingPage() {
   if (!hasHydrated || user?.onboardingCompleted || submittingOnboarding) {
     return (
       <KodaLoadingScreen
-        title="Preparando tu ruta de aprendizaje..."
-        subtitle="Verificando tu perfil y preferencias..."
+        title={
+          user?.onboardingCompleted
+            ? 'Redirigiendo a tu ruta...'
+            : submittingOnboarding
+            ? 'Guardando tus preferencias...'
+            : 'Preparando tu ruta de aprendizaje...'
+        }
+        subtitle={
+          user?.onboardingCompleted
+            ? 'Ya has completado tu calibración inicial. Ingresando a la plataforma...'
+            : submittingOnboarding
+            ? 'Configurando módulos iniciales y entorno pedagógico...'
+            : 'Verificando tu perfil y preferencias...'
+        }
+        terminalHint={
+          user?.onboardingCompleted
+            ? '> onboarding :: cuenta calibrada -> redirigiendo a /'
+            : '> auth :: verificando perfil'
+        }
       />
     );
   }

@@ -29,7 +29,8 @@
 
 ### A. Páginas y Vistas (`apps/web/src/app/onboarding/`)
 - [`apps/web/src/app/onboarding/page.tsx`](file:///home/dypok/Projects/DuolingoProgramacion/apps/web/src/app/onboarding/page.tsx):
-  - **Route Guard:** Hook reactivo sincronizado con `useAuthStore` (`hasHydrated` y `user.onboardingCompleted`), redirigiendo a `/` si ya fue completado.
+  - **Route Guard e Hidratación Resiliente:** Invocación explícita de `initAuth()` en `useEffect` de montaje para hidratar el estado global de `useAuthStore` desde `localStorage`. Hook reactivo que detecta `user.onboardingCompleted === true` y redirige de inmediato a la ruta canónica (`/`) con fallback automático vía `window.location.replace('/')`, eliminando cualquier congelamiento en la pantalla de carga (`KodaLoadingScreen`).
+  - **Sincronización en Segundo Plano:** Verificación con el backend (`AuthService.verifySession`) si hay token activo para reconciliar cambios de estado del perfil de forma transparente.
   - **Tres Modos de Vista Integrados:**
     1. `level_select`: Selección de 4 niveles con tags técnicos (`#variables`, `#condicionales`, `#bucles`, `#algoritmos`).
     2. `diagnostic_test`: Banco interactivo de preguntas calibradas con temporizador regresivo de 15 min, atajos ergonómicos de teclado y snippet de terminal.
