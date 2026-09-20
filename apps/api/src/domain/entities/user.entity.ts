@@ -149,6 +149,12 @@ export class UserEntity {
     return '***' + doc.slice(-4);
   }
 
+  get formattedMaskedDocument(): string | null {
+    if (!this.props.documentNumber) return null;
+    const prefix = this.props.documentType ? `${this.props.documentType} ` : '';
+    return `${prefix}${this.maskedDocumentNumber}`;
+  }
+
   get onboardingCompleted(): boolean {
     return this.props.onboardingCompleted ?? false;
   }
@@ -174,6 +180,37 @@ export class UserEntity {
     if (params.displayName) {
       this.props.displayName = params.displayName;
     }
+    this.props.updatedAt = new Date();
+  }
+
+  updateProfile(data: {
+    displayName?: string;
+    avatarUrl?: string | null;
+    avatarObjectKey?: string | null;
+    documentNumber?: string | null;
+    documentType?: DocumentType | null;
+    bio?: string | null;
+    timezone?: string;
+    locale?: string;
+    initialLanguageSlug?: string;
+    experienceLevel?: ExperienceLevel;
+    learningStyle?: LearningStyle;
+    dailyGoalId?: DailyGoalId;
+    dailyGoalMinutes?: number;
+  }): void {
+    if (data.displayName !== undefined) this.props.displayName = data.displayName;
+    if (data.avatarUrl !== undefined) this.props.avatarUrl = data.avatarUrl;
+    if (data.avatarObjectKey !== undefined) this.props.avatarObjectKey = data.avatarObjectKey;
+    if (data.documentNumber !== undefined) this.props.documentNumber = data.documentNumber;
+    if (data.documentType !== undefined) this.props.documentType = data.documentType;
+    if (data.bio !== undefined) this.props.bio = data.bio;
+    if (data.timezone !== undefined) this.props.timezone = data.timezone;
+    if (data.locale !== undefined) this.props.locale = data.locale;
+    if (data.initialLanguageSlug !== undefined) this.props.initialLanguageSlug = data.initialLanguageSlug;
+    if (data.experienceLevel !== undefined) this.props.experienceLevel = data.experienceLevel;
+    if (data.learningStyle !== undefined) this.props.learningStyle = data.learningStyle;
+    if (data.dailyGoalId !== undefined) this.props.dailyGoalId = data.dailyGoalId;
+    if (data.dailyGoalMinutes !== undefined) this.props.dailyGoalMinutes = data.dailyGoalMinutes;
     this.props.updatedAt = new Date();
   }
 

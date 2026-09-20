@@ -11,6 +11,7 @@ import { RoadmapModule } from './modules/roadmap/roadmap.module';
 import { DatabaseModule } from './database/database.module';
 import { PrismaModule } from '@infra/database/postgres/prisma.module';
 import { AuthModule } from './presentation/rest/auth/auth.module';
+import { UsersModule } from './presentation/rest/users/users.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AuthModule } from './presentation/rest/auth/auth.module';
     PrismaModule,
     DatabaseModule,
     AuthModule,
+    UsersModule,
     LanguagesModule,
     LearningModule,
     CertificationModule,
