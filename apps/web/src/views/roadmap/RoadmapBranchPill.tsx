@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import Link from 'next/link';
 import { CaretDown } from '@phosphor-icons/react';
 import { CAREER_BRANCHES, CareerBranchId } from '@/models/roadmap/tracks/track-catalog';
 import { useRoadmapStore } from '@/stores/roadmap.store';
@@ -35,13 +34,12 @@ export const RoadmapBranchPill: React.FC = () => {
   return (
     <div ref={boxRef} className="absolute left-4 top-4 z-20">
       <div className="flex items-center gap-1 rounded-full border border-slate-700/50 bg-slate-900/40 py-1.5 pl-1.5 pr-1 backdrop-blur-xl shadow-xl">
-        <Link
-          href="/"
-          aria-label="Koda - volver a la landing"
-          className="flex h-8 w-8 items-center justify-center rounded-full font-display text-sm font-black text-orange-400 transition-colors hover:bg-orange-500/20"
+        <div
+          aria-label="Koda"
+          className="flex h-8 w-8 items-center justify-center rounded-full font-display text-sm font-black text-orange-400 select-none"
         >
           K
-        </Link>
+        </div>
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}

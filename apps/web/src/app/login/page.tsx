@@ -21,7 +21,7 @@ export default function LoginPage() {
       if (user && user.onboardingCompleted === false) {
         router.replace('/register');
       } else {
-        router.replace('/app/ruta');
+        router.replace('/');
       }
     }
   }, [hasHydrated, isAuthenticated, user, router]);

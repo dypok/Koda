@@ -72,8 +72,12 @@ En estricto apego al protocolo de gobernanza `koda-frontend-workflow.md` (ADR-01
 - `apps/web/public/avatars/koda-gamer.svg`
 - `apps/web/src/constants/avatars.config.ts`
 
-### D. Rutas Next.js y Requerimiento Backend
-- `apps/web/src/app/app/perfil/page.tsx` [NEW]
+### D. Rutas Next.js y Despachador Canónico
+- `apps/web/src/views/landing/LandingPageView.tsx` [NEW]: Extracción completa de la landing page pública en componente modular.
+- `apps/web/src/app/page.tsx` [MODIFY]: Despachador inteligente de Koda. Renderiza directamente `StudentRoadmapView` en `/` para usuarios autenticados. Si el usuario ya se ha logueado antes (`hasEverLoggedIn === true`) y no tiene sesión, redirige inmediatamente a `/login`, bloqueando por completo la landing page. Nuevos visitantes ven `LandingPageView`.
+- `apps/web/src/app/app/ruta/page.tsx` [MODIFY]: Redirección canónica transparente hacia `/`.
+- `apps/web/src/views/roadmap/RoadmapBranchPill.tsx` [MODIFY]: Eliminación del botón Link hacia la landing, sustituyéndolo por un isotipo estático "K".
+- `apps/web/src/app/app/perfil/page.tsx` [NEW]: Retorno a `/`.
 - `documentation/done/backend/PENDIENTE-backend-avatar-upload.md` [NEW]
 
 ---
@@ -82,6 +86,8 @@ En estricto apego al protocolo de gobernanza `koda-frontend-workflow.md` (ADR-01
 
 - **Tipado TypeScript:** `pnpm --filter web exec tsc --noEmit` $\rightarrow$ **0 errores**.
 - **Compilación de Producción:** `pnpm --filter web build` $\rightarrow$ **100% exitoso (12/12 páginas generadas en Turbopack)**.
-- **Verificación HTTP:** 
-  - `GET /app/ruta` $\rightarrow$ `HTTP 200 OK`.
-  - `GET /app/perfil` $\rightarrow$ `HTTP 200 OK`.
+- **Verificación de Rutas:**
+  - `GET /` $\rightarrow$ Renderiza Roadmap directamente con sesión o Landing Page para nuevos visitantes.
+  - `GET /app/ruta` $\rightarrow$ Redirige a `/`.
+  - `GET /app/perfil` $\rightarrow$ Carga configuración de usuario con retorno a `/`.
+

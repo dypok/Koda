@@ -46,7 +46,7 @@ export const LoginForm: React.FC = () => {
             localStorage.removeItem('koda-register-progress');
             router.replace('/register');
           } else {
-            router.replace('/app/ruta');
+            router.replace('/');
           }
         })
         .catch((err: any) => {
@@ -72,7 +72,7 @@ export const LoginForm: React.FC = () => {
       if (!result.session.onboardingCompleted) {
         router.replace('/register');
       } else {
-        router.replace('/app/ruta');
+        router.replace('/');
       }
     } catch (err: any) {
       setError(err.message || 'Error al iniciar sesión.');

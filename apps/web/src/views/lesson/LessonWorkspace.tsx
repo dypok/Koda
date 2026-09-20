@@ -98,7 +98,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         <p className="text-sm text-slate-400 max-w-md">
           Este curso aún no tiene contenido interactivo. Vuelve al roadmap y sigue con Python o Lua publicados.
         </p>
-        <Link href="/app/ruta" className="inline-flex min-h-[48px] items-center rounded-xl bg-amber-400 px-6 text-sm font-bold text-slate-950">
+        <Link href="/" className="inline-flex min-h-[48px] items-center rounded-xl bg-amber-400 px-6 text-sm font-bold text-slate-950">
           Volver a la ruta
         </Link>
       </div>
@@ -151,7 +151,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             </button>
           ) : null}
           <Link
-            href="/app/ruta"
+            href="/"
             className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-slate-700 px-6 text-sm font-bold text-white hover:border-amber-400/50"
           >
             Volver a la ruta
@@ -166,7 +166,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
       <header className="border-b border-slate-800/80 bg-slate-950/80 backdrop-blur-md">
         <div className="mx-auto max-w-6xl px-4 py-3 flex items-center gap-3">
-          <Link href="/app/ruta" aria-label="Volver a la ruta" className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60">
+          <Link href="/" aria-label="Volver a la ruta" className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/60">
             <ArrowLeft aria-hidden="true" className="w-5 h-5" />
           </Link>
           <nav aria-label="Miga de pan" className="text-xs text-slate-500 truncate">
@@ -380,7 +380,7 @@ function QuizMode({
       <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4 px-4 text-center">
         <p className="font-display text-2xl font-bold text-white">Quiz en camino</p>
         <p className="text-sm text-slate-400">Esta sección aún no tiene banco de preguntas.</p>
-        <Link href="/app/ruta" className="inline-flex min-h-[48px] items-center rounded-xl bg-amber-400 px-6 text-sm font-bold text-slate-950">
+        <Link href="/" className="inline-flex min-h-[48px] items-center rounded-xl bg-amber-400 px-6 text-sm font-bold text-slate-950">
           Volver a la ruta
         </Link>
       </div>

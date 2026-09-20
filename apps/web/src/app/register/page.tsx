@@ -39,7 +39,7 @@ export default function RegisterPage() {
   useEffect(() => {
     if (hasHydrated && isAuthenticated && user?.onboardingCompleted === true && !isCompletingAndRedirecting) {
       setIsCompletingAndRedirecting(true);
-      router.replace('/app/ruta');
+      router.replace('/');
     }
   }, [hasHydrated, isAuthenticated, user, router, isCompletingAndRedirecting]);
 
@@ -96,7 +96,7 @@ export default function RegisterPage() {
           window.history.replaceState(null, '', window.location.pathname);
           if (session.onboardingCompleted) {
             setIsCompletingAndRedirecting(true);
-            router.replace('/app/ruta');
+            router.replace('/');
             return;
           }
         } catch (e) {
@@ -126,7 +126,7 @@ export default function RegisterPage() {
         setIsCompletingAndRedirecting(true);
         try {
           await profile.submit(onboardingData);
-          router.replace('/app/ruta');
+          router.replace('/');
         } catch {
           setIsCompletingAndRedirecting(false);
         }

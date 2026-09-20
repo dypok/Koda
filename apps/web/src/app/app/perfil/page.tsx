@@ -21,7 +21,7 @@ export default function ProfilePage() {
 
   const handleClose = () => {
     setModalOpen(false);
-    router.push('/app/ruta');
+    router.push('/');
   };
 
   return (

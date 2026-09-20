@@ -112,7 +112,7 @@ export const RegisterSuccessModal: React.FC<RegisterSuccessModalProps> = ({
 
             <WipeButton
               ref={ctaRef}
-              href="/app/ruta"
+              href="/"
               LinkComponent={TransitionLink}
               onClick={() => setHandoff(true)}
               className="w-full py-3 text-sm gap-2"
