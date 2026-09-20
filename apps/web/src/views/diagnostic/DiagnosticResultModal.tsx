@@ -121,7 +121,7 @@ export function DiagnosticResultModal({
         <div className="relative z-10 space-y-2.5 pt-2">
           <WipeButton
             onClick={() => onAcceptRecommendation(result.recommendedModuleId)}
-            className="w-full justify-center py-3.5 text-xs font-bold uppercase tracking-wider"
+            className="w-full justify-center py-3.5 text-xs sm:text-sm font-bold uppercase tracking-wider"
           >
             {isAdvanced
               ? `Aceptar recomendación (${result.recommendedModuleCode})`
