@@ -8,10 +8,12 @@
     "allowSyntheticDefaultImports": true,
     "target": "ES2021",
     "outDir": "./dist",
+    "rootDir": "src",
     "sourceMap": true,
     "baseUrl": "./",
     "moduleResolution": "node",
     "incremental": true,
+    "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo",
     "skipLibCheck": true,
     "strictNullChecks": false,
     "noImplicitAny": false,
@@ -24,8 +26,7 @@
       "@infra/*": ["src/infra/*"],
       "@presentation/*": ["src/presentation/*"],
       "@common/*": ["src/common/*"],
-      "@modules/*": ["src/modules/*"],
-      "@koda/types": ["../../packages/types/src/index.ts"]
+      "@modules/*": ["src/modules/*"]
     }
   },
   "include": ["src/**/*"]
