@@ -88,28 +88,6 @@
       border-radius: 10px;
       box-shadow: 0 10px 15px -3px rgba(234, 88, 12, 0.35);
     }
-    .otp-card {
-      background-color: #0D1322;
-      border: 1px dashed #374151;
-      border-radius: 12px;
-      padding: 20px;
-      text-align: center;
-      margin: 28px 0;
-    }
-    .otp-label {
-      font-size: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      color: #9CA3AF;
-      margin-bottom: 8px;
-    }
-    .otp-code {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-      font-size: 32px;
-      font-weight: 800;
-      letter-spacing: 8px;
-      color: #FB923C;
-    }
     .alert-box {
       background-color: rgba(245, 158, 11, 0.08);
       border-left: 4px solid #F59E0B;
@@ -197,17 +175,13 @@
             </svg>
           </a>
         </div>
-        <div class="otp-card">
-          <div class="otp-label">O ingresa manualmente este código temporal de 6 dígitos:</div>
-          <div class="otp-code">{{ .Token }}</div>
-        </div>
         <div class="alert-box">
           <p class="alert-text">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 6px; display: inline-block;">
               <circle cx="12" cy="12" r="10"></circle>
               <polyline points="12 6 12 12 16 14"></polyline>
             </svg>
-            <strong>Vigencia de 15 minutos:</strong> Por motivos de seguridad, este enlace y código OTP expiran en 15 minutos y son de un solo uso.<br><br>
+            <strong>Vigencia de 15 minutos:</strong> Por motivos de seguridad, este enlace de recuperación expira en 15 minutos y es de un solo uso.<br><br>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: text-bottom; margin-right: 6px; display: inline-block;">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
             </svg>
