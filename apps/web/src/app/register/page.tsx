@@ -15,6 +15,8 @@ import { ProfileStep } from '@/views/register/ProfileStep';
 import { RegisterOtpModal } from '@/views/register/RegisterOtpModal';
 import { RegisterSuccessModal } from '@/views/register/RegisterSuccessModal';
 import { RegisterBottomBar } from '@/views/register/RegisterBottomBar';
+import { DiagnosticTestModal } from '@/views/diagnostic/DiagnosticTestModal';
+import { DiagnosticResultResponse } from '@/services/learning/diagnostic.service';
 import { useRegisterStepperController } from '@/controllers/register/useRegisterStepperController';
 import { useRegisterProfileController } from '@/controllers/register/useRegisterProfileController';
 import { AuthService } from '@/services/auth/auth.service';
@@ -25,6 +27,8 @@ export default function RegisterPage() {
   const { user, token, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
   const [isOAuthProcessing, setIsOAuthProcessing] = useState(false);
   const [isCompletingAndRedirecting, setIsCompletingAndRedirecting] = useState(false);
+  const [isDiagnosticModalOpen, setIsDiagnosticModalOpen] = useState(false);
+  const [diagnosticResult, setDiagnosticResult] = useState<DiagnosticResultResponse | null>(null);
 
   const isOAuthUser = Boolean(token && user && !user.onboardingCompleted);
   const totalSteps = isOAuthUser ? 4 : 5;
@@ -208,6 +212,9 @@ export default function RegisterPage() {
             selectedExperienceId={stepper.selectedExperienceId}
             selectedTechName={stepper.selectedOption?.name}
             onSelectExperience={stepper.selectExperience}
+            onOpenDiagnostic={() => setIsDiagnosticModalOpen(true)}
+            diagnosticCompleted={Boolean(diagnosticResult)}
+            recommendedModuleCode={diagnosticResult?.recommendedModuleCode}
           />
         )}
         {stepper.currentStep === 3 && (
@@ -271,6 +278,20 @@ export default function RegisterPage() {
         studentName={profile.form.fullName || user?.fullName || 'Estudiante'}
         techName={stepper.selectedOption?.name}
         goalMinutes={stepper.selectedGoal?.minutes}
+      />
+      <DiagnosticTestModal
+        isOpen={isDiagnosticModalOpen}
+        declaredLevel={stepper.selectedExperienceId || 'medium'}
+        languageSlug={stepper.selectedLanguageId || 'python'}
+        userToken={token || undefined}
+        onClose={() => setIsDiagnosticModalOpen(false)}
+        onComplete={(res) => {
+          setDiagnosticResult(res);
+          setIsDiagnosticModalOpen(false);
+        }}
+        onSkip={() => {
+          setIsDiagnosticModalOpen(false);
+        }}
       />
     </div>
   );

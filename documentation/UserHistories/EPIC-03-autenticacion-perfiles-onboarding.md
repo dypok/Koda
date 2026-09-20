@@ -1,5 +1,5 @@
 # 🟣 EPIC 3 — Autenticación, Perfiles de Usuario y Onboarding
-`Sprint 2 · v1.1 · Color Jira: Morado · Código: AUTH · 5 Stories · 21 SP`
+`Sprint 2 · v2.0 · Color Jira: Morado · Código: AUTH · 5 Stories · 21 SP · ESTADO: 🟢 100% COMPLETADA`
 
 > Esta épica cubre el ciclo de vida de identidad del usuario en Koda 🦊: registro seguro, inicio de sesión mediante JWT stateless con refresh rotativo HttpOnly, prueba diagnóstica inicial, configuración de perfil y persistencia en Supabase Auth (`19_SECURITY.md`, `05_FUNCTIONAL_REQUIREMENTS.md` RF-AUTH-*).
 
@@ -26,9 +26,9 @@
 - [x] [BACKEND] Implementar `AuthModule` en `apps/api/src/presentation/rest/auth/` con endpoints de sesión y validación de tokens (`POST /api/v1/auth/verify-session`, `GET /api/v1/auth/session`).
 - [x] [BACKEND] Configurar `SupabaseAuthGuard` y decorador `@CurrentUser()` para inyección de usuario autenticado en controladores.
 - [x] [BACKEND] Implementar servicio de autenticación delegada en Supabase Auth con rotación y auto-aprovisionamiento (`ValidateUserSessionUseCase`).
-- [ ] [FRONTEND] Configurar interceptor en `apiClient` para auto-renovación silenciosa del token al recibir 401.
+- [x] [FRONTEND] Configurar interceptor en `apiClient` para auto-renovación silenciosa del token al recibir 401 (`AuthService.authFetch` y `scheduleBackgroundRefresh`).
 - [x] [FRONTEND] Diseñar formulario de registro interactivo en `apps/web/src/app/(auth)/` con validación Zod, feedback de errores, paleta Dark Navy y React Hook Form (`feat/register-frontend`).
-- [ ] [FRONTEND] Persistir estado de autenticación en Zustand `authStore` y sincronizar con cookie de sesión.
+- [x] [FRONTEND] Persistir estado de autenticación en Zustand `authStore` y sincronizar con cookie de sesión y localStorage.
 
 **DoD adicional para esta US:**
 - Flujo completo probado: registro $\rightarrow$ login $\rightarrow$ navegación protegida $\rightarrow$ refresh silencioso $\rightarrow$ logout verificado en Swagger `/api/docs`.
@@ -57,9 +57,9 @@
 **Subtasks:**
 - [x] [BACKEND] Endpoint `POST /api/v1/learning/diagnostic/submit` que evalúa respuestas del test diagnóstico, aplica clamping y calcula el `recommended_module_id` (Entregable: `documentation/done/backend/backend-04-auth-onboarding-diagnostico.md`).
 - [x] [BACKEND] Endpoint `GET /api/v1/learning/diagnostic/questions` que entrega 12 preguntas calibradas sin revelar las respuestas correctas.
-- [ ] [FRONTEND] Diseñar pantalla de onboarding `apps/web/src/app/onboarding/page.tsx` con cards interactivas de autodeclaración de nivel.
-- [ ] [FRONTEND] Implementar vista del test diagnóstico con stepper de progreso y temporizador formativo.
-- [ ] [FRONTEND] Modal de resultados con animación de Koda 🦊 celebrando el módulo de entrada recomendado.
+- [x] [FRONTEND] Diseñar pantalla de onboarding `apps/web/src/app/onboarding/page.tsx` con cards interactivas de autodeclaración de nivel.
+- [x] [FRONTEND] Implementar vista del test diagnóstico con stepper de progreso y temporizador formativo (`DiagnosticTestModal.tsx`).
+- [x] [FRONTEND] Modal de resultados con animación de Koda 🦊 celebrando el módulo de entrada recomendado (`DiagnosticResultModal.tsx`).
 
 **DoD adicional para esta US:**
 - Cobertura de tests unitarios verificando los 4 casos del algoritmo de clamping y determinación de módulo de inicio.
@@ -110,8 +110,8 @@
 **Subtasks:**
 - [x] [BACKEND] Configurar plantilla de email transaccional en Supabase Auth / Resend con diseño institucional Koda y TTL 15 min.
 - [x] [BACKEND] Implementar endpoints de solicitud y confirmación de reset con validación de token seguro (`POST /api/v1/auth/forgot-password`, `POST /api/v1/auth/reset-password`) con rate limiting y prevención OWASP (Entregable: `documentation/done/backend/backend-05-auth-recuperacion-password.md`).
-- [ ] [FRONTEND] Pantalla `apps/web/src/app/(auth)/recuperar/page.tsx` con input de email y feedback amigable.
-- [ ] [FRONTEND] Pantalla `apps/web/src/app/(auth)/nueva-clave/page.tsx` para digitar y confirmar nueva contraseña.
+- [x] [FRONTEND] Flujo de recuperación de contraseña integrado en modal de login (`AuthService.requestPasswordReset`).
+- [x] [FRONTEND] Pantalla `apps/web/src/app/nueva-clave/page.tsx` para digitar y confirmar nueva contraseña con validación de complejidad de clave.
 
 **DoD adicional para esta US:**
 - Token invalidado inmediatamente tras ser consumido una vez.
@@ -159,9 +159,9 @@
   - `POST /api/v1/auth/onboarding`: Registra y sincroniza las preferencias educativas finales (`onboarding_completed=true`).
   - `GET /api/v1/auth/onboarding-status`: Consulta el estado de onboarding del usuario actual.
 - [x] [TESTS] Pruebas unitarias de casos de uso backend (Jest 100% passed: 4 suites, 11 tests).
-- [ ] [FRONTEND - Próxima HU `feat/frontend-auth-05-otp-oauth-onboarding`] Implementar cliente Supabase en `apps/web` con soporte OAuth Google (`signInWithOAuth`).
-- [ ] [FRONTEND - Próxima HU `feat/frontend-auth-05-otp-oauth-onboarding`] Diseñar vista/modal de validación de código OTP con temporizador de expiración y botón de reenvío.
-- [ ] [FRONTEND - Próxima HU `feat/frontend-auth-05-otp-oauth-onboarding`] Crear callback `/auth/callback` para procesar el retorno de Google OAuth2 y enrutar inteligentemente a `/register` (si falta onboarding) o a `/app/ruta`.
+- [x] [FRONTEND] Implementar cliente en `apps/web` con soporte OAuth Google y GitHub (`AuthService.getOAuthRedirectUrl`).
+- [x] [FRONTEND] Diseñar vista/modal de validación de código OTP con temporizador de expiración y botón de reenvío (`RegisterOtpModal.tsx`).
+- [x] [FRONTEND] Procesar el retorno de Google OAuth2 en `LoginPage` y `RegisterPage` y enrutar inteligentemente a `/register` (si falta onboarding) o a `/`.
 
 **DoD adicional para esta US:**
 - Backend listo y verificado con 100% de tests aprobados; frontend desacoplado conforme a las reglas del `koda-backend-workflow.md` (ADR-015).
