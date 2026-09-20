@@ -78,20 +78,29 @@ export const CoursePinRail: React.FC<CoursePinRailProps> = ({ dataset, onDeploy 
     [activeIndex, goTo]
   );
 
-  // Navegación por teclado (Flechas Arriba/Abajo y AvPág/RePág)
+  // Navegación por teclado (Flechas Arriba/Abajo/Izquierda/Derecha y AvPág/RePág + Enter)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+      const activeTag = document.activeElement?.tagName?.toLowerCase();
+      if (activeTag === 'input' || activeTag === 'textarea') return;
+
+      if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'ArrowRight') {
         e.preventDefault();
         goTo(activeIndex + 1);
-      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      } else if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'ArrowLeft') {
         e.preventDefault();
         goTo(activeIndex - 1);
+      } else if (e.key === 'Enter') {
+        const targetNode = nodes[activeIndex];
+        if (targetNode && targetNode.isUnlocked) {
+          e.preventDefault();
+          onDeploy(targetNode);
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeIndex, goTo]);
+  }, [activeIndex, goTo, nodes, onDeploy]);
 
   // Medición dinámica para la línea láser del indicador lateral
   const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);

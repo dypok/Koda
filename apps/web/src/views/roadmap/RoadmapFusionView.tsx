@@ -79,17 +79,25 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'ArrowDown' || e.key === 'PageDown') {
+      const activeTag = document.activeElement?.tagName?.toLowerCase();
+      if (activeTag === 'input' || activeTag === 'textarea') return;
+
+      if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === 'ArrowRight') {
         e.preventDefault();
         goTo(activeIndex + 1);
-      } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+      } else if (e.key === 'ArrowUp' || e.key === 'PageUp' || e.key === 'ArrowLeft') {
         e.preventDefault();
         goTo(activeIndex - 1);
+      } else if (e.key === 'Enter') {
+        if (activeNode && activeNode.isUnlocked) {
+          e.preventDefault();
+          onDeploy(activeNode);
+        }
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeIndex, goTo]);
+  }, [activeIndex, goTo, activeNode, onDeploy]);
 
   // Arrastre para paneo (el zoom vive en el store y lo consume el grafo Pixi).
   const dragRef = useRef<{ px: number; py: number; ox: number; oy: number } | null>(null);

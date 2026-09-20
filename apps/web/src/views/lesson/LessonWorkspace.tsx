@@ -526,6 +526,11 @@ function QuizMode({
         engine.next();
       }
     },
+    onPrev: () => {
+      if (engine.index > 0) {
+        engine.prev();
+      }
+    },
     isSubmitted: Boolean(engine.result),
     canSubmit: Boolean(!engine.result && engine.selected.length > 0),
   });

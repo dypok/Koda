@@ -114,10 +114,16 @@ export function useLessonKeyboardShortcuts({
         return;
       }
 
-      // 4. Flecha derecha para avanzar
+      // 4. Flecha derecha para avanzar o validar
       if (e.key === 'ArrowRight') {
+        e.preventDefault();
         if (isSubmitted || !onSubmit) {
-          e.preventDefault();
+          triggerPressFeedback(null, 'next');
+          onNext?.();
+        } else if (canSubmit) {
+          triggerPressFeedback(null, 'submit');
+          onSubmit?.();
+        } else {
           triggerPressFeedback(null, 'next');
           onNext?.();
         }

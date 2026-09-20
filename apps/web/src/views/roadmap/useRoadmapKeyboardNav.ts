@@ -83,6 +83,20 @@ export function useRoadmapKeyboardNav({
           const nextNode = candidates[0];
           setActiveNode(nextNode.id);
           onSelectNode(nextNode);
+        } else {
+          // Fallback secuencial si el árbol o ruta es lineal / vertical
+          const currentIndex = nodes.findIndex((n) => n.id === currentNode.id);
+          if (currentIndex !== -1) {
+            if ((e.key === 'ArrowRight' || e.key === 'ArrowDown') && currentIndex < nodes.length - 1) {
+              const nextNode = nodes[currentIndex + 1];
+              setActiveNode(nextNode.id);
+              onSelectNode(nextNode);
+            } else if ((e.key === 'ArrowLeft' || e.key === 'ArrowUp') && currentIndex > 0) {
+              const prevNode = nodes[currentIndex - 1];
+              setActiveNode(prevNode.id);
+              onSelectNode(prevNode);
+            }
+          }
         }
         return;
       }
