@@ -57,6 +57,7 @@ export const WeatherLayer: React.FC<{ type: WeatherType; count?: number; classNa
     const mount = mountRef.current;
     if (!mount || reduceMotion) return;
     let cancelled = false;
+    let ro: ResizeObserver | null = null;
 
     const boot = async () => {
       const PIXI = await loadPixi();
@@ -71,6 +72,14 @@ export const WeatherLayer: React.FC<{ type: WeatherType; count?: number; classNa
         antialias: true,
         resolution: dprCap(),
       });
+      if (cancelled) {
+        try {
+          app.destroy(true);
+        } catch {
+          /* noop */
+        }
+        return;
+      }
       const view = app.view as unknown as HTMLCanvasElement;
       view.style.position = 'absolute';
       view.style.inset = '0';
@@ -94,9 +103,11 @@ export const WeatherLayer: React.FC<{ type: WeatherType; count?: number; classNa
       });
 
       const tick = () => {
+        if (cancelled || !app?.renderer) return;
         const dt = Math.min(0.05, app.ticker.deltaMS / 1000);
         const time = performance.now() / 1000;
         for (const { p, sp } of sprites) {
+          if (!sp || sp.destroyed) continue;
           p.y -= p.speed * dt;
           if (p.y < -0.05) {
             p.y = 1.05;
@@ -111,19 +122,25 @@ export const WeatherLayer: React.FC<{ type: WeatherType; count?: number; classNa
       };
       app.ticker.add(tick);
 
-      const ro = new ResizeObserver(() => {
+      ro = new ResizeObserver(() => {
+        if (cancelled || !app.renderer) return;
         const r = mount.getBoundingClientRect();
         px.w = Math.max(1, Math.round(r.width));
         px.h = Math.max(1, Math.round(r.height));
-        app.renderer.resize(px.w, px.h);
+        if (app.renderer) {
+          app.renderer.resize(px.w, px.h);
+        }
       });
       ro.observe(mount);
-      (app as unknown as { __ro?: ResizeObserver }).__ro = ro;
     };
 
     void boot();
     return () => {
       cancelled = true;
+      if (ro) {
+        ro.disconnect();
+        ro = null;
+      }
       const app = appRef.current;
       appRef.current = null;
       if (app) {
@@ -132,11 +149,13 @@ export const WeatherLayer: React.FC<{ type: WeatherType; count?: number; classNa
         } catch {
           /* noop */
         }
-        const ro = (app as unknown as { __ro?: ResizeObserver }).__ro;
-        ro?.disconnect();
         const v = app.view as unknown as HTMLElement;
-        if (v.parentNode === mount) mount.removeChild(v);
-        app.destroy(true);
+        if (v && v.parentNode === mount) mount.removeChild(v);
+        try {
+          app.destroy(true);
+        } catch {
+          /* noop */
+        }
       }
     };
   }, [particles, type, reduceMotion, mountRef]);

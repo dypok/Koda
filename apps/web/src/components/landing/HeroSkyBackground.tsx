@@ -68,6 +68,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
     const stage = stageRef.current;
     if (!mount || !stage) return;
     let cancelled = false;
+    let ro: ResizeObserver | null = null;
 
     const boot = async () => {
       const PIXI = await loadPixi();
@@ -83,6 +84,14 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
         antialias: true,
         resolution: dprCap(),
       });
+      if (cancelled) {
+        try {
+          app.destroy(true);
+        } catch {
+          /* noop */
+        }
+        return;
+      }
       const view = app.view as unknown as HTMLCanvasElement;
       view.style.position = 'absolute';
       view.style.inset = '0';
@@ -130,6 +139,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
       core.on('pointerdown', discover);
 
       const draw = (now: number) => {
+        if (cancelled || !app?.renderer) return;
         const time = now / 1000;
         const ptr = pointerRef.current;
         const dist = ptr.inside ? Math.hypot(ptr.x - realStar.x, ptr.y - realStar.y) : 1;
@@ -145,6 +155,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
         const ripRad = rip.t * 0.65;
 
         for (const { s, sp } of sprites) {
+          if (!sp || sp.destroyed) continue;
           let opacity = s.baseOpacity;
           if (!reduced) opacity *= 0.5 + 0.5 * Math.sin(time * s.twinkleSpeed * Math.PI * 2 + s.twinklePhase);
           let ox = 0;
@@ -186,19 +197,25 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
         const ry = realStar.y * px.h;
         const pulse = reduced ? 1 : 1 + 0.12 * Math.sin((time * Math.PI * 2) / 2.2);
         const corePx = (realStar.size + 1.5) * (1 + nearAmt * 0.2) * pulse;
-        core.position.set(rx, ry);
-        core.scale.set((corePx / GLOW_TEXTURE_SIZE) * 2);
-        core.alpha = 0.75 + nearAmt * 0.25;
+        if (core && !core.destroyed) {
+          core.position.set(rx, ry);
+          core.scale.set((corePx / GLOW_TEXTURE_SIZE) * 2);
+          core.alpha = 0.75 + nearAmt * 0.25;
+        }
         const haloPulse = reduced ? 1 : 0.85 + 0.15 * Math.sin((time * Math.PI * 2) / 3);
-        halo.position.set(rx, ry);
-        halo.scale.set(((44 * (0.8 + nearAmt * 0.6) * haloPulse) / GLOW_TEXTURE_SIZE) * 2);
-        halo.alpha = 0.35 + nearAmt * 0.55;
+        if (halo && !halo.destroyed) {
+          halo.position.set(rx, ry);
+          halo.scale.set(((44 * (0.8 + nearAmt * 0.6) * haloPulse) / GLOW_TEXTURE_SIZE) * 2);
+          halo.alpha = 0.35 + nearAmt * 0.55;
+        }
 
-        rippleGfx.clear();
-        if (rip.active) {
-          const fade = 1 - rip.t / RIPPLE_DURATION;
-          rippleGfx.lineStyle(2, 0xfbbf24, 0.9 * fade);
-          rippleGfx.drawCircle(rip.x * px.w, rip.y * px.h, Math.max(1, ripRad * Math.max(px.w, px.h)));
+        if (rippleGfx && !rippleGfx.destroyed) {
+          rippleGfx.clear();
+          if (rip.active) {
+            const fade = 1 - rip.t / RIPPLE_DURATION;
+            rippleGfx.lineStyle(2, 0xfbbf24, 0.9 * fade);
+            rippleGfx.drawCircle(rip.x * px.w, rip.y * px.h, Math.max(1, ripRad * Math.max(px.w, px.h)));
+          }
         }
         if (reduced && !rip.active) app.ticker.stop();
       };
@@ -206,11 +223,14 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
       const tick = () => draw(performance.now());
       appRef.current = { app, tick };
 
-      const ro = new ResizeObserver(() => {
+      ro = new ResizeObserver(() => {
+        if (cancelled || !app.renderer) return;
         const r = mount.getBoundingClientRect();
         px.w = Math.max(1, Math.round(r.width));
         px.h = Math.max(1, Math.round(r.height));
-        app.renderer.resize(px.w, px.h);
+        if (app.renderer) {
+          app.renderer.resize(px.w, px.h);
+        }
         if (reduced) draw(performance.now());
       });
       ro.observe(mount);
@@ -225,6 +245,10 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
     void boot();
     return () => {
       cancelled = true;
+      if (ro) {
+        ro.disconnect();
+        ro = null;
+      }
       const entry = appRef.current;
       appRef.current = null;
       if (entry) {
@@ -235,8 +259,12 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
           /* noop */
         }
         const v = entry.app.view as unknown as HTMLElement;
-        if (v.parentNode === stage) stage.removeChild(v);
-        entry.app.destroy(true);
+        if (v && v.parentNode === stage) stage.removeChild(v);
+        try {
+          entry.app.destroy(true);
+        } catch {
+          /* noop */
+        }
       }
     };
   }, [stars, realStar, interactive, reduceMotion, mountRef]);

@@ -220,6 +220,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
     if (!mount) return;
     let cancelled = false;
     let unsubscribe: (() => void) | null = null;
+    let ro: ResizeObserver | null = null;
 
     const boot = async () => {
       const PIXI = await loadPixi();
@@ -234,6 +235,14 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
         antialias: true,
         resolution: dprCap(),
       });
+      if (cancelled) {
+        try {
+          app.destroy(true);
+        } catch {
+          /* noop */
+        }
+        return;
+      }
       const view = app.view as unknown as HTMLCanvasElement;
       view.style.position = 'absolute';
       view.style.inset = '0';
@@ -417,6 +426,14 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
       const buildNodes = (animateIn: boolean) => {
         const { dataset: ds, branchColor: bc, activeNodeId: activeId, onSelect: select, nodeStyle } = propsRef.current;
         gsap.killTweensOf(nodeLayer.children);
+        Object.values(animRef.current.irisNodes).forEach((iris) => {
+          if (iris) {
+            gsap.killTweensOf([iris.vernier, iris.iris, iris.shock, iris.glyph, iris.core]);
+            if (iris.iris) gsap.killTweensOf(iris.iris.scale);
+            if (iris.shock) gsap.killTweensOf(iris.shock.scale);
+            if (iris.glyph) gsap.killTweensOf(iris.glyph.scale);
+          }
+        });
         nodeLayer.removeChildren().forEach((c) => c.destroy({ children: true }));
         animRef.current = { rings: [], halos: [], sats: [], holders: {}, irisNodes: {} };
         const accentNum = hexToNumber(bc, 0x38bdf8);
@@ -783,6 +800,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
 
       let time = 0;
       const tick = () => {
+        if (cancelled || !app?.renderer) return;
         const s = stateRef.current;
         const dt = Math.min(0.05, app.ticker.deltaMS / 1000);
         time += dt;
@@ -819,7 +837,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
             }
             if (done) {
               const holder = animRef.current.holders[fx.nodeId];
-              if (holder) {
+              if (holder && !holder.destroyed) {
                 gsap.fromTo(
                   holder.scale,
                   { x: 1, y: 1 },
@@ -832,11 +850,17 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
         }
         s.travelX += (s.tTravelX - s.travelX) * 0.12;
         s.travelY += (s.tTravelY - s.travelY) * 0.12;
-        for (const r of animRef.current.rings) r.obj.rotation += r.speed;
-        for (const h of animRef.current.halos) h.obj.alpha = h.base * (0.85 + 0.15 * Math.sin(time * 2.2 + h.phase));
+        for (const r of animRef.current.rings) {
+          if (r?.obj && !r.obj.destroyed) r.obj.rotation += r.speed;
+        }
+        for (const h of animRef.current.halos) {
+          if (h?.obj && !h.obj.destroyed) h.obj.alpha = h.base * (0.85 + 0.15 * Math.sin(time * 2.2 + h.phase));
+        }
         for (const sat of animRef.current.sats) {
-          sat.angle += sat.speed;
-          sat.obj.position.set(Math.cos(sat.angle) * sat.radius, Math.sin(sat.angle) * sat.radius);
+          if (sat?.obj && !sat.obj.destroyed) {
+            sat.angle += sat.speed;
+            sat.obj.position.set(Math.cos(sat.angle) * sat.radius, Math.sin(sat.angle) * sat.radius);
+          }
         }
         const edge = edgeRef.current;
         if (edge.style === 'flow') {
@@ -949,16 +973,20 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
       unsubscribe = useRoadmapStore.subscribe(syncStore);
       syncStore();
 
-      const ro = new ResizeObserver(() => {
+      ro = new ResizeObserver(() => {
+        if (cancelled || !app.renderer) return;
         const r = mount.getBoundingClientRect();
         W = Math.max(1, Math.round(r.width));
         H = Math.max(1, Math.round(r.height));
-        app.renderer.resize(W, H);
-        applyWorld();
-        app.renderer.render(app.stage);
+        if (app.renderer) {
+          app.renderer.resize(W, H);
+          applyWorld();
+          if (app.stage) {
+            app.renderer.render(app.stage);
+          }
+        }
       });
       ro.observe(mount);
-      (app as unknown as { __ro?: ResizeObserver }).__ro = ro;
 
       refresh(true);
       if (!reduced) app.ticker.add(tick);
@@ -967,6 +995,10 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
     void boot();
     return () => {
       cancelled = true;
+      if (ro) {
+        ro.disconnect();
+        ro = null;
+      }
       unsubscribe?.();
       unsubscribe = null;
       const app = appRef.current;
@@ -974,6 +1006,14 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
       if (app) {
         try {
           Object.values(animRef.current.holders).forEach((h) => gsap.killTweensOf([h.scale, h]));
+          Object.values(animRef.current.irisNodes).forEach((iris) => {
+            if (iris) {
+              gsap.killTweensOf([iris.vernier, iris.iris, iris.shock, iris.glyph, iris.core]);
+              if (iris.iris) gsap.killTweensOf(iris.iris.scale);
+              if (iris.shock) gsap.killTweensOf(iris.shock.scale);
+              if (iris.glyph) gsap.killTweensOf(iris.glyph.scale);
+            }
+          });
         } catch {
           /* noop */
         }
@@ -982,11 +1022,13 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
         } catch {
           /* noop */
         }
-        const ro = (app as unknown as { __ro?: ResizeObserver }).__ro;
-        ro?.disconnect();
         const v = app.view as unknown as HTMLElement;
-        if (v.parentNode === mount) mount.removeChild(v);
-        app.destroy(true);
+        if (v && v.parentNode === mount) mount.removeChild(v);
+        try {
+          app.destroy(true);
+        } catch {
+          /* noop */
+        }
       }
     };
     // Montaje: estilos y rama. Los cambios de dataset entran por refresco sin entrada.
@@ -1017,7 +1059,16 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
 
     // Si tiene estructura Iris B, disparar la apertura mecánica sincronizada
     const irisSet = animRef.current.irisNodes[unlockingNodeId];
-    if (irisSet) {
+    if (
+      irisSet?.vernier &&
+      irisSet?.iris &&
+      irisSet?.shock &&
+      irisSet?.glyph &&
+      !irisSet.vernier.destroyed &&
+      !irisSet.iris.destroyed &&
+      !irisSet.shock.destroyed &&
+      !irisSet.glyph.destroyed
+    ) {
       const tl = gsap.timeline();
       tl.to(irisSet.vernier, { rotation: '+=6.28318', duration: 0.7, ease: 'power2.inOut' });
       tl.to(irisSet.iris, { rotation: '-=3.14159', duration: 0.45, ease: 'power3.in' }, '-=0.6');

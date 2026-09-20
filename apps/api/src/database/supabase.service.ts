@@ -10,8 +10,14 @@ export class SupabaseService {
 
   constructor(private readonly configService: ConfigService) {
     const supabaseUrl = this.configService.get<string>('SUPABASE_URL');
+    const rawServiceKey = this.configService.get<string>('SUPABASE_SERVICE_ROLE_KEY');
+    const isValidServiceKey =
+      rawServiceKey &&
+      !rawServiceKey.includes('your-service-role') &&
+      rawServiceKey.trim().length > 20;
+
     const supabaseKey =
-      this.configService.get<string>('SUPABASE_SERVICE_ROLE_KEY') ||
+      (isValidServiceKey ? rawServiceKey : undefined) ||
       this.configService.get<string>('SUPABASE_ANON_KEY');
 
     if (!supabaseUrl || !supabaseKey) {
