@@ -22,7 +22,7 @@ import { useAuthStore } from '@/stores/auth.store';
 export default function RegisterPage() {
   const router = useRouter();
   const { user, token, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
-  const isOAuthUser = Boolean(token && user && user.onboardingCompleted === false);
+  const isOAuthUser = Boolean(token && user && !user.onboardingCompleted);
   const totalSteps = isOAuthUser ? 4 : 5;
   const stepper = useRegisterStepperController(totalSteps);
   const profile = useRegisterProfileController();
@@ -202,6 +202,12 @@ export default function RegisterPage() {
           </motion.div>
         </AnimatePresence>
       </main>
+
+      {profile.submitError && (
+        <div className="mx-auto mb-4 max-w-md w-[90%] p-3.5 bg-rose-500/20 border border-rose-500/40 rounded-2xl text-center text-xs font-semibold text-rose-200 shadow-xl backdrop-blur-md">
+          {profile.submitError}
+        </div>
+      )}
 
       <RegisterBottomBar
         canContinue={canContinue}

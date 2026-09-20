@@ -17,7 +17,7 @@ export interface RegisterOnboardingData {
 
 export function useRegisterProfileController(onSuccess?: () => void) {
   const { user, token, refreshToken } = useAuthStore();
-  const isOAuthUser = Boolean(token && user && user.onboardingCompleted === false);
+  const isOAuthUser = Boolean(token && user && !user.onboardingCompleted);
 
   const [form, setForm] = useState<RegisterProfileForm>({
     fullName: user?.fullName || '',
@@ -107,42 +107,54 @@ export function useRegisterProfileController(onSuccess?: () => void) {
 
   /**
    * Envía los datos de registro:
-   * - Si es usuario de OAuth (autenticado sin onboarding): completa onboarding vía POST /api/v1/auth/onboarding.
-   * - Si es usuario nuevo tradicional: envía los datos al backend (POST /api/v1/auth/register-otp) e inicia OTP.
+   * - Si es usuario de OAuth (autenticado sin onboarding): completa onboarding vía POST /api/v1/auth/onboarding sin requerir contraseña.
+   * - Si es usuario nuevo tradicional: valida el formulario (Paso 5) y envía los datos a register-otp.
    */
   const submit = useCallback(
     async (onboarding?: RegisterOnboardingData) => {
-      setTouched({ fullName: true, email: true, password: !isOAuthUser });
-      if (!isFormValid || isSubmitting) return;
+      if (isSubmitting) return;
 
-      setIsSubmitting(true);
-      setSubmitError(null);
-      setSavedOnboarding(onboarding);
+      const store = useAuthStore.getState();
+      const currentToken = token || store.token;
+      const currentUser = user || store.user;
+      const isOAuth = Boolean(currentToken && currentUser && !currentUser.onboardingCompleted);
 
-      if (isOAuthUser && token) {
+      // 1. Si es usuario autenticado con OAuth (o sesión activa con onboarding pendiente)
+      if (isOAuth || (currentToken && currentUser && !currentUser.onboardingCompleted)) {
+        setIsSubmitting(true);
+        setSubmitError(null);
+
+        const payload = {
+          initialLanguageSlug: onboarding?.initialLanguageSlug || 'python',
+          experienceLevel: onboarding?.experienceLevel || 'beginner',
+          learningStyle: onboarding?.learningStyle || 'hands-on',
+          dailyGoalId: onboarding?.dailyGoalId || 'regular',
+          dailyGoalMinutes: Number(onboarding?.dailyGoalMinutes) || 10,
+          displayName: form.fullName.trim() || currentUser?.fullName || currentUser?.email?.split('@')[0] || 'Estudiante Koda',
+        };
+
         try {
-          const updatedSession = await AuthService.completeOnboarding(
-            {
-              initialLanguageSlug: onboarding?.initialLanguageSlug || 'python',
-              experienceLevel: onboarding?.experienceLevel || 'beginner',
-              learningStyle: onboarding?.learningStyle || 'hands-on',
-              dailyGoalId: onboarding?.dailyGoalId || 'regular',
-              dailyGoalMinutes: Number(onboarding?.dailyGoalMinutes) || 10,
-              displayName: form.fullName.trim() || user?.fullName || undefined,
-            },
-            token
-          );
-
-          useAuthStore.getState().setUserSession(updatedSession, token, refreshToken || undefined);
+          const activeToken = currentToken!;
+          const updatedSession = await AuthService.completeOnboarding(payload, activeToken);
+          useAuthStore.getState().setUserSession(updatedSession, activeToken, refreshToken || store.refreshToken || undefined);
           setIsSuccess(true);
           onSuccess?.();
         } catch (err: any) {
+          console.error('[onboarding] Error al completar onboarding OAuth:', err);
           setSubmitError(err.message || 'No fue posible completar el perfil.');
         } finally {
           setIsSubmitting(false);
         }
         return;
       }
+
+      // 2. Flujo tradicional: requiere formulario completo (Paso 5)
+      setTouched({ fullName: true, email: true, password: true });
+      if (!isFormValid) return;
+
+      setIsSubmitting(true);
+      setSubmitError(null);
+      setSavedOnboarding(onboarding);
 
       const payload: RegisterOtpPayload = {
         fullName: form.fullName.trim(),
