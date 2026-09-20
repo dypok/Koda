@@ -55,7 +55,84 @@ const API_BASE_URL = RAW_BASE_URL.replace(/\/$/, '').endsWith('/api/v1')
   ? RAW_BASE_URL.replace(/\/$/, '')
   : `${RAW_BASE_URL.replace(/\/$/, '')}/api/v1`;
 
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://sertfbduqivvjrmeblvh.supabase.co';
+const SUPABASE_ANON_KEY =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlcnRmYmR1cWl2dmpybWVibHZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkzNDY3MjcsImV4cCI6MjEwNDkyMjcyN30.jC5gwZVgxqsA_VFbS6OAHOFKsmVdcpNhuH175KZ3Q3E';
+
 export class AuthService {
+  /**
+   * Inicia sesión con correo y contraseña contra Supabase Auth y sincroniza la sesión con el backend.
+   */
+  public static async loginWithPassword(email: string, password: string): Promise<VerifyOtpResult> {
+    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        apikey: SUPABASE_ANON_KEY,
+      },
+      body: JSON.stringify({
+        email: email.trim(),
+        password,
+      }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+
+    if (!res.ok) {
+      const desc = data?.error_description || data?.msg || data?.message || '';
+      if (desc.includes('Invalid login credentials')) {
+        throw new Error('Correo electrónico o contraseña incorrectos.');
+      }
+      if (desc.includes('Email not confirmed')) {
+        throw new Error('Debes confirmar tu correo electrónico con el código OTP antes de ingresar.');
+      }
+      throw new Error(desc || `Error al iniciar sesión (${res.status})`);
+    }
+
+    const accessToken = data.access_token;
+    const refreshToken = data.refresh_token;
+
+    // Sincronizar y aprovisionar perfil en el backend NestJS
+    const session = await this.verifySession(accessToken);
+
+    return {
+      session,
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  /**
+   * Obtiene la URL de redirección para autenticación OAuth (Google / GitHub) en Supabase Auth.
+   */
+  public static getOAuthRedirectUrl(provider: 'google' | 'github'): string {
+    const redirectOrigin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
+    return `${SUPABASE_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${encodeURIComponent(
+      `${redirectOrigin}/login`
+    )}`;
+  }
+
+  /**
+   * Solicita el restablecimiento de contraseña llamando a NestJS (POST /api/v1/auth/forgot-password).
+   */
+  public static async requestPasswordReset(email: string): Promise<{ message: string }> {
+    const res = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: email.trim() }),
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const msg = Array.isArray(data?.message) ? data.message[0] : data?.message;
+      throw new Error(msg || 'No fue posible procesar la solicitud.');
+    }
+
+    return data;
+  }
   /**
    * Registra al estudiante en el backend con envío de código OTP vía correo (Supabase Auth).
    */

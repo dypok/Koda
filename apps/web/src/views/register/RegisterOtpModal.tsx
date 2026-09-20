@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import {
-  ShieldCheck,
   ArrowClockwise,
   EnvelopeSimple,
   WarningCircle,
@@ -206,11 +205,7 @@ export const RegisterOtpModal: React.FC<RegisterOtpModalProps> = ({
             </div>
 
             {/* Cabecera */}
-            <div className="space-y-1.5">
-              <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/30">
-                <ShieldCheck aria-hidden="true" className="w-3.5 h-3.5" />
-                Verificación Segura Supabase
-              </span>
+            <div className="space-y-1.5 pt-1">
               <h2 id="otp-modal-title" className="text-xl sm:text-2xl font-black text-white tracking-tight">
                 Ingresa tu código OTP
               </h2>
