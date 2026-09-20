@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Envelope, Lock, Eye, EyeSlash, CircleNotch, ArrowRight, CheckCircle } from '@phosphor-icons/react';
-import { GradientButton } from '@/components/ui/gradient-button';
+import { WipeButton } from '@/components/ui/wipe-button';
 import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
 import { useAuthStore } from '@/stores/auth.store';
 import { AuthService } from '@/services/auth/auth.service';
@@ -199,19 +199,10 @@ export const LoginForm: React.FC = () => {
           </button>
         </div>
 
-        <GradientButton type="submit" disabled={isSubmitting} className="w-full py-3.5 text-base gap-2 mt-2 font-bold">
-          {isSubmitting ? (
-            <>
-              <CircleNotch className="w-4 h-4 animate-spin stroke-[2.5]" />
-              <span>Iniciando sesión…</span>
-            </>
-          ) : (
-            <>
-              <span>Iniciar Sesión</span>
-              <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-            </>
-          )}
-        </GradientButton>
+        <WipeButton type="submit" disabled={isSubmitting} className="w-full py-3.5 text-base gap-2 mt-2 font-bold">
+          <span>Iniciar Sesión</span>
+          <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+        </WipeButton>
       </form>
 
       <div className="text-center text-xs sm:text-sm text-slate-400 pt-1">

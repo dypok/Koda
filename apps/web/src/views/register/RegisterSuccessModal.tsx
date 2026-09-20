@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Sparkle, ArrowRight, Flame } from '@phosphor-icons/react';
-import { GradientButton } from '@/components/ui/gradient-button';
+import { WipeButton } from '@/components/ui/wipe-button';
 import { TransitionLink } from '@/components/ui/transition-link';
 import { CodeConfetti } from '@/views/landing/preview/CodeConfetti';
 
@@ -110,12 +110,16 @@ export const RegisterSuccessModal: React.FC<RegisterSuccessModalProps> = ({
               <span className="text-emerald-400">XP Inicial: +50 XP</span>
             </div>
 
-            <GradientButton asChild className="w-full py-3 text-sm gap-2">
-              <TransitionLink ref={ctaRef} href="/app/ruta" onClick={() => setHandoff(true)}>
-                <span>Comenzar a Programar</span>
-                <ArrowRight aria-hidden="true" className="w-4 h-4" />
-              </TransitionLink>
-            </GradientButton>
+            <WipeButton
+              ref={ctaRef}
+              href="/app/ruta"
+              LinkComponent={TransitionLink}
+              onClick={() => setHandoff(true)}
+              className="w-full py-3 text-sm gap-2"
+            >
+              <span>Comenzar a Programar</span>
+              <ArrowRight aria-hidden="true" className="w-4 h-4" />
+            </WipeButton>
           </motion.div>
 
           {/* Handoff: Koda vuela hacia la ruta durante la transición */}

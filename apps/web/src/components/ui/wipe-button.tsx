@@ -11,6 +11,7 @@ interface WipeButtonProps {
   href?: string;
   onClick?: () => void;
   disabled?: boolean;
+  type?: 'button' | 'submit' | 'reset';
   tone?: WipeTone;
   size?: WipeSize;
   className?: string;
@@ -34,17 +35,22 @@ const SIZES: Record<WipeSize, string> = {
  * CTA con wipe diagonal de 3 bandas. Retroceso simétrico: misma duración
  * en ambas direcciones y delays espejados para que salir sea el espejo de entrar.
  */
-export const WipeButton: React.FC<WipeButtonProps> = ({
-  href,
-  onClick,
-  disabled = false,
-  tone = 'amber',
-  size = 'md',
-  className,
-  ariaLabel,
-  LinkComponent = Link,
-  children,
-}) => {
+export const WipeButton = React.forwardRef<any, WipeButtonProps>(
+  (
+    {
+      href,
+      onClick,
+      disabled = false,
+      type = 'button',
+      tone = 'amber',
+      size = 'md',
+      className,
+      ariaLabel,
+      LinkComponent = Link,
+      children,
+    },
+    ref
+  ) => {
   const [b1, b2, b3] = BANDS[tone];
   const hoverTextColor = tone === 'amber' ? 'group-hover:text-white' : 'group-hover:text-amber-300';
   const base =
@@ -108,17 +114,19 @@ export const WipeButton: React.FC<WipeButtonProps> = ({
   if (href && !disabled) {
     const Comp = LinkComponent;
     return (
-      <Comp href={href} aria-label={ariaLabel} onClick={onClick} className={cls}>
+      <Comp ref={ref} href={href} aria-label={ariaLabel} onClick={onClick} className={cls}>
         {content}
       </Comp>
     );
   }
 
   return (
-    <button type="button" onClick={onClick} disabled={disabled} aria-label={ariaLabel} className={cls}>
+    <button ref={ref} type={type} onClick={onClick} disabled={disabled} aria-label={ariaLabel} className={cls}>
       {content}
     </button>
   );
-};
+});
+
+WipeButton.displayName = 'WipeButton';
 
 export default WipeButton;
