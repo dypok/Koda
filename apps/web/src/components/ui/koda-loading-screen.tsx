@@ -3,7 +3,6 @@
 import React from 'react';
 import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
-import { Sparkle } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 
 interface KodaLoadingScreenProps {
@@ -65,17 +64,6 @@ export const KodaLoadingScreen: React.FC<KodaLoadingScreenProps> = ({
           />
         </motion.div>
       </div>
-
-      {/* Terminal pill gamificada */}
-      <motion.div
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
-        className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-xs shadow-[0_0_15px_rgba(245,158,11,0.15)]"
-      >
-        <Sparkle aria-hidden="true" className="w-3.5 h-3.5 animate-spin text-amber-400" />
-        <span>{terminalHint}</span>
-      </motion.div>
 
       {/* Textos informativos */}
       <div className="space-y-2">
