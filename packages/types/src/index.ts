@@ -132,7 +132,7 @@ export interface RoadmapResponse {
 // Modelos de Grafo DAG Multi-Rama (ADR-007, ADR-011)
 // ------------------------------------------
 
-export type CareerBranchType = 'frontend' | 'backend' | 'devops' | 'python';
+export type CareerBranchType = 'frontend' | 'backend' | 'devops' | 'python' | 'data-analytics';
 
 export interface CareerBranch {
   id: CareerBranchType;
@@ -324,6 +324,19 @@ export interface LessonTriadEvaluation {
   item_3_prediction: PredictionChallenge;
 }
 
+export interface LessonEvaluationFivePhases {
+  phase_1_theory: {
+    step1: string;
+    step2: string;
+    step3: string;
+    code_snippet?: string;
+  };
+  phase_2_code_execution: ConsoleChallenge;
+  phase_3_multiple_choice: FourOptionsQuestion;
+  phase_4_theory: FourOptionsQuestion;
+  phase_5_prediction: PredictionChallenge;
+}
+
 export interface LessonDetail {
   id: string;
   section_id: string;
@@ -335,6 +348,7 @@ export interface LessonDetail {
   tip_markdown?: string;
   question?: LessonQuestion; // Legacy / compatibilidad
   evaluation_triad?: LessonTriadEvaluation; // Modelo Oficial Tríada (ADR-011)
+  evaluation_five_phases?: LessonEvaluationFivePhases; // Modelo de 5 Fases de Evaluación
 }
 
 export interface LessonAnswerSubmission {

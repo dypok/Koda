@@ -6,8 +6,8 @@
     "position": 1,
     "theory": {
       "step1": "Python es un lenguaje de programación diseñado para ser claro, legible y directo.",
-      "step2": "A diferencia de otros lenguajes, no necesitas caracteres extraños para empezar.",
-      "step3": "Cada instrucción que escribes le indica a la computadora qué acción exacta realizar.",
+      "step2": "A diferencia de otros lenguajes, no necesitas caracteres extraños ni configuraciones complejas para empezar.",
+      "step3": "Cada instrucción que escribes le indica a la computadora qué acción exacta realizar paso a paso.",
       "code_snippet": "print(\"¡Hola, Koda!\")"
     },
     "item_1_console": {
@@ -51,6 +51,42 @@
         }
       ]
     },
+    "item_3_theory": {
+      "prompt": "¿Qué tipo de lenguaje es Python según su modelo de traducción y ejecución?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lenguaje interpretado de alto nivel que utiliza bytecode ejecutado por la máquina virtual CPython",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python compila a bytecode (.pyc) y lo interpreta la máquina virtual en tiempo de ejecución."
+        },
+        {
+          "id": "b",
+          "text": "Lenguaje de bajo nivel compilado directamente a código de máquina binario sin intérprete",
+          "is_correct": false,
+          "feedback": "Ese modelo corresponde a lenguajes como C, C++ o Rust."
+        },
+        {
+          "id": "c",
+          "text": "Lenguaje exclusivo de marcado sin lógica de ejecución",
+          "is_correct": false,
+          "feedback": "HTML es de marcado; Python es un lenguaje de programación de propósito general completo."
+        },
+        {
+          "id": "d",
+          "text": "Lenguaje declarativo que solo funciona mediante consultas SQL",
+          "is_correct": false,
+          "feedback": "Python es multiparadigma (imperativo, orientado a objetos y funcional)."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué resultado mostrará en la terminal el comando print(\"Koda\")?",
+      "code_snippet": "print(\"Koda\")",
+      "target_type": "predict_output",
+      "expected_answer": "Koda",
+      "hint": "La función print() muestra el texto sin las comillas que lo rodean."
+    },
     "item_3_prediction": {
       "prompt": "¿Qué resultado mostrará en la terminal el comando print(\"Koda\")?",
       "code_snippet": "print(\"Koda\")",
@@ -58,7 +94,7 @@
       "expected_answer": "Koda",
       "hint": "La función print() muestra el texto sin las comillas que lo rodean."
     },
-    "xp_reward": 15,
+    "xp_reward": 20,
     "is_active": true
   },
   {
@@ -113,262 +149,442 @@
         }
       ]
     },
+    "item_3_theory": {
+      "prompt": "¿Cómo se denomina formalmente al principio de ejecutar instrucciones una tras otra?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Flujo secuencial de control",
+          "is_correct": true,
+          "feedback": "¡Exacto! El flujo secuencial es el pilar fundamental del paradigma estructurado e imperativo."
+        },
+        {
+          "id": "b",
+          "text": "Concurrencia asíncrona no bloqueante",
+          "is_correct": false,
+          "feedback": "La concurrencia asíncrona es un mecanismo avanzado de I/O, no la ejecución estándar línea por línea."
+        },
+        {
+          "id": "c",
+          "text": "Recursión de cola infinita",
+          "is_correct": false,
+          "feedback": "La recursión implica funciones que se invocan a sí mismas."
+        },
+        {
+          "id": "d",
+          "text": "Compilación cruzada estática",
+          "is_correct": false,
+          "feedback": "Eso se refiere a generar binarios para otra arquitectura de hardware."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "Observa este código. ¿Cuál será la segunda palabra que aparecerá en pantalla?",
+      "code_snippet": "print(\"Uno\")\nprint(\"Dos\")",
+      "target_type": "predict_output",
+      "expected_answer": "Dos",
+      "hint": "Cada print() imprime en una nueva línea; la segunda línea es la que ejecuta print('Dos')."
+    },
     "item_3_prediction": {
       "prompt": "Observa este código. ¿Cuál será la segunda palabra que aparecerá en pantalla?",
       "code_snippet": "print(\"Uno\")\nprint(\"Dos\")",
       "target_type": "predict_output",
       "expected_answer": "Dos",
-      "hint": "La segunda línea se ejecuta inmediatamente después de la primera."
+      "hint": "Cada print() imprime en una nueva línea; la segunda línea es la que ejecuta print('Dos')."
     },
-    "xp_reward": 15,
+    "xp_reward": 20,
     "is_active": true
   },
   {
     "slug": "py-m01-s02-l01",
     "section_slug": "py-m01-s02",
-    "title": "Cadenas de texto y comillas",
+    "title": "Texto entre comillas y comillas dentro de comillas",
     "position": 1,
     "theory": {
-      "step1": "Los textos en programación se conocen formalmente como cadenas (strings).",
-      "step2": "Para que Python sepa que es texto, debes envolverlo en comillas dobles \"...\" o simples '...'.",
-      "step3": "Si olvidas las comillas, Python pensará que el texto es el nombre de una variable o función.",
-      "code_snippet": "print(\"Aprendiendo Python\")"
+      "step1": "En Python, cualquier secuencia de caracteres rodeada de comillas simples o dobles es una cadena de texto (str).",
+      "step2": "Si necesitas incluir comillas dobles dentro del texto, puedes rodear la cadena con comillas simples.",
+      "step3": "También puedes usar el carácter de escape barra invertida (\\) para incluir comillas sin cerrar la cadena.",
+      "code_snippet": "print('Ella dijo: \"Python es genial\"')"
     },
     "item_1_console": {
-      "prompt": "Imprime en pantalla la frase: Koda es genial",
-      "initial_code": "# Usa print() con comillas\n",
-      "solution_code": "print(\"Koda es genial\")",
+      "prompt": "Imprime exactamente la frase: Koda dice: '¡Aprende!' usando comillas dobles para el texto exterior.",
+      "initial_code": "# Escribe tu print aquí\n",
+      "solution_code": "print(\"Koda dice: '¡Aprende!'\")",
       "test_cases": [
         {
           "input": "",
-          "expected_output": "Koda es genial\n",
-          "description": "Debe imprimir Koda es genial"
+          "expected_output": "Koda dice: '¡Aprende!'\n",
+          "description": "Debe imprimir la frase con comillas simples en el interior"
         }
       ]
     },
     "item_2_quiz": {
-      "prompt": "¿Cuál de las siguientes líneas define correctamente un texto para imprimir en Python?",
+      "prompt": "¿Qué sucede si abres una cadena con comillas dobles y la cierras con comilla simple como en \"Hola'?",
       "options": [
         {
           "id": "a",
-          "text": "print(\"Hola\")",
+          "text": "Se produce un SyntaxError (EOL while scanning string literal)",
           "is_correct": true,
-          "feedback": "¡Excelente! Las comillas dobles delimitan el texto correctamente."
+          "feedback": "¡Correcto! Python exige que el delimitador de apertura coincida exactamente con el de cierre."
         },
         {
           "id": "b",
-          "text": "print(Hola)",
+          "text": "Python la convierte a número automáticamente",
           "is_correct": false,
-          "feedback": "Sin comillas, Python generará un NameError buscando una variable llamada Hola."
+          "feedback": "No hay conversión de tipo en un error de sintaxis."
         },
         {
           "id": "c",
-          "text": "print<<Hola>>",
+          "text": "Se imprime con un signo de interrogación al final",
           "is_correct": false,
-          "feedback": "Esa no es la sintaxis de Python para llamar a funciones."
+          "feedback": "Python no tolera cadenas mal cerradas en tiempo de parseo."
         },
         {
           "id": "d",
-          "text": "print[Hola]",
+          "text": "El programa continúa ignorando esa línea",
           "is_correct": false,
-          "feedback": "Los corchetes se utilizan para indexar listas, no para invocar print."
+          "feedback": "Un SyntaxError detiene la ejecución inmediatamente."
         }
       ]
     },
-    "item_3_prediction": {
-      "prompt": "¿Qué error provocará ejecutar print(Python)? (Tip: falta un elemento de sintaxis)",
-      "code_snippet": "print(Python)",
-      "target_type": "bug_hunt",
-      "expected_answer": "NameError",
-      "hint": "Al no tener comillas, Python busca un identificador con ese nombre y falla al no encontrarlo."
-    },
-    "xp_reward": 15,
-    "is_active": true
-  },
-  {
-    "slug": "py-m01-s02-l02",
-    "section_slug": "py-m01-s02",
-    "title": "Comillas dobles vs comillas simples",
-    "position": 2,
-    "theory": {
-      "step1": "En Python, las comillas dobles (\"\") y simples ('') son totalmente equivalentes.",
-      "step2": "Puedes usar la que prefieras, siempre que abras y cierres con el mismo tipo de comilla.",
-      "step3": "Si tu texto contiene una comilla simple interna, puedes envolverlo en comillas dobles para evitar conflictos.",
-      "code_snippet": "print('Texto con comilla simple')\nprint(\"It's Koda\")"
-    },
-    "item_1_console": {
-      "prompt": "Imprime la frase: 'Python es divertido' utilizando comillas dobles alrededor.",
-      "initial_code": "# Escribe tu instrucción print\n",
-      "solution_code": "print(\"'Python es divertido'\")",
-      "test_cases": [
-        {
-          "input": "",
-          "expected_output": "'Python es divertido'\n",
-          "description": "Debe imprimir el texto con las comillas simples internas"
-        }
-      ]
-    },
-    "item_2_quiz": {
-      "prompt": "¿Qué sucede si abres una cadena con comilla doble y la cierras con comilla simple?",
+    "item_3_theory": {
+      "prompt": "¿Cuál es la función del carácter de escape barra invertida (\\) dentro de una cadena de texto?",
       "options": [
         {
           "id": "a",
-          "text": "Se genera un SyntaxError porque las comillas no coinciden",
+          "text": "Indicar que el carácter siguiente tiene un significado especial o debe ser tratado como texto literal",
           "is_correct": true,
-          "feedback": "¡Exacto! Python exige que el carácter de apertura coincida con el de cierre."
+          "feedback": "¡Exacto! Permite representar saltos de línea (\\n), tabuladores (\\t) o comillas literales (\\\")."
         },
         {
           "id": "b",
-          "text": "Python lo corrige automáticamente sin avisar",
+          "text": "Dividir dos números enteros en la misma línea",
           "is_correct": false,
-          "feedback": "Los lenguajes de programación son estrictos con la sintaxis de cierre."
+          "feedback": "La división usa barra diagonal (/), no barra invertida (\\)."
         },
         {
           "id": "c",
-          "text": "El programa imprime la mitad del texto",
+          "text": "Borrar el último carácter de la memoria",
           "is_correct": false,
-          "feedback": "El intérprete aborta antes de ejecutar debido a un error de sintaxis."
+          "feedback": "No es una operación de eliminación en memoria."
         },
         {
           "id": "d",
-          "text": "Se crea un número entero",
+          "text": "Cerrar automáticamente el programa",
           "is_correct": false,
-          "feedback": "Un texto mal cerrado jamás se convierte en un número."
+          "feedback": "El escape solo afecta la interpretación de la cadena literal."
         }
       ]
     },
-    "item_3_prediction": {
-      "prompt": "¿Cuál será la salida de print('Hola' + ' ' + 'Mundo')?",
-      "code_snippet": "print('Hola' + ' ' + 'Mundo')",
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá en consola este código?",
+      "code_snippet": "print(\"Python\\nes genial\")",
       "target_type": "predict_output",
-      "expected_answer": "Hola Mundo",
-      "hint": "El signo + entre cadenas une los textos sin agregar espacios extras por su cuenta."
+      "expected_answer": "Python\nes genial",
+      "hint": "El carácter \\n produce un salto de línea en la salida."
     },
-    "xp_reward": 15,
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá en consola este código?",
+      "code_snippet": "print(\"Python\\nes genial\")",
+      "target_type": "predict_output",
+      "expected_answer": "Python\nes genial",
+      "hint": "El carácter \\n produce un salto de línea en la salida."
+    },
+    "xp_reward": 20,
     "is_active": true
   },
   {
-    "slug": "py-m01-s03-l01",
-    "section_slug": "py-m01-s03",
-    "title": "Imprimiendo números en Python",
+    "slug": "py-m02-s01-l01",
+    "section_slug": "py-m02-s01",
+    "title": "Creando y asignando variables en Python",
     "position": 1,
     "theory": {
-      "step1": "Los números en Python no llevan comillas.",
-      "step2": "Si escribes un número entre comillas, Python lo tratará como texto y no como valor numérico.",
-      "step3": "Puedes pasar números directamente a print() para mostrarlos en pantalla.",
-      "code_snippet": "print(42)"
+      "step1": "Una variable es un nombre que hace referencia a un espacio en memoria donde guardamos un valor.",
+      "step2": "En Python la asignación se realiza con el operador igual (=): nombre = valor.",
+      "step3": "Python infiere dinámicamente el tipo de dato, por lo que no requieres declarar tipos explícitos.",
+      "code_snippet": "nombre = \"Koda\"\nnivel = 1\nprint(nombre)\nprint(nivel)"
     },
     "item_1_console": {
-      "prompt": "Imprime el número 2026 sin usar comillas.",
-      "initial_code": "# Imprime el número directamente\n",
-      "solution_code": "print(2026)",
+      "prompt": "Crea una variable llamada lenguaje con el valor \"Python\" y luego imprímela con print(lenguaje).",
+      "initial_code": "# Declara e imprime tu variable\n",
+      "solution_code": "lenguaje = \"Python\"\nprint(lenguaje)",
       "test_cases": [
         {
           "input": "",
-          "expected_output": "2026\n",
-          "description": "Debe imprimir el número 2026"
+          "expected_output": "Python\n",
+          "description": "Debe imprimir el valor de la variable lenguaje"
         }
       ]
     },
     "item_2_quiz": {
-      "prompt": "¿Cuál es la diferencia entre 100 y \"100\" en Python?",
+      "prompt": "¿Qué significa el operador '=' en una instrucción como 'puntos = 100'?",
       "options": [
         {
           "id": "a",
-          "text": "100 es un número entero para operaciones y \"100\" es una cadena de texto",
+          "text": "Asignar el valor 100 a la variable llamada puntos en memoria",
           "is_correct": true,
-          "feedback": "¡Perfecto! Los números permiten hacer cálculos matemáticos; los textos solo representan caracteres."
+          "feedback": "¡Correcto! El '=' es el operador de asignación en Python."
         },
         {
           "id": "b",
-          "text": "No hay ninguna diferencia, Python los trata exactamente igual",
+          "text": "Comparar si puntos es matemáticamente idéntico a 100",
           "is_correct": false,
-          "feedback": "Tienen tipos de datos completamente distintos (int vs str)."
+          "feedback": "La comparación de igualdad utiliza el operador doble igual (==)."
         },
         {
           "id": "c",
-          "text": "100 es texto y \"100\" es un número",
+          "text": "Borrar el valor anterior sin guardar nada nuevo",
           "is_correct": false,
-          "feedback": "Las comillas indican texto, no valores numéricos."
+          "feedback": "El operador asigna y enlaza el nuevo valor."
         },
         {
           "id": "d",
-          "text": "\"100\" causa un error de compilación",
+          "text": "Crear una constante inmutable que nunca podrá cambiar",
           "is_correct": false,
-          "feedback": "Es perfectamente válido escribir \"100\", es un string de tres caracteres."
+          "feedback": "En Python las variables son mutables por defecto."
         }
       ]
     },
-    "item_3_prediction": {
-      "prompt": "¿Qué valor imprimirá en consola print(10 + 5)?",
-      "code_snippet": "print(10 + 5)",
-      "target_type": "predict_output",
-      "expected_answer": "15",
-      "hint": "Python realiza la suma aritmética antes de pasar el resultado a print()."
+    "item_3_theory": {
+      "prompt": "¿Cuál es la característica del tipado de variables en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Tipado dinámico y fuerte: el tipo se asocia al objeto en tiempo de ejecución y no se realizan conversiones implícitas incompatibles",
+          "is_correct": true,
+          "feedback": "¡Exacto! Es dinámico porque no se declaran tipos, y fuerte porque '10' + 5 produce TypeError."
+        },
+        {
+          "id": "b",
+          "text": "Tipado estático y débil: los tipos se declaran antes de compilar y se coercionan libremente",
+          "is_correct": false,
+          "feedback": "C y C++ son estáticos; JavaScript es de tipado débil; Python es fuerte y dinámico."
+        },
+        {
+          "id": "c",
+          "text": "Sin tipos de datos: todo valor en memoria es tratado únicamente como texto plano",
+          "is_correct": false,
+          "feedback": "Python posee tipos rigurosos (int, float, bool, list, dict, etc.)."
+        },
+        {
+          "id": "d",
+          "text": "Tipado ensamblador: las variables representan registros directos de CPU",
+          "is_correct": false,
+          "feedback": "Python es de muy alto nivel, abstraído del hardware directo."
+        }
+      ]
     },
-    "xp_reward": 15,
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá en consola este código?",
+      "code_snippet": "x = 5\nx = x + 3\nprint(x)",
+      "target_type": "predict_output",
+      "expected_answer": "8",
+      "hint": "Se evalúa primero la expresión derecha (5 + 3) y el resultado 8 se reasigna a x."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá en consola este código?",
+      "code_snippet": "x = 5\nx = x + 3\nprint(x)",
+      "target_type": "predict_output",
+      "expected_answer": "8",
+      "hint": "Se evalúa primero la expresión derecha (5 + 3) y el resultado 8 se reasigna a x."
+    },
+    "xp_reward": 20,
     "is_active": true
   },
   {
-    "slug": "py-m01-s03-l02",
-    "section_slug": "py-m01-s03",
-    "title": "Operaciones aritméticas fundamentales",
-    "position": 2,
+    "slug": "poo-clases-l01",
+    "section_slug": "poo-clases",
+    "title": "¿Qué es POO?",
+    "position": 1,
     "theory": {
-      "step1": "Python funciona como una calculadora de alta precisión.",
-      "step2": "Los operadores básicos son: suma (+), resta (-), multiplicación (*) y división (/).",
-      "step3": "Python respeta las reglas matemáticas de precedencia (multiplicación antes de suma).",
-      "code_snippet": "print(5 * 4)\nprint(20 / 4)"
+      "step1": "La Programación Orientada a Objetos (POO) organiza el código en torno a objetos que combinan datos y lógica.",
+      "step2": "Una clase actúa como un plano o molde arquitectónico; un objeto es la entidad concreta instanciada a partir de ese plano.",
+      "step3": "Cada objeto contiene sus propios atributos (características o estado) y métodos (funciones que definen su comportamiento).",
+      "code_snippet": "class KodaPet:\n    especie = \"Zorro\"\n\nmi_koda = KodaPet()\nprint(mi_koda.especie)"
     },
     "item_1_console": {
-      "prompt": "Calcula e imprime el resultado de multiplicar 7 por 8.",
-      "initial_code": "# Escribe print con la multiplicación\n",
-      "solution_code": "print(7 * 8)",
+      "prompt": "Define una clase llamada Robot con el atributo modelo = \"K-9000\", crea una instancia llamada mi_robot e imprime mi_robot.modelo.",
+      "initial_code": "# Define la clase y su instancia aquí\n",
+      "solution_code": "class Robot:\n    modelo = \"K-9000\"\n\nmi_robot = Robot()\nprint(mi_robot.modelo)",
       "test_cases": [
         {
           "input": "",
-          "expected_output": "56\n",
-          "description": "Debe imprimir 56"
+          "expected_output": "K-9000\n",
+          "description": "Debe imprimir el modelo K-9000 a través del atributo de la instancia"
         }
       ]
     },
     "item_2_quiz": {
-      "prompt": "¿Qué símbolo se usa para multiplicar dos números en Python?",
+      "prompt": "¿Cuál es la mejor analogía para comprender la relación entre una clase y un objeto?",
       "options": [
         {
           "id": "a",
-          "text": "El asterisco (*)",
+          "text": "La clase es el plano arquitectónico de una casa y el objeto es la casa física construida",
           "is_correct": true,
-          "feedback": "¡Exacto! El asterisco * es el operador de multiplicación universal en programación."
+          "feedback": "¡Exacto! El plano describe las características; la casa es la entidad real que ocupa espacio."
         },
         {
           "id": "b",
-          "text": "La letra x",
+          "text": "La clase es una variable booleana y el objeto es una lista de números",
           "is_correct": false,
-          "feedback": "La letra x es interpretada como el nombre de una variable, no como multiplicación."
+          "feedback": "Una clase es un nuevo tipo de dato complejo definido por el programador."
         },
         {
           "id": "c",
-          "text": "El punto (.)",
+          "text": "La clase y el objeto son términos sinónimos exactamente intercambiables",
           "is_correct": false,
-          "feedback": "El punto se utiliza para números decimales o acceder a propiedades."
+          "feedback": "No son sinónimos: la clase es el molde y el objeto es la instancia creada."
         },
         {
           "id": "d",
-          "text": "El signo de porcentaje (%)",
+          "text": "El objeto define las funciones y la clase almacena el código fuente en disco",
           "is_correct": false,
-          "feedback": "El signo % se utiliza para obtener el residuo de una división (módulo)."
+          "feedback": "La clase define los métodos; las instancias los ejecutan con su propio estado."
         }
       ]
     },
-    "item_3_prediction": {
-      "prompt": "¿Cuál es el resultado de print(2 + 3 * 4)?",
-      "code_snippet": "print(2 + 3 * 4)",
-      "target_type": "predict_output",
-      "expected_answer": "14",
-      "hint": "La multiplicación (3 * 4 = 12) se resuelve antes que la suma (+ 2)."
+    "item_3_theory": {
+      "prompt": "¿Qué principio fundamental de diseño de software se logra al encapsular atributos y métodos dentro de una clase?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Modularidad y ocultamiento de información, aislando el estado interno y reduciendo el acoplamiento",
+          "is_correct": true,
+          "feedback": "¡Correcto! El encapsulamiento protege el estado interno del objeto y expone una interfaz limpia."
+        },
+        {
+          "id": "b",
+          "text": "Eliminación completa del uso de memoria RAM en el servidor",
+          "is_correct": false,
+          "feedback": "Los objetos se asignan dinámicamente en el heap de memoria."
+        },
+        {
+          "id": "c",
+          "text": "Aceleración de consultas de base de datos relacionales sin usar índices",
+          "is_correct": false,
+          "feedback": "POO es un paradigma de programación en el lenguaje, no un motor de almacenamiento."
+        },
+        {
+          "id": "d",
+          "text": "Incompatibilidad obligatoria con funciones puras",
+          "is_correct": false,
+          "feedback": "Python permite combinar libremente POO con programación funcional."
+        }
+      ]
     },
-    "xp_reward": 15,
+    "item_4_prediction": {
+      "prompt": "¿Qué valor se mostrará en pantalla al ejecutar este bloque de código?",
+      "code_snippet": "class Mascota:\n    energia = 100\n\np1 = Mascota()\np2 = Mascota()\np1.energia = 75\nprint(p2.energia)",
+      "target_type": "predict_output",
+      "expected_answer": "100",
+      "hint": "Modificar el atributo en la instancia p1 no altera el valor del atributo en la instancia p2."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor se mostrará en pantalla al ejecutar este bloque de código?",
+      "code_snippet": "class Mascota:\n    energia = 100\n\np1 = Mascota()\np2 = Mascota()\np1.energia = 75\nprint(p2.energia)",
+      "target_type": "predict_output",
+      "expected_answer": "100",
+      "hint": "Modificar el atributo en la instancia p1 no altera el valor del atributo en la instancia p2."
+    },
+    "xp_reward": 25,
+    "is_active": true
+  },
+  {
+    "slug": "poo-clases-l02",
+    "section_slug": "poo-clases",
+    "title": "Atributos y el método constructor __init__",
+    "position": 2,
+    "theory": {
+      "step1": "El método especial __init__ es el constructor en Python: se ejecuta automáticamente al crear un nuevo objeto.",
+      "step2": "El primer parámetro de los métodos siempre es self, que representa la referencia a la instancia actual.",
+      "step3": "Dentro de __init__, asignamos atributos individuales con self.nombre_atributo = valor.",
+      "code_snippet": "class Zorro:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nk = Zorro(\"Koda\")\nprint(k.nombre)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una clase llamada Personaje con un constructor __init__(self, alias) que guarde self.alias = alias. Luego crea un héroe con alias \"KodaMaster\" e imprime heroe.alias.",
+      "initial_code": "# Define la clase Personaje con constructor\n",
+      "solution_code": "class Personaje:\n    def __init__(self, alias):\n        self.alias = alias\n\nheroe = Personaje(\"KodaMaster\")\nprint(heroe.alias)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "KodaMaster\n",
+          "description": "Debe inicializar e imprimir el alias del personaje"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál es la función del parámetro 'self' en los métodos de una clase en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Representar explícitamente la instancia concreta sobre la cual se invoca el método",
+          "is_correct": true,
+          "feedback": "¡Exacto! self permite acceder a los atributos y métodos de la propia instancia."
+        },
+        {
+          "id": "b",
+          "text": "Importar automáticamente módulos externos de Python",
+          "is_correct": false,
+          "feedback": "Para importar módulos se utiliza la palabra clave import."
+        },
+        {
+          "id": "c",
+          "text": "Forzar que la variable sea global para todo el script",
+          "is_correct": false,
+          "feedback": "Al contrario, self vincula los atributos al ámbito privado de la instancia."
+        },
+        {
+          "id": "d",
+          "text": "Es una palabra reservada del sistema que no puede escribirse",
+          "is_correct": false,
+          "feedback": "self es una convención estándar y obligatoria en la firma de métodos de instancia."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿En qué momento del ciclo de vida de un objeto se ejecuta el método dunder __init__?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Inmediatamente después de que el objeto ha sido creado en memoria, para inicializar sus atributos",
+          "is_correct": true,
+          "feedback": "¡Correcto! __new__ asigna la memoria y __init__ inicializa el estado."
+        },
+        {
+          "id": "b",
+          "text": "Únicamente cuando el recolector de basura destruye el objeto",
+          "is_correct": false,
+          "feedback": "La destrucción la gestiona el método __del__."
+        },
+        {
+          "id": "c",
+          "text": "Cuando el usuario presiona Ctrl+C en la terminal",
+          "is_correct": false,
+          "feedback": "Eso lanza una excepción KeyboardInterrupt."
+        },
+        {
+          "id": "d",
+          "text": "Cada vez que se imprime el objeto con print()",
+          "is_correct": false,
+          "feedback": "Al imprimir un objeto se invoca __str__ o __repr__, no __init__."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá este programa?",
+      "code_snippet": "class Contador:\n    def __init__(self, inicio=0):\n        self.valor = inicio\n\nc1 = Contador()\nc2 = Contador(10)\nprint(c1.valor + c2.valor)",
+      "target_type": "predict_output",
+      "expected_answer": "10",
+      "hint": "c1 toma el valor por defecto 0; c2 se inicializa con 10. 0 + 10 = 10."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá este programa?",
+      "code_snippet": "class Contador:\n    def __init__(self, inicio=0):\n        self.valor = inicio\n\nc1 = Contador()\nc2 = Contador(10)\nprint(c1.valor + c2.valor)",
+      "target_type": "predict_output",
+      "expected_answer": "10",
+      "hint": "c1 toma el valor por defecto 0; c2 se inicializa con 10. 0 + 10 = 10."
+    },
+    "xp_reward": 25,
     "is_active": true
   }
 ]

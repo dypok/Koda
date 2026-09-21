@@ -10,6 +10,16 @@
     "is_active": true
   },
   {
+    "slug": "data-analytics",
+    "name": "Análisis de Datos",
+    "description": "Especialización en datos: Python analítico, estructuras, manipulación y visualización de datos.",
+    "icon": "IconChartBar",
+    "badge": "Especialidad",
+    "color": "#06B6D4",
+    "sort_order": 15,
+    "is_active": true
+  },
+  {
     "slug": "frontend",
     "name": "Frontend Developer",
     "description": "Especialización en interfaces web: HTML5 semántico, CSS moderno, TypeScript, React 19 y Next.js.",

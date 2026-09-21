@@ -70,5 +70,401 @@
     "total_lessons": 4,
     "xp_reward": 100,
     "is_active": true
+  },
+  {
+    "slug": "py-m02-s01",
+    "module_slug": "variables-y-tipos-de-datos",
+    "title": "Declaración y asignación de variables",
+    "position": 1,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s02",
+    "module_slug": "variables-y-tipos-de-datos",
+    "title": "Tipos primitivos: int, float, str, bool",
+    "position": 2,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s03",
+    "module_slug": "variables-y-tipos-de-datos",
+    "title": "Inspección de tipos con type() y casting",
+    "position": 3,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s04",
+    "module_slug": "variables-y-tipos-de-datos",
+    "title": "Nombrado de variables y buenas prácticas PEP 8",
+    "position": 4,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m03-s01",
+    "module_slug": "operadores-y-expresiones",
+    "title": "Operadores aritméticos y precedencia",
+    "position": 1,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m03-s02",
+    "module_slug": "operadores-y-expresiones",
+    "title": "Comparadores relacionales y booleanos",
+    "position": 2,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m03-s03",
+    "module_slug": "operadores-y-expresiones",
+    "title": "Operadores lógicos: and, or, not",
+    "position": 3,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m03-s04",
+    "module_slug": "operadores-y-expresiones",
+    "title": "Desafío de cálculo y expresiones compuestas",
+    "position": 4,
+    "total_lessons": 4,
+    "xp_reward": 100,
+    "is_active": true
+  },
+  {
+    "slug": "py-m04-s01",
+    "module_slug": "condicionales-y-control-flujo",
+    "title": "Toma de decisiones con bloques if",
+    "position": 1,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m04-s02",
+    "module_slug": "condicionales-y-control-flujo",
+    "title": "Caminos alternativos con else y elif",
+    "position": 2,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m04-s03",
+    "module_slug": "condicionales-y-control-flujo",
+    "title": "Condiciones anidadas y lógica booleana",
+    "position": 3,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m04-s04",
+    "module_slug": "condicionales-y-control-flujo",
+    "title": "Desafío de control de flujo del sistema",
+    "position": 4,
+    "total_lessons": 4,
+    "xp_reward": 100,
+    "is_active": true
+  },
+  {
+    "slug": "py-m05-s01",
+    "module_slug": "bucles-e-iteracion",
+    "title": "Bucles determinados con for y range()",
+    "position": 1,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m05-s02",
+    "module_slug": "bucles-e-iteracion",
+    "title": "Bucles condicionales con while",
+    "position": 2,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m05-s03",
+    "module_slug": "bucles-e-iteracion",
+    "title": "Control de bucle: break, continue y pass",
+    "position": 3,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m05-s04",
+    "module_slug": "bucles-e-iteracion",
+    "title": "Desafío de automatización e iteración",
+    "position": 4,
+    "total_lessons": 4,
+    "xp_reward": 100,
+    "is_active": true
+  },
+  {
+    "slug": "py-m06-s01",
+    "module_slug": "funciones-y-modularidad",
+    "title": "Definición de funciones con def y parámetros",
+    "position": 1,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m06-s02",
+    "module_slug": "funciones-y-modularidad",
+    "title": "Valores de retorno con return vs print()",
+    "position": 2,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m06-s03",
+    "module_slug": "funciones-y-modularidad",
+    "title": "Parámetros opcionales y argumentos por defecto",
+    "position": 3,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m06-s04",
+    "module_slug": "funciones-y-modularidad",
+    "title": "Alcance de variables (Scope local y global)",
+    "position": 4,
+    "total_lessons": 4,
+    "xp_reward": 100,
+    "is_active": true
+  },
+  {
+    "slug": "py-m07-s01",
+    "module_slug": "listas-y-tuplas",
+    "title": "Creación e indexación de listas",
+    "position": 1,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m07-s02",
+    "module_slug": "listas-y-tuplas",
+    "title": "Métodos mutables: append(), pop(), insert()",
+    "position": 2,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m07-s03",
+    "module_slug": "listas-y-tuplas",
+    "title": "Slicing y tuplas inmutables",
+    "position": 3,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m07-s04",
+    "module_slug": "listas-y-tuplas",
+    "title": "Desafío de manipulación de colecciones",
+    "position": 4,
+    "total_lessons": 4,
+    "xp_reward": 100,
+    "is_active": true
+  },
+  {
+    "slug": "py-m08-s01",
+    "module_slug": "diccionarios-y-conjuntos",
+    "title": "Mapeo asociativo clave-valor (dict)",
+    "position": 1,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m08-s02",
+    "module_slug": "diccionarios-y-conjuntos",
+    "title": "Acceso seguro con get() e iteración",
+    "position": 2,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m08-s03",
+    "module_slug": "diccionarios-y-conjuntos",
+    "title": "Conjuntos únicos (sets) y operaciones matemáticas",
+    "position": 3,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m08-s04",
+    "module_slug": "diccionarios-y-conjuntos",
+    "title": "Desafío de indexación y búsqueda rápida",
+    "position": 4,
+    "total_lessons": 4,
+    "xp_reward": 100,
+    "is_active": true
+  },
+  {
+    "slug": "py-m09-s01",
+    "module_slug": "manejo-de-errores-excepciones",
+    "title": "Anatomía de las excepciones comunes",
+    "position": 1,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m09-s02",
+    "module_slug": "manejo-de-errores-excepciones",
+    "title": "Captura defensiva con try y except",
+    "position": 2,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m09-s03",
+    "module_slug": "manejo-de-errores-excepciones",
+    "title": "Bloques complementarios: else y finally",
+    "position": 3,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m09-s04",
+    "module_slug": "manejo-de-errores-excepciones",
+    "title": "Desafío de código resiliente a fallos",
+    "position": 4,
+    "total_lessons": 4,
+    "xp_reward": 100,
+    "is_active": true
+  },
+  {
+    "slug": "py-m10-s01",
+    "module_slug": "modulos-paquetes-entornos",
+    "title": "Importación de módulos estándar (math, random)",
+    "position": 1,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m10-s02",
+    "module_slug": "modulos-paquetes-entornos",
+    "title": "Creación de tus propios módulos con import",
+    "position": 2,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m10-s03",
+    "module_slug": "modulos-paquetes-entornos",
+    "title": "Lectura y escritura de archivos (open, with)",
+    "position": 3,
+    "total_lessons": 4,
+    "xp_reward": 50,
+    "is_active": true
+  },
+  {
+    "slug": "py-m10-s04",
+    "module_slug": "modulos-paquetes-entornos",
+    "title": "Gestión de paquetes con pip y entornos venv",
+    "position": 4,
+    "total_lessons": 4,
+    "xp_reward": 100,
+    "is_active": true
+  },
+  {
+    "slug": "poo-clases",
+    "module_slug": "programacion-orientada-a-objetos",
+    "title": "Clases y Atributos",
+    "position": 1,
+    "total_lessons": 4,
+    "xp_reward": 60,
+    "is_active": true
+  },
+  {
+    "slug": "poo-metodos",
+    "module_slug": "programacion-orientada-a-objetos",
+    "title": "Métodos y Parámetro self",
+    "position": 2,
+    "total_lessons": 4,
+    "xp_reward": 60,
+    "is_active": true
+  },
+  {
+    "slug": "poo-constructor",
+    "module_slug": "programacion-orientada-a-objetos",
+    "title": "Constructor __init__ y Estado Inicial",
+    "position": 3,
+    "total_lessons": 4,
+    "xp_reward": 60,
+    "is_active": true
+  },
+  {
+    "slug": "poo-herencia",
+    "module_slug": "programacion-orientada-a-objetos",
+    "title": "Herencia y Jerarquías de Clases",
+    "position": 4,
+    "total_lessons": 4,
+    "xp_reward": 120,
+    "is_active": true
+  },
+  {
+    "slug": "py-m12-s01",
+    "module_slug": "proyecto-final-integrador",
+    "title": "Arquitectura y diseño del proyecto Koda",
+    "position": 1,
+    "total_lessons": 4,
+    "xp_reward": 80,
+    "is_active": true
+  },
+  {
+    "slug": "py-m12-s02",
+    "module_slug": "proyecto-final-integrador",
+    "title": "Implementación de lógica de negocio",
+    "position": 2,
+    "total_lessons": 4,
+    "xp_reward": 80,
+    "is_active": true
+  },
+  {
+    "slug": "py-m12-s03",
+    "module_slug": "proyecto-final-integrador",
+    "title": "Manejo de persistencia y archivos",
+    "position": 3,
+    "total_lessons": 4,
+    "xp_reward": 80,
+    "is_active": true
+  },
+  {
+    "slug": "py-m12-s04",
+    "module_slug": "proyecto-final-integrador",
+    "title": "Desafío Final y Preparación de Certificación",
+    "position": 4,
+    "total_lessons": 4,
+    "xp_reward": 250,
+    "is_active": true
   }
 ]

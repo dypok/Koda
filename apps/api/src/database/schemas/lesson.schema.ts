@@ -101,20 +101,29 @@ export class Lesson {
   @Prop({ required: true, min: 1, max: 10 })
   position: number;
 
+  // FASE 1: Contenido de la lección (Teoría estructurada)
   @Prop({ type: LessonTheory, required: true })
   theory: LessonTheory;
 
-  // ÍTEM 1 DE LA TRÍADA: Consola interactiva con pruebas automáticas
+  // FASE 2: Ejecución de código (Consola interactiva con pruebas automáticas)
   @Prop({ type: ConsoleChallenge, required: true })
   item_1_console: ConsoleChallenge;
 
-  // ÍTEM 2 DE LA TRÍADA: Quiz conceptual de 4 opciones A/B/C/D
+  // FASE 3: Selección múltiple (Quiz de 4 opciones A/B/C/D con feedback)
   @Prop({ type: SingleChoiceChallenge, required: true })
   item_2_quiz: SingleChoiceChallenge;
 
-  // ÍTEM 3 DE LA TRÍADA: Predicción de terminal o detección de bug
-  @Prop({ type: PredictionChallenge, required: true })
-  item_3_prediction: PredictionChallenge;
+  // FASE 4: Pregunta teórica (Concepto, reglas y fundamentos del lenguaje)
+  @Prop({ type: SingleChoiceChallenge, required: false })
+  item_3_theory?: SingleChoiceChallenge;
+
+  // FASE 5: ¿Qué hace ese código? (Predicción de output / Detección de bug)
+  @Prop({ type: PredictionChallenge, required: false })
+  item_4_prediction?: PredictionChallenge;
+
+  // Compatibilidad con esquema previo (Tríada legacy)
+  @Prop({ type: PredictionChallenge, required: false })
+  item_3_prediction?: PredictionChallenge;
 
   @Prop({ required: true, default: 15 })
   xp_reward: number;

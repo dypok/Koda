@@ -81,8 +81,8 @@ if (fs.existsSync(contentPath)) {
       catalog.question_banks.set(item.module_slug + '__' + item.difficulty, item);
       return;
     }
-    // Lesson
-    if (item.section_slug && (item.theory || item.item_1_console || item.item_2_quiz || item.item_3_prediction || base.includes('lesson'))) {
+    // Lesson (5 Fases de Evaluación / Tríada)
+    if (item.section_slug && (item.theory || item.item_1_console || item.item_2_quiz || item.item_3_theory || item.item_4_prediction || item.item_3_prediction || base.includes('lesson'))) {
       if (item.slug) {
         catalog.lessons.set(item.slug, item);
         return;

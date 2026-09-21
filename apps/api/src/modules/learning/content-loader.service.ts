@@ -190,7 +190,75 @@ export class ContentLoaderService implements OnModuleInit {
       }
     }
 
+    // Cargar también cursos desde content/courses/ si existen
+    this.loadFromCoursesDirectory();
+
     this.logger.log(`Contenido cargado: ${this.languagesMap.size} lenguajes, ${this.modulesMap.size} módulos, ${this.lessonsMap.size} lecciones indexadas.`);
+  }
+
+  private loadFromCoursesDirectory() {
+    const possibleRoots = [
+      path.resolve(process.cwd(), '../../content'),
+      path.resolve(process.cwd(), 'content'),
+      path.resolve(__dirname, '../../../../../../content'),
+      path.resolve(__dirname, '../../../../content'),
+    ];
+
+    const rootDir = possibleRoots.find((p) => fs.existsSync(p) && fs.existsSync(path.join(p, 'courses')));
+    if (!rootDir) return;
+
+    const coursesDir = path.join(rootDir, 'courses');
+    const courseDirs = fs.readdirSync(coursesDir, { withFileTypes: true });
+
+    for (const d of courseDirs) {
+      if (!d.isDirectory()) continue;
+      const coursePath = path.join(coursesDir, d.name);
+      const lessonsFile = path.join(coursePath, 'lessons.json');
+
+      if (fs.existsSync(lessonsFile)) {
+        try {
+          const rawLessons = JSON.parse(fs.readFileSync(lessonsFile, 'utf8'));
+          if (Array.isArray(rawLessons)) {
+            for (const item of rawLessons) {
+              const correctOpt = item.item_2_quiz?.options?.find((o: any) => o.is_correct);
+              const lessonDetail: LessonDetail = {
+                id: item.slug,
+                section_id: item.section_slug,
+                title: item.title,
+                order_index: item.position,
+                theory_markdown: item.theory
+                  ? `${item.theory.step1}\n\n${item.theory.step2}\n\n${item.theory.step3}`
+                  : '',
+                code_example: item.theory?.code_snippet || '',
+                question: item.item_2_quiz
+                  ? {
+                      id: `q_${item.slug}`,
+                      type: 'single_choice',
+                      prompt: item.item_2_quiz.prompt,
+                      options: item.item_2_quiz.options || [],
+                    }
+                  : undefined,
+                evaluation_five_phases: {
+                  phase_1_theory: item.theory || { step1: '', step2: '', step3: '' },
+                  phase_2_code_execution: item.item_1_console,
+                  phase_3_multiple_choice: item.item_2_quiz,
+                  phase_4_theory: item.item_3_theory,
+                  phase_5_prediction: item.item_4_prediction || item.item_3_prediction,
+                },
+              };
+
+              this.lessonsMap.set(item.slug, {
+                lesson: lessonDetail,
+                correctOptionId: correctOpt?.id,
+                explanation: correctOpt?.feedback,
+              });
+            }
+          }
+        } catch (err) {
+          this.logger.error(`Error cargando lessons.json de ${d.name}: ${err.message}`);
+        }
+      }
+    }
   }
 
   getAllLanguages(): ProgrammingLanguage[] {

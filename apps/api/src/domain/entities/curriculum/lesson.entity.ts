@@ -46,7 +46,9 @@ export interface LessonProps {
   theory: LessonTheory;
   item1Console: ConsoleChallenge;
   item2Quiz: SingleChoiceChallenge;
-  item3Prediction: PredictionChallenge;
+  item3Theory?: SingleChoiceChallenge;
+  item4Prediction?: PredictionChallenge;
+  item3Prediction?: PredictionChallenge;
   xpReward: number;
   isActive: boolean;
 }
@@ -59,7 +61,9 @@ export class LessonEntity {
   readonly theory: LessonTheory;
   readonly item1Console: ConsoleChallenge;
   readonly item2Quiz: SingleChoiceChallenge;
-  readonly item3Prediction: PredictionChallenge;
+  readonly item3Theory?: SingleChoiceChallenge;
+  readonly item4Prediction?: PredictionChallenge;
+  readonly item3Prediction?: PredictionChallenge;
   readonly xpReward: number;
   readonly isActive: boolean;
 
@@ -71,7 +75,9 @@ export class LessonEntity {
     this.theory = props.theory;
     this.item1Console = props.item1Console;
     this.item2Quiz = props.item2Quiz;
-    this.item3Prediction = props.item3Prediction;
+    this.item3Theory = props.item3Theory;
+    this.item4Prediction = props.item4Prediction ?? props.item3Prediction;
+    this.item3Prediction = props.item3Prediction ?? props.item4Prediction;
     this.xpReward = props.xpReward;
     this.isActive = props.isActive;
   }
