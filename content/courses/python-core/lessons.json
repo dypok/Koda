@@ -490,6 +490,1476 @@
     "is_active": true
   },
   {
+    "slug": "py-m02-s01-l02",
+    "section_slug": "py-m02-s01",
+    "title": "Reasignación y actualización de variables",
+    "position": 2,
+    "theory": {
+      "step1": "En Python, las variables pueden cambiar de valor cuantas veces sea necesario a lo largo de tu programa.",
+      "step2": "Cuando escribes de nuevo el nombre de una variable con el signo igual = y un nuevo valor, el dato anterior se descarta de inmediato.",
+      "step3": "El intérprete siempre utilizará el valor más reciente asignado a la variable al momento de ejecutar cada instrucción.",
+      "code_snippet": "vidas = 3\nvidas = 5\nprint(vidas)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada energia con valor 100, luego reasígnale el valor 80 en la siguiente línea y finalmente muéstrala con print(energia).",
+      "initial_code": "# Asigna y actualiza energia aquí\n",
+      "solution_code": "energia = 100\nenergia = 80\nprint(energia)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "80\n",
+          "description": "Debe mostrar 80 tras la reasignación"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "Si ejecutas puntos = 10 y luego puntos = 25, ¿qué valor imprimirá print(puntos)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "25",
+          "is_correct": true,
+          "feedback": "¡Correcto! La variable guarda siempre el último valor que le fue asignado."
+        },
+        {
+          "id": "b",
+          "text": "10",
+          "is_correct": false,
+          "feedback": "El valor 10 fue reemplazado por la segunda asignación."
+        },
+        {
+          "id": "c",
+          "text": "35",
+          "is_correct": false,
+          "feedback": "El operador = no suma los valores, los sobrescribe."
+        },
+        {
+          "id": "d",
+          "text": "Error de variable duplicada",
+          "is_correct": false,
+          "feedback": "En Python es completamente válido y normal reasignar una variable existente."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué le ocurre al valor antiguo de una variable cuando le asignas uno nuevo con el operador =?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Es reemplazado en la memoria por el nuevo valor asignado",
+          "is_correct": true,
+          "feedback": "¡Exacto! La variable pasa a apuntar al nuevo dato, perdiendo la referencia al anterior."
+        },
+        {
+          "id": "b",
+          "text": "Se almacena en un archivo de historial automático",
+          "is_correct": false,
+          "feedback": "Python no guarda automáticamente los valores pasados de una variable."
+        },
+        {
+          "id": "c",
+          "text": "Se fusiona con el nuevo valor en una lista",
+          "is_correct": false,
+          "feedback": "La asignación simple solo almacena un único valor a la vez."
+        },
+        {
+          "id": "d",
+          "text": "Bloquea el programa impidiendo futuras asignaciones",
+          "is_correct": false,
+          "feedback": "Las variables son mutables en sus referencias y se pueden actualizar libremente."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué número mostrará en pantalla este programa?",
+      "code_snippet": "monedas = 5\nmonedas = 12\nprint(monedas)",
+      "target_type": "predict_output",
+      "expected_answer": "12",
+      "hint": "La última asignación antes del print sobrescribe los valores previos."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué número mostrará en pantalla este programa?",
+      "code_snippet": "monedas = 5\nmonedas = 12\nprint(monedas)",
+      "target_type": "predict_output",
+      "expected_answer": "12",
+      "hint": "La última asignación antes del print sobrescribe los valores previos."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s01-l03",
+    "section_slug": "py-m02-s01",
+    "title": "Copiando valores entre variables",
+    "position": 3,
+    "theory": {
+      "step1": "Puedes asignar el valor de una variable a otra variable escribiendo su nombre al lado derecho del signo igual =.",
+      "step2": "Al hacer copia = original, Python lee el valor contenido en original y lo asigna también a copia.",
+      "step3": "Si más adelante cambias el valor de original, la variable copia conservará el valor que recibió en su momento.",
+      "code_snippet": "puntos = 50\nrecord = puntos\nprint(record)"
+    },
+    "item_1_console": {
+      "prompt": "Crea la variable origen con el texto \"Koda\", asígnale su valor a una nueva variable destino y muestra destino con print(destino).",
+      "initial_code": "# Copia el valor de origen a destino\n",
+      "solution_code": "origen = \"Koda\"\ndestino = origen\nprint(destino)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Koda\n",
+          "description": "Debe imprimir Koda a través de la variable destino"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "Si ejecutas a = 5, luego b = a, y finalmente a = 10, ¿cuál es el valor final de b?",
+      "options": [
+        {
+          "id": "a",
+          "text": "5",
+          "is_correct": true,
+          "feedback": "¡Correcto! b recibió el valor 5 en el momento de su asignación y no cambia automáticamente al modificar a."
+        },
+        {
+          "id": "b",
+          "text": "10",
+          "is_correct": false,
+          "feedback": "Modificar a después no altera el valor que ya tenía guardado b."
+        },
+        {
+          "id": "c",
+          "text": "15",
+          "is_correct": false,
+          "feedback": "Las variables no se suman solas al reasignar."
+        },
+        {
+          "id": "d",
+          "text": "None",
+          "is_correct": false,
+          "feedback": "b mantiene el número 5 que se le asignó."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "En la instrucción resultado = calculo, ¿qué papel cumple cada lado del operador =?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La variable de la izquierda (resultado) recibe el valor que produce o contiene el lado derecho (calculo)",
+          "is_correct": true,
+          "feedback": "¡Exacto! El flujo de asignación siempre va de derecha a izquierda."
+        },
+        {
+          "id": "b",
+          "text": "El lado izquierdo se copia en el derecho de izquierda a derecha",
+          "is_correct": false,
+          "feedback": "El sentido de asignación en Python es siempre de derecha a izquierda."
+        },
+        {
+          "id": "c",
+          "text": "Ambos lados deben ser idénticos o Python lanza un SyntaxError",
+          "is_correct": false,
+          "feedback": "El signo = es asignación, no comparación matemática."
+        },
+        {
+          "id": "d",
+          "text": "Se intercambian automáticamente los valores de ambas variables",
+          "is_correct": false,
+          "feedback": "Para intercambiar variables se requiere una lógica explícita."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor imprimirá la última línea de este código?",
+      "code_snippet": "n1 = 4\nn2 = n1\nn1 = 9\nprint(n2)",
+      "target_type": "predict_output",
+      "expected_answer": "4",
+      "hint": "La variable n2 guardó el valor de n1 cuando este valía 4."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor imprimirá la última línea de este código?",
+      "code_snippet": "n1 = 4\nn2 = n1\nn1 = 9\nprint(n2)",
+      "target_type": "predict_output",
+      "expected_answer": "4",
+      "hint": "La variable n2 guardó el valor de n1 cuando este valía 4."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s01-l04",
+    "section_slug": "py-m02-s01",
+    "title": "Mostrando múltiples variables en pantalla",
+    "position": 4,
+    "theory": {
+      "step1": "La función print() puede recibir varios datos o variables dentro de sus paréntesis si los separas con comas.",
+      "step2": "Por cada coma que coloques en print(), Python imprime automáticamente un espacio en blanco entre los elementos.",
+      "step3": "Esto te permite combinar etiquetas de texto explicativas con los valores de tus variables en una sola línea limpia.",
+      "code_snippet": "usuario = \"Koda\"\nnivel = 3\nprint(\"Jugador:\", usuario, \"Nivel:\", nivel)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable jugador con el texto \"Alex\" y una variable score con el número 50. Imprímelas juntas usando print(jugador, score).",
+      "initial_code": "# Crea las variables e imprímelas juntas con coma\n",
+      "solution_code": "jugador = \"Alex\"\nscore = 50\nprint(jugador, score)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Alex 50\n",
+          "description": "Debe imprimir Alex y 50 separados por un espacio"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué carácter inserta automáticamente print() entre los elementos separados por comas?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Un espacio en blanco (\" \")",
+          "is_correct": true,
+          "feedback": "¡Correcto! Las comas en print() separan los elementos con un espacio por defecto."
+        },
+        {
+          "id": "b",
+          "text": "Un salto de línea (\\n)",
+          "is_correct": false,
+          "feedback": "El salto de línea solo se añade al final de todo el print()."
+        },
+        {
+          "id": "c",
+          "text": "Un guion medio (-)",
+          "is_correct": false,
+          "feedback": "Python no añade guiones a menos que los especifiques."
+        },
+        {
+          "id": "d",
+          "text": "Ningún carácter, los une completamente pegados",
+          "is_correct": false,
+          "feedback": "Para unirlos pegados sin espacio se requeriría concatenación o cambiar el parámetro sep."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cuál es la diferencia fundamental entre ejecutar print(\"edad\") y ejecutar print(edad)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El primero imprime la palabra literal \"edad\", mientras el segundo busca e imprime el valor de la variable edad",
+          "is_correct": true,
+          "feedback": "¡Excelente! Las comillas indican texto literal, sin comillas es un identificador de variable."
+        },
+        {
+          "id": "b",
+          "text": "Ambos hacen exactamente lo mismo sin ninguna diferencia",
+          "is_correct": false,
+          "feedback": "Las comillas cambian completamente el significado de la instrucción."
+        },
+        {
+          "id": "c",
+          "text": "El segundo genera un error de sintaxis obligatorio",
+          "is_correct": false,
+          "feedback": "print(edad) es perfectamente válido si la variable edad ya fue creada."
+        },
+        {
+          "id": "d",
+          "text": "El primero imprime en mayúsculas y el segundo en minúsculas",
+          "is_correct": false,
+          "feedback": "Las comillas no controlan las mayúsculas de la salida."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá exactamente en consola este código?",
+      "code_snippet": "a = \"Hola\"\nb = \"Koda\"\nprint(a, b)",
+      "target_type": "predict_output",
+      "expected_answer": "Hola Koda",
+      "hint": "Recuerda que la coma entre elementos en print() genera un espacio de separación."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá exactamente en consola este código?",
+      "code_snippet": "a = \"Hola\"\nb = \"Koda\"\nprint(a, b)",
+      "target_type": "predict_output",
+      "expected_answer": "Hola Koda",
+      "hint": "Recuerda que la coma entre elementos en print() genera un espacio de separación."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s02-l01",
+    "section_slug": "py-m02-s02",
+    "title": "Números enteros con int",
+    "position": 1,
+    "theory": {
+      "step1": "En Python, los números enteros pertenecen al tipo int (de integer) y representan números completos sin parte decimal.",
+      "step2": "Pueden ser positivos (como 42), negativos (como -15) o el número cero (0), y se escriben directamente sin comillas.",
+      "step3": "Los enteros son ideales para contar elementos discretos: vidas de un jugador, número de páginas o cantidad de monedas.",
+      "code_snippet": "vidas = 3\npuntos = 150\nprint(vidas)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada nivel con el número entero 12 y muéstrala en consola usando print(nivel).",
+      "initial_code": "# Define nivel como entero e imprímelo\n",
+      "solution_code": "nivel = 12\nprint(nivel)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "12\n",
+          "description": "Debe imprimir el entero 12"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de los siguientes valores es un número entero (int) válido en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "-25",
+          "is_correct": true,
+          "feedback": "¡Correcto! Los números negativos sin decimales ni comillas son del tipo int."
+        },
+        {
+          "id": "b",
+          "text": "\"25\"",
+          "is_correct": false,
+          "feedback": "Al estar entre comillas, Python lo considera texto (str)."
+        },
+        {
+          "id": "c",
+          "text": "25.0",
+          "is_correct": false,
+          "feedback": "Al tener punto decimal, pertenece al tipo float."
+        },
+        {
+          "id": "d",
+          "text": "int 25",
+          "is_correct": false,
+          "feedback": "En Python no se antepone el tipo de dato al declarar."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué sucede si encierras un número entre comillas dobles, por ejemplo: numero = \"100\"?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Python lo almacena como una cadena de texto (str), no como un valor numérico",
+          "is_correct": true,
+          "feedback": "¡Exacto! Las comillas le indican a Python que trate los caracteres como texto literal."
+        },
+        {
+          "id": "b",
+          "text": "Python detecta los dígitos y lo convierte automáticamente a entero",
+          "is_correct": false,
+          "feedback": "Python no hace conversiones implícitas de texto a número."
+        },
+        {
+          "id": "c",
+          "text": "Se produce un error de sintaxis inmediato",
+          "is_correct": false,
+          "feedback": "Es una asignación válida, solo que el tipo resultante es str."
+        },
+        {
+          "id": "d",
+          "text": "El número se multiplica por diez",
+          "is_correct": false,
+          "feedback": "Las comillas delimitan texto, no realizan operaciones matemáticas."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor imprimirá la consola tras ejecutar este código?",
+      "code_snippet": "saldo = -10\nprint(saldo)",
+      "target_type": "predict_output",
+      "expected_answer": "-10",
+      "hint": "Los números enteros negativos conservan el signo menos al mostrarse."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor imprimirá la consola tras ejecutar este código?",
+      "code_snippet": "saldo = -10\nprint(saldo)",
+      "target_type": "predict_output",
+      "expected_answer": "-10",
+      "hint": "Los números enteros negativos conservan el signo menos al mostrarse."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s02-l02",
+    "section_slug": "py-m02-s02",
+    "title": "Números con decimales con float",
+    "position": 2,
+    "theory": {
+      "step1": "Cuando necesitas representar mediciones continuas o fracciones de una unidad, utilizas el tipo float (punto flotante).",
+      "step2": "En Python, el separador decimal es siempre el punto . (punto inglés), nunca la coma ,.",
+      "step3": "Incluso un número como 5.0 es considerado float por el simple hecho de contener la notación de punto decimal.",
+      "code_snippet": "precio = 19.99\ntemperatura = -3.5\nprint(precio)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada altura con el valor flotante 1.75 y muéstrala en consola con print(altura).",
+      "initial_code": "# Declara la variable altura con decimal e imprímela\n",
+      "solution_code": "altura = 1.75\nprint(altura)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "1.75\n",
+          "description": "Debe imprimir el número decimal 1.75"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de las siguientes asignaciones define correctamente un número flotante en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "peso = 68.5",
+          "is_correct": true,
+          "feedback": "¡Correcto! El punto (.) es el delimitador oficial de decimales en Python."
+        },
+        {
+          "id": "b",
+          "text": "peso = 68,5",
+          "is_correct": false,
+          "feedback": "Usar coma (,) crea una tupla de dos valores (68 y 5), no un flotante."
+        },
+        {
+          "id": "c",
+          "text": "peso = 68'5",
+          "is_correct": false,
+          "feedback": "El apóstrofe genera un error de sintaxis en números."
+        },
+        {
+          "id": "d",
+          "text": "float peso = 68.5",
+          "is_correct": false,
+          "feedback": "En Python no se especifica el tipo con palabras reservadas al asignar."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿A qué tipo de dato pertenece el valor 10.0 según las reglas internas de Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "float (punto flotante), debido a la presencia del punto decimal",
+          "is_correct": true,
+          "feedback": "¡Exacto! La presencia del punto le indica al intérprete que maneje el valor con precisión flotante."
+        },
+        {
+          "id": "b",
+          "text": "int (entero), porque su parte decimal es igual a cero",
+          "is_correct": false,
+          "feedback": "El tipo no depende del valor decimal cero, sino de la representación con punto."
+        },
+        {
+          "id": "c",
+          "text": "str (cadena de texto)",
+          "is_correct": false,
+          "feedback": "No tiene comillas delimitadoras."
+        },
+        {
+          "id": "d",
+          "text": "bool (booleano)",
+          "is_correct": false,
+          "feedback": "Los booleanos solo son True o False."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor mostrará la consola al ejecutar esta instrucción?",
+      "code_snippet": "pi = 3.14\nprint(pi)",
+      "target_type": "predict_output",
+      "expected_answer": "3.14",
+      "hint": "La función print() muestra el número flotante respetando su parte decimal con punto."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor mostrará la consola al ejecutar esta instrucción?",
+      "code_snippet": "pi = 3.14\nprint(pi)",
+      "target_type": "predict_output",
+      "expected_answer": "3.14",
+      "hint": "La función print() muestra el número flotante respetando su parte decimal con punto."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s02-l03",
+    "section_slug": "py-m02-s02",
+    "title": "Cadenas de texto con str",
+    "position": 3,
+    "theory": {
+      "step1": "El tipo str (string) almacena cualquier secuencia de caracteres: palabras, frases, números como texto o símbolos.",
+      "step2": "Se delimitan mediante comillas simples '...' o comillas dobles \"...\"; ambas formas son totalmente equivalentes.",
+      "step3": "Una cadena puede contener espacios, acentos, mayúsculas, minúsculas o incluso estar vacía si solo escribes \"\".",
+      "code_snippet": "ciudad = \"Bogotá\"\nlema = 'Código limpio'\nprint(ciudad)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada lema con el texto \"Aprender es crecer\" y muéstrala en pantalla con print(lema).",
+      "initial_code": "# Crea la variable de texto e imprímela\n",
+      "solution_code": "lema = \"Aprender es crecer\"\nprint(lema)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Aprender es crecer\n",
+          "description": "Debe imprimir el texto de la variable lema"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de las siguientes variables guarda un valor de tipo cadena de texto (str)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "codigo = \"2026\"",
+          "is_correct": true,
+          "feedback": "¡Correcto! Aunque contiene dígitos numéricos, al estar entre comillas es un str."
+        },
+        {
+          "id": "b",
+          "text": "codigo = 2026",
+          "is_correct": false,
+          "feedback": "Sin comillas es un número entero (int)."
+        },
+        {
+          "id": "c",
+          "text": "codigo = True",
+          "is_correct": false,
+          "feedback": "True es un valor booleano (bool)."
+        },
+        {
+          "id": "d",
+          "text": "codigo = 20.26",
+          "is_correct": false,
+          "feedback": "Con punto decimal es un número flotante (float)."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué representa la expresión texto = \"\" en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Una cadena de texto vacía válida con longitud cero",
+          "is_correct": true,
+          "feedback": "¡Exacto! Las cadenas vacías son muy comunes para inicializar textos antes de llenarlos."
+        },
+        {
+          "id": "b",
+          "text": "Un error de sintaxis porque las comillas requieren texto interior",
+          "is_correct": false,
+          "feedback": "Las cadenas pueden estar vacías sin producir error."
+        },
+        {
+          "id": "c",
+          "text": "Un valor nulo que borra la memoria del programa",
+          "is_correct": false,
+          "feedback": "Una cadena vacía sigue siendo un objeto str real en memoria."
+        },
+        {
+          "id": "d",
+          "text": "Un número cero disfrazado",
+          "is_correct": false,
+          "feedback": "Una cadena vacía es de tipo str, no un número."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá la terminal al ejecutar este código?",
+      "code_snippet": "mascota = \"Zorro Koda\"\nprint(mascota)",
+      "target_type": "predict_output",
+      "expected_answer": "Zorro Koda",
+      "hint": "print() muestra el contenido textual de la variable sin las comillas delimitadoras."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá la terminal al ejecutar este código?",
+      "code_snippet": "mascota = \"Zorro Koda\"\nprint(mascota)",
+      "target_type": "predict_output",
+      "expected_answer": "Zorro Koda",
+      "hint": "print() muestra el contenido textual de la variable sin las comillas delimitadoras."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s02-l04",
+    "section_slug": "py-m02-s02",
+    "title": "Verdad lógica con booleanos (bool)",
+    "position": 4,
+    "theory": {
+      "step1": "El tipo bool (booleano) representa la lógica binaria y solo admite dos valores posibles: True (Verdadero) y False (Falso).",
+      "step2": "En Python, ambos valores deben escribirse obligatoriamente con la primera letra en Mayúscula y sin comillas.",
+      "step3": "Los booleanos son fundamentales para registrar estados en tus programas: si un usuario está conectado, si una partida está activa o si una puerta está abierta.",
+      "code_snippet": "conectado = True\nen_pausa = False\nprint(conectado)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada juego_activo con el valor booleano True y muéstrala en pantalla con print(juego_activo).",
+      "initial_code": "# Asigna el booleano True e imprímelo\n",
+      "solution_code": "juego_activo = True\nprint(juego_activo)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "True\n",
+          "description": "Debe imprimir el valor booleano True"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál es la forma correcta de escribir el valor booleano verdadero en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "True (con T mayúscula y sin comillas)",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python reconoce True como palabra clave con la primera letra mayúscula."
+        },
+        {
+          "id": "b",
+          "text": "true (con minúsculas)",
+          "is_correct": false,
+          "feedback": "En minúsculas Python lo interpreta como el nombre de una variable no definida."
+        },
+        {
+          "id": "c",
+          "text": "\"True\" (entre comillas)",
+          "is_correct": false,
+          "feedback": "Entre comillas es una cadena de texto (str), no un tipo booleano."
+        },
+        {
+          "id": "d",
+          "text": "TRUE (todas mayúsculas)",
+          "is_correct": false,
+          "feedback": "Python es sensible a mayúsculas y no reconoce TRUE como palabra clave booleana."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "Si ejecutas activo = true (con la 't' minúscula), ¿qué respuesta dará Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lanzará un NameError porque busca una variable llamada 'true' que no existe",
+          "is_correct": true,
+          "feedback": "¡Excelente! Al no estar capitalizado, Python no lo reconoce como el valor booleano nativo."
+        },
+        {
+          "id": "b",
+          "text": "Lo corregirá automáticamente a True mayúscula",
+          "is_correct": false,
+          "feedback": "Python no autocorrige palabras clave mal escritas."
+        },
+        {
+          "id": "c",
+          "text": "Lo convertirá en el número cero",
+          "is_correct": false,
+          "feedback": "No hay conversión a número."
+        },
+        {
+          "id": "d",
+          "text": "Creará una variable booleana sin problema alguno",
+          "is_correct": false,
+          "feedback": "Python es estricto con el caso de sus palabras clave."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué salida mostrará la consola al ejecutar este fragmento de código?",
+      "code_snippet": "terminado = False\nprint(terminado)",
+      "target_type": "predict_output",
+      "expected_answer": "False",
+      "hint": "La función print() muestra literalmente la palabra False correspondiente al valor booleano."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué salida mostrará la consola al ejecutar este fragmento de código?",
+      "code_snippet": "terminado = False\nprint(terminado)",
+      "target_type": "predict_output",
+      "expected_answer": "False",
+      "hint": "La función print() muestra literalmente la palabra False correspondiente al valor booleano."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s03-l01",
+    "section_slug": "py-m02-s03",
+    "title": "Inspeccionando tipos con type()",
+    "position": 1,
+    "theory": {
+      "step1": "La función nativa type() te permite inspeccionar y conocer la naturaleza exacta o tipo de dato de cualquier valor o variable.",
+      "step2": "Al colocar una variable dentro de type(), Python te responderá con su clase: <class 'int'>, <class 'float'>, <class 'str'> o <class 'bool'>.",
+      "step3": "Para visualizar esta información en la terminal, envolvemos type() dentro de un print().",
+      "code_snippet": "edad = 25\nprint(type(edad))"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada nombre con el texto \"Koda\" y usa print(type(nombre)) para mostrar en pantalla a qué clase pertenece.",
+      "initial_code": "# Crea nombre e inspecciona su tipo\n",
+      "solution_code": "nombre = \"Koda\"\nprint(type(nombre))",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "<class 'str'>\n",
+          "description": "Debe imprimir <class 'str'>"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál será la salida exacta de ejecutar print(type(3.14)) en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "<class 'float'>",
+          "is_correct": true,
+          "feedback": "¡Correcto! 3.14 tiene punto decimal, por lo que pertenece a la clase float."
+        },
+        {
+          "id": "b",
+          "text": "<class 'int'>",
+          "is_correct": false,
+          "feedback": "int corresponde únicamente a números enteros sin decimales."
+        },
+        {
+          "id": "c",
+          "text": "<class 'number'>",
+          "is_correct": false,
+          "feedback": "En Python no existe una clase nativa llamada 'number'."
+        },
+        {
+          "id": "d",
+          "text": "float",
+          "is_correct": false,
+          "feedback": "type() devuelve la representación formal de clase: <class 'float'>."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué es tan valiosa la función type() en el desarrollo de software?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permite verificar el tipo de dato que contiene una variable antes de realizar operaciones incompatibles",
+          "is_correct": true,
+          "feedback": "¡Exacto! Ayuda a depurar código y asegurar que los datos sean del tipo que esperamos procesar."
+        },
+        {
+          "id": "b",
+          "text": "Sirve para cambiar el color del texto en la terminal",
+          "is_correct": false,
+          "feedback": "type() no modifica la apariencia visual de la consola."
+        },
+        {
+          "id": "c",
+          "text": "Obliga a Python a compilar el programa más rápido",
+          "is_correct": false,
+          "feedback": "Es una función inspectora, no influye en la velocidad de compilación."
+        },
+        {
+          "id": "d",
+          "text": "Borra de la memoria las variables que ya no se usan",
+          "is_correct": false,
+          "feedback": "type() solo consulta el tipo de un objeto, no lo destruye."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué mostrará en la terminal este comando?",
+      "code_snippet": "activo = True\nprint(type(activo))",
+      "target_type": "predict_output",
+      "expected_answer": "<class 'bool'>",
+      "hint": "La variable activo contiene un valor booleano True."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué mostrará en la terminal este comando?",
+      "code_snippet": "activo = True\nprint(type(activo))",
+      "target_type": "predict_output",
+      "expected_answer": "<class 'bool'>",
+      "hint": "La variable activo contiene un valor booleano True."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s03-l02",
+    "section_slug": "py-m02-s03",
+    "title": "Conversión a texto con str()",
+    "position": 2,
+    "theory": {
+      "step1": "El proceso de convertir un dato de un tipo a otro se conoce como conversión de tipos o casting.",
+      "step2": "La función str() toma cualquier dato (un número entero, decimal o booleano) y lo transforma en una cadena de texto.",
+      "step3": "Esto es indispensable cuando quieres concatenar valores numéricos con texto usando el operador suma +.",
+      "code_snippet": "nivel = 10\nmensaje = \"Nivel: \" + str(nivel)\nprint(mensaje)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada puntos con valor 100. Imprime exactamente el texto: \"Puntos: 100\" usando concatenación con + y str(puntos).",
+      "initial_code": "# Convierte puntos a texto y concaténalo con el mensaje\n",
+      "solution_code": "puntos = 100\nprint(\"Puntos: \" + str(puntos))",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Puntos: 100\n",
+          "description": "Debe imprimir Puntos: 100"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué error se genera si intentas unir un texto y un entero con el signo más, como en: \"Score: \" + 50?",
+      "options": [
+        {
+          "id": "a",
+          "text": "TypeError (no se pueden concatenar directamente objetos de tipo str e int)",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python es de tipado fuerte y prohíbe sumar texto con números sin convertir antes."
+        },
+        {
+          "id": "b",
+          "text": "SyntaxError",
+          "is_correct": false,
+          "feedback": "La sintaxis es legal para el parser, pero el error ocurre durante el análisis de tipos."
+        },
+        {
+          "id": "c",
+          "text": "NameError",
+          "is_correct": false,
+          "feedback": "No hay variables inexistentes involucradas."
+        },
+        {
+          "id": "d",
+          "text": "Ninguno, Python convierte el 50 a texto silenciosamente",
+          "is_correct": false,
+          "feedback": "A diferencia de JavaScript, Python jamás convierte tipos implícitamente con +."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "Si ejecutas resultado = str(True), ¿qué valor y tipo almacena la variable resultado?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La cadena de texto \"True\" de tipo str",
+          "is_correct": true,
+          "feedback": "¡Exacto! str() convierte el booleano en una cadena de cuatro letras."
+        },
+        {
+          "id": "b",
+          "text": "El número 1 de tipo int",
+          "is_correct": false,
+          "feedback": "str() genera texto, no enteros."
+        },
+        {
+          "id": "c",
+          "text": "El valor booleano True original sin cambios",
+          "is_correct": false,
+          "feedback": "La función str() produjo una nueva cadena de texto."
+        },
+        {
+          "id": "d",
+          "text": "Un error de conversión",
+          "is_correct": false,
+          "feedback": "Convertir un booleano a str() es totalmente seguro y válido."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué tipo imprimirá este código?",
+      "code_snippet": "x = 42\ntexto = str(x)\nprint(type(texto))",
+      "target_type": "predict_output",
+      "expected_answer": "<class 'str'>",
+      "hint": "La variable texto contiene el resultado de aplicar la función str()."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué tipo imprimirá este código?",
+      "code_snippet": "x = 42\ntexto = str(x)\nprint(type(texto))",
+      "target_type": "predict_output",
+      "expected_answer": "<class 'str'>",
+      "hint": "La variable texto contiene el resultado de aplicar la función str()."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s03-l03",
+    "section_slug": "py-m02-s03",
+    "title": "Conversión a números con int() y float()",
+    "position": 3,
+    "theory": {
+      "step1": "Cuando recibes números en forma de texto (por ejemplo \"25\"), no puedes hacer operaciones aritméticas hasta convertirlos.",
+      "step2": "La función int() convierte una cadena con dígitos enteros en un número int real: int(\"25\") produce 25.",
+      "step3": "La función float() convierte textos con punto decimal en flotantes: float(\"3.5\") produce el número 3.5.",
+      "code_snippet": "texto_num = \"50\"\nnumero = int(texto_num)\nprint(numero + 10)"
+    },
+    "item_1_console": {
+      "prompt": "Convierte la cadena de texto \"40\" a entero usando int(\"40\"), guárdala en una variable llamada total y muestra en pantalla total + 10.",
+      "initial_code": "# Convierte y suma 10\n",
+      "solution_code": "total = int(\"40\")\nprint(total + 10)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "50\n",
+          "description": "Debe imprimir el resultado numérico 50"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál es la diferencia de salida entre ejecutar \"10\" + \"20\" y ejecutar int(\"10\") + int(\"20\")?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El primero produce la concatenación \"1020\" y el segundo realiza la suma numérica 30",
+          "is_correct": true,
+          "feedback": "¡Excelente! Los strings se concatenan, mientras que los ints se suman matemáticamente."
+        },
+        {
+          "id": "b",
+          "text": "Ambos producen el número 30",
+          "is_correct": false,
+          "feedback": "El signo + entre cadenas une los caracteres textualmente."
+        },
+        {
+          "id": "c",
+          "text": "Ambos producen el texto \"1020\"",
+          "is_correct": false,
+          "feedback": "int() convierte a números enteros que se suman."
+        },
+        {
+          "id": "d",
+          "text": "El segundo produce un error de sintaxis",
+          "is_correct": false,
+          "feedback": "Sumar dos llamadas a int() es perfectamente válido."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "Si ejecutas la instrucción int(7.9), ¿qué resultado devuelve Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El entero 7 (trunca la parte decimal descartándola por completo sin redondear)",
+          "is_correct": true,
+          "feedback": "¡Correcto! int() sobre un float simplemente elimina los decimales, no redondea al más cercano."
+        },
+        {
+          "id": "b",
+          "text": "El entero 8 (redondea hacia arriba al entero más próximo)",
+          "is_correct": false,
+          "feedback": "int() nunca redondea, trunca directamente."
+        },
+        {
+          "id": "c",
+          "text": "Un TypeError por recibir un número flotante",
+          "is_correct": false,
+          "feedback": "int() acepta números flotantes y devuelve su parte entera."
+        },
+        {
+          "id": "d",
+          "text": "El número 7.0",
+          "is_correct": false,
+          "feedback": "int() devuelve un objeto de tipo int sin parte decimal."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Cuál será la salida en pantalla de este código?",
+      "code_snippet": "a = int(\"15\")\nb = 5\nprint(a + b)",
+      "target_type": "predict_output",
+      "expected_answer": "20",
+      "hint": "La cadena \"15\" se convierte a número entero y se suma con 5."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Cuál será la salida en pantalla de este código?",
+      "code_snippet": "a = int(\"15\")\nb = 5\nprint(a + b)",
+      "target_type": "predict_output",
+      "expected_answer": "20",
+      "hint": "La cadena \"15\" se convierte a número entero y se suma con 5."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s03-l04",
+    "section_slug": "py-m02-s03",
+    "title": "Prevención de errores de conversión: ValueError",
+    "position": 4,
+    "theory": {
+      "step1": "La función int() requiere que el texto contenga exclusivamente dígitos numéricos válidos en base 10.",
+      "step2": "Si intentas convertir una palabra como int(\"hola\"), Python detendrá la ejecución con un ValueError.",
+      "step3": "Tampoco puedes pasar directamente un texto con punto decimal a int(); para \"3.14\", primero debes usar float(\"3.14\").",
+      "code_snippet": "# int(\"Koda\") -> ValueError!\nvalido = int(\"120\")\nprint(valido)"
+    },
+    "item_1_console": {
+      "prompt": "Convierte el texto decimal \"2.5\" a flotante con float(), guárdalo en la variable factor y muéstralo en pantalla con print(factor).",
+      "initial_code": "# Convierte \"2.5\" a float y muéstralo\n",
+      "solution_code": "factor = float(\"2.5\")\nprint(factor)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "2.5\n",
+          "description": "Debe mostrar el número flotante 2.5"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué excepción arroja Python si ejecutas la instrucción int(\"veinte\")?",
+      "options": [
+        {
+          "id": "a",
+          "text": "ValueError: invalid literal for int() with base 10",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python no comprende el significado de palabras numéricas en español o inglés, solo dígitos."
+        },
+        {
+          "id": "b",
+          "text": "TypeError: unsupported operand",
+          "is_correct": false,
+          "feedback": "El argumento es de tipo str (tipo esperado), pero su valor o contenido es inválido."
+        },
+        {
+          "id": "c",
+          "text": "ZeroDivisionError",
+          "is_correct": false,
+          "feedback": "No se está dividiendo por cero."
+        },
+        {
+          "id": "d",
+          "text": "Devuelve 0 sin mostrar ningún error",
+          "is_correct": false,
+          "feedback": "Python falla explícitamente en lugar de inventar un valor por defecto."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué la llamada int(\"4.8\") produce un ValueError en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque la cadena contiene un punto (.), el cual no es un dígito entero válido",
+          "is_correct": true,
+          "feedback": "¡Exacto! Para procesar decimales en texto debes usar primero float(\"4.8\")."
+        },
+        {
+          "id": "b",
+          "text": "Porque int() solo acepta números negativos",
+          "is_correct": false,
+          "feedback": "int() acepta tanto positivos como negativos."
+        },
+        {
+          "id": "c",
+          "text": "Porque 4.8 es mayor que 4",
+          "is_correct": false,
+          "feedback": "La magnitud del número no influye en la validez sintáctica."
+        },
+        {
+          "id": "d",
+          "text": "Porque las cadenas nunca se pueden convertir a números",
+          "is_correct": false,
+          "feedback": "Cadenas como \"4\" sí se convierten a int perfectamente."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá la consola al ejecutar este fragmento?",
+      "code_snippet": "x = float(\"10.5\")\nprint(type(x))",
+      "target_type": "predict_output",
+      "expected_answer": "<class 'float'>",
+      "hint": "La función float() convierte el texto a número decimal flotante."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá la consola al ejecutar este fragmento?",
+      "code_snippet": "x = float(\"10.5\")\nprint(type(x))",
+      "target_type": "predict_output",
+      "expected_answer": "<class 'float'>",
+      "hint": "La función float() convierte el texto a número decimal flotante."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s04-l01",
+    "section_slug": "py-m02-s04",
+    "title": "Reglas obligatorias para nombres de variables",
+    "position": 1,
+    "theory": {
+      "step1": "En Python, los nombres de variables deben comenzar con una letra (a-z, A-Z) o un guion bajo _, nunca con un número.",
+      "step2": "Solo pueden contener caracteres alfanuméricos y guiones bajos; los espacios y símbolos como guiones medios - o signos de puntuación están prohibidos.",
+      "step3": "Además, Python es sensible a mayúsculas y minúsculas: edad, Edad y EDAD son tres variables completamente distintas.",
+      "code_snippet": "jugador_1 = \"Koda\"\n_vidas = 3\nprint(jugador_1)"
+    },
+    "item_1_console": {
+      "prompt": "Declara una variable válida llamada vidas_restantes con el valor 3 e imprímela usando print(vidas_restantes).",
+      "initial_code": "# Declara vidas_restantes e imprímela\n",
+      "solution_code": "vidas_restantes = 3\nprint(vidas_restantes)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "3\n",
+          "description": "Debe imprimir el valor 3 de la variable vidas_restantes"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de los siguientes identificadores es un nombre de variable INVÁLIDO en Python que provocará un SyntaxError?",
+      "options": [
+        {
+          "id": "a",
+          "text": "1er_puesto (comienza con un número)",
+          "is_correct": true,
+          "feedback": "¡Correcto! En Python ningún identificador o nombre de variable puede iniciar con un dígito."
+        },
+        {
+          "id": "b",
+          "text": "primer_puesto",
+          "is_correct": false,
+          "feedback": "Es un nombre 100% válido y recomendado."
+        },
+        {
+          "id": "c",
+          "text": "_puesto",
+          "is_correct": false,
+          "feedback": "Los nombres pueden iniciar con guion bajo."
+        },
+        {
+          "id": "d",
+          "text": "puesto1",
+          "is_correct": false,
+          "feedback": "Los dígitos están permitidos siempre que no estén en la primera posición."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "Si en tu programa tienes monedas = 10 y luego escribes print(Monedas) (con 'M' mayúscula), ¿qué sucederá?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Python lanzará un NameError porque no encuentra una variable llamada 'Monedas'",
+          "is_correct": true,
+          "feedback": "¡Exacto! Python es sensible a mayúsculas (case-sensitive); monedas y Monedas son identidades distintas."
+        },
+        {
+          "id": "b",
+          "text": "Imprimirá 10 normalmente porque ignora las mayúsculas",
+          "is_correct": false,
+          "feedback": "Python no ignora la distinción de mayúsculas."
+        },
+        {
+          "id": "c",
+          "text": "Convertirá el número 10 a mayúsculas",
+          "is_correct": false,
+          "feedback": "Los números no tienen mayúsculas."
+        },
+        {
+          "id": "d",
+          "text": "Reiniciará el programa desde el principio",
+          "is_correct": false,
+          "feedback": "Un NameError detiene la ejecución por error de referencia."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor imprimirá la terminal?",
+      "code_snippet": "total_puntos = 95\nprint(total_puntos)",
+      "target_type": "predict_output",
+      "expected_answer": "95",
+      "hint": "La variable total_puntos fue declarada válidamente y se pasa a print()."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor imprimirá la terminal?",
+      "code_snippet": "total_puntos = 95\nprint(total_puntos)",
+      "target_type": "predict_output",
+      "expected_answer": "95",
+      "hint": "La variable total_puntos fue declarada válidamente y se pasa a print()."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s04-l02",
+    "section_slug": "py-m02-s04",
+    "title": "Convención snake_case y legibilidad (PEP 8)",
+    "position": 2,
+    "theory": {
+      "step1": "PEP 8 es la guía oficial de estilo de Python, y establece que los nombres de variables deben escribirse en minúsculas separadas por guiones bajos: snake_case.",
+      "step2": "Un buen nombre de variable describe claramente el dato que contiene sin necesidad de explicaciones adicionales.",
+      "step3": "Es mucho mejor nombrar una variable tiempo_en_segundos que simplemente t o x.",
+      "code_snippet": "velocidad_maxima = 120\nnombre_usuario = \"Koda\"\nprint(velocidad_maxima)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada puntaje_maximo con el valor 250 siguiendo la convención snake_case y muéstrala en pantalla con print(puntaje_maximo).",
+      "initial_code": "# Crea puntaje_maximo en snake_case e imprímela\n",
+      "solution_code": "puntaje_maximo = 250\nprint(puntaje_maximo)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "250\n",
+          "description": "Debe imprimir el valor 250 de puntaje_maximo"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de las siguientes opciones sigue estrictamente la convención snake_case recomendada por PEP 8?",
+      "options": [
+        {
+          "id": "a",
+          "text": "distancia_kilometros",
+          "is_correct": true,
+          "feedback": "¡Correcto! Todas las letras en minúsculas y palabras separadas por guion bajo."
+        },
+        {
+          "id": "b",
+          "text": "distanciaKilometros",
+          "is_correct": false,
+          "feedback": "Ese es el estilo camelCase, común en JavaScript o Java, pero desaconsejado para variables en Python."
+        },
+        {
+          "id": "c",
+          "text": "Distancia_Kilometros",
+          "is_correct": false,
+          "feedback": "Las variables no deben llevar mayúsculas en snake_case."
+        },
+        {
+          "id": "d",
+          "text": "distancia-kilometros",
+          "is_correct": false,
+          "feedback": "El guion medio (-) es un operador de resta en Python y genera SyntaxError."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué es desaconsejable nombrar variables con letras individuales como a, b o z en proyectos reales?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Dificulta entender qué información guarda la variable y reduce la legibilidad para otros programadores",
+          "is_correct": true,
+          "feedback": "¡Excelente! El código se lee muchas más veces de las que se escribe; los nombres claros salvan proyectos."
+        },
+        {
+          "id": "b",
+          "text": "Python cobra más memoria por cada letra adicional en el nombre",
+          "is_correct": false,
+          "feedback": "El impacto en memoria del nombre de una variable es despreciable."
+        },
+        {
+          "id": "c",
+          "text": "Python produce un Warning de rendimiento",
+          "is_correct": false,
+          "feedback": "El intérprete lo permite técnicamente, pero es una pésima práctica humana."
+        },
+        {
+          "id": "d",
+          "text": "Las letras sueltas están reservadas por el sistema operativo",
+          "is_correct": false,
+          "feedback": "No están reservadas por el sistema operativo."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor mostrará en consola este código?",
+      "code_snippet": "vidas_jugador = 5\nprint(vidas_jugador)",
+      "target_type": "predict_output",
+      "expected_answer": "5",
+      "hint": "La variable vidas_jugador está escrita en snake_case y conserva el valor 5."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor mostrará en consola este código?",
+      "code_snippet": "vidas_jugador = 5\nprint(vidas_jugador)",
+      "target_type": "predict_output",
+      "expected_answer": "5",
+      "hint": "La variable vidas_jugador está escrita en snake_case y conserva el valor 5."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s04-l03",
+    "section_slug": "py-m02-s04",
+    "title": "Palabras reservadas de Python (Keywords)",
+    "position": 3,
+    "theory": {
+      "step1": "Python tiene un conjunto de palabras reservadas (keywords) que forman la gramática del lenguaje, como if, for, def, class, True o print.",
+      "step2": "No puedes usar palabras reservadas de la sintaxis como nombres de tus variables, ya que provocarás un SyntaxError.",
+      "step3": "Si necesitas referirte a esos conceptos, agrega una palabra descriptiva complementaria: usa clase_personaje en lugar de la palabra prohibida class.",
+      "code_snippet": "tipo_clase = \"Guerrero\"\nesta_activo = True\nprint(tipo_clase)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada nombre_clase con el texto \"Python 3\" y muéstrala en consola con print(nombre_clase).",
+      "initial_code": "# Crea nombre_clase y muéstrala\n",
+      "solution_code": "nombre_clase = \"Python 3\"\nprint(nombre_clase)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Python 3\n",
+          "description": "Debe imprimir el texto Python 3"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Por qué no puedes escribir la instrucción class = \"Aventurero\" en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque 'class' es una palabra clave reservada del lenguaje para crear clases y genera SyntaxError",
+          "is_correct": true,
+          "feedback": "¡Correcto! Las palabras clave como class, def, return o if no pueden redefinirse como variables."
+        },
+        {
+          "id": "b",
+          "text": "Porque Aventurero debe ir en números",
+          "is_correct": false,
+          "feedback": "El valor asignado es texto válido; el problema radica en el nombre reservado class."
+        },
+        {
+          "id": "c",
+          "text": "Porque class solo puede contener números enteros",
+          "is_correct": false,
+          "feedback": "class no es una variable, es una palabra clave del lenguaje."
+        },
+        {
+          "id": "d",
+          "text": "Porque class ya tiene un valor predeterminado de 0",
+          "is_correct": false,
+          "feedback": "class no es una variable."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "Si asignas por descuido print = \"Hola\", ¿qué consecuencia grave sufrirá tu programa más adelante?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Sobrescribirás la función print(), por lo que ya no podrás imprimir ningún mensaje en pantalla",
+          "is_correct": true,
+          "feedback": "¡Exacto! Aunque print es una función nativa y no una keyword estricta, redefinirla rompe su capacidad de imprimir."
+        },
+        {
+          "id": "b",
+          "text": "La computadora se apagará de forma preventiva",
+          "is_correct": false,
+          "feedback": "No afecta el sistema operativo ni el hardware."
+        },
+        {
+          "id": "c",
+          "text": "Python borrará el archivo fuente",
+          "is_correct": false,
+          "feedback": "No borra archivos."
+        },
+        {
+          "id": "d",
+          "text": "Ninguna, la función print original se duplica automáticamente",
+          "is_correct": false,
+          "feedback": "El identificador queda sobreescrito por la cadena 'Hola'."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué mostrará la consola?",
+      "code_snippet": "palabra_clave = \"segura\"\nprint(palabra_clave)",
+      "target_type": "predict_output",
+      "expected_answer": "segura",
+      "hint": "palabra_clave es un nombre descriptivo totalmente válido en Python."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué mostrará la consola?",
+      "code_snippet": "palabra_clave = \"segura\"\nprint(palabra_clave)",
+      "target_type": "predict_output",
+      "expected_answer": "segura",
+      "hint": "palabra_clave es un nombre descriptivo totalmente válido en Python."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s04-l04",
+    "section_slug": "py-m02-s04",
+    "title": "Desafío de consolidación del Módulo 02",
+    "position": 4,
+    "theory": {
+      "step1": "¡Felicitaciones! Has dominado la memoria de Python: variables, reasignación, tipos primitivos (int, float, str, bool) y conversiones con type(), str() e int().",
+      "step2": "Recuerda siempre aplicar buenas prácticas: nombres en snake_case, respetar las mayúsculas/minúsculas y evitar palabras reservadas.",
+      "step3": "En este desafío final pondrás a prueba todo lo aprendido integrando variables de múltiples tipos en una sola salida interactiva.",
+      "code_snippet": "mascota = \"Koda\"\nnivel = 2\nes_feliz = True\nprint(\"Explorador:\", mascota, \"Nivel:\", nivel)"
+    },
+    "item_1_console": {
+      "prompt": "Declara mascota = \"Koda\" y edad = 3. Luego imprime en una sola línea exactamente: Koda tiene 3 años (puedes usar print(mascota, \"tiene\", edad, \"años\")).",
+      "initial_code": "# Declara las variables e imprime la frase completa\n",
+      "solution_code": "mascota = \"Koda\"\nedad = 3\nprint(mascota, \"tiene\", edad, \"años\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Koda tiene 3 años\n",
+          "description": "Debe imprimir exactamente: Koda tiene 3 años"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "Dada la variable dato = \"50\", ¿cuál es la forma correcta de sumarle 10 para obtener el número 60?",
+      "options": [
+        {
+          "id": "a",
+          "text": "int(dato) + 10",
+          "is_correct": true,
+          "feedback": "¡Correcto! Se convierte el texto '50' a número entero 50 y se le suman 10."
+        },
+        {
+          "id": "b",
+          "text": "dato + 10",
+          "is_correct": false,
+          "feedback": "Esto arroja TypeError porque no se puede sumar str e int directamente."
+        },
+        {
+          "id": "c",
+          "text": "str(dato) + 10",
+          "is_correct": false,
+          "feedback": "dato ya era un str, y sumar 10 causará TypeError."
+        },
+        {
+          "id": "d",
+          "text": "dato + \"10\"",
+          "is_correct": false,
+          "feedback": "Esto produciría la cadena '5010' en lugar del número 60."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cuál de las siguientes afirmaciones sobre las variables en Python es 100% CORRECTA?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Python determina el tipo de una variable automáticamente en tiempo de ejecución según el valor que se le asigne (tipado dinámico)",
+          "is_correct": true,
+          "feedback": "¡Excelente! Python es de tipado dinámico y fuerte: infiere el tipo automáticamente, pero exige conversiones explícitas para operar tipos incompatibles."
+        },
+        {
+          "id": "b",
+          "text": "Es obligatorio declarar el tipo de dato antes del nombre de la variable (como int x = 5)",
+          "is_correct": false,
+          "feedback": "En Python no se declaran los tipos con palabras clave antes del nombre."
+        },
+        {
+          "id": "c",
+          "text": "Una variable nunca puede cambiar de tipo ni de valor después de ser creada",
+          "is_correct": false,
+          "feedback": "Las variables en Python pueden reasignarse a cualquier otro valor o tipo."
+        },
+        {
+          "id": "d",
+          "text": "Las variables solo pueden guardar números y no cadenas de texto",
+          "is_correct": false,
+          "feedback": "Las variables guardan cualquier tipo de objeto en Python."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá finalmente la última instrucción de este código?",
+      "code_snippet": "x = \"10\"\ny = int(x) * 2\nprint(y)",
+      "target_type": "predict_output",
+      "expected_answer": "20",
+      "hint": "La cadena \"10\" se transforma en el entero 10, que al multiplicarse por 2 da 20."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá finalmente la última instrucción de este código?",
+      "code_snippet": "x = \"10\"\ny = int(x) * 2\nprint(y)",
+      "target_type": "predict_output",
+      "expected_answer": "20",
+      "hint": "La cadena \"10\" se transforma en el entero 10, que al multiplicarse por 2 da 20."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
     "slug": "poo-clases-l01",
     "section_slug": "poo-clases",
     "title": "¿Qué es POO?",
