@@ -11,6 +11,10 @@ import {
   CURRICULUM_REPOSITORY_TOKEN,
   ICurriculumRepository,
 } from '../../domain/repositories/curriculum.repository';
+import {
+  IProgressRepository,
+  PROGRESS_REPOSITORY_TOKEN,
+} from '../../domain/repositories/progress.repository';
 
 @Injectable()
 export class LearningService {
@@ -19,9 +23,11 @@ export class LearningService {
   constructor(
     @Inject(CURRICULUM_REPOSITORY_TOKEN)
     private readonly curriculumRepository: ICurriculumRepository,
+    @Inject(PROGRESS_REPOSITORY_TOKEN)
+    private readonly progressRepository: IProgressRepository,
   ) {}
 
-  async getRoadmap(languageSlug: string): Promise<RoadmapResponse> {
+  async getRoadmap(languageSlug: string, userId?: string): Promise<RoadmapResponse> {
     const slug = languageSlug.toLowerCase();
     const track = await this.curriculumRepository.findTrackBySlug(slug);
 
@@ -32,33 +38,113 @@ export class LearningService {
       throw new NotFoundException(`Ruta curricular para el lenguaje o curso '${languageSlug}' no encontrada en MongoDB.`);
     }
 
-    const roadmapModules = await Promise.all(
-      modules.map(async (mod) => {
-        const sections = await this.curriculumRepository.findSectionsByModule(mod.slug);
-        return {
-          id: mod.slug,
-          code: `M${mod.position.toString().padStart(2, '0')}`,
-          title: mod.title,
-          description: mod.objective,
-          order_index: mod.position,
-          total_sections: mod.totalSections,
-          is_unlocked: mod.position === 1,
-          is_completed: false,
-          mastery_percentage: mod.position === 1 ? 25 : 0,
-          sections: sections.map((sec) => ({
-            id: sec.slug,
-            code: `S${sec.position.toString().padStart(2, '0')}`,
-            title: sec.title,
-            order_index: sec.position,
-            total_lessons: sec.totalLessons,
-            is_unlocked: mod.position === 1 && sec.position === 1,
-            is_completed: false,
-            stars_earned: 0,
-            max_stars_earned: 3,
-          })),
-        };
-      }),
+    // Si hay userId, consultamos la persistencia en PostgreSQL en batch (p95 < 40ms)
+    const [userStars, userModules] = userId
+      ? await Promise.all([
+          this.progressRepository.findAllSectionStarsByUser(userId),
+          this.progressRepository.findAllModuleProgressByUser(userId),
+        ])
+      : [[], []];
+
+    const starsMap = new Map(userStars.map((s) => [s.sectionId, s]));
+    const moduleProgressMap = new Map(userModules.map((m) => [m.moduleId, m]));
+
+    // Pre-cargar secciones de los módulos en orden determinista
+    const modulesWithSections = await Promise.all(
+      modules.map(async (mod) => ({
+        mod,
+        sections: await this.curriculumRepository.findSectionsByModule(mod.slug),
+      })),
     );
+
+    let totalStarsEarned = 0;
+    let totalSectionsAcrossAll = 0;
+    let totalCompletedSectionsAcrossAll = 0;
+    let currentModuleId = modules[0]?.slug ?? '';
+    let foundCurrentModule = false;
+    let prevModuleCompleted = true; // El primer módulo inicia desbloqueado por defecto
+
+    const roadmapModules = modulesWithSections.map(({ mod, sections }, modIndex) => {
+      const moduleProgress = moduleProgressMap.get(mod.slug);
+
+      // Desbloqueo progresivo del módulo:
+      // - El primer módulo siempre está desbloqueado
+      // - Si está explícitamente en progreso o completado en DB, está desbloqueado
+      // - Si el módulo anterior fue completado, se desbloquea
+      const isModuleUnlocked =
+        mod.position === 1 ||
+        modIndex === 0 ||
+        moduleProgress?.status === 'in_progress' ||
+        moduleProgress?.status === 'completed' ||
+        prevModuleCompleted;
+
+      let completedSectionsInModule = 0;
+      let prevSectionCompleted = isModuleUnlocked;
+
+      const mappedSections = sections.map((sec, secIndex) => {
+        const star = starsMap.get(sec.slug);
+        const starsEarned = star?.starsEarned ?? 0;
+        const isCompleted = star?.isPassed ?? false;
+
+        if (isCompleted) {
+          completedSectionsInModule += 1;
+          totalCompletedSectionsAcrossAll += 1;
+        }
+        totalStarsEarned += starsEarned;
+        totalSectionsAcrossAll += 1;
+
+        // Desbloqueo progresivo de sección dentro del módulo:
+        // Desbloqueada si el módulo está desbloqueado Y (es la primera sección O la sección anterior fue aprobada)
+        const isSectionUnlocked = isModuleUnlocked && (secIndex === 0 || prevSectionCompleted);
+        prevSectionCompleted = isCompleted;
+
+        return {
+          id: sec.slug,
+          code: `S${sec.position.toString().padStart(2, '0')}`,
+          title: sec.title,
+          order_index: sec.position,
+          total_lessons: sec.totalLessons,
+          is_unlocked: isSectionUnlocked,
+          is_completed: isCompleted,
+          stars_earned: starsEarned,
+          max_stars_earned: 3,
+        };
+      });
+
+      const isModuleCompleted =
+        moduleProgress?.status === 'completed' ||
+        (mappedSections.length > 0 && completedSectionsInModule === mappedSections.length);
+
+      prevModuleCompleted = isModuleCompleted;
+
+      if (!foundCurrentModule && isModuleUnlocked && !isModuleCompleted) {
+        currentModuleId = mod.slug;
+        foundCurrentModule = true;
+      }
+
+      const masteryPercentage =
+        mappedSections.length > 0
+          ? Math.round((completedSectionsInModule / mappedSections.length) * 100)
+          : 0;
+
+      return {
+        id: mod.slug,
+        code: `M${mod.position.toString().padStart(2, '0')}`,
+        title: mod.title,
+        description: mod.objective,
+        order_index: mod.position,
+        total_sections: mod.totalSections || mappedSections.length,
+        is_unlocked: isModuleUnlocked,
+        is_completed: isModuleCompleted,
+        mastery_percentage: masteryPercentage,
+        sections: mappedSections,
+      };
+    });
+
+    const overallProgress =
+      totalSectionsAcrossAll > 0
+        ? Math.round((totalCompletedSectionsAcrossAll / totalSectionsAcrossAll) * 100)
+        : 0;
 
     return {
       language: {
@@ -71,13 +157,14 @@ export class LearningService {
         total_modules: modules.length,
         is_active: true,
       },
-      overall_progress_percentage: 10,
-      total_stars_earned: 0,
-      max_possible_stars: modules.length * 24,
-      current_module_id: modules[0]?.slug ?? '',
+      overall_progress_percentage: overallProgress,
+      total_stars_earned: totalStarsEarned,
+      max_possible_stars: totalSectionsAcrossAll * 3,
+      current_module_id: currentModuleId,
       modules: roadmapModules,
     };
   }
+
 
   async getLesson(lessonId: string): Promise<LessonDetail> {
     const lesson = await this.curriculumRepository.findLessonBySlug(lessonId);

@@ -1,5 +1,8 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { ApiExcludeController, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import type { User as SupabaseAuthUser } from '@supabase/supabase-js';
+import { OptionalSupabaseAuthGuard } from '@common/guards/optional-supabase-auth.guard';
+import { CurrentUser } from '@common/decorators/current-user.decorator';
 import { LearningService } from './learning.service';
 import { LessonAnswerSubmissionDto } from './dto/lesson-answer-submission.dto';
 import type {
@@ -14,11 +17,16 @@ export class LearningController {
   constructor(private readonly learningService: LearningService) {}
 
   @Get('roadmap/:languageSlug')
-  @ApiOperation({ summary: 'Obtener el árbol de roadmap con candados y estrellas (MongoDB)' })
+  @UseGuards(OptionalSupabaseAuthGuard)
+  @ApiOperation({ summary: 'Obtener el árbol de roadmap con candados y estrellas (MongoDB + Postgres)' })
   @ApiResponse({ status: 200, description: 'Roadmap del lenguaje' })
-  async getRoadmap(@Param('languageSlug') languageSlug: string): Promise<RoadmapResponse> {
-    return this.learningService.getRoadmap(languageSlug);
+  async getRoadmap(
+    @Param('languageSlug') languageSlug: string,
+    @CurrentUser() authUser?: SupabaseAuthUser,
+  ): Promise<RoadmapResponse> {
+    return this.learningService.getRoadmap(languageSlug, authUser?.id);
   }
+
 
   @Get('lessons/:lessonId')
   @ApiOperation({ summary: 'Obtener detalle de una micro-lección y su ejercicio (MongoDB)' })

@@ -78,8 +78,8 @@
 **Subtasks:**
 - [x] [FRONTEND] Estandarizar renderizado de candados y etiquetas `RQ {requisito}` en `RoadmapGraphNode.tsx`.
 - [x] [FRONTEND] Conectar widget de Siguiente Hito en `RoadmapSidebarGoal.tsx` para reflejar el curso bloqueado real de la rama activa.
-- [ ] [BACKEND] Guard de NestJS `PrerequisitesGuard` que verifique en Supabase PostgreSQL el cumplimiento de dependencias antes de servir lecciones.
-- [ ] [TEST] Pruebas unitarias en Jest para validación de grafos DAG sin ciclos y evaluación de prerrequisitos múltiples.
+- [x] [BACKEND] Guard de NestJS `PrerequisitesGuard` que verifique en Supabase PostgreSQL el cumplimiento de dependencias antes de servir lecciones.
+- [x] [TEST] Pruebas unitarias en Jest para validación de grafos DAG sin ciclos y evaluación de prerrequisitos múltiples.
 
 ---
 
@@ -102,8 +102,8 @@
 - Animación visual de concesión de estrellas al finalizar la sección con sonido y confeti si se logra 3⭐.
 
 **Subtasks:**
-- [ ] [BD] Tabla `user_section_stars (user_id, section_slug, stars_earned, best_score, attempts_count)` en Supabase PostgreSQL.
-- [ ] [BACKEND] Algoritmo en `ProgressService` (NestJS) que calcule las estrellas y persista la marca histórica.
+- [x] [BD] Tabla `user_section_stars (user_id, section_slug, stars_earned, best_score, attempts_count)` en Supabase PostgreSQL.
+- [x] [BACKEND] Algoritmo en `ProgressService` (NestJS) que calcule las estrellas y persista la marca histórica.
 - [ ] [FRONTEND] Componente `StarRatingDisplay.tsx` con animación escalonada de estrellas doradas en resumen de lección.
 
 ---
@@ -124,7 +124,8 @@
 - Detección y prevención de duplicados en intentos mediante cabecera `Idempotency-Key` en endpoints de respuesta.
 
 **Subtasks:**
-- [ ] [BACKEND] Configurar `@nestjs/mongoose` en `apps/api` con schemas de Mongoose para `Track`, `Course`, `Module`, `Lesson`.
-- [ ] [BACKEND] Integrar cliente de Supabase / TypeORM en `ProgressModule` para actualización transaccional de estrellas y XP.
-- [ ] [BACKEND] Endpoint `GET /api/v1/learning/roadmap/progress` que fusiona la telemetría de Supabase con los nodos de MongoDB.
-- [ ] [TEST] Test de rendimiento verificando latencia p95 < 40 ms en la entrega de la hoja de ruta combinada.
+- [x] [BACKEND] Configurar `@nestjs/mongoose` en `apps/api` con schemas de Mongoose para `Track`, `Course`, `Module`, `Lesson`.
+- [x] [BACKEND] Integrar cliente de Supabase / TypeORM en `ProgressModule` para actualización transaccional de estrellas y XP.
+- [x] [BACKEND] Endpoint `GET /api/v1/learning/roadmap/progress` que fusiona la telemetría de Supabase con los nodos de MongoDB.
+- [x] [TEST] Test de rendimiento verificando latencia p95 < 40 ms en la entrega de la hoja de ruta combinada.
+
