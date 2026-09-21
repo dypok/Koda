@@ -51,6 +51,23 @@ export interface ProgrammingLanguage {
   icon_url: string;
   color: string;
   total_modules: number;
+  status?: 'available' | 'coming_soon' | 'hidden';
+  is_active: boolean;
+  courses?: Course[];
+}
+
+export interface Course {
+  id: string;
+  language_slug?: string;
+  language_id?: string;
+  code: string;
+  slug: string;
+  title: string;
+  description?: string;
+  level: 'all_levels' | 'beginner' | 'intermediate' | 'advanced';
+  total_modules: number;
+  status?: 'published' | 'coming_soon' | 'draft' | 'archived';
+  sort_order?: number;
   is_active: boolean;
 }
 
@@ -77,6 +94,7 @@ export interface SectionStars {
 
 export interface RoadmapModule {
   id: string;
+  course_id?: string;
   code: string;
   title: string;
   description: string;
@@ -102,6 +120,7 @@ export interface RoadmapSection {
 
 export interface RoadmapResponse {
   language: ProgrammingLanguage;
+  course?: Course;
   overall_progress_percentage: number;
   total_stars_earned: number;
   max_possible_stars: number;
@@ -227,6 +246,16 @@ export interface MilestoneTelemetry {
 // ==========================================
 
 export type QuestionType =
+  | 'single_choice'
+  | 'multiple_choice'
+  | 'code_output'
+  | 'fill_blank'
+  | 'order_blocks'
+  | 'match_pairs'
+  | 'bug_hunt'
+  | 'code_completion'
+  | 'true_false'
+  | 'drag_drop'
   | 'SINGLE_CHOICE'
   | 'MULTIPLE_CHOICE'
   | 'CODE_OUTPUT'

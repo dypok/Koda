@@ -1,0 +1,13 @@
+{
+  "id": "c_js_core_01",
+  "language_slug": "javascript",
+  "code": "JS_CORE",
+  "slug": "javascript-moderno-fundamentos-a-avanzado",
+  "title": "JavaScript Moderno: Fundamentos a Avanzado",
+  "description": "Domina el lenguaje nativo de la web, manipulando datos, eventos, asincronía con Promises y async/await, y APIs modernas.",
+  "level": "all_levels",
+  "status": "coming_soon",
+  "total_modules": 10,
+  "sort_order": 2,
+  "is_active": true
+}

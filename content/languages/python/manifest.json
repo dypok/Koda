@@ -72,7 +72,7 @@
       "position": 3,
       "total_sections": 8,
       "total_lessons": 80,
-      "status": "coming_soon",
+      "status": "published",
       "path": "modules/03_operadores"
     },
     {
@@ -84,7 +84,7 @@
       "position": 4,
       "total_sections": 8,
       "total_lessons": 80,
-      "status": "coming_soon",
+      "status": "published",
       "path": "modules/04_condicionales"
     },
     {
@@ -96,7 +96,7 @@
       "position": 5,
       "total_sections": 8,
       "total_lessons": 80,
-      "status": "coming_soon",
+      "status": "published",
       "path": "modules/05_bucles"
     },
     {
@@ -108,32 +108,32 @@
       "position": 6,
       "total_sections": 10,
       "total_lessons": 100,
-      "status": "coming_soon",
+      "status": "published",
       "path": "modules/06_funciones"
     },
     {
       "id": "py_mod_07",
       "code": "PY_MOD_07",
-      "slug": "listas-y-tuplas",
-      "title": "Listas y Tuplas",
-      "description": "Colecciones ordenadas, indexación, slicing, mutabilidad y métodos de lista.",
+      "slug": "colecciones",
+      "title": "Estructuras de Datos: Listas y Tuplas",
+      "description": "Colecciones ordenadas, indexación, mutabilidad y métodos de lista.",
       "position": 7,
       "total_sections": 8,
       "total_lessons": 80,
-      "status": "coming_soon",
-      "path": "modules/07_listas"
+      "status": "published",
+      "path": "modules/07_colecciones"
     },
     {
       "id": "py_mod_08",
       "code": "PY_MOD_08",
-      "slug": "diccionarios-y-conjuntos",
-      "title": "Diccionarios y Conjuntos",
-      "description": "Estructuras clave-valor, diccionarios asociativos y colecciones únicas con set.",
+      "slug": "strings-avanzados",
+      "title": "Manipulación de Cadenas de Texto",
+      "description": "Métodos de cadenas, slicing y formateo moderno con f-strings.",
       "position": 8,
       "total_sections": 8,
       "total_lessons": 80,
-      "status": "coming_soon",
-      "path": "modules/08_diccionarios"
+      "status": "published",
+      "path": "modules/08_strings_avanzados"
     },
     {
       "id": "py_mod_09",
@@ -144,20 +144,20 @@
       "position": 9,
       "total_sections": 8,
       "total_lessons": 80,
-      "status": "coming_soon",
-      "path": "modules/09_errores"
+      "status": "published",
+      "path": "modules/09_manejo_errores"
     },
     {
       "id": "py_mod_10",
       "code": "PY_MOD_10",
-      "slug": "modulos-y-paquetes",
-      "title": "Módulos y Bibliotecas Estándar",
-      "description": "Importación de módulos nativos (math, random, datetime) y creación de módulos propios.",
+      "slug": "archivos-y-modulos",
+      "title": "Persistencia de Archivos y Módulos",
+      "description": "Lectura/escritura de archivos con with open() e importación modular.",
       "position": 10,
       "total_sections": 8,
       "total_lessons": 80,
-      "status": "coming_soon",
-      "path": "modules/10_modulos"
+      "status": "published",
+      "path": "modules/10_archivos_modulos"
     },
     {
       "id": "py_mod_11",
@@ -168,19 +168,19 @@
       "position": 11,
       "total_sections": 10,
       "total_lessons": 100,
-      "status": "coming_soon",
+      "status": "published",
       "path": "modules/11_poo"
     },
     {
       "id": "py_mod_12",
       "code": "PY_MOD_12",
-      "slug": "proyecto-final-integrador",
+      "slug": "proyecto-final-y-certificacion",
       "title": "Proyecto Final Integrador y Certificación",
       "description": "Aplicación de todos los conceptos en un proyecto real, examen integral y graduación.",
       "position": 12,
       "total_sections": 10,
       "total_lessons": 100,
-      "status": "coming_soon",
+      "status": "published",
       "path": "modules/12_proyecto_final"
     }
   ]

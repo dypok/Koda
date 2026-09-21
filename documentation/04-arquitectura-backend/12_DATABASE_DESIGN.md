@@ -1,9 +1,7 @@
 # 12 — Diseño de Base de Datos
 
-> **Estado:** Aprobado / Actualizado · **Versión del documento:** 3.0.0 · **Fecha:** 2026-09-10
-> Complementa a `documentation/01-producto-negocio/`, `documentation/02-requisitos-ux/`, `11_SYSTEM_ARCHITECTURE.md`, `ADR-002`, `ADR-007`, `ADR-008` y `ADR-009`. Materializa la **Arquitectura de Persistencia Híbrida Políglota**:
-> 1. **Supabase (PostgreSQL 15+):** Núcleo transaccional ACID para usuarios, perfiles, estado de progreso, estrellas (1–3⭐), libro mayor de XP, rachas, cuaderno de errores y diplomas oficiales.
-> 2. **MongoDB:** Almacén documental no relacional de alto volumen para ramas de carrera, grafo DAG de cursos con prerrequisitos `RQ`, módulos, secciones secuenciales, lecciones y bancos de preguntas polimórficos.
+> **Estado:** Aprobado / Actualizado · **Versión del documento:** 2.0.0 · **Fecha:** 2026-09-02
+> Complementa a `01_PROJECT_OVERVIEW.md`, `03_OBJECTIVES.md`, `04_SCOPE.md`, `05_FUNCTIONAL_REQUIREMENTS.md`, `06_NON_FUNCTIONAL_REQUIREMENTS.md`, `07_USER_STORIES.md`, `11_SYSTEM_ARCHITECTURE.md`, `14_LEARNING_SYSTEM.md`, `16_GAMIFICATION.md`, `27_UI_UX_SPECIFICATION.md` y `01_PROJECT_OVERVIEW.md`. Materializa el modelo relacional para PostgreSQL ≥ 15 que deben implementar las migraciones versionadas, incluyendo el sistema de desbloqueo progresivo por estrellas (1–3⭐), candados secuenciales, cuaderno de errores y soporte multi-lenguaje (con Python como lenguaje insignia de lanzamiento).
 
 ---
 
@@ -11,355 +9,195 @@
 
 Este documento define **qué se persiste, cómo se relaciona y con qué garantías** para la plataforma interactiva de aprendizaje de programación con enfoque gamificado. Es la fuente de verdad para:
 
-- Migraciones versionadas en PostgreSQL (`RF-ADM-005`, `RNF-035`) y esquemas Mongoose en MongoDB (`ADR-009`).
-- Contratos de API (`13_API_SPECIFICATION.md`): cada recurso persistido tiene reflejo en un endpoint REST.
-- Motores de Dominio: `Learning`, `Question`, `Evaluation`, `Progress`, `Gamification` (Estrellas ⭐, XP, Rachas, Logros), `Review Notebook` (Cuaderno de Errores) y `Certification` (`ADR-003`, `ADR-007`, `ADR-008`, `ADR-009`).
-- Desbloqueo progresivo en Grafo DAG con compuertas de maestría y prerrequisitos `RQ` (`ADR-007`).
-- Trazabilidad `RF-*` → tabla/colección y pruebas de invariantes (`20_TESTING.md`, `RNF-033`–`RNF-036`).
+- Migraciones versionadas (`RF-ADM-005`, `RNF-035`).
+- Contratos de API (`13_API_SPECIFICATION.md`): cada recurso persistido tiene reflejo en un endpoint.
+- Motores de Dominio: `Learning`, `Question`, `Evaluation`, `Progress`, `Gamification` (Estrellas ⭐, XP, Rachas, Logros), `Review Notebook` (Cuaderno de Errores) y `Certification` (`01` §24–§29, `03` OT-01, `14`, `16`, `28`).
+- Desbloqueo progresivo con candados secuenciales ($S_1 \to S_n$) y compuertas de maestría de módulos ($M_{i+1}$ requiere 100% de secciones y $\ge 80\%$ de estrellas de maestría de $M_i$).
+- Trazabilidad `RF-*` → tabla/columna y pruebas de invariantes (`20_TESTING.md`, `RNF-033`–`RNF-036`).
 
-**Fuera de alcance:** detalle de infraestructura física de despliegue en cloud (`21_DEPLOYMENT.md`).
+**Fuera de alcance:** elección cerrada de proveedor de nube (se especifica interfaz `PostgreSQL ≥ 15` compatible como referencia sin hardcodear hosting), sintaxis propietaria vendor-lock (se provee DDL ANSI/Postgres en `§10`), y detalle de infraestructura de despliegue (`21_DEPLOYMENT.md`).
 
 ---
 
-## 2. Convenciones y Persistencia Híbrida
+## 2. Convenciones
 
 ### 2.1 Identificadores y tipos base
 
-| Convención | Valor | Motor |
-|---|---|---|
-| PK de tablas de usuario y negocio | `UUID v4` (`gen_random_uuid()`) | Supabase PostgreSQL |
-| Identificador de contenido curricular | `slug VARCHAR(80)` inmutable (ej. `python-fundamentos`, `modulo-01`) | MongoDB & PostgreSQL |
-| ID de documento pedagógico | `ObjectId` de MongoDB o `UUID` v4 string | MongoDB |
-| Timestamps | `TIMESTAMPTZ` en UTC; presentación en `America/Bogota` | PostgreSQL & MongoDB |
-| Moneda | `amount_cents INTEGER` + `currency CHAR(3)` | PostgreSQL |
-| Transacciones de XP | Libro mayor inmutable (`xp_transactions`) | PostgreSQL |
-| Contenido curricular / Lecciones | Documentos BSON/JSON anidados con entrega $O(1)$ sin joins | MongoDB |
+| Convención                       | Valor                                                                                                                                                                                         |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PK de todas las tablas de negocio | `UUID v4` (`uuid` / `gen_random_uuid()`), salvo catálogos pequeños inmutables donde se admite `SMALLINT`                                                                            |
+| FK                                | `UUID` hacia PK referenciada, `ON DELETE RESTRICT` por defecto; `ON DELETE CASCADE` solo en hijos sin sentido sin padre (ej. `answer → question`, `review_queue_items → attempt`) |
+| Timestamps                        | `TIMESTAMPTZ` en UTC; presentación en `America/Bogota` en capa de aplicación (`RNF-018`, `RNF-045`)                                                                                 |
+| Moneda                            | `amount_cents INTEGER` + `currency CHAR(3)` para evitar flotantes                                                                                                                         |
+| Enumeraciones                     | `VARCHAR` + `CHECK` + `TYPE ENUM` opcional; nunca `INTEGER` mágico                                                                                                                   |
+| Texto largo                       | `TEXT` con `CHECK (char_length(col) <= N)` cuando hay límite de producto                                                                                                                 |
+| JSON                              | `JSONB` solo para metadatos extensibles no consultados por rango; todo lo consultable tiene columna dedicada                                                                                |
+| Borrado                           | `deleted_at TIMESTAMPTZ` (soft delete) en contenido administrable; datos de usuario eliminables se anonimizan (`RF-USR-003`, `RNF-038`) no solo soft-delete                             |
+
+### 2.2 Nombres
+
+- Tablas en `snake_case` plural (`users`, `programming_languages`, `user_section_stars`, `user_mistakes_notebook`).
+- Columnas en `snake_case`.
+- Índices `idx_{tabla}_{columnas}`, únicos `uq_{tabla}_{columnas}`, FK `fk_{tabla}_{ref}`, checks `chk_{tabla}_{regla}`.
+- Migraciones `V{YYYYMMDD}_{NNN}__{descripcion}.sql` versionadas y reproducibles (`RNF-019`, `RNF-043`).
+
+### 2.3 Principios transversales
+
+1. **Integridad referencial en BD** (`RNF-036`): toda FK existe en BD, no solo en app. Sin huérfanos.
+2. **Persistencia atómica** (`RNF-033`, `RF-PROG-001`, `RF-LEC-003`): cada `Attempt`/`AttemptAnswer` es transaccional; doble envío con `idempotency_key` no duplica (`RNF-042`, `05` regla 3).
+3. **Calificación Formativa en Estrellas** (`14` §4.2, `16` §8.1): la calificación de 1 a 3 estrellas mide la precisión en la primera pasada y se adjudica tras completar la lección o su ronda de repaso formativo, permitiendo rejugabilidad sin penalizaciones.
+4. **Versionado de contenido** (`RNF-035`, `RF-PREG-006`, `RF-ADM-005`): cada intento congela `content_version` y `threshold_applied`; editar una pregunta crea nueva fila versionada, no `UPDATE` destructivo.
+5. **Contenido desacoplado** (`RNF-031`, `RF-LANG-004`): ningún texto de lección/pregunta hardcodeado fuera de tablas/archivos de contenido.
+6. **Privacidad por diseño** (`RNF-037`–`RNF-040`): PII mínima, nunca en logs/URLs; `document_number` solo para certificado y cifrable si se requiere.
 
 ---
 
-## 3. Gestores Seleccionados y Justificación (ADR-002, ADR-009)
+## 3. Gestor recomendado y justificación
 
-| Motor | Rol en Koda | Ventajas Clave | Justificación Arquitectónica |
-|---|---|---|---|
-| **Supabase (PostgreSQL 15+)** | **Núcleo Transaccional & ACID** | Integridad referencial estricta, Row-Level Security (RLS), triggers PL/pgSQL, secuencias atómicas para certificados (`CQ-*`) | Garantiza cero inconsistencias en puntuaciones, auditoría financiera y estados de usuario (`ADR-002`). |
-| **MongoDB** | **Almacén Documental de Contenido** | Estructuras en árbol nativas, esquema flexible para preguntas polimórficas (código, opción múltiple, fill-blank), lecturas $O(1)$ sin joins | Ratio de lectura 99.9%. Desacopla la publicación de cursos de la base transaccional (`ADR-009`). |
+| Opción                                  | Ventajas                                                                                                                                                                   | Desventajas                                                                  | Recomendación                                                                                                   |
+| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| **PostgreSQL ≥ 15 (recomendado)** | FKs +`EXCLUDE` + `JSONB` + `GIN` + `pgcrypto`/`pg_partman`; transacciones sólidas; `TIMESTAMPTZ`; ecosistema de migraciones (Flyway/Liquibase/Prisma/Drizzle) | Requiere gestión de índices y`VACUUM`                                    | ⭐**Elegida para Producción** — cubre `RNF-033`–`RNF-036` con máximo rendimiento y garantías ACID |
+| MySQL 8                                  | Amplio hosting                                                                                                                                                             | Menor soporte`EXCLUDE`, `JSONB` limitado                                 | Alternativa secundaria                                                                                           |
+| SQLite                                   | Simplicidad local                                                                                                                                                          | No apto para`RNF-005` (escalado horizontal) ni concurrencia de `RNF-001` | Solo para prototipos rápidos o tests offline                                                                    |
 
 ---
 
-## 4. Diagrama de Arquitectura de Datos Híbrida (Mermaid)
+## 4. Diagrama ER (Mermaid)
 
 ```mermaid
 erDiagram
-    %% SUPABASE POSTGRESQL (Transaccional)
     users ||--o| user_profiles : "1:1 tiene"
-    users ||--o{ user_module_progress : "1:N estado"
-    users ||--o{ user_section_stars : "1:N estrellas"
-    users ||--o{ user_branch_enrollment : "1:N inscribe"
-    users ||--o{ xp_transactions : "1:N ledger"
-    users ||--o{ streaks : "1:N racha"
-    users ||--o{ user_mistakes_notebook : "1:N cuaderno"
-    users ||--o{ certificates : "1:N diploma"
-    users ||--o{ subscriptions : "1:N pago"
+    users ||--o{ learning_paths : "1:N personaliza"
+    users ||--o{ attempts : "1:N intenta"
+    users ||--o{ progress : "1:N agrega"
+    users ||--o{ user_section_stars : "1:N califica"
+    users ||--o{ user_module_progress : "1:N desbloquea"
+    users ||--o{ user_mistakes_notebook : "1:N repasa"
+    users ||--o{ review_queue_items : "1:N procesa"
+    users ||--o{ xp_transactions : "1:N gana"
+    users ||--o{ streaks : "1:N historial"
+    users ||--o{ user_achievements : "1:N desbloquea"
+    users ||--o{ certificates : "1:N certifica"
+    users ||--o{ subscriptions : "1:N suscribe"
+    users ||--o{ diagnostic_results : "1:N diagnostica"
 
-    %% MONGODB (Documental No Relacional)
-    tracks ||--o{ courses : "1:N contiene"
-    courses ||--o{ modules : "1:N agrupa"
-    modules ||--o{ sections : "1:N secuencia"
-    sections ||--o{ lessons : "1:N 10_pildoras"
-    modules ||--o{ question_banks : "1:N reactivos"
+    programming_languages ||--o{ courses : "1:N categoriza"
+    programming_languages ||--o{ certificates : "1:N acredita"
 
-    %% ENLACE LÓGICO DESACOPLADO
-    user_module_progress }o..o{ modules : "referencia module_slug"
-    user_section_stars }o..o{ sections : "referencia section_slug"
-    user_branch_enrollment }o..o{ tracks : "referencia track_slug"
-    user_mistakes_notebook }o..o{ lessons : "referencia lesson_id"
+    courses ||--o{ modules : "1:N contiene"
+    courses ||--o{ learning_paths : "1:N instancia"
+    courses ||--o{ certificates : "1:N certifica"
+
+    learning_paths ||--o{ learning_path_modules : "1:N ordena"
+
+    modules ||--o{ sections : "1:N agrupa"
+    modules ||--o{ quizzes : "1:N evalúa"
+    modules ||--o{ exams : "1:N certifica"
+    modules ||--o{ questions : "1:N ancla"
+    modules ||--o{ user_module_progress : "1:N maestría"
+
+    sections ||--o{ lessons : "1:N compone"
+    sections ||--o{ questions : "1:N ancla"
+    sections ||--o{ user_section_stars : "1:N estrellas"
+
+    lessons ||--o{ questions : "1:N ancla"
+    lessons ||--o{ progress : "1:N mide"
+
+    questions ||--o{ answers : "1:N opciones"
+    questions ||--o{ quiz_questions : "N:M quiz"
+    questions ||--o{ exam_questions : "N:M exam"
+    questions ||--o{ attempt_answers : "1:N responde"
+    questions ||--o{ user_mistakes_notebook : "1:N registra"
+    questions ||--o{ review_queue_items : "1:N encola"
+
+    answers ||--o{ attempt_answers : "1:N elige"
+
+    quizzes ||--o{ quiz_questions : "1:N compone"
+    quizzes ||--o{ attempts : "1:N genera"
+
+    exams ||--o{ exam_questions : "1:N compone"
+    exams ||--o{ attempts : "1:N genera"
+
+    attempts ||--o{ attempt_answers : "1:N detalla"
+    attempts ||--o{ review_queue_items : "1:N activa"
+
+    achievements ||--o{ user_achievements : "1:N otorga"
+
+    %% Entidades de soporte
+    programming_languages {
+        uuid id PK
+        varchar code
+        varchar name
+        varchar status
+    }
+    courses {
+        uuid id PK
+        uuid language_id FK
+        varchar code
+        varchar slug
+        varchar title
+        varchar status
+    }
+    users {
+        uuid id PK
+        varchar email
+        varchar status
+    }
+    user_section_stars {
+        uuid id PK
+        uuid user_id FK
+        uuid section_id FK
+        smallint stars_earned
+        int first_attempt_errors
+    }
+    user_module_progress {
+        uuid id PK
+        uuid user_id FK
+        uuid module_id FK
+        boolean is_unlocked
+        int stars_earned
+        numeric stars_percentage
+    }
+    user_mistakes_notebook {
+        uuid id PK
+        uuid user_id FK
+        uuid question_id FK
+        int fail_count
+        boolean is_resolved
+    }
 ```
 
-> **Nota de Persistencia Políglota (ADR-009, ADR-011):** `tracks`, `courses`, `modules`, `sections`, `lessons` y `question_banks` se gestionan como documentos jerárquicos BSON en **MongoDB** para lecturas $O(1)$ sin JOINs. El núcleo transaccional en **Supabase (PostgreSQL)** custodia usuarios, progreso, estrellas, ledger de XP y el cuaderno de errores con repetición espaciada SM-2, referenciando el contenido únicamente por identificadores textuales inmutables (`slugs` / `UUIDs`).
+> Nota: `quiz_questions` y `exam_questions` son tablas de composición versionada; `attempt_answers` congela la respuesta dada y su corrección. `user_section_stars` almacena el rendimiento en estrellas (1–3⭐) por sección. `user_module_progress` centraliza el estado del candado del módulo y el porcentaje de maestría acumulado. `user_mistakes_notebook` persiste los fallos para práctica deliberada y refuerzo formativo.
 
 ---
 
-## 5. Esquemas Documentales NoSQL en MongoDB (Currículo y Grafo de Aprendizaje)
+## 5. Resumen de entidades y trazabilidad
 
-MongoDB almacena la totalidad del contenido educativo en estructuras documentales jerárquicas BSON, diseñadas para servir cualquier recurso en $O(1)$ sin realizar `JOINs` relacionales.
-
-### 5.1 Colección `tracks` (Ramas Profesionales de Carrera)
-Agrupa las especializaciones profesionales de Koda (**Frontend**, **Backend**, **DevOps**, **Python**).
-
-```json
-{
-  "_id": { "$oid": "66e1b001a1c2d3e4f5a6b701" },
-  "slug": "frontend",
-  "name": "Frontend Developer",
-  "description": "HTML Semántico, CSS Moderno, JavaScript DOM, React 19 y Tailwind CSS",
-  "icon": "IconDeviceDesktop",
-  "color": "#38BDF8",
-  "sort_order": 1,
-  "is_active": true,
-  "created_at": { "$date": "2026-09-10T00:00:00.000Z" },
-  "updated_at": { "$date": "2026-09-10T00:00:00.000Z" }
-}
-```
-
-### 5.2 Colección `courses` (Nodos del Grafo DAG con Topología Relativa Tier/Lane)
-Cada curso representa un nodo dentro del canvas interactivo del Roadmap. **No almacena coordenadas de píxeles fijas (`graph_x`, `graph_y`)**, sino una **topología relativa de rejilla** (`tier` y `lane`), permitiendo que el mapa crezca horizontalmente de manera infinita mientras el motor de renderizado del frontend calcula las curvas SVG automáticamente.
-
-```json
-{
-  "_id": { "$oid": "66e1b001a1c2d3e4f5a6b702" },
-  "slug": "react-hooks",
-  "track_slug": "frontend",
-  "code": "F1",
-  "title": "REACT & HOOKS",
-  "subtitle": "RQ JS DOM",
-  "variant": "branch",
-  "icon_type": "atom",
-  "topology": {
-    "tier": 4,
-    "lane": 1,
-    "lane_name": "top_branch"
-  },
-  "visual_style": {
-    "node_color": "#06B6D4",
-    "glow_color": "rgba(6, 182, 212, 0.45)",
-    "laser_color": "#38BDF8",
-    "animation_preset": "laser_flow_fast",
-    "line_dash": "solid"
-  },
-  "prerequisites": ["js-dom"],
-  "prerequisite_label": "RQ JS DOM",
-  "is_apex_gate": false,
-  "xp_reward": 150,
-  "max_stars": 9
-}
-```
-
-* **`topology.tier` (Paso / Columna horizontal $\rightarrow$):** Progresión cronológica (`1, 2, 3...`).
-* **`topology.lane` (Carril vertical $\updownarrow$):** `0` = Tronco central, `1` = Bifurcación superior, `-1` = Bifurcación inferior.
-* **`visual_style`:** Configuración cosmética y de aceleración por hardware.
-
-### 5.3 Colección `visual_effects` (Catálogo Maestro de Presets de Animación)
-Define los efectos físicos de láseres, halos, radares y partículas acelerados 100% por GPU (`will-change: stroke-dashoffset, transform`), evitando cadenas mágicas en los cursos.
-
-```json
-[
-  {
-    "_id": { "$oid": "66e1b001a1c2d3e4f5a6b720" },
-    "key": "laser_flow_fast",
-    "name": "Flujo Láser Fotónico de Alta Velocidad",
-    "target": "edge",
-    "engine": "svg_gpu",
-    "config": {
-      "css_class": "animate-laser-flow",
-      "duration_ms": 1200,
-      "timing_function": "linear",
-      "dash_array": "20 100",
-      "direction": "forward",
-      "repeat": "infinite"
-    },
-    "glow": {
-      "blur_px": 6,
-      "spread_px": 2,
-      "default_color": "#38BDF8"
-    }
-  },
-  {
-    "_id": { "$oid": "66e1b001a1c2d3e4f5a6b721" },
-    "key": "sonar_radar_pulse",
-    "name": "Pulso Sonar Radar Activo",
-    "target": "node_halo",
-    "engine": "svg_gpu",
-    "config": {
-      "css_class": "animate-sonar-wave",
-      "duration_ms": 3200,
-      "rings_count": 2,
-      "orbit_satellite": true,
-      "satellite_orbit_s": 8
-    },
-    "glow": {
-      "blur_px": 15,
-      "spread_px": 4,
-      "default_color": "rgba(249, 115, 22, 0.6)"
-    }
-  }
-]
-```
-
-### 5.4 Colección `modules` y `sections`
-Subdivisiones temáticas y paquetes de 10 micro-lecciones.
-
-```json
-{
-  "_id": { "$oid": "66e1b001a1c2d3e4f5a6b710" },
-  "slug": "mod-html-fundamentos",
-  "course_slug": "html-semantico",
-  "code": "M1",
-  "title": "Estructura del Documento y Etiquetas Principales",
-  "order_index": 1,
-  "sections_count": 3
-}
-```
-
-### 5.5 Colección `lessons` (Micro-lección Atómica con la Tríada de Evaluación)
-Cada lección se compone de teoría sintética ($< 2\text{ min}$) y una **Tríada de Evaluación Progresiva de 3 Ítems**:
-
-1. **Ítem 1 (`CONSOLE_CHALLENGE`):** Desafío de código en editor interactivo con consola/terminal integrada y validación por casos de prueba (`stdout` / `test_cases`).
-2. **Ítem 2 (`SINGLE_CHOICE`):** Pregunta conceptual de selección múltiple con exactamente **4 opciones de respuesta** (1 correcta + 3 distractores plausibles).
-3. **Ítem 3 (`PREDICT_OUTPUT` / `BUG_HUNT`):** Ejercicio de predicción de resultado o detección/corrección de bugs en código fuente.
-
-```json
-{
-  "_id": { "$oid": "66e1b001a1c2d3e4f5a6b730" },
-  "slug": "html-etiqueta-section",
-  "section_slug": "sec-html-semantica-01",
-  "course_slug": "html-semantico",
-  "order_index": 3,
-  "content_version": 1,
-  "title": "Estructuración Semántica con <section>",
-  "theory_markdown": "El elemento `<section>` representa una sección genérica y autónoma de un documento HTML...",
-  "code_example": "<section>\n  <h2>Perfil de Usuario</h2>\n  <p>Detalles del estudiante...</p>\n</section>",
-  "tip_markdown": "Usa `<section>` únicamente cuando el contenido cuente con un encabezado temático natural.",
-  
-  "evaluation_triad": {
-    "item_1_console": {
-      "type": "CONSOLE_CHALLENGE",
-      "instruction": "Escribe una función `esMayorDeEdad(edad)` que retorne true si la edad es >= 18.",
-      "starter_code": "function esMayorDeEdad(edad) {\n  // Tu código aquí\n}",
-      "solution_code": "function esMayorDeEdad(edad) {\n  return edad >= 18;\n}",
-      "test_cases": [
-        { "input": "20", "expected_output": "true", "is_hidden": false },
-        { "input": "15", "expected_output": "false", "is_hidden": false },
-        { "input": "18", "expected_output": "true", "is_hidden": true }
-      ],
-      "timeout_ms": 2500
-    },
-
-    "item_2_options": {
-      "type": "SINGLE_CHOICE",
-      "prompt": "¿Cuál es la principal ventaja de usar <section> en lugar de un contenedor <div> genérico?",
-      "options": [
-        { "id": "opt-a", "text": "Proporciona significado semántico y accesibilidad para lectores de pantalla y motores de búsqueda" },
-        { "id": "opt-b", "text": "Aplica automáticamente estilos visuales de flexbox y espaciado interno" },
-        { "id": "opt-c", "text": "Convierte el texto interno a negrita de forma predeterminada en el navegador" },
-        { "id": "opt-d", "text": "Evita que otros estilos CSS afecten a los elementos hijos dentro del contenedor" }
-      ],
-      "correct_option_id": "opt-a",
-      "explanation": "<section> comunica intención estructural en el DOM, mejorando la navegación accesible."
-    },
-
-    "item_3_prediction": {
-      "type": "PREDICT_OUTPUT",
-      "prompt": "Dado el código `const edad = 17; console.log(edad >= 18 ? 'Adulto' : 'Menor');`, ¿cuál es la salida exacta?",
-      "options": [
-        { "id": "p-1", "text": "Menor" },
-        { "id": "p-2", "text": "Adulto" },
-        { "id": "p-3", "text": "true" },
-        { "id": "p-4", "text": "undefined" }
-      ],
-      "correct_option_id": "p-1",
-      "explanation": "La condición `17 >= 18` evalúa a `false`, seleccionando la segunda rama del operador ternario."
-    }
-  }
-}
-```
-
-### 5.6 Regla Algorítmica de Concesión de Estrellas (1–3 ⭐)
-Las estrellas no son cosméticas; miden el rigor en la resolución de la Tríada al primer intento:
-* ⭐⭐⭐ **(3 Estrellas - Maestría):** Aprueba los **3 ítems al primer intento** (Consola sin errores + Pregunta de 4 opciones correcta + Predicción correcta).
-* ⭐⭐ **(2 Estrellas - Notable):** Aprueba **2 de los 3 ítems** al primer intento (ej. consola y predicción superados, pero erró la opción múltiple).
-* ⭐ **(1 Estrella - Aprobado Básico):** Aprueba **solo 1 ítem** al primer intento o resolvió la lección tras solicitar pistas y reintentos.
-* **0 Estrellas:** No superó el desafío de consola obligatorio; la lección no se da por completada.
-
-### 5.7 Repositorio Declarativo de Contenido y Seeding Idempotente
-Todo el catálogo curricular y los datos de seed residen como archivos JSON versionables y desacoplados en el directorio raíz `content/` (`P-01` y `P-04` de `23_CONTENT_SPECIFICATION.md`):
-
-```
-content/
-├── tracks.json                          # Colección tracks
-├── visual-effects.json                  # Colección visual_effects
-├── courses.json                         # Colección courses (DAG)
-└── courses/
-    └── python-core/
-        ├── modules.json                 # Colección modules
-        ├── sections.json                # Colección sections
-        ├── lessons.json                 # Colección lessons (Tríada Evaluativa)
-        └── question-banks.json          # Colección question_banks
-```
-
-* **Autocarga Dinámica:** El script `apps/api/src/database/seed.ts` y el inicializador Docker `docker/mongo-init/01-init-mongo.js` escanean recursivamente `content/` y clasifican automáticamente cualquier nuevo curso o documento por estructura y metadatos.
-* **Idempotencia:** Todas las operaciones de carga ejecutan `updateOne({ slug }, { $set }, { upsert: true })`.
-* **Comando de Siembra:** `pnpm --filter api db:seed`.
-
----
-
-## 6. Arquitectura de Conexión y Enlace Híbrido Desacoplado
-
-La conexión entre **MongoDB** y **Supabase PostgreSQL** se realiza en la **capa de aplicación de NestJS**, acelerada por **Redis L2 Cache**:
-
-```mermaid
-sequenceDiagram
-    participant FE as Frontend (Next.js)
-    participant API as NestJS Gateway / Services
-    participant REDIS as Redis L2 Cache
-    participant MONGO as MongoDB (Contenido)
-    participant PG as PostgreSQL (Transaccional)
-    participant BULL as BullMQ (Colas Redis)
-
-    Note over FE,PG: 1. Consulta del Roadmap con Fusión en Memoria
-    FE->>API: GET /api/v1/roadmap/branches/frontend
-    API->>REDIS: GET koda:track:frontend:nodes
-    alt Cache Hit
-        REDIS-->>API: Nodos del Grafo (Tier, Lane, FX)
-    else Cache Miss
-        API->>MONGO: courses.find({ track_slug: 'frontend' })
-        MONGO-->>API: Documentos de cursos con topología
-        API->>REDIS: SET koda:track:frontend:nodes (TTL 24h)
-    end
-    API->>PG: SELECT course_slug, stars_earned, is_unlocked FROM user_module_progress WHERE user_id = :uid
-    PG-->>API: Registros de progreso y estrellas del usuario
-    Note over API: Fusión en memoria: Mapea estrellas y evalúa prereqs (RQ)
-    API-->>FE: Payload unificado { branch, nodes: GraphNode[], connections: GraphEdge[] }
-
-    Note over FE,BULL: 2. Envío de Lección y Evaluación de la Tríada
-    FE->>API: POST /api/v1/learning/attempts (Idempotency-Key)
-    API->>REDIS: GET koda:lesson:html-etiqueta-section:v1
-    REDIS-->>API: Documento de lección con test cases y respuestas
-    Note over API: Verifica Código en sandbox + Opciones (4) + Predicción
-    API->>PG: INSERT INTO attempts (kind, score, stars_awarded, is_passed)
-    PG-->>API: Intento registrado (ACID)
-    API->>BULL: addJob('lesson_completed_effects', { userId, stars, xp })
-    API-->>FE: Feedback instantáneo (<50 ms) con estrellas ganadas (1-3⭐)
-    Note over BULL,PG: Worker en Background actualiza XP Ledger, Rachas y Cuaderno SM-2
-```
-
----
-
-## 7. Resumen de entidades y trazabilidad
-
-| # | Entidad | Tabla | RF / RNF principales | Rol en la Plataforma |
-|---|---|---|---|---|
-| 1 | User | `users` | RF-AUTH-*, RF-USR-* | Identidad y credenciales de autenticación |
-| 2 | UserProfile | `user_profiles` | RF-PROF-*, RF-USR-002 | Perfil visible, preferencias y configuración de UI |
-| 3 | ProgrammingLanguage | `programming_languages` | RF-LANG-* | Catálogo multi-lenguaje (`PY` activo de lanzamiento, `PY`, `JS`, etc.) |
-| 4 | LearningPath | `learning_paths` | RF-RUTA-*, RF-LVL-*, RF-DIAG-* | Ruta personalizada por usuario/lenguaje |
-| 5 | Module | `modules` | RF-MOD-*, RF-RUTA-004 | Unidad temática (12 módulos canónicos con umbrales) |
-| 6 | Section | `sections` | RF-SEC-*, RF-ESTRELLA-* | Subdivisión pedagógica con candados secuenciales ($S_1 \dots S_n$) |
-| 7 | Lesson | `lessons` | RF-LEC-*, RF-PREG-* | Unidad mínima de aprendizaje (10 por sección, concepto + ejercicio) |
-| 8 | Question | `questions` | RF-PREG-* | Banco tipificado (8 tipos interactivos con versiones) |
-| 9 | Answer | `answers` | RF-PREG-002 | Opciones y validaciones por pregunta |
-| 10 | Quiz | `quizzes` | RF-QUIZ-* | Evaluación intermedia por módulo (diagnóstica o formativa) |
-| 11 | Exam | `exams` | RF-EXAM-* | Examen de certificación y evaluación final de módulo |
-| 12 | Attempt | `attempts` | RF-EVAL-*, RF-QUIZ-003, RF-EXAM-003 | Registro de intento inmutable y auditable |
-| 13 | Progress | `progress` | RF-PROG-* | Agregado de avance porcentual e ítems completados |
-| 14 | XPTransaction | `xp_transactions` | RF-XP-* | Ledger transaccional de XP (recompensas e incentivos) |
-| 15 | Streak | `streaks` | RF-RACHA-* | Historial diario para cálculo de rachas activas |
-| 16 | Achievement | `achievements` + `user_achievements` | RF-LOGRO-* | Catálogo de medallas/logros y desbloqueos por usuario |
-| 17 | Certificate | `certificates` | RF-CERT-*, RF-PDF-* | Acreditación digital verificable con QR y firma |
-| 18 | Subscription | `subscriptions` | RF-PREM-*, RF-ADS-* | Suscripción Premium mensual (USD $1/mes) |
-| 19 | UserSectionStars | `user_section_stars` | RF-ESTRELLA-001–005, RF-SEC-004 | Puntuación de 1–3 estrellas por sección y registro de reintentos |
-| 20 | UserModuleProgress | `user_module_progress` | RF-CANDADO-001–004, RF-MOD-004 | Estado de candado de módulo, % de maestría en estrellas y examen |
-| 21 | UserMistakesNotebook | `user_mistakes_notebook` | RF-CUADERNO-001–006, RF-REP-001 | Cuaderno de errores persistente para práctica deliberada |
-| 22 | ReviewQueueItem | `review_queue_items` | RF-REP-002, RF-ESTRELLA-002 | Cola de preguntas pendientes en la ronda de repaso de la lección |
+| #  | Entidad              | Tabla                                    | RF / RNF principales                | Rol en la Plataforma                                                   |
+| -- | -------------------- | ---------------------------------------- | ----------------------------------- | ---------------------------------------------------------------------- |
+| 1  | User                 | `users`                                | RF-AUTH-*, RF-USR-*               | Identidad y credenciales de autenticación                             |
+| 2  | UserProfile          | `user_profiles`                        | RF-PROF-*, RF-USR-002               | Perfil visible, preferencias y configuración de UI                    |
+| 3  | ProgrammingLanguage  | `programming_languages`                | RF-LANG-*                           | Catálogo multi-lenguaje (`PY` activo de lanzamiento, `JS`, etc.)  |
+| 4  | Course               | `courses`                              | RF-CURSO-*, RF-RUTA-*             | Curso / Track formativo estructurado por lenguaje                      |
+| 5  | LearningPath         | `learning_paths`                       | RF-RUTA-*, RF-LVL-*, RF-DIAG-*    | Ruta personalizada por usuario/curso                                   |
+| 6  | Module               | `modules`                              | RF-MOD-*, RF-RUTA-004               | Unidad temática (12 módulos canónicos con umbrales)                 |
+| 7  | Section              | `sections`                             | RF-SEC-*, RF-ESTRELLA-*           | Subdivisión pedagógica con candados secuenciales ($S_1 \dots S_n$) |
+| 8  | Lesson               | `lessons`                              | RF-LEC-*, RF-PREG-*               | Unidad mínima de aprendizaje (10 por sección, concepto + ejercicio)  |
+| 9  | Question             | `questions`                            | RF-PREG-*                           | Banco tipificado con revisiones inmutables                             |
+| 10 | Answer               | `answers`                              | RF-PREG-002                         | Opciones y validaciones por pregunta                                   |
+| 11 | Quiz                 | `quizzes`                              | RF-QUIZ-*                           | Evaluación intermedia por módulo (diagnóstica o formativa)          |
+| 12 | Exam                 | `exams`                                | RF-EXAM-*                           | Examen de certificación y evaluación final de módulo                |
+| 13 | Attempt              | `attempts`                             | RF-EVAL-*, RF-QUIZ-003, RF-EXAM-003 | Registro de intento inmutable y auditable                              |
+| 14 | Progress             | `progress`                             | RF-PROG-*                           | Agregado de avance porcentual e ítems completados                     |
+| 15 | XPTransaction        | `xp_transactions`                      | RF-XP-*                             | Ledger transaccional de XP (recompensas e incentivos)                  |
+| 16 | Streak               | `streaks`                              | RF-RACHA-*                          | Historial diario para cálculo de rachas activas                       |
+| 17 | Achievement          | `achievements` + `user_achievements` | RF-LOGRO-*                          | Catálogo de medallas/logros y desbloqueos por usuario                 |
+| 18 | Certificate          | `certificates`                         | RF-CERT-*, RF-PDF-*               | Acreditación digital verificable con QR y firma                       |
+| 19 | Subscription         | `subscriptions`                        | RF-PREM-*, RF-ADS-*               | Suscripción Premium mensual (USD $1/mes)                              |
+| 20 | UserSectionStars     | `user_section_stars`                   | RF-ESTRELLA-001–005, RF-SEC-004    | Puntuación de 1–3 estrellas por sección y registro de reintentos    |
+| 21 | UserModuleProgress   | `user_module_progress`                 | RF-CANDADO-001–004, RF-MOD-004     | Estado de candado de módulo, % de maestría en estrellas y examen     |
+| 22 | UserMistakesNotebook | `user_mistakes_notebook`               | RF-CUADERNO-001–006, RF-REP-001    | Cuaderno de errores persistente para práctica deliberada              |
+| 23 | ReviewQueueItem      | `review_queue_items`                   | RF-REP-002, RF-ESTRELLA-002         | Cola de preguntas pendientes en la ronda de repaso de la lección      |
 
 ---
 
@@ -369,26 +207,28 @@ sequenceDiagram
 
 Identidad canónica. Aísla autenticación de perfil (`RF-USR-005`, `RNF-008`–`RNF-009`).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK**, `DEFAULT gen_random_uuid()` | Identificador interno estable |
-| `email` | `VARCHAR(320)` | `NOT NULL`, `UNIQUE`, `CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')` | Email canónico en minúsculas (`LOWER(email)`) |
-| `password_hash` | `VARCHAR(255)` | `NOT NULL` | Argon2id/bcrypt; nunca en claro (`RNF-008`) |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `DEFAULT 'active'`, `CHECK (status IN ('active','blocked','pending_verification','deleted'))` | `RF-USR-004` |
-| `email_verified_at` | `TIMESTAMPTZ` | `NULL` si no verificado | `RF-AUTH-005`; bloquea solo certificado, no aprendizaje |
-| `last_login_at` | `TIMESTAMPTZ` | `NULL` | Auditoría `RF-AUTH-008` |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Trigger `ON UPDATE` |
-| `deleted_at` | `TIMESTAMPTZ` | `NULL` | Anonimización `RF-USR-003`; no reutiliza email sin confirmación |
+| Campo                 | Tipo             | Restricción                                                                                                    | Descripción                                                       |
+| --------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ |
+| `id`                | `UUID`         | **PK**, `DEFAULT gen_random_uuid()`                                                                     | Identificador interno estable                                      |
+| `email`             | `VARCHAR(320)` | `NOT NULL`, `UNIQUE`, `CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')`               | Email canónico en minúsculas (`LOWER(email)`)                  |
+| `password_hash`     | `VARCHAR(255)` | `NOT NULL`                                                                                                    | Argon2id/bcrypt; nunca en claro (`RNF-008`)                      |
+| `status`            | `VARCHAR(20)`  | `NOT NULL`, `DEFAULT 'active'`, `CHECK (status IN ('active','blocked','pending_verification','deleted'))` | `RF-USR-004`                                                     |
+| `email_verified_at` | `TIMESTAMPTZ`  | `NULL` si no verificado                                                                                       | `RF-AUTH-005`; bloquea solo certificado, no aprendizaje          |
+| `last_login_at`     | `TIMESTAMPTZ`  | `NULL`                                                                                                        | Auditoría`RF-AUTH-008`                                          |
+| `created_at`        | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                                 |                                                                    |
+| `updated_at`        | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                                 | Trigger`ON UPDATE`                                               |
+| `deleted_at`        | `TIMESTAMPTZ`  | `NULL`                                                                                                        | Anonimización`RF-USR-003`; no reutiliza email sin confirmación |
 
 **Relaciones:** 1:1 `user_profiles`, 1:N `learning_paths`, `attempts`, `progress`, `xp_transactions`, `streaks`, `user_achievements`, `certificates`, `subscriptions`.
 
 **Restricciones adicionales:**
+
 - `CHECK (email = LOWER(email))`.
 - `UNIQUE (email) WHERE deleted_at IS NULL` (permite re-registro tras anonimización solo con confirmación).
 - Contraseña nunca logueada (`RNF-008`).
 
 **Índices:**
+
 - `uq_users_email` — `UNIQUE (email) WHERE deleted_at IS NULL`.
 - `idx_users_status` — `(status)` para bloqueo masivo/admin.
 - `idx_users_created_at` — `(created_at)` para analytics `26`.
@@ -397,47 +237,32 @@ Identidad canónica. Aísla autenticación de perfil (`RF-USR-005`, `RNF-008`–
 
 ### 6.2 UserProfile — `user_profiles`
 
-Datos visibles, preferencias pedagógicas configuradas en el registro del frontend (`apps/web/src/views/register/`), métricas agregadas $O(1)$ de tiempo de estudio y racha diaria activa. Separado de `users` para minimizar PII en joins de autenticación (`RNF-037`).
+Datos visibles y preferencias. Separado de `users` para minimizar PII en joins de autenticación (`RNF-037`).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** | Identificador único del perfil |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL`, `UNIQUE` | Relación 1:1 estricta con la cuenta de usuario |
-| `display_name` | `VARCHAR(80)` | `NOT NULL`, `CHECK (char_length(display_name) BETWEEN 2 AND 80)` | Nombre visible del estudiante (`RF-USR-001/002`) |
-| `avatar_url` | `VARCHAR(512)` | `NULL`, `CHECK (avatar_url ~* '^https?://')` | URL de avatar genérico o personalizado (`RF-PROF-002`) |
-| `avatar_object_key` | `VARCHAR(512)` | `NULL` | Clave en storage S3/GCS si se sube archivo personalizado |
-| `document_number` | `VARCHAR(50)` | `NULL`, `CHECK (char_length(document_number) BETWEEN 5 AND 50)` | Documento de identidad para certificados oficiales (`RF-CERT-002`) |
-| `document_type` | `VARCHAR(20)` | `NULL`, `CHECK (document_type IN ('CC','TI','CE','PASSPORT'))` | Tipo de documento para validación legal |
-| `timezone` | `VARCHAR(50)` | `NOT NULL`, `DEFAULT 'America/Bogota'` | `RF-RACHA-004`; corte diario de medianoche para racha |
-| `locale` | `VARCHAR(10)` | `NOT NULL`, `DEFAULT 'es-CO'` | Idioma y localización regional de la interfaz |
-| `bio` | `VARCHAR(500)` | `NULL` | Biografía breve para perfil público |
-| `initial_language_slug` | `VARCHAR(50)` | `NOT NULL`, `DEFAULT 'python'` | Paso 1 del Onboarding: Lenguaje/Tecnología inicial seleccionada |
-| `experience_level` | `VARCHAR(30)` | `NOT NULL`, `DEFAULT 'beginner'`, `CHECK (experience_level IN ('beginner','elementary','intermediate','advanced'))` | Paso 2 del Onboarding: Nivel previo declarado (`RF-USR-001`) |
-| `learning_style` | `VARCHAR(30)` | `NOT NULL`, `DEFAULT 'hands-on'`, `CHECK (learning_style IN ('hands-on','guided','projects','gamified'))` | Paso 3 del Onboarding: Cómo estudia mejor (práctica, guiado, proyectos, gamificado) |
-| `daily_goal_id` | `VARCHAR(20)` | `NOT NULL`, `DEFAULT 'regular'`, `CHECK (daily_goal_id IN ('casual','regular','focused','intense'))` | Paso 4 del Onboarding: Identificador de la meta diaria |
-| `daily_goal_minutes` | `SMALLINT` | `NOT NULL`, `DEFAULT 10`, `CHECK (daily_goal_minutes BETWEEN 5 AND 120)` | Minutos diarios requeridos de estudio (5, 10, 15, 20) |
-| `total_xp` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (total_xp >= 0)` | Experiencia total acumulada ($O(1)$) |
-| `current_level` | `INTEGER` | `NOT NULL`, `DEFAULT 1`, `CHECK (current_level >= 1)` | Nivel del estudiante según fórmula de XP |
-| `current_streak` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (current_streak >= 0)` | Días consecutivos activos de racha vigentes |
-| `longest_streak` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (longest_streak >= 0)` | Récord histórico de racha del estudiante |
-| `streak_freeze_count` | `SMALLINT` | `NOT NULL`, `DEFAULT 1`, `CHECK (streak_freeze_count BETWEEN 0 AND 5)` | Congeladores de racha disponibles en inventario |
-| `total_study_time_seconds` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (total_study_time_seconds >= 0)` | Tiempo total invertido en la plataforma (en segundos) |
-| `last_study_date` | `DATE` | `NULL` | Última fecha en la que completó actividad válida |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
+| Campo                 | Tipo             | Restricción                                                         | Descripción                                                                          |
+| --------------------- | ---------------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `id`                | `UUID`         | **PK**                                                         |                                                                                       |
+| `user_id`           | `UUID`         | **FK → users.id**, `NOT NULL`, `UNIQUE`                   | 1:1 estricto                                                                          |
+| `display_name`      | `VARCHAR(80)`  | `NOT NULL`, `CHECK (char_length(display_name) BETWEEN 2 AND 80)` | `RF-USR-001/002`                                                                    |
+| `avatar_url`        | `VARCHAR(512)` | `NULL`, `CHECK (avatar_url ~* '^https?://')`                     | `RF-PROF-002`; por defecto URL de avatar genérico en app                           |
+| `avatar_object_key` | `VARCHAR(512)` | `NULL`                                                             | Clave en storage S3-compatible si se sube archivo                                     |
+| `document_number`   | `VARCHAR(50)`  | `NULL`, `CHECK (char_length(document_number) BETWEEN 5 AND 50)`  | Solo para certificado (`RF-CERT-002`); cifrable con `pgp_sym_encrypt` si se exige |
+| `timezone`          | `VARCHAR(50)`  | `NOT NULL`, `DEFAULT 'America/Bogota'`                           | `RF-RACHA-004`; corte diario de racha                                               |
+| `locale`            | `VARCHAR(10)`  | `NOT NULL`, `DEFAULT 'es-CO'`                                    |                                                                                       |
+| `bio`               | `VARCHAR(500)` | `NULL`                                                             | Opcional futuro perfil público Post-MVP                                              |
+| `created_at`        | `TIMESTAMPTZ`  | `NOT NULL`                                                         |                                                                                       |
+| `updated_at`        | `TIMESTAMPTZ`  | `NOT NULL`                                                         |                                                                                       |
 
 **Relaciones:** N:1 `users`.
 
 **Restricciones:**
+
 - `CHECK (timezone IN (SELECT name FROM pg_timezone_names))` o lista blanca en app + validación en `RF-ADM-006`.
 - `document_number` no se expone en listados; solo en PDF y verificación interna (`RNF-037`).
-- `daily_goal_minutes` mapeado a `daily_goal_id` (`casual=5`, `regular=10`, `focused=15`, `intense=20`).
 
 **Índices:**
+
 - `uq_user_profiles_user_id` — `UNIQUE (user_id)`.
-- `idx_user_profiles_streak` — `(current_streak DESC)` para rankings y ligas.
-- `idx_user_profiles_xp` — `(total_xp DESC)` para tabla global de posiciones.
-- `idx_user_profiles_study_time` — `(total_study_time_seconds DESC)`.
 - `idx_user_profiles_display_name` — `GIN (display_name gin_trgm_ops)` para búsqueda admin (opcional).
 
 ---
@@ -446,63 +271,99 @@ Datos visibles, preferencias pedagógicas configuradas en el registro del fronte
 
 Catálogo extensible sin tocar el motor (`RF-LANG-004`, `RNF-006`, `RNF-031`).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `code` | `VARCHAR(20)` | `NOT NULL`, `UNIQUE`, `CHECK (code ~ '^[A-Z0-9_]+$')` | Ej. `PY`, `PY`, `JS`; usado en `KODA-{LANG}-{SEQ}` |
-| `name` | `VARCHAR(50)` | `NOT NULL`, `UNIQUE` | Ej. `Python` |
-| `slug` | `VARCHAR(50)` | `NOT NULL`, `UNIQUE`, `CHECK (slug ~ '^[a-z0-9-]+$')` | URL `/languages/python` |
-| `description` | `TEXT` | `NULL`, `CHECK (char_length(description) <= 2000)` |  |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('available','coming_soon','hidden'))`, `DEFAULT 'coming_soon'` | `RF-LANG-001`; en MVP solo `PY=available` |
-| `sort_order` | `SMALLINT` | `NOT NULL`, `DEFAULT 100` | Orden de listado |
-| `icon_url` | `VARCHAR(512)` | `NULL` |  |
-| `content_version` | `INTEGER` | `NOT NULL`, `DEFAULT 1` | Versión agregada del lenguaje; cambio significativo puede obsoletar certificados (`RF-CERT-005`) |
-| `is_active` | `BOOLEAN` | `NOT NULL`, `DEFAULT true` | Soft habilitación sin borrar |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `deleted_at` | `TIMESTAMPTZ` | `NULL` |  |
+| Campo               | Tipo             | Restricción                                                                                        | Descripción                                                                                        |
+| ------------------- | ---------------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `id`              | `UUID`         | **PK**                                                                                        |                                                                                                     |
+| `code`            | `VARCHAR(20)`  | `NOT NULL`, `UNIQUE`, `CHECK (code ~ '^[A-Z0-9_]+$')`                                         | Ej.`PY`, `PY`, `JS`; usado en `KODA-{LANG}-{SEQ}`                                           |
+| `name`            | `VARCHAR(50)`  | `NOT NULL`, `UNIQUE`                                                                            | Ej.`Python`                                                                                       |
+| `slug`            | `VARCHAR(50)`  | `NOT NULL`, `UNIQUE`, `CHECK (slug ~ '^[a-z0-9-]+$')`                                         | URL`/languages/python`                                                                            |
+| `description`     | `TEXT`         | `NULL`, `CHECK (char_length(description) <= 2000)`                                              |                                                                                                     |
+| `status`          | `VARCHAR(20)`  | `NOT NULL`, `CHECK (status IN ('available','coming_soon','hidden'))`, `DEFAULT 'coming_soon'` | `RF-LANG-001`; en MVP solo `PY=available`                                                       |
+| `sort_order`      | `SMALLINT`     | `NOT NULL`, `DEFAULT 100`                                                                       | Orden de listado                                                                                    |
+| `icon_url`        | `VARCHAR(512)` | `NULL`                                                                                            |                                                                                                     |
+| `content_version` | `INTEGER`      | `NOT NULL`, `DEFAULT 1`                                                                         | Versión agregada del lenguaje; cambio significativo puede obsoletar certificados (`RF-CERT-005`) |
+| `is_active`       | `BOOLEAN`      | `NOT NULL`, `DEFAULT true`                                                                      | Soft habilitación sin borrar                                                                       |
+| `created_at`      | `TIMESTAMPTZ`  | `NOT NULL`                                                                                        |                                                                                                     |
+| `updated_at`      | `TIMESTAMPTZ`  | `NOT NULL`                                                                                        |                                                                                                     |
+| `deleted_at`      | `TIMESTAMPTZ`  | `NULL`                                                                                            |                                                                                                     |
 
-**Relaciones:** 1:N `modules`, `learning_paths`, `certificates`.
+**Relaciones:** 1:N `courses`, `learning_paths`, `certificates`.
 
 **Restricciones:**
+
 - `CHECK ((status='available' AND is_active=true) OR status!='available')` — disponible implica activo.
 
 **Índices:**
+
 - `uq_programming_languages_code` — `UNIQUE (code)`.
 - `uq_programming_languages_slug` — `UNIQUE (slug)`.
 - `idx_programming_languages_status_sort` — `(status, sort_order)`.
 
 ---
 
-### 6.4 LearningPath — `learning_paths`
+### 6.4 Course — `courses`
+
+Unidad de agrupación pedagógica o ruta académica completa dentro de un lenguaje (`RF-CURSO-*`, `RF-RUTA-001`). Permite que un lenguaje de programación (ej. Python) ofrezca múltiples cursos independientes (ej. *Fundamentos a Avanzado*, *Ciencia de Datos*, *FastAPI y Backend*), resolviendo el acoplamiento rígido de lenguaje único y permitiendo escalabilidad multi-curso.
+
+| Campo             | Tipo             | Restricción                                                                                                     | Descripción                                                |
+| ----------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| `id`            | `UUID`         | **PK**, `DEFAULT gen_random_uuid()`                                                                      | Identificador único interno                                |
+| `language_id`   | `UUID`         | **FK → programming_languages.id**, `NOT NULL`                                                           | Lenguaje tecnológico asociado                              |
+| `code`          | `VARCHAR(50)`  | `NOT NULL`, `UNIQUE`, `CHECK (code ~ '^[A-Z0-9_]+$')`                                                      | Identificador natural/estable (ej.`PY_CORE`, `PY_DATA`) |
+| `name`          | `VARCHAR(150)` | `NOT NULL`                                                                                                     | Nombre descriptivo del curso                                |
+| `slug`          | `VARCHAR(150)` | `NOT NULL`, `UNIQUE`, `CHECK (slug ~ '^[a-z0-9-]+$')`                                                      | URL amigable`/courses/python-fundamentos`                 |
+| `description`   | `TEXT`         | `NULL`                                                                                                         | Descripción y alcance formativo                            |
+| `level`         | `VARCHAR(30)`  | `NOT NULL`, `DEFAULT 'all_levels'`, `CHECK (level IN ('all_levels','beginner','intermediate','advanced'))` | Nivel objetivo del curso                                    |
+| `status`        | `VARCHAR(20)`  | `NOT NULL`, `DEFAULT 'published'`, `CHECK (status IN ('draft','review','published','archived'))`           | Estado de publicación                                      |
+| `sort_order`    | `SMALLINT`     | `NOT NULL`, `DEFAULT 100`                                                                                    | Orden de visualización en el catálogo                     |
+| `total_modules` | `SMALLINT`     | `NOT NULL`, `DEFAULT 12`, `CHECK (total_modules > 0)`                                                      | Cantidad de módulos planificados                           |
+| `is_active`     | `BOOLEAN`      | `NOT NULL`, `DEFAULT true`                                                                                   | Habilitación en plataforma                                 |
+| `created_at`    | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                                  |                                                             |
+| `updated_at`    | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                                  | Trigger`ON UPDATE`                                        |
+| `deleted_at`    | `TIMESTAMPTZ`  | `NULL`                                                                                                         | Soft delete                                                 |
+
+**Relaciones:** N:1 `programming_languages`; 1:N `modules`, `learning_paths`, `certificates`.
+
+**Índices:**
+
+- `uq_courses_code` — `UNIQUE (code) WHERE deleted_at IS NULL`.
+- `uq_courses_slug` — `UNIQUE (slug) WHERE deleted_at IS NULL`.
+- `idx_courses_lang_status` — `(language_id, status, sort_order)`.
+
+---
+
+### 6.5 LearningPath — `learning_paths`
 
 Ruta personalizada por usuario y lenguaje (`RF-RUTA-001`, `RF-DIAG-003`). No es el orden canónico de `modules`; es la **instancia** que adapta el punto de entrada.
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` |  |
-| `language_id` | `UUID` | **FK → programming_languages.id**, `NOT NULL` |  |
-| `declared_level` | `VARCHAR(20)` | `NOT NULL`, `CHECK (declared_level IN ('BEGINNER','MEDIUM','SEMI_PROFESSIONAL','PROFESSIONAL'))` | `RF-LVL-001` |
-| `diagnostic_attempt_id` | `UUID` | **FK → attempts.id**, `NULL` | `RF-DIAG-005`; intento de tipo `diagnostic` |
-| `entry_module_id` | `UUID` | **FK → modules.id**, `NULL` | Módulo/sección recomendados (`RF-DIAG-003`) |
-| `entry_section_id` | `UUID` | **FK → sections.id**, `NULL` |  |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('active','completed','abandoned'))`, `DEFAULT 'active'` |  |
-| `current_module_id` | `UUID` | **FK → modules.id**, `NULL` | Cursor de reanudación (`RF-RUTA-005`) |
-| `current_section_id` | `UUID` | **FK → sections.id**, `NULL` |  |
-| `current_lesson_id` | `UUID` | **FK → lessons.id**, `NULL` |  |
-| `progress_percent` | `SMALLINT` | `NOT NULL`, `DEFAULT 0`, `CHECK (progress_percent BETWEEN 0 AND 100)` | Agregado cacheado; fuente de verdad es `progress` |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
+| Campo                     | Tipo            | Restricción                                                                                         | Descripción                                       |
+| ------------------------- | --------------- | ---------------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `id`                    | `UUID`        | **PK**                                                                                         |                                                    |
+| `user_id`               | `UUID`        | **FK → users.id**, `NOT NULL`                                                               |                                                    |
+| `language_id`           | `UUID`        | **FK → programming_languages.id**, `NOT NULL`                                               |                                                    |
+| `course_id`             | `UUID`        | **FK → courses.id**, `NULL`                                                                 | Curso al que se asocia la ruta personalizada       |
+| `declared_level`        | `VARCHAR(20)` | `NOT NULL`, `CHECK (declared_level IN ('BEGINNER','MEDIUM','SEMI_PROFESSIONAL','PROFESSIONAL'))` | `RF-LVL-001`                                     |
+| `diagnostic_attempt_id` | `UUID`        | **FK → attempts.id**, `NULL`                                                                | `RF-DIAG-005`; intento de tipo `diagnostic`    |
+| `entry_module_id`       | `UUID`        | **FK → modules.id**, `NULL`                                                                 | Módulo/sección recomendados (`RF-DIAG-003`)    |
+| `entry_section_id`      | `UUID`        | **FK → sections.id**, `NULL`                                                                |                                                    |
+| `status`                | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('active','completed','abandoned'))`, `DEFAULT 'active'`         |                                                    |
+| `current_module_id`     | `UUID`        | **FK → modules.id**, `NULL`                                                                 | Cursor de reanudación (`RF-RUTA-005`)           |
+| `current_section_id`    | `UUID`        | **FK → sections.id**, `NULL`                                                                |                                                    |
+| `current_lesson_id`     | `UUID`        | **FK → lessons.id**, `NULL`                                                                 |                                                    |
+| `progress_percent`      | `SMALLINT`    | `NOT NULL`, `DEFAULT 0`, `CHECK (progress_percent BETWEEN 0 AND 100)`                          | Agregado cacheado; fuente de verdad es`progress` |
+| `created_at`            | `TIMESTAMPTZ` | `NOT NULL`                                                                                         |                                                    |
+| `updated_at`            | `TIMESTAMPTZ` | `NOT NULL`                                                                                         |                                                    |
 
-**Relaciones:** N:1 `users`, `programming_languages`; N:1 opcionales a `modules`/`sections`/`lessons`; 1:N `learning_path_modules` (orden efectivo); 1:N `diagnostic_results` si se desglosa por área.
+**Relaciones:** N:1 `users`, `programming_languages`, `courses`; N:1 opcionales a `modules`/`sections`/`lessons`; 1:N `learning_path_modules` (orden efectivo); 1:N `diagnostic_results` si se desglosa por área.
 
 **Restricciones:**
+
 - `UNIQUE (user_id, language_id) WHERE status='active'` — una ruta activa por lenguaje (`RF-LANG-005`).
 - `CHECK ((entry_module_id IS NULL) = (entry_section_id IS NULL) OR entry_section_id IS NULL)` — sección sin módulo es inválida (validado en app + FK).
 - `CHECK (progress_percent BETWEEN 0 AND 100)`.
 
 **Índices:**
+
 - `uq_learning_paths_user_lang_active` — `UNIQUE (user_id, language_id) WHERE status='active'` (partial).
 - `idx_learning_paths_user_lang` — `(user_id, language_id)`.
 - `idx_learning_paths_current` — `(current_module_id, current_section_id)` para reanudación.
@@ -510,13 +371,13 @@ Ruta personalizada por usuario y lenguaje (`RF-RUTA-001`, `RF-DIAG-003`). No es 
 
 **Tabla de orden efectivo — `learning_path_modules`:**
 
-| Campo | Tipo | Restricción |
-|---|---|---|
-| `learning_path_id` | `UUID` | **FK → learning_paths.id**, `NOT NULL`, `ON DELETE CASCADE` |
-| `module_id` | `UUID` | **FK → modules.id**, `NOT NULL` |
-| `position` | `SMALLINT` | `NOT NULL`, `CHECK (position > 0)` |
-| `is_skipped_by_diagnostic` | `BOOLEAN` | `NOT NULL`, `DEFAULT false` |
-| `status` | `VARCHAR(20)` | `CHECK (status IN ('locked','available','in_progress','passed','failed'))` |
+| Campo                        | Tipo            | Restricción                                                                 |
+| ---------------------------- | --------------- | ---------------------------------------------------------------------------- |
+| `learning_path_id`         | `UUID`        | **FK → learning_paths.id**, `NOT NULL`, `ON DELETE CASCADE`       |
+| `module_id`                | `UUID`        | **FK → modules.id**, `NOT NULL`                                     |
+| `position`                 | `SMALLINT`    | `NOT NULL`, `CHECK (position > 0)`                                       |
+| `is_skipped_by_diagnostic` | `BOOLEAN`     | `NOT NULL`, `DEFAULT false`                                              |
+| `status`                   | `VARCHAR(20)` | `CHECK (status IN ('locked','available','in_progress','passed','failed'))` |
 
 - **PK** compuesta `(learning_path_id, module_id)`.
 - **UQ** `(learning_path_id, position)`.
@@ -524,37 +385,39 @@ Ruta personalizada por usuario y lenguaje (`RF-RUTA-001`, `RF-DIAG-003`). No es 
 
 ---
 
-### 6.5 Module — `modules`
+### 6.6 Module — `modules`
 
 Unidad temática canónica (12 módulos en el currículo principal de Python `01_PROJECT_OVERVIEW.md`). Orden pedagógico configurable sin código (`RF-MOD-004`, `RF-ADM-004`, `RNF-017`).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** | Identificador único del módulo |
-| `language_id` | `UUID` | **FK → programming_languages.id**, `NOT NULL` | Lenguaje al que pertenece (`PY`, `PY`, etc.) |
-| `code` | `VARCHAR(50)` | `NOT NULL` | Ej. `PY_MOD_01`, `PY_MOD_02` |
-| `title` | `VARCHAR(150)` | `NOT NULL` | Título visible (ej. `Fundamentos de Python`) |
-| `slug` | `VARCHAR(150)` | `NOT NULL` | Slug para URLs amigables |
-| `description` | `TEXT` | `NULL` | Resumen pedagógico del módulo |
-| `objective` | `TEXT` | `NULL` | `RF-MOD-002`; objetivo de aprendizaje |
-| `position` | `SMALLINT` | `NOT NULL`, `CHECK (position > 0)` | Posición secuencial en el roadmap (1..12) |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('draft','review','published','archived'))`, `DEFAULT 'draft'` | `RF-ADM-003/009` |
-| `content_version` | `INTEGER` | `NOT NULL`, `DEFAULT 1` | Incrementa en cada publicación (`RF-ADM-005`) |
-| `total_sections` | `SMALLINT` | `NOT NULL`, `DEFAULT 10`, `CHECK (total_sections > 0)` | Cantidad de secciones (10 en Python estándar) |
-| `total_lessons` | `SMALLINT` | `NOT NULL`, `DEFAULT 100`, `CHECK (total_lessons > 0)` | Cantidad de lecciones atómicas (100 en M02) |
-| `min_stars_percentage` | `SMALLINT` | `NOT NULL`, `DEFAULT 80`, `CHECK (min_stars_percentage BETWEEN 0 AND 100)` | Umbral de maestría (80% ⭐) para desbloquear $M_{i+1}$ (`14` §4.1) |
-| `quiz_threshold` | `SMALLINT` | `NOT NULL`, `DEFAULT 70`, `CHECK (quiz_threshold BETWEEN 0 AND 100)` | `RF-EVAL-005`; inicial 70% |
-| `exam_threshold` | `SMALLINT` | `NOT NULL`, `DEFAULT 80`, `CHECK (exam_threshold BETWEEN 0 AND 100)` | Umbral de aprobación de examen final (80%) |
-| `xp_on_pass` | `INTEGER` | `NOT NULL`, `DEFAULT 150` | `01` §17; XP otorgada al completar el módulo |
-| `prerequisite_module_id` | `UUID` | **FK → modules.id**, `NULL` | `RF-RUTA-004`; NULL para el primer módulo ($M_1$) |
-| `published_at` | `TIMESTAMPTZ` | `NULL` | Fecha de publicación |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `deleted_at` | `TIMESTAMPTZ` | `NULL` |  |
+| Campo                      | Tipo             | Restricción                                                                                       | Descripción                                                            |
+| -------------------------- | ---------------- | -------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| `id`                     | `UUID`         | **PK**                                                                                       | Identificador único del módulo                                        |
+| `course_id`              | `UUID`         | **FK → courses.id**, `NOT NULL`                                                           | Curso al que pertenece el módulo                                       |
+| `language_id`            | `UUID`         | **FK → programming_languages.id**, `NOT NULL`                                             | Lenguaje al que pertenece (`PY`, `JS`, etc.)                        |
+| `code`                   | `VARCHAR(50)`  | `NOT NULL`                                                                                       | Ej.`PY_MOD_01`, `PY_MOD_02`                                         |
+| `title`                  | `VARCHAR(150)` | `NOT NULL`                                                                                       | Título visible (ej.`Fundamentos de Python`)                          |
+| `slug`                   | `VARCHAR(150)` | `NOT NULL`                                                                                       | Slug para URLs amigables                                                |
+| `description`            | `TEXT`         | `NULL`                                                                                           | Resumen pedagógico del módulo                                         |
+| `objective`              | `TEXT`         | `NULL`                                                                                           | `RF-MOD-002`; objetivo de aprendizaje                                 |
+| `position`               | `SMALLINT`     | `NOT NULL`, `CHECK (position > 0)`                                                             | Posición secuencial en el roadmap (1..12)                              |
+| `status`                 | `VARCHAR(20)`  | `NOT NULL`, `CHECK (status IN ('draft','review','published','archived'))`, `DEFAULT 'draft'` | `RF-ADM-003/009`                                                      |
+| `content_version`        | `INTEGER`      | `NOT NULL`, `DEFAULT 1`                                                                        | Incrementa en cada publicación (`RF-ADM-005`)                        |
+| `total_sections`         | `SMALLINT`     | `NOT NULL`, `DEFAULT 10`, `CHECK (total_sections > 0)`                                       | Cantidad de secciones (10 en Python estándar)                          |
+| `total_lessons`          | `SMALLINT`     | `NOT NULL`, `DEFAULT 100`, `CHECK (total_lessons > 0)`                                       | Cantidad de lecciones atómicas (100 en M02)                            |
+| `min_stars_percentage`   | `SMALLINT`     | `NOT NULL`, `DEFAULT 80`, `CHECK (min_stars_percentage BETWEEN 0 AND 100)`                   | Umbral de maestría (80% ⭐) para desbloquear$M_{i+1}$ (`14` §4.1) |
+| `quiz_threshold`         | `SMALLINT`     | `NOT NULL`, `DEFAULT 70`, `CHECK (quiz_threshold BETWEEN 0 AND 100)`                         | `RF-EVAL-005`; inicial 70%                                            |
+| `exam_threshold`         | `SMALLINT`     | `NOT NULL`, `DEFAULT 80`, `CHECK (exam_threshold BETWEEN 0 AND 100)`                         | Umbral de aprobación de examen final (80%)                             |
+| `xp_on_pass`             | `INTEGER`      | `NOT NULL`, `DEFAULT 150`                                                                      | `01` §17; XP otorgada al completar el módulo                        |
+| `prerequisite_module_id` | `UUID`         | **FK → modules.id**, `NULL`                                                               | `RF-RUTA-004`; NULL para el primer módulo ($M_1$)                  |
+| `published_at`           | `TIMESTAMPTZ`  | `NULL`                                                                                           | Fecha de publicación                                                   |
+| `created_at`             | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                    |                                                                         |
+| `updated_at`             | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                    |                                                                         |
+| `deleted_at`             | `TIMESTAMPTZ`  | `NULL`                                                                                           |                                                                         |
 
 **Relaciones:** N:1 `programming_languages`; 1:N `sections`, `quizzes`, `exams`, `questions`, `user_module_progress`; self-referencia `prerequisite_module_id`.
 
 **Restricciones:**
+
 - `UNIQUE (language_id, code) WHERE deleted_at IS NULL`.
 - `UNIQUE (language_id, slug) WHERE deleted_at IS NULL`.
 - `UNIQUE (language_id, position) WHERE deleted_at IS NULL`.
@@ -562,6 +425,7 @@ Unidad temática canónica (12 módulos en el currículo principal de Python `01
 - Validación de ciclos en grafo de prerrequisitos en capa app (`RF-ADM-006`) + trigger que rechaza ciclos detectables por CTE recursivo.
 
 **Índices:**
+
 - `uq_modules_lang_code` — `UNIQUE (language_id, code) WHERE deleted_at IS NULL`.
 - `idx_modules_lang_position` — `(language_id, position) WHERE deleted_at IS NULL`.
 - `idx_modules_lang_status` — `(language_id, status)`.
@@ -569,115 +433,123 @@ Unidad temática canónica (12 módulos en el currículo principal de Python `01
 
 ---
 
-### 6.6 Section — `sections`
+### 6.7 Section — `sections`
 
 Subdivisión pedagógica de módulo (`01` §7.3, `RF-SEC-*`). Cada sección agrupa lecciones teóricas y ejercicios interactivos con evaluación formativa en estrellas (1–3⭐) y candado secuencial ($S_1 \to S_n$).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `module_id` | `UUID` | **FK → modules.id**, `NOT NULL`, `ON DELETE CASCADE` | Módulo padre |
-| `title` | `VARCHAR(150)` | `NOT NULL` | Nombre descriptivo de la sección |
-| `slug` | `VARCHAR(150)` | `NOT NULL` | Slug único dentro del módulo |
-| `position` | `SMALLINT` | `NOT NULL`, `CHECK (position > 0)` | Posición secuencial en el módulo (1..10) |
-| `type` | `VARCHAR(20)` | `NOT NULL`, `CHECK (type IN ('theory','example','exercise','quiz','review'))`, `DEFAULT 'theory'` | `RF-SEC-001` |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('draft','published','archived'))`, `DEFAULT 'draft'` |  |
-| `content_version` | `INTEGER` | `NOT NULL`, `DEFAULT 1` |  |
-| `total_lessons` | `SMALLINT` | `NOT NULL`, `DEFAULT 10`, `CHECK (total_lessons > 0)` | Cantidad de lecciones atómicas en la sección |
-| `stars_available` | `SMALLINT` | `NOT NULL`, `DEFAULT 3`, `CHECK (stars_available BETWEEN 1 AND 3)` | Máximo de estrellas adjudicables (3 ⭐) |
-| `is_first_section` | `BOOLEAN` | `NOT NULL`, `DEFAULT false` | `true` si `position = 1` (desbloqueada por defecto al abrir módulo) |
-| `xp_on_complete` | `INTEGER` | `NOT NULL`, `DEFAULT 10` | `01` §17; XP otorgada al finalizar la sección |
-| `estimated_minutes` | `SMALLINT` | `NULL`, `CHECK (estimated_minutes BETWEEN 1 AND 120)` | Tiempo estimado en minutos |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `deleted_at` | `TIMESTAMPTZ` | `NULL` |  |
+| Campo                 | Tipo             | Restricción                                                                                            | Descripción                                                             |
+| --------------------- | ---------------- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| `id`                | `UUID`         | **PK**                                                                                            |                                                                          |
+| `module_id`         | `UUID`         | **FK → modules.id**, `NOT NULL`, `ON DELETE CASCADE`                                         | Módulo padre                                                            |
+| `title`             | `VARCHAR(150)` | `NOT NULL`                                                                                            | Nombre descriptivo de la sección                                        |
+| `slug`              | `VARCHAR(150)` | `NOT NULL`                                                                                            | Slug único dentro del módulo                                           |
+| `position`          | `SMALLINT`     | `NOT NULL`, `CHECK (position > 0)`                                                                  | Posición secuencial en el módulo (1..10)                               |
+| `type`              | `VARCHAR(20)`  | `NOT NULL`, `CHECK (type IN ('theory','example','exercise','quiz','review'))`, `DEFAULT 'theory'` | `RF-SEC-001`                                                           |
+| `status`            | `VARCHAR(20)`  | `NOT NULL`, `CHECK (status IN ('draft','published','archived'))`, `DEFAULT 'draft'`               |                                                                          |
+| `content_version`   | `INTEGER`      | `NOT NULL`, `DEFAULT 1`                                                                             |                                                                          |
+| `total_lessons`     | `SMALLINT`     | `NOT NULL`, `DEFAULT 10`, `CHECK (total_lessons > 0)`                                             | Cantidad de lecciones atómicas en la sección                           |
+| `stars_available`   | `SMALLINT`     | `NOT NULL`, `DEFAULT 3`, `CHECK (stars_available BETWEEN 1 AND 3)`                                | Máximo de estrellas adjudicables (3 ⭐)                                 |
+| `is_first_section`  | `BOOLEAN`      | `NOT NULL`, `DEFAULT false`                                                                         | `true` si `position = 1` (desbloqueada por defecto al abrir módulo) |
+| `xp_on_complete`    | `INTEGER`      | `NOT NULL`, `DEFAULT 10`                                                                            | `01` §17; XP otorgada al finalizar la sección                        |
+| `estimated_minutes` | `SMALLINT`     | `NULL`, `CHECK (estimated_minutes BETWEEN 1 AND 120)`                                               | Tiempo estimado en minutos                                               |
+| `created_at`        | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                         |                                                                          |
+| `updated_at`        | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                         |                                                                          |
+| `deleted_at`        | `TIMESTAMPTZ`  | `NULL`                                                                                                |                                                                          |
 
 **Relaciones:** N:1 `modules`; 1:N `lessons`, `questions`, `user_section_stars`.
 
 **Restricciones:**
+
 - `UNIQUE (module_id, slug) WHERE deleted_at IS NULL`.
 - `UNIQUE (module_id, position) WHERE deleted_at IS NULL`.
 
 **Índices:**
+
 - `idx_sections_module_position` — `(module_id, position)`.
 - `idx_sections_module_status` — `(module_id, status)`.
 
 ---
 
-### 6.7 Lesson — `lessons`
+### 6.8 Lesson — `lessons`
 
 Unidad mínima de aprendizaje con flujo `concepto → explicación → ejemplo → ejercicio → feedback → recompensa` (`RF-LEC-001`, `01` §6).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `section_id` | `UUID` | **FK → sections.id**, `NOT NULL`, `ON DELETE CASCADE` |  |
-| `title` | `VARCHAR(150)` | `NOT NULL` |  |
-| `slug` | `VARCHAR(150)` | `NOT NULL` |  |
-| `position` | `SMALLINT` | `NOT NULL` |  |
-| `body_mdx` | `TEXT` | `NOT NULL` | Explicación breve en formato declarativo (`23_CONTENT_SPECIFICATION.md`) |
-| `example_code` | `TEXT` | `NULL` | Bloques de ejemplo; nunca hardcodeado en UI |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('draft','published','archived'))`, `DEFAULT 'draft'` |  |
-| `content_version` | `INTEGER` | `NOT NULL`, `DEFAULT 1` |  |
-| `is_required` | `BOOLEAN` | `NOT NULL`, `DEFAULT true` | `RF-SEC-003`: obligatoria para completar sección |
-| `xp_on_complete` | `INTEGER` | `NOT NULL`, `DEFAULT 0` | Normalmente 0; XP se otorga por ejercicio/section |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `deleted_at` | `TIMESTAMPTZ` | `NULL` |  |
+| Campo               | Tipo             | Restricción                                                                              | Descripción                                                                |
+| ------------------- | ---------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| `id`              | `UUID`         | **PK**                                                                              |                                                                             |
+| `section_id`      | `UUID`         | **FK → sections.id**, `NOT NULL`, `ON DELETE CASCADE`                          |                                                                             |
+| `title`           | `VARCHAR(150)` | `NOT NULL`                                                                              |                                                                             |
+| `slug`            | `VARCHAR(150)` | `NOT NULL`                                                                              |                                                                             |
+| `position`        | `SMALLINT`     | `NOT NULL`                                                                              |                                                                             |
+| `body_mdx`        | `TEXT`         | `NOT NULL`                                                                              | Explicación breve en formato declarativo (`23_CONTENT_SPECIFICATION.md`) |
+| `example_code`    | `TEXT`         | `NULL`                                                                                  | Bloques de ejemplo; nunca hardcodeado en UI                                 |
+| `status`          | `VARCHAR(20)`  | `NOT NULL`, `CHECK (status IN ('draft','published','archived'))`, `DEFAULT 'draft'` |                                                                             |
+| `content_version` | `INTEGER`      | `NOT NULL`, `DEFAULT 1`                                                               |                                                                             |
+| `is_required`     | `BOOLEAN`      | `NOT NULL`, `DEFAULT true`                                                            | `RF-SEC-003`: obligatoria para completar sección                         |
+| `xp_on_complete`  | `INTEGER`      | `NOT NULL`, `DEFAULT 0`                                                               | Normalmente 0; XP se otorga por ejercicio/section                           |
+| `created_at`      | `TIMESTAMPTZ`  | `NOT NULL`                                                                              |                                                                             |
+| `updated_at`      | `TIMESTAMPTZ`  | `NOT NULL`                                                                              |                                                                             |
+| `deleted_at`      | `TIMESTAMPTZ`  | `NULL`                                                                                  |                                                                             |
 
 **Relaciones:** N:1 `sections`; 1:N `questions` (ancladas a lección), `progress`.
 
 **Restricciones:**
+
 - `UNIQUE (section_id, slug) WHERE deleted_at IS NULL`.
 - `UNIQUE (section_id, position) WHERE deleted_at IS NULL`.
 
 **Índices:**
+
 - `idx_lessons_section_position` — `(section_id, position)`.
 - `idx_lessons_section_status` — `(section_id, status)`.
 
 ---
 
-### 6.8 Question — `questions`
+### 6.9 Question — `questions`
 
-Banco tipificado (`RF-PREG-001/002`, `01` §11). Versionada: editar crea nueva fila (`RF-PREG-006`).
+Banco tipificado (`RF-PREG-001/002`, `01` §11). Cada versión de pregunta es una fila inmutable (`RF-PREG-006`), agrupada por `question_uid` para conservar el linaje histórico sin romper compatibilidad con ORMs.
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** | Identidad lógica de la pregunta (estable entre versiones) |
-| `version` | `INTEGER` | `NOT NULL`, `DEFAULT 1`, `CHECK (version > 0)` | Versión de esta fila |
-| `language_id` | `UUID` | **FK → programming_languages.id**, `NOT NULL` |  |
-| `module_id` | `UUID` | **FK → modules.id**, `NOT NULL` | Anclaje `RF-PREG-003` |
-| `section_id` | `UUID` | **FK → sections.id**, `NULL` | Opcional si es de sección |
-| `lesson_id` | `UUID` | **FK → lessons.id**, `NULL` | Opcional si es de lección |
-| `type` | `VARCHAR(30)` | `NOT NULL`, `CHECK (type IN ('multiple_choice','true_false','fill_code','predict_output','find_error','order_lines','select_correct_code','match_concepts','write_code','small_problem'))` | `RF-PREG-001` |
-| `difficulty` | `VARCHAR(20)` | `NOT NULL`, `CHECK (difficulty IN ('easy','medium','hard'))`, `DEFAULT 'medium'` |  |
-| `category` | `VARCHAR(50)` | `NULL` | Ej. `variables`, `loops` para `RF-EVAL-004` |
-| `prompt` | `TEXT` | `NOT NULL` | Enunciado |
-| `prompt_code` | `TEXT` | `NULL` | Código asociado al enunciado |
-| `explanation` | `TEXT` | `NOT NULL` | Explicación de la respuesta correcta (`RF-PREG-004`) |
-| `score` | `INTEGER` | `NOT NULL`, `DEFAULT 10`, `CHECK (score > 0)` | `RF-PREG-002` |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('draft','published','archived'))`, `DEFAULT 'draft'` |  |
-| `content_version` | `INTEGER` | `NOT NULL`, `DEFAULT 1` | Alias de `version` para trazabilidad de intento |
-| `created_by` | `UUID` | **FK → users.id**, `NULL` | Auditoría `RF-ADM-008` |
-| `published_at` | `TIMESTAMPTZ` | `NULL` |  |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `deleted_at` | `TIMESTAMPTZ` | `NULL` |  |
+| Campo            | Tipo            | Restricción                                                                                                                                                                                   | Descripción                                            |
+| ---------------- | --------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| `id`           | `UUID`        | **PK**, `DEFAULT gen_random_uuid()`                                                                                                                                                    | Identificador inmutable de la versión de la pregunta   |
+| `question_uid` | `UUID`        | `NOT NULL`                                                                                                                                                                                   | Identidad lógica estable entre versiones sucesivas     |
+| `version`      | `INTEGER`     | `NOT NULL`, `DEFAULT 1`, `CHECK (version > 0)`                                                                                                                                           | Versión correlativa de esta revisión                  |
+| `language_id`  | `UUID`        | **FK → programming_languages.id**, `NOT NULL`                                                                                                                                         |                                                         |
+| `module_id`    | `UUID`        | **FK → modules.id**, `NOT NULL`                                                                                                                                                       | Anclaje`RF-PREG-003`                                  |
+| `section_id`   | `UUID`        | **FK → sections.id**, `NULL`                                                                                                                                                          | Opcional si es de sección                              |
+| `lesson_id`    | `UUID`        | **FK → lessons.id**, `NULL`                                                                                                                                                           | Opcional si es de lección                              |
+| `type`         | `VARCHAR(30)` | `NOT NULL`, `CHECK (type IN ('multiple_choice','true_false','fill_code','predict_output','find_error','order_lines','select_correct_code','match_concepts','write_code','small_problem'))` | `RF-PREG-001`                                         |
+| `difficulty`   | `VARCHAR(20)` | `NOT NULL`, `CHECK (difficulty IN ('easy','medium','hard'))`, `DEFAULT 'medium'`                                                                                                         |                                                         |
+| `category`     | `VARCHAR(50)` | `NULL`                                                                                                                                                                                       | Ej.`variables`, `loops` para `RF-EVAL-004`        |
+| `prompt`       | `TEXT`        | `NOT NULL`                                                                                                                                                                                   | Enunciado                                               |
+| `prompt_code`  | `TEXT`        | `NULL`                                                                                                                                                                                       | Código asociado al enunciado                           |
+| `explanation`  | `TEXT`        | `NOT NULL`                                                                                                                                                                                   | Explicación de la respuesta correcta (`RF-PREG-004`) |
+| `score`        | `INTEGER`     | `NOT NULL`, `DEFAULT 10`, `CHECK (score > 0)`                                                                                                                                            | `RF-PREG-002`                                         |
+| `status`       | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('draft','published','archived'))`, `DEFAULT 'draft'`                                                                                                      |                                                         |
+| `is_latest`    | `BOOLEAN`     | `NOT NULL`, `DEFAULT true`                                                                                                                                                                 | Marca rápida para seleccionar la versión activa       |
+| `created_by`   | `UUID`        | **FK → users.id**, `NULL`                                                                                                                                                             | Auditoría`RF-ADM-008`                                |
+| `published_at` | `TIMESTAMPTZ` | `NULL`                                                                                                                                                                                       |                                                         |
+| `created_at`   | `TIMESTAMPTZ` | `NOT NULL`                                                                                                                                                                                   |                                                         |
+| `updated_at`   | `TIMESTAMPTZ` | `NOT NULL`                                                                                                                                                                                   |                                                         |
+| `deleted_at`   | `TIMESTAMPTZ` | `NULL`                                                                                                                                                                                       |                                                         |
 
 **Relaciones:** N:1 `programming_languages`, `modules`, opcional `sections`/`lessons`; 1:N `answers`, `attempt_answers`, `quiz_questions`, `exam_questions`.
 
 **Restricciones:**
-- **PK lógica** `(id, version)` — `PRIMARY KEY (id, version)`; `id` solo es estable, la unicidad real es compuesta. Alternativa: tabla `question_versions` con `question_id + version`; aquí se modela como tabla versionada directa por simplicidad.
-- `CHECK ((lesson_id IS NULL AND section_id IS NULL) OR (lesson_id IS NOT NULL AND section_id IS NOT NULL) OR (lesson_id IS NULL AND section_id IS NOT NULL))` — si hay `lesson_id` debe haber `section_id` coherente (validado por FK + trigger que verifica `lessons.section_id = questions.section_id`).
-- `CHECK (score BETWEEN 1 AND 100)`.
-- `CHECK (type != 'write_code' OR prompt_code IS NOT NULL)` — ejemplo de validación por tipo.
 
-**Índices (críticos para `RNF-007` y repaso `RF-REP-002`):**
-- `pk_questions_id_version` — `PRIMARY KEY (id, version)`.
-- `idx_questions_module_status` — `(module_id, status, type)` para composición de quiz/examen.
-- `idx_questions_section` — `(section_id)` donde no nulo.
-- `idx_questions_lesson` — `(lesson_id)` donde no nulo.
-- `idx_questions_category` — `(category)` para bajo rendimiento.
+- `UNIQUE (question_uid, version)` — una versión por identidad lógica.
+- `CHECK ((lesson_id IS NULL AND section_id IS NULL) OR (lesson_id IS NOT NULL AND section_id IS NOT NULL) OR (lesson_id IS NULL AND section_id IS NOT NULL))` — si hay `lesson_id` debe haber `section_id` coherente.
+- `CHECK (score BETWEEN 1 AND 100)`.
+- `CHECK (type != 'write_code' OR prompt_code IS NOT NULL)`.
+
+**Índices:**
+
+- `uq_questions_uid_version` — `UNIQUE (question_uid, version)`.
+- `idx_questions_latest` — `(question_uid) WHERE is_latest = true`.
+- `idx_questions_module_status` — `(module_id, status, type)`.
+- `idx_questions_section` — `(section_id) WHERE section_id IS NOT NULL`.
+- `idx_questions_lesson` — `(lesson_id) WHERE lesson_id IS NOT NULL`.
+- `idx_questions_category` — `(category)`.
 - `idx_questions_difficulty` — `(difficulty)`.
 - `idx_questions_language` — `(language_id)`.
 - `idx_questions_published` — `(published_at) WHERE status='published'`.
@@ -690,26 +562,28 @@ Banco tipificado (`RF-PREG-001/002`, `01` §11). Versionada: editar crea nueva f
 
 Opciones y respuestas válidas por pregunta (`RF-PREG-002`).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `question_id` | `UUID` | `NOT NULL` | Parte de FK compuesta a `questions` |
-| `question_version` | `INTEGER` | `NOT NULL` |  |
-| `label` | `VARCHAR(10)` | `NULL` | Ej. `A`, `B` para múltiple choice |
-| `body` | `TEXT` | `NOT NULL` | Texto/código de la opción |
-| `is_correct` | `BOOLEAN` | `NOT NULL`, `DEFAULT false` | Puede haber múltiples correctas (`match_concepts`) |
-| `position` | `SMALLINT` | `NOT NULL` | Orden canónico; se aleatoriza en entrega (`RF-PREG-007`) |
-| `explanation` | `TEXT` | `NULL` | Explicación por opción (opcional) |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
+| Campo                | Tipo            | Restricción                    | Descripción                                                |
+| -------------------- | --------------- | ------------------------------- | ----------------------------------------------------------- |
+| `id`               | `UUID`        | **PK**                    |                                                             |
+| `question_id`      | `UUID`        | `NOT NULL`                    | Parte de FK compuesta a`questions`                        |
+| `question_version` | `INTEGER`     | `NOT NULL`                    |                                                             |
+| `label`            | `VARCHAR(10)` | `NULL`                        | Ej.`A`, `B` para múltiple choice                       |
+| `body`             | `TEXT`        | `NOT NULL`                    | Texto/código de la opción                                 |
+| `is_correct`       | `BOOLEAN`     | `NOT NULL`, `DEFAULT false` | Puede haber múltiples correctas (`match_concepts`)       |
+| `position`         | `SMALLINT`    | `NOT NULL`                    | Orden canónico; se aleatoriza en entrega (`RF-PREG-007`) |
+| `explanation`      | `TEXT`        | `NULL`                        | Explicación por opción (opcional)                         |
+| `created_at`       | `TIMESTAMPTZ` | `NOT NULL`                    |                                                             |
 
 **Relaciones:** N:1 `questions` (`FK (question_id, question_version) → questions (id, version)`, `ON DELETE CASCADE`).
 
 **Restricciones:**
+
 - `UNIQUE (question_id, question_version, position)`.
 - `CHECK (char_length(body) BETWEEN 1 AND 2000)`.
 - Al menos una `is_correct=true` por pregunta (validado por trigger o en `RF-ADM-006`).
 
 **Índices:**
+
 - `idx_answers_question` — `(question_id, question_version)`.
 - `idx_answers_correct` — `(question_id, question_version) WHERE is_correct=true`.
 
@@ -719,44 +593,46 @@ Opciones y respuestas válidas por pregunta (`RF-PREG-002`).
 
 Evaluación intermedia por módulo (`RF-QUIZ-*`, `01` §13). Composición configurable.
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `module_id` | `UUID` | **FK → modules.id**, `NOT NULL` |  |
-| `title` | `VARCHAR(150)` | `NOT NULL` | Ej. `Quiz — Variables` |
-| `slug` | `VARCHAR(150)` | `NOT NULL` |  |
-| `position` | `SMALLINT` | `NOT NULL` | Orden dentro del módulo (puede haber >1) |
-| `description` | `TEXT` | `NULL` |  |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('draft','published','archived'))`, `DEFAULT 'draft'` |  |
-| `content_version` | `INTEGER` | `NOT NULL`, `DEFAULT 1` |  |
-| `threshold` | `SMALLINT` | `NOT NULL`, `DEFAULT 70`, `CHECK (threshold BETWEEN 0 AND 100)` | `RF-QUIZ-003`, copia de `modules.quiz_threshold` al momento de publicar; `RNF-035` congela en intento |
-| `time_limit_seconds` | `INTEGER` | `NULL`, `CHECK (time_limit_seconds BETWEEN 60 AND 7200)` | Opcional |
-| `max_attempts` | `INTEGER` | `NULL`, `CHECK (max_attempts > 0)` | NULL = ilimitados en MVP (`RF-QUIZ-005`) |
-| `xp_on_complete` | `INTEGER` | `NOT NULL`, `DEFAULT 25` | `01` §17 |
-| `shuffle_questions` | `BOOLEAN` | `NOT NULL`, `DEFAULT true` |  |
-| `shuffle_answers` | `BOOLEAN` | `NOT NULL`, `DEFAULT true` | `RF-PREG-007` |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `deleted_at` | `TIMESTAMPTZ` | `NULL` |  |
+| Campo                  | Tipo             | Restricción                                                                              | Descripción                                                                                                |
+| ---------------------- | ---------------- | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `id`                 | `UUID`         | **PK**                                                                              |                                                                                                             |
+| `module_id`          | `UUID`         | **FK → modules.id**, `NOT NULL`                                                  |                                                                                                             |
+| `title`              | `VARCHAR(150)` | `NOT NULL`                                                                              | Ej.`Quiz — Variables`                                                                                    |
+| `slug`               | `VARCHAR(150)` | `NOT NULL`                                                                              |                                                                                                             |
+| `position`           | `SMALLINT`     | `NOT NULL`                                                                              | Orden dentro del módulo (puede haber >1)                                                                   |
+| `description`        | `TEXT`         | `NULL`                                                                                  |                                                                                                             |
+| `status`             | `VARCHAR(20)`  | `NOT NULL`, `CHECK (status IN ('draft','published','archived'))`, `DEFAULT 'draft'` |                                                                                                             |
+| `content_version`    | `INTEGER`      | `NOT NULL`, `DEFAULT 1`                                                               |                                                                                                             |
+| `threshold`          | `SMALLINT`     | `NOT NULL`, `DEFAULT 70`, `CHECK (threshold BETWEEN 0 AND 100)`                     | `RF-QUIZ-003`, copia de `modules.quiz_threshold` al momento de publicar; `RNF-035` congela en intento |
+| `time_limit_seconds` | `INTEGER`      | `NULL`, `CHECK (time_limit_seconds BETWEEN 60 AND 7200)`                              | Opcional                                                                                                    |
+| `max_attempts`       | `INTEGER`      | `NULL`, `CHECK (max_attempts > 0)`                                                    | NULL = ilimitados en MVP (`RF-QUIZ-005`)                                                                  |
+| `xp_on_complete`     | `INTEGER`      | `NOT NULL`, `DEFAULT 25`                                                              | `01` §17                                                                                                 |
+| `shuffle_questions`  | `BOOLEAN`      | `NOT NULL`, `DEFAULT true`                                                            |                                                                                                             |
+| `shuffle_answers`    | `BOOLEAN`      | `NOT NULL`, `DEFAULT true`                                                            | `RF-PREG-007`                                                                                             |
+| `created_at`         | `TIMESTAMPTZ`  | `NOT NULL`                                                                              |                                                                                                             |
+| `updated_at`         | `TIMESTAMPTZ`  | `NOT NULL`                                                                              |                                                                                                             |
+| `deleted_at`         | `TIMESTAMPTZ`  | `NULL`                                                                                  |                                                                                                             |
 
 **Relaciones:** N:1 `modules`; 1:N `quiz_questions`, `attempts`.
 
 **Restricciones:**
+
 - `UNIQUE (module_id, slug) WHERE deleted_at IS NULL`.
 - `UNIQUE (module_id, position) WHERE deleted_at IS NULL`.
 
 **Índices:**
+
 - `idx_quizzes_module_position` — `(module_id, position)`.
 - `idx_quizzes_module_status` — `(module_id, status)`.
 
 **Tabla de composición — `quiz_questions`:**
 
-| Campo | Tipo | Restricción |
-|---|---|---|
-| `quiz_id` | `UUID` | **FK → quizzes.id**, `NOT NULL`, `ON DELETE CASCADE` |
-| `question_id` | `UUID` | `NOT NULL` |
-| `question_version` | `INTEGER` | `NOT NULL` |
-| `position` | `SMALLINT` | `NOT NULL` |
+| Campo                | Tipo         | Restricción                                                    |
+| -------------------- | ------------ | --------------------------------------------------------------- |
+| `quiz_id`          | `UUID`     | **FK → quizzes.id**, `NOT NULL`, `ON DELETE CASCADE` |
+| `question_id`      | `UUID`     | `NOT NULL`                                                    |
+| `question_version` | `INTEGER`  | `NOT NULL`                                                    |
+| `position`         | `SMALLINT` | `NOT NULL`                                                    |
 
 - **PK** `(quiz_id, question_id, question_version)`.
 - **FK** `(question_id, question_version) → questions`.
@@ -769,47 +645,49 @@ Evaluación intermedia por módulo (`RF-QUIZ-*`, `01` §13). Composición config
 
 Evaluación final por módulo (`RF-EXAM-*`, `01` §14). Similar a `quizzes` pero con distribución por tipo configurable (`RF-EXAM-002`).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `module_id` | `UUID` | **FK → modules.id**, `NOT NULL`, `UNIQUE` | Un examen por módulo en MVP; Post-MVP puede ser 1:N quitando UNIQUE |
-| `title` | `VARCHAR(150)` | `NOT NULL` |  |
-| `slug` | `VARCHAR(150)` | `NOT NULL` |  |
-| `description` | `TEXT` | `NULL` |  |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('draft','published','archived'))`, `DEFAULT 'draft'` |  |
-| `content_version` | `INTEGER` | `NOT NULL`, `DEFAULT 1` |  |
-| `threshold` | `SMALLINT` | `NOT NULL`, `DEFAULT 80`, `CHECK (threshold BETWEEN 0 AND 100)` | `RF-EXAM-003` |
-| `distribution` | `JSONB` | `NOT NULL`, `DEFAULT '{"multiple_choice":5,"predict_output":5,"fill_code":3,"find_error":2,"true_false":5}'` | `RF-EXAM-002`; validada por `CHECK (distribution ? 'multiple_choice')` y suma = total |
-| `total_questions` | `SMALLINT` | `NOT NULL`, `DEFAULT 20` | Derivado de `distribution` pero cacheado |
-| `time_limit_seconds` | `INTEGER` | `NULL`, `CHECK (time_limit_seconds BETWEEN 300 AND 7200)` |  |
-| `max_attempts` | `INTEGER` | `NULL` | NULL = ilimitados (`RF-EXAM-005`) |
-| `xp_on_pass` | `INTEGER` | `NOT NULL`, `DEFAULT 100` | `01` §17 |
-| `shuffle_questions` | `BOOLEAN` | `NOT NULL`, `DEFAULT true` |  |
-| `shuffle_answers` | `BOOLEAN` | `NOT NULL`, `DEFAULT true` |  |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `deleted_at` | `TIMESTAMPTZ` | `NULL` |  |
+| Campo                  | Tipo             | Restricción                                                                                                     | Descripción                                                                              |
+| ---------------------- | ---------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `id`                 | `UUID`         | **PK**                                                                                                     |                                                                                           |
+| `module_id`          | `UUID`         | **FK → modules.id**, `NOT NULL`, `UNIQUE`                                                             | Un examen por módulo en MVP; Post-MVP puede ser 1:N quitando UNIQUE                      |
+| `title`              | `VARCHAR(150)` | `NOT NULL`                                                                                                     |                                                                                           |
+| `slug`               | `VARCHAR(150)` | `NOT NULL`                                                                                                     |                                                                                           |
+| `description`        | `TEXT`         | `NULL`                                                                                                         |                                                                                           |
+| `status`             | `VARCHAR(20)`  | `NOT NULL`, `CHECK (status IN ('draft','published','archived'))`, `DEFAULT 'draft'`                        |                                                                                           |
+| `content_version`    | `INTEGER`      | `NOT NULL`, `DEFAULT 1`                                                                                      |                                                                                           |
+| `threshold`          | `SMALLINT`     | `NOT NULL`, `DEFAULT 80`, `CHECK (threshold BETWEEN 0 AND 100)`                                            | `RF-EXAM-003`                                                                           |
+| `distribution`       | `JSONB`        | `NOT NULL`, `DEFAULT '{"multiple_choice":5,"predict_output":5,"fill_code":3,"find_error":2,"true_false":5}'` | `RF-EXAM-002`; validada por `CHECK (distribution ? 'multiple_choice')` y suma = total |
+| `total_questions`    | `SMALLINT`     | `NOT NULL`, `DEFAULT 20`                                                                                     | Derivado de`distribution` pero cacheado                                                 |
+| `time_limit_seconds` | `INTEGER`      | `NULL`, `CHECK (time_limit_seconds BETWEEN 300 AND 7200)`                                                    |                                                                                           |
+| `max_attempts`       | `INTEGER`      | `NULL`                                                                                                         | NULL = ilimitados (`RF-EXAM-005`)                                                       |
+| `xp_on_pass`         | `INTEGER`      | `NOT NULL`, `DEFAULT 100`                                                                                    | `01` §17                                                                               |
+| `shuffle_questions`  | `BOOLEAN`      | `NOT NULL`, `DEFAULT true`                                                                                   |                                                                                           |
+| `shuffle_answers`    | `BOOLEAN`      | `NOT NULL`, `DEFAULT true`                                                                                   |                                                                                           |
+| `created_at`         | `TIMESTAMPTZ`  | `NOT NULL`                                                                                                     |                                                                                           |
+| `updated_at`         | `TIMESTAMPTZ`  | `NOT NULL`                                                                                                     |                                                                                           |
+| `deleted_at`         | `TIMESTAMPTZ`  | `NULL`                                                                                                         |                                                                                           |
 
 **Relaciones:** N:1 `modules`; 1:N `exam_questions`, `attempts`.
 
 **Restricciones:**
+
 - `UNIQUE (module_id) WHERE deleted_at IS NULL` (MVP).
 - `CHECK (total_questions = (distribution->>'multiple_choice')::int + (distribution->>'predict_output')::int + ...)` — validado por trigger.
 - `CHECK (jsonb_typeof(distribution)='object')`.
 
 **Índices:**
+
 - `uq_exams_module` — `UNIQUE (module_id) WHERE deleted_at IS NULL`.
 - `idx_exams_module_status` — `(module_id, status)`.
 - `idx_exams_distribution` — `GIN (distribution)` si se filtra por tipo.
 
 **Tabla de composición — `exam_questions`:**
 
-| Campo | Tipo | Restricción |
-|---|---|---|
-| `exam_id` | `UUID` | **FK → exams.id**, `NOT NULL`, `ON DELETE CASCADE` |
-| `question_id` | `UUID` | `NOT NULL` |
-| `question_version` | `INTEGER` | `NOT NULL` |
-| `position` | `SMALLINT` | `NOT NULL` |
+| Campo                | Tipo         | Restricción                                                  |
+| -------------------- | ------------ | ------------------------------------------------------------- |
+| `exam_id`          | `UUID`     | **FK → exams.id**, `NOT NULL`, `ON DELETE CASCADE` |
+| `question_id`      | `UUID`     | `NOT NULL`                                                  |
+| `question_version` | `INTEGER`  | `NOT NULL`                                                  |
+| `position`         | `SMALLINT` | `NOT NULL`                                                  |
 
 - **PK** `(exam_id, question_id, question_version)`.
 - **UQ** `(exam_id, position)`.
@@ -821,35 +699,36 @@ Evaluación final por módulo (`RF-EXAM-*`, `01` §14). Similar a `quizzes` pero
 
 Intento inmutable y auditable (`RF-EVAL-003`, `RF-PREG-005`, `RF-PROG-001`, `RNF-033`–`RNF-035`). **Es la tabla más crítica del sistema.**
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` | Dueño del intento |
-| `kind` | `VARCHAR(20)` | `NOT NULL`, `CHECK (kind IN ('lesson_question','quiz','exam','diagnostic','review'))` | `RF-PREG-005`, `RF-DIAG-001`, `RF-REP-001` |
-| `module_id` | `UUID` | **FK → modules.id**, `NULL` | NULL para `lesson_question` fuera de módulo si aplica |
-| `section_id` | `UUID` | **FK → sections.id**, `NULL` |  |
-| `lesson_id` | `UUID` | **FK → lessons.id**, `NULL` | Para `lesson_question` |
-| `quiz_id` | `UUID` | **FK → quizzes.id**, `NULL` | Solo si `kind='quiz'` |
-| `exam_id` | `UUID` | **FK → exams.id**, `NULL` | Solo si `kind='exam'` |
-| `question_id` | `UUID` | `NULL` | Solo si `kind='lesson_question'` (una pregunta) |
-| `question_version` | `INTEGER` | `NULL` | Congela versión |
-| `content_version` | `INTEGER` | `NOT NULL` | Versión de contenido evaluada (`RNF-035`) |
-| `threshold_applied` | `SMALLINT` | `NULL`, `CHECK (threshold_applied BETWEEN 0 AND 100)` | Umbral vigente al calificar (`RF-EVAL-005`); NULL para `lesson_question` |
-| `score` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (score >= 0)` | Puntaje total obtenido |
-| `max_score` | `INTEGER` | `NOT NULL`, `CHECK (max_score > 0)` | Puntaje máximo posible |
-| `percent` | `NUMERIC(5,2)` | `NOT NULL`, `CHECK (percent BETWEEN 0 AND 100)` | `score/max_score*100` |
-| `is_passed` | `BOOLEAN` | `NOT NULL` | `percent >= threshold_applied` (o `score>0` para `lesson_question`) |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('in_progress','submitted','graded','invalidated'))`, `DEFAULT 'graded'` | En MVP `graded` inmediato (`RNF-012` <2s) |
-| `idempotency_key` | `VARCHAR(100)` | `NOT NULL` | `RNF-042`; evita duplicados por reintento |
-| `started_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `submitted_at` | `TIMESTAMPTZ` | `NULL` |  |
-| `graded_at` | `TIMESTAMPTZ` | `NULL` |  |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
+| Campo                 | Tipo             | Restricción                                                                                                 | Descripción                                                                 |
+| --------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------- |
+| `id`                | `UUID`         | **PK**                                                                                                 |                                                                              |
+| `user_id`           | `UUID`         | **FK → users.id**, `NOT NULL`                                                                       | Dueño del intento                                                           |
+| `kind`              | `VARCHAR(20)`  | `NOT NULL`, `CHECK (kind IN ('lesson_question','quiz','exam','diagnostic','review'))`                    | `RF-PREG-005`, `RF-DIAG-001`, `RF-REP-001`                             |
+| `module_id`         | `UUID`         | **FK → modules.id**, `NULL`                                                                         | NULL para`lesson_question` fuera de módulo si aplica                      |
+| `section_id`        | `UUID`         | **FK → sections.id**, `NULL`                                                                        |                                                                              |
+| `lesson_id`         | `UUID`         | **FK → lessons.id**, `NULL`                                                                         | Para`lesson_question`                                                      |
+| `quiz_id`           | `UUID`         | **FK → quizzes.id**, `NULL`                                                                         | Solo si`kind='quiz'`                                                       |
+| `exam_id`           | `UUID`         | **FK → exams.id**, `NULL`                                                                           | Solo si`kind='exam'`                                                       |
+| `question_id`       | `UUID`         | `NULL`                                                                                                     | Solo si`kind='lesson_question'` (una pregunta)                             |
+| `question_version`  | `INTEGER`      | `NULL`                                                                                                     | Congela versión                                                             |
+| `content_version`   | `INTEGER`      | `NOT NULL`                                                                                                 | Versión de contenido evaluada (`RNF-035`)                                 |
+| `threshold_applied` | `SMALLINT`     | `NULL`, `CHECK (threshold_applied BETWEEN 0 AND 100)`                                                    | Umbral vigente al calificar (`RF-EVAL-005`); NULL para `lesson_question` |
+| `score`             | `INTEGER`      | `NOT NULL`, `DEFAULT 0`, `CHECK (score >= 0)`                                                          | Puntaje total obtenido                                                       |
+| `max_score`         | `INTEGER`      | `NOT NULL`, `CHECK (max_score > 0)`                                                                      | Puntaje máximo posible                                                      |
+| `percent`           | `NUMERIC(5,2)` | `NOT NULL`, `CHECK (percent BETWEEN 0 AND 100)`                                                          | `score/max_score*100`                                                      |
+| `is_passed`         | `BOOLEAN`      | `NOT NULL`                                                                                                 | `percent >= threshold_applied` (o `score>0` para `lesson_question`)    |
+| `status`            | `VARCHAR(20)`  | `NOT NULL`, `CHECK (status IN ('in_progress','submitted','graded','invalidated'))`, `DEFAULT 'graded'` | En MVP`graded` inmediato (`RNF-012` <2s)                                 |
+| `idempotency_key`   | `VARCHAR(100)` | `NOT NULL`                                                                                                 | `RNF-042`; evita duplicados por reintento                                  |
+| `started_at`        | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                              |                                                                              |
+| `submitted_at`      | `TIMESTAMPTZ`  | `NULL`                                                                                                     |                                                                              |
+| `graded_at`         | `TIMESTAMPTZ`  | `NULL`                                                                                                     |                                                                              |
+| `created_at`        | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                              |                                                                              |
+| `updated_at`        | `TIMESTAMPTZ`  | `NOT NULL`                                                                                                 |                                                                              |
 
 **Relaciones:** N:1 `users`, opcionales `modules`/`sections`/`lessons`/`quizzes`/`exams`; 1:N `attempt_answers`.
 
 **Restricciones:**
+
 - `UNIQUE (user_id, idempotency_key)` — idempotencia por usuario (`05` regla 3, `RNF-042`).
 - `CHECK ((kind='quiz' AND quiz_id IS NOT NULL AND exam_id IS NULL AND question_id IS NULL) OR (kind='exam' AND exam_id IS NOT NULL AND quiz_id IS NULL AND question_id IS NULL) OR (kind='lesson_question' AND question_id IS NOT NULL AND quiz_id IS NULL AND exam_id IS NULL) OR (kind IN ('diagnostic','review') AND ...))` — exclusividad por tipo.
 - `CHECK ((kind IN ('quiz','exam') AND threshold_applied IS NOT NULL) OR (kind NOT IN ('quiz','exam') AND threshold_applied IS NULL) OR kind='diagnostic')` — umbral solo donde aplica.
@@ -858,6 +737,7 @@ Intento inmutable y auditable (`RF-EVAL-003`, `RF-PREG-005`, `RF-PROG-001`, `RNF
 - Inmutabilidad tras `graded`: trigger rechaza `UPDATE` de `score/max_score/percent/is_passed/threshold_applied/content_version` si `status='graded'`.
 
 **Índices (todos necesarios para `RNF-007`):**
+
 - `uq_attempts_user_idempotency` — `UNIQUE (user_id, idempotency_key)`.
 - `idx_attempts_user_module` — `(user_id, module_id, kind, created_at DESC)` — progreso por módulo, `RF-PROG-002`.
 - `idx_attempts_user_quiz` — `(user_id, quiz_id, created_at DESC) WHERE quiz_id IS NOT NULL`.
@@ -871,18 +751,18 @@ Intento inmutable y auditable (`RF-EVAL-003`, `RF-PREG-005`, `RF-PROG-001`, `RNF
 
 **Tabla hija — `attempt_answers`:**
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `attempt_id` | `UUID` | **FK → attempts.id**, `NOT NULL`, `ON DELETE CASCADE` |  |
-| `question_id` | `UUID` | `NOT NULL` |  |
-| `question_version` | `INTEGER` | `NOT NULL` | Congela versión |
-| `answer_id` | `UUID` | **FK → answers.id**, `NULL` | NULL para tipos sin opción predefinida (`fill_code`, `write_code`, `order_lines`) |
-| `given_answer` | `JSONB` | `NOT NULL` | Respuesta dada normalizada: `{ "selected": ["A"], "text": "name", "order": [3,1,2] }` |
-| `is_correct` | `BOOLEAN` | `NOT NULL` | Cálculo en servidor (`RF-EVAL-006`) |
-| `score_awarded` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (score_awarded >= 0)` | Puntaje otorgado por esta pregunta |
-| `position` | `SMALLINT` | `NOT NULL` | Orden en el intento |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
+| Campo                | Tipo            | Restricción                                                     | Descripción                                                                             |
+| -------------------- | --------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `id`               | `UUID`        | **PK**                                                     |                                                                                          |
+| `attempt_id`       | `UUID`        | **FK → attempts.id**, `NOT NULL`, `ON DELETE CASCADE` |                                                                                          |
+| `question_id`      | `UUID`        | `NOT NULL`                                                     |                                                                                          |
+| `question_version` | `INTEGER`     | `NOT NULL`                                                     | Congela versión                                                                         |
+| `answer_id`        | `UUID`        | **FK → answers.id**, `NULL`                             | NULL para tipos sin opción predefinida (`fill_code`, `write_code`, `order_lines`) |
+| `given_answer`     | `JSONB`       | `NOT NULL`                                                     | Respuesta dada normalizada:`{ "selected": ["A"], "text": "name", "order": [3,1,2] }`   |
+| `is_correct`       | `BOOLEAN`     | `NOT NULL`                                                     | Cálculo en servidor (`RF-EVAL-006`)                                                   |
+| `score_awarded`    | `INTEGER`     | `NOT NULL`, `DEFAULT 0`, `CHECK (score_awarded >= 0)`      | Puntaje otorgado por esta pregunta                                                       |
+| `position`         | `SMALLINT`    | `NOT NULL`                                                     | Orden en el intento                                                                      |
+| `created_at`       | `TIMESTAMPTZ` | `NOT NULL`                                                     |                                                                                          |
 
 - **FK** `(question_id, question_version) → questions`.
 - **UQ** `(attempt_id, question_id, question_version)`.
@@ -895,37 +775,39 @@ Intento inmutable y auditable (`RF-EVAL-003`, `RF-PREG-005`, `RF-PROG-001`, `RNF
 
 Agregado por usuario/lenguaje/módulo/sección/lección (`RF-PROG-002/003`, `01` §16). **No es la fuente de verdad granular** (esa es `attempts` + `attempt_answers`); es un **materialized aggregate** para lecturas p95 <100 ms (`RNF-007`).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` |  |
-| `language_id` | `UUID` | **FK → programming_languages.id**, `NOT NULL` |  |
-| `module_id` | `UUID` | **FK → modules.id**, `NULL` | NULL = agregado por lenguaje |
-| `section_id` | `UUID` | **FK → sections.id**, `NULL` | NULL = agregado por módulo |
-| `lesson_id` | `UUID` | **FK → lessons.id**, `NULL` | NULL = agregado por sección |
-| `scope` | `VARCHAR(20)` | `NOT NULL`, `CHECK (scope IN ('language','module','section','lesson'))` | Nivel del agregado |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('not_started','in_progress','completed','passed','failed'))`, `DEFAULT 'not_started'` | `RF-MOD-003` |
-| `total_items` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (total_items >= 0)` | Total de lecciones/preguntas en el scope |
-| `completed_items` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (completed_items >= 0)` |  |
-| `percent` | `NUMERIC(5,2)` | `NOT NULL`, `DEFAULT 0`, `CHECK (percent BETWEEN 0 AND 100)` | `completed/total*100` |
-| `best_score` | `INTEGER` | `NULL` | Mejor puntaje en el scope (si aplica) |
-| `best_percent` | `NUMERIC(5,2)` | `NULL`, `CHECK (best_percent BETWEEN 0 AND 100)` |  |
-| `attempts_count` | `INTEGER` | `NOT NULL`, `DEFAULT 0` |  |
-| `last_activity_at` | `TIMESTAMPTZ` | `NULL` | `RF-MOD-005` |
-| `first_started_at` | `TIMESTAMPTZ` | `NULL` |  |
-| `completed_at` | `TIMESTAMPTZ` | `NULL` |  |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
+| Campo                | Tipo             | Restricción                                                                                                               | Descripción                             |
+| -------------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| `id`               | `UUID`         | **PK**                                                                                                               |                                          |
+| `user_id`          | `UUID`         | **FK → users.id**, `NOT NULL`                                                                                     |                                          |
+| `language_id`      | `UUID`         | **FK → programming_languages.id**, `NOT NULL`                                                                     |                                          |
+| `module_id`        | `UUID`         | **FK → modules.id**, `NULL`                                                                                       | NULL = agregado por lenguaje             |
+| `section_id`       | `UUID`         | **FK → sections.id**, `NULL`                                                                                      | NULL = agregado por módulo              |
+| `lesson_id`        | `UUID`         | **FK → lessons.id**, `NULL`                                                                                       | NULL = agregado por sección             |
+| `scope`            | `VARCHAR(20)`  | `NOT NULL`, `CHECK (scope IN ('language','module','section','lesson'))`                                                | Nivel del agregado                       |
+| `status`           | `VARCHAR(20)`  | `NOT NULL`, `CHECK (status IN ('not_started','in_progress','completed','passed','failed'))`, `DEFAULT 'not_started'` | `RF-MOD-003`                           |
+| `total_items`      | `INTEGER`      | `NOT NULL`, `DEFAULT 0`, `CHECK (total_items >= 0)`                                                                  | Total de lecciones/preguntas en el scope |
+| `completed_items`  | `INTEGER`      | `NOT NULL`, `DEFAULT 0`, `CHECK (completed_items >= 0)`                                                              |                                          |
+| `percent`          | `NUMERIC(5,2)` | `NOT NULL`, `DEFAULT 0`, `CHECK (percent BETWEEN 0 AND 100)`                                                         | `completed/total*100`                  |
+| `best_score`       | `INTEGER`      | `NULL`                                                                                                                   | Mejor puntaje en el scope (si aplica)    |
+| `best_percent`     | `NUMERIC(5,2)` | `NULL`, `CHECK (best_percent BETWEEN 0 AND 100)`                                                                       |                                          |
+| `attempts_count`   | `INTEGER`      | `NOT NULL`, `DEFAULT 0`                                                                                                |                                          |
+| `last_activity_at` | `TIMESTAMPTZ`  | `NULL`                                                                                                                   | `RF-MOD-005`                           |
+| `first_started_at` | `TIMESTAMPTZ`  | `NULL`                                                                                                                   |                                          |
+| `completed_at`     | `TIMESTAMPTZ`  | `NULL`                                                                                                                   |                                          |
+| `created_at`       | `TIMESTAMPTZ`  | `NOT NULL`                                                                                                               |                                          |
+| `updated_at`       | `TIMESTAMPTZ`  | `NOT NULL`                                                                                                               |                                          |
 
 **Relaciones:** N:1 `users`, `programming_languages`, opcionales `modules`/`sections`/`lessons`.
 
 **Restricciones:**
+
 - `UNIQUE (user_id, language_id, module_id, section_id, lesson_id, scope)` — un agregado por scope.
 - `CHECK ((scope='language' AND module_id IS NULL AND section_id IS NULL AND lesson_id IS NULL) OR (scope='module' AND module_id IS NOT NULL AND section_id IS NULL AND lesson_id IS NULL) OR (scope='section' AND section_id IS NOT NULL AND lesson_id IS NULL) OR (scope='lesson' AND lesson_id IS NOT NULL))` — coherencia de scope.
 - `CHECK (completed_items <= total_items)`.
 - `CHECK (percent = CASE WHEN total_items=0 THEN 0 ELSE ROUND(completed_items::numeric/total_items*100,2) END)`.
 
 **Índices:**
+
 - `uq_progress_user_scope` — `UNIQUE (user_id, language_id, module_id, section_id, lesson_id, scope)`.
 - `idx_progress_user_lang` — `(user_id, language_id, scope, percent)` — lectura de perfil `RF-PROF-003`.
 - `idx_progress_user_module` — `(user_id, module_id) WHERE scope='module'`.
@@ -938,28 +820,30 @@ Agregado por usuario/lenguaje/módulo/sección/lección (`RF-PROG-002/003`, `01`
 
 Ledger inmutable de XP (`RF-XP-003`, `RF-XP-005`, `RNF-034`). Cada fila es un evento auditado; el `level` se deriva, no se persiste como fuente de verdad.
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` |  |
-| `amount` | `INTEGER` | `NOT NULL`, `CHECK (amount != 0)` | Positivo = ganancia; negativo = ajuste admin (raro) |
-| `balance_after` | `INTEGER` | `NOT NULL`, `CHECK (balance_after >= 0)` | Balance tras la transacción; evita recalcular |
-| `reason` | `VARCHAR(30)` | `NOT NULL`, `CHECK (reason IN ('section_complete','exercise_correct','quiz_complete','quiz_pass','exam_pass','module_complete','streak_bonus','achievement','admin_adjust'))` | `01` §17 + `RF-XP-001` |
-| `reference_type` | `VARCHAR(30)` | `NULL`, `CHECK (reference_type IN ('section','lesson','question','quiz','exam','module','achievement','streak'))` | Polimórfico tipado |
-| `reference_id` | `UUID` | `NULL` | FK lógica al recurso (no FK física para no acoplar; validada en app) |
-| `attempt_id` | `UUID` | **FK → attempts.id**, `NULL` | Trazabilidad a intento cuando aplica |
-| `idempotency_key` | `VARCHAR(100)` | `NOT NULL` | `RF-XP-005`; mismo que `attempts.idempotency_key` cuando deriva de intento |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
+| Campo               | Tipo             | Restricción                                                                                                                                                                      | Descripción                                                                   |
+| ------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| `id`              | `UUID`         | **PK**                                                                                                                                                                      |                                                                                |
+| `user_id`         | `UUID`         | **FK → users.id**, `NOT NULL`                                                                                                                                            |                                                                                |
+| `amount`          | `INTEGER`      | `NOT NULL`, `CHECK (amount != 0)`                                                                                                                                             | Positivo = ganancia; negativo = ajuste admin (raro)                            |
+| `balance_after`   | `INTEGER`      | `NOT NULL`, `CHECK (balance_after >= 0)`                                                                                                                                      | Balance tras la transacción; evita recalcular                                 |
+| `reason`          | `VARCHAR(30)`  | `NOT NULL`, `CHECK (reason IN ('section_complete','exercise_correct','quiz_complete','quiz_pass','exam_pass','module_complete','streak_bonus','achievement','admin_adjust'))` | `01` §17 + `RF-XP-001`                                                    |
+| `reference_type`  | `VARCHAR(30)`  | `NULL`, `CHECK (reference_type IN ('section','lesson','question','quiz','exam','module','achievement','streak'))`                                                             | Polimórfico tipado                                                            |
+| `reference_id`    | `UUID`         | `NULL`                                                                                                                                                                          | FK lógica al recurso (no FK física para no acoplar; validada en app)         |
+| `attempt_id`      | `UUID`         | **FK → attempts.id**, `NULL`                                                                                                                                             | Trazabilidad a intento cuando aplica                                           |
+| `idempotency_key` | `VARCHAR(100)` | `NOT NULL`                                                                                                                                                                      | `RF-XP-005`; mismo que `attempts.idempotency_key` cuando deriva de intento |
+| `created_at`      | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                                                                                                   |                                                                                |
 
 **Relaciones:** N:1 `users`, opcional `attempts`.
 
 **Restricciones:**
+
 - `UNIQUE (user_id, idempotency_key)` — `RF-XP-005`, `RNF-042`.
 - `CHECK ((reference_type IS NULL) = (reference_id IS NULL))`.
 - `CHECK (balance_after >= 0)` — no deuda de XP.
 - Inmutabilidad: trigger rechaza `UPDATE`/`DELETE`.
 
 **Índices:**
+
 - `uq_xp_user_idempotency` — `UNIQUE (user_id, idempotency_key)`.
 - `idx_xp_user_created` — `(user_id, created_at DESC)` — historial `RF-XP-003`.
 - `idx_xp_user_reason` — `(user_id, reason)` para analytics.
@@ -969,39 +853,35 @@ Ledger inmutable de XP (`RF-XP-003`, `RF-XP-005`, `RNF-034`). Cada fila es un ev
 
 ### 6.15 Streak — `streaks`
 
-Historial diario para rachas, registro de tiempo de estudio y cumplimiento de metas (`RF-RACHA-*`, `01` §18). Una fila por usuario y día con actividad válida.
+Historial diario para rachas (`RF-RACHA-*`, `01` §18). Una fila por usuario y día con actividad válida.
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** | Identificador único del registro de actividad diaria |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` | Referencia al estudiante |
-| `activity_date` | `DATE` | `NOT NULL` | Fecha local en `timezone` del usuario (`RF-RACHA-004`) |
-| `timezone` | `VARCHAR(50)` | `NOT NULL`, `DEFAULT 'America/Bogota'` | Zona horaria con la que se resolvió el corte diario |
-| `activity_count` | `INTEGER` | `NOT NULL`, `DEFAULT 1`, `CHECK (activity_count > 0)` | Número total de interacciones/ejercicios realizados |
-| `study_time_seconds` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (study_time_seconds >= 0)` | Tiempo efectivo de estudio acumulado en el día (en segundos) |
-| `lessons_completed_count` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (lessons_completed_count >= 0)` | Número de micro-lecciones aprobadas en la jornada |
-| `xp_earned_today` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (xp_earned_today >= 0)` | Total de puntos de experiencia ganados ese día |
-| `daily_goal_met` | `BOOLEAN` | `NOT NULL`, `DEFAULT false` | `true` si `study_time_seconds >= daily_goal_minutes * 60` |
-| `freeze_used` | `BOOLEAN` | `NOT NULL`, `DEFAULT false` | `true` si la racha fue salvada ese día usando un congelador |
-| `first_activity_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Timestamp del primer intento/evento del día |
-| `last_activity_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Timestamp del último intento/evento del día |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
+| Campo                 | Tipo            | Restricción                                                | Descripción                                        |
+| --------------------- | --------------- | ----------------------------------------------------------- | --------------------------------------------------- |
+| `id`                | `UUID`        | **PK**                                                |                                                     |
+| `user_id`           | `UUID`        | **FK → users.id**, `NOT NULL`                      |                                                     |
+| `activity_date`     | `DATE`        | `NOT NULL`                                                | Fecha en`timezone` del usuario (`RF-RACHA-004`) |
+| `timezone`          | `VARCHAR(50)` | `NOT NULL`                                                | Zona con la que se calculó`activity_date`        |
+| `activity_count`    | `INTEGER`     | `NOT NULL`, `DEFAULT 1`, `CHECK (activity_count > 0)` | Actividades válidas ese día                       |
+| `first_activity_at` | `TIMESTAMPTZ` | `NOT NULL`                                                |                                                     |
+| `last_activity_at`  | `TIMESTAMPTZ` | `NOT NULL`                                                |                                                     |
+| `created_at`        | `TIMESTAMPTZ` | `NOT NULL`                                                |                                                     |
 
 **Relaciones:** N:1 `users`.
 
 **Restricciones:**
+
 - `UNIQUE (user_id, activity_date)` — un registro por día.
 - `CHECK (activity_date <= CURRENT_DATE)` — validado en app con `timezone`.
 - `CHECK (last_activity_at >= first_activity_at)`.
 
 **Índices:**
+
 - `uq_streaks_user_date` — `UNIQUE (user_id, activity_date)`.
 - `idx_streaks_user_date_desc` — `(user_id, activity_date DESC)` — racha actual/máxima `RF-RACHA-003`.
 - `idx_streaks_date` — `(activity_date)` para DAU/WAU `26`.
-- `idx_streaks_goal_met` — `(user_id, daily_goal_met) WHERE daily_goal_met = true`.
 
 **Cálculo de racha:** no se persiste `current_streak`/`max_streak` como columna mutable; se deriva de `streaks` con ventana:
+
 ```sql
 -- Racha actual: días consecutivos hasta hoy (o ayer si hoy sin actividad)
 WITH days AS (
@@ -1011,6 +891,7 @@ WITH days AS (
 )
 SELECT COUNT(*) FROM days WHERE grp = (SELECT grp FROM days ORDER BY activity_date DESC LIMIT 1);
 ```
+
 Para p95 <100 ms se cachea en `user_profiles` o `progress` scope `language` y se recalcula por trigger en `streaks` o job diario con `timezone` del usuario. El historial permanece auditable (`RF-RACHA-005`).
 
 ---
@@ -1021,44 +902,48 @@ Catálogo y desbloqueos (`RF-LOGRO-*`, `01` §19). Contenido configurable sin c�
 
 **`achievements` (catálogo):**
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `code` | `VARCHAR(50)` | `NOT NULL`, `UNIQUE`, `CHECK (code ~ '^[A-Z_]+$')` | Ej. `FIRST_CODE`, `ON_FIRE`, `CODE_MASTER` |
-| `name` | `VARCHAR(100)` | `NOT NULL` |  |
-| `description` | `VARCHAR(500)` | `NOT NULL` |  |
-| `icon_url` | `VARCHAR(512)` | `NULL` |  |
-| `category` | `VARCHAR(30)` | `NOT NULL`, `CHECK (category IN ('progress','streak','score','language','special'))` |  |
-| `condition` | `JSONB` | `NOT NULL` | Regla verificable: `{"type":"streak_days","days":7}` o `{"type":"module_complete","count":1}` |
-| `xp_reward` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (xp_reward >= 0)` |  |
-| `is_active` | `BOOLEAN` | `NOT NULL`, `DEFAULT true` | `RF-LOGRO-004` |
-| `sort_order` | `SMALLINT` | `NOT NULL`, `DEFAULT 100` |  |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
+| Campo           | Tipo             | Restricción                                                                             | Descripción                                                                                     |
+| --------------- | ---------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `id`          | `UUID`         | **PK**                                                                             |                                                                                                  |
+| `code`        | `VARCHAR(50)`  | `NOT NULL`, `UNIQUE`, `CHECK (code ~ '^[A-Z_]+$')`                                 | Ej.`FIRST_CODE`, `ON_FIRE`, `CODE_MASTER`                                                  |
+| `name`        | `VARCHAR(100)` | `NOT NULL`                                                                             |                                                                                                  |
+| `description` | `VARCHAR(500)` | `NOT NULL`                                                                             |                                                                                                  |
+| `icon_url`    | `VARCHAR(512)` | `NULL`                                                                                 |                                                                                                  |
+| `category`    | `VARCHAR(30)`  | `NOT NULL`, `CHECK (category IN ('progress','streak','score','language','special'))` |                                                                                                  |
+| `condition`   | `JSONB`        | `NOT NULL`                                                                             | Regla verificable:`{"type":"streak_days","days":7}` o `{"type":"module_complete","count":1}` |
+| `xp_reward`   | `INTEGER`      | `NOT NULL`, `DEFAULT 0`, `CHECK (xp_reward >= 0)`                                  |                                                                                                  |
+| `is_active`   | `BOOLEAN`      | `NOT NULL`, `DEFAULT true`                                                           | `RF-LOGRO-004`                                                                                 |
+| `sort_order`  | `SMALLINT`     | `NOT NULL`, `DEFAULT 100`                                                            |                                                                                                  |
+| `created_at`  | `TIMESTAMPTZ`  | `NOT NULL`                                                                             |                                                                                                  |
+| `updated_at`  | `TIMESTAMPTZ`  | `NOT NULL`                                                                             |                                                                                                  |
 
 **Restricciones:**
+
 - `CHECK (jsonb_typeof(condition)='object' AND condition ? 'type')`.
 
 **Índices:**
+
 - `uq_achievements_code` — `UNIQUE (code)`.
 - `idx_achievements_category` — `(category)`.
 - `idx_achievements_active` — `(is_active) WHERE is_active=true`.
 
 **`user_achievements` (desbloqueos):**
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` |  |
-| `achievement_id` | `UUID` | **FK → achievements.id**, `NOT NULL` |  |
-| `unlocked_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | `RF-LOGRO-002` |
-| `context` | `JSONB` | `NULL` | Evidencia: `{"streak":7,"language":"PY"}` |
+| Campo              | Tipo            | Restricción                                  | Descripción                               |
+| ------------------ | --------------- | --------------------------------------------- | ------------------------------------------ |
+| `id`             | `UUID`        | **PK**                                  |                                            |
+| `user_id`        | `UUID`        | **FK → users.id**, `NOT NULL`        |                                            |
+| `achievement_id` | `UUID`        | **FK → achievements.id**, `NOT NULL` |                                            |
+| `unlocked_at`    | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()`               | `RF-LOGRO-002`                           |
+| `context`        | `JSONB`       | `NULL`                                      | Evidencia:`{"streak":7,"language":"PY"}` |
 
 **Restricciones:**
+
 - `UNIQUE (user_id, achievement_id)` — `RF-LOGRO-005`; un logro una vez.
 - `CHECK (unlocked_at <= now())`.
 
 **Índices:**
+
 - `uq_user_achievements_user_ach` — `UNIQUE (user_id, achievement_id)`.
 - `idx_user_achievements_user` — `(user_id, unlocked_at DESC)` — perfil `RF-PROF-004`.
 - `idx_user_achievements_achievement` — `(achievement_id)`.
@@ -1069,29 +954,30 @@ Catálogo y desbloqueos (`RF-LOGRO-*`, `01` §19). Contenido configurable sin c�
 
 Acreditación por lenguaje completado (`RF-CERT-*`, `04` §7, `01` §21–§22). Un certificado vigente por lenguaje con generación 100% en backend (NestJS) y persistencia en Google Drive API v3.
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** | Identificador único del registro |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` | Usuario titular del certificado |
-| `language_id` | `UUID` | **FK → programming_languages.id**, `NOT NULL` | Lenguaje acreditado |
-| `code` | `VARCHAR(20)` | `NOT NULL`, `UNIQUE` | `KODA-{LANG}-{SEQ}` ej. `KODA-PY-000001`, `KODA-PY-000001` (`RF-CERT-003`) |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('valid','revoked','obsolete'))`, `DEFAULT 'valid'` | `RF-CERT-005` |
-| `language_content_version` | `INTEGER` | `NOT NULL` | Versión del lenguaje al emitir; si cambia significativamente → `obsolete` |
-| `issued_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Fecha oficial de emisión (`RF-CERT-002`) |
-| `revoked_at` | `TIMESTAMPTZ` | `NULL` | Fecha de revocación u obsolescencia |
-| `storage_provider` | `VARCHAR(50)` | `NOT NULL`, `DEFAULT 'google_drive'` | Proveedor de almacenamiento (`google_drive`, `s3`) |
-| `google_drive_file_id` | `VARCHAR(255)` | `NULL` | ID del archivo subido en Google Drive API v3 (evita re-generaciones) |
-| `google_drive_file_id` | `VARCHAR(512)` | `NULL` | ID de archivo en Google Drive (ej. `1aBcDeFgHiJkLm_KODA-PY-000001`) |
-| `pdf_sha256` | `VARCHAR(64)` | `NULL` | Hash SHA-256 del binario para verificación de integridad bit-a-bit (`RF-PDF-003`) |
-| `pdf_version` | `INTEGER` | `NOT NULL`, `DEFAULT 1` | Versión de la plantilla visual del PDF (`RF-PDF-001`) |
-| `qr_payload` | `VARCHAR(512)` | `NOT NULL` | URL de verificación pública/interna (`RF-CERT-004`) |
-| `metadata` | `JSONB` | `NOT NULL`, `DEFAULT '{}'` | Snapshot inmutable: nombre, documento, plataforma, estado (`RF-CERT-002`) |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Fecha de creación del registro |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Fecha de última actualización |
+| Campo                        | Tipo             | Restricción                                                                            | Descripción                                                                         |
+| ---------------------------- | ---------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `id`                       | `UUID`         | **PK**                                                                            | Identificador único del registro                                                    |
+| `user_id`                  | `UUID`         | **FK → users.id**, `NOT NULL`                                                  | Usuario titular del certificado                                                      |
+| `language_id`              | `UUID`         | **FK → programming_languages.id**, `NOT NULL`                                  | Lenguaje acreditado                                                                  |
+| `course_id`                | `UUID`         | **FK → courses.id**, `NULL`                                                    | Curso acreditado (si aplica nivel curso)                                             |
+| `code`                     | `VARCHAR(30)`  | `NOT NULL`, `UNIQUE`                                                                | `KODA-{LANG}-{SEQ}` ej. `KODA-PY-000001` (`RF-CERT-003`)                       |
+| `status`                   | `VARCHAR(20)`  | `NOT NULL`, `CHECK (status IN ('valid','revoked','obsolete'))`, `DEFAULT 'valid'` | `RF-CERT-005`                                                                      |
+| `language_content_version` | `INTEGER`      | `NOT NULL`                                                                            | Versión del contenido al emitir; si cambia significativamente →`obsolete`        |
+| `issued_at`                | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                         | Fecha oficial de emisión (`RF-CERT-002`)                                          |
+| `revoked_at`               | `TIMESTAMPTZ`  | `NULL`                                                                                | Fecha de revocación u obsolescencia                                                 |
+| `storage_provider`         | `VARCHAR(50)`  | `NOT NULL`, `DEFAULT 'google_drive'`                                                | Proveedor de almacenamiento (`google_drive`, `s3`)                               |
+| `google_drive_file_id`     | `VARCHAR(255)` | `NULL`                                                                                | ID del archivo subido en Google Drive API v3 (evita re-generaciones)                 |
+| `pdf_sha256`               | `VARCHAR(64)`  | `NULL`                                                                                | Hash SHA-256 del binario para verificación de integridad bit-a-bit (`RF-PDF-003`) |
+| `pdf_version`              | `INTEGER`      | `NOT NULL`, `DEFAULT 1`                                                             | Versión de la plantilla visual del PDF (`RF-PDF-001`)                             |
+| `qr_payload`               | `VARCHAR(512)` | `NOT NULL`                                                                            | URL de verificación pública/interna (`RF-CERT-004`)                              |
+| `metadata`                 | `JSONB`        | `NOT NULL`, `DEFAULT '{}'`                                                          | Snapshot inmutable: nombre, documento, plataforma, estado (`RF-CERT-002`)          |
+| `created_at`               | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                         | Fecha de creación del registro                                                      |
+| `updated_at`               | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                         | Fecha de última actualización                                                      |
 
-**Relaciones:** N:1 `users`, `programming_languages`.
+**Relaciones:** N:1 `users`, `programming_languages`, `courses`.
 
 **Restricciones:**
+
 - `UNIQUE (code)` — correlativo único por lenguaje.
 - `UNIQUE (user_id, language_id) WHERE status='valid'` — un único certificado vigente por lenguaje (`RF-CERT-005`, `04` §7).
 - `CHECK (code ~ '^CQ-[A-Z]+-[0-9]{6}$')`.
@@ -1100,6 +986,7 @@ Acreditación por lenguaje completado (`RF-CERT-*`, `04` §7, `01` §21–§22).
 - `CHECK (pdf_version > 0)`.
 
 **Índices:**
+
 - `uq_certificates_code` — `UNIQUE (code)`.
 - `uq_certificates_user_lang_valid` — `UNIQUE (user_id, language_id) WHERE status='valid'` (partial).
 - `idx_certificates_user` — `(user_id, issued_at DESC)` — perfil `RF-PROF-005`.
@@ -1109,10 +996,10 @@ Acreditación por lenguaje completado (`RF-CERT-*`, `04` §7, `01` §21–§22).
 
 **Secuencia correlativa:** no se usa `SERIAL` global; se usa tabla `certificate_sequences`:
 
-| Campo | Tipo |
-|---|---|
-| `language_id` | `UUID` **PK, FK** |
-| `last_seq` | `INTEGER` `NOT NULL`, `DEFAULT 0` |
+| Campo           | Tipo                                    |
+| --------------- | --------------------------------------- |
+| `language_id` | `UUID` **PK, FK**               |
+| `last_seq`    | `INTEGER` `NOT NULL`, `DEFAULT 0` |
 
 - Emisión hace `UPDATE certificate_sequences SET last_seq = last_seq + 1 WHERE language_id=$1 RETURNING last_seq` en transacción, luego `code = 'CQ-'||code||'-'||LPAD(last_seq::text,6,'0')`. Garantiza correlativo por lenguaje sin huecos visibles en `code` aunque `id` sea UUID.
 
@@ -1122,33 +1009,35 @@ Acreditación por lenguaje completado (`RF-CERT-*`, `04` §7, `01` §21–§22).
 
 Premium USD $1/mes (`RF-PREM-*`, `01` §23, `04` §8). Pasarela abstraída (`RF-PREM-004`, `RF-PREM-006`).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK** |  |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` |  |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `CHECK (status IN ('active','expired','canceled','pending','failed'))`, `DEFAULT 'pending'` | `RF-PREM-002` (`activa/expirada/cancelada` + estados de pago) |
-| `plan_code` | `VARCHAR(30)` | `NOT NULL`, `DEFAULT 'premium_monthly'`, `CHECK (plan_code IN ('premium_monthly'))` | Extensible a futuros planes |
-| `amount_cents` | `INTEGER` | `NOT NULL`, `DEFAULT 100`, `CHECK (amount_cents > 0)` | 100 = USD $1 |
-| `currency` | `CHAR(3)` | `NOT NULL`, `DEFAULT 'USD'` |  |
-| `provider` | `VARCHAR(30)` | `NULL`, `CHECK (provider IN ('stripe','paypal','mock'))` | Abstraído; `mock` para MVP/tests |
-| `provider_subscription_id` | `VARCHAR(150)` | `NULL` | ID en pasarela; nunca datos de tarjeta en núcleo (`RNF-037`) |
-| `current_period_start` | `TIMESTAMPTZ` | `NULL` |  |
-| `current_period_end` | `TIMESTAMPTZ` | `NULL` | Expiración |
-| `canceled_at` | `TIMESTAMPTZ` | `NULL` |  |
-| `trial_ends_at` | `TIMESTAMPTZ` | `NULL` | Opcional |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL` |  |
-| `deleted_at` | `TIMESTAMPTZ` | `NULL` |  |
+| Campo                        | Tipo             | Restricción                                                                                                  | Descripción                                                      |
+| ---------------------------- | ---------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- |
+| `id`                       | `UUID`         | **PK**                                                                                                  |                                                                   |
+| `user_id`                  | `UUID`         | **FK → users.id**, `NOT NULL`                                                                        |                                                                   |
+| `status`                   | `VARCHAR(20)`  | `NOT NULL`, `CHECK (status IN ('active','expired','canceled','pending','failed'))`, `DEFAULT 'pending'` | `RF-PREM-002` (`activa/expirada/cancelada` + estados de pago) |
+| `plan_code`                | `VARCHAR(30)`  | `NOT NULL`, `DEFAULT 'premium_monthly'`, `CHECK (plan_code IN ('premium_monthly'))`                     | Extensible a futuros planes                                       |
+| `amount_cents`             | `INTEGER`      | `NOT NULL`, `DEFAULT 100`, `CHECK (amount_cents > 0)`                                                   | 100 = USD $1                                                      |
+| `currency`                 | `CHAR(3)`      | `NOT NULL`, `DEFAULT 'USD'`                                                                               |                                                                   |
+| `provider`                 | `VARCHAR(30)`  | `NULL`, `CHECK (provider IN ('stripe','paypal','mock'))`                                                  | Abstraído;`mock` para MVP/tests                                |
+| `provider_subscription_id` | `VARCHAR(150)` | `NULL`                                                                                                      | ID en pasarela; nunca datos de tarjeta en núcleo (`RNF-037`)   |
+| `current_period_start`     | `TIMESTAMPTZ`  | `NULL`                                                                                                      |                                                                   |
+| `current_period_end`       | `TIMESTAMPTZ`  | `NULL`                                                                                                      | Expiración                                                       |
+| `canceled_at`              | `TIMESTAMPTZ`  | `NULL`                                                                                                      |                                                                   |
+| `trial_ends_at`            | `TIMESTAMPTZ`  | `NULL`                                                                                                      | Opcional                                                          |
+| `created_at`               | `TIMESTAMPTZ`  | `NOT NULL`                                                                                                  |                                                                   |
+| `updated_at`               | `TIMESTAMPTZ`  | `NOT NULL`                                                                                                  |                                                                   |
+| `deleted_at`               | `TIMESTAMPTZ`  | `NULL`                                                                                                      |                                                                   |
 
 **Relaciones:** N:1 `users`.
 
 **Restricciones:**
+
 - `CHECK ((status='active' AND current_period_end IS NOT NULL AND current_period_end > current_period_start) OR status != 'active')`.
 - `CHECK ((status='canceled' AND canceled_at IS NOT NULL) OR status != 'canceled')`.
 - `CHECK (amount_cents = 100 AND currency='USD')` en MVP; Post-MVP se relaja si hay planes adicionales (validado en app por `plan_code`).
 - Solo una `active` por usuario: `UNIQUE (user_id) WHERE status='active'` (partial).
 
 **Índices:**
+
 - `uq_subscriptions_user_active` — `UNIQUE (user_id) WHERE status='active'`.
 - `idx_subscriptions_user` — `(user_id, created_at DESC)`.
 - `idx_subscriptions_status_period` — `(status, current_period_end)` para job de expiración.
@@ -1156,13 +1045,13 @@ Premium USD $1/mes (`RF-PREM-*`, `01` §23, `04` §8). Pasarela abstraída (`RF-
 
 **Tabla de auditoría — `subscription_events` (opcional pero recomendada para `RF-PREM-006`):**
 
-| Campo | Tipo |
-|---|---|
-| `id` | `UUID` **PK** |
-| `subscription_id` | `UUID` **FK → subscriptions.id**, `NOT NULL` |
-| `event_type` | `VARCHAR(30)` `CHECK (event_type IN ('created','activated','renewed','canceled','expired','payment_failed'))` |
-| `payload` | `JSONB` `NULL` (sin PII de tarjeta) |
-| `created_at` | `TIMESTAMPTZ` `NOT NULL` |
+| Campo               | Tipo                                                                                                              |
+| ------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `id`              | `UUID` **PK**                                                                                             |
+| `subscription_id` | `UUID` **FK → subscriptions.id**, `NOT NULL`                                                           |
+| `event_type`      | `VARCHAR(30)` `CHECK (event_type IN ('created','activated','renewed','canceled','expired','payment_failed'))` |
+| `payload`         | `JSONB` `NULL` (sin PII de tarjeta)                                                                           |
+| `created_at`      | `TIMESTAMPTZ` `NOT NULL`                                                                                      |
 
 - Índice `(subscription_id, created_at DESC)`.
 
@@ -1172,32 +1061,34 @@ Premium USD $1/mes (`RF-PREM-*`, `01` §23, `04` §8). Pasarela abstraída (`RF-
 
 Registro de calificación formativa en estrellas (1–3⭐), errores en primer intento y estado de completitud por sección (`14` §4.2, `16` §8.1, `RF-ESTRELLA-*`, `RF-SEC-004`).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK**, `DEFAULT gen_random_uuid()` | Identificador del registro |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` | Usuario evaluado |
-| `language_id` | `UUID` | **FK → programming_languages.id**, `NOT NULL` | Lenguaje en curso |
-| `module_id` | `UUID` | **FK → modules.id**, `NOT NULL` | Módulo padre |
-| `section_id` | `UUID` | **FK → sections.id**, `NOT NULL` | Sección evaluada |
-| `stars_earned` | `SMALLINT` | `NOT NULL`, `CHECK (stars_earned BETWEEN 1 AND 3)` | Estrellas obtenidas (3 = 0 errores, 2 = 1 error corregido, 1 = 2+ errores corregidos) |
-| `max_stars_earned` | `SMALLINT` | `NOT NULL`, `DEFAULT 1`, `CHECK (max_stars_earned BETWEEN 1 AND 3)` | Mejor puntuación histórica alcanzada en reintentos |
-| `first_attempt_errors` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (first_attempt_errors >= 0)` | Cantidad de ejercicios fallados en la primera pasada |
-| `review_round_completed` | `BOOLEAN` | `NOT NULL`, `DEFAULT true` | `true` cuando se resuelven todos los ejercicios en la ronda de repaso |
-| `attempts_count` | `INTEGER` | `NOT NULL`, `DEFAULT 1`, `CHECK (attempts_count > 0)` | Número de veces que el usuario ha completado la sección |
-| `is_completed` | `BOOLEAN` | `NOT NULL`, `DEFAULT true` | Estado de finalización de la sección |
-| `first_completed_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Timestamp de la primera vez que se completó |
-| `last_completed_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Timestamp del último reintento |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Trigger `ON UPDATE` |
+| Campo                      | Tipo            | Restricción                                                              | Descripción                                                                          |
+| -------------------------- | --------------- | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `id`                     | `UUID`        | **PK**, `DEFAULT gen_random_uuid()`                               | Identificador del registro                                                            |
+| `user_id`                | `UUID`        | **FK → users.id**, `NOT NULL`                                    | Usuario evaluado                                                                      |
+| `language_id`            | `UUID`        | **FK → programming_languages.id**, `NOT NULL`                    | Lenguaje en curso                                                                     |
+| `module_id`              | `UUID`        | **FK → modules.id**, `NOT NULL`                                  | Módulo padre                                                                         |
+| `section_id`             | `UUID`        | **FK → sections.id**, `NOT NULL`                                 | Sección evaluada                                                                     |
+| `stars_earned`           | `SMALLINT`    | `NOT NULL`, `CHECK (stars_earned BETWEEN 1 AND 3)`                    | Estrellas obtenidas (3 = 0 errores, 2 = 1 error corregido, 1 = 2+ errores corregidos) |
+| `max_stars_earned`       | `SMALLINT`    | `NOT NULL`, `DEFAULT 1`, `CHECK (max_stars_earned BETWEEN 1 AND 3)` | Mejor puntuación histórica alcanzada en reintentos                                  |
+| `first_attempt_errors`   | `INTEGER`     | `NOT NULL`, `DEFAULT 0`, `CHECK (first_attempt_errors >= 0)`        | Cantidad de ejercicios fallados en la primera pasada                                  |
+| `review_round_completed` | `BOOLEAN`     | `NOT NULL`, `DEFAULT true`                                            | `true` cuando se resuelven todos los ejercicios en la ronda de repaso               |
+| `attempts_count`         | `INTEGER`     | `NOT NULL`, `DEFAULT 1`, `CHECK (attempts_count > 0)`               | Número de veces que el usuario ha completado la sección                             |
+| `is_completed`           | `BOOLEAN`     | `NOT NULL`, `DEFAULT true`                                            | Estado de finalización de la sección                                                |
+| `first_completed_at`     | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()`                                           | Timestamp de la primera vez que se completó                                          |
+| `last_completed_at`      | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()`                                           | Timestamp del último reintento                                                       |
+| `created_at`             | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()`                                           |                                                                                       |
+| `updated_at`             | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()`                                           | Trigger`ON UPDATE`                                                                  |
 
 **Relaciones:** N:1 `users`, `programming_languages`, `modules`, `sections`.
 
 **Restricciones:**
+
 - `UNIQUE (user_id, section_id)` — un registro consolidado por usuario y sección.
 - `CHECK (max_stars_earned >= stars_earned)`.
 - `CHECK (last_completed_at >= first_completed_at)`.
 
 **Índices:**
+
 - `uq_user_section_stars` — `UNIQUE (user_id, section_id)`.
 - `idx_user_section_stars_user_module` — `(user_id, module_id, stars_earned)`.
 - `idx_user_section_stars_user_lang` — `(user_id, language_id)`.
@@ -1208,35 +1099,37 @@ Registro de calificación formativa en estrellas (1–3⭐), errores en primer i
 
 Estado de candado (`locked`/`unlocked`), total de estrellas acumuladas y porcentaje de maestría por módulo (`14` §4.1, `16` §8.2, `28` §3.1, `RF-CANDADO-*`, `RF-MOD-004`).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK**, `DEFAULT gen_random_uuid()` | Identificador del registro |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` | Usuario |
-| `language_id` | `UUID` | **FK → programming_languages.id**, `NOT NULL` | Lenguaje |
-| `module_id` | `UUID` | **FK → modules.id**, `NOT NULL` | Módulo evaluado |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `DEFAULT 'locked'`, `CHECK (status IN ('locked','unlocked','in_progress','completed','mastered'))` | Estado del módulo en la ruta |
-| `is_unlocked` | `BOOLEAN` | `NOT NULL`, `DEFAULT false` | `true` si el candado está abierto ($M_1$ o $M_i$ con prerequisitos cumplidos) |
-| `sections_total` | `SMALLINT` | `NOT NULL`, `DEFAULT 10`, `CHECK (sections_total > 0)` | Total de secciones configuradas en el módulo |
-| `sections_completed` | `SMALLINT` | `NOT NULL`, `DEFAULT 0`, `CHECK (sections_completed BETWEEN 0 AND sections_total)` | Cantidad de secciones finalizadas |
-| `stars_total_possible` | `SMALLINT` | `NOT NULL`, `DEFAULT 30`, `CHECK (stars_total_possible > 0)` | Total de estrellas posibles ($N_{\text{secciones}} \times 3$) |
-| `stars_earned` | `SMALLINT` | `NOT NULL`, `DEFAULT 0`, `CHECK (stars_earned BETWEEN 0 AND stars_total_possible)` | Suma actual de estrellas obtenidas en el módulo |
-| `stars_percentage` | `NUMERIC(5,2)` | `NOT NULL`, `DEFAULT 0.00`, `CHECK (stars_percentage BETWEEN 0 AND 100)` | Porcentaje de maestría (`stars_earned / stars_total_possible * 100`) |
-| `exam_passed` | `BOOLEAN` | `NOT NULL`, `DEFAULT false` | `true` si el usuario aprobó el examen final con $\ge 80\%$ |
-| `exam_score` | `SMALLINT` | `NULL`, `CHECK (exam_score BETWEEN 0 AND 100)` | Calificación más alta en el examen |
-| `unlocked_at` | `TIMESTAMPTZ` | `NULL` | Fecha en la que se abrió el candado |
-| `completed_at` | `TIMESTAMPTZ` | `NULL` | Fecha en la que completó el 100% de las secciones |
-| `mastered_at` | `TIMESTAMPTZ` | `NULL` | Fecha en la que alcanzó $\ge 80\%$ de estrellas + examen aprobado |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
+| Campo                    | Tipo             | Restricción                                                                                                         | Descripción                                                                         |
+| ------------------------ | ---------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ |
+| `id`                   | `UUID`         | **PK**, `DEFAULT gen_random_uuid()`                                                                          | Identificador del registro                                                           |
+| `user_id`              | `UUID`         | **FK → users.id**, `NOT NULL`                                                                               | Usuario                                                                              |
+| `language_id`          | `UUID`         | **FK → programming_languages.id**, `NOT NULL`                                                               | Lenguaje                                                                             |
+| `module_id`            | `UUID`         | **FK → modules.id**, `NOT NULL`                                                                             | Módulo evaluado                                                                     |
+| `status`               | `VARCHAR(20)`  | `NOT NULL`, `DEFAULT 'locked'`, `CHECK (status IN ('locked','unlocked','in_progress','completed','mastered'))` | Estado del módulo en la ruta                                                        |
+| `is_unlocked`          | `BOOLEAN`      | `NOT NULL`, `DEFAULT false`                                                                                      | `true` si el candado está abierto ($M_1$ o $M_i$ con prerequisitos cumplidos) |
+| `sections_total`       | `SMALLINT`     | `NOT NULL`, `DEFAULT 10`, `CHECK (sections_total > 0)`                                                         | Total de secciones configuradas en el módulo                                        |
+| `sections_completed`   | `SMALLINT`     | `NOT NULL`, `DEFAULT 0`, `CHECK (sections_completed BETWEEN 0 AND sections_total)`                             | Cantidad de secciones finalizadas                                                    |
+| `stars_total_possible` | `SMALLINT`     | `NOT NULL`, `DEFAULT 30`, `CHECK (stars_total_possible > 0)`                                                   | Total de estrellas posibles ($N_{\text{secciones}} \times 3$)                      |
+| `stars_earned`         | `SMALLINT`     | `NOT NULL`, `DEFAULT 0`, `CHECK (stars_earned BETWEEN 0 AND stars_total_possible)`                             | Suma actual de estrellas obtenidas en el módulo                                     |
+| `stars_percentage`     | `NUMERIC(5,2)` | `NOT NULL`, `DEFAULT 0.00`, `CHECK (stars_percentage BETWEEN 0 AND 100)`                                       | Porcentaje de maestría (`stars_earned / stars_total_possible * 100`)              |
+| `exam_passed`          | `BOOLEAN`      | `NOT NULL`, `DEFAULT false`                                                                                      | `true` si el usuario aprobó el examen final con $\ge 80\%$                      |
+| `exam_score`           | `SMALLINT`     | `NULL`, `CHECK (exam_score BETWEEN 0 AND 100)`                                                                   | Calificación más alta en el examen                                                 |
+| `unlocked_at`          | `TIMESTAMPTZ`  | `NULL`                                                                                                             | Fecha en la que se abrió el candado                                                 |
+| `completed_at`         | `TIMESTAMPTZ`  | `NULL`                                                                                                             | Fecha en la que completó el 100% de las secciones                                   |
+| `mastered_at`          | `TIMESTAMPTZ`  | `NULL`                                                                                                             | Fecha en la que alcanzó$\ge 80\%$ de estrellas + examen aprobado                  |
+| `created_at`           | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                                      |                                                                                      |
+| `updated_at`           | `TIMESTAMPTZ`  | `NOT NULL`, `DEFAULT now()`                                                                                      |                                                                                      |
 
 **Relaciones:** N:1 `users`, `programming_languages`, `modules`.
 
 **Restricciones:**
+
 - `UNIQUE (user_id, module_id)` — un estado por usuario y módulo.
 - `CHECK (stars_percentage = ROUND(stars_earned::numeric / NULLIF(stars_total_possible, 0) * 100, 2))`.
 - `CHECK ((is_unlocked = true AND unlocked_at IS NOT NULL) OR (is_unlocked = false AND unlocked_at IS NULL))`.
 
 **Índices:**
+
 - `uq_user_module_progress` — `UNIQUE (user_id, module_id)`.
 - `idx_user_module_progress_user_lang` — `(user_id, language_id, status)`.
 - `idx_user_module_progress_stars` — `(user_id, stars_percentage)`.
@@ -1247,34 +1140,36 @@ Estado de candado (`locked`/`unlocked`), total de estrellas acumuladas y porcent
 
 Cuaderno de Errores persistente para práctica deliberada y refuerzo formativo continuo (`14` §5, `RF-CUADERNO-*`, `RF-REP-*`).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK**, `DEFAULT gen_random_uuid()` | Identificador de la entrada |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` | Estudiante |
-| `language_id` | `UUID` | **FK → programming_languages.id**, `NOT NULL` | Lenguaje |
-| `module_id` | `UUID` | **FK → modules.id**, `NOT NULL` | Módulo |
-| `section_id` | `UUID` | **FK → sections.id**, `NULL` | Sección de origen |
-| `lesson_id` | `UUID` | **FK → lessons.id**, `NULL` | Lección de origen |
-| `question_id` | `UUID` | `NOT NULL` | Pregunta fallada |
-| `question_version` | `INTEGER` | `NOT NULL` | Versión congelada de la pregunta |
-| `fail_count` | `INTEGER` | `NOT NULL`, `DEFAULT 1`, `CHECK (fail_count > 0)` | Número de veces que el usuario ha fallado este ejercicio |
-| `is_resolved` | `BOOLEAN` | `NOT NULL`, `DEFAULT false` | `true` cuando el usuario resuelve correctamente el ejercicio desde el cuaderno |
-| `first_failed_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Fecha del primer error |
-| `last_failed_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` | Fecha del error más reciente |
-| `resolved_at` | `TIMESTAMPTZ` | `NULL` | Fecha de remediación en el cuaderno de repaso |
-| `resolved_in_attempt_id` | `UUID` | **FK → attempts.id**, `NULL` | Intento en el que se corrigió el error |
-| `xp_recovered` | `INTEGER` | `NOT NULL`, `DEFAULT 0`, `CHECK (xp_recovered >= 0)` | XP formativa otorgada por corregir el error (+5 XP) |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
+| Campo                      | Tipo            | Restricción                                               | Descripción                                                                     |
+| -------------------------- | --------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| `id`                     | `UUID`        | **PK**, `DEFAULT gen_random_uuid()`                | Identificador de la entrada                                                      |
+| `user_id`                | `UUID`        | **FK → users.id**, `NOT NULL`                     | Estudiante                                                                       |
+| `language_id`            | `UUID`        | **FK → programming_languages.id**, `NOT NULL`     | Lenguaje                                                                         |
+| `module_id`              | `UUID`        | **FK → modules.id**, `NOT NULL`                   | Módulo                                                                          |
+| `section_id`             | `UUID`        | **FK → sections.id**, `NULL`                      | Sección de origen                                                               |
+| `lesson_id`              | `UUID`        | **FK → lessons.id**, `NULL`                       | Lección de origen                                                               |
+| `question_id`            | `UUID`        | `NOT NULL`                                               | Pregunta fallada                                                                 |
+| `question_version`       | `INTEGER`     | `NOT NULL`                                               | Versión congelada de la pregunta                                                |
+| `fail_count`             | `INTEGER`     | `NOT NULL`, `DEFAULT 1`, `CHECK (fail_count > 0)`    | Número de veces que el usuario ha fallado este ejercicio                        |
+| `is_resolved`            | `BOOLEAN`     | `NOT NULL`, `DEFAULT false`                            | `true` cuando el usuario resuelve correctamente el ejercicio desde el cuaderno |
+| `first_failed_at`        | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()`                            | Fecha del primer error                                                           |
+| `last_failed_at`         | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()`                            | Fecha del error más reciente                                                    |
+| `resolved_at`            | `TIMESTAMPTZ` | `NULL`                                                   | Fecha de remediación en el cuaderno de repaso                                   |
+| `resolved_in_attempt_id` | `UUID`        | **FK → attempts.id**, `NULL`                      | Intento en el que se corrigió el error                                          |
+| `xp_recovered`           | `INTEGER`     | `NOT NULL`, `DEFAULT 0`, `CHECK (xp_recovered >= 0)` | XP formativa otorgada por corregir el error (+5 XP)                              |
+| `created_at`             | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()`                            |                                                                                  |
+| `updated_at`             | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()`                            |                                                                                  |
 
 **Relaciones:** N:1 `users`, `programming_languages`, `modules`, `sections`, `lessons`, opcional `attempts`; FK compuesta `(question_id, question_version) → questions(id, version)`.
 
 **Restricciones:**
+
 - `UNIQUE (user_id, question_id)` — un registro por ejercicio y usuario (actualiza `fail_count` e `is_resolved`).
 - `CHECK ((is_resolved = true AND resolved_at IS NOT NULL) OR (is_resolved = false AND resolved_at IS NULL))`.
 - `CHECK (last_failed_at >= first_failed_at)`.
 
 **Índices:**
+
 - `uq_user_mistakes_user_question` — `UNIQUE (user_id, question_id)`.
 - `idx_user_mistakes_unresolved` — `(user_id, module_id, last_failed_at DESC) WHERE is_resolved = false`.
 - `idx_user_mistakes_user_lang` — `(user_id, language_id, is_resolved)`.
@@ -1285,25 +1180,27 @@ Cuaderno de Errores persistente para práctica deliberada y refuerzo formativo c
 
 Cola en sesión activa para la ronda de repaso de ejercicios fallados dentro de una lección antes de calificar las estrellas (`14` §4.2, `RF-ESTRELLA-002`, `RF-REP-002`).
 
-| Campo | Tipo | Restricción | Descripción |
-|---|---|---|---|
-| `id` | `UUID` | **PK**, `DEFAULT gen_random_uuid()` |  |
-| `attempt_id` | `UUID` | **FK → attempts.id**, `NOT NULL`, `ON DELETE CASCADE` | Intento activo de la lección/sección |
-| `user_id` | `UUID` | **FK → users.id**, `NOT NULL` | Estudiante |
-| `section_id` | `UUID` | **FK → sections.id**, `NOT NULL` | Sección en progreso |
-| `question_id` | `UUID` | `NOT NULL` | Ejercicio en cola de repaso |
-| `question_version` | `INTEGER` | `NOT NULL` | Versión congelada |
-| `status` | `VARCHAR(20)` | `NOT NULL`, `DEFAULT 'pending'`, `CHECK (status IN ('pending','passed','failed'))` | Estado en la ronda actual |
-| `review_round` | `SMALLINT` | `NOT NULL`, `DEFAULT 1`, `CHECK (review_round > 0)` | Número de iteración de repaso |
-| `created_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
-| `updated_at` | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()` |  |
+| Campo                | Tipo            | Restricción                                                                             | Descripción                           |
+| -------------------- | --------------- | ---------------------------------------------------------------------------------------- | -------------------------------------- |
+| `id`               | `UUID`        | **PK**, `DEFAULT gen_random_uuid()`                                              |                                        |
+| `attempt_id`       | `UUID`        | **FK → attempts.id**, `NOT NULL`, `ON DELETE CASCADE`                         | Intento activo de la lección/sección |
+| `user_id`          | `UUID`        | **FK → users.id**, `NOT NULL`                                                   | Estudiante                             |
+| `section_id`       | `UUID`        | **FK → sections.id**, `NOT NULL`                                                | Sección en progreso                   |
+| `question_id`      | `UUID`        | `NOT NULL`                                                                             | Ejercicio en cola de repaso            |
+| `question_version` | `INTEGER`     | `NOT NULL`                                                                             | Versión congelada                     |
+| `status`           | `VARCHAR(20)` | `NOT NULL`, `DEFAULT 'pending'`, `CHECK (status IN ('pending','passed','failed'))` | Estado en la ronda actual              |
+| `review_round`     | `SMALLINT`    | `NOT NULL`, `DEFAULT 1`, `CHECK (review_round > 0)`                                | Número de iteración de repaso        |
+| `created_at`       | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()`                                                          |                                        |
+| `updated_at`       | `TIMESTAMPTZ` | `NOT NULL`, `DEFAULT now()`                                                          |                                        |
 
 **Relaciones:** N:1 `attempts`, `users`, `sections`; FK `(question_id, question_version) → questions`.
 
 **Restricciones:**
+
 - `UNIQUE (attempt_id, question_id, review_round)`.
 
 **Índices:**
+
 - `idx_review_queue_attempt_status` — `(attempt_id, status)`.
 
 ---
@@ -1316,19 +1213,19 @@ Estas tablas no son entidades de dominio nuevas, sino materialización de requis
 
 Desglose por área del diagnóstico (`RF-DIAG-002/003`, `RF-DIAG-005`).
 
-| Campo | Tipo | Restricción |
-|---|---|---|
-| `id` | `UUID` **PK** |  |
-| `attempt_id` | `UUID` **FK → attempts.id** `NOT NULL`, `UNIQUE` | `kind='diagnostic'` |
-| `user_id` | `UUID` **FK → users.id** `NOT NULL` |  |
-| `language_id` | `UUID` **FK → programming_languages.id** `NOT NULL` |  |
-| `total_score` | `INTEGER` `NOT NULL` |  |
-| `max_score` | `INTEGER` `NOT NULL` |  |
-| `percent` | `NUMERIC(5,2)` `NOT NULL` |  |
-| `area_scores` | `JSONB` `NOT NULL` | `{"variables":80,"loops":45}` |
-| `recommended_module_id` | `UUID` **FK → modules.id** `NULL` |  |
-| `recommended_section_id` | `UUID` **FK → sections.id** `NULL` |  |
-| `created_at` | `TIMESTAMPTZ` `NOT NULL` |  |
+| Campo                      | Tipo                                                           | Restricción                    |
+| -------------------------- | -------------------------------------------------------------- | ------------------------------- |
+| `id`                     | `UUID` **PK**                                          |                                 |
+| `attempt_id`             | `UUID` **FK → attempts.id** `NOT NULL`, `UNIQUE`  | `kind='diagnostic'`           |
+| `user_id`                | `UUID` **FK → users.id** `NOT NULL`                 |                                 |
+| `language_id`            | `UUID` **FK → programming_languages.id** `NOT NULL` |                                 |
+| `total_score`            | `INTEGER` `NOT NULL`                                       |                                 |
+| `max_score`              | `INTEGER` `NOT NULL`                                       |                                 |
+| `percent`                | `NUMERIC(5,2)` `NOT NULL`                                  |                                 |
+| `area_scores`            | `JSONB` `NOT NULL`                                         | `{"variables":80,"loops":45}` |
+| `recommended_module_id`  | `UUID` **FK → modules.id** `NULL`                   |                                 |
+| `recommended_section_id` | `UUID` **FK → sections.id** `NULL`                  |                                 |
+| `created_at`             | `TIMESTAMPTZ` `NOT NULL`                                   |                                 |
 
 - Índices: `idx_diag_user_lang` `(user_id, language_id)`, `uq_diag_attempt` `UNIQUE (attempt_id)`.
 
@@ -1336,17 +1233,17 @@ Desglose por área del diagnóstico (`RF-DIAG-002/003`, `RF-DIAG-005`).
 
 Auditoría administrativa (`RF-ADM-008`, `RNF-019`).
 
-| Campo | Tipo |
-|---|---|
-| `id` | `UUID` **PK** |
-| `actor_user_id` | `UUID` **FK → users.id** `NOT NULL` |
-| `entity_type` | `VARCHAR(30)` `CHECK (entity_type IN ('language','module','section','lesson','question','quiz','exam','achievement'))` |
-| `entity_id` | `UUID` `NOT NULL` |
-| `action` | `VARCHAR(20)` `CHECK (action IN ('create','update','publish','hide','archive'))` |
-| `from_version` | `INTEGER` `NULL` |
-| `to_version` | `INTEGER` `NULL` |
-| `diff` | `JSONB` `NULL` |
-| `created_at` | `TIMESTAMPTZ` `NOT NULL` |
+| Campo             | Tipo                                                                                                                       |
+| ----------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `id`            | `UUID` **PK**                                                                                                      |
+| `actor_user_id` | `UUID` **FK → users.id** `NOT NULL`                                                                             |
+| `entity_type`   | `VARCHAR(30)` `CHECK (entity_type IN ('language','module','section','lesson','question','quiz','exam','achievement'))` |
+| `entity_id`     | `UUID` `NOT NULL`                                                                                                      |
+| `action`        | `VARCHAR(20)` `CHECK (action IN ('create','update','publish','hide','archive'))`                                       |
+| `from_version`  | `INTEGER` `NULL`                                                                                                       |
+| `to_version`    | `INTEGER` `NULL`                                                                                                       |
+| `diff`          | `JSONB` `NULL`                                                                                                         |
+| `created_at`    | `TIMESTAMPTZ` `NOT NULL`                                                                                               |
 
 - Índices: `(entity_type, entity_id, created_at DESC)`, `(actor_user_id)`.
 
@@ -1379,6 +1276,7 @@ Agregados y estado de gamificación (actualizados atómicamente)
 ```
 
 **Regla de consistencia:** toda finalización de lección o ronda de repaso actualiza en una **única transacción**:
+
 1. `attempts` + `attempt_answers` (congelación histórica).
 2. `user_mistakes_notebook` (registro o incremento de fallos).
 3. `user_section_stars` (cálculo de 1–3⭐ y actualización de `max_stars_earned`).
@@ -1426,8 +1324,14 @@ flowchart TD
 2. **Candados de Módulo ($M_i \to M_{i+1}$):**
    - $M_1$ (Fundamentos de Python) está disponible por defecto para todos los usuarios.
    - Para desbloquear $M_{i+1}$, el motor verifica dos condiciones obligatorias en `user_module_progress` de $M_i$:
-     $$\text{Condición 1: } \text{sections\_completed} = \text{sections\_total} \quad (100\% \text{ de secciones completadas})$$
-     $$\text{Condición 2: } \text{stars\_percentage} \ge 80.00\% \quad (\text{ej. } \ge 24 \text{ estrellas de 30 posibles en M01/M02})$$
+
+     $$
+     \text{Condición 1: } \text{sections\_completed} = \text{sections\_total} \quad (100\% \text{ de secciones completadas})
+     $$
+
+     $$
+     \text{Condición 2: } \text{stars\_percentage} \ge 80.00\% \quad (\text{ej. } \ge 24 \text{ estrellas de 30 posibles en M01/M02})
+     $$
    - Si el usuario termina todas las secciones pero tiene $< 80\%$ de estrellas, el módulo $M_{i+1}$ permanece con candado (`🔒`); la interfaz y Koda invitan al estudiante a repetir secciones de 1⭐ o 2⭐ para alcanzar el umbral de maestría.
 
 ---
@@ -1445,15 +1349,15 @@ flowchart TD
 
 ### 8.3 Invariantes que el modelo garantiza (verificables en `20_TESTING.md`)
 
-| Invariante | Regla de Negocio | Verificación SQL en BD |
-|---|---|---|
-| **I-01: Desbloqueo de Módulo** | $M_{i+1}$ desbloqueado solo si $M_i$ tiene 100% secciones y $\ge 80\%$ estrellas | `SELECT COUNT(*) FROM user_module_progress WHERE is_unlocked = true AND module_id = $M_next AND (SELECT stars_percentage FROM user_module_progress WHERE module_id = $M_prev) < 80.00` = 0 |
-| **I-02: Calificación en Rango** | Estrellas por sección siempre entre 1 y 3 | `CHECK (stars_earned BETWEEN 1 AND 3)` en `user_section_stars` |
-| **I-03: No Regresión de Estrellas** | Rejugar nunca disminuye la mejor puntuación de estrellas del usuario | Trigger `BEFORE UPDATE` en `user_section_stars`: `NEW.max_stars_earned = GREATEST(OLD.max_stars_earned, NEW.stars_earned)` |
-| **I-04: Transaccionalidad de Intento** | Ningún cambio en progreso/estrellas sin su `attempt` grabado | Inserción en transacción única; FK estricta a `attempts(id)` |
-| **I-05: Idempotencia de XP** | Reintentos o doble clic no duplican XP | `UNIQUE (user_id, idempotency_key)` en `xp_transactions` |
-| **I-06: Inmutabilidad tras Graded** | Un intento calificado no puede ser alterado | Trigger `BEFORE UPDATE` en `attempts` que rechaza modificaciones si `status = 'graded'` |
-| **I-07: Emisión de Certificado** | Todos los 12 módulos aprobados y certificados | Verificación de 100% módulos en `mastered` antes de insertar en `certificates` |
+| Invariante                                   | Regla de Negocio                                                                       | Verificación SQL en BD                                                                                                                                                                      |
+| -------------------------------------------- | -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **I-01: Desbloqueo de Módulo**        | $M_{i+1}$ desbloqueado solo si $M_i$ tiene 100% secciones y $\ge 80\%$ estrellas | `SELECT COUNT(*) FROM user_module_progress WHERE is_unlocked = true AND module_id = $M_next AND (SELECT stars_percentage FROM user_module_progress WHERE module_id = $M_prev) < 80.00` = 0 |
+| **I-02: Calificación en Rango**       | Estrellas por sección siempre entre 1 y 3                                             | `CHECK (stars_earned BETWEEN 1 AND 3)` en `user_section_stars`                                                                                                                           |
+| **I-03: No Regresión de Estrellas**   | Rejugar nunca disminuye la mejor puntuación de estrellas del usuario                  | Trigger`BEFORE UPDATE` en `user_section_stars`: `NEW.max_stars_earned = GREATEST(OLD.max_stars_earned, NEW.stars_earned)`                                                              |
+| **I-04: Transaccionalidad de Intento** | Ningún cambio en progreso/estrellas sin su`attempt` grabado                         | Inserción en transacción única; FK estricta a`attempts(id)`                                                                                                                             |
+| **I-05: Idempotencia de XP**           | Reintentos o doble clic no duplican XP                                                 | `UNIQUE (user_id, idempotency_key)` en `xp_transactions`                                                                                                                                 |
+| **I-06: Inmutabilidad tras Graded**    | Un intento calificado no puede ser alterado                                            | Trigger`BEFORE UPDATE` en `attempts` que rechaza modificaciones si `status = 'graded'`                                                                                                 |
+| **I-07: Emisión de Certificado**      | Todos los 12 módulos aprobados y certificados                                         | Verificación de 100% módulos en`mastered` antes de insertar en `certificates`                                                                                                          |
 
 ---
 
@@ -1469,16 +1373,16 @@ flowchart TD
 
 ### 9.1 Matriz de índices por consulta crítica
 
-| Consulta crítica | Tablas involucradas | Índices utilizados | p95 objetivo |
-|---|---|---|---|
-| Carga de Roadmap (12 módulos + candados + estrellas) | `user_module_progress`, `user_section_stars`, `modules` | `uq_user_module_progress`, `idx_user_section_stars_user_module`, `idx_modules_lang_position` | <80 ms (`RNF-007`) |
-| Carga de Cuaderno de Errores pendientes | `user_mistakes_notebook`, `questions` | `idx_user_mistakes_unresolved`, `idx_questions_lesson` | <100 ms (`RNF-001`) |
-| Lectura de Lección + 10 ejercicios interactivos | `lessons`, `questions`, `answers` | `idx_lessons_section_position`, `idx_questions_lesson`, `idx_answers_question` | <150 ms (`RNF-001`) |
-| Envío de respuesta individual + evaluación | `attempts`, `attempt_answers`, `xp_transactions` | `uq_attempts_user_idempotency`, `uq_xp_user_idempotency` | <300 ms (`RNF-010`) |
-| Cierre de sección y adjudicación de estrellas | `attempts`, `user_section_stars`, `user_module_progress` | `uq_user_section_stars`, `uq_user_module_progress` | <400 ms (`RNF-001`) |
-| Calificación de Quiz / Examen final | `attempts`, `attempt_answers`, `user_module_progress` | `idx_attempt_answers_attempt`, `uq_user_module_progress` | <800 ms (`RNF-012`) |
-| Historial de racha y DAU | `streaks` | `uq_streaks_user_date`, `idx_streaks_user_date_desc` | <50 ms |
-| Verificación pública de certificado con QR | `certificates` | `uq_certificates_code` | <100 ms |
+| Consulta crítica                                     | Tablas involucradas                                            | Índices utilizados                                                                                | p95 objetivo          |
+| ----------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | --------------------- |
+| Carga de Roadmap (12 módulos + candados + estrellas) | `user_module_progress`, `user_section_stars`, `modules`  | `uq_user_module_progress`, `idx_user_section_stars_user_module`, `idx_modules_lang_position` | <80 ms (`RNF-007`)  |
+| Carga de Cuaderno de Errores pendientes               | `user_mistakes_notebook`, `questions`                      | `idx_user_mistakes_unresolved`, `idx_questions_lesson`                                         | <100 ms (`RNF-001`) |
+| Lectura de Lección + 10 ejercicios interactivos      | `lessons`, `questions`, `answers`                        | `idx_lessons_section_position`, `idx_questions_lesson`, `idx_answers_question`               | <150 ms (`RNF-001`) |
+| Envío de respuesta individual + evaluación          | `attempts`, `attempt_answers`, `xp_transactions`         | `uq_attempts_user_idempotency`, `uq_xp_user_idempotency`                                       | <300 ms (`RNF-010`) |
+| Cierre de sección y adjudicación de estrellas       | `attempts`, `user_section_stars`, `user_module_progress` | `uq_user_section_stars`, `uq_user_module_progress`                                             | <400 ms (`RNF-001`) |
+| Calificación de Quiz / Examen final                  | `attempts`, `attempt_answers`, `user_module_progress`    | `idx_attempt_answers_attempt`, `uq_user_module_progress`                                       | <800 ms (`RNF-012`) |
+| Historial de racha y DAU                              | `streaks`                                                    | `uq_streaks_user_date`, `idx_streaks_user_date_desc`                                           | <50 ms                |
+| Verificación pública de certificado con QR          | `certificates`                                               | `uq_certificates_code`                                                                           | <100 ms               |
 
 ### 9.2 Estrategia de volumen y escalabilidad
 
@@ -1515,70 +1419,6 @@ CREATE TABLE users (
 );
 CREATE UNIQUE INDEX uq_users_email ON users (email) WHERE deleted_at IS NULL;
 
--- User Profiles (Perfil, Preferencias Pedagógicas de Onboarding, Rachas y Tiempo de Estudio)
-CREATE TABLE user_profiles (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  display_name VARCHAR(80) NOT NULL CHECK (char_length(display_name) BETWEEN 2 AND 80),
-  avatar_url VARCHAR(512) CHECK (avatar_url IS NULL OR avatar_url ~* '^https?://'),
-  avatar_object_key VARCHAR(512),
-  document_number VARCHAR(50) CHECK (document_number IS NULL OR char_length(document_number) BETWEEN 5 AND 50),
-  document_type VARCHAR(20) CHECK (document_type IS NULL OR document_type IN ('CC', 'TI', 'CE', 'PASSPORT')),
-  bio VARCHAR(500),
-  timezone VARCHAR(50) NOT NULL DEFAULT 'America/Bogota',
-  locale VARCHAR(10) NOT NULL DEFAULT 'es-CO',
-
-  -- Preferencias pedagógicas de onboarding (Frontend Register)
-  initial_language_slug VARCHAR(50) NOT NULL DEFAULT 'python',
-  experience_level VARCHAR(30) NOT NULL DEFAULT 'beginner'
-    CHECK (experience_level IN ('beginner','elementary','intermediate','advanced')),
-  learning_style VARCHAR(30) NOT NULL DEFAULT 'hands-on'
-    CHECK (learning_style IN ('hands-on','guided','projects','gamified')),
-  daily_goal_id VARCHAR(20) NOT NULL DEFAULT 'regular'
-    CHECK (daily_goal_id IN ('casual','regular','focused','intense')),
-  daily_goal_minutes SMALLINT NOT NULL DEFAULT 10
-    CHECK (daily_goal_minutes BETWEEN 5 AND 120),
-
-  -- Métricas agregadas O(1) de gamificación, racha y tiempo de estudio
-  total_xp INTEGER NOT NULL DEFAULT 0 CHECK (total_xp >= 0),
-  current_level INTEGER NOT NULL DEFAULT 1 CHECK (current_level >= 1),
-  current_streak INTEGER NOT NULL DEFAULT 0 CHECK (current_streak >= 0),
-  longest_streak INTEGER NOT NULL DEFAULT 0 CHECK (longest_streak >= 0),
-  streak_freeze_count SMALLINT NOT NULL DEFAULT 1 CHECK (streak_freeze_count BETWEEN 0 AND 5),
-  total_study_time_seconds INTEGER NOT NULL DEFAULT 0 CHECK (total_study_time_seconds >= 0),
-  last_study_date DATE,
-
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  CONSTRAINT uq_user_profiles_user_id UNIQUE (user_id)
-);
-CREATE INDEX idx_user_profiles_streak ON user_profiles (current_streak DESC);
-CREATE INDEX idx_user_profiles_xp ON user_profiles (total_xp DESC);
-CREATE INDEX idx_user_profiles_study_time ON user_profiles (total_study_time_seconds DESC);
-
--- Streaks (Historial diario de actividad, tiempo de estudio y cumplimiento de meta)
-CREATE TABLE streaks (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  activity_date DATE NOT NULL,
-  timezone VARCHAR(50) NOT NULL DEFAULT 'America/Bogota',
-  activity_count INTEGER NOT NULL DEFAULT 1 CHECK (activity_count > 0),
-  study_time_seconds INTEGER NOT NULL DEFAULT 0 CHECK (study_time_seconds >= 0),
-  lessons_completed_count INTEGER NOT NULL DEFAULT 0 CHECK (lessons_completed_count >= 0),
-  xp_earned_today INTEGER NOT NULL DEFAULT 0 CHECK (xp_earned_today >= 0),
-  daily_goal_met BOOLEAN NOT NULL DEFAULT false,
-  freeze_used BOOLEAN NOT NULL DEFAULT false,
-  first_activity_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  last_activity_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  CONSTRAINT uq_streaks_user_date UNIQUE (user_id, activity_date),
-  CONSTRAINT chk_streaks_activity_order CHECK (last_activity_at >= first_activity_at)
-);
-CREATE INDEX idx_streaks_user_date_desc ON streaks (user_id, activity_date DESC);
-CREATE INDEX idx_streaks_date ON streaks (activity_date);
-CREATE INDEX idx_streaks_goal_met ON streaks (user_id, daily_goal_met) WHERE daily_goal_met = true;
-
 -- Programming languages
 CREATE TABLE programming_languages (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -1597,25 +1437,96 @@ CREATE TABLE programming_languages (
 CREATE UNIQUE INDEX uq_pl_code ON programming_languages (code);
 CREATE UNIQUE INDEX uq_pl_slug ON programming_languages (slug);
 
--- Nota de Persistencia Híbrida (ADR-009, ADR-011):
--- El contenido educativo (tracks, courses, modules, sections, lessons y question_banks) 
--- se almacena exclusivamente en MongoDB para lecturas O(1) sin JOINs.
--- PostgreSQL custodia únicamente tablas transaccionales enlazadas por identificadores inmutables (slugs/UUIDs).
+-- Courses (Tracks formativos por lenguaje)
+CREATE TABLE courses (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  language_id UUID NOT NULL REFERENCES programming_languages(id),
+  code VARCHAR(50) NOT NULL CHECK (code ~ '^[A-Z0-9_]+$'),
+  name VARCHAR(150) NOT NULL,
+  slug VARCHAR(150) NOT NULL CHECK (slug ~ '^[a-z0-9-]+$'),
+  description TEXT,
+  level VARCHAR(30) NOT NULL DEFAULT 'all_levels'
+    CHECK (level IN ('all_levels','beginner','intermediate','advanced')),
+  status VARCHAR(20) NOT NULL DEFAULT 'published'
+    CHECK (status IN ('draft','review','published','archived')),
+  sort_order SMALLINT NOT NULL DEFAULT 100,
+  total_modules SMALLINT NOT NULL DEFAULT 12 CHECK (total_modules > 0),
+  is_active BOOLEAN NOT NULL DEFAULT true,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  deleted_at TIMESTAMPTZ
+);
+CREATE UNIQUE INDEX uq_courses_code ON courses (code) WHERE deleted_at IS NULL;
+CREATE UNIQUE INDEX uq_courses_slug ON courses (slug) WHERE deleted_at IS NULL;
 
--- Attempts (Registro inmutable de intentos y evaluaciones)
+-- Modules (Unidades temáticas canónicas)
+CREATE TABLE modules (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  course_id UUID NOT NULL REFERENCES courses(id),
+  language_id UUID NOT NULL REFERENCES programming_languages(id),
+  code VARCHAR(50) NOT NULL,
+  title VARCHAR(150) NOT NULL,
+  slug VARCHAR(150) NOT NULL,
+  description TEXT,
+  objective TEXT,
+  position SMALLINT NOT NULL CHECK (position > 0),
+  status VARCHAR(20) NOT NULL DEFAULT 'draft'
+    CHECK (status IN ('draft','review','published','archived')),
+  content_version INT NOT NULL DEFAULT 1,
+  total_sections SMALLINT NOT NULL DEFAULT 10 CHECK (total_sections > 0),
+  total_lessons SMALLINT NOT NULL DEFAULT 100 CHECK (total_lessons > 0),
+  min_stars_percentage SMALLINT NOT NULL DEFAULT 80 CHECK (min_stars_percentage BETWEEN 0 AND 100),
+  quiz_threshold SMALLINT NOT NULL DEFAULT 70 CHECK (quiz_threshold BETWEEN 0 AND 100),
+  exam_threshold SMALLINT NOT NULL DEFAULT 80 CHECK (exam_threshold BETWEEN 0 AND 100),
+  xp_on_pass INT NOT NULL DEFAULT 150,
+  prerequisite_module_id UUID REFERENCES modules(id),
+  published_at TIMESTAMPTZ,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  deleted_at TIMESTAMPTZ,
+  CONSTRAINT uq_modules_course_code UNIQUE (course_id, code),
+  CONSTRAINT uq_modules_course_position UNIQUE (course_id, position)
+);
+
+-- Questions (versionadas con PK simple e identidad lógica)
+CREATE TABLE questions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  question_uid UUID NOT NULL,
+  version INT NOT NULL DEFAULT 1 CHECK (version > 0),
+  language_id UUID NOT NULL REFERENCES programming_languages(id),
+  module_id UUID NOT NULL REFERENCES modules(id),
+  section_id UUID REFERENCES sections(id),
+  lesson_id UUID REFERENCES lessons(id),
+  type VARCHAR(30) NOT NULL
+    CHECK (type IN ('multiple_choice','true_false','fill_code','predict_output','find_error','order_lines','select_correct_code','match_concepts','write_code','small_problem')),
+  difficulty VARCHAR(20) NOT NULL DEFAULT 'medium'
+    CHECK (difficulty IN ('easy','medium','hard')),
+  prompt TEXT NOT NULL,
+  prompt_code TEXT,
+  explanation TEXT NOT NULL,
+  score INT NOT NULL DEFAULT 10 CHECK (score > 0),
+  status VARCHAR(20) NOT NULL DEFAULT 'draft'
+    CHECK (status IN ('draft','published','archived')),
+  is_latest BOOLEAN NOT NULL DEFAULT true,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  deleted_at TIMESTAMPTZ,
+  CONSTRAINT uq_questions_uid_version UNIQUE (question_uid, version)
+);
+CREATE INDEX idx_questions_uid_latest ON questions (question_uid) WHERE is_latest = true;
+
+-- Attempts
 CREATE TABLE attempts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id),
   kind VARCHAR(20) NOT NULL
     CHECK (kind IN ('lesson_question','quiz','exam','diagnostic','review')),
-  track_slug VARCHAR(80) NOT NULL,
-  course_slug VARCHAR(80) NOT NULL,
-  module_slug VARCHAR(80),
-  section_slug VARCHAR(80),
-  lesson_id VARCHAR(64),
-  quiz_id VARCHAR(64),
-  exam_id VARCHAR(64),
-  question_id VARCHAR(64),
+  module_id UUID REFERENCES modules(id),
+  section_id UUID REFERENCES sections(id),
+  lesson_id UUID REFERENCES lessons(id),
+  quiz_id UUID REFERENCES quizzes(id),
+  exam_id UUID REFERENCES exams(id),
+  question_id UUID,
   question_version INT,
   content_version INT NOT NULL,
   threshold_applied SMALLINT CHECK (threshold_applied BETWEEN 0 AND 100),
@@ -1631,6 +1542,7 @@ CREATE TABLE attempts (
   graded_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  FOREIGN KEY (question_id, question_version) REFERENCES questions(id, version),
   CONSTRAINT chk_attempt_kind CHECK (
     (kind='quiz' AND quiz_id IS NOT NULL AND exam_id IS NULL AND question_id IS NULL) OR
     (kind='exam' AND exam_id IS NOT NULL AND quiz_id IS NULL AND question_id IS NULL) OR
@@ -1639,15 +1551,15 @@ CREATE TABLE attempts (
   )
 );
 CREATE UNIQUE INDEX uq_attempts_user_idempotency ON attempts (user_id, idempotency_key);
-CREATE INDEX idx_attempts_user_course ON attempts (user_id, course_slug, kind, created_at DESC);
+CREATE INDEX idx_attempts_user_module ON attempts (user_id, module_id, kind, created_at DESC);
 
 -- User Section Stars (Calificación formativa 1-3⭐)
 CREATE TABLE user_section_stars (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id),
-  track_slug VARCHAR(80) NOT NULL,
-  course_slug VARCHAR(80) NOT NULL,
-  section_slug VARCHAR(80) NOT NULL,
+  language_id UUID NOT NULL REFERENCES programming_languages(id),
+  module_id UUID NOT NULL REFERENCES modules(id),
+  section_id UUID NOT NULL REFERENCES sections(id),
   stars_earned SMALLINT NOT NULL CHECK (stars_earned BETWEEN 1 AND 3),
   max_stars_earned SMALLINT NOT NULL DEFAULT 1 CHECK (max_stars_earned BETWEEN 1 AND 3),
   first_attempt_errors INT NOT NULL DEFAULT 0 CHECK (first_attempt_errors >= 0),
@@ -1658,19 +1570,18 @@ CREATE TABLE user_section_stars (
   last_completed_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  CONSTRAINT uq_user_section_stars UNIQUE (user_id, section_slug),
+  CONSTRAINT uq_user_section_stars UNIQUE (user_id, section_id),
   CONSTRAINT chk_max_stars CHECK (max_stars_earned >= stars_earned)
 );
-CREATE INDEX idx_user_section_stars_user_course ON user_section_stars (user_id, course_slug, stars_earned);
-CREATE INDEX idx_user_section_stars_user_track ON user_section_stars (user_id, track_slug);
+CREATE INDEX idx_user_section_stars_user_module ON user_section_stars (user_id, module_id, stars_earned);
+CREATE INDEX idx_user_section_stars_user_lang ON user_section_stars (user_id, language_id);
 
 -- User Module Progress (Candados y Maestría 80%⭐)
 CREATE TABLE user_module_progress (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id),
-  track_slug VARCHAR(80) NOT NULL,
-  course_slug VARCHAR(80) NOT NULL,
-  module_slug VARCHAR(80) NOT NULL,
+  language_id UUID NOT NULL REFERENCES programming_languages(id),
+  module_id UUID NOT NULL REFERENCES modules(id),
   status VARCHAR(20) NOT NULL DEFAULT 'locked'
     CHECK (status IN ('locked','unlocked','in_progress','completed','mastered')),
   is_unlocked BOOLEAN NOT NULL DEFAULT false,
@@ -1686,31 +1597,25 @@ CREATE TABLE user_module_progress (
   mastered_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-  CONSTRAINT uq_user_module_progress UNIQUE (user_id, course_slug, module_slug),
+  CONSTRAINT uq_user_module_progress UNIQUE (user_id, module_id),
   CONSTRAINT chk_sections_completed CHECK (sections_completed BETWEEN 0 AND sections_total),
   CONSTRAINT chk_stars_earned CHECK (stars_earned BETWEEN 0 AND stars_total_possible)
 );
-CREATE INDEX idx_user_module_progress_user_track ON user_module_progress (user_id, track_slug, status);
+CREATE INDEX idx_user_module_progress_user_lang ON user_module_progress (user_id, language_id, status);
 CREATE INDEX idx_user_module_progress_stars ON user_module_progress (user_id, stars_percentage);
 
--- User Mistakes Notebook (Cuaderno de Errores con Algoritmo SM-2 de Repetición Espaciada)
+-- User Mistakes Notebook (Cuaderno de Errores)
 CREATE TABLE user_mistakes_notebook (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id),
-  track_slug VARCHAR(80) NOT NULL,
-  course_slug VARCHAR(80) NOT NULL,
-  module_slug VARCHAR(80) NOT NULL,
-  section_slug VARCHAR(80),
-  lesson_id VARCHAR(64),
-  question_id VARCHAR(64) NOT NULL,
-  question_version INT NOT NULL DEFAULT 1,
+  language_id UUID NOT NULL REFERENCES programming_languages(id),
+  module_id UUID NOT NULL REFERENCES modules(id),
+  section_id UUID REFERENCES sections(id),
+  lesson_id UUID REFERENCES lessons(id),
+  question_id UUID NOT NULL,
+  question_version INT NOT NULL,
   fail_count INT NOT NULL DEFAULT 1 CHECK (fail_count > 0),
   is_resolved BOOLEAN NOT NULL DEFAULT false,
-  -- Parámetros del Algoritmo SuperMemo SM-2 (ADR-011)
-  interval_days INT NOT NULL DEFAULT 1 CHECK (interval_days >= 1),
-  ease_factor NUMERIC(4,2) NOT NULL DEFAULT 2.50 CHECK (ease_factor >= 1.30),
-  repetition_count INT NOT NULL DEFAULT 0 CHECK (repetition_count >= 0),
-  next_review_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   first_failed_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   last_failed_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   resolved_at TIMESTAMPTZ,
@@ -1718,24 +1623,26 @@ CREATE TABLE user_mistakes_notebook (
   xp_recovered INT NOT NULL DEFAULT 0 CHECK (xp_recovered >= 0),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  FOREIGN KEY (question_id, question_version) REFERENCES questions(id, version),
   CONSTRAINT uq_user_mistakes_user_question UNIQUE (user_id, question_id)
 );
-CREATE INDEX idx_user_mistakes_unresolved ON user_mistakes_notebook (user_id, course_slug, last_failed_at DESC) WHERE is_resolved = false;
-CREATE INDEX idx_user_mistakes_sm2_review ON user_mistakes_notebook (user_id, next_review_at) WHERE is_resolved = false;
+CREATE INDEX idx_user_mistakes_unresolved ON user_mistakes_notebook (user_id, module_id, last_failed_at DESC) WHERE is_resolved = false;
+CREATE INDEX idx_user_mistakes_user_lang ON user_mistakes_notebook (user_id, language_id, is_resolved);
 
 -- Review Queue Items (Cola de repaso activa)
 CREATE TABLE review_queue_items (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   attempt_id UUID NOT NULL REFERENCES attempts(id) ON DELETE CASCADE,
   user_id UUID NOT NULL REFERENCES users(id),
-  section_slug VARCHAR(80) NOT NULL,
-  question_id VARCHAR(64) NOT NULL,
-  question_version INT NOT NULL DEFAULT 1,
+  section_id UUID NOT NULL REFERENCES sections(id),
+  question_id UUID NOT NULL,
+  question_version INT NOT NULL,
   status VARCHAR(20) NOT NULL DEFAULT 'pending'
     CHECK (status IN ('pending','passed','failed')),
   review_round SMALLINT NOT NULL DEFAULT 1 CHECK (review_round > 0),
   created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  FOREIGN KEY (question_id, question_version) REFERENCES questions(id, version),
   CONSTRAINT uq_review_queue_item UNIQUE (attempt_id, question_id, review_round)
 );
 CREATE INDEX idx_review_queue_attempt_status ON review_queue_items (attempt_id, status);
@@ -1747,18 +1654,24 @@ DECLARE
   v_module_id UUID;
   v_user_id UUID;
   v_language_id UUID;
+  v_course_id UUID;
   v_total_stars INT;
   v_possible_stars INT;
   v_completed_count INT;
   v_total_sec INT;
   v_pct NUMERIC(5,2);
+  v_current_pos INT;
   v_next_module_id UUID;
 BEGIN
   v_module_id := NEW.module_id;
   v_user_id := NEW.user_id;
   v_language_id := NEW.language_id;
 
-  SELECT total_sections INTO v_total_sec FROM modules WHERE id = v_module_id;
+  SELECT total_sections, course_id, position 
+  INTO v_total_sec, v_course_id, v_current_pos 
+  FROM modules 
+  WHERE id = v_module_id;
+
   v_possible_stars := COALESCE(v_total_sec * 3, 30);
 
   SELECT 
@@ -1790,9 +1703,11 @@ BEGIN
   IF v_completed_count >= v_total_sec AND v_pct >= 80.00 THEN
     SELECT id INTO v_next_module_id
     FROM modules
-    WHERE language_id = v_language_id 
-      AND position = (SELECT position + 1 FROM modules WHERE id = v_module_id)
-      AND deleted_at IS NULL;
+    WHERE course_id = v_course_id
+      AND position > v_current_pos
+      AND deleted_at IS NULL
+    ORDER BY position ASC
+    LIMIT 1;
 
     IF v_next_module_id IS NOT NULL THEN
       UPDATE user_module_progress
@@ -1812,105 +1727,6 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER trg_after_section_stars_upsert
 AFTER INSERT OR UPDATE OF max_stars_earned ON user_section_stars
 FOR EACH ROW EXECUTE FUNCTION fn_recalculate_module_progress();
-
--- Trigger Function: Actualizar racha diaria, tiempo de estudio y meta al completar un intento
-CREATE OR REPLACE FUNCTION fn_handle_user_study_activity()
-RETURNS TRIGGER AS $$
-DECLARE
-  v_tz VARCHAR(50);
-  v_today DATE;
-  v_daily_goal_min SMALLINT;
-  v_time_spent INT;
-  v_xp_awarded INT;
-  v_is_passed BOOLEAN;
-  v_last_date DATE;
-  v_curr_streak INT;
-  v_long_streak INT;
-  v_freezes SMALLINT;
-BEGIN
-  -- Obtener configuración y estado actual del perfil
-  SELECT timezone, daily_goal_minutes, last_study_date, current_streak, longest_streak, streak_freeze_count
-  INTO v_tz, v_daily_goal_min, v_last_date, v_curr_streak, v_long_streak, v_freezes
-  FROM user_profiles
-  WHERE user_id = NEW.user_id;
-
-  IF NOT FOUND THEN
-    RETURN NEW;
-  END IF;
-
-  v_today := (NEW.completed_at AT TIME ZONE COALESCE(v_tz, 'America/Bogota'))::DATE;
-  v_time_spent := COALESCE(NEW.time_spent_seconds, 0);
-  v_xp_awarded := COALESCE(NEW.xp_awarded, 0);
-  v_is_passed := COALESCE(NEW.is_passed, false);
-
-  -- 1. Upsert en la tabla diaria de streaks
-  INSERT INTO streaks (
-    user_id, activity_date, timezone, activity_count, study_time_seconds,
-    lessons_completed_count, xp_earned_today, daily_goal_met, first_activity_at, last_activity_at
-  ) VALUES (
-    NEW.user_id, v_today, v_tz, 1, v_time_spent,
-    CASE WHEN v_is_passed THEN 1 ELSE 0 END,
-    v_xp_awarded,
-    (v_time_spent >= (v_daily_goal_min * 60)),
-    NEW.completed_at, NEW.completed_at
-  )
-  ON CONFLICT (user_id, activity_date) DO UPDATE SET
-    activity_count = streaks.activity_count + 1,
-    study_time_seconds = streaks.study_time_seconds + v_time_spent,
-    lessons_completed_count = streaks.lessons_completed_count + (CASE WHEN v_is_passed THEN 1 ELSE 0 END),
-    xp_earned_today = streaks.xp_earned_today + v_xp_awarded,
-    daily_goal_met = (streaks.study_time_seconds + v_time_spent >= (v_daily_goal_min * 60)),
-    last_activity_at = NEW.completed_at,
-    updated_at = now();
-
-  -- 2. Actualizar contadores de racha en user_profiles
-  IF v_last_date IS NULL THEN
-    v_curr_streak := 1;
-    v_long_streak := GREATEST(v_long_streak, 1);
-  ELSIF v_last_date = v_today THEN
-    -- Mismo día, no incrementa el contador pero acumula tiempo
-    NULL;
-  ELSIF v_last_date = v_today - 1 THEN
-    -- Día consecutivo
-    v_curr_streak := v_curr_streak + 1;
-    v_long_streak := GREATEST(v_long_streak, v_curr_streak);
-    -- Recompensa: 1 freeze cada 7 días de racha consecutiva (máximo 2 almacenados)
-    IF v_curr_streak % 7 = 0 AND v_freezes < 2 THEN
-      v_freezes := v_freezes + 1;
-    END IF;
-  ELSE
-    -- Faltó al menos un día
-    IF v_freezes > 0 AND v_last_date = v_today - 2 THEN
-      -- Se consume 1 freeze automático y se preserva la racha
-      v_freezes := v_freezes - 1;
-      v_curr_streak := v_curr_streak + 1;
-      v_long_streak := GREATEST(v_long_streak, v_curr_streak);
-      UPDATE streaks SET freeze_used = true WHERE user_id = NEW.user_id AND activity_date = v_today - 1;
-    ELSE
-      -- Racha se reinicia a 1
-      v_curr_streak := 1;
-    END IF;
-  END IF;
-
-  UPDATE user_profiles SET
-    total_study_time_seconds = total_study_time_seconds + v_time_spent,
-    total_xp = total_xp + v_xp_awarded,
-    current_streak = v_curr_streak,
-    longest_streak = v_long_streak,
-    streak_freeze_count = v_freezes,
-    last_study_date = v_today,
-    updated_at = now()
-  WHERE user_id = NEW.user_id;
-
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_attempts_update_streak_and_study_time
-AFTER INSERT OR UPDATE OF is_passed ON attempts
-FOR EACH ROW
-WHEN (NEW.completed_at IS NOT NULL)
-EXECUTE FUNCTION fn_handle_user_study_activity();
 ```
 
 > El DDL completo (22 entidades + 5 tablas de soporte) se genera a partir de este documento y se versiona en `migrations/` con `V__` + `COMMENT ON TABLE/COLUMN` para trazabilidad `RF-*`.
@@ -1919,14 +1735,14 @@ EXECUTE FUNCTION fn_handle_user_study_activity();
 
 ## 11. Seguridad y privacidad (RNF-008, RNF-009, RNF-037–RNF-040)
 
-| Medida | Implementación en BD |
-|---|---|
-| Hash de contraseñas | `password_hash` con Argon2id; nunca `SELECT password_hash` en endpoints de lectura; solo en `verify` |
-| PII mínima | `document_number` solo en `user_profiles` y snapshot `certificates.metadata`; acceso por `user_id = auth.uid()` (RLS o `WHERE` en app) |
-| Aislamiento entre usuarios | Toda consulta de `attempts/progress/certificates/subscriptions/user_section_stars/user_mistakes_notebook` filtra por `user_id = $auth_user_id` salvo admin con `RF-ADM-007`; test IDOR en `20` (`RNF-009`) |
-| No fuga en logs | `RNF-037`: triggers de auditoría nunca loguean `password_hash`, `document_number` en claro, ni `given_answer` con PII |
-| Borrado/anonimización | `RF-USR-003`: `UPDATE users SET email='deleted_'||id||'@deleted.local', deleted_at=now()` + `UPDATE user_profiles SET display_name='Usuario eliminado', document_number=NULL, avatar_url=NULL` + `UPDATE certificates SET metadata = metadata - 'document_number'` y `status='revoked'` si aplica |
-| Backups | `RNF-043`: dump diario + WAL; retención ≥7 días; ensayo mensual en `staging` |
+| Medida                     | Implementación en BD                                                                                                                                                                                               |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Hash de contraseñas       | `password_hash` con Argon2id; nunca `SELECT password_hash` en endpoints de lectura; solo en `verify`                                                                                                          |
+| PII mínima                | `document_number` solo en `user_profiles` y snapshot `certificates.metadata`; acceso por `user_id = auth.uid()` (RLS o `WHERE` en app)                                                                    |
+| Aislamiento entre usuarios | Toda consulta de`attempts/progress/certificates/subscriptions/user_section_stars/user_mistakes_notebook` filtra por `user_id = $auth_user_id` salvo admin con `RF-ADM-007`; test IDOR en `20` (`RNF-009`) |
+| No fuga en logs            | `RNF-037`: triggers de auditoría nunca loguean `password_hash`, `document_number` en claro, ni `given_answer` con PII                                                                                      |
+| Borrado/anonimización     | `RF-USR-003`: `UPDATE users SET email='deleted_'                                                                                                                                                                  |
+| Backups                    | `RNF-043`: dump diario + WAL; retención ≥7 días; ensayo mensual en `staging`                                                                                                                                 |
 
 ---
 
@@ -1944,53 +1760,49 @@ EXECUTE FUNCTION fn_handle_user_study_activity();
 
 ## 13. Trazabilidad RF → Tabla
 
-| RF | Tabla(s) | Columna(s) clave |
-|---|---|---|
-| RF-AUTH-001/002/005 | `users` | `email`, `password_hash`, `email_verified_at`, `status` |
-| RF-USR-003 | `users`, `user_profiles`, `certificates` | `deleted_at`, anonimización |
-| RF-PROF-001/003 | `user_profiles`, `progress` | `display_name`, `avatar_url`, `progress.percent` |
-| RF-LANG-001–005 | `programming_languages`, `learning_paths` | `status`, `learning_paths.language_id` |
-| RF-LVL-001–004 | `learning_paths` | `declared_level` |
-| RF-DIAG-001–006 | `attempts` (`kind='diagnostic'`), `diagnostic_results` | `threshold_applied`, `area_scores` |
-| RF-RUTA-001–005 | `learning_paths`, `learning_path_modules` | `entry_module_id`, `current_*`, `position` |
-| RF-MOD-001–005 | `modules`, `user_module_progress` | `position`, `status`, `min_stars_percentage`, `prerequisite_module_id` |
-| RF-SEC-001–005 | `sections`, `user_section_stars` | `type`, `stars_available`, `is_first_section`, `xp_on_complete` |
-| RF-LEC-001–005 | `lessons` | `body_mdx`, `is_required` |
-| RF-PREG-001–007 | `questions`, `answers` | `type`, `difficulty`, `prompt`, `is_correct` |
-| RF-QUIZ-001–006 | `quizzes`, `quiz_questions` | `threshold`, `distribution` implícita |
-| RF-EXAM-001–007 | `exams`, `exam_questions` | `threshold`, `distribution` |
-| RF-EVAL-001–006 | `attempts`, `attempt_answers` | `score`, `percent`, `is_passed`, `threshold_applied`, `content_version` |
-| RF-PROG-001–006 | `progress`, `attempts` | `scope`, `completed_items`, `percent` |
-| RF-ESTRELLA-001–005 | `user_section_stars` | `stars_earned`, `max_stars_earned`, `first_attempt_errors`, `review_round_completed` |
-| RF-CANDADO-001–004 | `user_module_progress`, `sections` | `is_unlocked`, `stars_percentage`, `sections_completed`, `unlocked_at` |
-| RF-CUADERNO-001–006 | `user_mistakes_notebook` | `question_id`, `fail_count`, `is_resolved`, `resolved_at`, `xp_recovered` |
-| RF-REP-001–005 | `user_mistakes_notebook`, `review_queue_items` | `status`, `review_round`, `last_failed_at` |
-| RF-XP-001–005 | `xp_transactions` | `amount`, `reason`, `idempotency_key` |
-| RF-RACHA-001–005 | `streaks` | `activity_date`, `timezone` |
-| RF-LOGRO-001–005 | `achievements`, `user_achievements` | `code`, `condition`, `unlocked_at` |
-| RF-CERT-001–006 | `certificates`, `certificate_sequences` | `code`, `status`, `language_content_version` |
-| RF-PDF-001–004 | `certificates` | `google_drive_file_id`, `pdf_version` |
-| RF-ADS-001–005 | `subscriptions` (inferencia `status='active'` = sin ads) | `status` |
-| RF-PREM-001–006 | `subscriptions`, `subscription_events` | `plan_code`, `provider`, `current_period_end` |
-| RF-ADM-001–009 | `content_audit_log`, todas las tablas de contenido | `status`, `content_version`, `created_by` |
+| RF                   | Tabla(s)                                                     | Columna(s) clave                                                                             |
+| -------------------- | ------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| RF-AUTH-001/002/005  | `users`                                                    | `email`, `password_hash`, `email_verified_at`, `status`                              |
+| RF-USR-003           | `users`, `user_profiles`, `certificates`               | `deleted_at`, anonimización                                                               |
+| RF-PROF-001/003      | `user_profiles`, `progress`                              | `display_name`, `avatar_url`, `progress.percent`                                       |
+| RF-LANG-001–005     | `programming_languages`, `learning_paths`                | `status`, `learning_paths.language_id`                                                   |
+| RF-LVL-001–004      | `learning_paths`                                           | `declared_level`                                                                           |
+| RF-DIAG-001–006     | `attempts` (`kind='diagnostic'`), `diagnostic_results` | `threshold_applied`, `area_scores`                                                       |
+| RF-RUTA-001–005     | `learning_paths`, `learning_path_modules`                | `entry_module_id`, `current_*`, `position`                                             |
+| RF-MOD-001–005      | `modules`, `user_module_progress`                        | `position`, `status`, `min_stars_percentage`, `prerequisite_module_id`               |
+| RF-SEC-001–005      | `sections`, `user_section_stars`                         | `type`, `stars_available`, `is_first_section`, `xp_on_complete`                      |
+| RF-LEC-001–005      | `lessons`                                                  | `body_mdx`, `is_required`                                                                |
+| RF-PREG-001–007     | `questions`, `answers`                                   | `type`, `difficulty`, `prompt`, `is_correct`                                         |
+| RF-QUIZ-001–006     | `quizzes`, `quiz_questions`                              | `threshold`, `distribution` implícita                                                   |
+| RF-EXAM-001–007     | `exams`, `exam_questions`                                | `threshold`, `distribution`                                                              |
+| RF-EVAL-001–006     | `attempts`, `attempt_answers`                            | `score`, `percent`, `is_passed`, `threshold_applied`, `content_version`            |
+| RF-PROG-001–006     | `progress`, `attempts`                                   | `scope`, `completed_items`, `percent`                                                  |
+| RF-ESTRELLA-001–005 | `user_section_stars`                                       | `stars_earned`, `max_stars_earned`, `first_attempt_errors`, `review_round_completed` |
+| RF-CANDADO-001–004  | `user_module_progress`, `sections`                       | `is_unlocked`, `stars_percentage`, `sections_completed`, `unlocked_at`               |
+| RF-CUADERNO-001–006 | `user_mistakes_notebook`                                   | `question_id`, `fail_count`, `is_resolved`, `resolved_at`, `xp_recovered`          |
+| RF-REP-001–005      | `user_mistakes_notebook`, `review_queue_items`           | `status`, `review_round`, `last_failed_at`                                             |
+| RF-XP-001–005       | `xp_transactions`                                          | `amount`, `reason`, `idempotency_key`                                                  |
+| RF-RACHA-001–005    | `streaks`                                                  | `activity_date`, `timezone`                                                              |
+| RF-LOGRO-001–005    | `achievements`, `user_achievements`                      | `code`, `condition`, `unlocked_at`                                                     |
+| RF-CERT-001–006     | `certificates`, `certificate_sequences`                  | `code`, `status`, `language_content_version`                                           |
+| RF-PDF-001–004      | `certificates`                                             | `google_drive_file_id`, `pdf_version`                                                    |
+| RF-ADS-001–005      | `subscriptions` (inferencia `status='active'` = sin ads) | `status`                                                                                   |
+| RF-PREM-001–006     | `subscriptions`, `subscription_events`                   | `plan_code`, `provider`, `current_period_end`                                          |
+| RF-ADM-001–009      | `content_audit_log`, todas las tablas de contenido         | `status`, `content_version`, `created_by`                                              |
 
 ---
 
 ## 14. Decisiones abiertas y próximos pasos
 
-| Decisión | Estado | Siguiente paso |
-|---|---|---|
-| Gestor concreto y hosting (RDS, Cloud SQL, Supabase) | Abierta — requiere ADR | Evaluar costo vs. `RNF-001`/`RNF-005` en `09-decisions/` |
-| RLS vs. `WHERE user_id` en app | Abierta | Si se usa Supabase/PostgREST, habilitar RLS; si API propia, `WHERE` + tests IDOR (`RNF-009`) |
-| Particionado de `attempts` | Diferida a Post-MVP | Medir `RNF-007` con dataset sintético 100k intentos; si p95 >100 ms, particionar |
-| Cifrado de `document_number` | Abierta | Si `RNF-037` lo exige, usar `pgcrypto` o cifrado en app con KMS |
-| Caché de `progress` y `roadmap` en Redis | Recomendada | Implementar tras MVP para garantizar lecturas del roadmap sub-80 ms |
+| Decisión                                            | Estado                  | Siguiente paso                                                                                  |
+| ---------------------------------------------------- | ----------------------- | ----------------------------------------------------------------------------------------------- |
+| Gestor concreto y hosting (RDS, Cloud SQL, Supabase) | Abierta — requiere ADR | Evaluar costo vs.`RNF-001`/`RNF-005` en `09-decisions/`                                   |
+| RLS vs.`WHERE user_id` en app                      | Abierta                 | Si se usa Supabase/PostgREST, habilitar RLS; si API propia,`WHERE` + tests IDOR (`RNF-009`) |
+| Particionado de`attempts`                          | Diferida a Post-MVP     | Medir`RNF-007` con dataset sintético 100k intentos; si p95 >100 ms, particionar              |
+| Cifrado de`document_number`                        | Abierta                 | Si`RNF-037` lo exige, usar `pgcrypto` o cifrado en app con KMS                              |
+| Caché de`progress` y `roadmap` en Redis         | Recomendada             | Implementar tras MVP para garantizar lecturas del roadmap sub-80 ms                             |
 
 ---
-
-*Fin de `12_DATABASE_DESIGN.md` — cualquier adición requiere actualizar `05_FUNCTIONAL_REQUIREMENTS.md`, `11_SYSTEM_ARCHITECTURE.md`, `13_API_SPECIFICATION.md`, `20_TESTING.md` y `CHANGELOG.md`.*
-| Cifrado de `document_number` | Abierta | Si `RNF-037` lo exige, usar `pgcrypto` o cifrado en app con KMS |
-| Caché de `progress` en Redis | Recomendada | Implementar tras MVP si `idx_progress_user_lang` no alcanza p95 |
 
 > Actualizar este documento y `CHANGELOG.md` (fecha `America/Bogota`) ante cualquier cambio de esquema, y generar ADR si la decisión es arquitectónica (`09-decisions/`).
 
