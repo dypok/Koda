@@ -1,5 +1,5 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiExcludeController, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { LearningService } from './learning.service';
 import { LessonAnswerSubmissionDto } from './dto/lesson-answer-submission.dto';
 import type {
@@ -8,7 +8,7 @@ import type {
   LessonAnswerFeedback,
 } from '@koda/types';
 
-@ApiTags('Learning & Roadmap')
+@ApiExcludeController()
 @Controller('learning')
 export class LearningController {
   constructor(private readonly learningService: LearningService) {}

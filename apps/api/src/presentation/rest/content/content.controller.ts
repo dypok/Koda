@@ -1,5 +1,5 @@
 import { Controller, Get, Param } from '@nestjs/common';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   GetTracksUseCase,
   GetTrackCoursesUseCase,
@@ -8,7 +8,7 @@ import {
   GetVisualEffectsUseCase,
 } from '../../../application/use-cases/curriculum';
 
-@ApiTags('Content & Curriculum')
+@ApiExcludeController()
 @Controller('content')
 export class ContentController {
   constructor(

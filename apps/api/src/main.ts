@@ -59,10 +59,23 @@ async function bootstrap() {
   const isProduction = process.env.NODE_ENV === 'production';
   if (!isProduction) {
     const config = new DocumentBuilder()
-      .setTitle('Koda API 🦊')
-      .setDescription('API REST v2.0 para la plataforma de aprendizaje gamificado Koda')
+      .setTitle('Koda API 🦊 (REST v2.0 - Superficie Transaccional)')
+      .setDescription(
+        'Especificación OpenAPI 3.0 para la plataforma Koda. ' +
+        'Conforme a la Arquitectura Híbrida formalizada en ADR-012, la superficie REST (/api/v1) está reservada exclusivamente para ' +
+        'estándares HTTP nativos y operaciones pesadas: Autenticación con Supabase Auth (/auth), Gestión de Perfiles y PII Legal (/users), ' +
+        'Evaluación Diagnóstica Inicial (/learning/diagnostic), Certificaciones y Streaming PDF (/certificates), y Monitoreo de Infraestructura. ' +
+        'Las consultas interactivas de currículo, grafo DAG de roadmap y mutaciones formativas se consumen a través de GraphQL (/graphql).'
+      )
       .setVersion('2.0.0')
-      .addBearerAuth()
+      .addBearerAuth({
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        description: 'Ingresa el Access Token JWT emitido por Supabase Auth',
+        in: 'header',
+      })
       .build();
 
     const document = SwaggerModule.createDocument(app, config);

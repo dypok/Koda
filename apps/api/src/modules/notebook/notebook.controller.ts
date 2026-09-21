@@ -1,13 +1,12 @@
 import { Controller, Get, Post, Param, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiExcludeController, ApiBearerAuth, ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { NotebookService } from './notebook.service';
 import type { MistakesNotebookItem } from '@koda/types';
 import { SupabaseAuthGuard } from '../../common/guards/supabase-auth.guard';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
 import type { User as SupabaseAuthUser } from '@supabase/supabase-js';
 
-@ApiTags('Mistakes Notebook')
-@ApiBearerAuth()
+@ApiExcludeController()
 @UseGuards(SupabaseAuthGuard)
 @Controller('notebook')
 export class NotebookController {

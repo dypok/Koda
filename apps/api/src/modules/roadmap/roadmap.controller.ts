@@ -1,11 +1,11 @@
 import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiExcludeController, ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { RoadmapService } from './roadmap.service';
 import { SeedRoadmapDto } from './dto/seed-roadmap.dto';
 import { SupabaseAuthGuard } from '../../common/guards/supabase-auth.guard';
 import type { GraphDataset } from './roadmap-graph.types';
 
-@ApiTags('Roadmap (Grafo Visual)')
+@ApiExcludeController()
 @Controller('roadmap')
 export class RoadmapController {
   constructor(private readonly roadmapService: RoadmapService) {}
