@@ -63,7 +63,7 @@ export const WipeButton = React.forwardRef<any, WipeButtonProps>(
       <span
         aria-hidden="true"
         className={cn(
-          'pointer-events-none absolute -left-8 -top-16 h-64 w-[160%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
+          'pointer-events-none absolute inset-y-0 -left-[15%] w-[160%] origin-left -skew-x-12 scale-x-0 transition-transform duration-[600ms] ease-out',
           'delay-150 group-hover:delay-0 group-hover:scale-x-100 motion-reduce:hidden',
           b1
         )}
@@ -71,7 +71,7 @@ export const WipeButton = React.forwardRef<any, WipeButtonProps>(
       <span
         aria-hidden="true"
         className={cn(
-          'pointer-events-none absolute -left-8 -top-16 h-64 w-[160%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
+          'pointer-events-none absolute inset-y-0 -left-[15%] w-[160%] origin-left -skew-x-12 scale-x-0 transition-transform duration-[600ms] ease-out',
           'delay-75 group-hover:delay-75 group-hover:scale-x-100 motion-reduce:hidden',
           b2
         )}
@@ -79,7 +79,7 @@ export const WipeButton = React.forwardRef<any, WipeButtonProps>(
       <span
         aria-hidden="true"
         className={cn(
-          'pointer-events-none absolute -left-8 -top-16 h-64 w-[160%] origin-left rotate-12 scale-x-0 transition-transform duration-[600ms] ease-out',
+          'pointer-events-none absolute inset-y-0 -left-[15%] w-[160%] origin-left -skew-x-12 scale-x-0 transition-transform duration-[600ms] ease-out',
           'delay-0 group-hover:delay-150 group-hover:scale-x-100 motion-reduce:hidden',
           b3
         )}
@@ -88,7 +88,7 @@ export const WipeButton = React.forwardRef<any, WipeButtonProps>(
   );
 
   const cls = cn(
-    'group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl font-bold select-none',
+    'group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-xl font-bold select-none isolate',
     'transition-all duration-300 hover:shadow-[0_8px_32px_-2px_rgba(249,115,22,0.65)] active:scale-[0.98]',
     'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300',
     'disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none',

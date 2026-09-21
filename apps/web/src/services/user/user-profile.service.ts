@@ -1,3 +1,5 @@
+import { AuthService } from '@/services/auth/auth.service';
+
 export interface UserProfileResponse {
   id: string;
   email: string;
@@ -46,35 +48,65 @@ export interface UpdateUserProfilePayload {
 }
 
 const RAW_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
-const API_BASE_URL = RAW_BASE_URL.replace(/\/$/, '').endsWith('/api/v1')
+const DIRECT_BASE_URL = RAW_BASE_URL.replace(/\/$/, '').endsWith('/api/v1')
   ? RAW_BASE_URL.replace(/\/$/, '')
   : `${RAW_BASE_URL.replace(/\/$/, '')}/api/v1`;
+
+async function fetchWithFallback(path: string, options: RequestInit = {}): Promise<Response> {
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  const directUrl = `${DIRECT_BASE_URL}${cleanPath}`;
+  const proxyUrl = `/api/v1${cleanPath}`;
+
+  // 1. En navegador, intentar primero la ruta relativa mediante el proxy de Next.js
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await AuthService.authFetch(proxyUrl, options);
+      if (res.status !== 404) {
+        return res;
+      }
+    } catch {
+      // Si el proxy falla, intentar directo al backend
+    }
+  }
+
+  // 2. Fetch directo al backend
+  return AuthService.authFetch(directUrl, options);
+}
 
 export class UserProfileService {
   /**
    * Obtiene el perfil completo y consolidado del usuario autenticado con métricas en tiempo real.
    */
-  public static async getProfile(token: string): Promise<UserProfileResponse> {
-    if (!token) {
+  public static async getProfile(token?: string): Promise<UserProfileResponse> {
+    const activeToken =
+      token || (typeof window !== 'undefined' ? localStorage.getItem('koda_auth_token') : null);
+    if (!activeToken) {
       throw new Error('No hay sesión activa para consultar el perfil.');
     }
 
-    const res = await fetch(`${API_BASE_URL}/users/me`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      const res = await fetchWithFallback('/users/me', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${activeToken}`,
+        },
+      });
 
-    const data = await res.json().catch(() => ({}));
+      const data = await res.json().catch(() => ({}));
 
-    if (!res.ok) {
-      const msg = Array.isArray(data?.message) ? data.message[0] : data?.message;
-      throw new Error(msg || `Error al consultar el perfil (${res.status})`);
+      if (!res.ok) {
+        const msg = Array.isArray(data?.message) ? data.message[0] : data?.message;
+        throw new Error(msg || `Error al consultar el perfil (${res.status})`);
+      }
+
+      return data as UserProfileResponse;
+    } catch (err: any) {
+      if (err?.message?.includes('Failed to fetch') || err?.name === 'TypeError') {
+        throw new Error('No se pudo conectar con el servidor de Koda. Verifica que la API esté activa.');
+      }
+      throw err;
     }
-
-    return data as UserProfileResponse;
   }
 
   /**
@@ -82,28 +114,37 @@ export class UserProfileService {
    */
   public static async updateProfile(
     payload: UpdateUserProfilePayload,
-    token: string
+    token?: string
   ): Promise<UserProfileResponse> {
-    if (!token) {
+    const activeToken =
+      token || (typeof window !== 'undefined' ? localStorage.getItem('koda_auth_token') : null);
+    if (!activeToken) {
       throw new Error('No hay sesión activa para actualizar el perfil.');
     }
 
-    const res = await fetch(`${API_BASE_URL}/users/me`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-    });
+    try {
+      const res = await fetchWithFallback('/users/me', {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${activeToken}`,
+        },
+        body: JSON.stringify(payload),
+      });
 
-    const data = await res.json().catch(() => ({}));
+      const data = await res.json().catch(() => ({}));
 
-    if (!res.ok) {
-      const msg = Array.isArray(data?.message) ? data.message[0] : data?.message;
-      throw new Error(msg || `Error al actualizar el perfil (${res.status})`);
+      if (!res.ok) {
+        const msg = Array.isArray(data?.message) ? data.message[0] : data?.message;
+        throw new Error(msg || `Error al actualizar el perfil (${res.status})`);
+      }
+
+      return data as UserProfileResponse;
+    } catch (err: any) {
+      if (err?.message?.includes('Failed to fetch') || err?.name === 'TypeError') {
+        throw new Error('No se pudo conectar con el servidor de Koda. Verifica que la API esté activa.');
+      }
+      throw err;
     }
-
-    return data as UserProfileResponse;
   }
 }

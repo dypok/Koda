@@ -33,7 +33,7 @@ export const RegisterBottomBar: React.FC<RegisterBottomBarProps> = ({
           <WipeButton
             onClick={onContinue}
             disabled={!canContinue || isLoading}
-            className="w-full sm:w-56 py-3 text-sm gap-2"
+            className="w-full sm:min-w-[14rem] sm:w-auto px-6 py-3 text-sm gap-2 whitespace-nowrap"
           >
             {isLoading ? (
               <>

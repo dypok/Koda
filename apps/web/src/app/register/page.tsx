@@ -15,6 +15,8 @@ import { ProfileStep } from '@/views/register/ProfileStep';
 import { RegisterOtpModal } from '@/views/register/RegisterOtpModal';
 import { RegisterSuccessModal } from '@/views/register/RegisterSuccessModal';
 import { RegisterBottomBar } from '@/views/register/RegisterBottomBar';
+import { DiagnosticTestModal } from '@/views/diagnostic/DiagnosticTestModal';
+import { DiagnosticResultResponse } from '@/services/learning/diagnostic.service';
 import { useRegisterStepperController } from '@/controllers/register/useRegisterStepperController';
 import { useRegisterProfileController } from '@/controllers/register/useRegisterProfileController';
 import { AuthService } from '@/services/auth/auth.service';
@@ -25,11 +27,20 @@ export default function RegisterPage() {
   const { user, token, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
   const [isOAuthProcessing, setIsOAuthProcessing] = useState(false);
   const [isCompletingAndRedirecting, setIsCompletingAndRedirecting] = useState(false);
+  const [isDiagnosticModalOpen, setIsDiagnosticModalOpen] = useState(false);
+  const [diagnosticResult, setDiagnosticResult] = useState<DiagnosticResultResponse | null>(null);
 
   const isOAuthUser = Boolean(token && user && !user.onboardingCompleted);
   const totalSteps = isOAuthUser ? 4 : 5;
-  const stepper = useRegisterStepperController(totalSteps);
+  const stepper = useRegisterStepperController(totalSteps, {
+    isDiagnosticCompleted: Boolean(diagnosticResult),
+  });
   const profile = useRegisterProfileController();
+
+  // Si cambia el lenguaje seleccionado, reiniciar el resultado diagnóstico
+  useEffect(() => {
+    setDiagnosticResult(null);
+  }, [stepper.selectedLanguageId]);
 
   useEffect(() => {
     initAuth();
@@ -117,11 +128,33 @@ export default function RegisterPage() {
     }
   };
 
+  const isNonBeginnerExperience =
+    stepper.selectedExperienceId != null && stepper.selectedExperienceId !== 'beginner';
+  const hasPendingDiagnostic =
+    isNonBeginnerExperience && !diagnosticResult;
+
   const isLast = stepper.currentStep === totalSteps;
-  const canContinue = isLast && !isOAuthUser ? profile.isFormValid : stepper.canContinue;
+  const canContinue = isLast && !isOAuthUser
+    ? profile.isFormValid
+    : stepper.currentStep === 2 && hasPendingDiagnostic
+    ? Boolean(stepper.selectedExperienceId)
+    : stepper.canContinue;
 
   const handleContinue = async () => {
+    // Si está en el paso 2 y tiene test diagnóstico obligatorio pendiente, abrir el modal
+    if (stepper.currentStep === 2 && hasPendingDiagnostic) {
+      setIsDiagnosticModalOpen(true);
+      return;
+    }
+
     if (isLast) {
+      // Bloqueo estricto adicional: no se puede completar registro sin el test si es nivel no básico
+      if (hasPendingDiagnostic) {
+        stepper.goToStep(2);
+        setIsDiagnosticModalOpen(true);
+        return;
+      }
+
       if (isOAuthUser) {
         setIsCompletingAndRedirecting(true);
         try {
@@ -140,7 +173,16 @@ export default function RegisterPage() {
 
   const STEP_CTA: Record<number, { text: string; hint: string }> = {
     1: { text: 'Explorar y continuar', hint: 'Elige tu tecnología para continuar' },
-    2: { text: 'Confirmar mi nivel', hint: 'Elige tu nivel para continuar' },
+    2: {
+      text: hasPendingDiagnostic
+        ? 'Iniciar test'
+        : diagnosticResult
+        ? 'Confirmar mi nivel y continuar'
+        : 'Confirmar mi nivel',
+      hint: hasPendingDiagnostic
+        ? 'Realiza el test para validar tu nivel y continuar'
+        : 'Elige tu nivel para continuar',
+    },
     3: { text: 'Confirmar mi estilo', hint: 'Elige tu estilo para continuar' },
     4: {
       text: isOAuthUser ? 'Fijar mi meta y comenzar mi ruta' : 'Fijar mi meta · 10 min/día',
@@ -208,6 +250,9 @@ export default function RegisterPage() {
             selectedExperienceId={stepper.selectedExperienceId}
             selectedTechName={stepper.selectedOption?.name}
             onSelectExperience={stepper.selectExperience}
+            onOpenDiagnostic={() => setIsDiagnosticModalOpen(true)}
+            diagnosticCompleted={Boolean(diagnosticResult)}
+            recommendedModuleCode={diagnosticResult?.recommendedModuleCode}
           />
         )}
         {stepper.currentStep === 3 && (
@@ -271,6 +316,18 @@ export default function RegisterPage() {
         studentName={profile.form.fullName || user?.fullName || 'Estudiante'}
         techName={stepper.selectedOption?.name}
         goalMinutes={stepper.selectedGoal?.minutes}
+      />
+      <DiagnosticTestModal
+        isOpen={isDiagnosticModalOpen}
+        declaredLevel={stepper.selectedExperienceId || 'elementary'}
+        languageSlug={stepper.selectedLanguageId || 'python'}
+        userToken={token || undefined}
+        isMandatory={isNonBeginnerExperience}
+        onClose={() => setIsDiagnosticModalOpen(false)}
+        onComplete={(res) => {
+          setDiagnosticResult(res);
+          setIsDiagnosticModalOpen(false);
+        }}
       />
     </div>
   );

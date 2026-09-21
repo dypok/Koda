@@ -31,7 +31,14 @@ function loadProgress(): Partial<PersistedProgress> {
   }
 }
 
-export function useRegisterStepperController(maxSteps: number = 5) {
+export interface RegisterStepperOptions {
+  isDiagnosticCompleted?: boolean;
+}
+
+export function useRegisterStepperController(
+  maxSteps: number = 5,
+  options?: RegisterStepperOptions
+) {
   // false en el primer render (igual que el servidor); se hidrata en efecto.
   const [isExpress, setIsExpress] = useState(false);
   useEffect(() => {
@@ -113,11 +120,15 @@ export function useRegisterStepperController(maxSteps: number = 5) {
 
   const canContinue = useMemo(() => {
     if (currentStep === 1) return Boolean(selectedOption && selectedOption.isAvailable);
-    if (currentStep === 2) return Boolean(selectedExperienceId);
+    if (currentStep === 2) {
+      if (!selectedExperienceId) return false;
+      if (selectedExperienceId !== 'beginner' && !options?.isDiagnosticCompleted) return false;
+      return true;
+    }
     if (currentStep === 3) return Boolean(selectedStyleId);
     if (currentStep === 4) return Boolean(selectedGoalId);
     return true;
-  }, [currentStep, selectedOption, selectedExperienceId, selectedStyleId, selectedGoalId]);
+  }, [currentStep, selectedOption, selectedExperienceId, selectedStyleId, selectedGoalId, options?.isDiagnosticCompleted]);
 
   const nextStep = useCallback(() => {
     if (!canContinue) return;
@@ -130,9 +141,14 @@ export function useRegisterStepperController(maxSteps: number = 5) {
 
   // En express, goToStep recibe el número visible (1-3) y salta al real.
   const goToStep = useCallback((step: number) => {
+    // Si intenta ir más allá del paso 2 con nivel no básico y sin haber completado el diagnóstico:
+    if (step > 2 && selectedExperienceId && selectedExperienceId !== 'beginner' && !options?.isDiagnosticCompleted) {
+      setCurrentStep(2);
+      return;
+    }
     const real = isExpress ? (step >= 3 ? maxSteps : 1) : step;
     setCurrentStep(Math.min(maxSteps, Math.max(1, Math.round(real))));
-  }, [isExpress, maxSteps]);
+  }, [isExpress, maxSteps, selectedExperienceId, options?.isDiagnosticCompleted]);
 
   // Flechas del teclado para navegar (fuera de inputs).
   useEffect(() => {

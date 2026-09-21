@@ -211,6 +211,31 @@ export class AuthService {
 
     return data;
   }
+
+  /**
+   * Restablece la contraseña utilizando el token temporal recibido por correo (POST /api/v1/auth/reset-password).
+   */
+  public static async resetPassword(payload: {
+    token: string;
+    newPassword: string;
+    email?: string;
+  }): Promise<{ message: string; success: boolean }> {
+    const res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const msg = Array.isArray(data?.message) ? data.message[0] : data?.message;
+      throw new Error(msg || 'No fue posible restablecer la contraseña. Verifica que el token sea válido.');
+    }
+
+    return data;
+  }
   /**
    * Registra al estudiante en el backend con envío de código OTP vía correo.
    */
