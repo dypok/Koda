@@ -95,6 +95,99 @@
           }
         ],
         "explanation": "Las cadenas de texto en Python pertenecen a la clase str y se definen con comillas."
+      },
+      {
+        "id": "bnk_py_01_04_e",
+        "prompt": "¿Qué sucede si omites las comillas al intentar imprimir un texto como print(Hola)?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Se genera un NameError porque Python busca una variable llamada Hola que no existe",
+            "is_correct": true,
+            "feedback": "¡Correcto! Las palabras sin comillas son interpretadas como identificadores de variables."
+          },
+          {
+            "id": "b",
+            "text": "Python lo imprime normalmente",
+            "is_correct": false,
+            "feedback": "Sin comillas, Python no lo reconoce como texto literal."
+          },
+          {
+            "id": "c",
+            "text": "Se convierte a número automáticamente",
+            "is_correct": false,
+            "feedback": "Las letras no se convierten a número."
+          },
+          {
+            "id": "d",
+            "text": "Se apaga el computador",
+            "is_correct": false,
+            "feedback": "Un NameError simplemente detiene el script."
+          }
+        ],
+        "explanation": "Todo texto literal requiere comillas obligatorias en Python para diferenciarse de variables."
+      },
+      {
+        "id": "bnk_py_01_05_e",
+        "prompt": "¿Cuál es el resultado de ejecutar print() sin argumentos?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Imprime una línea vacía en la terminal",
+            "is_correct": true,
+            "feedback": "¡Exacto! Emite un salto de línea sin texto."
+          },
+          {
+            "id": "b",
+            "text": "Lanza un TypeError por falta de texto",
+            "is_correct": false,
+            "feedback": "print() no requiere argumentos obligatorios."
+          },
+          {
+            "id": "c",
+            "text": "Borra la terminal",
+            "is_correct": false,
+            "feedback": "print() solo escribe, no limpia la pantalla."
+          },
+          {
+            "id": "d",
+            "text": "Imprime la palabra None",
+            "is_correct": false,
+            "feedback": "En la consola simplemente añade una línea en blanco."
+          }
+        ],
+        "explanation": "print() por defecto envía un carácter de nueva línea a la salida estándar."
+      },
+      {
+        "id": "bnk_py_01_06_e",
+        "prompt": "¿Qué operador aritmético se utiliza en Python para multiplicar dos números?",
+        "options": [
+          {
+            "id": "a",
+            "text": "El asterisco (*)",
+            "is_correct": true,
+            "feedback": "¡Correcto! El asterisco es el operador universal de multiplicación."
+          },
+          {
+            "id": "b",
+            "text": "La letra x",
+            "is_correct": false,
+            "feedback": "La letra 'x' se confunde con nombres de variables."
+          },
+          {
+            "id": "c",
+            "text": "El punto (.)",
+            "is_correct": false,
+            "feedback": "El punto representa decimales."
+          },
+          {
+            "id": "d",
+            "text": "El signo de porcentaje (%)",
+            "is_correct": false,
+            "feedback": "% es el operador de módulo."
+          }
+        ],
+        "explanation": "El operador * realiza la multiplicación entre expresiones numéricas."
       }
     ]
   },
@@ -165,6 +258,68 @@
           }
         ],
         "explanation": "En Python la indentación no es estética, sino parte fundamental de la sintaxis."
+      },
+      {
+        "id": "bnk_py_01_07_m",
+        "prompt": "¿Cuál es el resultado exacto de ejecutar print(15 / 3) en Python 3?",
+        "options": [
+          {
+            "id": "a",
+            "text": "5.0 (número flotante)",
+            "is_correct": true,
+            "feedback": "¡Correcto! El operador / siempre genera un número de tipo float."
+          },
+          {
+            "id": "b",
+            "text": "5 (entero)",
+            "is_correct": false,
+            "feedback": "La división con / siempre produce float en Python 3."
+          },
+          {
+            "id": "c",
+            "text": "\"15 / 3\"",
+            "is_correct": false,
+            "feedback": "No está entre comillas, por lo que se evalúa la división."
+          },
+          {
+            "id": "d",
+            "text": "SyntaxError",
+            "is_correct": false,
+            "feedback": "La división es una operación aritmética válida."
+          }
+        ],
+        "explanation": "En Python 3, la división con barra simple / siempre retorna un objeto de clase float."
+      },
+      {
+        "id": "bnk_py_01_08_m",
+        "prompt": "¿Qué ocurre al evaluar la expresión print(2 + 3 * 5)?",
+        "options": [
+          {
+            "id": "a",
+            "text": "17 (resuelve primero 3 * 5 = 15 y luego suma 2)",
+            "is_correct": true,
+            "feedback": "¡Excelente! Python obedece la jerarquía matemática de precedencia."
+          },
+          {
+            "id": "b",
+            "text": "25 (suma primero 2 + 3 = 5 y luego multiplica por 5)",
+            "is_correct": false,
+            "feedback": "Para que sume primero se necesitarían paréntesis: (2 + 3) * 5."
+          },
+          {
+            "id": "c",
+            "text": "\"2 + 15\"",
+            "is_correct": false,
+            "feedback": "No se representan como texto."
+          },
+          {
+            "id": "d",
+            "text": "SyntaxError",
+            "is_correct": false,
+            "feedback": "Es una expresión aritmética perfectamente válida."
+          }
+        ],
+        "explanation": "La multiplicación (*) tiene mayor precedencia que la suma (+)."
       }
     ]
   },
@@ -202,6 +357,68 @@
           }
         ],
         "explanation": "En Python la coerción implícita de tipos entre string e int no está permitida al usar el operador +."
+      },
+      {
+        "id": "bnk_py_01_10_h",
+        "prompt": "¿Cuál de las siguientes instrucciones causará un SyntaxError debido a delimitadores incorrectos?",
+        "options": [
+          {
+            "id": "a",
+            "text": "print(\"Koda')",
+            "is_correct": true,
+            "feedback": "¡Correcto! Abre con comilla doble y cierra con comilla simple: SyntaxError: unterminated string literal."
+          },
+          {
+            "id": "b",
+            "text": "print('Koda: \"Genial\"')",
+            "is_correct": false,
+            "feedback": "Es 100% válido: delimitador externo simple e interno doble."
+          },
+          {
+            "id": "c",
+            "text": "print(\"Koda\\nFox\")",
+            "is_correct": false,
+            "feedback": "Es válido: usa el salto de línea \\n."
+          },
+          {
+            "id": "d",
+            "text": "print(\"Koda\", 10)",
+            "is_correct": false,
+            "feedback": "Es válido: combina string y número con coma."
+          }
+        ],
+        "explanation": "Los delimitadores de cadenas deben ser del mismo tipo al abrir y al cerrar."
+      },
+      {
+        "id": "bnk_py_01_11_h",
+        "prompt": "Si ejecutas print(\"Alfa\", \"Beta\", sep=\"-\"), ¿qué imprimirá la terminal?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Alfa-Beta",
+            "is_correct": true,
+            "feedback": "¡Exacto! El argumento sep=\"-\" cambia el separador por defecto (espacio) por un guion."
+          },
+          {
+            "id": "b",
+            "text": "Alfa Beta",
+            "is_correct": false,
+            "feedback": "El parámetro sep personaliza el delimitador entre argumentos."
+          },
+          {
+            "id": "c",
+            "text": "Alfa-Beta-",
+            "is_correct": false,
+            "feedback": "El separador solo se coloca entre elementos, no al final."
+          },
+          {
+            "id": "d",
+            "text": "SyntaxError",
+            "is_correct": false,
+            "feedback": "sep es un parámetro nativo de la función print()."
+          }
+        ],
+        "explanation": "El parámetro sep permite cambiar el separador entre elementos en print()."
       }
     ]
   },
