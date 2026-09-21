@@ -143,67 +143,41 @@ Todas las respuestas de error ($4xx$ y $5xx$) devuelven un JSON canónico:
 
 ---
 
-## 5. Tabla completa de recursos y endpoints
+## 5. Taxonomía de Transporte y Catálogo de Endpoints (ADR-012)
 
-> `Auth` = requiere `Bearer <access_token>`. `Rol` mínimo. `RF` principal trazado.
+Conforme a la **Arquitectura Híbrida Inteligente** formalizada en `ADR-012`, la plataforma Koda divide sus contratos de integración en dos superficies optimizadas:
+1. **Superficie REST (`/api/v1`)**: Documentada en Swagger (`/api/docs`), reservada estrictamente para operaciones que requieren estándares HTTP nativos, flujos OAuth/criptográficos, descargas binarias y endpoints de infraestructura.
+2. **Superficie GraphQL (`/graphql`)**: Contrato declarativo primario para la experiencia interactiva del estudiante en Next.js 15, eliminando *under-fetching* y *over-fetching*.
 
-| # | Recurso | Método | Endpoint | Auth | Rol | Descripción | RF |
+---
+
+### 5.1 Superficie Oficial REST `/api/v1` (OpenAPI / Swagger)
+
+> Estos endpoints constituyen la especificación viva generada en `http://localhost:4000/api/docs`.
+
+| # | Tag / Dominio | Método | Endpoint | Auth | Rol | Descripción | Criterio de Inclusión REST |
 |---|---|---|---|---|---|---|---|
-| 1 | Auth | POST | `/auth/register` | No | — | Registro con email + contraseña | RF-AUTH-001, RF-USR-001 |
-| 2 | Auth | POST | `/auth/login` | No | — | Login, emite `access` + `refresh` | RF-AUTH-002, RF-AUTH-006 |
-| 3 | Auth | POST | `/auth/refresh` | Sí (refresh) | — | Renueva par de tokens rotativos | RF-AUTH-007 |
-| 4 | Auth | POST | `/auth/logout` | Sí | USER | Invalida `refresh_token` activo | RF-AUTH-003 |
-| 5 | Auth | POST | `/auth/forgot-password` | No | — | Solicita recuperación de contraseña | RF-AUTH-004 |
-| 6 | Auth | POST | `/auth/reset-password` | No (token) | — | Define nueva contraseña con token | RF-AUTH-004 |
-| 7 | Auth | POST | `/auth/verify-email` | No (token) | — | Confirma email del usuario | RF-AUTH-005 |
-| 8 | Users | GET | `/users/me` | Sí | USER | Perfil consolidado del titular | RF-PROF-001, RF-USR-002 |
-| 9 | Users | PATCH | `/users/me` | Sí | USER | Actualiza datos de perfil / clave | RF-USR-002, RF-PROF-002 |
-| 9B | Users | PATCH | `/users/me/preferences` | Sí | USER | Actualiza estilo de aprendizaje y meta diaria | RF-USR-002, RF-RACHA-004 |
-| 10 | Users | DELETE | `/users/me` | Sí | USER | Solicita anonimización / baja | RF-USR-003 |
-| 11 | Users | GET | `/users/me/progress` | Sí | USER | Progreso agregado por lenguaje / módulo | RF-PROG-002, RF-PROG-005 |
-| 12 | Users | GET | `/users/me/achievements` | Sí | USER | Logros desbloqueados y en progreso | RF-LOGRO-002/003 |
-| 13 | Users | GET | `/users/me/certificates` | Sí | USER | Certificados emitidos al titular | RF-PROF-005, RF-CERT-001 |
-| 14 | Users | GET | `/users/me/stats` | Sí | USER | Estadísticas globales de aprendizaje | RF-PROF-006 |
-| 15 | Languages | GET | `/languages` | No* | — | Lista de lenguajes (Python disponibles) | RF-LANG-001 |
-| 16 | Languages | GET | `/languages/{id}` | No* | — | Detalle de un lenguaje de programación | RF-LANG-001 |
-| 17 | Languages | GET | `/languages/{id}/modules` | Sí | USER | Lista de módulos con progreso y candados | RF-MOD-001, RF-RUTA-002 |
-| 18 | Roadmap | GET | `/roadmap/branches` | Sí | USER | Listado de ramas profesionales (Frontend, Backend, DevOps) con telemetría | ADR-007, RF-RUTA-001 |
-| 18A | Roadmap | GET | `/roadmap/branches/{branchId}` | Sí | USER | **Grafo DAG interactivo:** nodos espaciales y aristas SVG | ADR-007, ADR-011 |
-| 18B | Roadmap | GET | `/roadmap/courses/{id}/lessons` | Sí | USER | Grafo DAG de lecciones detalladas del curso | ADR-007, RF-LEC-001 |
-| 18C | Roadmap | GET | `/roadmap/telemetry/milestone` | Sí | USER | Siguiente hito desbloqueable (título, XP, etiqueta `RQ`) | ADR-007, RF-MOD-003 |
-| 19 | Modules | GET | `/modules/{id}` | Sí | USER | Detalle de módulo (objetivo, candado, % estrellas) | RF-MOD-002/003/005 |
-| 20 | Modules | GET | `/modules/{id}/sections` | Sí | USER | Secciones del módulo con candados y ⭐ | RF-SEC-001, RF-CANDADO-002 |
-| 21 | Sections | GET | `/sections/{id}` | Sí | USER | Detalle de sección con micro-lecciones y ⭐ obtenidas | RF-SEC-002/004, RF-ESTRELLA-004 |
-| 22 | Sections | POST | `/sections/{id}/complete` | Sí | USER | **Cierre y calificación de sección (1–3 ⭐)** | RF-SEC-003, RF-ESTRELLA-001–005 |
-| 23 | Sections | POST | `/sections/{id}/review-queue/answer` | Sí | USER | Responde ejercicio de la ronda de repaso intra-sección | RF-REP-002, RF-ESTRELLA-002 |
-| 24 | Lessons | GET | `/lessons/{id}` | Sí | USER | Detalle de lección con teoría, código y ejercicios | RF-LEC-001/004 |
-| 25 | Lessons | POST | `/lessons/{id}/complete` | Sí | USER | Marca micro-lección completada | RF-LEC-003, RF-PROG-001 |
-| 26 | Lessons | POST | `/lessons/{id}/answer` | Sí | USER | **Envía respuesta de ejercicio:** feedback anti-spoilers | RF-PREG-004/005, RF-CUADERNO-001 |
-| 27 | Notebook | GET | `/notebook/mistakes` | Sí | USER | **Cuaderno de errores:** lista ejercicios pendientes | RF-CUADERNO-001–004 |
-| 28 | Notebook | POST | `/notebook/mistakes/{question_id}/resolve` | Sí | USER | **Remediación en cuaderno:** valida solución (+5 XP) | RF-CUADERNO-005/006 |
-| 29 | Levels | POST | `/users/me/level` | Sí | USER | Declaración de nivel inicial | RF-LVL-001/002 |
-| 30 | Diagnostics | POST | `/diagnostics` | Sí | USER | Inicia diagnóstico por lenguaje | RF-DIAG-001 |
-| 31 | Diagnostics | POST | `/diagnostics/{id}/attempt` | Sí | USER | Envía intento de diagnóstico (evaluación y entrada) | RF-DIAG-002/003 |
-| 32 | Quizzes | GET | `/quizzes/{id}` | Sí | USER | Metadatos y composición del quiz | RF-QUIZ-001 |
-| 33 | Quizzes | POST | `/quiz/{id}/attempt` | Sí | USER | Envía intento de quiz (umbral 70%) | RF-QUIZ-002/003/006 |
-| 34 | Quizzes | GET | `/quiz/{id}/attempts` | Sí | USER | Historial de intentos de quiz | RF-QUIZ-005, RF-EVAL-003 |
-| 35 | Exams | GET | `/exams/{id}` | Sí | USER | Metadatos y composición del examen final | RF-EXAM-001/002 |
-| 36 | Exams | POST | `/exam/{id}/attempt` | Sí | USER | **Envía intento de examen (umbral 80%):** maestría | RF-EXAM-003/004/005 |
-| 37 | Exams | GET | `/exam/{id}/attempts` | Sí | USER | Historial de intentos de examen | RF-EXAM-005, RF-EVAL-003 |
-| 38 | Progress | GET | `/progress` | Sí | USER | Historial filtrable de lecciones/quizzes/exámenes | RF-PROG-005 |
-| 39 | Progress | GET | `/progress/streak` | Sí | USER | Racha actual / récord / congelamientos | RF-RACHA-003/005 |
-| 40 | Certificates | GET | `/certificates/{id}` | No* | — | Verificación pública de certificado (`KODA-PY-...`) | RF-CERT-006 |
-| 41 | Certificates | GET | `/certificates/{id}/pdf` | Sí | USER | Descarga PDF del certificado (solo titular) | RF-PDF-002/003 |
-| 42 | Certificates | POST | `/certificates/verify` | No | — | Verificación pública por código o QR | RF-CERT-004/006 |
-| 43 | Review | GET | `/review/recommended` | Sí | USER | Sesión de repaso inteligente recomendada | RF-REP-001/002 |
-| 44 | Review | POST | `/review/attempt` | Sí | USER | Envía intento de repaso (no penaliza) | RF-REP-004 |
-| — | Admin | * | `/admin/*` | Sí | ADMIN | CRUD completo, validación, publicación y métricas | RF-ADM-001–009 |
+| 1 | Auth | POST | `/api/v1/auth/register-otp` | No | — | Registro e inicio de sesión con OTP vía Supabase Auth | Flujo transaccional OTP |
+| 2 | Auth | POST | `/api/v1/auth/verify-otp` | No | — | Verificación de código OTP y entrega de sesión | Entrega de JWT stateless |
+| 3 | Auth | POST | `/api/v1/auth/verify-session` | Sí (Header/Body) | — | Validación y aprovisionamiento de sesión activa | Sincronización criptográfica |
+| 4 | Auth | POST | `/api/v1/auth/refresh-session` | Sí (Refresh) | — | Renovación de access token mediante refresh token | Rotación de tokens RFC 6749 |
+| 5 | Auth | POST | `/api/v1/auth/complete-onboarding` | Sí | USER | Finalización de onboarding y sincronización de metadata | Persistencia atómica de usuario |
+| 6 | Auth | POST | `/api/v1/auth/forgot-password` | No | — | Despacho de enlace para restablecer clave | Integración SMTP Supabase |
+| 7 | Auth | POST | `/api/v1/auth/reset-password` | Sí (Token) | — | Actualización segura de contraseña | Estándar de recuperación HTTP |
+| 8 | Users | GET | `/api/v1/users/me` | Sí | USER | Consulta de perfil consolidado con cédula enmascarada | Protección estricta de PII |
+| 9 | Users | PATCH | `/api/v1/users/me` | Sí | USER | Modificación de nombre, bio y documento legal | Mutación de identidad legal |
+| 10 | Users | PATCH | `/api/v1/users/me/preferences` | Sí | USER | Actualización de meta diaria de estudio y estilo | Sincronización de preferencias |
+| 11 | Diagnostic & Onboarding | GET | `/api/v1/learning/diagnostic/questions` | Opcional | — | 12 preguntas estratificadas (B1 y B2) para test de entrada | Evaluación diagnóstica inicial |
+| 12 | Diagnostic & Onboarding | POST | `/api/v1/learning/diagnostic/submit` | Opcional | — | Evaluación algorítmica y cálculo de módulo inicial | Inferencia pedagógica de entrada |
+| 13 | Certification | GET | `/api/v1/certificates/verify/:code` | No (Público) | — | Verificación pública de certificados oficiales (`KODA-PY-*`) | Validación externa por QR/Código |
+| 14 | Certification | GET | `/api/v1/certificates/:id/download-info` | Sí | USER | Metadatos y URL de streaming de certificado PDF | Descarga binaria y storage |
+| 15 | Root & Health | GET | `/api/v1` | No | — | Estado de salud, versión y metadatos de la plataforma | Probe de infraestructura |
 
-\* Endpoints de lectura pública o verificación sin autenticación. No exponen datos personales sensibles (PII).
+---
 
-### 5B. Catálogo Oficial de Operaciones GraphQL (`/graphql`)
+### 5.2 Superficie Oficial GraphQL (`/graphql`)
 
-Conforme a la ratificación de **ADR-012**, todas las operaciones interactivas y aquellas categorizadas previamente como indiferentes se exponen a través del endpoint primario `/graphql`:
+> Contrato fuertemente tipado consumido por el frontend en `apps/web` para navegación y renderizado interactivo:
 
 | Tipo | Operación | Argumentos | Retorno | Descripción |
 |---|---|---|---|---|
@@ -223,7 +197,13 @@ Conforme a la ratificación de **ADR-012**, todas las operaciones interactivas y
 | `Mutation` | `evaluateLessonAnswer` | `input: LessonAnswerInput!` | `LessonAnswerFeedbackType!` | Evaluación de ejercicio con feedback anti-spoilers |
 | `Mutation` | `resolveMistake` | `questionId: String!` | `ResolveMistakeResponseType!` | Remediación de error en cuaderno (+5 XP) |
 
-> **Nota de Coexistencia Hexagonal:** Los controladores REST de currículo y roadmap se mantienen activos como adaptadores secundarios de compatibilidad para evitar regresiones en herramientas legadas, mientras que `/graphql` es el contrato de consumo primario para la experiencia web.
+---
+
+### 5.3 Coexistencia Hexagonal y Adaptadores Excluidos de Swagger
+
+En concordancia con el principio de *Driving Adapters* de la Arquitectura Hexagonal:
+- Los controladores REST secundarios de currículo (`/api/v1/content/*`), roadmap (`/api/v1/roadmap/*`), lecciones (`/api/v1/learning/*`), cuaderno (`/api/v1/notebook/*`) y lenguajes (`/api/v1/languages/*`) han sido decorados con `@ApiExcludeController()`.
+- **Razón técnica:** Se mantienen temporalmente en el código como adaptadores de retrocompatibilidad, pero **no forman parte de la especificación OpenAPI de producción**, garantizando que Swagger (`/api/docs`) sea un espejo fiel, limpio y sin ambigüedades de la superficie REST oficial.
 
 ---
 

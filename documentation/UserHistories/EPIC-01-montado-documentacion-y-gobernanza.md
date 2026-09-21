@@ -48,12 +48,12 @@
 - Paquete compartido `@koda/types` implementado en monorepo con contratos TypeScript compilados a `dist/`.
 
 **Subtasks:**
-- [ ] [DOCS] Redactar `11_SYSTEM_ARCHITECTURE.md` con diagramas Mermaid de los 9 motores (Learning, Evaluation, Gamification, Certification, etc.).
-- [ ] [DOCS] Diseñar el modelo ER en `12_DATABASE_DESIGN.md` con soporte para estrellas (1–3⭐), candados secuenciales, cuaderno de errores y triggers de integridad.
-- [ ] [DOCS] Escribir la especificación completa OpenAPI 3.0.3 en `13_API_SPECIFICATION.md` con DTOs de Request/Response y códigos de error por dominio.
-- [ ] [BACKEND] Configurar NestJS con prefijo `/api/v1` y documentación viva Swagger en `/api/docs`.
-- [ ] [TYPES] Crear paquete `packages/types` con las interfaces maestras (`User`, `RoadmapResponse`, `LessonDetail`, `UserStreak`, `Certificate`).
-- [ ] [TYPES] Compilar `@koda/types` exitosamente con TypeScript `tsc`.
+- [x] [DOCS] Redactar `11_SYSTEM_ARCHITECTURE.md` con diagramas Mermaid de los 9 motores (Learning, Evaluation, Gamification, Certification, etc.).
+- [x] [DOCS] Diseñar el modelo ER en `12_DATABASE_DESIGN.md` con soporte para estrellas (1–3⭐), candados secuenciales, cuaderno de errores y triggers de integridad.
+- [x] [DOCS] Escribir la especificación completa OpenAPI 3.0.3 en `13_API_SPECIFICATION.md` con DTOs de Request/Response y códigos de error por dominio.
+- [x] [BACKEND] Configurar NestJS con prefijo `/api/v1` y documentación viva Swagger en `/api/docs`.
+- [x] [TYPES] Crear paquete `packages/types` con las interfaces maestras (`User`, `RoadmapResponse`, `LessonDetail`, `UserStreak`, `Certificate`).
+- [x] [TYPES] Compilar `@koda/types` exitosamente con TypeScript `tsc`.
 
 **DoD adicional para esta US:**
 - Swagger operativo en `http://localhost:4000/api/docs` y `@koda/types` consumible mediante `workspace:*` en `apps/api` y `apps/web`.
