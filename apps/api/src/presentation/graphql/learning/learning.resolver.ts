@@ -1,23 +1,36 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import type { User as SupabaseAuthUser } from '@supabase/supabase-js';
+import { OptionalSupabaseAuthGuard } from '@common/guards/optional-supabase-auth.guard';
+import { SupabaseAuthGuard } from '@common/guards/supabase-auth.guard';
+import { CurrentUser } from '@common/decorators/current-user.decorator';
 import { LearningService } from '../../../modules/learning/learning.service';
+import { CompleteSectionUseCase } from '@application/use-cases/learning/complete-section.use-case';
 import {
   LearningRoadmapType,
   LessonAnswerFeedbackType,
   LessonAnswerInput,
+  CompleteSectionInput,
+  SectionCompletionType,
 } from './types/learning.type';
 
 @Resolver()
 export class LearningResolver {
-  constructor(private readonly learningService: LearningService) {}
+  constructor(
+    private readonly learningService: LearningService,
+    private readonly completeSectionUseCase: CompleteSectionUseCase,
+  ) {}
 
   @Query(() => LearningRoadmapType, {
     name: 'learningRoadmap',
-    description: 'Obtener el árbol de roadmap con candados y estrellas de un lenguaje (MongoDB)',
+    description: 'Obtener el árbol de roadmap con candados y estrellas de un lenguaje (MongoDB + PostgreSQL)',
   })
+  @UseGuards(OptionalSupabaseAuthGuard)
   async getLearningRoadmap(
     @Args('languageSlug', { type: () => String }) languageSlug: string,
+    @CurrentUser() authUser?: SupabaseAuthUser,
   ): Promise<LearningRoadmapType> {
-    const res = await this.learningService.getRoadmap(languageSlug);
+    const res = await this.learningService.getRoadmap(languageSlug, authUser?.id);
     return {
       overall_progress_percentage: res.overall_progress_percentage,
       total_stars_earned: res.total_stars_earned,
@@ -57,4 +70,17 @@ export class LearningResolver {
   ): Promise<LessonAnswerFeedbackType> {
     return this.learningService.evaluateAnswer(input);
   }
+
+  @Mutation(() => SectionCompletionType, {
+    name: 'completeSection',
+    description: 'Registrar la completitud de una sección con asignación de estrellas (1-3⭐), XP no-regresiva y telemetría en PostgreSQL',
+  })
+  @UseGuards(SupabaseAuthGuard)
+  async completeSection(
+    @Args('input', { type: () => CompleteSectionInput }) input: CompleteSectionInput,
+    @CurrentUser() authUser: SupabaseAuthUser,
+  ): Promise<SectionCompletionType> {
+    return this.completeSectionUseCase.execute(authUser.id, input);
+  }
 }
+

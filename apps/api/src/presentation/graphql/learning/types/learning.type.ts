@@ -122,3 +122,61 @@ export class LessonAnswerInput {
   @Field(() => [String], { nullable: true })
   ordered_block_ids?: string[];
 }
+
+@InputType('CompleteSectionInput')
+export class CompleteSectionInput {
+  @Field(() => String)
+  sectionId!: string;
+
+  @Field(() => String)
+  moduleId!: string;
+
+  @Field(() => String)
+  courseId!: string;
+
+  @Field(() => Float)
+  accuracyPercentage!: number;
+}
+
+@ObjectType('SectionCompletion')
+export class SectionCompletionType {
+  @Field(() => String)
+  sectionId!: string;
+
+  @Field(() => String)
+  moduleId!: string;
+
+  @Field(() => Int)
+  starsEarnedThisAttempt!: number;
+
+  @Field(() => Int)
+  bestStarsEarnedOverall!: number;
+
+  @Field(() => Float)
+  bestAccuracyScore!: number;
+
+  @Field(() => Int)
+  totalAttemptsCount!: number;
+
+  @Field(() => Boolean)
+  isPassed!: boolean;
+
+  @Field(() => Boolean)
+  isPerfect!: boolean;
+
+  @Field(() => Boolean)
+  isNewlyPassed!: boolean;
+
+  @Field(() => Boolean)
+  isNewBest!: boolean;
+
+  @Field(() => Int)
+  xpAwarded!: number;
+
+  @Field(() => Int)
+  userTotalXp!: number;
+
+  @Field(() => String, { nullable: true })
+  completedAt!: string | null;
+}
+

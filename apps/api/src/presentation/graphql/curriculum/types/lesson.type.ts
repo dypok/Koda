@@ -107,8 +107,9 @@ export class LessonType {
   @Field(() => SingleChoiceChallengeType)
   item2Quiz: SingleChoiceChallengeType;
 
-  @Field(() => PredictionChallengeType)
-  item3Prediction: PredictionChallengeType;
+  @Field(() => PredictionChallengeType, { nullable: true })
+  item3Prediction?: PredictionChallengeType;
+
 
   @Field(() => Int)
   xpReward: number;
