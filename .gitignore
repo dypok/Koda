@@ -64,4 +64,10 @@ coverage/
 # 3D assets scratch
 *.blend*
 
-.agents/
+# Jira scripts and generated CSVs
+documentation/scripts/generate_jira_csv_with_subtasks.js
+generate_jira_csv_with_subtasks.js
+documentation/jira-backlog-with-subtasks.csv
+documentation/jira-subtasks-only.csv
+jira-backlog-with-subtasks.csv
+jira-subtasks-only.csv
