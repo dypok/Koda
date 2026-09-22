@@ -8,6 +8,7 @@ import { AppController } from './app.controller';
 import { LanguagesModule } from './modules/languages/languages.module';
 import { LearningModule } from './modules/learning/learning.module';
 import { CertificationModule } from './modules/certification/certification.module';
+import { EvaluationModule } from './modules/evaluation/evaluation.module';
 import { NotebookModule } from './modules/notebook/notebook.module';
 import { RoadmapModule } from './modules/roadmap/roadmap.module';
 import { DatabaseModule } from './database/database.module';
