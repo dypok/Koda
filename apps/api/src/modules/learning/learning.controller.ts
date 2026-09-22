@@ -64,12 +64,10 @@ export class LearningController {
     @CurrentUser() authUser: SupabaseAuthUser,
   ) {
     return this.completeSectionUseCase.execute(authUser.id, {
-      section_id: sectionId,
-      module_id: body.module_id,
-      course_id: body.course_id,
-      language_slug: body.language_slug,
-      stars_earned: body.stars_earned,
-      accuracy_percentage: body.accuracy_percentage,
+      sectionId: sectionId,
+      moduleId: body.moduleId,
+      courseId: body.courseId,
+      accuracyPercentage: body.accuracyPercentage,
     });
   }
 

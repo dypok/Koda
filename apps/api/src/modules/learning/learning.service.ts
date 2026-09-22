@@ -232,6 +232,14 @@ export class LearningService {
       throw new NotFoundException(`Lección '${submission.lesson_id}' no encontrada en MongoDB.`);
     }
 
+    const section = await this.curriculumRepository.findSectionBySlug(lesson.sectionSlug);
+    const module = section ? await this.curriculumRepository.findModuleBySlug(section.moduleSlug) : null;
+    const course = module ? await this.curriculumRepository.findCourseBySlug(module.courseSlug) : null;
+
+    const moduleSlug = module?.slug || '';
+    const courseSlug = course?.slug || '';
+    const languageSlug = course?.trackSlug || '';
+
     const correctOption = lesson.item2Quiz.options.find((o) => o.isCorrect);
     const isCorrect = Boolean(
       correctOption && submission.selected_option_ids.includes(correctOption.id),
@@ -252,9 +260,9 @@ export class LearningService {
       user_id: userId,
       lesson_id: lesson.slug,
       section_id: lesson.sectionSlug,
-      module_id: lesson.moduleSlug,
-      course_id: lesson.courseSlug,
-      language_code: lesson.languageSlug,
+      module_id: moduleSlug,
+      course_id: courseSlug,
+      language_code: languageSlug,
       status: 'completed',
       is_passed: isCorrect,
       xp_earned: xpEarned,
@@ -296,9 +304,9 @@ export class LearningService {
           question_id: lesson.slug + '_q1',
           lesson_id: lesson.slug,
           section_slug: lesson.sectionSlug,
-          module_slug: lesson.moduleSlug,
-          course_slug: lesson.courseSlug,
-          track_slug: lesson.languageSlug,
+          module_slug: moduleSlug,
+          course_slug: courseSlug,
+          track_slug: languageSlug,
           question_type: 'SINGLE_CHOICE',
           question_prompt: lesson.item2Quiz.prompt,
           user_wrong_answer: submission.selected_option_ids,

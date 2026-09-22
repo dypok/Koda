@@ -94,9 +94,9 @@ describe('LearningResolver', () => {
       lesson_id: 'py-01',
       question_id: 'q-01',
       selected_option_ids: ['a'],
-    });
+    }, mockUser);
     expect(res.is_correct).toBe(true);
-    expect(learningService.evaluateAnswer).toHaveBeenCalledWith({
+    expect(learningService.evaluateAnswer).toHaveBeenCalledWith('usr-456', {
       lesson_id: 'py-01',
       question_id: 'q-01',
       selected_option_ids: ['a'],
