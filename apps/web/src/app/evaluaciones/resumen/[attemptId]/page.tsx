@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { getCookie } from 'cookies-next';
-import { CheckCircle2, XCircle, ArrowRight } from 'lucide-react';
+
+
+function getCookie(n:string){if(typeof document==='undefined')return'';const v=document.cookie.match('(^|;) ?'+n+'=([^;]*)(;|$)');return v?v[2]:null;}
+import { CheckCircle, XCircle, ArrowRight } from '@phosphor-icons/react';
 
 export default function AttemptReviewScreen({ params }: { params: { attemptId: string } }) {
   const [summary, setSummary] = useState<any>(null);
@@ -76,10 +76,10 @@ export default function AttemptReviewScreen({ params }: { params: { attemptId: s
 
       <div className="space-y-6">
         {filteredDetails.map((item: any, i: number) => (
-           <Card key={i} className={`p-6 border-l-4 ${item.is_correct ? 'border-l-green-500' : 'border-l-red-500'}`}>
+           <div key={i} className={`p-6 border-l-4 ${item.is_correct ? 'border-l-green-500' : 'border-l-red-500'}`}>
               <div className="flex gap-4 items-start">
                  <div className="mt-1">
-                    {item.is_correct ? <CheckCircle2 className="text-green-500 w-6 h-6" /> : <XCircle className="text-red-500 w-6 h-6" />}
+                    {item.is_correct ? <CheckCircle weight='fill' className="text-green-500 w-6 h-6" /> : <XCircle weight='fill' className="text-red-500 w-6 h-6" />}
                  </div>
                  <div className="flex-1">
                     <h3 className="text-lg font-medium mb-4">{item.prompt}</h3>
@@ -108,14 +108,14 @@ export default function AttemptReviewScreen({ params }: { params: { attemptId: s
                     </div>
                  </div>
               </div>
-           </Card>
+           </div>
         ))}
       </div>
 
       <div className="mt-10 flex justify-center pb-12">
-         <Button size="lg" className="gap-2" onClick={() => router.push('/dashboard')}>
+         <button className="gap-2" onClick={() => router.push('/dashboard')}>
             {passed ? 'Continuar al siguiente módulo' : 'Repasar conceptos clave'} <ArrowRight className="w-4 h-4" />
-         </Button>
+         </button>
       </div>
 
     </div>

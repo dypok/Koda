@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { toast } from 'react-hot-toast';
-import { getCookie } from 'cookies-next';
+
+
+
+
 
 export default function ExamPage({ params }: { params: { id: string } }) {
   const [questions, setQuestions] = useState<any[]>([]);
+function getCookie(name: string) { if (typeof document === "undefined") return ""; const v = document.cookie.match("(^|;) ?" + name + "=([^;]*)(;|$)"); return v ? v[2] : null; }
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
@@ -29,7 +30,7 @@ export default function ExamPage({ params }: { params: { id: string } }) {
         const data = await res.json();
         setQuestions(data.questions || []);
       } catch (error) {
-         toast.error('Hubo un problema al cargar el examen');
+         alert('Hubo un problema al cargar el examen');
       } finally {
         setLoading(false);
       }
@@ -84,15 +85,15 @@ export default function ExamPage({ params }: { params: { id: string } }) {
         const result = await res.json();
         
         if (result.passed) {
-          toast.success(`¡Módulo Completado! Aprobaste con un ${result.score}% y ganaste ${result.xp_earned} XP`);
+          alert(`¡Módulo Completado! Aprobaste con un ${result.score}% y ganaste ${result.xp_earned} XP`);
         } else {
-          toast.error(`Obtuviste ${result.score}%. Necesitas 80% para certificar este módulo.`);
+          alert(`Obtuviste ${result.score}%. Necesitas 80% para certificar este módulo.`);
         }
         
         // Redirigir a resumen
         router.push(`/evaluaciones/resumen/${result.attempt_id}`);
     } catch (error) {
-       toast.error('Error al calificar el examen');
+       alert('Error al calificar el examen');
        setSubmitting(false);
     }
   };
@@ -124,7 +125,7 @@ export default function ExamPage({ params }: { params: { id: string } }) {
         />
       </div>
 
-      <Card className="p-8 border-t-4 border-t-indigo-600 shadow-lg">
+      <div className="p-8 border-t-4 border-t-indigo-600 shadow-lg">
         <h2 className="text-xl font-medium mb-6">{currentQ.prompt}</h2>
         {currentQ.code_snippet && (
            <pre className="bg-slate-900 text-green-400 p-4 rounded-md mb-6 overflow-x-auto text-sm shadow-inner">
@@ -147,25 +148,25 @@ export default function ExamPage({ params }: { params: { id: string } }) {
             </button>
           ))}
         </div>
-      </Card>
+      </div>
 
       <div className="flex justify-between mt-8">
-        <Button 
-          variant="outline" 
+        <button 
+          
           onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
           disabled={currentIndex === 0}
         >
           Anterior
-        </Button>
+        </button>
         
         {currentIndex === questions.length - 1 ? (
-          <Button onClick={handleSubmit} disabled={submitting} className="bg-indigo-600 hover:bg-indigo-700 text-white">
+          <button onClick={handleSubmit} disabled={submitting} className="bg-indigo-600 hover:bg-indigo-700 text-white">
             {submitting ? 'Evaluando...' : 'Finalizar Examen'}
-          </Button>
+          </button>
         ) : (
-          <Button onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}>
+          <button onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}>
             Siguiente
-          </Button>
+          </button>
         )}
       </div>
     </div>
