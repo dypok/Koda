@@ -15,9 +15,10 @@ import { OptionalSupabaseAuthGuard } from '@common/guards/optional-supabase-auth
 import { SupabaseAuthGuard } from '@common/guards/supabase-auth.guard';
 import { DatabaseModule } from '../../database/database.module';
 import { ContentModule } from '../../presentation/rest/content/content.module';
+import { CodeRunnerModule } from '../../application/services/code-runner/code-runner.module';
 
 @Module({
-  imports: [DatabaseModule, ContentModule],
+  imports: [DatabaseModule, ContentModule, CodeRunnerModule],
   controllers: [LearningController, DiagnosticController],
   providers: [
     LearningService,

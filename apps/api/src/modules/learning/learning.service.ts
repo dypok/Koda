@@ -15,6 +15,7 @@ import {
   IProgressRepository,
   PROGRESS_REPOSITORY_TOKEN,
 } from '../../domain/repositories/progress.repository';
+import { SupabaseService } from '../../database/supabase.service';
 
 @Injectable()
 export class LearningService {
@@ -25,6 +26,7 @@ export class LearningService {
     private readonly curriculumRepository: ICurriculumRepository,
     @Inject(PROGRESS_REPOSITORY_TOKEN)
     private readonly progressRepository: IProgressRepository,
+    private readonly supabaseService: SupabaseService,
   ) {}
 
   async getRoadmap(languageSlug: string, userId?: string): Promise<RoadmapResponse> {
@@ -224,7 +226,7 @@ export class LearningService {
     };
   }
 
-  async evaluateAnswer(submission: LessonAnswerSubmission): Promise<LessonAnswerFeedback> {
+  async evaluateAnswer(userId: string, submission: LessonAnswerSubmission): Promise<LessonAnswerFeedback> {
     const lesson = await this.curriculumRepository.findLessonBySlug(submission.lesson_id);
     if (!lesson) {
       throw new NotFoundException(`Lección '${submission.lesson_id}' no encontrada en MongoDB.`);
@@ -240,9 +242,78 @@ export class LearningService {
       : (lesson.item2Quiz.options.find((o) => submission.selected_option_ids.includes(o.id))?.feedback ||
          'Respuesta incorrecta. Revisa la teoría y vuelve a intentarlo.');
 
+    const xpEarned = isCorrect ? lesson.xpReward : 0;
+    
+    // Persist attempt asynchronously using SupabaseService
+    const client = this.supabaseService.getClient();
+    
+    // Attempt record
+    const { data: attemptData, error: attemptError } = await client.from('attempts').insert({
+      user_id: userId,
+      lesson_id: lesson.slug,
+      section_id: lesson.sectionSlug,
+      module_id: lesson.moduleSlug,
+      course_id: lesson.courseSlug,
+      language_code: lesson.languageSlug,
+      status: 'completed',
+      is_passed: isCorrect,
+      xp_earned: xpEarned,
+      duration_seconds: submission.time_spent_seconds ?? 0,
+      mistakes_count: isCorrect ? 0 : 1,
+    }).select('id').single();
+    
+    if (attemptData && !attemptError) {
+      await client.from('attempt_answers').insert({
+        attempt_id: attemptData.id,
+        question_id: lesson.slug + '_q1',
+        question_type: 'SINGLE_CHOICE',
+        user_response: submission.selected_option_ids,
+        is_correct: isCorrect,
+        time_spent_seconds: submission.time_spent_seconds ?? 0,
+        xp_awarded: xpEarned,
+        feedback_text: feedbackText
+      });
+    }
+
+    // Add to review queue / mistakes notebook if incorrect
+    if (!isCorrect) {
+      // Usar upsert o verificar si existe
+      const { data: existingMistake } = await client.from('user_mistakes_notebook')
+        .select('id, fail_count')
+        .eq('user_id', userId)
+        .eq('question_id', lesson.slug + '_q1')
+        .maybeSingle();
+
+      if (existingMistake) {
+        await client.from('user_mistakes_notebook').update({
+          fail_count: (existingMistake.fail_count || 1) + 1,
+          is_resolved: false,
+          last_failed_at: new Date().toISOString()
+        }).eq('id', existingMistake.id);
+      } else {
+        await client.from('user_mistakes_notebook').insert({
+          user_id: userId,
+          question_id: lesson.slug + '_q1',
+          lesson_id: lesson.slug,
+          section_slug: lesson.sectionSlug,
+          module_slug: lesson.moduleSlug,
+          course_slug: lesson.courseSlug,
+          track_slug: lesson.languageSlug,
+          question_type: 'SINGLE_CHOICE',
+          question_prompt: lesson.item2Quiz.prompt,
+          user_wrong_answer: submission.selected_option_ids,
+          correct_answer: [correctOption?.id],
+          fail_count: 1,
+          is_resolved: false,
+          first_failed_at: new Date().toISOString(),
+          last_failed_at: new Date().toISOString()
+        });
+      }
+    }
+
     return {
       is_correct: isCorrect,
-      xp_earned: isCorrect ? lesson.xpReward : 0,
+      xp_earned: xpEarned,
       feedback_message: feedbackText,
       hint: isCorrect ? undefined : lesson.item3Prediction.hint,
       explanation: isCorrect ? correctOption?.feedback : undefined,

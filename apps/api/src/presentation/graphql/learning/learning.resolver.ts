@@ -65,10 +65,12 @@ export class LearningResolver {
     name: 'evaluateLessonAnswer',
     description: 'Evaluar respuesta de una micro-lección con feedback anti-spoilers (MongoDB)',
   })
+  @UseGuards(SupabaseAuthGuard)
   async evaluateLessonAnswer(
     @Args('input', { type: () => LessonAnswerInput }) input: LessonAnswerInput,
+    @CurrentUser() authUser: SupabaseAuthUser,
   ): Promise<LessonAnswerFeedbackType> {
-    return this.learningService.evaluateAnswer(input);
+    return this.learningService.evaluateAnswer(authUser.id, input);
   }
 
   @Mutation(() => SectionCompletionType, {
