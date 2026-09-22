@@ -97,6 +97,11 @@ export class EvaluationService {
     return sampled.sort(() => 0.5 - Math.random()); // shuffle final
   }
 
+  /**
+   * Genera un intento de evaluación (Quiz o Examen) cargando dinámicamente las preguntas
+   * desde el banco (bank.json) y seleccionando una muestra según la receta (compositions.json).
+   * Omitimos enviar las respuestas correctas al cliente por seguridad.
+   */
   async generateEvaluation(userId: string, moduleSlug: string, type: 'quiz' | 'exam') {
     const module = await this.curriculumRepository.findModuleBySlug(moduleSlug);
     if (!module) throw new NotFoundException(`Modulo ${moduleSlug} no encontrado.`);
@@ -133,6 +138,10 @@ export class EvaluationService {
     };
   }
 
+  /**
+   * Recibe las respuestas del usuario, calcula la puntuación, persiste el resultado
+   * atómicamente en PostgreSQL y envía los errores al cuaderno de repasos (Spaced Repetition).
+   */
   async evaluateAttempt(userId: string, targetId: string, submission: any, type: 'quiz' | 'exam') {
     const moduleSlug = targetId; // Assuming targetId is moduleSlug for now.
     const module = await this.curriculumRepository.findModuleBySlug(moduleSlug);
@@ -242,6 +251,11 @@ export class EvaluationService {
     };
   }
 
+  /**
+   * Extrae el resumen del intento calificado de la base de datos (PostgreSQL),
+   * inyectando las justificaciones conceptuales del bank.json para la revisión y
+   * aprendizaje formativo del estudiante.
+   */
   async getAttemptSummary(userId: string, attemptId: string) {
     const client = this.supabaseService.getClient();
     const { data: attempt } = await client.from('attempts').select('*').eq('id', attemptId).eq('user_id', userId).single();
