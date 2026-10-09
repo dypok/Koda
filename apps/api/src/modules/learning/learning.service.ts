@@ -16,6 +16,8 @@ import {
   PROGRESS_REPOSITORY_TOKEN,
 } from '../../domain/repositories/progress.repository';
 
+import { ContentLoaderService } from './content-loader.service';
+
 @Injectable()
 export class LearningService {
   private readonly logger = new Logger(LearningService.name);
@@ -25,18 +27,35 @@ export class LearningService {
     private readonly curriculumRepository: ICurriculumRepository,
     @Inject(PROGRESS_REPOSITORY_TOKEN)
     private readonly progressRepository: IProgressRepository,
+    private readonly contentLoaderService?: ContentLoaderService,
   ) {}
 
   async getRoadmap(languageSlug: string, userId?: string): Promise<RoadmapResponse> {
     const slug = languageSlug.toLowerCase();
-    const track = await this.curriculumRepository.findTrackBySlug(slug);
 
+    try {
+      const track = await this.curriculumRepository.findTrackBySlug(slug);
+      const targetCourseSlug = slug === 'python' ? 'python-core' : `${slug}-core`;
+      const modules = await this.curriculumRepository.findModulesByCourse(targetCourseSlug);
+
+      if (modules.length === 0) {
+        if (this.contentLoaderService) {
+          const fallback = this.contentLoaderService.getCourseRoadmap(slug);
+          if (fallback) return fallback;
+        }
+        throw new NotFoundException(`Ruta curricular para el lenguaje o curso '${languageSlug}' no encontrada en MongoDB.`);
+      }
+    } catch (err) {
+      if (this.contentLoaderService) {
+        const fallback = this.contentLoaderService.getCourseRoadmap(slug);
+        if (fallback) return fallback;
+      }
+      throw err;
+    }
+
+    const track = await this.curriculumRepository.findTrackBySlug(slug);
     const targetCourseSlug = slug === 'python' ? 'python-core' : `${slug}-core`;
     const modules = await this.curriculumRepository.findModulesByCourse(targetCourseSlug);
-
-    if (modules.length === 0) {
-      throw new NotFoundException(`Ruta curricular para el lenguaje o curso '${languageSlug}' no encontrada en MongoDB.`);
-    }
 
     // Si hay userId, consultamos la persistencia en PostgreSQL en batch (p95 < 40ms)
     const [userStars, userModules] = userId
@@ -167,87 +186,103 @@ export class LearningService {
 
 
   async getLesson(lessonId: string): Promise<LessonDetail> {
-    const lesson = await this.curriculumRepository.findLessonBySlug(lessonId);
-    if (!lesson) {
-      throw new NotFoundException(`Micro-lección '${lessonId}' no encontrada en MongoDB.`);
+    try {
+      const lesson = await this.curriculumRepository.findLessonBySlug(lessonId);
+      if (lesson) {
+        const correctOption = lesson.item2Quiz.options.find((o) => o.isCorrect);
+
+        const quizOptions: [QuestionOption, QuestionOption, QuestionOption, QuestionOption] = [
+          { id: lesson.item2Quiz.options[0]?.id ?? 'a', text: lesson.item2Quiz.options[0]?.text ?? '' },
+          { id: lesson.item2Quiz.options[1]?.id ?? 'b', text: lesson.item2Quiz.options[1]?.text ?? '' },
+          { id: lesson.item2Quiz.options[2]?.id ?? 'c', text: lesson.item2Quiz.options[2]?.text ?? '' },
+          { id: lesson.item2Quiz.options[3]?.id ?? 'd', text: lesson.item2Quiz.options[3]?.text ?? '' },
+        ];
+
+        const fourOptionsQuestion: FourOptionsQuestion = {
+          type: 'SINGLE_CHOICE',
+          prompt: lesson.item2Quiz.prompt,
+          options: quizOptions,
+          correct_option_id: correctOption?.id,
+          explanation: correctOption?.feedback,
+        };
+
+        return {
+          id: lesson.slug,
+          section_id: lesson.sectionSlug,
+          title: lesson.title,
+          order_index: lesson.position,
+          theory_markdown: `${lesson.theory.step1}\n\n${lesson.theory.step2}\n\n${lesson.theory.step3}`,
+          code_example: lesson.theory.codeSnippet ?? '',
+          expected_output: lesson.item1Console.solutionCode,
+          tip_markdown: lesson.item3Prediction.hint,
+          evaluation_triad: {
+            item_1_console: {
+              type: 'CONSOLE_CHALLENGE',
+              instruction: lesson.item1Console.prompt,
+              starter_code: lesson.item1Console.initialCode,
+              solution_code: lesson.item1Console.solutionCode,
+              test_cases: lesson.item1Console.testCases.map((tc) => ({
+                input: tc.input,
+                expected_output: tc.expectedOutput,
+                is_hidden: false,
+              })),
+              timeout_ms: 2500,
+            },
+            item_2_options: fourOptionsQuestion,
+            item_3_prediction: {
+              type: lesson.item3Prediction.targetType === 'bug_hunt' ? 'BUG_HUNT' : 'PREDICT_OUTPUT',
+              prompt: lesson.item3Prediction.prompt,
+              code_snippet: lesson.item3Prediction.codeSnippet,
+              expected_output: lesson.item3Prediction.expectedAnswer,
+              explanation: lesson.item3Prediction.hint,
+            },
+          },
+        };
+      }
+    } catch {
+      // Fallback a ContentLoaderService
     }
 
-    const correctOption = lesson.item2Quiz.options.find((o) => o.isCorrect);
+    if (this.contentLoaderService) {
+      const fallback = this.contentLoaderService.getLesson(lessonId);
+      if (fallback) return fallback;
+    }
 
-    // Mapeo seguro a tupla de 4 opciones exigida por @koda/types
-    const quizOptions: [QuestionOption, QuestionOption, QuestionOption, QuestionOption] = [
-      { id: lesson.item2Quiz.options[0]?.id ?? 'a', text: lesson.item2Quiz.options[0]?.text ?? '' },
-      { id: lesson.item2Quiz.options[1]?.id ?? 'b', text: lesson.item2Quiz.options[1]?.text ?? '' },
-      { id: lesson.item2Quiz.options[2]?.id ?? 'c', text: lesson.item2Quiz.options[2]?.text ?? '' },
-      { id: lesson.item2Quiz.options[3]?.id ?? 'd', text: lesson.item2Quiz.options[3]?.text ?? '' },
-    ];
-
-    const fourOptionsQuestion: FourOptionsQuestion = {
-      type: 'SINGLE_CHOICE',
-      prompt: lesson.item2Quiz.prompt,
-      options: quizOptions,
-      correct_option_id: correctOption?.id,
-      explanation: correctOption?.feedback,
-    };
-
-    return {
-      id: lesson.slug,
-      section_id: lesson.sectionSlug,
-      title: lesson.title,
-      order_index: lesson.position,
-      theory_markdown: `${lesson.theory.step1}\n\n${lesson.theory.step2}\n\n${lesson.theory.step3}`,
-      code_example: lesson.theory.codeSnippet ?? '',
-      expected_output: lesson.item1Console.solutionCode,
-      tip_markdown: lesson.item3Prediction.hint,
-      evaluation_triad: {
-        item_1_console: {
-          type: 'CONSOLE_CHALLENGE',
-          instruction: lesson.item1Console.prompt,
-          starter_code: lesson.item1Console.initialCode,
-          solution_code: lesson.item1Console.solutionCode,
-          test_cases: lesson.item1Console.testCases.map((tc) => ({
-            input: tc.input,
-            expected_output: tc.expectedOutput,
-            is_hidden: false,
-          })),
-          timeout_ms: 2500,
-        },
-        item_2_options: fourOptionsQuestion,
-        item_3_prediction: {
-          type: lesson.item3Prediction.targetType === 'bug_hunt' ? 'BUG_HUNT' : 'PREDICT_OUTPUT',
-          prompt: lesson.item3Prediction.prompt,
-          code_snippet: lesson.item3Prediction.codeSnippet,
-          expected_output: lesson.item3Prediction.expectedAnswer,
-          explanation: lesson.item3Prediction.hint,
-        },
-      },
-    };
+    throw new NotFoundException(`Micro-lección '${lessonId}' no encontrada.`);
   }
 
   async evaluateAnswer(submission: LessonAnswerSubmission): Promise<LessonAnswerFeedback> {
-    const lesson = await this.curriculumRepository.findLessonBySlug(submission.lesson_id);
-    if (!lesson) {
-      throw new NotFoundException(`Lección '${submission.lesson_id}' no encontrada en MongoDB.`);
+    try {
+      const lesson = await this.curriculumRepository.findLessonBySlug(submission.lesson_id);
+      if (lesson) {
+        const correctOption = lesson.item2Quiz.options.find((o) => o.isCorrect);
+        const isCorrect = Boolean(
+          correctOption && submission.selected_option_ids.includes(correctOption.id),
+        );
+
+        const feedbackText = isCorrect
+          ? (correctOption?.feedback || '¡Respuesta correcta! Has asimilado el concepto clave.')
+          : (lesson.item2Quiz.options.find((o) => submission.selected_option_ids.includes(o.id))?.feedback ||
+             'Respuesta incorrecta. Revisa la teoría y vuelve a intentarlo.');
+
+        return {
+          is_correct: isCorrect,
+          xp_earned: isCorrect ? lesson.xpReward : 0,
+          feedback_message: feedbackText,
+          hint: isCorrect ? undefined : lesson.item3Prediction.hint,
+          explanation: isCorrect ? correctOption?.feedback : undefined,
+          correct_option_ids: isCorrect ? (correctOption ? [correctOption.id] : []) : undefined,
+          added_to_review_queue: !isCorrect,
+        };
+      }
+    } catch {
+      // Fallback a ContentLoaderService
     }
 
-    const correctOption = lesson.item2Quiz.options.find((o) => o.isCorrect);
-    const isCorrect = Boolean(
-      correctOption && submission.selected_option_ids.includes(correctOption.id),
-    );
+    if (this.contentLoaderService) {
+      return this.contentLoaderService.evaluateAnswer(submission);
+    }
 
-    const feedbackText = isCorrect
-      ? (correctOption?.feedback || '¡Respuesta correcta! Has asimilado el concepto clave.')
-      : (lesson.item2Quiz.options.find((o) => submission.selected_option_ids.includes(o.id))?.feedback ||
-         'Respuesta incorrecta. Revisa la teoría y vuelve a intentarlo.');
-
-    return {
-      is_correct: isCorrect,
-      xp_earned: isCorrect ? lesson.xpReward : 0,
-      feedback_message: feedbackText,
-      hint: isCorrect ? undefined : lesson.item3Prediction.hint,
-      explanation: isCorrect ? correctOption?.feedback : undefined,
-      correct_option_ids: isCorrect ? (correctOption ? [correctOption.id] : []) : undefined,
-      added_to_review_queue: !isCorrect,
-    };
+    throw new NotFoundException(`Lección '${submission.lesson_id}' no encontrada.`);
   }
 }

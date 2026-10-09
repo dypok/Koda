@@ -16,11 +16,14 @@ import { SupabaseAuthGuard } from '@common/guards/supabase-auth.guard';
 import { DatabaseModule } from '../../database/database.module';
 import { ContentModule } from '../../presentation/rest/content/content.module';
 
+import { ContentLoaderService } from './content-loader.service';
+
 @Module({
   imports: [DatabaseModule, ContentModule],
   controllers: [LearningController, DiagnosticController],
   providers: [
     LearningService,
+    ContentLoaderService,
     GetDiagnosticQuestionsUseCase,
     EvaluateDiagnosticUseCase,
     CompleteSectionUseCase,
@@ -39,6 +42,7 @@ import { ContentModule } from '../../presentation/rest/content/content.module';
   ],
   exports: [
     LearningService,
+    ContentLoaderService,
     GetDiagnosticQuestionsUseCase,
     EvaluateDiagnosticUseCase,
     CompleteSectionUseCase,

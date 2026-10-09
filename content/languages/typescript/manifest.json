@@ -4,7 +4,7 @@
   "slug": "typescript",
   "name": "TypeScript",
   "description": "JavaScript con superpoderes de tipado estático. Diseña aplicaciones a gran escala con detección de errores en tiempo de compilación.",
-  "status": "coming_soon",
+  "status": "available",
   "sort_order": 3,
   "content_version": 1,
   "is_active": true,
@@ -33,10 +33,22 @@
       "title": "Fundamentos de TypeScript",
       "description": "Tipos primitivos (string, number, boolean), inferencia de tipos, type annotations y el compilador tsc.",
       "position": 1,
-      "total_sections": 8,
-      "total_lessons": 80,
-      "status": "coming_soon",
+      "total_sections": 1,
+      "total_lessons": 1,
+      "status": "published",
       "path": "modules/01_fundamentos"
+    },
+    {
+      "id": "ts_mod_02",
+      "code": "TS_MOD_02",
+      "slug": "interfaces-y-type-aliases",
+      "title": "Interfaces y Type Aliases",
+      "description": "Contratos estructurales, duck typing, propiedades opcionales (?) y modificador readonly.",
+      "position": 2,
+      "total_sections": 1,
+      "total_lessons": 2,
+      "status": "published",
+      "path": "modules/02_interfaces"
     }
   ]
 }

@@ -1,0 +1,46 @@
+[
+  {
+    "id": "bank-for-01",
+    "type": "single_choice",
+    "difficulty": "easy",
+    "prompt": "¿Qué función genera una serie de enteros para iterar en for?",
+    "answers": [
+      { "id": "a", "label": "A", "body": "range()", "is_correct": true },
+      { "id": "b", "label": "B", "body": "loop()", "is_correct": false },
+      { "id": "c", "label": "C", "body": "series()", "is_correct": false },
+      { "id": "d", "label": "D", "body": "sequence()", "is_correct": false }
+    ],
+    "correct_answer_ids": ["a"],
+    "explanation": "range() es la función incorporada estándar en Python para generar secuencias numéricas."
+  },
+  {
+    "id": "bank-for-02",
+    "type": "predict_output",
+    "difficulty": "medium",
+    "prompt": "¿Qué imprime este código?",
+    "prompt_code": "total = 0\nfor i in range(1, 4):\n    total += i\nprint(total)",
+    "answers": [
+      { "id": "a", "label": "A", "body": "6", "is_correct": true },
+      { "id": "b", "label": "B", "body": "10", "is_correct": false },
+      { "id": "c", "label": "C", "body": "4", "is_correct": false },
+      { "id": "d", "label": "D", "body": "3", "is_correct": false }
+    ],
+    "correct_answer_ids": ["a"],
+    "explanation": "Suma 1 + 2 + 3 = 6. El 4 queda excluido por el límite de range()."
+  },
+  {
+    "id": "bank-for-03",
+    "type": "predict_output",
+    "difficulty": "medium",
+    "prompt": "¿Qué imprime este bucle con continue?",
+    "prompt_code": "for n in range(4):\n    if n == 2:\n        continue\n    print(n, end='')",
+    "answers": [
+      { "id": "a", "label": "A", "body": "013", "is_correct": true },
+      { "id": "b", "label": "B", "body": "0123", "is_correct": false },
+      { "id": "c", "label": "C", "body": "01", "is_correct": false },
+      { "id": "d", "label": "D", "body": "2", "is_correct": false }
+    ],
+    "correct_answer_ids": ["a"],
+    "explanation": "Cuando n es 2, continue salta la impresión, dejando los números 0, 1 y 3."
+  }
+]

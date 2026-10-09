@@ -4,7 +4,7 @@
   "slug": "javascript",
   "name": "JavaScript Moderno",
   "description": "El lenguaje de la web por excelencia. Crea aplicaciones interactivas en frontend y backends robustos con Node.js.",
-  "status": "coming_soon",
+  "status": "available",
   "sort_order": 2,
   "content_version": 1,
   "is_active": true,
@@ -33,10 +33,34 @@
       "title": "Fundamentos de JavaScript",
       "description": "Sintaxis moderna, console.log, variables let/const, tipos primitivos y operadores.",
       "position": 1,
-      "total_sections": 8,
-      "total_lessons": 80,
-      "status": "coming_soon",
+      "total_sections": 1,
+      "total_lessons": 1,
+      "status": "published",
       "path": "modules/01_fundamentos"
+    },
+    {
+      "id": "js_mod_02",
+      "code": "JS_MOD_02",
+      "slug": "variables-y-tipos-de-datos",
+      "title": "Variables, Tipos de Datos y Alcance",
+      "description": "const vs let, inmutabilidad, tipos primitivos inmutables y operador typeof.",
+      "position": 2,
+      "total_sections": 1,
+      "total_lessons": 3,
+      "status": "published",
+      "path": "modules/02_variables"
+    },
+    {
+      "id": "js_mod_03",
+      "code": "JS_MOD_03",
+      "slug": "funciones-y-arrow-functions",
+      "title": "Funciones y Arrow Functions",
+      "description": "Funciones clásicas, arrow functions, parámetros por defecto y sentencias return.",
+      "position": 3,
+      "total_sections": 1,
+      "total_lessons": 2,
+      "status": "published",
+      "path": "modules/03_funciones"
     }
   ]
 }
