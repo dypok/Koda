@@ -95,6 +95,99 @@
           }
         ],
         "explanation": "Las cadenas de texto en Python pertenecen a la clase str y se definen con comillas."
+      },
+      {
+        "id": "bnk_py_01_04_e",
+        "prompt": "¿Qué sucede si omites las comillas al intentar imprimir un texto como print(Hola)?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Se genera un NameError porque Python busca una variable llamada Hola que no existe",
+            "is_correct": true,
+            "feedback": "¡Correcto! Las palabras sin comillas son interpretadas como identificadores de variables."
+          },
+          {
+            "id": "b",
+            "text": "Python lo imprime normalmente",
+            "is_correct": false,
+            "feedback": "Sin comillas, Python no lo reconoce como texto literal."
+          },
+          {
+            "id": "c",
+            "text": "Se convierte a número automáticamente",
+            "is_correct": false,
+            "feedback": "Las letras no se convierten a número."
+          },
+          {
+            "id": "d",
+            "text": "Se apaga el computador",
+            "is_correct": false,
+            "feedback": "Un NameError simplemente detiene el script."
+          }
+        ],
+        "explanation": "Todo texto literal requiere comillas obligatorias en Python para diferenciarse de variables."
+      },
+      {
+        "id": "bnk_py_01_05_e",
+        "prompt": "¿Cuál es el resultado de ejecutar print() sin argumentos?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Imprime una línea vacía en la terminal",
+            "is_correct": true,
+            "feedback": "¡Exacto! Emite un salto de línea sin texto."
+          },
+          {
+            "id": "b",
+            "text": "Lanza un TypeError por falta de texto",
+            "is_correct": false,
+            "feedback": "print() no requiere argumentos obligatorios."
+          },
+          {
+            "id": "c",
+            "text": "Borra la terminal",
+            "is_correct": false,
+            "feedback": "print() solo escribe, no limpia la pantalla."
+          },
+          {
+            "id": "d",
+            "text": "Imprime la palabra None",
+            "is_correct": false,
+            "feedback": "En la consola simplemente añade una línea en blanco."
+          }
+        ],
+        "explanation": "print() por defecto envía un carácter de nueva línea a la salida estándar."
+      },
+      {
+        "id": "bnk_py_01_06_e",
+        "prompt": "¿Qué operador aritmético se utiliza en Python para multiplicar dos números?",
+        "options": [
+          {
+            "id": "a",
+            "text": "El asterisco (*)",
+            "is_correct": true,
+            "feedback": "¡Correcto! El asterisco es el operador universal de multiplicación."
+          },
+          {
+            "id": "b",
+            "text": "La letra x",
+            "is_correct": false,
+            "feedback": "La letra 'x' se confunde con nombres de variables."
+          },
+          {
+            "id": "c",
+            "text": "El punto (.)",
+            "is_correct": false,
+            "feedback": "El punto representa decimales."
+          },
+          {
+            "id": "d",
+            "text": "El signo de porcentaje (%)",
+            "is_correct": false,
+            "feedback": "% es el operador de módulo."
+          }
+        ],
+        "explanation": "El operador * realiza la multiplicación entre expresiones numéricas."
       }
     ]
   },
@@ -165,6 +258,68 @@
           }
         ],
         "explanation": "En Python la indentación no es estética, sino parte fundamental de la sintaxis."
+      },
+      {
+        "id": "bnk_py_01_07_m",
+        "prompt": "¿Cuál es el resultado exacto de ejecutar print(15 / 3) en Python 3?",
+        "options": [
+          {
+            "id": "a",
+            "text": "5.0 (número flotante)",
+            "is_correct": true,
+            "feedback": "¡Correcto! El operador / siempre genera un número de tipo float."
+          },
+          {
+            "id": "b",
+            "text": "5 (entero)",
+            "is_correct": false,
+            "feedback": "La división con / siempre produce float en Python 3."
+          },
+          {
+            "id": "c",
+            "text": "\"15 / 3\"",
+            "is_correct": false,
+            "feedback": "No está entre comillas, por lo que se evalúa la división."
+          },
+          {
+            "id": "d",
+            "text": "SyntaxError",
+            "is_correct": false,
+            "feedback": "La división es una operación aritmética válida."
+          }
+        ],
+        "explanation": "En Python 3, la división con barra simple / siempre retorna un objeto de clase float."
+      },
+      {
+        "id": "bnk_py_01_08_m",
+        "prompt": "¿Qué ocurre al evaluar la expresión print(2 + 3 * 5)?",
+        "options": [
+          {
+            "id": "a",
+            "text": "17 (resuelve primero 3 * 5 = 15 y luego suma 2)",
+            "is_correct": true,
+            "feedback": "¡Excelente! Python obedece la jerarquía matemática de precedencia."
+          },
+          {
+            "id": "b",
+            "text": "25 (suma primero 2 + 3 = 5 y luego multiplica por 5)",
+            "is_correct": false,
+            "feedback": "Para que sume primero se necesitarían paréntesis: (2 + 3) * 5."
+          },
+          {
+            "id": "c",
+            "text": "\"2 + 15\"",
+            "is_correct": false,
+            "feedback": "No se representan como texto."
+          },
+          {
+            "id": "d",
+            "text": "SyntaxError",
+            "is_correct": false,
+            "feedback": "Es una expresión aritmética perfectamente válida."
+          }
+        ],
+        "explanation": "La multiplicación (*) tiene mayor precedencia que la suma (+)."
       }
     ]
   },
@@ -202,6 +357,338 @@
           }
         ],
         "explanation": "En Python la coerción implícita de tipos entre string e int no está permitida al usar el operador +."
+      },
+      {
+        "id": "bnk_py_01_10_h",
+        "prompt": "¿Cuál de las siguientes instrucciones causará un SyntaxError debido a delimitadores incorrectos?",
+        "options": [
+          {
+            "id": "a",
+            "text": "print(\"Koda')",
+            "is_correct": true,
+            "feedback": "¡Correcto! Abre con comilla doble y cierra con comilla simple: SyntaxError: unterminated string literal."
+          },
+          {
+            "id": "b",
+            "text": "print('Koda: \"Genial\"')",
+            "is_correct": false,
+            "feedback": "Es 100% válido: delimitador externo simple e interno doble."
+          },
+          {
+            "id": "c",
+            "text": "print(\"Koda\\nFox\")",
+            "is_correct": false,
+            "feedback": "Es válido: usa el salto de línea \\n."
+          },
+          {
+            "id": "d",
+            "text": "print(\"Koda\", 10)",
+            "is_correct": false,
+            "feedback": "Es válido: combina string y número con coma."
+          }
+        ],
+        "explanation": "Los delimitadores de cadenas deben ser del mismo tipo al abrir y al cerrar."
+      },
+      {
+        "id": "bnk_py_01_11_h",
+        "prompt": "Si ejecutas print(\"Alfa\", \"Beta\", sep=\"-\"), ¿qué imprimirá la terminal?",
+        "options": [
+          {
+            "id": "a",
+            "text": "Alfa-Beta",
+            "is_correct": true,
+            "feedback": "¡Exacto! El argumento sep=\"-\" cambia el separador por defecto (espacio) por un guion."
+          },
+          {
+            "id": "b",
+            "text": "Alfa Beta",
+            "is_correct": false,
+            "feedback": "El parámetro sep personaliza el delimitador entre argumentos."
+          },
+          {
+            "id": "c",
+            "text": "Alfa-Beta-",
+            "is_correct": false,
+            "feedback": "El separador solo se coloca entre elementos, no al final."
+          },
+          {
+            "id": "d",
+            "text": "SyntaxError",
+            "is_correct": false,
+            "feedback": "sep es un parámetro nativo de la función print()."
+          }
+        ],
+        "explanation": "El parámetro sep permite cambiar el separador entre elementos en print()."
+      }
+    ]
+  },
+  {
+    "module_slug": "variables-y-tipos-de-datos",
+    "difficulty": "easy",
+    "questions": [
+      {
+        "id": "bnk_py_02_01",
+        "prompt": "¿Cuál de las siguientes opciones asigna correctamente el número 100 a la variable puntos en Python?",
+        "options": [
+          {
+            "id": "a",
+            "text": "puntos = 100",
+            "is_correct": true,
+            "feedback": "¡Correcto! En Python se escribe el nombre de la variable, el operador = y el valor."
+          },
+          {
+            "id": "b",
+            "text": "100 = puntos",
+            "is_correct": false,
+            "feedback": "No puedes asignar un valor a un literal numérico; el nombre de la variable debe ir a la izquierda."
+          },
+          {
+            "id": "c",
+            "text": "puntos := 100",
+            "is_correct": false,
+            "feedback": "El operador de asignación estándar es el signo igual simple =."
+          },
+          {
+            "id": "d",
+            "text": "var puntos = 100",
+            "is_correct": false,
+            "feedback": "En Python no se utiliza la palabra var para declarar variables."
+          }
+        ],
+        "explanation": "La asignación básica en Python se realiza colocando la variable a la izquierda y el valor a la derecha del operador =."
+      },
+      {
+        "id": "bnk_py_02_02",
+        "prompt": "¿A qué tipo de dato pertenece el valor True en Python?",
+        "options": [
+          {
+            "id": "a",
+            "text": "bool (booleano)",
+            "is_correct": true,
+            "feedback": "¡Exacto! True y False son los dos únicos valores del tipo bool."
+          },
+          {
+            "id": "b",
+            "text": "str (cadena de texto)",
+            "is_correct": false,
+            "feedback": "Para ser un str requeriría estar encerrado entre comillas."
+          },
+          {
+            "id": "c",
+            "text": "int (entero)",
+            "is_correct": false,
+            "feedback": "int representa números enteros."
+          },
+          {
+            "id": "d",
+            "text": "float (punto flotante)",
+            "is_correct": false,
+            "feedback": "float representa números con punto decimal."
+          }
+        ],
+        "explanation": "El tipo primitivo bool representa valores de verdad lógica y solo admite True o False."
+      },
+      {
+        "id": "bnk_py_02_03",
+        "prompt": "¿Cuál de las siguientes instrucciones permite inspeccionar en consola el tipo de dato que guarda la variable edad?",
+        "options": [
+          {
+            "id": "a",
+            "text": "print(type(edad))",
+            "is_correct": true,
+            "feedback": "¡Correcto! type(edad) inspecciona el tipo y print() lo muestra en pantalla."
+          },
+          {
+            "id": "b",
+            "text": "print(edad.type())",
+            "is_correct": false,
+            "feedback": "type() es una función nativa que recibe el objeto como argumento, no un método."
+          },
+          {
+            "id": "c",
+            "text": "typeof(edad)",
+            "is_correct": false,
+            "feedback": "typeof es el operador de JavaScript, no de Python."
+          },
+          {
+            "id": "d",
+            "text": "print(kind(edad))",
+            "is_correct": false,
+            "feedback": "No existe una función kind() nativa en Python."
+          }
+        ],
+        "explanation": "La función nativa type() recibe cualquier objeto o variable y retorna su clase correspondiente."
+      }
+    ]
+  },
+  {
+    "module_slug": "variables-y-tipos-de-datos",
+    "difficulty": "medium",
+    "questions": [
+      {
+        "id": "bnk_py_02_04",
+        "prompt": "¿Qué salida se obtiene al ejecutar: print(type(5.0))?",
+        "code_snippet": "print(type(5.0))",
+        "options": [
+          {
+            "id": "a",
+            "text": "<class 'float'>",
+            "is_correct": true,
+            "feedback": "¡Correcto! Todo número con punto decimal en Python pertenece a la clase float."
+          },
+          {
+            "id": "b",
+            "text": "<class 'int'>",
+            "is_correct": false,
+            "feedback": "Aunque la parte decimal sea cero, la presencia del punto lo convierte en float."
+          },
+          {
+            "id": "c",
+            "text": "<class 'decimal'>",
+            "is_correct": false,
+            "feedback": "El tipo nativo estándar en Python es float."
+          },
+          {
+            "id": "d",
+            "text": "<class 'number'>",
+            "is_correct": false,
+            "feedback": "Python no posee un tipo general 'number' para floats."
+          }
+        ],
+        "explanation": "En Python, los literales numéricos con punto decimal se clasifican como instancias de float."
+      },
+      {
+        "id": "bnk_py_02_05",
+        "prompt": "¿Cuál será el valor impreso al ejecutar el siguiente bloque de código?",
+        "code_snippet": "a = 15\nb = a\na = 30\nprint(b)",
+        "options": [
+          {
+            "id": "a",
+            "text": "15",
+            "is_correct": true,
+            "feedback": "¡Exacto! 'b' guardó el valor 15 al momento de su asignación y no cambia cuando 'a' es reasignada."
+          },
+          {
+            "id": "b",
+            "text": "30",
+            "is_correct": false,
+            "feedback": "Reasignar 'a' posteriormente no modifica el valor almacenado en 'b'."
+          },
+          {
+            "id": "c",
+            "text": "45",
+            "is_correct": false,
+            "feedback": "Las variables no se acumulan solas."
+          },
+          {
+            "id": "d",
+            "text": "None",
+            "is_correct": false,
+            "feedback": "'b' mantiene su valor asignado."
+          }
+        ],
+        "explanation": "Al asignar b = a, el valor primitivo actual se copia a b, manteniéndose inalterado tras futuras reasignaciones de a."
+      },
+      {
+        "id": "bnk_py_02_06",
+        "prompt": "¿Cuál de los siguientes nombres de variable viola las reglas de sintaxis de Python y causará un SyntaxError?",
+        "options": [
+          {
+            "id": "a",
+            "text": "3er_lugar",
+            "is_correct": true,
+            "feedback": "¡Correcto! Los nombres de variables no pueden comenzar con un dígito numérico."
+          },
+          {
+            "id": "b",
+            "text": "lugar_3",
+            "is_correct": false,
+            "feedback": "Es válido porque el dígito está al final."
+          },
+          {
+            "id": "c",
+            "text": "_tercer_lugar",
+            "is_correct": false,
+            "feedback": "Es válido porque los nombres pueden iniciar con guion bajo."
+          },
+          {
+            "id": "d",
+            "text": "tercer_lugar",
+            "is_correct": false,
+            "feedback": "Es un nombre 100% válido y sigue la convención snake_case."
+          }
+        ],
+        "explanation": "Los identificadores en Python deben comenzar obligatoriamente con una letra (a-z, A-Z) o un guion bajo (_)."
+      }
+    ]
+  },
+  {
+    "module_slug": "variables-y-tipos-de-datos",
+    "difficulty": "hard",
+    "questions": [
+      {
+        "id": "bnk_py_02_07",
+        "prompt": "Observa el siguiente código: ¿Qué excepción lanzará Python al ejecutarlo?",
+        "code_snippet": "texto = \"25.8\"\nnumero = int(texto)\nprint(numero)",
+        "options": [
+          {
+            "id": "a",
+            "text": "ValueError (invalid literal for int() with base 10: '25.8')",
+            "is_correct": true,
+            "feedback": "¡Excelente! int() no puede procesar strings con caracteres decimales como el punto; se debe usar float() primero."
+          },
+          {
+            "id": "b",
+            "text": "TypeError",
+            "is_correct": false,
+            "feedback": "El tipo de entrada str es compatible con int(), pero el formato o contenido literal es inválido."
+          },
+          {
+            "id": "c",
+            "text": "SyntaxError",
+            "is_correct": false,
+            "feedback": "La sintaxis de la llamada a la función es correcta."
+          },
+          {
+            "id": "d",
+            "text": "Ninguna, trunca el valor e imprime 25",
+            "is_correct": false,
+            "feedback": "int(25.8) sí truncaría a 25, pero int('25.8') desde texto falla con ValueError."
+          }
+        ],
+        "explanation": "La función int() solo acepta cadenas formadas exclusivamente por dígitos enteros; para texto con decimales se debe usar float()."
+      },
+      {
+        "id": "bnk_py_02_08",
+        "prompt": "¿Qué imprimirá en la terminal este fragmento de código?",
+        "code_snippet": "x = \"10\"\ny = 5\nresultado = int(x) + y\nprint(\"Total:\", resultado)",
+        "options": [
+          {
+            "id": "a",
+            "text": "Total: 15",
+            "is_correct": true,
+            "feedback": "¡Correcto! int(x) convierte '10' a número 10, que al sumarse con 5 da 15, y print() añade el espacio tras la coma."
+          },
+          {
+            "id": "b",
+            "text": "Total: 105",
+            "is_correct": false,
+            "feedback": "Al usar int(x), se ejecuta suma numérica (10 + 5) y no concatenación de texto."
+          },
+          {
+            "id": "c",
+            "text": "TypeError",
+            "is_correct": false,
+            "feedback": "No hay error de tipo porque la conversión con int() produce dos enteros compatibles."
+          },
+          {
+            "id": "d",
+            "text": "Total:15",
+            "is_correct": false,
+            "feedback": "La coma en print() inserta un espacio separador automáticamente."
+          }
+        ],
+        "explanation": "La conversión explícita con int() permite la suma aritmética y print() formatea los argumentos separados por un espacio."
       }
     ]
   }

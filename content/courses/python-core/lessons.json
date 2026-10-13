@@ -196,6 +196,202 @@
     "is_active": true
   },
   {
+    "slug": "py-m01-s01-l03",
+    "section_slug": "py-m01-s01",
+    "title": "¿Cómo piensa Python? Flujo de arriba hacia abajo",
+    "position": 3,
+    "theory": {
+      "step1": "Una computadora no lee todo un texto de golpe; procesa una instrucción a la vez de manera ordenada y predecible.",
+      "step2": "En Python, el flujo normal de ejecución avanza línea por línea, empezando desde la primera línea del archivo hasta la última.",
+      "step3": "Si una instrucción contiene un error, el programa se detendrá justo en esa línea sin ejecutar las líneas posteriores.",
+      "code_snippet": "print(\"Paso 1: Encender motor\")\nprint(\"Paso 2: Despegar\")"
+    },
+    "item_1_console": {
+      "prompt": "Escribe dos instrucciones print(): primero imprime \"Inicio\" y en la siguiente línea imprime \"Fin\".",
+      "initial_code": "# Escribe las dos líneas en orden\n",
+      "solution_code": "print(\"Inicio\")\nprint(\"Fin\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Inicio\nFin\n",
+          "description": "Debe imprimir Inicio y luego Fin en líneas separadas"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué ocurre si la línea 2 de un programa de 5 líneas tiene un error?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Se ejecuta la línea 1, la línea 2 falla y el programa se detiene sin ejecutar las líneas 3, 4 y 5",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python detiene la ejecución inmediatamente al encontrar un error que no puede resolver."
+        },
+        {
+          "id": "b",
+          "text": "Python ignora la línea 2 y continúa ejecutando las líneas 3, 4 y 5",
+          "is_correct": false,
+          "feedback": "Python no salta líneas con errores automáticamente."
+        },
+        {
+          "id": "c",
+          "text": "Ninguna línea se ejecuta, ni siquiera la línea 1",
+          "is_correct": false,
+          "feedback": "En errores en tiempo de ejecución, las líneas anteriores sí se ejecutan con éxito."
+        },
+        {
+          "id": "d",
+          "text": "Las líneas se ejecutan en orden inverso",
+          "is_correct": false,
+          "feedback": "El flujo de ejecución es estrictamente descendente."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué es crucial el orden secuencial de las instrucciones en un programa?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque el resultado final depende de que cada paso ocurra después del anterior",
+          "is_correct": true,
+          "feedback": "¡Exacto! Al igual que una receta de cocina, los pasos deben seguir un orden lógico."
+        },
+        {
+          "id": "b",
+          "text": "Porque Python ordena las líneas por longitud de texto antes de correr",
+          "is_correct": false,
+          "feedback": "Python jamás reorganiza tus líneas de código."
+        },
+        {
+          "id": "c",
+          "text": "Es indiferente, el orden no afecta el resultado",
+          "is_correct": false,
+          "feedback": "El orden define exactamente qué sucede primero y qué después."
+        },
+        {
+          "id": "d",
+          "text": "Solo importa si el archivo tiene más de 1000 líneas",
+          "is_correct": false,
+          "feedback": "El orden importa desde un programa de dos líneas."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué palabra aparecerá en la primera línea de la consola?",
+      "code_snippet": "print(\"Alfa\")\nprint(\"Beta\")",
+      "target_type": "predict_output",
+      "expected_answer": "Alfa",
+      "hint": "La primera instrucción que se ejecuta es la que se ubica en la línea superior."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué palabra aparecerá en la primera línea de la consola?",
+      "code_snippet": "print(\"Alfa\")\nprint(\"Beta\")",
+      "target_type": "predict_output",
+      "expected_answer": "Alfa",
+      "hint": "La primera instrucción que se ejecuta es la que se ubica en la línea superior."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s01-l04",
+    "section_slug": "py-m01-s01",
+    "title": "Construyendo tu primer guion de instrucciones",
+    "position": 4,
+    "theory": {
+      "step1": "Un archivo de Python (con extensión .py) es simplemente un guion o lista de instrucciones escritas para la máquina.",
+      "step2": "Al ejecutar el archivo, Python interpreta cada instrucción de arriba a abajo produciendo salidas visuales en la consola.",
+      "step3": "Puedes escribir tantas instrucciones print() como necesites para comunicar información paso a paso al usuario.",
+      "code_snippet": "print(\"Bienvenido\")\nprint(\"Cargando perfil...\")\nprint(\"¡Listo!\")"
+    },
+    "item_1_console": {
+      "prompt": "Escribe tres instrucciones print(): la primera con \"Paso 1\", la segunda con \"Paso 2\" y la tercera con \"Paso 3\".",
+      "initial_code": "# Escribe las tres instrucciones print aquí\n",
+      "solution_code": "print(\"Paso 1\")\nprint(\"Paso 2\")\nprint(\"Paso 3\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Paso 1\nPaso 2\nPaso 3\n",
+          "description": "Debe mostrar Paso 1, Paso 2 y Paso 3 en líneas consecutivas"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué extensión llevan por estándar los archivos de código fuente de Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": ".py",
+          "is_correct": true,
+          "feedback": "¡Correcto! .py es la extensión estándar que identifica los programas de Python."
+        },
+        {
+          "id": "b",
+          "text": ".python",
+          "is_correct": false,
+          "feedback": "La extensión oficial se abrevia a .py."
+        },
+        {
+          "id": "c",
+          "text": ".txt",
+          "is_correct": false,
+          "feedback": ".txt identifica texto plano sin formato ejecutable."
+        },
+        {
+          "id": "d",
+          "text": ".exe",
+          "is_correct": false,
+          "feedback": ".exe es un binario compilado de Windows, no código fuente."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué programa se encarga de leer y ejecutar tu archivo de código .py en la computadora?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El intérprete de Python",
+          "is_correct": true,
+          "feedback": "¡Exacto! El intérprete lee tus instrucciones y las traduce a acciones que la máquina realiza."
+        },
+        {
+          "id": "b",
+          "text": "El navegador web",
+          "is_correct": false,
+          "feedback": "El navegador interpreta HTML, CSS y JS, no scripts nativos de Python."
+        },
+        {
+          "id": "c",
+          "text": "El procesador de texto Word",
+          "is_correct": false,
+          "feedback": "Word es una herramienta ofimática, no un entorno de ejecución."
+        },
+        {
+          "id": "d",
+          "text": "La tarjeta de video",
+          "is_correct": false,
+          "feedback": "La tarjeta de video procesa gráficos, no ejecuta la lógica general de Python."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Cuántas líneas de texto se mostrarán en la terminal al ejecutar este código?",
+      "code_snippet": "print(\"A\")\nprint(\"B\")\nprint(\"C\")",
+      "target_type": "predict_output",
+      "expected_answer": "3",
+      "hint": "Cada llamada a print() genera una nueva línea por defecto."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Cuántas líneas de texto se mostrarán en la terminal al ejecutar este código?",
+      "code_snippet": "print(\"A\")\nprint(\"B\")\nprint(\"C\")",
+      "target_type": "predict_output",
+      "expected_answer": "3",
+      "hint": "Cada llamada a print() genera una nueva línea por defecto."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
     "slug": "py-m01-s02-l01",
     "section_slug": "py-m01-s02",
     "title": "Texto entre comillas y comillas dentro de comillas",
@@ -392,6 +588,2554 @@
     "is_active": true
   },
   {
+    "slug": "py-m01-s02-l03",
+    "section_slug": "py-m01-s02",
+    "title": "Múltiples textos con comas en print()",
+    "position": 3,
+    "theory": {
+      "step1": "No estás limitado a imprimir un solo texto a la vez dentro de la función print().",
+      "step2": "Si separas dos o más textos con comas dentro de los paréntesis, Python los imprimirá todos juntos en la misma línea.",
+      "step3": "Python añade automáticamente un espacio en blanco entre cada elemento que separes con una coma.",
+      "code_snippet": "print(\"Hola,\", \"Koda\")"
+    },
+    "item_1_console": {
+      "prompt": "Usa un solo print() con dos textos separados por coma: \"Nivel:\" y \"1\".",
+      "initial_code": "# Usa print con coma entre los dos textos\n",
+      "solution_code": "print(\"Nivel:\", \"1\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Nivel: 1\n",
+          "description": "Debe imprimir Nivel: 1 con un espacio intermedio"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué salida exacta producirá la instrucción print(\"Hola\", \"Mundo\")?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Hola Mundo (con un espacio entre ambas palabras)",
+          "is_correct": true,
+          "feedback": "¡Correcto! La coma genera automáticamente un espacio separador."
+        },
+        {
+          "id": "b",
+          "text": "HolaMundo (completamente pegadas)",
+          "is_correct": false,
+          "feedback": "La coma en print() inserta un espacio separador por defecto."
+        },
+        {
+          "id": "c",
+          "text": "Hola, Mundo (con la coma impresa literalmente)",
+          "is_correct": false,
+          "feedback": "La coma en el código es un separador de argumentos, no se imprime en pantalla."
+        },
+        {
+          "id": "d",
+          "text": "SyntaxError",
+          "is_correct": false,
+          "feedback": "Pasar múltiples argumentos separados por coma es una característica nativa de print()."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué la coma en print(\"A\", \"B\") no aparece escrita en la terminal?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque es un delimitador de sintaxis para separar argumentos en Python, no texto literal",
+          "is_correct": true,
+          "feedback": "¡Excelente! Solo lo que está encerrado entre comillas forma parte del texto a imprimir."
+        },
+        {
+          "id": "b",
+          "text": "Porque la terminal tiene prohibido mostrar comas",
+          "is_correct": false,
+          "feedback": "Si pones la coma entre comillas como \",\" sí se imprime."
+        },
+        {
+          "id": "c",
+          "text": "Porque Python borra los signos de puntuación",
+          "is_correct": false,
+          "feedback": "Python no borra los caracteres de tus textos."
+        },
+        {
+          "id": "d",
+          "text": "Porque print solo acepta letras",
+          "is_correct": false,
+          "feedback": "print acepta cualquier carácter o símbolo."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá en consola este código?",
+      "code_snippet": "print(\"Puntos:\", \"100\")",
+      "target_type": "predict_output",
+      "expected_answer": "Puntos: 100",
+      "hint": "Recuerda que la coma entre argumentos agrega un espacio."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá en consola este código?",
+      "code_snippet": "print(\"Puntos:\", \"100\")",
+      "target_type": "predict_output",
+      "expected_answer": "Puntos: 100",
+      "hint": "Recuerda que la coma entre argumentos agrega un espacio."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s02-l04",
+    "section_slug": "py-m01-s02",
+    "title": "Imprimiendo líneas vacías para ordenar la consola",
+    "position": 4,
+    "theory": {
+      "step1": "A veces deseas separar visualmente dos bloques de mensajes en la pantalla para que sea más fácil de leer.",
+      "step2": "Si llamas a la función print() con los paréntesis totalmente vacíos sin ningún texto, Python imprimirá una línea en blanco.",
+      "step3": "Esta técnica te ayuda a estructurar interfaces de consola limpias y amigables para el usuario.",
+      "code_snippet": "print(\"Título\")\nprint()\nprint(\"Contenido\")"
+    },
+    "item_1_console": {
+      "prompt": "Imprime \"Arriba\", luego una línea vacía con print() y finalmente \"Abajo\".",
+      "initial_code": "# Imprime Arriba, línea vacía y Abajo\n",
+      "solution_code": "print(\"Arriba\")\nprint()\nprint(\"Abajo\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Arriba\n\nAbajo\n",
+          "description": "Debe imprimir Arriba, salto de línea vacío y Abajo"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué ocurre cuando ejecutas print() sin ningún argumento dentro de los paréntesis?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Imprime una línea vacía en la consola y salta a la siguiente",
+          "is_correct": true,
+          "feedback": "¡Correcto! print() emite un salto de línea por defecto aunque no reciba contenido."
+        },
+        {
+          "id": "b",
+          "text": "Lanza un TypeError por falta de texto obligatorio",
+          "is_correct": false,
+          "feedback": "print() no exige argumentos obligatorios; es válido llamarlo vacío."
+        },
+        {
+          "id": "c",
+          "text": "Borra todo lo que se había impreso anteriormente",
+          "is_correct": false,
+          "feedback": "print() no limpia la pantalla, solo añade una línea."
+        },
+        {
+          "id": "d",
+          "text": "Apaga el programa inmediatamente",
+          "is_correct": false,
+          "feedback": "El programa continúa su ejecución normal en la siguiente línea."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cuál es el beneficio de incluir líneas en blanco en la salida de una aplicación de consola?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Mejora la legibilidad del usuario al separar bloques temáticos de información",
+          "is_correct": true,
+          "feedback": "¡Exacto! El espacio visual hace que las respuestas sean más claras de digerir."
+        },
+        {
+          "id": "b",
+          "text": "Aumenta la memoria RAM de la computadora",
+          "is_correct": false,
+          "feedback": "No incrementa el hardware ni la memoria."
+        },
+        {
+          "id": "c",
+          "text": "Es un requisito obligatorio para que Python compile",
+          "is_correct": false,
+          "feedback": "No es obligatorio para compilar; es una decisión de diseño de salida."
+        },
+        {
+          "id": "d",
+          "text": "Sirve para cifrar las contraseñas del usuario",
+          "is_correct": false,
+          "feedback": "No tiene funciones de criptografía."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Cuántos saltos de línea se habrán generado tras ejecutar este código?",
+      "code_snippet": "print(\"Hola\")\nprint()",
+      "target_type": "predict_output",
+      "expected_answer": "2",
+      "hint": "Cada print() añade un salto de línea al finalizar."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Cuántos saltos de línea se habrán generado tras ejecutar este código?",
+      "code_snippet": "print(\"Hola\")\nprint()",
+      "target_type": "predict_output",
+      "expected_answer": "2",
+      "hint": "Cada print() añade un salto de línea al finalizar."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s03-l01",
+    "section_slug": "py-m01-s03",
+    "title": "Números sin comillas en print()",
+    "position": 1,
+    "theory": {
+      "step1": "A diferencia de los textos que requieren comillas obligatorias, los números en Python se escriben directamente sin comillas.",
+      "step2": "Cuando escribes un número sin comillas dentro de print(), Python reconoce que se trata de un valor numérico real.",
+      "step3": "Puedes escribir números enteros positivos (como 5) o negativos (como -8) de forma natural.",
+      "code_snippet": "print(42)\nprint(-7)"
+    },
+    "item_1_console": {
+      "prompt": "Muestra el número 100 en la terminal escribiéndolo directamente sin comillas dentro de print().",
+      "initial_code": "# Imprime el número 100 sin comillas\n",
+      "solution_code": "print(100)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "100\n",
+          "description": "Debe imprimir el número 100"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de las siguientes instrucciones imprime un valor numérico sin tratarlo como texto?",
+      "options": [
+        {
+          "id": "a",
+          "text": "print(50)",
+          "is_correct": true,
+          "feedback": "¡Correcto! Los números sin comillas son reconocidos como literales numéricos directos."
+        },
+        {
+          "id": "b",
+          "text": "print(\"50\")",
+          "is_correct": false,
+          "feedback": "Al estar entre comillas, Python lo procesa como una cadena de texto."
+        },
+        {
+          "id": "c",
+          "text": "print('50')",
+          "is_correct": false,
+          "feedback": "Las comillas simples también lo convierten en texto."
+        },
+        {
+          "id": "d",
+          "text": "print(num: 50)",
+          "is_correct": false,
+          "feedback": "Esa sintaxis es inválida en Python para print."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué es importante no colocar comillas alrededor de un número si quieres calcular con él?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque las comillas lo convierten en texto y Python no podrá realizar operaciones matemáticas normales con él",
+          "is_correct": true,
+          "feedback": "¡Exacto! \"5\" + \"5\" resulta en \"55\" (texto), mientras que 5 + 5 resulta en 10 (suma matemática)."
+        },
+        {
+          "id": "b",
+          "text": "Porque las comillas hacen que el número se convierta en cero",
+          "is_correct": false,
+          "feedback": "No se convierte en cero, conserva los caracteres del dígito."
+        },
+        {
+          "id": "c",
+          "text": "Porque Python borra los números entre comillas",
+          "is_correct": false,
+          "feedback": "Python muestra el texto tal cual."
+        },
+        {
+          "id": "d",
+          "text": "No hay diferencia alguna",
+          "is_correct": false,
+          "feedback": "Existe una diferencia fundamental de tipos de datos."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor numérico aparecerá en pantalla?",
+      "code_snippet": "print(25)",
+      "target_type": "predict_output",
+      "expected_answer": "25",
+      "hint": "print() muestra el número directamente en la terminal."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor numérico aparecerá en pantalla?",
+      "code_snippet": "print(25)",
+      "target_type": "predict_output",
+      "expected_answer": "25",
+      "hint": "print() muestra el número directamente en la terminal."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s03-l02",
+    "section_slug": "py-m01-s03",
+    "title": "Sumas y restas en la terminal",
+    "position": 2,
+    "theory": {
+      "step1": "Python funciona como una calculadora superpotente y resuelve operaciones aritméticas antes de mostrar el resultado.",
+      "step2": "El operador de suma es el signo más `+` y el de resta es el signo menos `-`.",
+      "step3": "Al escribir `print(10 + 5)`, Python calcula primero la operación matemática y muestra directamente el número final: 15.",
+      "code_snippet": "print(10 + 5)\nprint(20 - 8)"
+    },
+    "item_1_console": {
+      "prompt": "Calcula y muestra la suma de 30 más 25 usando print(30 + 25).",
+      "initial_code": "# Realiza la suma dentro de print\n",
+      "solution_code": "print(30 + 25)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "55\n",
+          "description": "Debe imprimir el resultado 55 de la suma"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué imprimirá la instrucción print(8 + 2)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "10",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python resuelve la suma de los enteros e imprime 10."
+        },
+        {
+          "id": "b",
+          "text": "\"8 + 2\"",
+          "is_correct": false,
+          "feedback": "Solo imprimiría el texto si estuviera entre comillas: print(\"8 + 2\")."
+        },
+        {
+          "id": "c",
+          "text": "82",
+          "is_correct": false,
+          "feedback": "Al ser números y no textos, se suman matemáticamente en vez de pegarse."
+        },
+        {
+          "id": "d",
+          "text": "Error de cálculo",
+          "is_correct": false,
+          "feedback": "La suma de enteros es una operación elemental nativa de Python."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cuál es la diferencia entre print(4 + 4) y print(\"4 + 4\")?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El primero calcula la suma y muestra 8; el segundo muestra el texto literal \"4 + 4\"",
+          "is_correct": true,
+          "feedback": "¡Excelente! Las comillas le ordenan a Python que no evalúe la expresión matemática."
+        },
+        {
+          "id": "b",
+          "text": "Ambos muestran el número 8",
+          "is_correct": false,
+          "feedback": "El segundo está entre comillas, por lo que se toma como texto literal."
+        },
+        {
+          "id": "c",
+          "text": "Ambos muestran el texto \"4 + 4\"",
+          "is_correct": false,
+          "feedback": "Sin comillas, Python ejecuta el operador aritmético."
+        },
+        {
+          "id": "d",
+          "text": "El primero da error y el segundo no",
+          "is_correct": false,
+          "feedback": "Ambas expresiones son perfectamente válidas en Python."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué resultado imprimirá este cálculo?",
+      "code_snippet": "print(15 - 6)",
+      "target_type": "predict_output",
+      "expected_answer": "9",
+      "hint": "Python resuelve la resta de 15 menos 6."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué resultado imprimirá este cálculo?",
+      "code_snippet": "print(15 - 6)",
+      "target_type": "predict_output",
+      "expected_answer": "9",
+      "hint": "Python resuelve la resta de 15 menos 6."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s03-l03",
+    "section_slug": "py-m01-s03",
+    "title": "Multiplicaciones con el asterisco (*)",
+    "position": 3,
+    "theory": {
+      "step1": "En programación, el signo de multiplicación no es la letra 'x', sino el símbolo del asterisco `*`.",
+      "step2": "Al escribir `print(4 * 5)`, Python multiplica ambos números enteros y emite el producto resultante.",
+      "step3": "No uses la letra 'x' para multiplicar, ya que Python creerá que estás llamando a una variable y lanzará un NameError.",
+      "code_snippet": "print(6 * 7)"
+    },
+    "item_1_console": {
+      "prompt": "Multiplica 8 por 5 usando el operador asterisco dentro de print(8 * 5).",
+      "initial_code": "# Realiza la multiplicación\n",
+      "solution_code": "print(8 * 5)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "40\n",
+          "description": "Debe imprimir el producto 40"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál es el operador correcto para multiplicar en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El asterisco (*)",
+          "is_correct": true,
+          "feedback": "¡Correcto! El asterisco * es el operador de multiplicación universal en Python."
+        },
+        {
+          "id": "b",
+          "text": "La letra equis (x)",
+          "is_correct": false,
+          "feedback": "La letra 'x' se interpreta como un nombre de variable, no como multiplicación."
+        },
+        {
+          "id": "c",
+          "text": "El punto (.)",
+          "is_correct": false,
+          "feedback": "El punto se reserva para decimales o acceso a atributos."
+        },
+        {
+          "id": "d",
+          "text": "Doble signo más (++)",
+          "is_correct": false,
+          "feedback": "++ no es multiplicación ni existe como operador en Python."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "Si escribes por error `print(3 x 4)`, ¿qué responderá el intérprete de Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Un SyntaxError debido a que la letra 'x' no es un operador válido entre números",
+          "is_correct": true,
+          "feedback": "¡Exacto! Python no entiende 'x' como multiplicación matemática y marca un error de sintaxis."
+        },
+        {
+          "id": "b",
+          "text": "Calculará 12 automáticamente",
+          "is_correct": false,
+          "feedback": "Python requiere estrictamente el operador *."
+        },
+        {
+          "id": "c",
+          "text": "Creará una variable x con valor 12",
+          "is_correct": false,
+          "feedback": "No crea variables en medio de una llamada."
+        },
+        {
+          "id": "d",
+          "text": "Imprimirá \"3 x 4\" como texto",
+          "is_correct": false,
+          "feedback": "Al no tener comillas, el intérprete intenta parsearlo como código y falla."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué número mostrará la consola?",
+      "code_snippet": "print(3 * 3)",
+      "target_type": "predict_output",
+      "expected_answer": "9",
+      "hint": "Multiplicación de 3 por 3."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué número mostrará la consola?",
+      "code_snippet": "print(3 * 3)",
+      "target_type": "predict_output",
+      "expected_answer": "9",
+      "hint": "Multiplicación de 3 por 3."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s03-l04",
+    "section_slug": "py-m01-s03",
+    "title": "División básica con la barra (/)",
+    "position": 4,
+    "theory": {
+      "step1": "Para realizar divisiones en Python, utilizamos la barra diagonal simple `/` (slash).",
+      "step2": "Un detalle fundamental de Python es que el operador `/` siempre produce un número decimal (float), incluso si la división es exacta.",
+      "step3": "Por ejemplo, `print(10 / 2)` producirá `5.0` en lugar del entero `5`.",
+      "code_snippet": "print(10 / 2)\nprint(9 / 2)"
+    },
+    "item_1_console": {
+      "prompt": "Divide 20 entre 4 usando print(20 / 4) y observa cómo el resultado tiene punto decimal.",
+      "initial_code": "# Divide 20 entre 4\n",
+      "solution_code": "print(20 / 4)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "5.0\n",
+          "description": "Debe imprimir el resultado decimal 5.0"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué resultado mostrará en la terminal el comando print(8 / 4)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "2.0",
+          "is_correct": true,
+          "feedback": "¡Correcto! En Python la división con / siempre devuelve un número de punto flotante (con decimales)."
+        },
+        {
+          "id": "b",
+          "text": "2",
+          "is_correct": false,
+          "feedback": "El operador / genera siempre un flotante, mostrando .0 al final."
+        },
+        {
+          "id": "c",
+          "text": "\"8 / 4\"",
+          "is_correct": false,
+          "feedback": "No está entre comillas, por lo que se calcula la división."
+        },
+        {
+          "id": "d",
+          "text": "0",
+          "is_correct": false,
+          "feedback": "8 dividido 4 da 2.0."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué Python devuelve 5.0 en vez de 5 al ejecutar 10 / 2?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque el operador de división estándar / siempre genera un resultado de tipo float por consistencia matemática",
+          "is_correct": true,
+          "feedback": "¡Excelente! Esto asegura que las divisiones inexactas (como 10 / 3) y exactas tengan el mismo tipo de retorno."
+        },
+        {
+          "id": "b",
+          "text": "Porque es un fallo de cálculo que se corregirá en el futuro",
+          "is_correct": false,
+          "feedback": "Es un comportamiento intencional y diseñado desde Python 3.0."
+        },
+        {
+          "id": "c",
+          "text": "Porque el número 10 es un número decimal secreto",
+          "is_correct": false,
+          "feedback": "10 es un entero, el cambio a float lo hace el operador /."
+        },
+        {
+          "id": "d",
+          "text": "Solo ocurre si la computadora tiene poca batería",
+          "is_correct": false,
+          "feedback": "El lenguaje se comporta de forma idéntica en cualquier circunstancia."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá exactamente en consola esta división?",
+      "code_snippet": "print(6 / 2)",
+      "target_type": "predict_output",
+      "expected_answer": "3.0",
+      "hint": "Recuerda incluir el punto decimal .0 en el resultado de la división /."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá exactamente en consola esta división?",
+      "code_snippet": "print(6 / 2)",
+      "target_type": "predict_output",
+      "expected_answer": "3.0",
+      "hint": "Recuerda incluir el punto decimal .0 en el resultado de la división /."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s04-l01",
+    "section_slug": "py-m01-s04",
+    "title": "¿Qué es un comentario y para qué sirve?",
+    "position": 1,
+    "theory": {
+      "step1": "Un comentario es una nota escrita en el código dirigida exclusivamente a los seres humanos que lo leen.",
+      "step2": "El intérprete de Python ignora por completo los comentarios al momento de ejecutar el programa.",
+      "step3": "Los comentarios no se imprimen en la pantalla ni afectan la velocidad o el comportamiento de tu software.",
+      "code_snippet": "# Esto es un comentario\nprint(\"Hola humano\")"
+    },
+    "item_1_console": {
+      "prompt": "Escribe un comentario en la primera línea que diga # Mi nota y en la segunda línea imprime \"Listo\".",
+      "initial_code": "# Escribe tu código aquí\n",
+      "solution_code": "# Mi nota\nprint(\"Listo\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Listo\n",
+          "description": "Debe mostrar solo 'Listo', ignorando el comentario"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué hace Python cuando encuentra una línea de comentario?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La ignora por completo y continúa con la siguiente instrucción",
+          "is_correct": true,
+          "feedback": "¡Correcto! Los comentarios son invisibles para la ejecución de Python."
+        },
+        {
+          "id": "b",
+          "text": "La imprime en la consola en color gris",
+          "is_correct": false,
+          "feedback": "Los comentarios nunca se muestran en la salida estándar."
+        },
+        {
+          "id": "c",
+          "text": "Detiene el programa con un error",
+          "is_correct": false,
+          "feedback": "Los comentarios son perfectamente legales y recomendados."
+        },
+        {
+          "id": "d",
+          "text": "La traduce a lenguaje binario y la guarda en disco",
+          "is_correct": false,
+          "feedback": "El compilador descarta los comentarios antes de generar bytecode."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cuál es el principal beneficio de escribir comentarios claros en tu código?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Facilita a ti y a otros programadores comprender por qué se tomaron ciertas decisiones lógicas",
+          "is_correct": true,
+          "feedback": "¡Exacto! El código se lee muchas más veces de las que se escribe; los comentarios son tu mapa."
+        },
+        {
+          "id": "b",
+          "text": "Hace que el programa sea un 50% más rápido",
+          "is_correct": false,
+          "feedback": "Los comentarios no alteran el rendimiento de ejecución."
+        },
+        {
+          "id": "c",
+          "text": "Permite que el código funcione sin necesidad de instalar Python",
+          "is_correct": false,
+          "feedback": "Python sigue siendo necesario para interpretar el script."
+        },
+        {
+          "id": "d",
+          "text": "Evita que otras personas puedan copiar tu código",
+          "is_correct": false,
+          "feedback": "Cualquiera con acceso al archivo de texto puede leer los comentarios."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá este archivo?",
+      "code_snippet": "# Saludo matutino\nprint(\"Buenos días\")",
+      "target_type": "predict_output",
+      "expected_answer": "Buenos días",
+      "hint": "El comentario inicial no produce ninguna salida en la consola."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá este archivo?",
+      "code_snippet": "# Saludo matutino\nprint(\"Buenos días\")",
+      "target_type": "predict_output",
+      "expected_answer": "Buenos días",
+      "hint": "El comentario inicial no produce ninguna salida en la consola."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s04-l02",
+    "section_slug": "py-m01-s04",
+    "title": "El símbolo numeral (#) para comentarios de una línea",
+    "position": 2,
+    "theory": {
+      "step1": "En Python, los comentarios se inician con el símbolo numeral `#` (también conocido como almohadilla o hashtag).",
+      "step2": "Todo lo que esté a la derecha del `#` hasta el final de esa línea será ignorado por el intérprete.",
+      "step3": "Por convención y buenas prácticas de estilo (PEP 8), se suele dejar un espacio después del `#` antes del texto.",
+      "code_snippet": "# Calcula el puntaje total del jugador\nprint(100)"
+    },
+    "item_1_console": {
+      "prompt": "Escribe un comentario con # Saludo y luego imprime \"Hola Koda\".",
+      "initial_code": "# Añade tu comentario y el print\n",
+      "solution_code": "# Saludo\nprint(\"Hola Koda\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Hola Koda\n",
+          "description": "Debe mostrar Hola Koda sin afectar la ejecución"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de los siguientes símbolos se utiliza para escribir comentarios en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El símbolo numeral (#)",
+          "is_correct": true,
+          "feedback": "¡Correcto! En Python el carácter # es el indicador oficial de comentarios."
+        },
+        {
+          "id": "b",
+          "text": "Doble barra (//)",
+          "is_correct": false,
+          "feedback": "En Python // es división entera; // no crea comentarios."
+        },
+        {
+          "id": "c",
+          "text": "Signo de porcentaje (%)",
+          "is_correct": false,
+          "feedback": "% es el operador de módulo o residuo en Python."
+        },
+        {
+          "id": "d",
+          "text": "Guion doble (--)",
+          "is_correct": false,
+          "feedback": "-- es la sintaxis de comentarios en SQL o Lua, no en Python."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué ocurre si colocas un símbolo numeral dentro de un texto entre comillas como print(\"#1\")?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Se imprime literalmente como parte del texto porque está dentro de las comillas",
+          "is_correct": true,
+          "feedback": "¡Excelente! Los delimitadores de texto tienen prioridad: dentro de las comillas, # es un carácter normal."
+        },
+        {
+          "id": "b",
+          "text": "Python comenta el resto de la instrucción y da error",
+          "is_correct": false,
+          "feedback": "Dentro de las comillas el símbolo # no actúa como comentario."
+        },
+        {
+          "id": "c",
+          "text": "El número 1 se borra",
+          "is_correct": false,
+          "feedback": "El texto completo \"#1\" se muestra sin alteración."
+        },
+        {
+          "id": "d",
+          "text": "Se apaga la consola",
+          "is_correct": false,
+          "feedback": "No causa ninguna interrupción."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor imprimirá la terminal?",
+      "code_snippet": "print(\"# Ganador\")",
+      "target_type": "predict_output",
+      "expected_answer": "# Ganador",
+      "hint": "Al estar dentro de las comillas, el símbolo numeral se imprime literalmente."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor imprimirá la terminal?",
+      "code_snippet": "print(\"# Ganador\")",
+      "target_type": "predict_output",
+      "expected_answer": "# Ganador",
+      "hint": "Al estar dentro de las comillas, el símbolo numeral se imprime literalmente."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s04-l03",
+    "section_slug": "py-m01-s04",
+    "title": "Comentarios al final de una línea (Inline comments)",
+    "position": 3,
+    "theory": {
+      "step1": "Puedes colocar un comentario al final de una línea que contiene código activo.",
+      "step2": "Python ejecutará primero la instrucción de la izquierda y luego ignorará todo lo que siga al `#` hacia la derecha.",
+      "step3": "Es una técnica excelente para hacer aclaraciones breves sobre un valor o un cálculo específico.",
+      "code_snippet": "print(50)  # Puntos iniciales del nivel 1"
+    },
+    "item_1_console": {
+      "prompt": "Imprime el número 10 y en la misma línea añade un comentario que diga: # Diez",
+      "initial_code": "# Escribe tu código aquí\n",
+      "solution_code": "print(10)  # Diez",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "10\n",
+          "description": "Debe imprimir 10 ignorando el comentario al final de la línea"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "Si tienes la línea `print(\"Koda\")  # Nombre del zorro`, ¿qué saldrá en pantalla?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Koda",
+          "is_correct": true,
+          "feedback": "¡Correcto! Solo se ejecuta print(\"Koda\"); el comentario a la derecha es descartado."
+        },
+        {
+          "id": "b",
+          "text": "Koda  # Nombre del zorro",
+          "is_correct": false,
+          "feedback": "Los comentarios al final de la línea nunca se muestran en consola."
+        },
+        {
+          "id": "c",
+          "text": "# Nombre del zorro",
+          "is_correct": false,
+          "feedback": "El código antes del comentario sí se ejecuta con normalidad."
+        },
+        {
+          "id": "d",
+          "text": "SyntaxError",
+          "is_correct": false,
+          "feedback": "Los comentarios inline son completamente válidos."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué recomendación de estilo hace PEP 8 al colocar un comentario al final de una línea de código?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Dejar al menos dos espacios en blanco entre el código y el símbolo #",
+          "is_correct": true,
+          "feedback": "¡Exacto! Los dos espacios separan visualmente la instrucción de la nota explicativa."
+        },
+        {
+          "id": "b",
+          "text": "Pegar el # directamente al paréntesis sin espacios",
+          "is_correct": false,
+          "feedback": "Pegar el símbolo reduce la legibilidad del código."
+        },
+        {
+          "id": "c",
+          "text": "Escribir todo el comentario en mayúsculas sostenidas",
+          "is_correct": false,
+          "feedback": "No es una regla de PEP 8."
+        },
+        {
+          "id": "d",
+          "text": "Repetir el comentario 3 veces",
+          "is_correct": false,
+          "feedback": "Los comentarios deben ser concisos y no redundantes."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué número mostrará la consola?",
+      "code_snippet": "print(2 + 3)  # Suma de prueba",
+      "target_type": "predict_output",
+      "expected_answer": "5",
+      "hint": "Se ejecuta la suma 2 + 3 y se ignora el comentario."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué número mostrará la consola?",
+      "code_snippet": "print(2 + 3)  # Suma de prueba",
+      "target_type": "predict_output",
+      "expected_answer": "5",
+      "hint": "Se ejecuta la suma 2 + 3 y se ignora el comentario."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s04-l04",
+    "section_slug": "py-m01-s04",
+    "title": "Desactivando código temporalmente para depuración",
+    "position": 4,
+    "theory": {
+      "step1": "Durante la programación, a menudo quieres probar cómo funciona tu código sin ejecutar ciertas líneas.",
+      "step2": "En lugar de borrar una línea que luego podrías necesitar, puedes anteponerle un `#` al inicio.",
+      "step3": "A esta práctica se le llama 'comentar código' y es una de las técnicas de depuración más rápidas y utilizadas en el mundo.",
+      "code_snippet": "print(\"Línea 1\")\n# print(\"Línea 2 desactivada\")\nprint(\"Línea 3\")"
+    },
+    "item_1_console": {
+      "prompt": "Tienes dos líneas: print(\"Activo\") y print(\"Pausa\"). Desactiva la línea \"Pausa\" colocando un # al inicio para que solo se imprima \"Activo\".",
+      "initial_code": "print(\"Activo\")\nprint(\"Pausa\")\n",
+      "solution_code": "print(\"Activo\")\n# print(\"Pausa\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Activo\n",
+          "description": "Debe mostrar solo Activo porque la segunda línea está comentada"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "Si le agregas un `#` al inicio de una línea con `print(\"Error\")`, ¿qué sucederá al correr el programa?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Esa línea no se ejecutará en absoluto",
+          "is_correct": true,
+          "feedback": "¡Correcto! Al estar comentada, Python pasa de largo sin ejecutarla."
+        },
+        {
+          "id": "b",
+          "text": "Se imprimirá con una advertencia",
+          "is_correct": false,
+          "feedback": "Python no emite nada por líneas comentadas."
+        },
+        {
+          "id": "c",
+          "text": "Se borrará permanentemente de tu archivo",
+          "is_correct": false,
+          "feedback": "El código permanece en el archivo, solo queda inactivo."
+        },
+        {
+          "id": "d",
+          "text": "El programa se cerrará",
+          "is_correct": false,
+          "feedback": "El programa continúa con las siguientes líneas activas."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué los programadores prefieren 'comentar' una línea en lugar de borrarla durante pruebas?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Para conservar el código y poder reactivarlo fácilmente más tarde con solo retirar el #",
+          "is_correct": true,
+          "feedback": "¡Exacto! Te ahorra tener que volver a escribir instrucciones complejas."
+        },
+        {
+          "id": "b",
+          "text": "Porque borrar líneas está prohibido en Python",
+          "is_correct": false,
+          "feedback": "Puedes borrar texto cuando desees."
+        },
+        {
+          "id": "c",
+          "text": "Porque los comentarios generan copias de seguridad en la nube",
+          "is_correct": false,
+          "feedback": "Los comentarios no tienen relación con la nube."
+        },
+        {
+          "id": "d",
+          "text": "Para que el archivo pese menos kilobytes",
+          "is_correct": false,
+          "feedback": "Los caracteres comentados ocupan el mismo espacio en el archivo fuente."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué palabra aparecerá en la consola?",
+      "code_snippet": "# print(\"Oculto\")\nprint(\"Visible\")",
+      "target_type": "predict_output",
+      "expected_answer": "Visible",
+      "hint": "La primera línea está desactivada con un # al principio."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué palabra aparecerá en la consola?",
+      "code_snippet": "# print(\"Oculto\")\nprint(\"Visible\")",
+      "target_type": "predict_output",
+      "expected_answer": "Visible",
+      "hint": "La primera línea está desactivada con un # al principio."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s05-l01",
+    "section_slug": "py-m01-s05",
+    "title": "¿Qué es la indentación en Python?",
+    "position": 1,
+    "theory": {
+      "step1": "La indentación es la cantidad de espacios en blanco que colocas al inicio de una línea antes del código.",
+      "step2": "A diferencia de otros lenguajes que usan llaves {} para agrupar instrucciones, Python utiliza los espacios al inicio para estructurar el código.",
+      "step3": "En el nivel superior (código básico sin bloques), todas las líneas deben comenzar exactamente en el margen izquierdo (cero espacios).",
+      "code_snippet": "print(\"Línea pegada al margen\")\nprint(\"Otra línea en el margen\")"
+    },
+    "item_1_console": {
+      "prompt": "Escribe dos instrucciones print(): una con \"Línea 1\" y otra con \"Línea 2\", ambas pegadas al margen izquierdo sin espacios iniciales.",
+      "initial_code": "# Asegúrate de no dejar espacios al inicio\n",
+      "solution_code": "print(\"Línea 1\")\nprint(\"Línea 2\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Línea 1\nLínea 2\n",
+          "description": "Debe imprimir ambas líneas sin error de sangría"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué papel juega la indentación en Python comparado con otros lenguajes?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Es obligatoria y define la estructura sintáctica del código, no es solo estética",
+          "is_correct": true,
+          "feedback": "¡Correcto! En Python los espacios iniciales son reglas de sintaxis que el intérprete exige."
+        },
+        {
+          "id": "b",
+          "text": "Es puramente decorativa y Python la ignora",
+          "is_correct": false,
+          "feedback": "Python es muy estricto con los espacios iniciales."
+        },
+        {
+          "id": "c",
+          "text": "Solo se usa para imprimir textos en cursiva",
+          "is_correct": false,
+          "feedback": "La indentación no tiene relación con el formato visual de la consola."
+        },
+        {
+          "id": "d",
+          "text": "Solo importa los fines de semana",
+          "is_correct": false,
+          "feedback": "La sintaxis se evalúa en todo momento."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué los creadores de Python decidieron hacer la indentación obligatoria?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Para garantizar que todo el código escrito en Python sea visualmente limpio, ordenado y legible",
+          "is_correct": true,
+          "feedback": "¡Excelente! Uno de los pilares del Zen de Python es 'la legibilidad cuenta'."
+        },
+        {
+          "id": "b",
+          "text": "Para gastar más espacio en el disco duro",
+          "is_correct": false,
+          "feedback": "Los espacios ocupan apenas 1 byte."
+        },
+        {
+          "id": "c",
+          "text": "Para confundir a los principiantes",
+          "is_correct": false,
+          "feedback": "Al contrario, busca evitar códigos caóticos y difíciles de entender."
+        },
+        {
+          "id": "d",
+          "text": "Fue un error de programación de Guido van Rossum",
+          "is_correct": false,
+          "feedback": "Fue una decisión de diseño arquitectónico fundamental y muy elogiada."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá este programa correctamente indentado?",
+      "code_snippet": "print(\"Orden\")\nprint(\"Estructura\")",
+      "target_type": "predict_output",
+      "expected_answer": "Orden\nEstructura",
+      "hint": "Ambas líneas están en el margen principal y se ejecutan secuencialmente."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá este programa correctamente indentado?",
+      "code_snippet": "print(\"Orden\")\nprint(\"Estructura\")",
+      "target_type": "predict_output",
+      "expected_answer": "Orden\nEstructura",
+      "hint": "Ambas líneas están en el margen principal y se ejecutan secuencialmente."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s05-l02",
+    "section_slug": "py-m01-s05",
+    "title": "El error de sangría inesperada: IndentationError",
+    "position": 2,
+    "theory": {
+      "step1": "Si agregas un espacio accidental al inicio de una línea fuera de un bloque, Python se confunde y no sabe a qué pertenece.",
+      "step2": "En ese momento, el intérprete detiene el programa y emite un `IndentationError: unexpected indent`.",
+      "step3": "La solución es tan simple como borrar los espacios sobrantes y alinear la línea al margen izquierdo.",
+      "code_snippet": "#  print(\"Error\") <- ese espacio causará IndentationError\nprint(\"Correcto\")"
+    },
+    "item_1_console": {
+      "prompt": "Corrige el código asegurando que print(\"Corregido\") no tenga ningún espacio antes de la letra 'p'.",
+      "initial_code": " print(\"Corregido\")\n",
+      "solution_code": "print(\"Corregido\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Corregido\n",
+          "description": "Debe ejecutar sin IndentationError al eliminar el espacio inicial"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué excepción lanza Python si colocas espacios en blanco al inicio de una línea sin estar dentro de una estructura?",
+      "options": [
+        {
+          "id": "a",
+          "text": "IndentationError: unexpected indent",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python te indica que no esperaba una sangría en esa línea."
+        },
+        {
+          "id": "b",
+          "text": "ValueError",
+          "is_correct": false,
+          "feedback": "ValueError ocurre cuando el tipo de dato recibe un valor inválido."
+        },
+        {
+          "id": "c",
+          "text": "ZeroDivisionError",
+          "is_correct": false,
+          "feedback": "Esto solo ocurre al dividir por cero."
+        },
+        {
+          "id": "d",
+          "text": "NameError",
+          "is_correct": false,
+          "feedback": "NameError ocurre al usar nombres no definidos."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cómo se soluciona un 'unexpected indent' en tu editor de código?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Borrando los espacios al inicio de la línea señalada para que comience al ras del margen",
+          "is_correct": true,
+          "feedback": "¡Exacto! Alinear la línea con el nivel correspondiente resuelve el problema de inmediato."
+        },
+        {
+          "id": "b",
+          "text": "Reiniciando el computador",
+          "is_correct": false,
+          "feedback": "No es un problema del sistema operativo."
+        },
+        {
+          "id": "c",
+          "text": "Agregando más espacios a todas las demás líneas",
+          "is_correct": false,
+          "feedback": "Eso solo empeoraría el desajuste de sangría."
+        },
+        {
+          "id": "d",
+          "text": "Cambiando la extensión del archivo a .txt",
+          "is_correct": false,
+          "feedback": "El archivo debe seguir siendo .py."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué mensaje se imprimirá en pantalla al corregir la sangría?",
+      "code_snippet": "print(\"Alineado\")",
+      "target_type": "predict_output",
+      "expected_answer": "Alineado",
+      "hint": "La línea no tiene espacios iniciales y se ejecuta sin errores."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué mensaje se imprimirá en pantalla al corregir la sangría?",
+      "code_snippet": "print(\"Alineado\")",
+      "target_type": "predict_output",
+      "expected_answer": "Alineado",
+      "hint": "La línea no tiene espacios iniciales y se ejecuta sin errores."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s05-l03",
+    "section_slug": "py-m01-s05",
+    "title": "Estándar de 4 espacios por nivel (PEP 8)",
+    "position": 3,
+    "theory": {
+      "step1": "Cuando en el futuro aprendas estructuras que requieren sangría (como bloques condicionales o funciones), la regla estándar es usar exactamente 4 espacios.",
+      "step2": "La guía oficial de estilo PEP 8 prohíbe mezclar tabulaciones con espacios en blanco.",
+      "step3": "La inmensa mayoría de editores de código modernos convierten automáticamente la tecla Tab en 4 espacios para facilitarte la vida.",
+      "code_snippet": "# La convención oficial es:\n# 4 espacios por cada nivel de anidación"
+    },
+    "item_1_console": {
+      "prompt": "Imprime \"Espacios limpios\" sin ningún espacio ni tabulación inicial.",
+      "initial_code": "# Código aquí\n",
+      "solution_code": "print(\"Espacios limpios\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Espacios limpios\n",
+          "description": "Debe imprimir Espacios limpios al ras del margen"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuántos espacios en blanco recomienda la guía de estilo PEP 8 por cada nivel de indentación en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "4 espacios",
+          "is_correct": true,
+          "feedback": "¡Correcto! 4 espacios es el estándar dorado de la comunidad Python."
+        },
+        {
+          "id": "b",
+          "text": "1 espacio",
+          "is_correct": false,
+          "feedback": "1 espacio es muy difícil de distinguir visualmente."
+        },
+        {
+          "id": "c",
+          "text": "8 espacios",
+          "is_correct": false,
+          "feedback": "8 espacios desplaza el código demasiado hacia la derecha."
+        },
+        {
+          "id": "d",
+          "text": "La cantidad que decida al azar el sistema",
+          "is_correct": false,
+          "feedback": "La consistencia es una regla estricta de estilo."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué PEP 8 aconseja encarecidamente no mezclar tabuladores y espacios?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque diferentes editores muestran los tabuladores con anchos distintos, provocando errores de TabError invisibles a simple vista",
+          "is_correct": true,
+          "feedback": "¡Excelente! En un editor un tab puede verse como 4 espacios y en otro como 8, rompiendo la estructura."
+        },
+        {
+          "id": "b",
+          "text": "Porque los tabuladores gastan la pantalla de la computadora",
+          "is_correct": false,
+          "feedback": "No tiene impacto en la pantalla."
+        },
+        {
+          "id": "c",
+          "text": "Porque la tecla Tab se desactiva al escribir Python",
+          "is_correct": false,
+          "feedback": "La tecla Tab funciona en cualquier teclado."
+        },
+        {
+          "id": "d",
+          "text": "Solo es una sugerencia que ningún desarrollador sigue",
+          "is_correct": false,
+          "feedback": "Es una de las reglas más respetadas de todo el ecosistema de Python."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué salida mostrará este programa?",
+      "code_snippet": "print(\"PEP 8\")",
+      "target_type": "predict_output",
+      "expected_answer": "PEP 8",
+      "hint": "Instrucción de nivel superior sin sangría."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué salida mostrará este programa?",
+      "code_snippet": "print(\"PEP 8\")",
+      "target_type": "predict_output",
+      "expected_answer": "PEP 8",
+      "hint": "Instrucción de nivel superior sin sangría."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s05-l04",
+    "section_slug": "py-m01-s05",
+    "title": "Líneas en blanco para separar ideas en el código",
+    "position": 4,
+    "theory": {
+      "step1": "En tu archivo de código .py, puedes dejar líneas en blanco entre instrucciones para separar bloques conceptuales.",
+      "step2": "Python ignora por completo las líneas totalmente vacías dentro de tu código; no provocan ningún error ni ralentizan la máquina.",
+      "step3": "Usa líneas en blanco con moderación para que tu código 'respire' y sea fácil de escanear con la vista.",
+      "code_snippet": "print(\"Fase 1\")\n\nprint(\"Fase 2\")"
+    },
+    "item_1_console": {
+      "prompt": "Escribe print(\"Bloque 1\"), deja una línea vacía en el editor y luego escribe print(\"Bloque 2\").",
+      "initial_code": "# Separa los dos print con una línea vacía en el código\n",
+      "solution_code": "print(\"Bloque 1\")\n\nprint(\"Bloque 2\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Bloque 1\nBloque 2\n",
+          "description": "Debe ejecutar correctamente ignorando la línea en blanco en el editor"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué hace el intérprete de Python cuando encuentra una línea en blanco en el archivo .py?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La salta silenciosamente y pasa a leer la siguiente línea con código",
+          "is_correct": true,
+          "feedback": "¡Correcto! Las líneas en blanco en el archivo fuente no tienen ningún costo ni efecto de ejecución."
+        },
+        {
+          "id": "b",
+          "text": "Emite un EmptyLineError",
+          "is_correct": false,
+          "feedback": "Las líneas en blanco son 100% legales y comunes."
+        },
+        {
+          "id": "c",
+          "text": "Imprime un espacio en la terminal",
+          "is_correct": false,
+          "feedback": "Para imprimir en la terminal debes usar print(), una línea vacía en el archivo no imprime nada."
+        },
+        {
+          "id": "d",
+          "text": "Cierra el archivo de inmediato",
+          "is_correct": false,
+          "feedback": "Python solo concluye al llegar al final físico del archivo."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cuál es la diferencia entre una línea vacía en el archivo de código y ejecutar print()?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La línea vacía en el archivo solo organiza el código para el programador; print() genera una línea vacía visible para el usuario en la terminal",
+          "is_correct": true,
+          "feedback": "¡Exacto! El código en el editor es para ti; la salida de print() es para el usuario."
+        },
+        {
+          "id": "b",
+          "text": "Hacen exactamente lo mismo en la pantalla",
+          "is_correct": false,
+          "feedback": "Una línea vacía en el script jamás llega a la pantalla del usuario."
+        },
+        {
+          "id": "c",
+          "text": "print() da error si no lleva texto",
+          "is_correct": false,
+          "feedback": "print() sin argumentos es totalmente válido."
+        },
+        {
+          "id": "d",
+          "text": "Las líneas vacías en el editor son ilegales",
+          "is_correct": false,
+          "feedback": "Son una buena práctica recomendada por PEP 8."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá en la terminal este código?",
+      "code_snippet": "print(\"Uno\")\n\nprint(\"Dos\")",
+      "target_type": "predict_output",
+      "expected_answer": "Uno\nDos",
+      "hint": "La línea vacía en el editor se ignora; cada print() imprime su palabra en una línea de consola."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá en la terminal este código?",
+      "code_snippet": "print(\"Uno\")\n\nprint(\"Dos\")",
+      "target_type": "predict_output",
+      "expected_answer": "Uno\nDos",
+      "hint": "La línea vacía en el editor se ignora; cada print() imprime su palabra en una línea de consola."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s06-l01",
+    "section_slug": "py-m01-s06",
+    "title": "Texto y números en un solo print() usando comas",
+    "position": 1,
+    "theory": {
+      "step1": "A menudo quieres mostrar mensajes donde explicas qué significa un número, como \"Nivel:\" y el número 5.",
+      "step2": "Al separar la cadena de texto y el número con una coma dentro de print(), Python los muestra juntos en la misma línea.",
+      "step3": "La coma inserta un espacio automático entre el texto y el número sin que tengas que agregarlo tú.",
+      "code_snippet": "print(\"Puntos:\", 100)"
+    },
+    "item_1_console": {
+      "prompt": "Imprime la etiqueta \"Vidas:\" y el número 3 separados por una coma dentro de print(\"Vidas:\", 3).",
+      "initial_code": "# Muestra texto y número con coma\n",
+      "solution_code": "print(\"Vidas:\", 3)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Vidas: 3\n",
+          "description": "Debe imprimir Vidas: 3 con el espacio automático"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué salida producirá la instrucción print(\"Edad:\", 20)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Edad: 20",
+          "is_correct": true,
+          "feedback": "¡Correcto! Muestra el texto y el número separados por el espacio que añade la coma."
+        },
+        {
+          "id": "b",
+          "text": "Edad:20 (pegado sin espacios)",
+          "is_correct": false,
+          "feedback": "La coma siempre coloca un espacio separador por defecto."
+        },
+        {
+          "id": "c",
+          "text": "TypeError",
+          "is_correct": false,
+          "feedback": "Separar con coma es la forma nativa y recomendada en print(), no da error."
+        },
+        {
+          "id": "d",
+          "text": "Edad:, 20",
+          "is_correct": false,
+          "feedback": "La coma en el código no se imprime en la salida."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué es tan conveniente usar comas para combinar texto y números en print()?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque no requiere convertir previamente el número a texto y añade un espacio automático limpio",
+          "is_correct": true,
+          "feedback": "¡Excelente! print() se encarga de formatear el número sin complicaciones."
+        },
+        {
+          "id": "b",
+          "text": "Porque multiplica el número por dos",
+          "is_correct": false,
+          "feedback": "No altera el valor del número."
+        },
+        {
+          "id": "c",
+          "text": "Porque borra el texto después de mostrarlo",
+          "is_correct": false,
+          "feedback": "El texto permanece visible en la terminal."
+        },
+        {
+          "id": "d",
+          "text": "Solo funciona con números impares",
+          "is_correct": false,
+          "feedback": "Funciona con cualquier número."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá la consola?",
+      "code_snippet": "print(\"Monedas:\", 50)",
+      "target_type": "predict_output",
+      "expected_answer": "Monedas: 50",
+      "hint": "print() une la cadena y el entero con un espacio intermedio."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá la consola?",
+      "code_snippet": "print(\"Monedas:\", 50)",
+      "target_type": "predict_output",
+      "expected_answer": "Monedas: 50",
+      "hint": "print() une la cadena y el entero con un espacio intermedio."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s06-l02",
+    "section_slug": "py-m01-s06",
+    "title": "La trampa de unir texto con números usando el signo más (+)",
+    "position": 2,
+    "theory": {
+      "step1": "En Python, el operador más `+` tiene dos significados: suma numérica (5 + 5 = 10) o unión de textos (\"Hola\" + \"Koda\").",
+      "step2": "Si intentas usar `+` para unir un texto y un número directamente (como `\"Nivel: \" + 5`), Python se detendrá con un `TypeError`.",
+      "step3": "Python no adivina si deseas sumar o pegar texto; para unir texto y números de forma segura en esta etapa, usa siempre comas en `print()`.",
+      "code_snippet": "# print(\"Puntos: \" + 10) <- ¡TypeError!\nprint(\"Puntos:\", 10)      # <- ¡Correcto y seguro!"
+    },
+    "item_1_console": {
+      "prompt": "Imprime \"Total:\" y el número 15 usando comas en print(\"Total:\", 15) para evitar el TypeError del operador +.",
+      "initial_code": "# Usa comas para evitar el TypeError\n",
+      "solution_code": "print(\"Total:\", 15)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Total: 15\n",
+          "description": "Debe imprimir Total: 15 sin errores de tipo"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué error ocurre al intentar ejecutar: print(\"Puntaje: \" + 100)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "TypeError (no se puede concatenar un string con un número entero usando +)",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python es de tipado fuerte y no mezcla tipos incompatibles con + automáticamente."
+        },
+        {
+          "id": "b",
+          "text": "SyntaxError",
+          "is_correct": false,
+          "feedback": "No es un error de sintaxis gramatical, sino un conflicto entre los tipos de datos."
+        },
+        {
+          "id": "c",
+          "text": "IndentationError",
+          "is_correct": false,
+          "feedback": "No hay problemas con espacios al inicio de la línea."
+        },
+        {
+          "id": "d",
+          "text": "Se imprime \"Puntaje: 100\" sin error",
+          "is_correct": false,
+          "feedback": "En Python esa instrucción falla inmediatamente; en JavaScript funcionaría, pero Python protege la coherencia de tipos."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué Python prefiere arrojar un TypeError en vez de adivinar y convertir el 100 a texto automáticamente?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque Python sigue el principio 'Explícito es mejor que implícito' para evitar errores silenciosos en cálculos críticos",
+          "is_correct": true,
+          "feedback": "¡Exacto! Obligar al programador a ser claro evita errores sutiles como que una factura termine sumando textos."
+        },
+        {
+          "id": "b",
+          "text": "Porque el motor de Python no tiene suficiente memoria",
+          "is_correct": false,
+          "feedback": "No tiene relación con recursos de memoria."
+        },
+        {
+          "id": "c",
+          "text": "Para que el programador tenga que teclear más",
+          "is_correct": false,
+          "feedback": "El diseño busca robustez y seguridad en el software."
+        },
+        {
+          "id": "d",
+          "text": "Es un error del sistema operativo",
+          "is_correct": false,
+          "feedback": "Es una decisión de diseño de Python."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá esta instrucción que usa coma?",
+      "code_snippet": "print(\"Items:\", 4)",
+      "target_type": "predict_output",
+      "expected_answer": "Items: 4",
+      "hint": "Al usar la coma, no hay TypeError y se imprime con un espacio."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá esta instrucción que usa coma?",
+      "code_snippet": "print(\"Items:\", 4)",
+      "target_type": "predict_output",
+      "expected_answer": "Items: 4",
+      "hint": "Al usar la coma, no hay TypeError y se imprime con un espacio."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s06-l03",
+    "section_slug": "py-m01-s06",
+    "title": "Etiquetando cálculos matemáticos en la salida",
+    "position": 3,
+    "theory": {
+      "step1": "Puedes combinar operaciones matemáticas directamente con etiquetas de texto dentro de una misma llamada a print().",
+      "step2": "Al escribir `print(\"Resultado:\", 5 + 3)`, Python evalúa primero la suma aritmética (8) y luego la imprime junto a la etiqueta.",
+      "step3": "El usuario verá en la terminal: `Resultado: 8` de forma completamente clara y profesional.",
+      "code_snippet": "print(\"Total ganado:\", 10 * 5)"
+    },
+    "item_1_console": {
+      "prompt": "Imprime la etiqueta \"Suma:\" seguida de la operación 12 + 8 usando print(\"Suma:\", 12 + 8).",
+      "initial_code": "# Realiza el print con etiqueta y suma\n",
+      "solution_code": "print(\"Suma:\", 12 + 8)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Suma: 20\n",
+          "description": "Debe imprimir Suma: 20"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué salida exacta producirá la instrucción print(\"Doble:\", 7 * 2)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Doble: 14",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python resuelve la multiplicación 7 * 2 = 14 y la une con la etiqueta 'Doble:'."
+        },
+        {
+          "id": "b",
+          "text": "Doble: 7 * 2",
+          "is_correct": false,
+          "feedback": "La operación matemática no está entre comillas, por lo que se calcula su resultado."
+        },
+        {
+          "id": "c",
+          "text": "Doble: 72",
+          "is_correct": false,
+          "feedback": "Los números se multiplican, no se concatenan."
+        },
+        {
+          "id": "d",
+          "text": "SyntaxError",
+          "is_correct": false,
+          "feedback": "Pasar expresiones aritméticas tras una coma es completamente válido."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "En la instrucción `print(\"Total:\", 4 + 4)`, ¿en qué orden procesa Python los elementos?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Calcula primero la expresión matemática (4 + 4 = 8) y luego imprime la etiqueta junto al resultado",
+          "is_correct": true,
+          "feedback": "¡Exacto! Python evalúa todos los argumentos de una función antes de enviarlos a la salida."
+        },
+        {
+          "id": "b",
+          "text": "Imprime primero y luego intenta calcular el número en la memoria",
+          "is_correct": false,
+          "feedback": "No se puede imprimir el resultado antes de calcularlo."
+        },
+        {
+          "id": "c",
+          "text": "Ignora la suma y solo imprime \"Total:\"",
+          "is_correct": false,
+          "feedback": "Todos los argumentos separados por coma se procesan."
+        },
+        {
+          "id": "d",
+          "text": "Da error porque no se pueden mezclar números y sumas",
+          "is_correct": false,
+          "feedback": "Es una de las operaciones más comunes y útiles en Python."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué resultado se mostrará en pantalla?",
+      "code_snippet": "print(\"Saldo:\", 100 - 30)",
+      "target_type": "predict_output",
+      "expected_answer": "Saldo: 70",
+      "hint": "Se resta 100 menos 30 tras la etiqueta Saldo:."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué resultado se mostrará en pantalla?",
+      "code_snippet": "print(\"Saldo:\", 100 - 30)",
+      "target_type": "predict_output",
+      "expected_answer": "Saldo: 70",
+      "hint": "Se resta 100 menos 30 tras la etiqueta Saldo:."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s06-l04",
+    "section_slug": "py-m01-s06",
+    "title": "Creando pequeños reportes en pantalla",
+    "position": 4,
+    "theory": {
+      "step1": "Al combinar varias líneas de print() con textos y números, puedes generar pequeños informes organizados en consola.",
+      "step2": "Puedes presentar el estado de un juego, un resumen de compras o estadísticas con total claridad visual.",
+      "step3": "Usa títulos, etiquetas y resultados ordenados línea por línea para crear una gran experiencia de usuario.",
+      "code_snippet": "print(\"--- REPORTE ---\")\nprint(\"Nivel:\", 1)\nprint(\"Monedas:\", 50)"
+    },
+    "item_1_console": {
+      "prompt": "Escribe dos instrucciones print(): primero print(\"Jugador:\", \"Koda\") y luego print(\"Vidas:\", 3).",
+      "initial_code": "# Crea el mini reporte\n",
+      "solution_code": "print(\"Jugador:\", \"Koda\")\nprint(\"Vidas:\", 3)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Jugador: Koda\nVidas: 3\n",
+          "description": "Debe imprimir el reporte con Jugador: Koda y Vidas: 3"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cómo se logra que cada dato del reporte aparezca en una línea diferente?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Escribiendo una instrucción print() independiente para cada línea del reporte",
+          "is_correct": true,
+          "feedback": "¡Correcto! Cada print() genera automáticamente su propia línea de texto."
+        },
+        {
+          "id": "b",
+          "text": "Separando con comas dentro del mismo print()",
+          "is_correct": false,
+          "feedback": "Las comas dentro de un solo print() mantienen todo en la misma línea."
+        },
+        {
+          "id": "c",
+          "text": "Reiniciando el programa tras cada palabra",
+          "is_correct": false,
+          "feedback": "El programa corre de corrido en un solo ciclo."
+        },
+        {
+          "id": "d",
+          "text": "Dejando 10 espacios en blanco",
+          "is_correct": false,
+          "feedback": "Los espacios no generan saltos de línea."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué importancia tiene la presentación visual ordenada de los datos en aplicaciones de consola?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permite al usuario interpretar rápidamente el estado del sistema sin confundir métricas",
+          "is_correct": true,
+          "feedback": "¡Excelente! La claridad en la comunicación es el objetivo de cualquier interfaz."
+        },
+        {
+          "id": "b",
+          "text": "Hace que los cálculos matemáticos sean más exactos",
+          "is_correct": false,
+          "feedback": "La precisión matemática de la CPU es independiente del formato visual."
+        },
+        {
+          "id": "c",
+          "text": "Es requerida para que el sistema operativo no borre el archivo",
+          "is_correct": false,
+          "feedback": "El sistema operativo no evalúa la estética de la consola."
+        },
+        {
+          "id": "d",
+          "text": "Ninguna, la consola solo la leen robots",
+          "is_correct": false,
+          "feedback": "Los usuarios y desarrolladores interactúan constantemente a través de la terminal."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué dirá la segunda línea de este reporte?",
+      "code_snippet": "print(\"=== ESTADO ===\")\nprint(\"Salud:\", 100)",
+      "target_type": "predict_output",
+      "expected_answer": "Salud: 100",
+      "hint": "La segunda instrucción es print('Salud:', 100)."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué dirá la segunda línea de este reporte?",
+      "code_snippet": "print(\"=== ESTADO ===\")\nprint(\"Salud:\", 100)",
+      "target_type": "predict_output",
+      "expected_answer": "Salud: 100",
+      "hint": "La segunda instrucción es print('Salud:', 100)."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s07-l01",
+    "section_slug": "py-m01-s07",
+    "title": "¿Qué es un SyntaxError y por qué no debes temerle?",
+    "position": 1,
+    "theory": {
+      "step1": "Un `SyntaxError` ocurre cuando escribes una instrucción que viola las reglas gramaticales de Python.",
+      "step2": "Los errores son tus mejores maestros en programación: Python te avisa exactamente qué parte no entendió para que puedas corregirla.",
+      "step3": "Un SyntaxError se detecta antes de que el programa comience a funcionar, protegiéndote de comportamientos inesperados.",
+      "code_snippet": "# Si olvidas una comilla o un paréntesis,\n# Python te avisa con un SyntaxError"
+    },
+    "item_1_console": {
+      "prompt": "Corrige el error de sintaxis escribiendo la instrucción correcta print(\"Hola Koda\").",
+      "initial_code": "print(\"Hola Koda\n",
+      "solution_code": "print(\"Hola Koda\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Hola Koda\n",
+          "description": "Debe cerrar la comilla y el paréntesis para eliminar el SyntaxError"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿En qué momento detecta Python un SyntaxError?",
+      "options": [
+        {
+          "id": "a",
+          "text": "En la fase de lectura y análisis gramatical, antes de comenzar a ejecutar el programa",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python revisa la gramática de todo el archivo antes de correr la primera instrucción."
+        },
+        {
+          "id": "b",
+          "text": "Solo cuando la computadora se queda sin batería",
+          "is_correct": false,
+          "feedback": "No depende del hardware ni de la energía."
+        },
+        {
+          "id": "c",
+          "text": "Al día siguiente de escribir el código",
+          "is_correct": false,
+          "feedback": "La detección ocurre al milisegundo de intentar ejecutar el archivo."
+        },
+        {
+          "id": "d",
+          "text": "Nunca, Python ignora los errores de sintaxis",
+          "is_correct": false,
+          "feedback": "Python se detiene de inmediato ante un error de sintaxis."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cuál es la mejor actitud ante un mensaje de error en la consola?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Leer el mensaje con calma, fijarse en la línea que señala la terminal y corregir el detalle gramatical",
+          "is_correct": true,
+          "feedback": "¡Exacto! Los programadores profesionales leen errores todos los días; son guías de navegación."
+        },
+        {
+          "id": "b",
+          "text": "Cerrar el editor y no volver a programar nunca",
+          "is_correct": false,
+          "feedback": "Equivocarse y corregir es la forma natural de aprender."
+        },
+        {
+          "id": "c",
+          "text": "Borrar todo el código y comenzar desde cero",
+          "is_correct": false,
+          "feedback": "La mayoría de errores se solucionan agregando un paréntesis o una comilla faltante."
+        },
+        {
+          "id": "d",
+          "text": "Apagar la pantalla para que el error no se vea",
+          "is_correct": false,
+          "feedback": "El error debe corregirse en el archivo de texto."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué mensaje se imprimirá una vez corregido el error de sintaxis?",
+      "code_snippet": "print(\"Sin errores\")",
+      "target_type": "predict_output",
+      "expected_answer": "Sin errores",
+      "hint": "La sintaxis es 100% válida: paréntesis y comillas cerradas."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué mensaje se imprimirá una vez corregido el error de sintaxis?",
+      "code_snippet": "print(\"Sin errores\")",
+      "target_type": "predict_output",
+      "expected_answer": "Sin errores",
+      "hint": "La sintaxis es 100% válida: paréntesis y comillas cerradas."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s07-l02",
+    "section_slug": "py-m01-s07",
+    "title": "Paréntesis abiertos sin cerrar",
+    "position": 2,
+    "theory": {
+      "step1": "Toda llamada a una función como print() exige una pareja equilibrada de paréntesis: apertura `(` y cierre `)`.",
+      "step2": "Si abres un paréntesis y olvidas cerrarlo al final, Python no sabrá dónde termina tu instrucción.",
+      "step3": "El intérprete reportará: `SyntaxError: '(' was never closed` o buscará el cierre en las líneas siguientes.",
+      "code_snippet": "# print(\"Hola\"   <- ¡Falta cerrar el paréntesis!\nprint(\"Hola\")   # <- ¡Correcto!"
+    },
+    "item_1_console": {
+      "prompt": "Cierra correctamente el paréntesis de la función print escribiendo print(\"Paréntesis cerrado\").",
+      "initial_code": "print(\"Paréntesis cerrado\"\n",
+      "solution_code": "print(\"Paréntesis cerrado\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Paréntesis cerrado\n",
+          "description": "Debe cerrar el paréntesis final para que la instrucción compile"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué mensaje de error suele emitir Python cuando olvidas el paréntesis de cierre en print()?",
+      "options": [
+        {
+          "id": "a",
+          "text": "SyntaxError: '(' was never closed",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python te indica con precisión que el paréntesis '(' nunca fue cerrado."
+        },
+        {
+          "id": "b",
+          "text": "ZeroDivisionError",
+          "is_correct": false,
+          "feedback": "No es una división numérica."
+        },
+        {
+          "id": "c",
+          "text": "MemoryError",
+          "is_correct": false,
+          "feedback": "No se agotó la memoria."
+        },
+        {
+          "id": "d",
+          "text": "IndexError",
+          "is_correct": false,
+          "feedback": "No se está accediendo a posiciones de una lista."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "Si olvidas cerrar un paréntesis en la línea 1, ¿por qué a veces Python marca el error en la línea 2?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque Python sigue leyendo la línea 2 esperando encontrar allí el paréntesis que falta de la línea 1",
+          "is_correct": true,
+          "feedback": "¡Exacto! Python permite que las instrucciones dentro de paréntesis abarquen múltiples líneas."
+        },
+        {
+          "id": "b",
+          "text": "Porque Python siempre culpa a la línea siguiente por diversión",
+          "is_correct": false,
+          "feedback": "El intérprete sigue reglas lógicas de análisis sintáctico."
+        },
+        {
+          "id": "c",
+          "text": "Porque la línea 2 se borra automáticamente",
+          "is_correct": false,
+          "feedback": "Ninguna línea se borra."
+        },
+        {
+          "id": "d",
+          "text": "Es un error del teclado",
+          "is_correct": false,
+          "feedback": "Es el comportamiento estándar del parser de Python."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor imprimirá la terminal?",
+      "code_snippet": "print(\"Equilibrado\")",
+      "target_type": "predict_output",
+      "expected_answer": "Equilibrado",
+      "hint": "Paréntesis y comillas correctamente emparejados."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor imprimirá la terminal?",
+      "code_snippet": "print(\"Equilibrado\")",
+      "target_type": "predict_output",
+      "expected_answer": "Equilibrado",
+      "hint": "Paréntesis y comillas correctamente emparejados."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s07-l03",
+    "section_slug": "py-m01-s07",
+    "title": "Comillas desiguales o no cerradas (unterminated string)",
+    "position": 3,
+    "theory": {
+      "step1": "Toda cadena de texto debe abrir y cerrar con el mismo tipo de comilla: comilla doble con comilla doble (`\"...\"`) o simple con simple (`'...'`).",
+      "step2": "Si abres con `\"` y cierras con `'`, o si olvidas la comilla final, Python emitirá: `SyntaxError: unterminated string literal`.",
+      "step3": "Revisa siempre que cada comilla de apertura tenga su pareja idéntica de cierre.",
+      "code_snippet": "# print(\"Hola')  <- ¡Comillas dispares!\nprint(\"Hola\")   # <- ¡Ambas dobles!"
+    },
+    "item_1_console": {
+      "prompt": "Corrige las comillas desiguales para que ambas sean dobles en print(\"Comillas parejas\").",
+      "initial_code": "print(\"Comillas parejas')\n",
+      "solution_code": "print(\"Comillas parejas\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Comillas parejas\n",
+          "description": "Debe igualar los delimitadores a comillas dobles"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué significa el error 'SyntaxError: unterminated string literal'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que una cadena de texto se abrió con una comilla pero la línea terminó sin encontrar la comilla de cierre adecuada",
+          "is_correct": true,
+          "feedback": "¡Correcto! 'Unterminated' significa no terminada o sin cerrar."
+        },
+        {
+          "id": "b",
+          "text": "Que la computadora se quedó sin espacio",
+          "is_correct": false,
+          "feedback": "No tiene relación con espacio en disco."
+        },
+        {
+          "id": "c",
+          "text": "Que el texto contiene demasiadas palabras",
+          "is_correct": false,
+          "feedback": "Las cadenas pueden ser tan largas como necesites."
+        },
+        {
+          "id": "d",
+          "text": "Que debes comprar una licencia de Python",
+          "is_correct": false,
+          "feedback": "Python es software libre y 100% gratuito."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cómo evitas el error de comillas no cerradas al escribir código?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Aprovechando el autocompletado de tu editor, que suele insertar la comilla de cierre automáticamente al escribir la de apertura",
+          "is_correct": true,
+          "feedback": "¡Excelente! Los editores modernos te ayudan a mantener parejas de comillas completas."
+        },
+        {
+          "id": "b",
+          "text": "No usando nunca cadenas de texto",
+          "is_correct": false,
+          "feedback": "Las cadenas de texto son indispensables en cualquier programa."
+        },
+        {
+          "id": "c",
+          "text": "Escribiendo comillas triples en todas partes",
+          "is_correct": false,
+          "feedback": "Las comillas simples y dobles son el estándar para textos normales."
+        },
+        {
+          "id": "d",
+          "text": "Cambiando de teclado",
+          "is_correct": false,
+          "feedback": "Es cuestión de atención sintáctica al teclear."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué mostrará la consola?",
+      "code_snippet": "print(\"Texto cerrado\")",
+      "target_type": "predict_output",
+      "expected_answer": "Texto cerrado",
+      "hint": "Ambas comillas son dobles y cierran correctamente."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué mostrará la consola?",
+      "code_snippet": "print(\"Texto cerrado\")",
+      "target_type": "predict_output",
+      "expected_answer": "Texto cerrado",
+      "hint": "Ambas comillas son dobles y cierran correctamente."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s07-l04",
+    "section_slug": "py-m01-s07",
+    "title": "Cómo leer la flecha (^) de error de Python",
+    "position": 4,
+    "theory": {
+      "step1": "Cuando Python detecta un error de sintaxis, imprime en la consola el número de línea y una pequeña flecha hacia arriba `^`.",
+      "step2": "Esa flecha `^` apunta con notable precisión al carácter exacto donde Python notó que algo no encajaba.",
+      "step3": "Aprender a mirar dónde apunta la flecha te permite encontrar y reparar errores en cuestión de segundos.",
+      "code_snippet": "#   File \"app.py\", line 1\n#     print(\"Hola\"\n#                 ^\n# SyntaxError: '(' was never closed"
+    },
+    "item_1_console": {
+      "prompt": "Escribe la instrucción correcta print(\"Detectado y resuelto\") sin ningún fallo.",
+      "initial_code": "# Escribe tu print correcto aquí\n",
+      "solution_code": "print(\"Detectado y resuelto\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Detectado y resuelto\n",
+          "description": "Debe imprimir el texto sin errores de sintaxis"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué indica la flecha (^) que aparece en el mensaje de error de Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Señala el punto exacto de la línea donde el intérprete detectó la anomalía de sintaxis",
+          "is_correct": true,
+          "feedback": "¡Correcto! Es una ayuda visual directa de Python para orientar tu corrección."
+        },
+        {
+          "id": "b",
+          "text": "Indica que la computadora debe reiniciarse",
+          "is_correct": false,
+          "feedback": "No es una orden de reinicio."
+        },
+        {
+          "id": "c",
+          "text": "Significa exponente matemático en el error",
+          "is_correct": false,
+          "feedback": "En los reportes de error de la terminal actúa como puntero visual."
+        },
+        {
+          "id": "d",
+          "text": "Señala la línea que tiene mejor rendimiento",
+          "is_correct": false,
+          "feedback": "Señala la ubicación del problema sintáctico."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué dos datos indispensables debes buscar primero en un reporte de error de Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El número de línea (line X) y el tipo de error (SyntaxError, etc.)",
+          "is_correct": true,
+          "feedback": "¡Exacto! Con el número de línea sabes a dónde ir y con el tipo de error sabes qué buscar."
+        },
+        {
+          "id": "b",
+          "text": "La marca de la pantalla y el modelo de mouse",
+          "is_correct": false,
+          "feedback": "Los periféricos no aparecen en los errores de Python."
+        },
+        {
+          "id": "c",
+          "text": "La hora en que se apagará el equipo",
+          "is_correct": false,
+          "feedback": "El equipo no se apaga."
+        },
+        {
+          "id": "d",
+          "text": "La velocidad del ventilador del procesador",
+          "is_correct": false,
+          "feedback": "Son datos puramente de código fuente."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá este programa perfectamente corregido?",
+      "code_snippet": "print(\"Cero errores\")",
+      "target_type": "predict_output",
+      "expected_answer": "Cero errores",
+      "hint": "La sintaxis es limpia y produce la salida de texto esperada."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá este programa perfectamente corregido?",
+      "code_snippet": "print(\"Cero errores\")",
+      "target_type": "predict_output",
+      "expected_answer": "Cero errores",
+      "hint": "La sintaxis es limpia y produce la salida de texto esperada."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s08-l01",
+    "section_slug": "py-m01-s08",
+    "title": "Repaso: La anatomía de un programa básico",
+    "position": 1,
+    "theory": {
+      "step1": "Has recorrido los pilares de Python: la función print(), textos entre comillas, números sin comillas, operaciones y comentarios.",
+      "step2": "Todo programa en Python es una secuencia ordenada de instrucciones que la máquina procesa sin titubear de arriba hacia abajo.",
+      "step3": "Escribir código limpio, bien indentado y con comentarios oportunos te convertirá en un excelente desarrollador.",
+      "code_snippet": "# Mi primer programa completo\nprint(\"Koda despierta\")\nprint(\"Energía:\", 100)"
+    },
+    "item_1_console": {
+      "prompt": "Escribe un comentario con # Inicio, luego imprime \"Koda listo\" y en la siguiente línea imprime \"Poder:\", 10 usando coma.",
+      "initial_code": "# Escribe tu programa de repaso aquí\n",
+      "solution_code": "# Inicio\nprint(\"Koda listo\")\nprint(\"Poder:\", 10)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Koda listo\nPoder: 10\n",
+          "description": "Debe imprimir Koda listo y Poder: 10"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de las siguientes afirmaciones sobre Python es FALSA?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Los textos entre comillas dobles y comillas simples se comportan de forma diferente y no son compatibles",
+          "is_correct": true,
+          "feedback": "¡Correcto, es falsa! En Python las comillas simples y dobles son 100% equivalentes para delimitar cadenas."
+        },
+        {
+          "id": "b",
+          "text": "print() envía información a la salida estándar o consola",
+          "is_correct": false,
+          "feedback": "Esta afirmación es verdadera."
+        },
+        {
+          "id": "c",
+          "text": "Los comentarios comienzan con el símbolo #",
+          "is_correct": false,
+          "feedback": "Esta afirmación es verdadera."
+        },
+        {
+          "id": "d",
+          "text": "La división con / siempre produce un número decimal (float)",
+          "is_correct": false,
+          "feedback": "Esta afirmación es verdadera."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué ventaja tiene la sintaxis amigable de Python frente a lenguajes tradicionales más complejos?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permite concentrarse en la lógica y resolución de problemas sin perder tiempo en signos innecesarios",
+          "is_correct": true,
+          "feedback": "¡Excelente! Python te permite materializar ideas rápidamente con código legible."
+        },
+        {
+          "id": "b",
+          "text": "Que la computadora gasta menos electricidad",
+          "is_correct": false,
+          "feedback": "No es una ventaja eléctrica."
+        },
+        {
+          "id": "c",
+          "text": "Que no es necesario estudiar para dominarlo",
+          "is_correct": false,
+          "feedback": "La práctica y el estudio siguen siendo fundamentales."
+        },
+        {
+          "id": "d",
+          "text": "Que solo funciona para videojuegos infantiles",
+          "is_correct": false,
+          "feedback": "Python se usa en IA, desarrollo web, ciencia de datos y astrofísica."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá la última línea de este programa?",
+      "code_snippet": "print(\"A\")\n# print(\"B\")\nprint(\"C\")",
+      "target_type": "predict_output",
+      "expected_answer": "C",
+      "hint": "La línea con B está comentada y se ignora."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá la última línea de este programa?",
+      "code_snippet": "print(\"A\")\n# print(\"B\")\nprint(\"C\")",
+      "target_type": "predict_output",
+      "expected_answer": "C",
+      "hint": "La línea con B está comentada y se ignora."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s08-l02",
+    "section_slug": "py-m01-s08",
+    "title": "Mini-desafío: La tarjeta de presentación de Koda",
+    "position": 2,
+    "theory": {
+      "step1": "Es hora de poner en práctica lo aprendido construyendo una tarjeta de presentación formateada para Koda en la consola.",
+      "step2": "Combina bordes decorativos con saltos de línea y etiquetas descriptivas.",
+      "step3": "La práctica deliberada consolida tu memoria muscular al escribir código.",
+      "code_snippet": "print(\"====================\")\nprint(\"Nombre:\", \"Koda\")\nprint(\"Especie:\", \"Zorro\")\nprint(\"====================\")"
+    },
+    "item_1_console": {
+      "prompt": "Imprime la tarjeta de Koda: primera línea con \"=== KODA ===\", segunda línea con \"Rol:\", \"Explorador\" y tercera línea con \"=== FIN ===\".",
+      "initial_code": "# Crea la tarjeta de presentación\n",
+      "solution_code": "print(\"=== KODA ===\")\nprint(\"Rol:\", \"Explorador\")\nprint(\"=== FIN ===\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "=== KODA ===\nRol: Explorador\n=== FIN ===\n",
+          "description": "Debe imprimir la tarjeta formateada en 3 líneas"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "Si quieres mostrar comillas dobles alrededor de una palabra como \"Explorador\" en pantalla, ¿cómo debes delimitar el texto exterior en print()?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Usando comillas simples para delimitar el texto exterior: print('\"Explorador\"')",
+          "is_correct": true,
+          "feedback": "¡Correcto! Las comillas simples exteriores permiten mostrar comillas dobles en el interior sin conflicto."
+        },
+        {
+          "id": "b",
+          "text": "Usando más comillas dobles pegadas: print(\"\"Explorador\"\")",
+          "is_correct": false,
+          "feedback": "Eso genera un SyntaxError por comillas cerradas anticipadamente."
+        },
+        {
+          "id": "c",
+          "text": "No es posible mostrar comillas en Python",
+          "is_correct": false,
+          "feedback": "Es perfectamente posible alternando delimitadores o usando caracteres de escape."
+        },
+        {
+          "id": "d",
+          "text": "Escribiendo la palabra entre paréntesis triples",
+          "is_correct": false,
+          "feedback": "Los paréntesis no reemplazan las comillas."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué carácter especial te permite insertar un salto de línea dentro de un solo texto sin tener que llamar a otro print()?",
+      "options": [
+        {
+          "id": "a",
+          "text": "\\n (barra invertida seguida de la letra n)",
+          "is_correct": true,
+          "feedback": "¡Exacto! \\n es el carácter de escape estándar de salto de línea."
+        },
+        {
+          "id": "b",
+          "text": "/n (barra normal con n)",
+          "is_correct": false,
+          "feedback": "La barra normal /n simplemente se imprime como texto literal."
+        },
+        {
+          "id": "c",
+          "text": "#n",
+          "is_correct": false,
+          "feedback": "# iniciaría un comentario."
+        },
+        {
+          "id": "d",
+          "text": "&jump",
+          "is_correct": false,
+          "feedback": "No existe tal comando en Python."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá este formato?",
+      "code_snippet": "print(\"Koda\", 1)",
+      "target_type": "predict_output",
+      "expected_answer": "Koda 1",
+      "hint": "La coma añade un espacio entre Koda y el número 1."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá este formato?",
+      "code_snippet": "print(\"Koda\", 1)",
+      "target_type": "predict_output",
+      "expected_answer": "Koda 1",
+      "hint": "La coma añade un espacio entre Koda y el número 1."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s08-l03",
+    "section_slug": "py-m01-s08",
+    "title": "Mini-desafío: Calculadora de puntaje básico",
+    "position": 3,
+    "theory": {
+      "step1": "En los videojuegos, el puntaje final suele ser el resultado de multiplicar misiones completadas y sumar bonificaciones.",
+      "step2": "Puedes combinar multiplicaciones y sumas dentro de una sola expresión: `10 * 5 + 20`.",
+      "step3": "Python respeta la jerarquía matemática universal: primero resuelve multiplicaciones y divisiones, y luego sumas y restas.",
+      "code_snippet": "print(\"Score final:\", 10 * 5 + 20)"
+    },
+    "item_1_console": {
+      "prompt": "Imprime la etiqueta \"Puntaje:\" y calcula el puntaje con 5 * 10 + 50 usando print(\"Puntaje:\", 5 * 10 + 50).",
+      "initial_code": "# Calcula el puntaje con precedencia matemática\n",
+      "solution_code": "print(\"Puntaje:\", 5 * 10 + 50)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Puntaje: 100\n",
+          "description": "Debe imprimir Puntaje: 100 tras resolver 5*10=50 + 50 = 100"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál es el resultado de la operación 2 + 3 * 4 en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "14 (multiplica primero 3 * 4 = 12 y luego suma 2)",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python respeta la precedencia de operadores: la multiplicación tiene mayor prioridad que la suma."
+        },
+        {
+          "id": "b",
+          "text": "20 (suma primero 2 + 3 = 5 y luego multiplica por 4)",
+          "is_correct": false,
+          "feedback": "Para que sume primero, requeriría paréntesis: (2 + 3) * 4."
+        },
+        {
+          "id": "c",
+          "text": "24",
+          "is_correct": false,
+          "feedback": "Revisa el cálculo con precedencia estándar."
+        },
+        {
+          "id": "d",
+          "text": "SyntaxError",
+          "is_correct": false,
+          "feedback": "Combinar múltiples operadores aritméticos es totalmente válido."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cómo puedes obligar a Python a realizar una suma antes que una multiplicación?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Encerrando la suma entre paréntesis, por ejemplo: (2 + 3) * 4",
+          "is_correct": true,
+          "feedback": "¡Exacto! Los paréntesis tienen la máxima prioridad en la evaluación de expresiones."
+        },
+        {
+          "id": "b",
+          "text": "Escribiendo la suma con letras mayúsculas",
+          "is_correct": false,
+          "feedback": "Las mayúsculas no aplican a operadores matemáticos."
+        },
+        {
+          "id": "c",
+          "text": "Dejando 10 espacios entre los números",
+          "is_correct": false,
+          "feedback": "Los espacios no cambian el orden de precedencia matemática."
+        },
+        {
+          "id": "d",
+          "text": "No es posible alterar el orden matemático",
+          "is_correct": false,
+          "feedback": "Los paréntesis permiten definir exactamente qué se calcula primero."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor imprimirá este cálculo?",
+      "code_snippet": "print(10 + 2 * 5)",
+      "target_type": "predict_output",
+      "expected_answer": "20",
+      "hint": "Primero 2 * 5 = 10, y luego 10 + 10 = 20."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor imprimirá este cálculo?",
+      "code_snippet": "print(10 + 2 * 5)",
+      "target_type": "predict_output",
+      "expected_answer": "20",
+      "hint": "Primero 2 * 5 = 10, y luego 10 + 10 = 20."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m01-s08-l04",
+    "section_slug": "py-m01-s08",
+    "title": "Gran desafío integrador del Módulo 01",
+    "position": 4,
+    "theory": {
+      "step1": "¡Momento culminante! Has completado con éxito el Módulo 01: Fundamentos de Python.",
+      "step2": "Ahora dominas la emisión de mensajes con print(), secuencias, delimitadores, cálculos aritméticos, comentarios y sangrías limpias.",
+      "step3": "Estás listo para ingresar al Módulo 02 donde aprenderás a guardar información en la memoria usando variables.",
+      "code_snippet": "# Módulo 01 Completado\nprint(\"¡Misión Cumplida!\")\nprint(\"Nivel alcanzado:\", 1)"
+    },
+    "item_1_console": {
+      "prompt": "Escribe un comentario con # Certificado, luego imprime \"¡Felicidades Koda!\" y finalmente imprime \"Puntos ganados:\", 100 usando coma.",
+      "initial_code": "# Completa el gran desafío integrador\n",
+      "solution_code": "# Certificado\nprint(\"¡Felicidades Koda!\")\nprint(\"Puntos ganados:\", 100)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "¡Felicidades Koda!\nPuntos ganados: 100\n",
+          "description": "Debe imprimir las dos líneas de felicitaciones y puntaje"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de las siguientes combinaciones de código es 100% libre de errores y válida en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "# Reporte final\\nprint(\"Koda\", 100)",
+          "is_correct": true,
+          "feedback": "¡Correcto! Comentario bien formado con # y print() con coma entre texto y número."
+        },
+        {
+          "id": "b",
+          "text": "print(\"Koda\" + 100)",
+          "is_correct": false,
+          "feedback": "Provoca un TypeError al intentar sumar str e int con +."
+        },
+        {
+          "id": "c",
+          "text": "print(\"Koda')",
+          "is_correct": false,
+          "feedback": "Provoca un SyntaxError por comillas desiguales."
+        },
+        {
+          "id": "d",
+          "text": " print(\"Koda\") (con espacio al inicio fuera de bloque)",
+          "is_correct": false,
+          "feedback": "Provoca un IndentationError por sangría inesperada."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cuál es el siguiente paso natural en tu aprendizaje tras dominar los fundamentos de print() y operaciones?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Aprender a guardar y manipular datos en la memoria de la computadora mediante variables y tipos de datos",
+          "is_correct": true,
+          "feedback": "¡Exacto! Las variables te permitirán recordar información para usarla más adelante."
+        },
+        {
+          "id": "b",
+          "text": "Construir un cohete espacial inmediatamente",
+          "is_correct": false,
+          "feedback": "El aprendizaje es progresivo paso a paso."
+        },
+        {
+          "id": "c",
+          "text": "Olvidar todo lo aprendido sobre print()",
+          "is_correct": false,
+          "feedback": "print() se utiliza a lo largo de toda tu carrera como desarrollador."
+        },
+        {
+          "id": "d",
+          "text": "Cambiar de computadora",
+          "is_correct": false,
+          "feedback": "Tu entorno actual está listo para continuar."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué mensaje final sellará tu victoria en el Módulo 01?",
+      "code_snippet": "print(\"Koda\", \"Nivel\", 1)",
+      "target_type": "predict_output",
+      "expected_answer": "Koda Nivel 1",
+      "hint": "Las comas separan cada uno de los tres elementos con un espacio."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué mensaje final sellará tu victoria en el Módulo 01?",
+      "code_snippet": "print(\"Koda\", \"Nivel\", 1)",
+      "target_type": "predict_output",
+      "expected_answer": "Koda Nivel 1",
+      "hint": "Las comas separan cada uno de los tres elementos con un espacio."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
     "slug": "py-m02-s01-l01",
     "section_slug": "py-m02-s01",
     "title": "Creando y asignando variables en Python",
@@ -485,6 +3229,1476 @@
       "target_type": "predict_output",
       "expected_answer": "8",
       "hint": "Se evalúa primero la expresión derecha (5 + 3) y el resultado 8 se reasigna a x."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s01-l02",
+    "section_slug": "py-m02-s01",
+    "title": "Reasignación y actualización de variables",
+    "position": 2,
+    "theory": {
+      "step1": "En Python, las variables pueden cambiar de valor cuantas veces sea necesario a lo largo de tu programa.",
+      "step2": "Cuando escribes de nuevo el nombre de una variable con el signo igual = y un nuevo valor, el dato anterior se descarta de inmediato.",
+      "step3": "El intérprete siempre utilizará el valor más reciente asignado a la variable al momento de ejecutar cada instrucción.",
+      "code_snippet": "vidas = 3\nvidas = 5\nprint(vidas)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada energia con valor 100, luego reasígnale el valor 80 en la siguiente línea y finalmente muéstrala con print(energia).",
+      "initial_code": "# Asigna y actualiza energia aquí\n",
+      "solution_code": "energia = 100\nenergia = 80\nprint(energia)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "80\n",
+          "description": "Debe mostrar 80 tras la reasignación"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "Si ejecutas puntos = 10 y luego puntos = 25, ¿qué valor imprimirá print(puntos)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "25",
+          "is_correct": true,
+          "feedback": "¡Correcto! La variable guarda siempre el último valor que le fue asignado."
+        },
+        {
+          "id": "b",
+          "text": "10",
+          "is_correct": false,
+          "feedback": "El valor 10 fue reemplazado por la segunda asignación."
+        },
+        {
+          "id": "c",
+          "text": "35",
+          "is_correct": false,
+          "feedback": "El operador = no suma los valores, los sobrescribe."
+        },
+        {
+          "id": "d",
+          "text": "Error de variable duplicada",
+          "is_correct": false,
+          "feedback": "En Python es completamente válido y normal reasignar una variable existente."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué le ocurre al valor antiguo de una variable cuando le asignas uno nuevo con el operador =?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Es reemplazado en la memoria por el nuevo valor asignado",
+          "is_correct": true,
+          "feedback": "¡Exacto! La variable pasa a apuntar al nuevo dato, perdiendo la referencia al anterior."
+        },
+        {
+          "id": "b",
+          "text": "Se almacena en un archivo de historial automático",
+          "is_correct": false,
+          "feedback": "Python no guarda automáticamente los valores pasados de una variable."
+        },
+        {
+          "id": "c",
+          "text": "Se fusiona con el nuevo valor en una lista",
+          "is_correct": false,
+          "feedback": "La asignación simple solo almacena un único valor a la vez."
+        },
+        {
+          "id": "d",
+          "text": "Bloquea el programa impidiendo futuras asignaciones",
+          "is_correct": false,
+          "feedback": "Las variables son mutables en sus referencias y se pueden actualizar libremente."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué número mostrará en pantalla este programa?",
+      "code_snippet": "monedas = 5\nmonedas = 12\nprint(monedas)",
+      "target_type": "predict_output",
+      "expected_answer": "12",
+      "hint": "La última asignación antes del print sobrescribe los valores previos."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué número mostrará en pantalla este programa?",
+      "code_snippet": "monedas = 5\nmonedas = 12\nprint(monedas)",
+      "target_type": "predict_output",
+      "expected_answer": "12",
+      "hint": "La última asignación antes del print sobrescribe los valores previos."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s01-l03",
+    "section_slug": "py-m02-s01",
+    "title": "Copiando valores entre variables",
+    "position": 3,
+    "theory": {
+      "step1": "Puedes asignar el valor de una variable a otra variable escribiendo su nombre al lado derecho del signo igual =.",
+      "step2": "Al hacer copia = original, Python lee el valor contenido en original y lo asigna también a copia.",
+      "step3": "Si más adelante cambias el valor de original, la variable copia conservará el valor que recibió en su momento.",
+      "code_snippet": "puntos = 50\nrecord = puntos\nprint(record)"
+    },
+    "item_1_console": {
+      "prompt": "Crea la variable origen con el texto \"Koda\", asígnale su valor a una nueva variable destino y muestra destino con print(destino).",
+      "initial_code": "# Copia el valor de origen a destino\n",
+      "solution_code": "origen = \"Koda\"\ndestino = origen\nprint(destino)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Koda\n",
+          "description": "Debe imprimir Koda a través de la variable destino"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "Si ejecutas a = 5, luego b = a, y finalmente a = 10, ¿cuál es el valor final de b?",
+      "options": [
+        {
+          "id": "a",
+          "text": "5",
+          "is_correct": true,
+          "feedback": "¡Correcto! b recibió el valor 5 en el momento de su asignación y no cambia automáticamente al modificar a."
+        },
+        {
+          "id": "b",
+          "text": "10",
+          "is_correct": false,
+          "feedback": "Modificar a después no altera el valor que ya tenía guardado b."
+        },
+        {
+          "id": "c",
+          "text": "15",
+          "is_correct": false,
+          "feedback": "Las variables no se suman solas al reasignar."
+        },
+        {
+          "id": "d",
+          "text": "None",
+          "is_correct": false,
+          "feedback": "b mantiene el número 5 que se le asignó."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "En la instrucción resultado = calculo, ¿qué papel cumple cada lado del operador =?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La variable de la izquierda (resultado) recibe el valor que produce o contiene el lado derecho (calculo)",
+          "is_correct": true,
+          "feedback": "¡Exacto! El flujo de asignación siempre va de derecha a izquierda."
+        },
+        {
+          "id": "b",
+          "text": "El lado izquierdo se copia en el derecho de izquierda a derecha",
+          "is_correct": false,
+          "feedback": "El sentido de asignación en Python es siempre de derecha a izquierda."
+        },
+        {
+          "id": "c",
+          "text": "Ambos lados deben ser idénticos o Python lanza un SyntaxError",
+          "is_correct": false,
+          "feedback": "El signo = es asignación, no comparación matemática."
+        },
+        {
+          "id": "d",
+          "text": "Se intercambian automáticamente los valores de ambas variables",
+          "is_correct": false,
+          "feedback": "Para intercambiar variables se requiere una lógica explícita."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor imprimirá la última línea de este código?",
+      "code_snippet": "n1 = 4\nn2 = n1\nn1 = 9\nprint(n2)",
+      "target_type": "predict_output",
+      "expected_answer": "4",
+      "hint": "La variable n2 guardó el valor de n1 cuando este valía 4."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor imprimirá la última línea de este código?",
+      "code_snippet": "n1 = 4\nn2 = n1\nn1 = 9\nprint(n2)",
+      "target_type": "predict_output",
+      "expected_answer": "4",
+      "hint": "La variable n2 guardó el valor de n1 cuando este valía 4."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s01-l04",
+    "section_slug": "py-m02-s01",
+    "title": "Mostrando múltiples variables en pantalla",
+    "position": 4,
+    "theory": {
+      "step1": "La función print() puede recibir varios datos o variables dentro de sus paréntesis si los separas con comas.",
+      "step2": "Por cada coma que coloques en print(), Python imprime automáticamente un espacio en blanco entre los elementos.",
+      "step3": "Esto te permite combinar etiquetas de texto explicativas con los valores de tus variables en una sola línea limpia.",
+      "code_snippet": "usuario = \"Koda\"\nnivel = 3\nprint(\"Jugador:\", usuario, \"Nivel:\", nivel)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable jugador con el texto \"Alex\" y una variable score con el número 50. Imprímelas juntas usando print(jugador, score).",
+      "initial_code": "# Crea las variables e imprímelas juntas con coma\n",
+      "solution_code": "jugador = \"Alex\"\nscore = 50\nprint(jugador, score)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Alex 50\n",
+          "description": "Debe imprimir Alex y 50 separados por un espacio"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué carácter inserta automáticamente print() entre los elementos separados por comas?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Un espacio en blanco (\" \")",
+          "is_correct": true,
+          "feedback": "¡Correcto! Las comas en print() separan los elementos con un espacio por defecto."
+        },
+        {
+          "id": "b",
+          "text": "Un salto de línea (\\n)",
+          "is_correct": false,
+          "feedback": "El salto de línea solo se añade al final de todo el print()."
+        },
+        {
+          "id": "c",
+          "text": "Un guion medio (-)",
+          "is_correct": false,
+          "feedback": "Python no añade guiones a menos que los especifiques."
+        },
+        {
+          "id": "d",
+          "text": "Ningún carácter, los une completamente pegados",
+          "is_correct": false,
+          "feedback": "Para unirlos pegados sin espacio se requeriría concatenación o cambiar el parámetro sep."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cuál es la diferencia fundamental entre ejecutar print(\"edad\") y ejecutar print(edad)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El primero imprime la palabra literal \"edad\", mientras el segundo busca e imprime el valor de la variable edad",
+          "is_correct": true,
+          "feedback": "¡Excelente! Las comillas indican texto literal, sin comillas es un identificador de variable."
+        },
+        {
+          "id": "b",
+          "text": "Ambos hacen exactamente lo mismo sin ninguna diferencia",
+          "is_correct": false,
+          "feedback": "Las comillas cambian completamente el significado de la instrucción."
+        },
+        {
+          "id": "c",
+          "text": "El segundo genera un error de sintaxis obligatorio",
+          "is_correct": false,
+          "feedback": "print(edad) es perfectamente válido si la variable edad ya fue creada."
+        },
+        {
+          "id": "d",
+          "text": "El primero imprime en mayúsculas y el segundo en minúsculas",
+          "is_correct": false,
+          "feedback": "Las comillas no controlan las mayúsculas de la salida."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá exactamente en consola este código?",
+      "code_snippet": "a = \"Hola\"\nb = \"Koda\"\nprint(a, b)",
+      "target_type": "predict_output",
+      "expected_answer": "Hola Koda",
+      "hint": "Recuerda que la coma entre elementos en print() genera un espacio de separación."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá exactamente en consola este código?",
+      "code_snippet": "a = \"Hola\"\nb = \"Koda\"\nprint(a, b)",
+      "target_type": "predict_output",
+      "expected_answer": "Hola Koda",
+      "hint": "Recuerda que la coma entre elementos en print() genera un espacio de separación."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s02-l01",
+    "section_slug": "py-m02-s02",
+    "title": "Números enteros con int",
+    "position": 1,
+    "theory": {
+      "step1": "En Python, los números enteros pertenecen al tipo int (de integer) y representan números completos sin parte decimal.",
+      "step2": "Pueden ser positivos (como 42), negativos (como -15) o el número cero (0), y se escriben directamente sin comillas.",
+      "step3": "Los enteros son ideales para contar elementos discretos: vidas de un jugador, número de páginas o cantidad de monedas.",
+      "code_snippet": "vidas = 3\npuntos = 150\nprint(vidas)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada nivel con el número entero 12 y muéstrala en consola usando print(nivel).",
+      "initial_code": "# Define nivel como entero e imprímelo\n",
+      "solution_code": "nivel = 12\nprint(nivel)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "12\n",
+          "description": "Debe imprimir el entero 12"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de los siguientes valores es un número entero (int) válido en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "-25",
+          "is_correct": true,
+          "feedback": "¡Correcto! Los números negativos sin decimales ni comillas son del tipo int."
+        },
+        {
+          "id": "b",
+          "text": "\"25\"",
+          "is_correct": false,
+          "feedback": "Al estar entre comillas, Python lo considera texto (str)."
+        },
+        {
+          "id": "c",
+          "text": "25.0",
+          "is_correct": false,
+          "feedback": "Al tener punto decimal, pertenece al tipo float."
+        },
+        {
+          "id": "d",
+          "text": "int 25",
+          "is_correct": false,
+          "feedback": "En Python no se antepone el tipo de dato al declarar."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué sucede si encierras un número entre comillas dobles, por ejemplo: numero = \"100\"?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Python lo almacena como una cadena de texto (str), no como un valor numérico",
+          "is_correct": true,
+          "feedback": "¡Exacto! Las comillas le indican a Python que trate los caracteres como texto literal."
+        },
+        {
+          "id": "b",
+          "text": "Python detecta los dígitos y lo convierte automáticamente a entero",
+          "is_correct": false,
+          "feedback": "Python no hace conversiones implícitas de texto a número."
+        },
+        {
+          "id": "c",
+          "text": "Se produce un error de sintaxis inmediato",
+          "is_correct": false,
+          "feedback": "Es una asignación válida, solo que el tipo resultante es str."
+        },
+        {
+          "id": "d",
+          "text": "El número se multiplica por diez",
+          "is_correct": false,
+          "feedback": "Las comillas delimitan texto, no realizan operaciones matemáticas."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor imprimirá la consola tras ejecutar este código?",
+      "code_snippet": "saldo = -10\nprint(saldo)",
+      "target_type": "predict_output",
+      "expected_answer": "-10",
+      "hint": "Los números enteros negativos conservan el signo menos al mostrarse."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor imprimirá la consola tras ejecutar este código?",
+      "code_snippet": "saldo = -10\nprint(saldo)",
+      "target_type": "predict_output",
+      "expected_answer": "-10",
+      "hint": "Los números enteros negativos conservan el signo menos al mostrarse."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s02-l02",
+    "section_slug": "py-m02-s02",
+    "title": "Números con decimales con float",
+    "position": 2,
+    "theory": {
+      "step1": "Cuando necesitas representar mediciones continuas o fracciones de una unidad, utilizas el tipo float (punto flotante).",
+      "step2": "En Python, el separador decimal es siempre el punto . (punto inglés), nunca la coma ,.",
+      "step3": "Incluso un número como 5.0 es considerado float por el simple hecho de contener la notación de punto decimal.",
+      "code_snippet": "precio = 19.99\ntemperatura = -3.5\nprint(precio)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada altura con el valor flotante 1.75 y muéstrala en consola con print(altura).",
+      "initial_code": "# Declara la variable altura con decimal e imprímela\n",
+      "solution_code": "altura = 1.75\nprint(altura)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "1.75\n",
+          "description": "Debe imprimir el número decimal 1.75"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de las siguientes asignaciones define correctamente un número flotante en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "peso = 68.5",
+          "is_correct": true,
+          "feedback": "¡Correcto! El punto (.) es el delimitador oficial de decimales en Python."
+        },
+        {
+          "id": "b",
+          "text": "peso = 68,5",
+          "is_correct": false,
+          "feedback": "Usar coma (,) crea una tupla de dos valores (68 y 5), no un flotante."
+        },
+        {
+          "id": "c",
+          "text": "peso = 68'5",
+          "is_correct": false,
+          "feedback": "El apóstrofe genera un error de sintaxis en números."
+        },
+        {
+          "id": "d",
+          "text": "float peso = 68.5",
+          "is_correct": false,
+          "feedback": "En Python no se especifica el tipo con palabras reservadas al asignar."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿A qué tipo de dato pertenece el valor 10.0 según las reglas internas de Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "float (punto flotante), debido a la presencia del punto decimal",
+          "is_correct": true,
+          "feedback": "¡Exacto! La presencia del punto le indica al intérprete que maneje el valor con precisión flotante."
+        },
+        {
+          "id": "b",
+          "text": "int (entero), porque su parte decimal es igual a cero",
+          "is_correct": false,
+          "feedback": "El tipo no depende del valor decimal cero, sino de la representación con punto."
+        },
+        {
+          "id": "c",
+          "text": "str (cadena de texto)",
+          "is_correct": false,
+          "feedback": "No tiene comillas delimitadoras."
+        },
+        {
+          "id": "d",
+          "text": "bool (booleano)",
+          "is_correct": false,
+          "feedback": "Los booleanos solo son True o False."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor mostrará la consola al ejecutar esta instrucción?",
+      "code_snippet": "pi = 3.14\nprint(pi)",
+      "target_type": "predict_output",
+      "expected_answer": "3.14",
+      "hint": "La función print() muestra el número flotante respetando su parte decimal con punto."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor mostrará la consola al ejecutar esta instrucción?",
+      "code_snippet": "pi = 3.14\nprint(pi)",
+      "target_type": "predict_output",
+      "expected_answer": "3.14",
+      "hint": "La función print() muestra el número flotante respetando su parte decimal con punto."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s02-l03",
+    "section_slug": "py-m02-s02",
+    "title": "Cadenas de texto con str",
+    "position": 3,
+    "theory": {
+      "step1": "El tipo str (string) almacena cualquier secuencia de caracteres: palabras, frases, números como texto o símbolos.",
+      "step2": "Se delimitan mediante comillas simples '...' o comillas dobles \"...\"; ambas formas son totalmente equivalentes.",
+      "step3": "Una cadena puede contener espacios, acentos, mayúsculas, minúsculas o incluso estar vacía si solo escribes \"\".",
+      "code_snippet": "ciudad = \"Bogotá\"\nlema = 'Código limpio'\nprint(ciudad)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada lema con el texto \"Aprender es crecer\" y muéstrala en pantalla con print(lema).",
+      "initial_code": "# Crea la variable de texto e imprímela\n",
+      "solution_code": "lema = \"Aprender es crecer\"\nprint(lema)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Aprender es crecer\n",
+          "description": "Debe imprimir el texto de la variable lema"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de las siguientes variables guarda un valor de tipo cadena de texto (str)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "codigo = \"2026\"",
+          "is_correct": true,
+          "feedback": "¡Correcto! Aunque contiene dígitos numéricos, al estar entre comillas es un str."
+        },
+        {
+          "id": "b",
+          "text": "codigo = 2026",
+          "is_correct": false,
+          "feedback": "Sin comillas es un número entero (int)."
+        },
+        {
+          "id": "c",
+          "text": "codigo = True",
+          "is_correct": false,
+          "feedback": "True es un valor booleano (bool)."
+        },
+        {
+          "id": "d",
+          "text": "codigo = 20.26",
+          "is_correct": false,
+          "feedback": "Con punto decimal es un número flotante (float)."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Qué representa la expresión texto = \"\" en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Una cadena de texto vacía válida con longitud cero",
+          "is_correct": true,
+          "feedback": "¡Exacto! Las cadenas vacías son muy comunes para inicializar textos antes de llenarlos."
+        },
+        {
+          "id": "b",
+          "text": "Un error de sintaxis porque las comillas requieren texto interior",
+          "is_correct": false,
+          "feedback": "Las cadenas pueden estar vacías sin producir error."
+        },
+        {
+          "id": "c",
+          "text": "Un valor nulo que borra la memoria del programa",
+          "is_correct": false,
+          "feedback": "Una cadena vacía sigue siendo un objeto str real en memoria."
+        },
+        {
+          "id": "d",
+          "text": "Un número cero disfrazado",
+          "is_correct": false,
+          "feedback": "Una cadena vacía es de tipo str, no un número."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá la terminal al ejecutar este código?",
+      "code_snippet": "mascota = \"Zorro Koda\"\nprint(mascota)",
+      "target_type": "predict_output",
+      "expected_answer": "Zorro Koda",
+      "hint": "print() muestra el contenido textual de la variable sin las comillas delimitadoras."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá la terminal al ejecutar este código?",
+      "code_snippet": "mascota = \"Zorro Koda\"\nprint(mascota)",
+      "target_type": "predict_output",
+      "expected_answer": "Zorro Koda",
+      "hint": "print() muestra el contenido textual de la variable sin las comillas delimitadoras."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s02-l04",
+    "section_slug": "py-m02-s02",
+    "title": "Verdad lógica con booleanos (bool)",
+    "position": 4,
+    "theory": {
+      "step1": "El tipo bool (booleano) representa la lógica binaria y solo admite dos valores posibles: True (Verdadero) y False (Falso).",
+      "step2": "En Python, ambos valores deben escribirse obligatoriamente con la primera letra en Mayúscula y sin comillas.",
+      "step3": "Los booleanos son fundamentales para registrar estados en tus programas: si un usuario está conectado, si una partida está activa o si una puerta está abierta.",
+      "code_snippet": "conectado = True\nen_pausa = False\nprint(conectado)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada juego_activo con el valor booleano True y muéstrala en pantalla con print(juego_activo).",
+      "initial_code": "# Asigna el booleano True e imprímelo\n",
+      "solution_code": "juego_activo = True\nprint(juego_activo)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "True\n",
+          "description": "Debe imprimir el valor booleano True"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál es la forma correcta de escribir el valor booleano verdadero en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "True (con T mayúscula y sin comillas)",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python reconoce True como palabra clave con la primera letra mayúscula."
+        },
+        {
+          "id": "b",
+          "text": "true (con minúsculas)",
+          "is_correct": false,
+          "feedback": "En minúsculas Python lo interpreta como el nombre de una variable no definida."
+        },
+        {
+          "id": "c",
+          "text": "\"True\" (entre comillas)",
+          "is_correct": false,
+          "feedback": "Entre comillas es una cadena de texto (str), no un tipo booleano."
+        },
+        {
+          "id": "d",
+          "text": "TRUE (todas mayúsculas)",
+          "is_correct": false,
+          "feedback": "Python es sensible a mayúsculas y no reconoce TRUE como palabra clave booleana."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "Si ejecutas activo = true (con la 't' minúscula), ¿qué respuesta dará Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lanzará un NameError porque busca una variable llamada 'true' que no existe",
+          "is_correct": true,
+          "feedback": "¡Excelente! Al no estar capitalizado, Python no lo reconoce como el valor booleano nativo."
+        },
+        {
+          "id": "b",
+          "text": "Lo corregirá automáticamente a True mayúscula",
+          "is_correct": false,
+          "feedback": "Python no autocorrige palabras clave mal escritas."
+        },
+        {
+          "id": "c",
+          "text": "Lo convertirá en el número cero",
+          "is_correct": false,
+          "feedback": "No hay conversión a número."
+        },
+        {
+          "id": "d",
+          "text": "Creará una variable booleana sin problema alguno",
+          "is_correct": false,
+          "feedback": "Python es estricto con el caso de sus palabras clave."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué salida mostrará la consola al ejecutar este fragmento de código?",
+      "code_snippet": "terminado = False\nprint(terminado)",
+      "target_type": "predict_output",
+      "expected_answer": "False",
+      "hint": "La función print() muestra literalmente la palabra False correspondiente al valor booleano."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué salida mostrará la consola al ejecutar este fragmento de código?",
+      "code_snippet": "terminado = False\nprint(terminado)",
+      "target_type": "predict_output",
+      "expected_answer": "False",
+      "hint": "La función print() muestra literalmente la palabra False correspondiente al valor booleano."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s03-l01",
+    "section_slug": "py-m02-s03",
+    "title": "Inspeccionando tipos con type()",
+    "position": 1,
+    "theory": {
+      "step1": "La función nativa type() te permite inspeccionar y conocer la naturaleza exacta o tipo de dato de cualquier valor o variable.",
+      "step2": "Al colocar una variable dentro de type(), Python te responderá con su clase: <class 'int'>, <class 'float'>, <class 'str'> o <class 'bool'>.",
+      "step3": "Para visualizar esta información en la terminal, envolvemos type() dentro de un print().",
+      "code_snippet": "edad = 25\nprint(type(edad))"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada nombre con el texto \"Koda\" y usa print(type(nombre)) para mostrar en pantalla a qué clase pertenece.",
+      "initial_code": "# Crea nombre e inspecciona su tipo\n",
+      "solution_code": "nombre = \"Koda\"\nprint(type(nombre))",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "<class 'str'>\n",
+          "description": "Debe imprimir <class 'str'>"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál será la salida exacta de ejecutar print(type(3.14)) en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "<class 'float'>",
+          "is_correct": true,
+          "feedback": "¡Correcto! 3.14 tiene punto decimal, por lo que pertenece a la clase float."
+        },
+        {
+          "id": "b",
+          "text": "<class 'int'>",
+          "is_correct": false,
+          "feedback": "int corresponde únicamente a números enteros sin decimales."
+        },
+        {
+          "id": "c",
+          "text": "<class 'number'>",
+          "is_correct": false,
+          "feedback": "En Python no existe una clase nativa llamada 'number'."
+        },
+        {
+          "id": "d",
+          "text": "float",
+          "is_correct": false,
+          "feedback": "type() devuelve la representación formal de clase: <class 'float'>."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué es tan valiosa la función type() en el desarrollo de software?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permite verificar el tipo de dato que contiene una variable antes de realizar operaciones incompatibles",
+          "is_correct": true,
+          "feedback": "¡Exacto! Ayuda a depurar código y asegurar que los datos sean del tipo que esperamos procesar."
+        },
+        {
+          "id": "b",
+          "text": "Sirve para cambiar el color del texto en la terminal",
+          "is_correct": false,
+          "feedback": "type() no modifica la apariencia visual de la consola."
+        },
+        {
+          "id": "c",
+          "text": "Obliga a Python a compilar el programa más rápido",
+          "is_correct": false,
+          "feedback": "Es una función inspectora, no influye en la velocidad de compilación."
+        },
+        {
+          "id": "d",
+          "text": "Borra de la memoria las variables que ya no se usan",
+          "is_correct": false,
+          "feedback": "type() solo consulta el tipo de un objeto, no lo destruye."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué mostrará en la terminal este comando?",
+      "code_snippet": "activo = True\nprint(type(activo))",
+      "target_type": "predict_output",
+      "expected_answer": "<class 'bool'>",
+      "hint": "La variable activo contiene un valor booleano True."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué mostrará en la terminal este comando?",
+      "code_snippet": "activo = True\nprint(type(activo))",
+      "target_type": "predict_output",
+      "expected_answer": "<class 'bool'>",
+      "hint": "La variable activo contiene un valor booleano True."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s03-l02",
+    "section_slug": "py-m02-s03",
+    "title": "Conversión a texto con str()",
+    "position": 2,
+    "theory": {
+      "step1": "El proceso de convertir un dato de un tipo a otro se conoce como conversión de tipos o casting.",
+      "step2": "La función str() toma cualquier dato (un número entero, decimal o booleano) y lo transforma en una cadena de texto.",
+      "step3": "Esto es indispensable cuando quieres concatenar valores numéricos con texto usando el operador suma +.",
+      "code_snippet": "nivel = 10\nmensaje = \"Nivel: \" + str(nivel)\nprint(mensaje)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada puntos con valor 100. Imprime exactamente el texto: \"Puntos: 100\" usando concatenación con + y str(puntos).",
+      "initial_code": "# Convierte puntos a texto y concaténalo con el mensaje\n",
+      "solution_code": "puntos = 100\nprint(\"Puntos: \" + str(puntos))",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Puntos: 100\n",
+          "description": "Debe imprimir Puntos: 100"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué error se genera si intentas unir un texto y un entero con el signo más, como en: \"Score: \" + 50?",
+      "options": [
+        {
+          "id": "a",
+          "text": "TypeError (no se pueden concatenar directamente objetos de tipo str e int)",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python es de tipado fuerte y prohíbe sumar texto con números sin convertir antes."
+        },
+        {
+          "id": "b",
+          "text": "SyntaxError",
+          "is_correct": false,
+          "feedback": "La sintaxis es legal para el parser, pero el error ocurre durante el análisis de tipos."
+        },
+        {
+          "id": "c",
+          "text": "NameError",
+          "is_correct": false,
+          "feedback": "No hay variables inexistentes involucradas."
+        },
+        {
+          "id": "d",
+          "text": "Ninguno, Python convierte el 50 a texto silenciosamente",
+          "is_correct": false,
+          "feedback": "A diferencia de JavaScript, Python jamás convierte tipos implícitamente con +."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "Si ejecutas resultado = str(True), ¿qué valor y tipo almacena la variable resultado?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La cadena de texto \"True\" de tipo str",
+          "is_correct": true,
+          "feedback": "¡Exacto! str() convierte el booleano en una cadena de cuatro letras."
+        },
+        {
+          "id": "b",
+          "text": "El número 1 de tipo int",
+          "is_correct": false,
+          "feedback": "str() genera texto, no enteros."
+        },
+        {
+          "id": "c",
+          "text": "El valor booleano True original sin cambios",
+          "is_correct": false,
+          "feedback": "La función str() produjo una nueva cadena de texto."
+        },
+        {
+          "id": "d",
+          "text": "Un error de conversión",
+          "is_correct": false,
+          "feedback": "Convertir un booleano a str() es totalmente seguro y válido."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué tipo imprimirá este código?",
+      "code_snippet": "x = 42\ntexto = str(x)\nprint(type(texto))",
+      "target_type": "predict_output",
+      "expected_answer": "<class 'str'>",
+      "hint": "La variable texto contiene el resultado de aplicar la función str()."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué tipo imprimirá este código?",
+      "code_snippet": "x = 42\ntexto = str(x)\nprint(type(texto))",
+      "target_type": "predict_output",
+      "expected_answer": "<class 'str'>",
+      "hint": "La variable texto contiene el resultado de aplicar la función str()."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s03-l03",
+    "section_slug": "py-m02-s03",
+    "title": "Conversión a números con int() y float()",
+    "position": 3,
+    "theory": {
+      "step1": "Cuando recibes números en forma de texto (por ejemplo \"25\"), no puedes hacer operaciones aritméticas hasta convertirlos.",
+      "step2": "La función int() convierte una cadena con dígitos enteros en un número int real: int(\"25\") produce 25.",
+      "step3": "La función float() convierte textos con punto decimal en flotantes: float(\"3.5\") produce el número 3.5.",
+      "code_snippet": "texto_num = \"50\"\nnumero = int(texto_num)\nprint(numero + 10)"
+    },
+    "item_1_console": {
+      "prompt": "Convierte la cadena de texto \"40\" a entero usando int(\"40\"), guárdala en una variable llamada total y muestra en pantalla total + 10.",
+      "initial_code": "# Convierte y suma 10\n",
+      "solution_code": "total = int(\"40\")\nprint(total + 10)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "50\n",
+          "description": "Debe imprimir el resultado numérico 50"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál es la diferencia de salida entre ejecutar \"10\" + \"20\" y ejecutar int(\"10\") + int(\"20\")?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El primero produce la concatenación \"1020\" y el segundo realiza la suma numérica 30",
+          "is_correct": true,
+          "feedback": "¡Excelente! Los strings se concatenan, mientras que los ints se suman matemáticamente."
+        },
+        {
+          "id": "b",
+          "text": "Ambos producen el número 30",
+          "is_correct": false,
+          "feedback": "El signo + entre cadenas une los caracteres textualmente."
+        },
+        {
+          "id": "c",
+          "text": "Ambos producen el texto \"1020\"",
+          "is_correct": false,
+          "feedback": "int() convierte a números enteros que se suman."
+        },
+        {
+          "id": "d",
+          "text": "El segundo produce un error de sintaxis",
+          "is_correct": false,
+          "feedback": "Sumar dos llamadas a int() es perfectamente válido."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "Si ejecutas la instrucción int(7.9), ¿qué resultado devuelve Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El entero 7 (trunca la parte decimal descartándola por completo sin redondear)",
+          "is_correct": true,
+          "feedback": "¡Correcto! int() sobre un float simplemente elimina los decimales, no redondea al más cercano."
+        },
+        {
+          "id": "b",
+          "text": "El entero 8 (redondea hacia arriba al entero más próximo)",
+          "is_correct": false,
+          "feedback": "int() nunca redondea, trunca directamente."
+        },
+        {
+          "id": "c",
+          "text": "Un TypeError por recibir un número flotante",
+          "is_correct": false,
+          "feedback": "int() acepta números flotantes y devuelve su parte entera."
+        },
+        {
+          "id": "d",
+          "text": "El número 7.0",
+          "is_correct": false,
+          "feedback": "int() devuelve un objeto de tipo int sin parte decimal."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Cuál será la salida en pantalla de este código?",
+      "code_snippet": "a = int(\"15\")\nb = 5\nprint(a + b)",
+      "target_type": "predict_output",
+      "expected_answer": "20",
+      "hint": "La cadena \"15\" se convierte a número entero y se suma con 5."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Cuál será la salida en pantalla de este código?",
+      "code_snippet": "a = int(\"15\")\nb = 5\nprint(a + b)",
+      "target_type": "predict_output",
+      "expected_answer": "20",
+      "hint": "La cadena \"15\" se convierte a número entero y se suma con 5."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s03-l04",
+    "section_slug": "py-m02-s03",
+    "title": "Prevención de errores de conversión: ValueError",
+    "position": 4,
+    "theory": {
+      "step1": "La función int() requiere que el texto contenga exclusivamente dígitos numéricos válidos en base 10.",
+      "step2": "Si intentas convertir una palabra como int(\"hola\"), Python detendrá la ejecución con un ValueError.",
+      "step3": "Tampoco puedes pasar directamente un texto con punto decimal a int(); para \"3.14\", primero debes usar float(\"3.14\").",
+      "code_snippet": "# int(\"Koda\") -> ValueError!\nvalido = int(\"120\")\nprint(valido)"
+    },
+    "item_1_console": {
+      "prompt": "Convierte el texto decimal \"2.5\" a flotante con float(), guárdalo en la variable factor y muéstralo en pantalla con print(factor).",
+      "initial_code": "# Convierte \"2.5\" a float y muéstralo\n",
+      "solution_code": "factor = float(\"2.5\")\nprint(factor)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "2.5\n",
+          "description": "Debe mostrar el número flotante 2.5"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Qué excepción arroja Python si ejecutas la instrucción int(\"veinte\")?",
+      "options": [
+        {
+          "id": "a",
+          "text": "ValueError: invalid literal for int() with base 10",
+          "is_correct": true,
+          "feedback": "¡Correcto! Python no comprende el significado de palabras numéricas en español o inglés, solo dígitos."
+        },
+        {
+          "id": "b",
+          "text": "TypeError: unsupported operand",
+          "is_correct": false,
+          "feedback": "El argumento es de tipo str (tipo esperado), pero su valor o contenido es inválido."
+        },
+        {
+          "id": "c",
+          "text": "ZeroDivisionError",
+          "is_correct": false,
+          "feedback": "No se está dividiendo por cero."
+        },
+        {
+          "id": "d",
+          "text": "Devuelve 0 sin mostrar ningún error",
+          "is_correct": false,
+          "feedback": "Python falla explícitamente en lugar de inventar un valor por defecto."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué la llamada int(\"4.8\") produce un ValueError en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque la cadena contiene un punto (.), el cual no es un dígito entero válido",
+          "is_correct": true,
+          "feedback": "¡Exacto! Para procesar decimales en texto debes usar primero float(\"4.8\")."
+        },
+        {
+          "id": "b",
+          "text": "Porque int() solo acepta números negativos",
+          "is_correct": false,
+          "feedback": "int() acepta tanto positivos como negativos."
+        },
+        {
+          "id": "c",
+          "text": "Porque 4.8 es mayor que 4",
+          "is_correct": false,
+          "feedback": "La magnitud del número no influye en la validez sintáctica."
+        },
+        {
+          "id": "d",
+          "text": "Porque las cadenas nunca se pueden convertir a números",
+          "is_correct": false,
+          "feedback": "Cadenas como \"4\" sí se convierten a int perfectamente."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá la consola al ejecutar este fragmento?",
+      "code_snippet": "x = float(\"10.5\")\nprint(type(x))",
+      "target_type": "predict_output",
+      "expected_answer": "<class 'float'>",
+      "hint": "La función float() convierte el texto a número decimal flotante."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá la consola al ejecutar este fragmento?",
+      "code_snippet": "x = float(\"10.5\")\nprint(type(x))",
+      "target_type": "predict_output",
+      "expected_answer": "<class 'float'>",
+      "hint": "La función float() convierte el texto a número decimal flotante."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s04-l01",
+    "section_slug": "py-m02-s04",
+    "title": "Reglas obligatorias para nombres de variables",
+    "position": 1,
+    "theory": {
+      "step1": "En Python, los nombres de variables deben comenzar con una letra (a-z, A-Z) o un guion bajo _, nunca con un número.",
+      "step2": "Solo pueden contener caracteres alfanuméricos y guiones bajos; los espacios y símbolos como guiones medios - o signos de puntuación están prohibidos.",
+      "step3": "Además, Python es sensible a mayúsculas y minúsculas: edad, Edad y EDAD son tres variables completamente distintas.",
+      "code_snippet": "jugador_1 = \"Koda\"\n_vidas = 3\nprint(jugador_1)"
+    },
+    "item_1_console": {
+      "prompt": "Declara una variable válida llamada vidas_restantes con el valor 3 e imprímela usando print(vidas_restantes).",
+      "initial_code": "# Declara vidas_restantes e imprímela\n",
+      "solution_code": "vidas_restantes = 3\nprint(vidas_restantes)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "3\n",
+          "description": "Debe imprimir el valor 3 de la variable vidas_restantes"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de los siguientes identificadores es un nombre de variable INVÁLIDO en Python que provocará un SyntaxError?",
+      "options": [
+        {
+          "id": "a",
+          "text": "1er_puesto (comienza con un número)",
+          "is_correct": true,
+          "feedback": "¡Correcto! En Python ningún identificador o nombre de variable puede iniciar con un dígito."
+        },
+        {
+          "id": "b",
+          "text": "primer_puesto",
+          "is_correct": false,
+          "feedback": "Es un nombre 100% válido y recomendado."
+        },
+        {
+          "id": "c",
+          "text": "_puesto",
+          "is_correct": false,
+          "feedback": "Los nombres pueden iniciar con guion bajo."
+        },
+        {
+          "id": "d",
+          "text": "puesto1",
+          "is_correct": false,
+          "feedback": "Los dígitos están permitidos siempre que no estén en la primera posición."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "Si en tu programa tienes monedas = 10 y luego escribes print(Monedas) (con 'M' mayúscula), ¿qué sucederá?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Python lanzará un NameError porque no encuentra una variable llamada 'Monedas'",
+          "is_correct": true,
+          "feedback": "¡Exacto! Python es sensible a mayúsculas (case-sensitive); monedas y Monedas son identidades distintas."
+        },
+        {
+          "id": "b",
+          "text": "Imprimirá 10 normalmente porque ignora las mayúsculas",
+          "is_correct": false,
+          "feedback": "Python no ignora la distinción de mayúsculas."
+        },
+        {
+          "id": "c",
+          "text": "Convertirá el número 10 a mayúsculas",
+          "is_correct": false,
+          "feedback": "Los números no tienen mayúsculas."
+        },
+        {
+          "id": "d",
+          "text": "Reiniciará el programa desde el principio",
+          "is_correct": false,
+          "feedback": "Un NameError detiene la ejecución por error de referencia."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor imprimirá la terminal?",
+      "code_snippet": "total_puntos = 95\nprint(total_puntos)",
+      "target_type": "predict_output",
+      "expected_answer": "95",
+      "hint": "La variable total_puntos fue declarada válidamente y se pasa a print()."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor imprimirá la terminal?",
+      "code_snippet": "total_puntos = 95\nprint(total_puntos)",
+      "target_type": "predict_output",
+      "expected_answer": "95",
+      "hint": "La variable total_puntos fue declarada válidamente y se pasa a print()."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s04-l02",
+    "section_slug": "py-m02-s04",
+    "title": "Convención snake_case y legibilidad (PEP 8)",
+    "position": 2,
+    "theory": {
+      "step1": "PEP 8 es la guía oficial de estilo de Python, y establece que los nombres de variables deben escribirse en minúsculas separadas por guiones bajos: snake_case.",
+      "step2": "Un buen nombre de variable describe claramente el dato que contiene sin necesidad de explicaciones adicionales.",
+      "step3": "Es mucho mejor nombrar una variable tiempo_en_segundos que simplemente t o x.",
+      "code_snippet": "velocidad_maxima = 120\nnombre_usuario = \"Koda\"\nprint(velocidad_maxima)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada puntaje_maximo con el valor 250 siguiendo la convención snake_case y muéstrala en pantalla con print(puntaje_maximo).",
+      "initial_code": "# Crea puntaje_maximo en snake_case e imprímela\n",
+      "solution_code": "puntaje_maximo = 250\nprint(puntaje_maximo)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "250\n",
+          "description": "Debe imprimir el valor 250 de puntaje_maximo"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Cuál de las siguientes opciones sigue estrictamente la convención snake_case recomendada por PEP 8?",
+      "options": [
+        {
+          "id": "a",
+          "text": "distancia_kilometros",
+          "is_correct": true,
+          "feedback": "¡Correcto! Todas las letras en minúsculas y palabras separadas por guion bajo."
+        },
+        {
+          "id": "b",
+          "text": "distanciaKilometros",
+          "is_correct": false,
+          "feedback": "Ese es el estilo camelCase, común en JavaScript o Java, pero desaconsejado para variables en Python."
+        },
+        {
+          "id": "c",
+          "text": "Distancia_Kilometros",
+          "is_correct": false,
+          "feedback": "Las variables no deben llevar mayúsculas en snake_case."
+        },
+        {
+          "id": "d",
+          "text": "distancia-kilometros",
+          "is_correct": false,
+          "feedback": "El guion medio (-) es un operador de resta en Python y genera SyntaxError."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Por qué es desaconsejable nombrar variables con letras individuales como a, b o z en proyectos reales?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Dificulta entender qué información guarda la variable y reduce la legibilidad para otros programadores",
+          "is_correct": true,
+          "feedback": "¡Excelente! El código se lee muchas más veces de las que se escribe; los nombres claros salvan proyectos."
+        },
+        {
+          "id": "b",
+          "text": "Python cobra más memoria por cada letra adicional en el nombre",
+          "is_correct": false,
+          "feedback": "El impacto en memoria del nombre de una variable es despreciable."
+        },
+        {
+          "id": "c",
+          "text": "Python produce un Warning de rendimiento",
+          "is_correct": false,
+          "feedback": "El intérprete lo permite técnicamente, pero es una pésima práctica humana."
+        },
+        {
+          "id": "d",
+          "text": "Las letras sueltas están reservadas por el sistema operativo",
+          "is_correct": false,
+          "feedback": "No están reservadas por el sistema operativo."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué valor mostrará en consola este código?",
+      "code_snippet": "vidas_jugador = 5\nprint(vidas_jugador)",
+      "target_type": "predict_output",
+      "expected_answer": "5",
+      "hint": "La variable vidas_jugador está escrita en snake_case y conserva el valor 5."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué valor mostrará en consola este código?",
+      "code_snippet": "vidas_jugador = 5\nprint(vidas_jugador)",
+      "target_type": "predict_output",
+      "expected_answer": "5",
+      "hint": "La variable vidas_jugador está escrita en snake_case y conserva el valor 5."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s04-l03",
+    "section_slug": "py-m02-s04",
+    "title": "Palabras reservadas de Python (Keywords)",
+    "position": 3,
+    "theory": {
+      "step1": "Python tiene un conjunto de palabras reservadas (keywords) que forman la gramática del lenguaje, como if, for, def, class, True o print.",
+      "step2": "No puedes usar palabras reservadas de la sintaxis como nombres de tus variables, ya que provocarás un SyntaxError.",
+      "step3": "Si necesitas referirte a esos conceptos, agrega una palabra descriptiva complementaria: usa clase_personaje en lugar de la palabra prohibida class.",
+      "code_snippet": "tipo_clase = \"Guerrero\"\nesta_activo = True\nprint(tipo_clase)"
+    },
+    "item_1_console": {
+      "prompt": "Crea una variable llamada nombre_clase con el texto \"Python 3\" y muéstrala en consola con print(nombre_clase).",
+      "initial_code": "# Crea nombre_clase y muéstrala\n",
+      "solution_code": "nombre_clase = \"Python 3\"\nprint(nombre_clase)",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Python 3\n",
+          "description": "Debe imprimir el texto Python 3"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "¿Por qué no puedes escribir la instrucción class = \"Aventurero\" en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque 'class' es una palabra clave reservada del lenguaje para crear clases y genera SyntaxError",
+          "is_correct": true,
+          "feedback": "¡Correcto! Las palabras clave como class, def, return o if no pueden redefinirse como variables."
+        },
+        {
+          "id": "b",
+          "text": "Porque Aventurero debe ir en números",
+          "is_correct": false,
+          "feedback": "El valor asignado es texto válido; el problema radica en el nombre reservado class."
+        },
+        {
+          "id": "c",
+          "text": "Porque class solo puede contener números enteros",
+          "is_correct": false,
+          "feedback": "class no es una variable, es una palabra clave del lenguaje."
+        },
+        {
+          "id": "d",
+          "text": "Porque class ya tiene un valor predeterminado de 0",
+          "is_correct": false,
+          "feedback": "class no es una variable."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "Si asignas por descuido print = \"Hola\", ¿qué consecuencia grave sufrirá tu programa más adelante?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Sobrescribirás la función print(), por lo que ya no podrás imprimir ningún mensaje en pantalla",
+          "is_correct": true,
+          "feedback": "¡Exacto! Aunque print es una función nativa y no una keyword estricta, redefinirla rompe su capacidad de imprimir."
+        },
+        {
+          "id": "b",
+          "text": "La computadora se apagará de forma preventiva",
+          "is_correct": false,
+          "feedback": "No afecta el sistema operativo ni el hardware."
+        },
+        {
+          "id": "c",
+          "text": "Python borrará el archivo fuente",
+          "is_correct": false,
+          "feedback": "No borra archivos."
+        },
+        {
+          "id": "d",
+          "text": "Ninguna, la función print original se duplica automáticamente",
+          "is_correct": false,
+          "feedback": "El identificador queda sobreescrito por la cadena 'Hola'."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué mostrará la consola?",
+      "code_snippet": "palabra_clave = \"segura\"\nprint(palabra_clave)",
+      "target_type": "predict_output",
+      "expected_answer": "segura",
+      "hint": "palabra_clave es un nombre descriptivo totalmente válido en Python."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué mostrará la consola?",
+      "code_snippet": "palabra_clave = \"segura\"\nprint(palabra_clave)",
+      "target_type": "predict_output",
+      "expected_answer": "segura",
+      "hint": "palabra_clave es un nombre descriptivo totalmente válido en Python."
+    },
+    "xp_reward": 20,
+    "is_active": true
+  },
+  {
+    "slug": "py-m02-s04-l04",
+    "section_slug": "py-m02-s04",
+    "title": "Desafío de consolidación del Módulo 02",
+    "position": 4,
+    "theory": {
+      "step1": "¡Felicitaciones! Has dominado la memoria de Python: variables, reasignación, tipos primitivos (int, float, str, bool) y conversiones con type(), str() e int().",
+      "step2": "Recuerda siempre aplicar buenas prácticas: nombres en snake_case, respetar las mayúsculas/minúsculas y evitar palabras reservadas.",
+      "step3": "En este desafío final pondrás a prueba todo lo aprendido integrando variables de múltiples tipos en una sola salida interactiva.",
+      "code_snippet": "mascota = \"Koda\"\nnivel = 2\nes_feliz = True\nprint(\"Explorador:\", mascota, \"Nivel:\", nivel)"
+    },
+    "item_1_console": {
+      "prompt": "Declara mascota = \"Koda\" y edad = 3. Luego imprime en una sola línea exactamente: Koda tiene 3 años (puedes usar print(mascota, \"tiene\", edad, \"años\")).",
+      "initial_code": "# Declara las variables e imprime la frase completa\n",
+      "solution_code": "mascota = \"Koda\"\nedad = 3\nprint(mascota, \"tiene\", edad, \"años\")",
+      "test_cases": [
+        {
+          "input": "",
+          "expected_output": "Koda tiene 3 años\n",
+          "description": "Debe imprimir exactamente: Koda tiene 3 años"
+        }
+      ]
+    },
+    "item_2_quiz": {
+      "prompt": "Dada la variable dato = \"50\", ¿cuál es la forma correcta de sumarle 10 para obtener el número 60?",
+      "options": [
+        {
+          "id": "a",
+          "text": "int(dato) + 10",
+          "is_correct": true,
+          "feedback": "¡Correcto! Se convierte el texto '50' a número entero 50 y se le suman 10."
+        },
+        {
+          "id": "b",
+          "text": "dato + 10",
+          "is_correct": false,
+          "feedback": "Esto arroja TypeError porque no se puede sumar str e int directamente."
+        },
+        {
+          "id": "c",
+          "text": "str(dato) + 10",
+          "is_correct": false,
+          "feedback": "dato ya era un str, y sumar 10 causará TypeError."
+        },
+        {
+          "id": "d",
+          "text": "dato + \"10\"",
+          "is_correct": false,
+          "feedback": "Esto produciría la cadena '5010' en lugar del número 60."
+        }
+      ]
+    },
+    "item_3_theory": {
+      "prompt": "¿Cuál de las siguientes afirmaciones sobre las variables en Python es 100% CORRECTA?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Python determina el tipo de una variable automáticamente en tiempo de ejecución según el valor que se le asigne (tipado dinámico)",
+          "is_correct": true,
+          "feedback": "¡Excelente! Python es de tipado dinámico y fuerte: infiere el tipo automáticamente, pero exige conversiones explícitas para operar tipos incompatibles."
+        },
+        {
+          "id": "b",
+          "text": "Es obligatorio declarar el tipo de dato antes del nombre de la variable (como int x = 5)",
+          "is_correct": false,
+          "feedback": "En Python no se declaran los tipos con palabras clave antes del nombre."
+        },
+        {
+          "id": "c",
+          "text": "Una variable nunca puede cambiar de tipo ni de valor después de ser creada",
+          "is_correct": false,
+          "feedback": "Las variables en Python pueden reasignarse a cualquier otro valor o tipo."
+        },
+        {
+          "id": "d",
+          "text": "Las variables solo pueden guardar números y no cadenas de texto",
+          "is_correct": false,
+          "feedback": "Las variables guardan cualquier tipo de objeto en Python."
+        }
+      ]
+    },
+    "item_4_prediction": {
+      "prompt": "¿Qué imprimirá finalmente la última instrucción de este código?",
+      "code_snippet": "x = \"10\"\ny = int(x) * 2\nprint(y)",
+      "target_type": "predict_output",
+      "expected_answer": "20",
+      "hint": "La cadena \"10\" se transforma en el entero 10, que al multiplicarse por 2 da 20."
+    },
+    "item_3_prediction": {
+      "prompt": "¿Qué imprimirá finalmente la última instrucción de este código?",
+      "code_snippet": "x = \"10\"\ny = int(x) * 2\nprint(y)",
+      "target_type": "predict_output",
+      "expected_answer": "20",
+      "hint": "La cadena \"10\" se transforma en el entero 10, que al multiplicarse por 2 da 20."
     },
     "xp_reward": 20,
     "is_active": true
