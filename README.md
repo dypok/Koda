@@ -5,9 +5,9 @@
 [![Python Version](https://img.shields.io/badge/Python-3.12-blue.svg?logo=python&logoColor=white)](https://www.python.org)
 [![Módulo 01](https://img.shields.io/badge/Módulo%2001-Fundamentos-success.svg)](content/languages/python/modules/01_fundamentos/module.json)
 [![Ruta Oficial](https://img.shields.io/badge/Ruta-12%20Módulos-blueviolet.svg)](content/languages/python/manifest.json)
-[![Arquitectura](https://img.shields.io/badge/Arquitectura-Monolito%20Modular%20(Next.js%20%2B%20NestJS)-indigo.svg)](docs/11_SYSTEM_ARCHITECTURE.md)
-[![Base de Datos](https://img.shields.io/badge/Database-Supabase%20(PostgreSQL%2015)-emerald.svg)](docs/12_DATABASE_DESIGN.md)
-[![Documentación](https://img.shields.io/badge/Docs-Hub%20de%20Especificaciones-purple.svg)](docs/README.md)
+[![Arquitectura](https://img.shields.io/badge/Arquitectura-Monolito%20Modular%20(Next.js%20%2B%20NestJS)-indigo.svg)](documentation/04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md)
+[![Base de Datos](https://img.shields.io/badge/Database-H%C3%ADbrida%20(Supabase%20%2B%20MongoDB)-emerald.svg)](documentation/04-arquitectura-backend/12_DATABASE_DESIGN.md)
+[![Documentación](https://img.shields.io/badge/Docs-Hub%20de%20Especificaciones-purple.svg)](documentation/README.md)
 [![Licencia](https://img.shields.io/badge/Licencia-MIT-green.svg)](LICENSE)
 
 > [!IMPORTANT]
@@ -128,17 +128,17 @@ DuolingoProgramacion/
 │           ├── config/                 # Umbrales, XP y composiciones de examen
 │           └── modules/
 │               └── 01_fundamentos/     # Lecciones atómicas con print, variables y tipos
-├── docs/                               # Hub de Documentación y Especificaciones
+├── documentation/                      # Hub de Documentación y Especificaciones
 │   ├── README.md                       # Índice maestro y mapa de lectura por rol
-│   ├── adr/                            # Registro de decisiones de arquitectura (ADR-001..006)
-│   ├── 01_PROJECT_OVERVIEW.md          # Visión general y filosofía pedagógica
-│   ├── 11_SYSTEM_ARCHITECTURE.md       # Arquitectura técnica, motores y stack oficial
-│   ├── 12_DATABASE_DESIGN.md           # Modelo relacional Supabase v2.0.0
-│   ├── 13_API_SPECIFICATION.md         # Especificación REST v2.0.0 (44 endpoints)
-│   ├── 14_LEARNING_SYSTEM.md           # Máquinas de estado y lógica pedagógica
-│   ├── 16_GAMIFICATION.md              # Economía de XP, rachas y estrellas
-│   ├── 17_CERTIFICATION.md             # Motor de certificación y Google Drive
-│   └── 27_UI_UX_SPECIFICATION.md       # Sistema de diseño de interfaz
+│   ├── adr/                            # Registro de decisiones de arquitectura (ADR-001..016)
+│   ├── UserHistories/                  # Backlog Jira-Ready y Definición de Terminado (DoD)
+│   ├── changelog/                      # Bitácora diaria por autor y hora
+│   ├── done/                           # Repositorio de evidencias y entregables
+│   ├── 01-producto-negocio/            # Visión general, modelo y roadmap
+│   ├── 02-requisitos-ux/               # RF, RNF, historias y sistema de diseño
+│   ├── 03-pedagogia-contenido/         # Pedagogía atómica, scoring y guías
+│   ├── 04-arquitectura-backend/        # Arquitectura modular, base de datos y API spec
+│   └── 05-devops-seguridad/            # Seguridad, testing, despliegue y analítica
 ├── CONTRIBUTING.md                     # Guía de contribución y estándares de código
 ├── CHANGELOG.md                        # Bitácora estricta de cambios (America/Bogota)
 ├── LICENSE                             # Licencia de código abierto MIT
@@ -184,7 +184,7 @@ pnpm dev:api    # Inicia NestJS en http://localhost:4000
 
 ¡Las contribuciones son bienvenidas! Consulta [`CONTRIBUTING.md`](CONTRIBUTING.md) para conocer las pautas de estilo, convención de commits y el flujo de trabajo con ramas.
 
-Para proponer nuevo contenido pedagógico, consulta la guía de autoría en [`docs/24_CONTENT_AUTHORING_GUIDE.md`](docs/24_CONTENT_AUTHORING_GUIDE.md).
+Para proponer nuevo contenido pedagógico, consulta la guía de autoría en [`documentation/03-pedagogia-contenido/24_CONTENT_AUTHORING_GUIDE.md`](documentation/03-pedagogia-contenido/24_CONTENT_AUTHORING_GUIDE.md).
 
 ---
 

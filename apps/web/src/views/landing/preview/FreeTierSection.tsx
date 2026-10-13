@@ -1,29 +1,32 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Highlight } from '@/components/ui/highlight';
 
 export const FreeTierSection: React.FC = () => {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section
       id="propuesta-valor"
-      className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0a0d18] to-slate-950"
+      className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950"
     >
-      <div className="absolute top-1/2 right-6 lg:right-24 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.14)_0%,rgba(245,158,11,0.04)_45%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
-      <div className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-amber-400/40 to-transparent pointer-events-none" />
+      <div aria-hidden="true" data-glow="12" className="absolute top-1/2 right-6 lg:right-24 -translate-y-1/2 w-[520px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+      <div aria-hidden="true" className="absolute top-0 inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-amber-400/40 to-transparent pointer-events-none" />
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           <motion.div
-            initial={{ opacity: 0, x: -35 }}
+            initial={reduceMotion ? false : { opacity: 0, x: -35 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: false, margin: '-40px' }}
+            viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-7 space-y-5 text-left"
           >
-            <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1]">
+            <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] text-balance">
               Aprende{' '}
-              <span className="bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
+              <Highlight>
                 100% gratis
-              </span>{' '}
+              </Highlight>{' '}
               con los mejores resultados
             </h2>
 
@@ -33,15 +36,15 @@ export const FreeTierSection: React.FC = () => {
           </motion.div>
 
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.9, y: 20 }}
             whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: false, margin: '-40px' }}
+            viewport={{ once: true, margin: '-40px' }}
             transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
             className="lg:col-span-5 flex flex-col items-start lg:items-end justify-center text-left lg:text-right space-y-3 w-full"
           >
             <div className="relative">
-              <div className="absolute -inset-6 bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.2)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
-              <span className="relative font-display text-8xl sm:text-9xl font-black bg-gradient-to-br from-orange-400 via-amber-300 to-orange-500 bg-clip-text text-transparent leading-none select-none tracking-tight">
+              <div aria-hidden="true" className="absolute -inset-6 bg-[radial-gradient(ellipse_at_center,rgba(249,115,22,0.15)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+              <span className="relative font-display text-8xl sm:text-9xl font-black text-amber-400 leading-none select-none tracking-tight">
                 $0
               </span>
             </div>

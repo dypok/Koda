@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  IconHelp,
-  IconSchool,
-  IconAward,
-  IconUsers,
-  IconFileText,
-  IconShieldLock,
-  IconUserCheck,
-  IconArticle,
-} from '@tabler/icons-react';
+import { Question, GraduationCap, Medal, Users, FileText, ShieldCheck, UserCheck, Newspaper } from '@phosphor-icons/react';
 
 export type InfoModalTab =
   | 'faqs'
@@ -35,24 +26,24 @@ export const MODAL_CATEGORIES: ModalCategory[] = [
   {
     name: 'Ayuda y Soporte',
     items: [
-      { id: 'faqs', label: 'Preguntas Frecuentes', icon: IconHelp },
-      { id: 'schools', label: 'Koda para Escuelas', icon: IconSchool },
-      { id: 'tests', label: 'Certificación & Evaluaciones', icon: IconAward },
+      { id: 'faqs', label: 'Preguntas Frecuentes', icon: Question },
+      { id: 'schools', label: 'Koda para Escuelas', icon: GraduationCap },
+      { id: 'tests', label: 'Certificación & Evaluaciones', icon: Medal },
     ],
   },
   {
     name: 'Privacidad y Términos',
     items: [
-      { id: 'guidelines', label: 'Normas de la Comunidad', icon: IconUsers },
-      { id: 'terms', label: 'Términos de Servicio', icon: IconFileText },
-      { id: 'privacy', label: 'Política de Privacidad', icon: IconShieldLock },
-      { id: 'data-rights', label: 'Gestión de Datos', icon: IconUserCheck },
+      { id: 'guidelines', label: 'Normas de la Comunidad', icon: Users },
+      { id: 'terms', label: 'Términos de Servicio', icon: FileText },
+      { id: 'privacy', label: 'Política de Privacidad', icon: ShieldCheck },
+      { id: 'data-rights', label: 'Gestión de Datos', icon: UserCheck },
     ],
   },
   {
     name: 'Comunidad & Social',
     items: [
-      { id: 'social', label: 'Redes Sociales & Blog', icon: IconArticle },
+      { id: 'social', label: 'Redes Sociales & Blog', icon: Newspaper },
     ],
   },
 ];

@@ -12,19 +12,34 @@ async function bootstrap() {
     helmet({
       contentSecurityPolicy: false,
       crossOriginEmbedderPolicy: false,
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
     }),
   );
 
   // 2. Prefijo global para la API REST v1
   app.setGlobalPrefix('api/v1');
 
-  // 3. CORS seguro: orígenes explícitos sin comodín inseguro
+  // 3. CORS seguro: orígenes explícitos y soporte de desarrollo local
   const allowedOrigins = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
     : ['http://localhost:3000', 'http://127.0.0.1:3000'];
 
   app.enableCors({
-    origin: allowedOrigins,
+    origin: (origin, callback) => {
+      // Permitir solicitudes sin origin (como cURL, herramientas internas o SSR)
+      if (!origin) return callback(null, true);
+      // Permitir cualquier puerto en localhost o 127.0.0.1 durante desarrollo
+      if (
+        process.env.NODE_ENV !== 'production' &&
+        /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+      ) {
+        return callback(null, true);
+      }
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     credentials: true,
     allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
@@ -44,14 +59,28 @@ async function bootstrap() {
   const isProduction = process.env.NODE_ENV === 'production';
   if (!isProduction) {
     const config = new DocumentBuilder()
-      .setTitle('Koda API 🦊')
-      .setDescription('API REST v2.0 para la plataforma de aprendizaje gamificado Koda')
+      .setTitle('Koda API 🦊 (REST v2.0 - Superficie Transaccional)')
+      .setDescription(
+        'Especificación OpenAPI 3.0 para la plataforma Koda. ' +
+        'Conforme a la Arquitectura Híbrida formalizada en ADR-012, la superficie REST (/api/v1) está reservada exclusivamente para ' +
+        'estándares HTTP nativos y operaciones pesadas: Autenticación con Supabase Auth (/auth), Gestión de Perfiles y PII Legal (/users), ' +
+        'Evaluación Diagnóstica Inicial (/learning/diagnostic), Certificaciones y Streaming PDF (/certificates), y Monitoreo de Infraestructura. ' +
+        'Las consultas interactivas de currículo, grafo DAG de roadmap y mutaciones formativas se consumen a través de GraphQL (/graphql).'
+      )
       .setVersion('2.0.0')
-      .addBearerAuth()
+      .addBearerAuth({
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'Authorization',
+        description: 'Ingresa el Access Token JWT emitido por Supabase Auth',
+        in: 'header',
+      })
       .build();
 
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup('api/docs', app, document);
+    SwaggerModule.setup('docs', app, document);
   }
 
   const port = process.env.PORT || 4000;

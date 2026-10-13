@@ -48,12 +48,12 @@
 - Paquete compartido `@koda/types` implementado en monorepo con contratos TypeScript compilados a `dist/`.
 
 **Subtasks:**
-- [ ] [DOCS] Redactar `11_SYSTEM_ARCHITECTURE.md` con diagramas Mermaid de los 9 motores (Learning, Evaluation, Gamification, Certification, etc.).
-- [ ] [DOCS] Diseñar el modelo ER en `12_DATABASE_DESIGN.md` con soporte para estrellas (1–3⭐), candados secuenciales, cuaderno de errores y triggers de integridad.
-- [ ] [DOCS] Escribir la especificación completa OpenAPI 3.0.3 en `13_API_SPECIFICATION.md` con DTOs de Request/Response y códigos de error por dominio.
-- [ ] [BACKEND] Configurar NestJS con prefijo `/api/v1` y documentación viva Swagger en `/api/docs`.
-- [ ] [TYPES] Crear paquete `packages/types` con las interfaces maestras (`User`, `RoadmapResponse`, `LessonDetail`, `UserStreak`, `Certificate`).
-- [ ] [TYPES] Compilar `@koda/types` exitosamente con TypeScript `tsc`.
+- [x] [DOCS] Redactar `11_SYSTEM_ARCHITECTURE.md` con diagramas Mermaid de los 9 motores (Learning, Evaluation, Gamification, Certification, etc.).
+- [x] [DOCS] Diseñar el modelo ER en `12_DATABASE_DESIGN.md` con soporte para estrellas (1–3⭐), candados secuenciales, cuaderno de errores y triggers de integridad.
+- [x] [DOCS] Escribir la especificación completa OpenAPI 3.0.3 en `13_API_SPECIFICATION.md` con DTOs de Request/Response y códigos de error por dominio.
+- [x] [BACKEND] Configurar NestJS con prefijo `/api/v1` y documentación viva Swagger en `/api/docs`.
+- [x] [TYPES] Crear paquete `packages/types` con las interfaces maestras (`User`, `RoadmapResponse`, `LessonDetail`, `UserStreak`, `Certificate`).
+- [x] [TYPES] Compilar `@koda/types` exitosamente con TypeScript `tsc`.
 
 **DoD adicional para esta US:**
 - Swagger operativo en `http://localhost:4000/api/docs` y `@koda/types` consumible mediante `workspace:*` en `apps/api` y `apps/web`.
@@ -70,20 +70,23 @@
 
 **Criterios de aceptación:**
 - Directorio `docs/adr/` configurado con plantilla oficial y ciclo de vida de ADRs formalizado (`RNF-019`).
-- Symlinks de compatibilidad `09-decisions/` $\rightarrow$ `docs/adr` operativos.
-- Los 6 ADRs fundacionales redactados, justificados y aprobados.
+- Los 9 ADRs oficiales redactados, justificados y aprobados (ADR-001 al ADR-009).
+- Estructura modular de `docs/` organizada en 5 subdirectorios funcionales con sus índices locales `README.md`.
 - `docs/README.md` creado como hub interactivo clasificado en 5 dominios y rutas de lectura sugeridas por rol.
 
 **Subtasks:**
-- [ ] [DOCS] Crear `docs/adr/README.md` con guía de ciclo de vida (Propuesto $\rightarrow$ Aprobado $\rightarrow$ Reemplazado / Rechazado).
-- [ ] [DOCS] Redactar `ADR-001`: Monorepo con PNPM Workspaces (`apps/web`, `apps/api`, `packages/types`).
-- [ ] [DOCS] Redactar `ADR-002`: Persistencia Relacional con Supabase (PostgreSQL 15+).
-- [ ] [DOCS] Redactar `ADR-003`: Emisión de Certificados en Backend y Almacenamiento en Google Drive API v3.
-- [ ] [DOCS] Redactar `ADR-004`: Renderizado WebGL de Mascota Koda 🦊 y Confeti con PixiJS v7.
-- [ ] [DOCS] Redactar `ADR-005`: Adopción de Python 3.12 como Lenguaje Oficial de Lanzamiento del MVP.
-- [ ] [DOCS] Redactar `ADR-006`: Motor de Ejecución de Código Híbrido (`ICodeRunner`).
-- [ ] [DEVOPS] Crear symlinks `09-decisions` y `docs/09-decisions` apuntando a `docs/adr/`.
-- [ ] [DOCS] Crear `docs/README.md` con mapa conceptual Mermaid, catálogo maestro de 27 documentos y rutas por rol.
+- [x] [DOCS] Crear `docs/adr/README.md` con guía de ciclo de vida (Propuesto $\rightarrow$ Aprobado $\rightarrow$ Reemplazado / Rechazado).
+- [x] [DOCS] Redactar `ADR-001`: Monorepo con PNPM Workspaces (`apps/web`, `apps/api`, `packages/types`).
+- [x] [DOCS] Redactar `ADR-002`: Persistencia Relacional con Supabase (PostgreSQL 15+).
+- [x] [DOCS] Redactar `ADR-003`: Emisión de Certificados en Backend y Almacenamiento en Google Drive API v3.
+- [x] [DOCS] Redactar `ADR-004`: Renderizado WebGL de Mascota Koda 🦊 y Confeti con PixiJS v7.
+- [x] [DOCS] Redactar `ADR-005`: Adopción de Python 3.12 como Lenguaje Oficial de Lanzamiento del MVP.
+- [x] [DOCS] Redactar `ADR-006`: Motor de Ejecución de Código Híbrido (`ICodeRunner`).
+- [x] [DOCS] Redactar `ADR-007`: Arquitectura de Grafo DAG por Ramas de Carrera y Prerrequisitos.
+- [x] [DOCS] Redactar `ADR-008`: Adopción Definitiva de NestJS como Motor de Backend.
+- [x] [DOCS] Redactar `ADR-009`: Persistencia Híbrida Políglota (MongoDB Contenido + Supabase Transacciones).
+- [x] [DOCS] Organizar `docs/` en 5 subdirectorios (`01-producto-negocio`, `02-requisitos-ux`, `03-pedagogia-contenido`, `04-arquitectura-backend`, `05-devops-seguridad`) con índices `README.md`.
+- [x] [DOCS] Crear `docs/README.md` con mapa conceptual Mermaid, catálogo maestro de 27 documentos y rutas por rol.
 
 **DoD adicional para esta US:**
 - Todas las 33 referencias rotas de archivos (`12_DATA_MODEL`, `13_API_SPEC`, `27_UI_DESIGN`, `24_QUESTION_SYSTEM`) subsanadas en el 100% de la documentación.

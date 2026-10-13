@@ -1,0 +1,61 @@
+{
+  "id": "py_mod_08",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "course_id": "c_py_core_01",
+  "code": "PY_MOD_08",
+  "slug": "strings-avanzados",
+  "title": "Manipulación de Cadenas de Texto",
+  "objective": "Transformar cadenas con métodos útiles (.lower, .upper, .strip, .replace, .split), formateo moderno con f-strings y rebanado (slicing).",
+  "description": "Domina el procesamiento de texto en Python utilizando los métodos y técnicas más eficientes de la biblioteca estándar.",
+  "position": 8,
+  "status": "published",
+  "content_version": 1,
+  "prerequisite_module_id": "py_mod_07",
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 150
+  },
+  "sections": [
+    {
+      "id": "sec_py_08_01",
+      "code": "S01",
+      "title": "Métodos de Cadena y f-strings",
+      "slug": "metodos-y-fstrings",
+      "position": 1,
+      "type": "theory",
+      "status": "published",
+      "content_version": 1,
+      "estimated_minutes": 10,
+      "xp_on_complete": 10,
+      "lessons": [
+        {
+          "id": "les_py_08_01",
+          "code": "L01",
+          "title": "Interpolación moderna con f-strings",
+          "position": 1,
+          "theory_markdown": "Las `f-strings` permiten insertar variables y expresiones directamente dentro de un texto anteponiendo una letra `f` antes de las comillas y usando llaves `{}`.",
+          "code_example": "usuario = \"Koda\"\nnivel = 10\nprint(f\"El zorro {usuario} tiene nivel {nivel}\")",
+          "expected_output": "El zorro Koda tiene nivel 10",
+          "tip_markdown": "Las f-strings son la forma más rápida y legible de formatear texto en Python moderno.",
+          "exercise": {
+            "id": "ex_py_08_01",
+            "type": "single_choice",
+            "prompt": "¿Qué prefijo debe colocarse antes de las comillas para crear una f-string?",
+            "hint": "Es la letra inicial de 'format'.",
+            "options": [
+              { "id": "opt_a", "text": "f o F" },
+              { "id": "opt_b", "text": "$" },
+              { "id": "opt_c", "text": "format:" },
+              { "id": "opt_d", "text": "str" }
+            ],
+            "correct_option_id": "opt_a",
+            "explanation": "¡Correcto! Una letra `f` o `F` justo antes de abrir las comillas indica a Python que procese las llaves como código."
+          }
+        }
+      ]
+    }
+  ]
+}

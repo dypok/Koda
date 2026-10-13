@@ -51,6 +51,23 @@ export interface ProgrammingLanguage {
   icon_url: string;
   color: string;
   total_modules: number;
+  status?: 'available' | 'coming_soon' | 'hidden';
+  is_active: boolean;
+  courses?: Course[];
+}
+
+export interface Course {
+  id: string;
+  language_slug?: string;
+  language_id?: string;
+  code: string;
+  slug: string;
+  title: string;
+  description?: string;
+  level: 'all_levels' | 'beginner' | 'intermediate' | 'advanced';
+  total_modules: number;
+  status?: 'published' | 'coming_soon' | 'draft' | 'archived';
+  sort_order?: number;
   is_active: boolean;
 }
 
@@ -77,6 +94,7 @@ export interface SectionStars {
 
 export interface RoadmapModule {
   id: string;
+  course_id?: string;
   code: string;
   title: string;
   description: string;
@@ -102,6 +120,7 @@ export interface RoadmapSection {
 
 export interface RoadmapResponse {
   language: ProgrammingLanguage;
+  course?: Course;
   overall_progress_percentage: number;
   total_stars_earned: number;
   max_possible_stars: number;
@@ -109,11 +128,134 @@ export interface RoadmapResponse {
   modules: RoadmapModule[];
 }
 
+// ------------------------------------------
+// Modelos de Grafo DAG Multi-Rama (ADR-007, ADR-011)
+// ------------------------------------------
+
+export type CareerBranchType = 'frontend' | 'backend' | 'devops' | 'python' | 'data-analytics';
+
+export interface CareerBranch {
+  id: CareerBranchType;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  progress_percentage: number;
+  completed_courses: number;
+  total_courses: number;
+  stars_earned: number;
+  is_active: boolean;
+}
+
+export type GraphNodeVariant =
+  | 'active'
+  | 'locked'
+  | 'unlocked'
+  | 'completed'
+  | 'branch'
+  | 'boss'
+  | 'bonus';
+
+export type GraphNodeIconType =
+  | 'brackets'
+  | 'code'
+  | 'flow'
+  | 'matrix'
+  | 'atom'
+  | 'lock'
+  | 'skull'
+  | 'chest'
+  | 'server'
+  | 'database';
+
+export interface NodeTopology {
+  tier: number; // Columna horizontal progresiva (1, 2, 3...)
+  lane: number; // 0: centro, 1: superior, -1: inferior
+  lane_name?: string;
+}
+
+export type AnimationPresetKey =
+  | 'laser_flow_fast'
+  | 'laser_flow_normal'
+  | 'laser_standby_dashed'
+  | 'sonar_radar_pulse'
+  | 'boss_threat_pulse'
+  | 'orbital_satellite';
+
+export interface NodeFxConfig {
+  preset: AnimationPresetKey;
+  color?: string;
+  glow_rgba?: string;
+  speed_multiplier?: number;
+}
+
+export interface EdgeFxConfig {
+  preset: AnimationPresetKey;
+  laser_color?: string;
+  trail_color?: string;
+  dash_style?: 'solid' | 'dashed';
+}
+
+export interface GraphNode {
+  id: string;
+  code: string;
+  title: string;
+  subtitle: string;
+  variant: GraphNodeVariant;
+  icon_type: GraphNodeIconType;
+  topology?: NodeTopology;
+  fx?: NodeFxConfig;
+  graph_x?: number;
+  graph_y?: number;
+  is_unlocked: boolean;
+  stars_earned: number;
+  max_stars: number;
+  prerequisites: string[];
+  course_slug?: string;
+  lesson_id?: string;
+}
+
+export type GraphEdgeVariant = 'direct' | 'curved' | 'dashed';
+
+export interface GraphEdge {
+  id: string;
+  from_id: string;
+  to_id: string;
+  variant: GraphEdgeVariant;
+  fx?: EdgeFxConfig;
+  is_completed: boolean;
+}
+
+export interface BranchRoadmapResponse {
+  branch: CareerBranch;
+  nodes: GraphNode[];
+  connections: GraphEdge[];
+}
+
+export interface MilestoneTelemetry {
+  code: string;
+  title: string;
+  description: string;
+  xp_reward: number;
+  prerequisite_label: string; // ej. "RQ HTML"
+  is_locked: boolean;
+}
+
 // ==========================================
 // 3. LECCIONES Y PREGUNTAS
 // ==========================================
 
 export type QuestionType =
+  | 'single_choice'
+  | 'multiple_choice'
+  | 'code_output'
+  | 'fill_blank'
+  | 'order_blocks'
+  | 'match_pairs'
+  | 'bug_hunt'
+  | 'code_completion'
+  | 'true_false'
+  | 'drag_drop'
   | 'SINGLE_CHOICE'
   | 'MULTIPLE_CHOICE'
   | 'CODE_OUTPUT'
@@ -140,6 +282,61 @@ export interface LessonQuestion {
   options: QuestionOption[];
 }
 
+// ------------------------------------------
+// Tríada Evaluativa de Lección (ADR-011)
+// ------------------------------------------
+
+export interface ConsoleTestCase {
+  input: string;
+  expected_output: string;
+  is_hidden: boolean;
+}
+
+export interface ConsoleChallenge {
+  type: 'CONSOLE_CHALLENGE';
+  instruction: string;
+  starter_code: string;
+  solution_code?: string;
+  test_cases: ConsoleTestCase[];
+  timeout_ms: number;
+}
+
+export interface FourOptionsQuestion {
+  type: 'SINGLE_CHOICE';
+  prompt: string;
+  options: [QuestionOption, QuestionOption, QuestionOption, QuestionOption]; // Exactamente 4 opciones A, B, C, D
+  correct_option_id?: string;
+  explanation?: string;
+}
+
+export interface PredictionChallenge {
+  type: 'PREDICT_OUTPUT' | 'BUG_HUNT';
+  prompt: string;
+  code_snippet?: string;
+  options?: QuestionOption[];
+  expected_output?: string;
+  explanation?: string;
+}
+
+export interface LessonTriadEvaluation {
+  item_1_console: ConsoleChallenge;
+  item_2_options: FourOptionsQuestion;
+  item_3_prediction: PredictionChallenge;
+}
+
+export interface LessonEvaluationFivePhases {
+  phase_1_theory: {
+    step1: string;
+    step2: string;
+    step3: string;
+    code_snippet?: string;
+  };
+  phase_2_code_execution: ConsoleChallenge;
+  phase_3_multiple_choice: FourOptionsQuestion;
+  phase_4_theory: FourOptionsQuestion;
+  phase_5_prediction: PredictionChallenge;
+}
+
 export interface LessonDetail {
   id: string;
   section_id: string;
@@ -149,7 +346,9 @@ export interface LessonDetail {
   code_example: string;
   expected_output?: string;
   tip_markdown?: string;
-  question: LessonQuestion;
+  question?: LessonQuestion; // Legacy / compatibilidad
+  evaluation_triad?: LessonTriadEvaluation; // Modelo Oficial Tríada (ADR-011)
+  evaluation_five_phases?: LessonEvaluationFivePhases; // Modelo de 5 Fases de Evaluación
 }
 
 export interface LessonAnswerSubmission {
@@ -158,6 +357,7 @@ export interface LessonAnswerSubmission {
   selected_option_ids: string[];
   input_text?: string;
   ordered_block_ids?: string[];
+  time_spent_seconds?: number;
 }
 
 export interface LessonAnswerFeedback {
@@ -170,6 +370,27 @@ export interface LessonAnswerFeedback {
   added_to_review_queue: boolean;
 }
 
+export interface LessonTriadSubmission {
+  lesson_id: string;
+  item_1_code: string;
+  item_2_selected_option_id: string;
+  item_3_answer: string;
+}
+
+export interface LessonTriadFeedback {
+  is_completed: boolean;
+  stars_earned: 1 | 2 | 3;
+  items_passed: {
+    console: boolean;
+    options: boolean;
+    prediction: boolean;
+  };
+  xp_earned: number;
+  feedback_message: string;
+  console_output?: string;
+  added_to_review_queue: boolean;
+}
+
 // ==========================================
 // 4. CUADERNO DE ERRORES Y REPASO
 // ==========================================
@@ -178,14 +399,23 @@ export interface MistakesNotebookItem {
   id: string;
   user_id: string;
   question_id: string;
-  language_id: string;
-  module_id: string;
-  section_id: string;
+  track_slug?: string;
+  course_slug?: string;
+  module_slug?: string;
+  section_slug?: string;
+  language_id?: string;
+  module_id?: string;
+  section_id?: string;
   lesson_title: string;
   prompt: string;
   code_context?: string;
   error_count: number;
   is_resolved: boolean;
+  // Parámetros del Algoritmo SuperMemo SM-2 (ADR-011)
+  interval_days?: number;
+  ease_factor?: number;
+  repetition_count?: number;
+  next_review_at?: string;
   created_at: string;
   last_failed_at: string;
 }

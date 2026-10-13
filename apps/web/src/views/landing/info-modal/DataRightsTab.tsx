@@ -1,11 +1,11 @@
 import React from 'react';
-import { IconUserCheck, IconCircleCheck } from '@tabler/icons-react';
+import { UserCheck, CheckCircle } from '@phosphor-icons/react';
 
 export const DataRightsTab: React.FC = () => (
   <div className="space-y-6 animate-fadeIn">
     <div>
       <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20 mb-2 font-sans">
-        <IconUserCheck className="w-3.5 h-3.5" />
+        <UserCheck className="w-3.5 h-3.5" />
         Control de Tus Datos
       </div>
       <h4 className="font-display text-2xl font-bold text-white tracking-tight">
@@ -25,15 +25,15 @@ export const DataRightsTab: React.FC = () => (
       <h5 className="font-bold text-white text-sm">Tus Derechos Fundamentales:</h5>
       <ul className="space-y-2 font-sans">
         <li className="flex items-center gap-2">
-          <IconCircleCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+          <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>Derecho a descargar una copia completa de tu historial y progreso en formato JSON.</span>
         </li>
         <li className="flex items-center gap-2">
-          <IconCircleCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+          <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>Derecho al olvido y eliminación definitiva de tu cuenta y datos con un solo clic.</span>
         </li>
         <li className="flex items-center gap-2">
-          <IconCircleCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+          <CheckCircle className="w-4 h-4 text-emerald-400 shrink-0" />
           <span>Desactivación total de cookies analíticas no esenciales en cualquier momento.</span>
         </li>
       </ul>

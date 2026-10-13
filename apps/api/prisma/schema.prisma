@@ -1,0 +1,436 @@
+// ==============================================================================
+// KODA PLATFORM — PRISMA SCHEMA FOR SUPABASE POSTGRESQL 15+ (ADR-013)
+// Conforms to: 20260914000000..20260915000002 SQL Migrations
+// ==============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ------------------------------------------------------------------------------
+// 1. USUARIOS Y PERFILES (Consolidado con Supabase Auth)
+// ------------------------------------------------------------------------------
+model User {
+  id                      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email                   String    @unique @db.VarChar(255)
+  role                    String    @default("user") @db.VarChar(20)
+  status                  String    @default("active") @db.VarChar(20)
+  displayName             String    @default("Estudiante Koda") @map("display_name") @db.VarChar(80)
+  avatarUrl               String?   @default("/brand/koda-mascot-cartoon-2d.svg") @map("avatar_url") @db.VarChar(512)
+  avatarObjectKey         String?   @map("avatar_object_key") @db.VarChar(512)
+  documentNumber          String?   @map("document_number") @db.VarChar(50)
+  documentType            String?   @map("document_type") @db.VarChar(20)
+  bio                     String?   @db.VarChar(500)
+  timezone                String    @default("America/Bogota") @db.VarChar(50)
+  locale                  String    @default("es-CO") @db.VarChar(10)
+
+  // Preferencias de Onboarding
+  onboardingCompleted     Boolean   @default(false) @map("onboarding_completed")
+  initialLanguageSlug     String    @default("python") @map("initial_language_slug") @db.VarChar(50)
+  experienceLevel         String    @default("beginner") @map("experience_level") @db.VarChar(30)
+  learningStyle           String    @default("hands-on") @map("learning_style") @db.VarChar(30)
+  dailyGoalId             String    @default("regular") @map("daily_goal_id") @db.VarChar(20)
+  dailyGoalMinutes        Int       @default(10) @map("daily_goal_minutes") @db.SmallInt
+
+  // Métricas de Gamificación O(1)
+  totalXp                 Int       @default(0) @map("total_xp")
+  currentLevel            Int       @default(1) @map("current_level")
+  currentStreak           Int       @default(0) @map("current_streak")
+  longestStreak           Int       @default(0) @map("longest_streak")
+  streakFreezeCount       Int       @default(1) @map("streak_freeze_count") @db.SmallInt
+  totalStudyTimeSeconds   Int       @default(0) @map("total_study_time_seconds")
+  lastStudyDate           DateTime? @map("last_study_date") @db.Date
+
+  createdAt               DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt               DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  // Relaciones
+  enrollments             UserBranchEnrollment[]
+  moduleProgress          UserModuleProgress[]
+  sectionStars            UserSectionStars[]
+  attempts                Attempt[]
+  reviewQueue             ReviewQueueItem[]
+  mistakesNotebook        UserMistakesNotebook[]
+  streakRecord            Streak?
+  xpTransactions          XpTransaction[]
+  achievements            UserAchievement[]
+  certificates            Certificate[]
+  subscription            Subscription?
+
+  @@index([totalXp(sort: Desc)], map: "idx_users_xp")
+  @@index([currentStreak(sort: Desc)], map: "idx_users_streak")
+  @@index([totalStudyTimeSeconds(sort: Desc)], map: "idx_users_study_time")
+  @@map("users")
+}
+
+// ------------------------------------------------------------------------------
+// 2. CATÁLOGO DE LENGUAJES DE PROGRAMACIÓN
+// ------------------------------------------------------------------------------
+model ProgrammingLanguage {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code         String   @unique @db.VarChar(10)
+  name         String   @db.VarChar(100)
+  slug         String   @unique @db.VarChar(50)
+  description  String?  @db.Text
+  status       String   @default("available") @db.VarChar(30)
+  sortOrder    Int      @default(100) @map("sort_order") @db.SmallInt
+  iconUrl      String?  @map("icon_url") @db.VarChar(512)
+  color        String   @default("#38BDF8") @db.VarChar(7)
+  totalModules Int      @default(12) @map("total_modules") @db.SmallInt
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt    DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  enrollments  UserBranchEnrollment[]
+
+  @@map("programming_languages")
+}
+
+// ------------------------------------------------------------------------------
+// 3. MATRÍCULA Y PROGRESO POR RAMA / LENGUAJE
+// ------------------------------------------------------------------------------
+model UserBranchEnrollment {
+  id              String              @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String              @map("user_id") @db.Uuid
+  languageCode    String              @map("language_code") @db.VarChar(10)
+  status          String              @default("active") @db.VarChar(20)
+  currentLevel    Int                 @default(1) @map("current_level")
+  totalBranchXp   Int                 @default(0) @map("total_branch_xp")
+  isActive        Boolean             @default(true) @map("is_active")
+  enrolledAt      DateTime            @default(now()) @map("enrolled_at") @db.Timestamptz(6)
+  lastAccessedAt  DateTime            @default(now()) @map("last_accessed_at") @db.Timestamptz(6)
+
+  user            User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  language        ProgrammingLanguage @relation(fields: [languageCode], references: [code])
+
+  @@unique([userId, languageCode], map: "uq_user_branch")
+  @@map("user_branch_enrollment")
+}
+
+// ------------------------------------------------------------------------------
+// 4. PROGRESO DE MÓDULOS Y ESTRELLAS DE SECCIÓN
+// ------------------------------------------------------------------------------
+model UserModuleProgress {
+  id                      String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                  String    @map("user_id") @db.Uuid
+  moduleId                String    @map("module_id") @db.VarChar(80)
+  courseId                String    @map("course_id") @db.VarChar(80)
+  languageCode            String    @map("language_code") @db.VarChar(10)
+  status                  String    @default("in_progress") @db.VarChar(20)
+  totalSectionsCount      Int       @default(0) @map("total_sections_count") @db.SmallInt
+  completedSectionsCount  Int       @default(0) @map("completed_sections_count") @db.SmallInt
+  isUnlocked              Boolean   @default(false) @map("is_unlocked")
+  unlockedByDiagnostic    Boolean   @default(false) @map("unlocked_by_diagnostic")
+  score                   Decimal?  @db.Decimal(5, 2)
+  completedAt             DateTime? @map("completed_at") @db.Timestamptz(6)
+  updatedAt               DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, moduleId], map: "uq_user_module")
+  @@map("user_module_progress")
+}
+
+model UserSectionStars {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @map("user_id") @db.Uuid
+  sectionId           String    @map("section_id") @db.VarChar(80)
+  moduleId            String    @map("module_id") @db.VarChar(80)
+  starsEarned         Int       @default(0) @map("stars_earned") @db.SmallInt
+  bestAccuracyScore   Decimal?  @map("best_accuracy_score") @db.Decimal(5, 2)
+  totalAttemptsCount  Int       @default(0) @map("total_attempts_count")
+  completedAt         DateTime? @map("completed_at") @db.Timestamptz(6)
+  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, sectionId], map: "uq_user_section")
+  @@map("user_section_stars")
+}
+
+// ------------------------------------------------------------------------------
+// 5. INTENTOS Y RESPUESTAS DE LECCIONES
+// ------------------------------------------------------------------------------
+model Attempt {
+  id                  String          @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String          @map("user_id") @db.Uuid
+  lessonId            String          @map("lesson_id") @db.VarChar(80)
+  sectionId           String          @map("section_id") @db.VarChar(80)
+  moduleId            String          @map("module_id") @db.VarChar(80)
+  courseId            String          @map("course_id") @db.VarChar(80)
+  languageCode        String          @map("language_code") @db.VarChar(10)
+  status              String          @default("in_progress") @db.VarChar(20)
+  score               Decimal?        @db.Decimal(5, 2)
+  maxScore            Decimal?        @map("max_score") @db.Decimal(5, 2)
+  accuracyPercentage  Decimal?        @map("accuracy_percentage") @db.Decimal(5, 2)
+  isPassed            Boolean         @default(false) @map("is_passed")
+  xpEarned            Int             @default(0) @map("xp_earned")
+  streakMaintained    Boolean         @default(false) @map("streak_maintained")
+  durationSeconds     Int?            @map("duration_seconds")
+  mistakesCount       Int             @default(0) @map("mistakes_count") @db.SmallInt
+  codeSubmitted       String?         @map("code_submitted") @db.Text
+  contentVersion      String?         @map("content_version") @db.VarChar(64)
+  attemptType         String          @default("lesson") @map("attempt_type") @db.VarChar(20)
+  startedAt           DateTime        @default(now()) @map("started_at") @db.Timestamptz(6)
+  completedAt         DateTime?       @map("completed_at") @db.Timestamptz(6)
+
+  user                User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  answers             AttemptAnswer[]
+
+  @@index([userId, lessonId], map: "idx_attempts_user_lesson")
+  @@map("attempts")
+}
+
+model AttemptAnswer {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  attemptId         String   @map("attempt_id") @db.Uuid
+  questionId        String   @map("question_id") @db.VarChar(80)
+  questionType      String   @map("question_type") @db.VarChar(30)
+  userResponse      Json     @map("user_response")
+  isCorrect         Boolean  @map("is_correct")
+  timeSpentSeconds  Int?     @map("time_spent_seconds")
+  xpAwarded         Int      @default(0) @map("xp_awarded")
+  feedbackText      String?  @map("feedback_text") @db.Text
+  createdAt         DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  attempt           Attempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+
+  @@map("attempt_answers")
+}
+
+// ------------------------------------------------------------------------------
+// 6. COLA DE REPASO ESPACIADO Y CUADERNO DE ERRORES (SM-2)
+// ------------------------------------------------------------------------------
+model ReviewQueueItem {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String    @map("user_id") @db.Uuid
+  questionId        String    @map("question_id") @db.VarChar(80)
+  lessonId          String    @map("lesson_id") @db.VarChar(80)
+  languageCode      String    @map("language_code") @db.VarChar(10)
+  boxLevel          Int       @default(1) @map("box_level") @db.SmallInt
+  nextReviewDue     DateTime  @map("next_review_due") @db.Timestamptz(6)
+  repetitionsCount  Int       @default(0) @map("repetitions_count")
+  easeFactor        Decimal   @default(2.50) @map("ease_factor") @db.Decimal(4, 2)
+  intervalDays      Int       @default(1) @map("interval_days")
+  lastReviewedAt    DateTime? @map("last_reviewed_at") @db.Timestamptz(6)
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, questionId], map: "uq_user_review_question")
+  @@map("review_queue_items")
+}
+
+model UserMistakesNotebook {
+  id                String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId            String    @map("user_id") @db.Uuid
+  questionId        String    @map("question_id") @db.VarChar(80)
+  lessonId          String    @map("lesson_id") @db.VarChar(80)
+  languageCode      String    @map("language_code") @db.VarChar(10)
+  questionType      String    @map("question_type") @db.VarChar(30)
+  questionPrompt    String    @map("question_prompt") @db.Text
+  userWrongAnswer   Json      @map("user_wrong_answer")
+  correctAnswer     Json      @map("correct_answer")
+  explanationText   String?   @map("explanation_text") @db.Text
+  difficultyLevel   String    @default("medium") @map("difficulty_level") @db.VarChar(20)
+  repetitionCount   Int       @default(1) @map("repetition_count") @db.SmallInt
+  lastMistakeAt     DateTime  @default(now()) @map("last_mistake_at") @db.Timestamptz(6)
+  isRemediated      Boolean   @default(false) @map("is_remediated")
+  remediatedAt      DateTime? @map("remediated_at") @db.Timestamptz(6)
+  sm2EaseFactor     Decimal   @default(2.50) @map("sm2_ease_factor") @db.Decimal(4, 2)
+  sm2IntervalDays   Int       @default(1) @map("sm2_interval_days")
+  sm2NextReviewDue  DateTime? @map("sm2_next_review_due") @db.Timestamptz(6)
+  createdAt         DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, isRemediated], map: "idx_mistakes_user_remediated")
+  @@map("user_mistakes_notebook")
+}
+
+// ------------------------------------------------------------------------------
+// 7. RACHAS Y TRANSACCIONES DE XP
+// ------------------------------------------------------------------------------
+model Streak {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String    @unique @map("user_id") @db.Uuid
+  currentStreak       Int       @default(0) @map("current_streak")
+  longestStreak       Int       @default(0) @map("longest_streak")
+  lastActivityDate    DateTime? @map("last_activity_date") @db.Date
+  streakFreezeCount   Int       @default(1) @map("streak_freeze_count") @db.SmallInt
+  streakFreezeUsedAt  DateTime? @map("streak_freeze_used_at") @db.Timestamptz(6)
+  isActiveToday       Boolean   @default(false) @map("is_active_today")
+  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("streaks")
+}
+
+model XpTransaction {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  amount          Int
+  balanceAfter    Int      @map("balance_after")
+  reason          String   @db.VarChar(50)
+  referenceId     String?  @map("reference_id") @db.VarChar(128)
+  referenceType   String?  @map("reference_type") @db.VarChar(50)
+  idempotencyKey  String?  @unique @map("idempotency_key") @db.VarChar(128)
+  createdAt       DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)], map: "idx_xp_user_date")
+  @@map("xp_transactions")
+}
+
+// ------------------------------------------------------------------------------
+// 8. LOGROS Y CERTIFICADOS
+// ------------------------------------------------------------------------------
+model Achievement {
+  id          String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code        String            @unique @db.VarChar(50)
+  title       String            @db.VarChar(100)
+  description String            @db.Text
+  category    String            @db.VarChar(30)
+  xpReward    Int               @default(50) @map("xp_reward")
+  iconUrl     String?           @map("icon_url") @db.VarChar(512)
+  rarity      String            @default("common") @db.VarChar(20)
+  isActive    Boolean           @default(true) @map("is_active")
+  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  users       UserAchievement[]
+
+  @@map("achievements")
+}
+
+model UserAchievement {
+  id            String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String      @map("user_id") @db.Uuid
+  achievementId String      @map("achievement_id") @db.Uuid
+  unlockedAt    DateTime    @default(now()) @map("unlocked_at") @db.Timestamptz(6)
+  notifySeen    Boolean     @default(false) @map("notify_seen")
+
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, achievementId], map: "uq_user_achievement")
+  @@map("user_achievements")
+}
+
+model Certificate {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId              String   @map("user_id") @db.Uuid
+  languageCode        String   @map("language_code") @db.VarChar(10)
+  trackCode           String?  @map("track_code") @db.VarChar(30)
+  title               String   @db.VarChar(150)
+  studentName         String   @map("student_name") @db.VarChar(150)
+  studentIdMasked     String?  @map("student_id_masked") @db.VarChar(50)
+  issueDate           DateTime @default(now()) @map("issue_date") @db.Timestamptz(6)
+  verificationCode    String   @unique @map("verification_code") @db.VarChar(64)
+  verificationQrUrl   String?  @map("verification_qr_url") @db.VarChar(512)
+  storagePath         String?  @map("storage_path") @db.VarChar(255)
+  storageUrl          String?  @map("storage_url") @db.Text
+  pdfFileSizeBytes    Int?     @map("pdf_file_size_bytes")
+  pdfSha256Hash       String?  @map("pdf_sha256_hash") @db.VarChar(64)
+  metadata            Json?
+  isRevoked           Boolean  @default(false) @map("is_revoked")
+  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt           DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("certificates")
+}
+
+model Subscription {
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId                String    @unique @map("user_id") @db.Uuid
+  planCode              String    @default("free") @map("plan_code") @db.VarChar(30)
+  status                String    @default("active") @db.VarChar(20)
+  billingCycle          String?   @map("billing_cycle") @db.VarChar(20)
+  currentPeriodStart    DateTime? @map("current_period_start") @db.Timestamptz(6)
+  currentPeriodEnd      DateTime? @map("current_period_end") @db.Timestamptz(6)
+  cancelAtPeriodEnd     Boolean   @default(false) @map("cancel_at_period_end")
+  stripeCustomerId      String?   @map("stripe_customer_id") @db.VarChar(100)
+  stripeSubscriptionId  String?   @map("stripe_subscription_id") @db.VarChar(100)
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("subscriptions")
+}
+
+// ------------------------------------------------------------------------------
+// 9. TABLAS DEL ROADMAP VISUAL EN GRAFO
+// ------------------------------------------------------------------------------
+model RoadmapSector {
+  scopeType       String   @map("scope_type") @db.VarChar(10)
+  scopeId         String   @map("scope_id") @db.VarChar(80)
+  sectorTitle     String   @map("sector_title") @db.VarChar(150)
+  progressPercent Int      @default(0) @map("progress_percent") @db.SmallInt
+  updatedAt       DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@id([scopeType, scopeId])
+  @@map("roadmap_sectors")
+}
+
+model RoadmapCourse {
+  id            String   @id @db.VarChar(80)
+  languageSlug  String   @map("language_slug") @db.VarChar(50)
+  code          String   @db.VarChar(10)
+  label         String   @db.VarChar(150)
+  subtitle      String   @db.VarChar(200)
+  description   String   @db.Text
+  x             Int
+  y             Int
+  isUnlocked    Boolean  @default(false) @map("is_unlocked")
+  isCompleted   Boolean  @default(false) @map("is_completed")
+  xpReward      Int      @default(100) @map("xp_reward")
+  sortOrder     Int      @default(1) @map("sort_order") @db.SmallInt
+  updatedAt     DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("roadmap_courses")
+}
+
+model RoadmapLesson {
+  id          String   @id @db.VarChar(80)
+  courseId    String   @map("course_id") @db.VarChar(80)
+  code        String   @db.VarChar(10)
+  label       String   @db.VarChar(150)
+  subtitle    String   @db.VarChar(200)
+  statusText  String?  @map("status_text") @db.VarChar(100)
+  x           Int
+  y           Int
+  variant     String   @default("exercise") @db.VarChar(30)
+  iconType    String   @default("code") @map("icon_type") @db.VarChar(30)
+  stars       Int      @default(0) @db.SmallInt
+  maxStars    Int      @default(3) @map("max_stars") @db.SmallInt
+  xpReward    Int      @default(50) @map("xp_reward")
+  isUnlocked  Boolean  @default(false) @map("is_unlocked")
+  sortOrder   Int      @default(1) @map("sort_order") @db.SmallInt
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("roadmap_lessons")
+}
+
+model RoadmapGraphEdge {
+  id          String   @id @db.VarChar(80)
+  scopeType   String   @map("scope_type") @db.VarChar(10)
+  scopeId     String   @map("scope_id") @db.VarChar(80)
+  fromNodeId  String   @map("from_node_id") @db.VarChar(80)
+  toNodeId    String   @map("to_node_id") @db.VarChar(80)
+  color       String   @default("#38BDF8") @db.VarChar(10)
+  pathD       String   @map("path_d") @db.Text
+  isDashed    Boolean  @default(false) @map("is_dashed")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@map("roadmap_graph_edges")
+}

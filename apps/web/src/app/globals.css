@@ -8,84 +8,224 @@
 ::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 4px; }
 ::-webkit-scrollbar-thumb:hover { background: #334155; }
 
-@layer components {
-  .gradient-button {
-    @apply relative appearance-none cursor-pointer text-slate-950 font-black tracking-tight select-none overflow-hidden rounded-xl;
-    isolation: isolate;
-    background: linear-gradient(135deg, #ea580c 0%, #f97316 45%, #f59e0b 100%);
-    box-shadow: 0 2px 8px -2px rgba(234, 88, 12, 0.3) !important;
-    transform: translateZ(0);
-    will-change: transform, box-shadow;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  }
+/* Aurora: acento rotativo ámbar→esmeralda→cian */
+@property --koda-hue {
+  syntax: '<number>';
+  initial-value: 38;
+  inherits: true;
+}
 
-  .gradient-button:hover {
-    box-shadow: 0 8px 30px -4px rgba(249, 115, 22, 0.5) !important;
-  }
+:root {
+  --koda-hue: 38;
+  transition: --koda-hue 2s ease;
+}
 
-  .gradient-button:active {
-    transform: scale(0.975) translateZ(0) !important;
-    box-shadow: 0 2px 10px -2px rgba(249, 115, 22, 0.35) !important;
-  }
+/* Koda landing tokens: focus visible + solid surfaces (no purple/blue defaults) */
+:focus-visible {
+  outline: 2px solid #f59e0b;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 
-  /* Capa de degradado animada por GPU */
-  .gradient-button::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    background: linear-gradient(135deg, #fef08a 0%, #fbbf24 25%, #f59e0b 60%, #ea580c 100%);
-    opacity: 0;
-    pointer-events: none;
-    z-index: -1;
-    transform: translateZ(0);
-    will-change: opacity;
-    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  }
+.koda-grid-bg {
+  background-image:
+    linear-gradient(rgba(148, 163, 184, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.06) 1px, transparent 1px);
+  background-size: 44px 44px;
+  mask-image: radial-gradient(ellipse 90% 80% at 50% 20%, black 30%, transparent 75%);
+}
 
-  .gradient-button:hover::after {
-    opacity: 1;
-  }
-
-  /* Borde fino con degradado */
-  .gradient-button::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(254, 240, 138, 0.7) 0%, rgba(245, 158, 11, 0.4) 50%, rgba(234, 88, 12, 0.8) 100%);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
-    pointer-events: none;
-    z-index: 1;
-    transition: background 0.4s ease;
-  }
-
-  .gradient-button:hover::before {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(254, 240, 138, 0.85) 40%, rgba(249, 115, 22, 0.95) 100%);
-  }
-
-  /* Variante secundaria (dark glass) */
-  .gradient-button-variant {
-    @apply text-slate-100 font-bold;
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 60%, #0b0f19 100%);
-    box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.5) !important;
-  }
-
-  .gradient-button-variant:hover {
-    box-shadow: 0 8px 25px -4px rgba(245, 158, 11, 0.25) !important;
-  }
-
-  .gradient-button-variant::after {
-    background: linear-gradient(135deg, #334155 0%, #1e293b 50%, #151d2e 100%);
-  }
-
-  .gradient-button-variant::before {
-    background: linear-gradient(135deg, rgba(245, 158, 11, 0.3) 0%, rgba(100, 116, 139, 0.3) 50%, rgba(15, 23, 42, 0.8) 100%);
-  }
-
-  .gradient-button-variant:hover::before {
-    background: linear-gradient(135deg, rgba(251, 191, 36, 0.8) 0%, rgba(245, 158, 11, 0.6) 50%, rgba(234, 88, 12, 0.7) 100%);
+@media (prefers-reduced-motion: reduce) {
+  .animate-bounce,
+  .animate-pulse,
+  .animate-ping,
+  .beam-stroke,
+  .beam-stroke-core,
+  .animate-float,
+  .animate-marquee,
+  .animate-laser-flow,
+  .animate-laser-standby,
+  .animate-star-twinkle-a,
+  .animate-star-twinkle-b,
+  .animate-hud-shimmer,
+  .animate-wander-1,
+  .animate-wander-2,
+  .animate-wander-3,
+  .animate-wander-4,
+  .animate-wander-5,
+  [class*='emberRise'],
+  [class*='codeStream'],
+  .st-dash-flow,
+  .st-spin-slow,
+  .st-spin-slower,
+  .st-breathe,
+  .st-twinkle,
+  .st-flicker,
+  .st-chest,
+  .koda-grain,
+  .koda-wave,
+  .koda-beam-a,
+  .koda-beam-b,
+  .wx-rise,
+  .wx-drift,
+  .wx-float {
+    animation: none !important;
   }
 }
+/* View Transitions: salida fundida + entrada deslizante */
+::view-transition-old(root) {
+  animation: koda-vt-out 0.35s ease forwards;
+}
+::view-transition-new(root) {
+  animation: koda-vt-in 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes koda-vt-out { to { opacity: 0; transform: translateY(-24px); } }
+@keyframes koda-vt-in { from { opacity: 0; transform: translateY(32px); } to { opacity: 1; transform: none; } }
+
+/* Modo fiesta konami */
+@keyframes koda-party-hue { from { filter: hue-rotate(0deg); } to { filter: hue-rotate(360deg); } }
+.koda-party {
+  animation: koda-party-hue 6s linear infinite;
+}
+
+/* Escaneo del inspector drone */
+@keyframes scanline { from { transform: translateY(-100%); opacity: 0; } 30% { opacity: 1; } to { transform: translateY(420px); opacity: 0; } }
+
+/* Clima por sección */
+@keyframes wx-rise { 0% { transform: translateY(20px); opacity: 0; } 20% { opacity: 0.9; } 100% { transform: translateY(-120px); opacity: 0; } }
+@keyframes wx-drift { 0%, 100% { transform: translate(0, 0); opacity: 0.3; } 50% { transform: translate(24px, -18px); opacity: 1; } }
+@keyframes wx-float { 0%, 100% { transform: translateY(0); opacity: 0.25; } 50% { transform: translateY(-14px); opacity: 0.8; } }
+.wx-rise { animation: wx-rise 5s ease-out infinite; will-change: transform, opacity; }
+.wx-drift { animation: wx-drift 6s ease-in-out infinite; will-change: transform, opacity; }
+.wx-float { animation: wx-float 7s ease-in-out infinite; will-change: transform, opacity; }
+
+/* Onda divisoria entre secciones */
+@keyframes koda-wave-drift { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.koda-wave { animation: koda-wave-drift 14s linear infinite; will-change: transform; }
+
+/* Haz dorado recorriendo el borde de la tarjeta premium */
+@keyframes koda-beam-trace { from { stroke-dashoffset: 1000; } to { stroke-dashoffset: 0; } }
+.beam-stroke { stroke-dasharray: 180 820; animation: koda-beam-trace 9s linear infinite; }
+.beam-stroke-core { stroke-dasharray: 80 920; animation: koda-beam-trace 9s linear infinite; }
+
+/* Shimmer diagonal en hover para el CTA premium */
+.btn-shimmer { position: relative; overflow: hidden; }
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(60deg, transparent 20%, rgba(255, 255, 255, 0.25) 50%, transparent 80%);
+  transform: rotate(25deg) translateY(-100%);
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+.btn-shimmer:hover::after { transform: rotate(25deg) translateY(100%); }
+
+/* Rayos volumétricos del hero (faros barriendo) */
+@keyframes koda-beam-a { 0%, 100% { transform: rotate(-8deg); opacity: 0.5; } 50% { transform: rotate(9deg); opacity: 0.9; } }
+@keyframes koda-beam-b { 0%, 100% { transform: rotate(7deg); opacity: 0.8; } 50% { transform: rotate(-9deg); opacity: 0.45; } }
+.koda-beam-a { animation: koda-beam-a 40s ease-in-out infinite; transform-origin: top center; }
+.koda-beam-b { animation: koda-beam-b 60s ease-in-out infinite; transform-origin: top center; }
+
+/* Register narrativo: el cielo cambia con el paso (noche → amanecer → día ámbar) */
+.register-sky { transition: filter 1.2s ease; }
+body[data-register-step='2'] .register-sky { filter: hue-rotate(8deg) brightness(1.05); }
+body[data-register-step='3'] .register-sky { filter: hue-rotate(16deg) brightness(1.1); }
+body[data-register-step='4'] .register-sky { filter: hue-rotate(26deg) brightness(1.15) saturate(1.1); }
+body[data-register-step='5'] .register-sky { filter: hue-rotate(36deg) brightness(1.2) saturate(1.2); }
+
+/* Actos temáticos por tramo (F15): el grano y el hilo respiran con la historia */
+body[data-act='2'] .koda-grain { opacity: 0.07; }
+body[data-act='3'] .koda-grain { opacity: 0.04; }
+body[data-act='4'] .koda-grain { opacity: 0.08; }
+.koda-grain { transition: opacity 1.2s ease; }
+
+/* Grain cinematográfico global (landing) */
+@keyframes koda-grain {
+  0%, 100% { transform: translate(0, 0); }
+  12% { transform: translate(-4%, 3%); }
+  25% { transform: translate(3%, -4%); }
+  37% { transform: translate(-3%, -2%); }
+  50% { transform: translate(4%, 3%); }
+  62% { transform: translate(-2%, 4%); }
+  75% { transform: translate(3%, -3%); }
+  87% { transform: translate(-4%, -4%); }
+}
+
+.koda-grain {
+  position: fixed;
+  inset: -10%;
+  z-index: 40;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  animation: koda-grain 1s steps(8) infinite;
+}
+
+/* SkillTree vivo (SVG): flujo, órbitas, respiración y destellos */
+@keyframes st-dash-flow { to { stroke-dashoffset: -28; } }
+@keyframes st-spin { to { transform: rotate(360deg); } }
+@keyframes st-breathe { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+@keyframes st-twinkle { 0%, 100% { opacity: 0.15; } 50% { opacity: 0.9; } }
+@keyframes st-flicker { 0%, 100% { opacity: 1; } 45% { opacity: 0.75; } 55% { opacity: 0.95; } }
+@keyframes st-chest { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+
+.st-dash-flow { animation: st-dash-flow 1.1s linear infinite; }
+.st-spin-slow { animation: st-spin 28s linear infinite; transform-box: fill-box; transform-origin: center; }
+.st-spin-slower { animation: st-spin 44s linear infinite reverse; transform-box: fill-box; transform-origin: center; }
+.st-breathe { animation: st-breathe 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.st-twinkle { animation: st-twinkle 3s ease-in-out infinite; }
+.st-flicker { animation: st-flicker 1.8s ease-in-out infinite; }
+.st-chest { animation: st-chest 2.5s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.st-node { transition: filter 0.3s ease; }
+.st-node:hover { filter: brightness(1.3); }
+
+@keyframes laser-flow { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -120; } }
+@keyframes laser-standby { from { stroke-dashoffset: 0; } to { stroke-dashoffset: -56; } }
+@keyframes star-twinkle-a { 0%, 100% { opacity: 0.2; transform: scale(0.85); } 50% { opacity: 0.9; transform: scale(1.15); } }
+@keyframes star-twinkle-b { 0%, 100% { opacity: 0.85; transform: scale(1.1); } 50% { opacity: 0.15; transform: scale(0.8); } }
+@keyframes hud-shimmer { 0% { transform: translate3d(-100%, 0, 0); } 100% { transform: translate3d(200%, 0, 0); } }
+
+/* Organic Non-Linear Cosmic Star Wanderings across the entire map */
+@keyframes wander-1 { 0%, 100% { transform: translate3d(0, 0, 0); } 30% { transform: translate3d(240px, -70px, 0); } 70% { transform: translate3d(420px, 50px, 0); } }
+@keyframes wander-2 { 0%, 100% { transform: translate3d(0, 0, 0); } 40% { transform: translate3d(-180px, 90px, 0); } 75% { transform: translate3d(140px, 160px, 0); } }
+@keyframes wander-3 { 0%, 100% { transform: translate3d(0, 0, 0); } 35% { transform: translate3d(150px, 110px, 0); } 65% { transform: translate3d(-100px, -80px, 0); } }
+@keyframes wander-4 { 0%, 100% { transform: translate3d(0, 0, 0); } 50% { transform: translate3d(-240px, -90px, 0); } 80% { transform: translate3d(-90px, 70px, 0); } }
+@keyframes wander-5 { 0%, 100% { transform: translate3d(0, 0, 0); } 25% { transform: translate3d(190px, -50px, 0); } 70% { transform: translate3d(-150px, -110px, 0); } }
+
+.animate-laser-flow { animation: laser-flow 2.2s linear infinite; will-change: stroke-dashoffset; }
+.animate-laser-standby { animation: laser-standby 4s linear infinite; will-change: stroke-dashoffset; }
+.animate-star-twinkle-a { animation: star-twinkle-a 3s ease-in-out infinite; transform-origin: center; will-change: transform, opacity; }
+.animate-star-twinkle-b { animation: star-twinkle-b 4.5s ease-in-out infinite; transform-origin: center; will-change: transform, opacity; }
+.animate-hud-shimmer { animation: hud-shimmer 2.4s ease-in-out infinite; will-change: transform; }
+
+.animate-wander-1 { animation: wander-1 26s ease-in-out infinite; will-change: transform; }
+.animate-wander-2 { animation: wander-2 32s ease-in-out -8s infinite; will-change: transform; }
+.animate-wander-3 { animation: wander-3 22s ease-in-out -14s infinite; will-change: transform; }
+.animate-wander-4 { animation: wander-4 28s ease-in-out -5s infinite; will-change: transform; }
+.animate-wander-5 { animation: wander-5 36s ease-in-out -19s infinite; will-change: transform; }
+
+/* Cylindrical Conduit Charge Animations (Amber Quantum Thermal) */
+@keyframes conduit-slug-flow {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: -188; }
+}
+@keyframes filament-breathe {
+  0%, 100% { opacity: 0.18; }
+  50% { opacity: 0.38; }
+}
+
+.animate-conduit-slug {
+  animation: conduit-slug-flow 1.8s linear infinite;
+  will-change: stroke-dashoffset;
+}
+.animate-conduit-breathe {
+  animation: filament-breathe 3.5s ease-in-out infinite;
+  will-change: opacity;
+}
+
+
+

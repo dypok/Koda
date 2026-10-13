@@ -1,5 +1,6 @@
 # Logs
 logs
+.koda-logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -39,11 +40,17 @@ build/
 .env.test.local
 .env.production.local
 *.pem
+*service-account*.json
+*credentials*.json
+config/*.json
+apps/api/config/
+
 
 # IDE & OS
 .DS_Store
 .idea/
 .vscode/
+.agents/
 *.suo
 *.ntvs*
 *.njsproj
@@ -57,3 +64,19 @@ coverage/
 # 3D assets scratch
 *.blend*
 
+# Contributing
+CONTRIBUTING.md
+documentation/CONTRIBUTING.md
+*CONTRIBUTING.md
+*contributing.md
+
+# Jira scripts and generated CSVs
+documentation/scripts/generate_jira_csv_with_subtasks.js
+generate_jira_csv_with_subtasks.js
+*generate_jira_csv_with_subtasks.js
+documentation/jira-backlog-with-subtasks.csv
+documentation/jira-subtasks-only.csv
+jira-backlog-with-subtasks.csv
+jira-subtasks-only.csv
+*jira-backlog-with-subtasks.csv
+*jira-subtasks-only.csv

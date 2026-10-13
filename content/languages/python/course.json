@@ -1,0 +1,13 @@
+{
+  "id": "c_py_core_01",
+  "language_slug": "python",
+  "code": "PY_CORE",
+  "slug": "python-fundamentos-a-avanzado",
+  "title": "Python: Fundamentos a Avanzado",
+  "description": "Ruta integral de 12 módulos canónicos para dominar la programación en Python desde cero hasta conceptos avanzados y proyectos del mundo real.",
+  "level": "all_levels",
+  "status": "published",
+  "total_modules": 12,
+  "sort_order": 1,
+  "is_active": true
+}

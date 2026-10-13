@@ -1,0 +1,113 @@
+'use client';
+
+import React, { useId, useLayoutEffect, useRef } from 'react';
+import { getGsap, prefersReducedMotion } from '@/lib/gsap';
+import { cn } from '@/lib/utils';
+
+const EXPAND = 9;
+
+interface KodaLogoSvgProps {
+  className?: string;
+  label?: string;
+}
+
+/** Wordmark KODA inline: las llaves viven en grupos propios para animarlas con GSAP. */
+export const KodaLogoSvg: React.FC<KodaLogoSvgProps> = ({ className, label = 'Koda' }) => {
+  const uid = useId().replace(/:/g, '');
+  const gradId = `koda-orange-gradient-${uid}`;
+  const rootRef = useRef<SVGSVGElement>(null);
+
+  useLayoutEffect(() => {
+    if (prefersReducedMotion()) return;
+    const { gsap } = getGsap();
+    const ctx = gsap.context(() => {
+      const open = rootRef.current?.querySelector('[data-brace="open"]');
+      const close = rootRef.current?.querySelector('[data-brace="close"]');
+      if (!open || !close) return;
+      // GSAP `x` es absoluto: sin base pisaría el translate() original
+      // y expulsaría las llaves del viewBox. Se mide la base primero.
+      const openX = Number(gsap.getProperty(open, 'x'));
+      const closeX = Number(gsap.getProperty(close, 'x'));
+      const enter = () => {
+        gsap.to(open, { x: openX - EXPAND, duration: 0.55, ease: 'elastic.out(1, 0.55)', overwrite: 'auto' });
+        gsap.to(close, { x: closeX + EXPAND, duration: 0.55, ease: 'elastic.out(1, 0.55)', overwrite: 'auto' });
+      };
+      const leave = () => {
+        gsap.to(open, { x: openX, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
+        gsap.to(close, { x: closeX, duration: 0.4, ease: 'power3.out', overwrite: 'auto' });
+      };
+      const root = rootRef.current;
+      root?.addEventListener('mouseenter', enter);
+      root?.addEventListener('mouseleave', leave);
+      root?.addEventListener('focusin', enter);
+      root?.addEventListener('focusout', leave);
+      return () => {
+        root?.removeEventListener('mouseenter', enter);
+        root?.removeEventListener('mouseleave', leave);
+        root?.removeEventListener('focusin', enter);
+        root?.removeEventListener('focusout', leave);
+      };
+    }, rootRef);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <svg
+      ref={rootRef}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="430 265 498 185"
+      role="img"
+      aria-label={label}
+      className={cn('w-auto', className)}
+    >
+      <defs>
+        <linearGradient id={gradId} x1="0%" y1="100%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="#EA580C" />
+          <stop offset="45%" stopColor="#F97316" />
+          <stop offset="100%" stopColor="#FBBF24" />
+        </linearGradient>
+      </defs>
+      <g transform="matrix(1.3333333,0,0,-1.3333333,0,745.33333)">
+        <g>
+          {/* Letter k */}
+          <g transform="translate(343.9292,353.4866)">
+            <path
+              fill="#FFFFFF"
+              d="M 0,0 H -15 V -125 H 0 v 27.9 L 10,-86.5 42,-125 H 61.919 L 21,-76.5 59.049,-38.16 38.5,-38 0.158,-76.507 Z"
+            />
+          </g>
+          {/* Opening brace { */}
+          <g transform="translate(435.7425,305.7324)" data-brace="open">
+            <path
+              fill={`url(#${gradId})`}
+              d="m 0,0 v 11.088 h -12 c 0,0 -12.717,-0.197 -13.696,-12.001 0,0 0.848,-10.37 0,-18 0,0 -0.701,-9.163 -14.054,-8.919 v -11.934 c 0,0 13.598,0.538 13.598,-9.636 l 0.065,-12.555 c 0,0 1.63,-18.391 26.087,-16.369 v 11.462 h -5.315 c 0,0 -9.294,-2.332 -8.642,16.973 0,0 1.044,10.63 -6.391,13.956 0,0 -1.916,0.326 -2.136,1.794 0,0 -0.391,1.663 2.446,2.127 0,0 7.647,3.384 6.864,17.471 0,0 -2.022,12.146 6.391,14.543 z"
+            />
+          </g>
+          {/* Closing brace with arrow } */}
+          <g transform="translate(492.9382,253.0041)" data-brace="close">
+            <path
+              fill={`url(#${gradId})`}
+              d="m 0,0 v 12.962 h -8.071 c 0,0 -6.407,0.489 -7.875,-6.481 0,0 -1.565,-5.796 -1.174,-15.579 0.392,-9.782 -8.641,-15.13 -8.641,-15.13 0,0 -6.196,-2.935 -18.196,-1.892 v 12.131 h 6.979 c 0,0 6.554,-0.587 7.532,6.456 0,0 0.489,3.522 -0.097,9.49 0,0 -2.153,9.293 6.847,15.358 0,0 0.75,0.506 0.718,1.777 0,0 0.13,1.386 -0.962,1.941 0,0 -2.837,1.834 -5.161,7.165 0,0 -0.497,0.4 -1.051,6.432 v 8.446 c 0,0 0.522,9.261 -6.978,9.652 h -7.827 v 11.087 h 10.631 c 0,0 14.446,0.359 16.011,-12.554 0,0 0.147,-6.457 -0.587,-13.794 0,0 -0.098,-11.201 8.755,-13.353 l 9.147,0 v 13.72 L 27.065,18.736 Z"
+            />
+          </g>
+          {/* Letter d */}
+          <g transform="translate(576.3032,352.8866)">
+            <path
+              fill="#FFFFFF"
+              d="m 0,0 c -0.4,-0.4 -0.7,-11 -0.7,-23.6 0,-12.5 -0.2,-22.8 -0.5,-22.8 -0.3,0 -1.6,1 -2.8,2.1 -3.9,3.8 -14,7.9 -20.8,8.5 -13.2,1.2 -25.3,-3.1 -33.8,-12.1 -5.2,-5.5 -9.6,-12.9 -8.6,-14.5 0.4,-0.6 3.3,-2.8 6.5,-5 l 5.9,-4 2.1,4.7 c 3.2,7.3 6.5,10.9 12.6,13.9 6.9,3.3 15.6,3.7 22.7,1 5.8,-2.2 12.6,-9.5 15,-16.2 2.2,-6.2 2.3,-19.3 0.1,-25.6 -1.9,-5.8 -7.3,-12 -13.2,-15.5 -4,-2.4 -5.8,-2.8 -12.2,-2.8 -6.4,0.1 -8.3,0.5 -12.9,3 -5.6,3.1 -10.6,8.9 -12.7,14.8 -0.7,1.8 -1.7,3.1 -2.4,2.9 -2.8,-0.7 -12,-7.8 -12,-9.3 0,-2.6 7.4,-13.3 11.6,-16.6 15.3,-12 38.1,-12.2 51.6,-0.4 4.4,3.8 4.8,3.8 4.8,0.4 0,-6.9 0.6,-7.4 7.9,-7.1 l 6.6,0.3 v 62 62 l -7,0.3 C 3.9,0.5 0.4,0.4 0,0"
+            />
+          </g>
+          {/* Letter a */}
+          <g transform="translate(656.3032,300.8866)">
+            <path
+              fill="#FFFFFF"
+              d="m 0,0 c 4.5,-1.9 9.6,-7.3 12.4,-13 1.7,-3.6 2.4,-7.1 2.7,-13.6 0.6,-12.4 -1.5,-18.6 -8.8,-25.9 -4.8,-4.9 -6.4,-5.8 -11.2,-6.8 -16.6,-3.5 -29.1,7.3 -31.4,26.9 -0.7,6 0.9,15.6 3.2,20.2 2.2,4.2 7.3,9.7 10.8,11.5 C -15.9,2.7 -7.1,2.9 0,0 M -22.6,15 C -42.3,9.7 -55,-12.4 -51.8,-35.9 c 2.4,-17.3 10.4,-29 23.9,-35.3 4.9,-2.3 7.1,-2.7 15.2,-2.7 8.2,0 10.3,0.4 15,2.6 3.1,1.4 7.2,4 9.2,5.8 4.3,3.7 4.8,3.8 4.8,0.7 0,-1.4 0.4,-3.6 1,-5.1 0.9,-2.5 1.3,-2.6 7.2,-2.3 l 6.3,0.3 v 43 43 l -6.6,0.3 c -7.2,0.3 -7.8,-0.3 -7.9,-6.5 0,-1.3 -0.2,-2.3 -0.4,-2.3 -0.2,0 -3.3,2 -6.9,4.4 -9.7,6.5 -20,8.1 -31.6,5"
+            />
+          </g>
+        </g>
+      </g>
+    </svg>
+  );
+};
+
+export default KodaLogoSvg;

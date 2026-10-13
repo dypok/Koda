@@ -1,13 +1,17 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Highlight } from '@/components/ui/highlight';
+import { WeatherLayer } from '@/components/landing/WeatherLayer';
 
-export const HintsSection: React.FC = () => (
-  <section id="pistas" className="py-28 md:py-36 relative overflow-hidden border-t border-slate-900/80 bg-gradient-to-b from-slate-950 via-[#0a0d18] to-slate-950">
-    <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.14)_0%,rgba(99,102,241,0.04)_40%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-[1px] bg-gradient-to-r from-transparent via-amber-400/50 to-transparent pointer-events-none" />
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.1)_0%,rgba(234,88,12,0.03)_45%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+export const HintsSection: React.FC = () => {
+  const reduceMotion = useReducedMotion();
 
-    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-80 pointer-events-none select-none opacity-20 hidden sm:block">
+  return (
+  <section id="pistas" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20 sticky top-[188px] z-[25] rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.5)]">
+    <WeatherLayer type="fireflies" count={12} />
+    <div aria-hidden="true" data-glow="10" className="absolute -top-16 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
+
+    <div aria-hidden="true" className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-80 pointer-events-none select-none opacity-20 hidden sm:block">
       <svg className="w-full h-full" viewBox="0 0 800 300" fill="none">
         <defs>
           <linearGradient id="pistaGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -26,18 +30,18 @@ export const HintsSection: React.FC = () => (
       </svg>
     </div>
 
-    <motion.div
-      initial={{ opacity: 0, y: 32, scale: 0.98 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: false, margin: '-40px' }}
+      <motion.div
+        initial={reduceMotion ? false : { opacity: 0, y: 32 }}
+        whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
       className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-6 relative"
     >
       <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] max-w-3xl mx-auto">
         Pistas que te enseñan a{' '}
-        <span className="bg-gradient-to-r from-amber-400 via-yellow-300 to-orange-400 bg-clip-text text-transparent">
+        <Highlight>
           pensar
-        </span>
+        </Highlight>
         , no spoilers
       </h3>
 
@@ -46,10 +50,11 @@ export const HintsSection: React.FC = () => (
       </p>
 
       <div className="pt-4 max-w-md mx-auto">
-        <p className="text-xs sm:text-sm font-sans italic text-slate-400/80 border-t border-slate-900 pt-4">
-          "El objetivo no es que copies código, es que entiendas cómo resolverlo."
+        <p className="text-xs sm:text-sm font-sans italic text-slate-400 border-t border-slate-900 pt-4">
+          &quot;El objetivo no es que copies código, es que entiendas cómo resolverlo.&quot;
         </p>
       </div>
     </motion.div>
   </section>
-);
+  );
+};

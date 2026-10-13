@@ -1,45 +1,70 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Navbar } from '@/components/landing/Navbar';
-import { HeroSection } from '@/components/landing/HeroSection';
-import { InteractivePreview } from '@/components/landing/InteractivePreview';
-import { MethodologySection } from '@/components/landing/MethodologySection';
-import { CtaSection } from '@/components/landing/CtaSection';
-import { Footer } from '@/components/landing/Footer';
-import { LoginModal } from '@/components/landing/LoginModal';
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/stores/auth.store';
+import { StudentRoadmapView } from '@/views/roadmap/StudentRoadmapView';
+import { LandingPageView } from '@/views/landing/LandingPageView';
+import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
 
 export default function HomePage() {
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const router = useRouter();
+  const { user, isAuthenticated, hasEverLoggedIn, hasHydrated, initAuth } = useAuthStore();
 
-  const openLogin = () => setIsLoginModalOpen(true);
-  const closeLogin = () => setIsLoginModalOpen(false);
+  useEffect(() => {
+    initAuth();
+  }, [initAuth]);
 
-  return (
-    <div className="flex min-h-screen flex-col bg-slate-950 text-slate-100 selection:bg-amber-500/30 selection:text-amber-200">
-      {/* 1. Sticky Navbar with Iniciar Sesión */}
-      <Navbar onOpenLogin={openLogin} />
+  useEffect(() => {
+    if (!hasHydrated) return;
 
-      {/* Main Landing Sections */}
-      <main className="flex-1">
-        {/* 2. Hero Section with PixiJS Mascot */}
-        <HeroSection onOpenLogin={openLogin} />
+    if (isAuthenticated) {
+      if (user && user.onboardingCompleted === false) {
+        router.replace('/register');
+      }
+    } else if (hasEverLoggedIn) {
+      // Un usuario que ya ha iniciado sesión antes no puede volver a ver la landing page
+      router.replace('/login');
+    }
+  }, [hasHydrated, isAuthenticated, hasEverLoggedIn, user, router]);
 
-        {/* 3. Live Interactive Terminal Preview */}
-        <InteractivePreview />
+  if (!hasHydrated) {
+    return (
+      <KodaLoadingScreen
+        title="Cargando Koda..."
+        subtitle="Verificando tu sesión de aprendizaje..."
+        terminalHint="> auth :: verificando sesion"
+      />
+    );
+  }
 
-        {/* 4. Pedagogical Methodology & Comparison */}
-        <MethodologySection />
+  // Si ya inició sesión alguna vez pero no está autenticado, está siendo redirigido a /login
+  if (!isAuthenticated && hasEverLoggedIn) {
+    return (
+      <KodaLoadingScreen
+        title="Redirigiendo al inicio de sesión..."
+        subtitle="Sesión no iniciada. Acceso directo a Koda..."
+        terminalHint="> auth :: redirigiendo a /login"
+      />
+    );
+  }
 
-        {/* 5. Final Call to Action */}
-        <CtaSection onOpenLogin={openLogin} />
-      </main>
+  // Si el usuario está autenticado y tiene pendiente el onboarding, se está redirigiendo a /register
+  if (isAuthenticated && user?.onboardingCompleted === false) {
+    return (
+      <KodaLoadingScreen
+        title="Completando registro..."
+        subtitle="Te estamos redirigiendo para finalizar tu configuración..."
+        terminalHint="> onboarding :: redirigiendo"
+      />
+    );
+  }
 
-      {/* 8. Institutional Footer */}
-      <Footer />
+  // Usuario autenticado: el Roadmap vive directamente en la raíz (/)
+  if (isAuthenticated) {
+    return <StudentRoadmapView />;
+  }
 
-      {/* Login / Próximamente Modal */}
-      <LoginModal isOpen={isLoginModalOpen} onClose={closeLogin} />
-    </div>
-  );
+  // Visitante primerizo que nunca se ha logueado en la plataforma
+  return <LandingPageView />;
 }

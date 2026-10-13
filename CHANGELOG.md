@@ -10,6 +10,62 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-09-17 12:22] [Added] **Laboratorio interactivo de 100 propuestas de navbars minimalistas (`/preview-workspace`):**
+  - Catálogo exhaustivo de 100 variantes distribuidas en 10 familias: Píldoras Flotantes, Hairline Minimal, Terminal Statusline, Micro-Notch & Island, Stepper-First, Breadcrumbs Claros, Insignias en Esquinas, Cyber & Sci-Fi, Zero-UI Zen y Fusiones Maestras (`navbar-catalog-data.ts`).
+  - Renderizador reactivo `DynamicNavbarRenderer` con soporte para preview en vivo y montaje en ejercicio real.
+  - Vistas conmutables `Workspace Real` y `Galería 100` (`?view=gallery`) con filtros por categoría, búsqueda instantánea y atajos `←`/`→`.
+  - Integración estética completa con el fondo cósmico `OrbitFieldBackground` (Roadmap Fusion) y el botón táctil 3D D74 (`< / > C O M P R O B A R`).
+  - Detalle en `documentation/changelog/17-09-2026-changelog.md`.
+- [2026-09-17 09:32] [Added] **Sistema de atajos de teclado ergonómicos y keycaps táctiles (`KA-152` / `LESS-02`):**
+  - Hook modular `useLessonKeyboardShortcuts` con soporte para selección rápida (`1-4`, `A-D`), validación/avance con `Enter` / `Espacio` y navegación con flechas.
+  - Badges táctiles mecanizadas `<kbd>` en `QuestionRenderer` con micro-animaciones de hundimiento (`translate-y-0.5`) y resplandor lumínico ámbar/cyan.
+  - Integración completa tanto en el flujo de lecciones teóricas como en el modo `QuizMode` de `LessonWorkspace.tsx`.
+  - Detalle en `documentation/changelog/17-09-2026-changelog.md`.
+- [2026-09-14 23:56] [Added] **Motor de render PixiJS compartido + migración landing (`lib/pixi/engine.ts`):**
+  - Import dinámico en chunk aparte, DPR capado, textura glow compartida y tickers pausados fuera de pantalla.
+  - Sky del hero, `WeatherLayer` y `CodeConfetti` migrados a Pixi; fondo del roadmap a órbita kepleriana + espiral ASCII (`OrbitFieldBackground`).
+  - Detalle por commit en `documentation/changelog/14-09-2026-changelog.md`.
+- [2026-09-14 23:56] [Added] **Roadmap Fusión en Pixi con multiruta Lua:**
+  - `RoadmapPixiGraph`: medallones hexagonales con iconos vectoriales, haz doble + pulso en conexiones, onda expansiva al desbloquear, cámara con pan y retícula.
+  - Lua con topología tronco → ramas Flujo/Datos → convergencia (campo `route` en `GraphNode`).
+  - Sub-roadmap de secciones igualado a Fusión con transición de entrada/salida; bloqueo/desbloqueo a voluntad desde el panel.
+  - Laboratorio `/preview-roadmap` con 32 propuestas conmutables en vivo.
+  - Detalle por commit en `documentation/changelog/14-09-2026-changelog.md`.
+- [2026-09-14 23:56] [Added] **Rediseños landing (vórtice metodología, pipeline de rachas, pricing con haz):**
+  - `MethodologyHub` con vórtice ASCII, beacon y timeline; `StreakSection` como pipeline secuencial con consola git; `PricingSection` con borde eléctrico y checks dibujados.
+  - Pases polish en Hero, Navbar, Metodología e InteractivePreview (contraste, targets 44px, a11y).
+  - Detalle por commit en `documentation/changelog/14-09-2026-changelog.md`.
+
+- [2026-09-13 18:30] [Added] **Workspace de lección con enunciados y quiz:**
+  - Loader de contenido con code-split por módulo, ruta `/app/curso/[course]/seccion/[section]`, split teoría/práctica con stepper y atajos, renderer por tipo, XP +5/+2 con repaso sin spoilers, quiz por composition (70%) con desbloqueo siguiente y rail conectado.
+- [2026-09-13 18:05] [Added] **Lua como segunda especialidad:**
+  - Elegible en el paso 1 del registro (badge Disponible, icono luna, `techAvailability`).
+  - Pill `live` 100% en el carrusel de la landing y copy ES/EN con Python y Lua (hero, pricing, certificado).
+- [2026-09-13 17:55] [Added] **Resurrección del currículo Lua (rama `feat/frontend-visual-experience`):**
+  - `content/languages/lua/` con M01 (9 secciones x 10 = 90 lecciones) y M02 (10 x 10 = 100) publicados, manifest de 12 módulos (M03-M12 `coming_soon`) y configs heredados.
+  - Metodología en `docs/03-pedagogia-contenido/28_LUA_CURRICULUM.md` y `docs/adr/ADR-005-lua-curriculo-piloto-validacion-pedagogica.md`.
+  - Visores legacy `test_m*.html` no revividos (sustituidos por la app Next.js).
+- [2026-09-13 16:40] [Added] **Roadmap: clicks fiables y datos honestos (rama `feat/frontend-visual-experience`):**
+  - Fix del inspector (capture diferido, fallback por `elementFromPoint`, sync anti-bucle).
+  - Avance real, TopHud con barra segmentada, debug solo en dev, avance persistido, ramas accesibles, servicio sin doble `/api/v1`, canvas legible y calmado, inspector cinematográfico, camino ámbar, warp con bypass, boss con presencia y leyenda con ticks.
+  - Detalle por commit en `documentation/changelog/13-09-2026-changelog.md`.
+- [2026-09-13 15:00] [Added] **Acabado visual del registro `/register` (rama `feat/frontend-visual-experience`):**
+  - Transiciones de layout FLIP, fondo narrativo por paso, CTA contextual por paso, Koda reactivo al formulario, handoff animado al roadmap, terminal de idiomas con toggle y variante express `?v=express` con evento analytics stub.
+  - Detalle por commit en `documentation/changelog/13-09-2026-changelog.md`.
+- [2026-09-13 14:35] [Added] **Renovación del registro `/register` (rama `feat/frontend-visual-experience`):**
+  - `SelectableCard` radio único + `StepLayout` con stagger (-78 líneas, fuera 3 cards duplicadas), progressbar real, persistencia del wizard, flechas de teclado y bottom bar con hint.
+  - Form real (submit Enter, labels, errores por campo, medidor de fuerza, ojo accesible), social auth honesto con loading por provider, success modal accesible con confeti y CTA a roadmap, slide direccional + odómetro, Koda buddy por paso, Tu plan revisable, `AVAILABLE_IDS` como única fuente y fondo vivo por paso.
+  - Detalle por commit en `documentation/changelog/13-09-2026-changelog.md`.
+- [2026-09-13 14:15] [Added] **Transiciones 2.5D entre secciones + fondo 3D (rama `feat/frontend-visual-experience`):**
+  - Tanda F: glows con parallax propio, wipe ámbar, shine del diploma, skew por velocidad, lift de testimonios, metodología apilada, demo y diploma pineados, focos del mapa por scrub, eclipse-wipe al footer, hilo de ruta continuo, actos temáticos (`body[data-act]`), hero pineado 200vh, premium elevada y Koda guía narradora.
+  - Tanda D: fondo 3D full-page con Three.js (`CosmicBackground` ssr:false, 3.500/1.200/700 partículas según dispositivo, twinkle por shader, dolly + warp por Lenis, intensidad por acto, `UnrealBloomPass` lazy y guardián de fps con relevo del sky 2D).
+  - Detalle por commit en `documentation/changelog/13-09-2026-changelog.md`.
+- [2026-09-13 13:40] [Added] **Landing page renovada (rama `feat/frontend-visual-experience`, 45 commits):**
+  - Base L1-L6: copy pedagógico del hero, Navbar con anchors, mini-lección interactiva real, metodología con ritmo, CTA/Footer/InfoModal pulidos, iconografía lucide y logo que vuelve a la landing (`/?landing=true`).
+  - Scroll y motion S1-S5 + W1-W15: Lenis, GSAP ScrollTrigger con parallax del hero, scroll-spy de pilares, reveals variados, micro-interacciones (magnetic, counters spring, burst, shake/pop), split-text, typewriter, highlights dibujados, odómetro, marquesina por velocidad, grain, cursor glow, confeti de código, onda divisoria, KodaPeeks, pillar strip pineada, View Transitions, skill-tree que se dibuja, carrusel 3D de testimonios y finale cinematográfico con eclipse.
+  - Contenido y confianza: carrusel tech con pills, skill-tree vivo y accesible, selector de idioma premium, InfoModal accesible (tablist, focus trap, acordeón), footer honesto, kit de conversión (anuncio, testimonios, pricing, CTA sticky, exit-intent), kit lúdico (Koda emocional, racha simulada, sonido opt-in), certificado demo, i18n ES/EN del hero, páginas 404/error y espectáculo E1-E10 (preloader, aurora, mapa mundial, rayos, clima por sección, konami).
+  - Rendimiento: imágenes AVIF/WebP, fuera `three`/`ogl` sin uso, sky adaptativo (estrellas y DPR por dispositivo), `reduced-motion` en toda animación y `next build` verde.
+  - Detalle por commit en `documentation/changelog/12-09-2026-changelog.md` y `13-09-2026-changelog.md`.
 - [2026-09-07 08:46] [Changed] **Reestructuración Editorial Multi-Lenguaje de la Landing Page:**
   - Se reformuló la narrativa y textos en todos los componentes (`layout.tsx`, `Navbar`, `HeroSection`, `InteractivePreview`, `MethodologySection`, `CurriculumSection`, `FaqSection`, `CtaSection` y `Footer`).
   - Se reposicionó a Python 3.12 como el **Track Inaugural Piloto** de una plataforma diseñada para ser multi-lenguaje, incorporando avisos de roadmap oficial para JavaScript/TypeScript, Go y Rust.
@@ -29,6 +85,16 @@ Zona horaria: America/Bogota (UTC-5)
   - Se generaron iconos del sistema: `favicon.ico` multirresolución (16, 32, 48px), `icon.png` (192px) para PWA, y `apple-icon.png` (180px) para dispositivos Apple.
   - Se generó la imagen de portada y redes sociales `og-image.png` (1200x630) y `koda-scene.png`.
   - Se implementó un selector de modo visual en `HeroSection` permitiendo alternar entre el "Render 3D Oficial" flotante y la animación interactiva "WebGL 2D" que sigue el cursor.
+
+### Changed
+- [2026-09-14 23:56] [Changed] **Cromo del roadmap a píldoras flotantes:**
+  - TopHud y Legend como píldoras (título + continuar, racha, XP); panel de detalle a `top-16`; lienzo a todo ancho.
+  - Detalle por commit en `documentation/changelog/14-09-2026-changelog.md`.
+
+### Removed
+- [2026-09-14 23:56] [Removed] **Limpieza de fondo 3D, sidebar y vistas legacy:**
+  - `CosmicBackground` + `cosmic-field.ts` + deps `three`/`@types/three`; sidebar del roadmap (6 archivos) con píldoras de rama y perfil; `LessonRail`, `StreakPreview`, `HeroRealStar`, loop y renderer del sky canvas2D, `useHeroSkyController`, lluvia matrix sin uso.
+  - Detalle por commit en `documentation/changelog/14-09-2026-changelog.md`.
 
 ### Fixed
 - [2026-09-07 08:06] [Fixed] **Resolución del error 500 en servidor de desarrollo Next.js:**

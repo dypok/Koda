@@ -145,3 +145,28 @@
 
 **DoD adicional para esta US:**
 - Rendimiento impecable sin parpadeos visuales al cambiar entre tipos de ejercicio.
+
+---
+
+### LESS-06 — Motor de Ejecución de Código Híbrido (`ICodeRunner`) y Carga Documental NoSQL
+**Tipo:** Story | **SP:** 5 | **Prioridad:** Muy Alta | **Asignado:** Fullstack Developer  
+**Rama sugerida:** `feature/icoderunner-hybrid-nosql`  
+**Trazabilidad:** `ADR-006`, `ADR-008`, `ADR-009`, `documentation/04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md`
+
+**Historia de usuario:**
+> "Como estudiante, quiero ejecutar código Python directamente en mi navegador con retroalimentación instantánea y consultar lecciones sin latencia,
+> para comprobar mis hipótesis de programación en menos de 500 ms de forma segura y fluida."
+
+**Criterios de aceptación:**
+- **Carga Documental desde MongoDB (`ADR-009`):**
+  - Endpoint `GET /api/v1/content/lessons/:id` entrega el documento completo de la micro-lección en una sola consulta $O(1)$ sin joins (teoría Markdown, código inicial, casos de prueba, pistas y metadatos).
+- **Ejecución Híbrida (`ADR-006`):**
+  - **Cliente (Nivel 1):** Ejecución instantánea en WebAssembly mediante Pyodide para ejercicios estándar sin I/O bloqueante (latencia < 200 ms).
+  - **Backend Sandbox (Nivel 2 Fallback):** Para ejecuciones complejas o que superen límites de memoria del navegador, fallback seguro hacia sandbox Docker en NestJS con límites estrictos de CPU (0.5 cores), memoria (64 MB) y timeout de 3 segundos.
+- Manejo seguro de errores de sintaxis y excepciones (`SyntaxError`, `NameError`, `ZeroDivisionError`) formateados pedagógicamente sin exponer trazas internas del servidor.
+
+**Subtasks:**
+- [ ] [FRONTEND] Integrar Web Worker con Pyodide para ejecución de Python en cliente sin congelar la UI.
+- [ ] [BACKEND] Implementar interfaz `ICodeRunner` en NestJS `CodeExecutionService` con driver Docker aislado.
+- [ ] [BACKEND] Mapear schema Mongoose de lecciones en MongoDB (`ADR-009`) para entrega atómica en `ContentModule`.
+- [ ] [TEST] Verificar aislamiento y timeout del sandbox ante bucles infinitos (`while True:`).

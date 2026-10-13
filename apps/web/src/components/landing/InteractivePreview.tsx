@@ -6,10 +6,10 @@ import { LiveCodeComparisonSection } from '@/views/landing/preview/LiveCodeCompa
 
 export const InteractivePreview: React.FC = () => {
   return (
-    <div className="relative">
+    <section aria-label="Vista previa" id="vista-previa" className="relative scroll-mt-20">
       <FreeTierSection />
       <LiveCodeComparisonSection />
-    </div>
+    </section>
   );
 };
 

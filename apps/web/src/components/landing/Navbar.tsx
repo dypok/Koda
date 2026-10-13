@@ -2,16 +2,13 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { LanguageSelector } from './LanguageSelector';
+import { KodaLogo } from './KodaLogo';
+import { WipeButton } from '@/components/ui/wipe-button';
 import { cn } from '@/lib/utils';
 
-interface NavbarProps {
-  onOpenLogin?: () => void;
-}
-
-export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
+export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -36,30 +33,47 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenLogin }) => {
           : 'bg-transparent border-b border-transparent shadow-none'
       )}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        {/* Left: Brand Logo */}
-        <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="relative flex h-10 w-10 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 group-hover:scale-105 group-hover:border-amber-500/40 transition-all overflow-hidden">
-            <Image
-              src="/logo.png"
-              alt="KodaAcademy Logo"
-              width={40}
-              height={40}
-              className="object-contain"
-              priority
-            />
-          </div>
-          <div className="flex flex-col">
-            <div className="flex items-center gap-1.5">
-              <span className="font-display text-2xl font-bold tracking-tight bg-gradient-to-r from-orange-500 via-amber-400 to-orange-500 bg-clip-text text-transparent">
-                KodaAcademy
-              </span>
-            </div>
-          </div>
-        </Link>
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
+        {/* Left: Brand Logo (k{}da wordmark) */}
+        <KodaLogo imgClassName="h-6 w-auto sm:h-7" />
 
-        {/* Right: Selector de idioma desplegable */}
-        <div className="flex items-center gap-3">
+        {/* Center: Desktop nav */}
+        <nav aria-label="Principal" className="hidden md:flex items-center gap-1 text-sm font-medium text-slate-300">
+          <Link
+            href="#metodologia"
+            className="rounded-lg px-3 py-2 transition-colors hover:text-white hover:bg-slate-800/60"
+          >
+            Metodología
+          </Link>
+          <Link
+            href="#vista-previa"
+            className="rounded-lg px-3 py-2 transition-colors hover:text-white hover:bg-slate-800/60"
+          >
+            Vista previa
+          </Link>
+          <Link
+            href="#testimonios"
+            className="rounded-lg px-3 py-2 transition-colors hover:text-white hover:bg-slate-800/60"
+          >
+            Opiniones
+          </Link>
+          <Link
+            href="#planes"
+            className="rounded-lg px-3 py-2 transition-colors hover:text-white hover:bg-slate-800/60"
+          >
+            Planes
+          </Link>
+        </nav>
+
+        {/* Right: CTA + Selector de idioma desplegable */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <WipeButton
+            href="/register"
+            size="sm"
+            className="hidden sm:inline-flex px-4 font-bold"
+          >
+            Comenzar gratis
+          </WipeButton>
           <LanguageSelector />
         </div>
       </div>

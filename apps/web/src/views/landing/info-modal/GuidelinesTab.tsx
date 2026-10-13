@@ -1,11 +1,11 @@
 import React from 'react';
-import { IconUsers } from '@tabler/icons-react';
+import { Users } from '@phosphor-icons/react';
 
 export const GuidelinesTab: React.FC = () => (
   <div className="space-y-6 animate-fadeIn">
     <div>
       <div className="inline-flex items-center gap-1.5 text-xs font-semibold text-orange-400 bg-orange-500/10 px-2.5 py-0.5 rounded-full border border-orange-500/20 mb-2 font-sans">
-        <IconUsers className="w-3.5 h-3.5" />
+        <Users className="w-3.5 h-3.5" />
         Convivencia y Aprendizaje
       </div>
       <h4 className="font-display text-2xl font-bold text-white tracking-tight">Normas de la Comunidad Koda</h4>

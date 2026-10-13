@@ -1,0 +1,81 @@
+# Changelog: 13-09-2026
+
+- [Sunday]-[13/09/2026]-[12:04]-[Brandon Carranza] : S2 GSAP ScrollTrigger + parallax del hero (copy -70, mascota -140, grid 12%, carrusel fade) con Lenis en el ticker de GSAP; wrappers evitan pelear con framer.
+- [Sunday]-[13/09/2026]-[12:21]-[Brandon Carranza] : S3 scroll-spy de 4 pilares con `IntersectionObserver` + barra de progreso ámbar con spring y `aria-current` en pilar activo.
+- [Sunday]-[13/09/2026]-[12:24]-[Brandon Carranza] : S4 reveals variados (Streak blur-to-sharp, Roadmap wipe `clip-path`, LiveCode spring, Hints rotate, CTA mascota spring); fin del fade-up único.
+- [Sunday]-[13/09/2026]-[12:28]-[Brandon Carranza] : S5 micro-interacciones (`Magnetic` en CTAs, counters con spring, burst al descubrir la estrella, shake en fallo y pop en acierto de la demo).
+- [Sunday]-[13/09/2026]-[12:34]-[Brandon Carranza] : T1 carrusel tech como pills (progreso por tech, pausa visible con `aria-pressed`, mitad duplicada `aria-hidden`, 28s móvil/48s desktop); modelo con `category/progress/status` y paleta única.
+- [Sunday]-[13/09/2026]-[12:37]-[Brandon Carranza] : T2 skill-tree vivo (dash-flow en bloqueadas, partículas `animateMotion`, anillos orbitales, ping+breathe en 04, checks en 01-03, candado en 05A, cofre flotante, boss flicker, filtros 5→2, `role="img"`).
+- [Sunday]-[13/09/2026]-[12:37]-[Brandon Carranza] : T3 selector de idioma premium (trigger con bandera+código en pill h-9, dropdown w-60 con stagger, `menuitemradio`, badge Pronto, persistencia y retorno de foco; banderas rectangulares + EN/PT/FR comingSoon).
+- [Sunday]-[13/09/2026]-[12:39]-[Brandon Carranza] : U1 InfoModal accesible (fix `exit` de AnimatePresence, focus trap + restore + inicial, tablist con flechas, tabpanel con key y scroll-top, FAQs como acordeón `details/summary`, rompe import circular).
+- [Sunday]-[13/09/2026]-[12:40]-[Brandon Carranza] : U2 footer honesto (social externa con `target=_blank` y `aria-label`, Blog abre el modal, iconos en soporte/legal, columnas `nav` con `aria-labelledby`).
+- [Sunday]-[13/09/2026]-[12:41]-[Brandon Carranza] : V1-V4 rendimiento (imágenes AVIF/WebP, fuera `three`/`ogl` sin uso, sky 200/90/60 estrellas según móvil/save-data y DPR 1.5 en táctil; fuentes ya `swap+latin`).
+- [Sunday]-[13/09/2026]-[12:42]-[Brandon Carranza] : V5-V9 kit de conversión (`AnnouncementBar` dismissible, `Testimonials`, tabla Gratis vs Premium $1, CTA sticky móvil, `ExitIntentModal` 1x por sesión solo desktop).
+- [Sunday]-[13/09/2026]-[12:44]-[Brandon Carranza] : V10-V12 kit lúdico (Koda emocional en demo con `aria-live`, `StreakPreview` de 7 llamas + freeze, sonido WebAudio opt-in con toggle en footer).
+- [Sunday]-[13/09/2026]-[12:46]-[Brandon Carranza] : V13-V15 kit de confianza (sección certificado `KODA-PY-000001`, i18n ES/EN del hero con hook, páginas 404 y error con Koda).
+- [Sunday]-[13/09/2026]-[12:53]-[Brandon Carranza] : W1 split-text del hero por carácter/palabra con máscaras y stagger GSAP (`SplitText` reusable, `aria-label`).
+- [Sunday]-[13/09/2026]-[12:54]-[Brandon Carranza] : W2 terminal typewriter que escribe `print("Hola, Koda")` en loop con cursor y salida verde.
+- [Sunday]-[13/09/2026]-[12:55]-[Brandon Carranza] : W3 `Highlight` con marcador ámbar `scaleX` por scrub en 9 títulos (reemplaza subrayados estáticos).
+- [Sunday]-[13/09/2026]-[12:56]-[Brandon Carranza] : W4 contadores odómetro (dígitos slot-machine, easing quart, `once`, `aria-label`).
+- [Sunday]-[13/09/2026]-[12:57]-[Brandon Carranza] : W5 marquesina gigante APRENDE·PRACTICA·DOMINA en outline que acelera con la velocidad de Lenis.
+- [Sunday]-[13/09/2026]-[12:57]-[Brandon Carranza] : W6 grain cinematográfico global (`feTurbulence` 8fps, opacidad 0.05).
+- [Sunday]-[13/09/2026]-[12:58]-[Brandon Carranza] : W7 halo ámbar que sigue el cursor en el hero (solo puntero fino).
+- [Sunday]-[13/09/2026]-[12:58]-[Brandon Carranza] : W8 confeti de 24 glifos de código con física GSAP al acertar la demo.
+- [Sunday]-[13/09/2026]-[12:59]-[Brandon Carranza] : W9 divisor de onda ámbar entre metodología y testimonios.
+- [Sunday]-[13/09/2026]-[12:59]-[Brandon Carranza] : W10 `KodaPeek` con parallax propio en roadmap y pricing (easter egg, oculto en móvil).
+- [Sunday]-[13/09/2026]-[13:00]-[Brandon Carranza] : W11 `PillarStrip` pineada (`sticky top-16`, tablist con scroll-spy) durante el viaje de metodología.
+- [Sunday]-[13/09/2026]-[13:01]-[Brandon Carranza] : W12 `TransitionLink` con View Transitions API hacia `/register` (salida fundida + entrada deslizante, fallback normal).
+- [Sunday]-[13/09/2026]-[13:02]-[Brandon Carranza] : W13 skill-tree que se dibuja con scrub por longitud real (`strokeDashoffset` escalonado).
+- [Sunday]-[13/09/2026]-[13:03]-[Brandon Carranza] : W14 testimonios como carrusel (snap, flechas 44px, dots tablist, autoplay 5.2s pausable, card activa con glow).
+- [Sunday]-[13/09/2026]-[13:03]-[Brandon Carranza] : W15 `CinematicFinale` (negro total, frase palabra por palabra, Koda 168, CTA gigante magnético con pulso).
+- [Sunday]-[13/09/2026]-[13:17]-[Brandon Carranza] : E1 `Preloader` cinematográfico (anillo draw + odómetro + wipe, 1x por sesión, timeout de seguridad).
+- [Sunday]-[13/09/2026]-[13:18]-[Brandon Carranza] : E8 eclipse con anillo ámbar por scrub en el finale.
+- [Sunday]-[13/09/2026]-[13:19]-[Brandon Carranza] : E6 aurora (`@property --koda-hue` ámbar→esmeralda→cian cada 20s en progreso e highlights, toggle persistente en footer).
+- [Sunday]-[13/09/2026]-[13:19]-[Brandon Carranza] : E5 `WorldMap` de puntos con 12 focos pulsantes y contador vivo con jitter.
+- [Sunday]-[13/09/2026]-[13:20]-[Brandon Carranza] : E7 3 haces volumétricos barriendo el hero (clip-path + blend-screen, solo puntero fino).
+- [Sunday]-[13/09/2026]-[13:20]-[Brandon Carranza] : E9 `WeatherLayer` (ascuas/luciérnagas/polvo dorado, máx 14 partículas, solo en viewport) en roadmap/pistas/certificado.
+- [Sunday]-[13/09/2026]-[13:21]-[Brandon Carranza] : E10 modo fiesta konami (hue-rotate global 30s, badge dismissible, arpegio chiptune; inactivo con `reduced-motion`).
+- [Sunday]-[13/09/2026]-[13:31]-[Brandon Carranza] : Fix autoplay de testimonios que arrastraba la página (`scrollLeft` manual del track en vez de `scrollIntoView`; fuera drag de framer).
+- [Sunday]-[13/09/2026]-[13:39]-[Brandon Carranza] : Fusión del CTA clásico en `CinematicFinale` (login secundario + trust points absorbidos; eliminados `CtaSection/CtaActions/CtaTrustPoints`).
+- [Sunday]-[13/09/2026]-[13:50]-[Brandon Carranza] : F7 `GlowParallax` (9 glows a ritmo propio con scrub, absorbiendo translates de Tailwind).
+- [Sunday]-[13/09/2026]-[13:51]-[Brandon Carranza] : F4 cortina ámbar con scrub en `WaveDivider` + F5 barrido de brillo sobre el diploma.
+- [Sunday]-[13/09/2026]-[13:52]-[Brandon Carranza] : F9 skew por velocidad en la marquesina + F11 lift de la card activa de testimonios.
+- [Sunday]-[13/09/2026]-[13:53]-[Brandon Carranza] : F10 metodología apilada (sticky escalonado con rounded y sombra) + F2 demo pineada `top-24` en desktop.
+- [Sunday]-[13/09/2026]-[13:54]-[Brandon Carranza] : F12 diploma sticky con checklist que se ilumina item por item.
+- [Sunday]-[13/09/2026]-[13:55]-[Brandon Carranza] : F8 focos del mapa que se encienden escalonados con scrub.
+- [Sunday]-[13/09/2026]-[13:56]-[Brandon Carranza] : F6 eclipse-wipe al footer (eclipse x3.2 + fundido del contenido) + F13 `RouteThread` lateral que crece con el scroll.
+- [Sunday]-[13/09/2026]-[13:58]-[Brandon Carranza] : F15 `ActTheme` (`body[data-act]`, grano por tramo, ids de sección) + F1 hero pineado 200vh con el contenido deslizándose encima.
+- [Sunday]-[13/09/2026]-[13:59]-[Brandon Carranza] : F3 premium elevada sobre gratis + F14 `KodaGuide` narradora fija solo en desktop.
+- [Sunday]-[13/09/2026]-[14:10]-[Brandon Carranza] : D1 fondo 3D (`three` + `@types/three`, `CosmicBackground` ssr:false full-page, DPR capado, dispose total).
+- [Sunday]-[13/09/2026]-[14:11]-[Brandon Carranza] : D2 `ShaderMaterial` con twinkle por estrella y uniforms de warp e intensidad.
+- [Sunday]-[13/09/2026]-[14:12]-[Brandon Carranza] : D3 cosmos reactivo (dolly z 8→4.5, warp por velocity de Lenis, intensidad por acto) + D4 `UnrealBloomPass` lazy con fallback.
+- [Sunday]-[13/09/2026]-[14:13]-[Brandon Carranza] : D5 guardián de fps (degrada bloom→partículas→off si <45fps×3s, relevo del sky 2D).
+- [Sunday]-[13/09/2026]-[14:23]-[Brandon Carranza] : R1 `SelectableCard` radio único + `StepLayout` con stagger reemplazan 3 cards y 3 steps duplicados (-78 líneas); fix `p-4.5` inválido.
+- [Sunday]-[13/09/2026]-[14:24]-[Brandon Carranza] : R2 progressbar real, persistencia del wizard en localStorage, flechas de teclado, bottom bar con blur/hint y tab correcto, iconos lucide.
+- [Sunday]-[13/09/2026]-[14:27]-[Brandon Carranza] : R3 form con submit Enter, labels asociadas, errores por campo con alert, medidor de fuerza con meter, ojo con aria-pressed, términos sin affordance falsa + R4 social auth con loading por provider, marcas SVG propias y aviso honesto.
+- [Sunday]-[13/09/2026]-[14:28]-[Brandon Carranza] : R5 success modal accesible (exit animado, focus trap + restore, Escape a ruta, confeti, CTA a roadmap, sin bounce infinito).
+- [Sunday]-[13/09/2026]-[14:29]-[Brandon Carranza] : R6 slide direccional entre pasos con `AnimatePresence wait` + contador odómetro en el header.
+- [Sunday]-[13/09/2026]-[14:30]-[Brandon Carranza] : R7 burbuja `kodaSay` en los 5 pasos + pills de categoría como tablist.
+- [Sunday]-[13/09/2026]-[14:31]-[Brandon Carranza] : R8 Tu plan revisable (filas editables que saltan al paso, minutos visibles, sin defaults falsos, `goToStep`).
+- [Sunday]-[13/09/2026]-[14:32]-[Brandon Carranza] : R9 `AVAILABLE_IDS` + `techAvailability` como única fuente, iconos no-brand a lucide, eliminado controller duplicado + R10 fondo vivo (estrellas por paso, luciérnagas al final).
+- [Sunday]-[13/09/2026]-[14:51]-[Brandon Carranza] : G5 layout FLIP en `StepLayout` y grid de idiomas con `popLayout` al filtrar + G6 fondo narrativo (`body[data-register-step]`, hue/brightness por paso).
+- [Sunday]-[13/09/2026]-[14:52]-[Brandon Carranza] : G13 CTA contextual por paso con hint argumentado.
+- [Sunday]-[13/09/2026]-[14:53]-[Brandon Carranza] : G7 Koda reactivo (ojos al campo enfocado, salto por campo válido, decorativo).
+- [Sunday]-[13/09/2026]-[14:54]-[Brandon Carranza] : G14 handoff al roadmap (overlay con Koda volando + View Transition).
+- [Sunday]-[13/09/2026]-[14:56]-[Brandon Carranza] : G8 `TerminalLanguagePicker` (`$ koda use`, filtro, flechas/Enter) con toggle grid/terminal persistente.
+- [Sunday]-[13/09/2026]-[14:58]-[Brandon Carranza] : G15 `?v=express` (3 pasos visibles, defaults en resumen, evento analytics stub).
+- [Sunday]-[13/09/2026]-[16:23]-[Brandon Carranza] : Fix scanner del roadmap (capture diferido al umbral, selección fallback por `elementFromPoint`, sync anti-bucle, `data-node-id`).
+- [Sunday]-[13/09/2026]-[16:25]-[Brandon Carranza] : M6 avance real desbloqueados/total, hito sin fallback falso, racha/XP/nivel sin números inventados.
+- [Sunday]-[13/09/2026]-[16:26]-[Brandon Carranza] : M7 barra segmentada con `progressPercent` y Continuar al curso del nodo activo, iconos lucide.
+- [Sunday]-[13/09/2026]-[16:27]-[Brandon Carranza] : M8 Simular Desbloqueo solo en dev + avance persistido en localStorage.
+- [Sunday]-[13/09/2026]-[16:29]-[Brandon Carranza] : M9 ramas con `aria-pressed` y bloqueo en carga, overlay de carga, fix doble `/api/v1` y puerto, fuera huérfanos.
+- [Sunday]-[13/09/2026]-[16:31]-[Brandon Carranza] : Fase 2 canvas legible (fondo único 60, nodos con rol/foco/teclado/hit-area, texto contreescalado, controles abajo 44px, anillos lentos, fotones solo en activa).
+- [Sunday]-[13/09/2026]-[16:32]-[Brandon Carranza] : M11 inspector con scanline, XP/estrellas con odómetro e iconos lucide.
+- [Sunday]-[13/09/2026]-[16:33]-[Brandon Carranza] : M12 conexiones del nodo activo en ámbar.
+- [Sunday]-[13/09/2026]-[16:34]-[Brandon Carranza] : M13 warp con bypass instantáneo en `reduced-motion`.
+- [Sunday]-[13/09/2026]-[16:36]-[Brandon Carranza] : M14 boss con doble anillo, flicker, shake al intentarlo y tooltip de requisitos.
+- [Sunday]-[13/09/2026]-[16:37]-[Brandon Carranza] : M15 ticks vivos por nodo en la leyenda.
+- [Sunday]-[13/09/2026]-[17:55]-[Brandon Carranza] : Resurrecci�n de Lua (M01 9x10=90 + M02 10x10=100 lecciones, manifest 12 m�dulos, metodolog�a 28 y ADR-005-lua adaptados a la estructura actual).
+- [Sunday]-[13/09/2026]-[18:05]-[Brandon Carranza] : Lua como segunda especialidad (elegible en registro con icono luna, pill live 100% en carrusel, copy ES/EN con Python y Lua).
+- [Sunday]-[13/09/2026]-[18:15]-[Brandon Carranza] : Rama Lua Specialist en el roadmap (12 nodos generados del manifest, lecciones reales M01/M02 local-first en el servicio).
+- [Sunday]-[13/09/2026]-[18:30]-[Brandon Carranza] : Workspace de lecci�n (loader con code-split, ruta curso/seccion split 50/50, renderer por tipo, XP + repaso, quiz 70% con desbloqueo, rail conectado).

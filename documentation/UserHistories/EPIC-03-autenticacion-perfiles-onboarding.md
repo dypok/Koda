@@ -1,5 +1,5 @@
 # 🟣 EPIC 3 — Autenticación, Perfiles de Usuario y Onboarding
-`Sprint 2 · v1.0 · Color Jira: Morado · Código: AUTH`
+`Sprint 2 · v2.0 · Color Jira: Morado · Código: AUTH · 5 Stories · 21 SP · ESTADO: 🟢 100% COMPLETADA`
 
 > Esta épica cubre el ciclo de vida de identidad del usuario en Koda 🦊: registro seguro, inicio de sesión mediante JWT stateless con refresh rotativo HttpOnly, prueba diagnóstica inicial, configuración de perfil y persistencia en Supabase Auth (`19_SECURITY.md`, `05_FUNCTIONAL_REQUIREMENTS.md` RF-AUTH-*).
 
@@ -22,13 +22,13 @@
 - Manejo de respuestas 401 Unauthorized sin fugas de información.
 
 **Subtasks:**
-- [ ] [BD] Configurar Supabase Auth con proveedores Email/Password y tabla `auth.users` vinculada a `public.profiles`.
-- [ ] [BACKEND] Implementar `AuthModule` en `apps/api/src/modules/auth/` con endpoints `POST /auth/register`, `POST /auth/login`, `POST /auth/refresh`, `POST /auth/logout`.
-- [ ] [BACKEND] Configurar `JwtAuthGuard` y decorador `@CurrentUser()` para inyección de usuario autenticado en controladores.
-- [ ] [BACKEND] Implementar servicio de rotación de Refresh Tokens con almacenamiento de hash en tabla de sesiones.
-- [ ] [FRONTEND] Diseñar formulario de login y registro en `apps/web/src/app/(auth)/` con validación en cliente (Zod / React Hook Form).
-- [ ] [FRONTEND] Configurar interceptor en `apiClient` para auto-renovación silenciosa del token al recibir 401.
-- [ ] [FRONTEND] Persistir estado de autenticación en Zustand `authStore` y sincronizar con cookie de sesión.
+- [x] [BD] Configurar Supabase Auth con proveedores Email/Password y tabla `auth.users` vinculada a `public.users` (`schema.prisma`).
+- [x] [BACKEND] Implementar `AuthModule` en `apps/api/src/presentation/rest/auth/` con endpoints de sesión y validación de tokens (`POST /api/v1/auth/verify-session`, `GET /api/v1/auth/session`).
+- [x] [BACKEND] Configurar `SupabaseAuthGuard` y decorador `@CurrentUser()` para inyección de usuario autenticado en controladores.
+- [x] [BACKEND] Implementar servicio de autenticación delegada en Supabase Auth con rotación y auto-aprovisionamiento (`ValidateUserSessionUseCase`).
+- [x] [FRONTEND] Configurar interceptor en `apiClient` para auto-renovación silenciosa del token al recibir 401 (`AuthService.authFetch` y `scheduleBackgroundRefresh`).
+- [x] [FRONTEND] Diseñar formulario de registro interactivo en `apps/web/src/app/(auth)/` con validación Zod, feedback de errores, paleta Dark Navy y React Hook Form (`feat/register-frontend`).
+- [x] [FRONTEND] Persistir estado de autenticación en Zustand `authStore` y sincronizar con cookie de sesión y localStorage.
 
 **DoD adicional para esta US:**
 - Flujo completo probado: registro $\rightarrow$ login $\rightarrow$ navegación protegida $\rightarrow$ refresh silencioso $\rightarrow$ logout verificado en Swagger `/api/docs`.
@@ -55,11 +55,11 @@
 - Opción clara de "Omitir diagnóstico y empezar desde cero".
 
 **Subtasks:**
-- [ ] [BACKEND] Endpoint `POST /api/v1/learning/diagnostic/submit` que evalúa respuestas del test diagnóstico y calcula el `recommended_module_id`.
-- [ ] [BACKEND] Endpoint `GET /api/v1/learning/diagnostic/questions` que entrega 12 preguntas calibradas sin revelar las respuestas correctas.
-- [ ] [FRONTEND] Diseñar pantalla de onboarding `apps/web/src/app/onboarding/page.tsx` con cards interactivas de autodeclaración de nivel.
-- [ ] [FRONTEND] Implementar vista del test diagnóstico con stepper de progreso y temporizador formativo.
-- [ ] [FRONTEND] Modal de resultados con animación de Koda 🦊 celebrando el módulo de entrada recomendado.
+- [x] [BACKEND] Endpoint `POST /api/v1/learning/diagnostic/submit` que evalúa respuestas del test diagnóstico, aplica clamping y calcula el `recommended_module_id` (Entregable: `documentation/done/backend/backend-04-auth-onboarding-diagnostico.md`).
+- [x] [BACKEND] Endpoint `GET /api/v1/learning/diagnostic/questions` que entrega 12 preguntas calibradas sin revelar las respuestas correctas.
+- [x] [FRONTEND] Diseñar pantalla de onboarding `apps/web/src/app/onboarding/page.tsx` con cards interactivas de autodeclaración de nivel.
+- [x] [FRONTEND] Implementar vista del test diagnóstico con stepper de progreso y temporizador formativo (`DiagnosticTestModal.tsx`).
+- [x] [FRONTEND] Modal de resultados con animación de Koda 🦊 celebrando el módulo de entrada recomendado (`DiagnosticResultModal.tsx`).
 
 **DoD adicional para esta US:**
 - Cobertura de tests unitarios verificando los 4 casos del algoritmo de clamping y determinación de módulo de inicio.
@@ -81,11 +81,12 @@
 - Visualización de estadísticas del estudiante: lecciones completadas, porcentaje de maestría en Python 3.12, certificados obtenidos.
 
 **Subtasks:**
-- [ ] [BD] Verificar tabla `user_profiles` en Supabase con función `pgp_sym_encrypt` para número de identificación legal.
-- [ ] [BACKEND] Controlador `UsersController` con endpoints de lectura y actualización parcial de perfil.
-- [ ] [FRONTEND] Pantalla `apps/web/src/app/perfil/page.tsx` con grid de estadísticas, badge de nivel y selector de avatares.
-- [ ] [FRONTEND] Formulario de edición con validación de nombre y cédula/pasaporte.
-- [ ] [FRONTEND] Toast interactivo de confirmación al actualizar datos.
+- [x] [BD] Verificar tabla `public.users` en PostgreSQL (Supabase) con persistencia de campos `document_type`, `document_number`, `avatar_url`, `bio` y metas de estudio.
+- [x] [BACKEND] Implementar `UsersController` con endpoints de lectura (`GET /api/v1/users/me`) y actualización parcial (`PATCH /api/v1/users/me`), casos de uso hexagonales y enmascaramiento de cédula (Entregable: `documentation/done/backend/backend-03-auth-perfil-usuario.md`).
+- [x] [FRONTEND] Pantalla `apps/web/src/app/perfil/page.tsx` con grid de estadísticas, badge de nivel y selector de avatares.
+- [x] [FRONTEND] Formulario de edición con validación de nombre y cédula/pasaporte con enmascaramiento PII.
+- [x] [FRONTEND] Toast interactivo de confirmación al actualizar datos (`ProfileToast`).
+- [x] [FRONTEND] Menú desplegable en el HUD superior derecho (`ProfileDropdownMenu`) y modal de configuración integral (`ProfileSettingsModal`).
 
 **DoD adicional para esta US:**
 - El número de documento se transmite con TLS y se devuelve enmascarado en la API pública.
@@ -107,10 +108,62 @@
 - Rate limiting estricto: máximo 3 solicitudes de recuperación por IP por hora (`19` §10).
 
 **Subtasks:**
-- [ ] [BACKEND] Configurar plantilla de email transaccional en Supabase Auth / Resend con diseño institucional Koda.
-- [ ] [BACKEND] Implementar endpoints de solicitud y confirmación de reset con validación de token seguro.
-- [ ] [FRONTEND] Pantalla `apps/web/src/app/(auth)/recuperar/page.tsx` con input de email y feedback amigable.
-- [ ] [FRONTEND] Pantalla `apps/web/src/app/(auth)/nueva-clave/page.tsx` para digitar y confirmar nueva contraseña.
+- [x] [BACKEND] Configurar plantilla de email transaccional en Supabase Auth / Resend con diseño institucional Koda y TTL 15 min.
+- [x] [BACKEND] Implementar endpoints de solicitud y confirmación de reset con validación de token seguro (`POST /api/v1/auth/forgot-password`, `POST /api/v1/auth/reset-password`) con rate limiting y prevención OWASP (Entregable: `documentation/done/backend/backend-05-auth-recuperacion-password.md`).
+- [x] [FRONTEND] Flujo de recuperación de contraseña integrado en modal de login (`AuthService.requestPasswordReset`).
+- [x] [FRONTEND] Pantalla `apps/web/src/app/nueva-clave/page.tsx` para digitar y confirmar nueva contraseña con validación de complejidad de clave.
 
 **DoD adicional para esta US:**
 - Token invalidado inmediatamente tras ser consumido una vez.
+
+---
+
+### AUTH-05 — Registro y Autenticación Dual (Email/Password + OTP y Google OAuth2) con Onboarding E-Learning
+**Tipo:** Story | **SP:** 5 | **Prioridad:** Muy Alta | **Asignado:** Fullstack Developer  
+**Rama sugerida:** `feat/backend-auth-05-otp-oauth-onboarding`
+
+**Historia de usuario:**
+> "Como nuevo estudiante de Koda,
+> quiero poder registrarme usando credenciales tradicionales (con validación de correo vía código OTP) o mediante mi cuenta de Google OAuth2,
+> para acceder de forma rápida y segura a la plataforma, asegurando que mis preferencias de aprendizaje (lenguaje, nivel, estilo y metas diarias) queden guardadas en mi perfil de forma obligatoria e independiente del método seleccionado."
+
+**Criterios de aceptación (Gherkin):**
+- [x] **Escenario 1 (Registro Tradicional + OTP):**
+  - **Dado** que el usuario ingresa su nombre, correo y contraseña segura en el formulario de registro,
+  - **Cuando** presiona "Crear cuenta",
+  - **Entonces** Supabase Auth crea la cuenta en estado pendiente de verificación y envía un código OTP de 6 dígitos a su correo; el usuario visualiza una pantalla/modal para ingresar el código. Al verificar el OTP exitosamente, se inicia la sesión y se consolidan los datos del onboarding en su perfil interno.
+- [x] **Escenario 2 (Registro con Google OAuth2):**
+  - **Dado** que el usuario selecciona "Continuar con Google",
+  - **Cuando** autoriza sus credenciales en la pantalla de consentimiento de Google,
+  - **Entonces** Supabase Auth crea la identidad federada; al retornar a la plataforma, el sistema detecta que es un usuario nuevo (`onboarding_completed = false`) y lo transfiere automáticamente a completar las preguntas del onboarding (tecnología, nivel, metas, estilo) antes de permitir el ingreso al roadmap de cursos.
+- [x] **Escenario 3 (Continuidad del Onboarding Previo):**
+  - **Dado** que el usuario ya seleccionó tecnología, nivel y metas en los primeros pasos del onboarding y en el último paso elige "Continuar con Google",
+  - **Cuando** concluye la autenticación externa,
+  - **Entonces** las preferencias previas almacenadas temporalmente se sincronizan automáticamente con el backend sin obligarlo a repetir las selecciones.
+- [x] **Escenario 4 (Persistencia y Sincronización Interna en Supabase):**
+  - **Dado** un usuario autenticado por cualquiera de los dos métodos,
+  - **Cuando** se completan las preferencias de onboarding,
+  - **Entonces** el backend actualiza la tabla `public.users` en PostgreSQL (vía Prisma), sincroniza los metadatos en `auth.users.raw_user_meta_data` y marca `onboarding_completed = true`.
+- [x] **Escenario 5 (Seguridad y Resiliencia del OTP):**
+  - **Dado** que el código OTP expira (TTL 10 min) o se digita incorrectamente,
+  - **Cuando** el usuario interactúa con la interfaz,
+  - **Entonces** recibe mensaje de error descriptivo con opción de solicitar reenvío (`Resend OTP`), sujeto a rate-limiting (máximo 3 reenvíos por hora).
+
+**Subtasks:**
+- [x] [BD] Agregar campo `onboardingCompleted` (Boolean @default(false)) en `schema.prisma` y actualizar `UserEntity`.
+- [x] [BACKEND] Implementar métodos en `SupabaseService` para `signUpWithEmail`, `verifyOtp`, `resendOtp` y `updateUserMetadata`.
+- [x] [BACKEND] Crear casos de uso `RegisterWithOtpUseCase`, `VerifyOtpUseCase` y `CompleteOnboardingUseCase` con validaciones de dominio.
+- [x] [BACKEND] Exponer endpoints en `AuthController`:
+  - `POST /api/v1/auth/register-otp`: Inicia registro y envío de código OTP.
+  - `POST /api/v1/auth/verify-otp`: Valida código OTP y emite sesión con tokens.
+  - `POST /api/v1/auth/onboarding`: Registra y sincroniza las preferencias educativas finales (`onboarding_completed=true`).
+  - `GET /api/v1/auth/onboarding-status`: Consulta el estado de onboarding del usuario actual.
+- [x] [TESTS] Pruebas unitarias de casos de uso backend (Jest 100% passed: 4 suites, 11 tests).
+- [x] [FRONTEND] Implementar cliente en `apps/web` con soporte OAuth Google y GitHub (`AuthService.getOAuthRedirectUrl`).
+- [x] [FRONTEND] Diseñar vista/modal de validación de código OTP con temporizador de expiración y botón de reenvío (`RegisterOtpModal.tsx`).
+- [x] [FRONTEND] Procesar el retorno de Google OAuth2 en `LoginPage` y `RegisterPage` y enrutar inteligentemente a `/register` (si falta onboarding) o a `/`.
+
+**DoD adicional para esta US:**
+- Backend listo y verificado con 100% de tests aprobados; frontend desacoplado conforme a las reglas del `koda-backend-workflow.md` (ADR-015).
+
+
