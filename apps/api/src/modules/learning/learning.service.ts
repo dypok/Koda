@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, Logger, NotFoundException, Optional } from '@nestjs/common';
 import type {
   RoadmapResponse,
   LessonDetail,
@@ -28,7 +28,9 @@ export class LearningService {
     private readonly curriculumRepository: ICurriculumRepository,
     @Inject(PROGRESS_REPOSITORY_TOKEN)
     private readonly progressRepository: IProgressRepository,
+    @Optional()
     private readonly eventEmitter?: EventEmitter2,
+    @Optional()
     private readonly contentLoaderService?: ContentLoaderService,
   ) {}
 
@@ -56,8 +58,8 @@ export class LearningService {
           ])
         : [[], []];
 
-      const starsMap = new Map(userStars.map((s) => [s.sectionSlug, s]));
-      const modulesProgressMap = new Map(userModules.map((m) => [m.moduleSlug, m]));
+      const starsMap = new Map(userStars.map((s) => [s.sectionId, s]));
+      const modulesProgressMap = new Map(userModules.map((m) => [m.moduleId, m]));
 
       let totalStarsEarned = 0;
       let totalCompletedSectionsAcrossAll = 0;
@@ -148,12 +150,12 @@ export class LearningService {
 
       return {
         language: {
-          id: track?.id ?? slug,
+          id: track?.slug ?? slug,
           name: track?.name ?? languageSlug,
           slug,
           description: track?.description ?? '',
           color: track?.color ?? '#38BDF8',
-          icon: track?.icon ?? 'code',
+          icon_url: track?.icon ?? 'code',
           total_modules: modules.length,
           is_active: true,
         },

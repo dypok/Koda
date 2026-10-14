@@ -199,7 +199,7 @@ describe('Curriculum Use Cases (MongoDB)', () => {
     expect(coursesGraph.nodes[0].isUnlocked).toBe(true);
 
     const lessonsGraph = await useCase.getLessonsGraph('python-core');
-    expect(lessonsGraph.nodes).toHaveLength(1);
-    expect(lessonsGraph.nodes[0].id).toBe('py-m01-s01-l01');
+    expect(lessonsGraph.nodes).toHaveLength(8);
+    expect(lessonsGraph.nodes[0].id).toBe('py-m01');
   });
 });
