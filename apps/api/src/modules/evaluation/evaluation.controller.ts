@@ -3,12 +3,18 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import type { User as SupabaseAuthUser } from '@supabase/supabase-js';
 import { SupabaseAuthGuard } from '@common/guards/supabase-auth.guard';
 import { CurrentUser } from '@common/decorators/current-user.decorator';
-import { EvaluationService } from './evaluation.service';
+import { GenerateEvaluationUseCase } from '../../application/use-cases/evaluation/generate-evaluation.use-case';
+import { EvaluateAttemptUseCase } from '../../application/use-cases/evaluation/evaluate-attempt.use-case';
+import { GetAttemptSummaryUseCase } from '../../application/use-cases/evaluation/get-attempt-summary.use-case';
 
 @ApiTags('Evaluations')
 @Controller('learning')
 export class EvaluationController {
-  constructor(private readonly evaluationService: EvaluationService) {}
+  constructor(
+    private readonly generateEvaluationUseCase: GenerateEvaluationUseCase,
+    private readonly evaluateAttemptUseCase: EvaluateAttemptUseCase,
+    private readonly getAttemptSummaryUseCase: GetAttemptSummaryUseCase,
+  ) {}
 
   @Get('modules/:id/quiz')
   @UseGuards(SupabaseAuthGuard)
@@ -18,7 +24,7 @@ export class EvaluationController {
     @Param('id') moduleId: string,
     @CurrentUser() authUser: SupabaseAuthUser,
   ) {
-    return this.evaluationService.generateEvaluation(authUser.id, moduleId, 'quiz');
+    return this.generateEvaluationUseCase.execute(authUser.id, moduleId, 'quiz');
   }
 
   @Post('quiz/:id/attempt')
@@ -26,11 +32,11 @@ export class EvaluationController {
   @ApiOperation({ summary: 'Evaluar intento de Quiz' })
   @ApiResponse({ status: 200, description: 'Resultado de la evaluación' })
   async submitQuizAttempt(
-    @Param('id') quizId: string, // En realidad puede ser attemptId
-    @Body() submission: any, // Define DTO
+    @Param('id') quizId: string,
+    @Body() submission: any,
     @CurrentUser() authUser: SupabaseAuthUser,
   ) {
-    return this.evaluationService.evaluateAttempt(authUser.id, quizId, submission, 'quiz');
+    return this.evaluateAttemptUseCase.execute(authUser.id, quizId, submission, 'quiz');
   }
 
   @Get('modules/:id/exam')
@@ -41,7 +47,7 @@ export class EvaluationController {
     @Param('id') moduleId: string,
     @CurrentUser() authUser: SupabaseAuthUser,
   ) {
-    return this.evaluationService.generateEvaluation(authUser.id, moduleId, 'exam');
+    return this.generateEvaluationUseCase.execute(authUser.id, moduleId, 'exam');
   }
 
   @Post('exam/:id/attempt')
@@ -50,10 +56,10 @@ export class EvaluationController {
   @ApiResponse({ status: 200, description: 'Resultado de la evaluación' })
   async submitExamAttempt(
     @Param('id') examId: string,
-    @Body() submission: any, // Define DTO
+    @Body() submission: any,
     @CurrentUser() authUser: SupabaseAuthUser,
   ) {
-    return this.evaluationService.evaluateAttempt(authUser.id, examId, submission, 'exam');
+    return this.evaluateAttemptUseCase.execute(authUser.id, examId, submission, 'exam');
   }
 
   @Get('attempts/:attemptId/summary')
@@ -64,6 +70,6 @@ export class EvaluationController {
     @Param('attemptId') attemptId: string,
     @CurrentUser() authUser: SupabaseAuthUser,
   ) {
-    return this.evaluationService.getAttemptSummary(authUser.id, attemptId);
+    return this.getAttemptSummaryUseCase.execute(authUser.id, attemptId);
   }
 }
