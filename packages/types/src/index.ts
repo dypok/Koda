@@ -357,6 +357,7 @@ export interface LessonAnswerSubmission {
   selected_option_ids: string[];
   input_text?: string;
   ordered_block_ids?: string[];
+  time_spent_seconds?: number;
 }
 
 export interface LessonAnswerFeedback {

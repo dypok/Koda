@@ -204,7 +204,7 @@ describe('LearningService (Hybrid Progress Fusion)', () => {
     it('debe otorgar feedback positivo y XP cuando la respuesta es correcta', async () => {
       mockCurriculumRepo.findLessonBySlug.mockResolvedValue(mockLesson);
 
-      const feedback = await service.evaluateAnswer({
+      const feedback = await service.evaluateAnswer('user-1', {
         lesson_id: 'lesson-01',
         question_id: 'q1',
         selected_option_ids: ['opt-1'],
@@ -219,7 +219,7 @@ describe('LearningService (Hybrid Progress Fusion)', () => {
     it('debe indicar error y agregar al notebook de errores cuando es incorrecta', async () => {
       mockCurriculumRepo.findLessonBySlug.mockResolvedValue(mockLesson);
 
-      const feedback = await service.evaluateAnswer({
+      const feedback = await service.evaluateAnswer('user-1', {
         lesson_id: 'lesson-01',
         question_id: 'q1',
         selected_option_ids: ['opt-2'],
