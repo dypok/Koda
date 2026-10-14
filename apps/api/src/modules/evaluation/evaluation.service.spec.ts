@@ -1,50 +1,22 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EvaluationService } from './evaluation.service';
-import { CURRICULUM_REPOSITORY_TOKEN } from '@domain/repositories/curriculum.repository';
-import { SupabaseService } from '../../database/supabase.service';
-import { ContentBundleService } from '../../infra/content/content-bundle.service';
+import { GenerateEvaluationUseCase } from '../../application/use-cases/evaluation/generate-evaluation.use-case';
+import { EvaluateAttemptUseCase } from '../../application/use-cases/evaluation/evaluate-attempt.use-case';
+import { GetAttemptSummaryUseCase } from '../../application/use-cases/evaluation/get-attempt-summary.use-case';
 
-describe('EvaluationService (Anti-N+1 & Memory Bundle)', () => {
+describe('EvaluationService (Facade to Use Cases)', () => {
   let service: EvaluationService;
 
-  const mockCurriculumRepo = {
-    findModuleBySlug: jest.fn(),
-    findCourseBySlug: jest.fn(),
+  const mockGenerateEvaluationUseCase = {
+    execute: jest.fn(),
   };
 
-  const mockSupabaseClient = {
-    from: jest.fn().mockReturnThis(),
-    insert: jest.fn().mockReturnThis(),
-    select: jest.fn().mockReturnThis(),
-    single: jest.fn().mockResolvedValue({ data: { id: 'attempt-uuid-1' }, error: null }),
-    rpc: jest.fn().mockResolvedValue({ data: null, error: null }),
+  const mockEvaluateAttemptUseCase = {
+    execute: jest.fn(),
   };
 
-  const mockSupabaseService = {
-    getClient: jest.fn().mockReturnValue(mockSupabaseClient),
-  };
-
-  const mockContentBundleService = {
-    getComposition: jest.fn().mockReturnValue({
-      quiz: { single_choice: 2 },
-      exam: { single_choice: 2 },
-    }),
-    getModuleBank: jest.fn().mockReturnValue([
-      {
-        id: 'q1',
-        type: 'single_choice',
-        prompt: 'Pregunta 1',
-        correct_option_id: 'opt_a',
-        hint: 'Pista 1',
-      },
-      {
-        id: 'q2',
-        type: 'single_choice',
-        prompt: 'Pregunta 2',
-        correct_option_id: 'opt_b',
-        hint: 'Pista 2',
-      },
-    ]),
+  const mockGetAttemptSummaryUseCase = {
+    execute: jest.fn(),
   };
 
   beforeEach(async () => {
@@ -54,16 +26,16 @@ describe('EvaluationService (Anti-N+1 & Memory Bundle)', () => {
       providers: [
         EvaluationService,
         {
-          provide: CURRICULUM_REPOSITORY_TOKEN,
-          useValue: mockCurriculumRepo,
+          provide: GenerateEvaluationUseCase,
+          useValue: mockGenerateEvaluationUseCase,
         },
         {
-          provide: SupabaseService,
-          useValue: mockSupabaseService,
+          provide: EvaluateAttemptUseCase,
+          useValue: mockEvaluateAttemptUseCase,
         },
         {
-          provide: ContentBundleService,
-          useValue: mockContentBundleService,
+          provide: GetAttemptSummaryUseCase,
+          useValue: mockGetAttemptSummaryUseCase,
         },
       ],
     }).compile();
@@ -71,58 +43,36 @@ describe('EvaluationService (Anti-N+1 & Memory Bundle)', () => {
     service = module.get<EvaluationService>(EvaluationService);
   });
 
-  describe('generateEvaluation', () => {
-    it('debe generar una evaluación omitiendo correct_option_id y hints por seguridad', async () => {
-      mockCurriculumRepo.findModuleBySlug.mockResolvedValue({
-        slug: 'python-fundamentos',
-        courseSlug: 'python-core',
-      });
-      mockCurriculumRepo.findCourseBySlug.mockResolvedValue({
-        slug: 'python-core',
-        trackSlug: 'python',
-      });
-
-      const result = await service.generateEvaluation('user-1', 'python-fundamentos', 'quiz');
-
-      expect(result.evaluation_type).toBe('quiz');
-      expect(result.total_questions).toBe(2);
-      expect(result.questions[0]).not.toHaveProperty('correct_option_id');
-      expect(result.questions[0]).not.toHaveProperty('hint');
-      expect(result.questions[0]).toHaveProperty('prompt');
+  it('debe delegar generateEvaluation en GenerateEvaluationUseCase', async () => {
+    mockGenerateEvaluationUseCase.execute.mockResolvedValue({
+      evaluation_type: 'quiz',
+      total_questions: 10,
     });
+
+    const res = await service.generateEvaluation('usr-1', 'mod-1', 'quiz');
+    expect(res.total_questions).toBe(10);
+    expect(mockGenerateEvaluationUseCase.execute).toHaveBeenCalledWith('usr-1', 'mod-1', 'quiz');
   });
 
-  describe('evaluateAttempt', () => {
-    it('debe evaluar respuestas e insertar errores en un único lote sin cascada N+1', async () => {
-      mockCurriculumRepo.findModuleBySlug.mockResolvedValue({
-        slug: 'python-fundamentos',
-        courseSlug: 'python-core',
-      });
-      mockCurriculumRepo.findCourseBySlug.mockResolvedValue({
-        slug: 'python-core',
-        trackSlug: 'python',
-      });
-
-      // 1 acierto (q1: opt_a) y 1 fallo (q2: opt_wrong)
-      const submission = {
-        answers: {
-          q1: 'opt_a',
-          q2: 'opt_wrong',
-        },
-        time_spent_seconds: 45,
-      };
-
-      const result = await service.evaluateAttempt('user-1', 'python-fundamentos', submission, 'quiz');
-
-      expect(result.passed).toBe(false); // 50% < 70% threshold
-      expect(result.score).toBe(50);
-      expect(result.correct_count).toBe(1);
-
-      // Verificar que Supabase fue invocado para user_mistakes_notebook con un ARRAY (Bulk Insert)
-      const mistakeCalls = mockSupabaseClient.from.mock.calls.filter(
-        (c: string[]) => c[0] === 'user_mistakes_notebook',
-      );
-      expect(mistakeCalls.length).toBe(1); // Exactamente 1 llamada, cero cascada N+1
+  it('debe delegar evaluateAttempt en EvaluateAttemptUseCase', async () => {
+    mockEvaluateAttemptUseCase.execute.mockResolvedValue({
+      passed: true,
+      score: 100,
     });
+
+    const res = await service.evaluateAttempt('usr-1', 'mod-1', { answers: {} }, 'quiz');
+    expect(res.passed).toBe(true);
+    expect(mockEvaluateAttemptUseCase.execute).toHaveBeenCalledWith('usr-1', 'mod-1', { answers: {} }, 'quiz');
+  });
+
+  it('debe delegar getAttemptSummary en GetAttemptSummaryUseCase', async () => {
+    mockGetAttemptSummaryUseCase.execute.mockResolvedValue({
+      attempt_id: 'att-1',
+      score: 100,
+    });
+
+    const res = await service.getAttemptSummary('usr-1', 'att-1');
+    expect(res.attempt_id).toBe('att-1');
+    expect(mockGetAttemptSummaryUseCase.execute).toHaveBeenCalledWith('usr-1', 'att-1');
   });
 });

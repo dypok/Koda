@@ -12,3 +12,10 @@
 - **Miércoles-14/10/2026-10:09** - Daniel Echeverría : Implementación de `ContentBundleService` en `apps/api/src/infra/content/content-bundle.service.ts` eliminando lecturas sincrónicas `fs.readFileSync` durante peticiones HTTP y habilitando compatibilidad Cloud Stateless.
 - **Miércoles-14/10/2026-10:09** - Daniel Echeverría : Erradicación de la cascada N+1 en `EvaluationService.evaluateAttempt` mediante inserción masiva (`bulk insert`) en `user_mistakes_notebook` y `attempt_answers`.
 - **Miércoles-14/10/2026-10:09** - Daniel Echeverría : Creación de suite unitaria `evaluation.service.spec.ts` con cobertura de mitigación de spoilers y verificación de llamada única en bloque. Suite global: 20/20 pasadas (76 tests en verde).
+
+## [14/10/2026] - Fase 3 de Realineación Quirúrgica: Casos de Uso Hexagonales & Transporte GraphQL Dual
+
+- **Miércoles-14/10/2026-10:28** - Daniel Echeverría : Creación de casos de uso hexagonales puros en `apps/api/src/application/use-cases/evaluation/` (`GenerateEvaluationUseCase`, `EvaluateAttemptUseCase`, `GetAttemptSummaryUseCase`).
+- **Miércoles-14/10/2026-10:28** - Daniel Echeverría : Implementación de `EvaluationResolver` y `EvaluationGraphQLModule` bajo `/graphql` cumpliendo con el ADR-012 para la experiencia reactiva del estudiante.
+- **Miércoles-14/10/2026-10:28** - Daniel Echeverría : Conversión de `EvaluationController` y `EvaluationService` en proxies y fachadas delegativas puras hacia los casos de uso, previniendo el code drift y garantizando compatibilidad 100% con el frontend actual de Next.js.
+- **Miércoles-14/10/2026-10:28** - Daniel Echeverría : Adición de pruebas unitarias para casos de uso y resolver GraphQL. Suite global: 23/23 suites pasadas (81 tests en verde).
