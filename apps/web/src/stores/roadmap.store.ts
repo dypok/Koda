@@ -320,17 +320,29 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   },
   completeSectionNode: (nodeId: string, stars: number) => {
     const dataset = get().lessonsDataset;
-    const idx = dataset.nodes.findIndex((n) => n.id === nodeId);
+    const norm = (id: string) =>
+      id.toLowerCase().replace(/^py-m0?/, 'les-0').replace(/boss-logic|guardi[aá]n/, 'miniboss').replace(/apex.*|boss$/, 'apex');
+    const targetNorm = norm(nodeId);
+
+    const idx = dataset.nodes.findIndex((n) => n.id === nodeId || norm(n.id) === targetNorm);
     if (idx < 0) return;
+
     const nodes = dataset.nodes.map((n, i) => {
       if (i === idx) {
         return { ...n, variant: 'completed' as const, stars: Math.max(n.stars ?? 0, stars), statusText: 'COMPLETADA' };
       }
       if (i === idx + 1 && !n.isUnlocked) {
-        return { ...n, isUnlocked: true, variant: 'unlocked' as const, statusText: 'DISPONIBLE' };
+        return {
+          ...n,
+          isUnlocked: true,
+          variant: (n.variant === 'boss' ? 'boss' : 'unlocked') as NodeVariant,
+          iconType: n.iconType === 'lock' ? 'code' : n.iconType,
+          statusText: 'DISPONIBLE',
+        };
       }
       return n;
     });
+
     set({ lessonsDataset: { ...dataset, nodes } });
   },
   setZoomLevel: (zoom) =>

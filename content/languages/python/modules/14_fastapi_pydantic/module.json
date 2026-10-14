@@ -1,0 +1,60 @@
+{
+  "id": "py_mod_15_fastapi_pydantic",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "course_id": "fastapi-async",
+  "code": "FA_MOD_02",
+  "slug": "fastapi-pydantic",
+  "title": "Validación y Modelado con Pydantic v2",
+  "objective": "Aprender a definir esquemas de datos con BaseModel de Pydantic, tipado estricto, validación de cuerpos de petición JSON y respuesta tipada.",
+  "description": "Garantiza la integridad y seguridad de cada dato que entra y sale de tus APIs con Pydantic.",
+  "position": 15,
+  "status": "published",
+  "content_version": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 200
+  },
+  "sections": [
+    {
+      "id": "sec_fa_02",
+      "code": "S01",
+      "title": "Modelos con BaseModel",
+      "slug": "modelos-pydantic",
+      "position": 1,
+      "type": "theory",
+      "status": "published",
+      "content_version": 1,
+      "estimated_minutes": 10,
+      "xp_on_complete": 15,
+      "lessons": [
+        {
+          "id": "les_fa_02_01",
+          "code": "L01",
+          "title": "Definir un Schema de petición con BaseModel",
+          "position": 1,
+          "theory_markdown": "Pydantic permite declarar esquemas de datos heredando de `BaseModel`. Si un cliente envía datos inválidos (por ejemplo, texto en un campo `int`), FastAPI rechaza la petición automáticamente con un error 422 Unprocessable Entity detallado.",
+          "code_example": "from pydantic import BaseModel\n\nclass Item(BaseModel):\n    nombre: str\n    precio: float\n    activo: bool = True",
+          "expected_output": "Item(nombre='Teclado', precio=49.99, activo=True)",
+          "tip_markdown": "Los valores asignados con `=` dentro del modelo actúan como valores predeterminados opcionales.",
+          "exercise": {
+            "id": "ex_fa_02_01",
+            "type": "single_choice",
+            "prompt": "¿De qué clase base de Pydantic deben heredar los modelos de datos en FastAPI?",
+            "hint": "Comienza con Base...",
+            "options": [
+              { "id": "opt_a", "text": "BaseModel" },
+              { "id": "opt_b", "text": "DataModel" },
+              { "id": "opt_c", "text": "Schema" },
+              { "id": "opt_d", "text": "Model" }
+            ],
+            "correct_option_id": "opt_a",
+            "explanation": "¡Correcto! En Pydantic y FastAPI, todos los esquemas derivan de `pydantic.BaseModel`."
+          }
+        }
+      ]
+    }
+  ]
+}

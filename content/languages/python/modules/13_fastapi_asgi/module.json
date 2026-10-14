@@ -1,0 +1,60 @@
+{
+  "id": "py_mod_14_fastapi_asgi",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "course_id": "fastapi-async",
+  "code": "FA_MOD_01",
+  "slug": "fastapi-asgi",
+  "title": "Arquitectura ASGI y Primera API con FastAPI",
+  "objective": "Comprender la diferencia entre WSGI y ASGI, inicializar una aplicación FastAPI, definir rutas básicas y ejecutarla con Uvicorn.",
+  "description": "El framework web moderno de Python de alto rendimiento basado en tipado y concurrencia nativa.",
+  "position": 14,
+  "status": "published",
+  "content_version": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 200
+  },
+  "sections": [
+    {
+      "id": "sec_fa_01",
+      "code": "S01",
+      "title": "Inicialización y Primer Endpoint",
+      "slug": "primer-endpoint-fastapi",
+      "position": 1,
+      "type": "theory",
+      "status": "published",
+      "content_version": 1,
+      "estimated_minutes": 10,
+      "xp_on_complete": 15,
+      "lessons": [
+        {
+          "id": "les_fa_01_01",
+          "code": "L01",
+          "title": "Hola FastAPI: Tu primera ruta GET",
+          "position": 1,
+          "theory_markdown": "FastAPI se basa en el estándar ASGI (Asynchronous Server Gateway Interface), lo que permite manejar miles de conexiones simultáneas. Creas una instancia de `FastAPI()` y usas decoradores como `@app.get(\"/\")` para asociar funciones a rutas HTTP.",
+          "code_example": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/\")\ndef root():\n    return {\"mensaje\": \"¡API en línea con FastAPI!\"}",
+          "expected_output": "{\"mensaje\": \"¡API en línea con FastAPI!\"}",
+          "tip_markdown": "FastAPI serializa automáticamente diccionarios y modelos a formato JSON válido.",
+          "exercise": {
+            "id": "ex_fa_01_01",
+            "type": "single_choice",
+            "prompt": "¿Qué decorador se usa en FastAPI para registrar un endpoint que responda a peticiones HTTP GET?",
+            "hint": "Comienza con @app seguido del método HTTP en minúsculas.",
+            "options": [
+              { "id": "opt_a", "text": "@app.get(\"/ruta\")" },
+              { "id": "opt_b", "text": "@route.get(\"/ruta\")" },
+              { "id": "opt_c", "text": "@fastapi.endpoint(\"/ruta\")" },
+              { "id": "opt_d", "text": "@api.get(\"/ruta\")" }
+            ],
+            "correct_option_id": "opt_a",
+            "explanation": "¡Correcto! En FastAPI las operaciones de ruta se declaran usando `@app.get()`, `@app.post()`, `@app.put()`, etc."
+          }
+        }
+      ]
+    }
+  ]
+}

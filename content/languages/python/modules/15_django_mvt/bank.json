@@ -1,0 +1,28 @@
+[
+  {
+    "id": "q_dj_01_01",
+    "type": "single_choice",
+    "prompt": "¿Qué comando CLI crea un nuevo proyecto Django con su configuración inicial?",
+    "options": [
+      { "id": "opt_a", "text": "django-admin startproject mi_proyecto" },
+      { "id": "opt_b", "text": "python django create mi_proyecto" },
+      { "id": "opt_c", "text": "pip install django --init" },
+      { "id": "opt_d", "text": "django new project" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "`django-admin startproject <nombre>` es la instrucción canónica que genera la estructura de archivos inicial de Django."
+  },
+  {
+    "id": "q_dj_01_02",
+    "type": "single_choice",
+    "prompt": "¿Qué archivo central en un proyecto Django contiene las configuraciones de bases de datos, aplicaciones instaladas y middlewares?",
+    "options": [
+      { "id": "opt_a", "text": "settings.py" },
+      { "id": "opt_b", "text": "urls.py" },
+      { "id": "opt_c", "text": "manage.py" },
+      { "id": "opt_d", "text": "wsgi.py" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "`settings.py` aloja todas las variables de entorno, configuración de base de datos (`DATABASES`) y paquetes habilitados (`INSTALLED_APPS`)."
+  }
+]

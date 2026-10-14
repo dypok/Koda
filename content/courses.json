@@ -1,9 +1,9 @@
 [
   {
-    "slug": "python-core",
+    "slug": "python-1",
     "track_slug": "python",
-    "name": "Fundamentos de Programación con Python 3.12",
-    "description": "Aprende los conceptos fundamentales de la programación con la sintaxis más limpia y amigable.",
+    "name": "Python 1: Fundamentos & Lógica de Programación",
+    "description": "Sintaxis limpia, variables, tipos primitivos, operadores y condicionales con Mini-Boss Gate.",
     "color": "#38BDF8",
     "icon": "IconBrandPython",
     "topology": {
@@ -13,24 +13,132 @@
     "prerequisites": [],
     "edges": [
       {
-        "target_course_slug": "frontend-core",
+        "target_course_slug": "python-2",
         "connection_type": "unlocks",
         "visual_effect_code": "energy_beam_solid",
-        "edge_color": "#10B981"
-      },
+        "edge_color": "#38BDF8"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "slug": "python-2",
+    "track_slug": "python",
+    "name": "Python 2: Estructuras de Datos & POO",
+    "description": "Funciones, listas, diccionarios, excepciones, manejo de archivos y objetos.",
+    "color": "#06B6D4",
+    "icon": "IconBrandPython",
+    "topology": {
+      "tier": 1,
+      "lane": 0
+    },
+    "prerequisites": [
+      "python-1"
+    ],
+    "edges": [
       {
-        "target_course_slug": "backend-core",
+        "target_course_slug": "python-3",
+        "connection_type": "unlocks",
+        "visual_effect_code": "energy_beam_solid",
+        "edge_color": "#06B6D4"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "slug": "python-3",
+    "track_slug": "python",
+    "name": "Python 3: Avanzado, Concurrencia & Tipado",
+    "description": "POO avanzada, generadores, decoradores, tipado estático y modularidad profesional.",
+    "color": "#F59E0B",
+    "icon": "IconBrandPython",
+    "topology": {
+      "tier": 2,
+      "lane": 0
+    },
+    "prerequisites": [
+      "python-2"
+    ],
+    "edges": [
+      {
+        "target_course_slug": "fastapi-async",
         "connection_type": "unlocks",
         "visual_effect_code": "laser_flow_fast",
         "edge_color": "#8B5CF6"
       },
       {
-        "target_course_slug": "devops-core",
+        "target_course_slug": "django-enterprise",
         "connection_type": "unlocks",
-        "visual_effect_code": "dotted_amber_pulse",
-        "edge_color": "#F59E0B"
+        "visual_effect_code": "laser_flow_fast",
+        "edge_color": "#10B981"
       }
     ],
+    "is_active": true
+  },
+  {
+    "slug": "fastapi-async",
+    "track_slug": "python",
+    "name": "Especialización: Microservicios con FastAPI (Nivel 3.A)",
+    "description": "APIs ultra rápidas, validación con Pydantic v2, endpoints asíncronos e inyección de dependencias.",
+    "color": "#8B5CF6",
+    "icon": "IconServer",
+    "topology": {
+      "tier": 3,
+      "lane": -1
+    },
+    "prerequisites": [
+      "python-3"
+    ],
+    "edges": [
+      {
+        "target_course_slug": "python-apex",
+        "connection_type": "unlocks",
+        "visual_effect_code": "dotted_amber_pulse",
+        "edge_color": "#8B5CF6"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "slug": "django-enterprise",
+    "track_slug": "python",
+    "name": "Especialización: Desarrollo Web con Django (Nivel 3.B)",
+    "description": "Arquitectura MVT, Django ORM, migraciones, vistas basadas en clases y panel administrativo.",
+    "color": "#10B981",
+    "icon": "IconServer",
+    "topology": {
+      "tier": 3,
+      "lane": 1
+    },
+    "prerequisites": [
+      "python-3"
+    ],
+    "edges": [
+      {
+        "target_course_slug": "python-apex",
+        "connection_type": "unlocks",
+        "visual_effect_code": "dotted_amber_pulse",
+        "edge_color": "#10B981"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "slug": "python-apex",
+    "track_slug": "python",
+    "name": "Apex Master Gate: Proyecto Integrador",
+    "description": "Desafío integral de certificación en 3 fases combinando fundamentos, POO y especializaciones.",
+    "color": "#F43F5E",
+    "icon": "terminal",
+    "topology": {
+      "tier": 4,
+      "lane": 0
+    },
+    "prerequisites": [
+      "fastapi-async",
+      "django-enterprise"
+    ],
+    "edges": [],
     "is_active": true
   },
   {
@@ -45,7 +153,7 @@
       "lane": -1
     },
     "prerequisites": [
-      "python-core"
+      "python-1"
     ],
     "edges": [],
     "is_active": true
@@ -62,22 +170,9 @@
       "lane": 0
     },
     "prerequisites": [
-      "python-core"
+      "python-1"
     ],
-    "edges": [
-      {
-        "target_course_slug": "fastapi-async",
-        "connection_type": "unlocks",
-        "visual_effect_code": "laser_flow_fast",
-        "edge_color": "#8B5CF6"
-      },
-      {
-        "target_course_slug": "django-enterprise",
-        "connection_type": "unlocks",
-        "visual_effect_code": "dotted_amber_pulse",
-        "edge_color": "#10B981"
-      }
-    ],
+    "edges": [],
     "is_active": true
   },
   {
@@ -92,41 +187,7 @@
       "lane": 1
     },
     "prerequisites": [
-      "python-core"
-    ],
-    "edges": [],
-    "is_active": true
-  },
-  {
-    "slug": "fastapi-async",
-    "track_slug": "backend",
-    "name": "Microservicios Asíncronos con FastAPI",
-    "description": "APIs ultra rápidas de alto rendimiento con validación Pydantic y concurrencia asyncio.",
-    "color": "#8B5CF6",
-    "icon": "IconServer",
-    "topology": {
-      "tier": 2,
-      "lane": 0
-    },
-    "prerequisites": [
-      "backend-core"
-    ],
-    "edges": [],
-    "is_active": true
-  },
-  {
-    "slug": "django-enterprise",
-    "track_slug": "backend",
-    "name": "Desarrollo Web Empresarial con Django",
-    "description": "Aplicaciones completas con ORM robusto, sistema de autenticación y panel de administración.",
-    "color": "#10B981",
-    "icon": "IconServer",
-    "topology": {
-      "tier": 2,
-      "lane": 1
-    },
-    "prerequisites": [
-      "backend-core"
+      "python-1"
     ],
     "edges": [],
     "is_active": true

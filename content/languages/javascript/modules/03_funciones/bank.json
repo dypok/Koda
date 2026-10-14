@@ -1,0 +1,28 @@
+[
+  {
+    "id": "q_js_03_01",
+    "type": "single_choice",
+    "prompt": "¿Qué operador define una Arrow Function en JavaScript?",
+    "options": [
+      { "id": "opt_a", "text": "=>" },
+      { "id": "opt_b", "text": "->" },
+      { "id": "opt_c", "text": "~>" },
+      { "id": "opt_d", "text": "==>" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "La 'fat arrow' `=>` define funciones flecha en JavaScript ES6+."
+  },
+  {
+    "id": "q_js_03_02",
+    "type": "single_choice",
+    "prompt": "¿Cómo se define un parámetro con valor por defecto en JavaScript?",
+    "options": [
+      { "id": "opt_a", "text": "function saludar(nombre = \"Invitado\")" },
+      { "id": "opt_b", "text": "function saludar(nombre : \"Invitado\")" },
+      { "id": "opt_c", "text": "function saludar(default nombre = \"Invitado\")" },
+      { "id": "opt_d", "text": "function saludar(nombre := \"Invitado\")" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "La asignación `=` dentro de los paréntesis del parámetro define el valor por defecto si el argumento no se proporciona."
+  }
+]

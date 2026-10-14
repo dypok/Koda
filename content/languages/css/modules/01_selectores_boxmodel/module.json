@@ -1,0 +1,61 @@
+{
+  "id": "css_mod_01",
+  "language_id": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
+  "course_id": "fe-css",
+  "code": "CSS_MOD_01",
+  "slug": "selectores-y-box-model",
+  "title": "Selectores CSS y el Modelo de Caja (Box Model)",
+  "objective": "Aprender la sintaxis de reglas CSS, selectores de etiqueta, clase e id, y dominar las dimensiones con margin, border, padding y content.",
+  "description": "El núcleo fundamental que determina cómo se renderiza y dimensiona cada elemento en la pantalla.",
+  "position": 1,
+  "status": "published",
+  "content_version": 1,
+  "prerequisite_module_id": null,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 150
+  },
+  "sections": [
+    {
+      "id": "sec_css_01_01",
+      "code": "S01",
+      "title": "Selectores y Box Model",
+      "slug": "box-model-css",
+      "position": 1,
+      "type": "theory",
+      "status": "published",
+      "content_version": 1,
+      "estimated_minutes": 10,
+      "xp_on_complete": 10,
+      "lessons": [
+        {
+          "id": "les_css_01_01",
+          "code": "L01",
+          "title": "Anatomía del Box Model y box-sizing",
+          "position": 1,
+          "theory_markdown": "Todo elemento HTML es una caja rectangular compuesta por 4 capas concéntricas: **content** (el texto o imagen interior), **padding** (espacio interno entre contenido y borde), **border** (línea del contorno) y **margin** (espacio exterior que separa la caja de otros elementos). `box-sizing: border-box` incluye el padding y el border dentro del width fijado.",
+          "code_example": ".tarjeta {\n  box-sizing: border-box;\n  width: 300px;\n  padding: 16px;\n  border: 2px solid #ff6a00;\n  margin: 24px auto;\n}",
+          "expected_output": "width total = 300px",
+          "tip_markdown": "Usar 'box-sizing: border-box' en todos los elementos (* { box-sizing: border-box; }) evita que el padding expanda el ancho total de tus cajas.",
+          "exercise": {
+            "id": "ex_css_01_01",
+            "type": "single_choice",
+            "prompt": "¿Qué capa del Box Model genera espacio interior entre el contenido y el borde del elemento?",
+            "hint": "Espaciado interno de relleno.",
+            "options": [
+              { "id": "opt_a", "text": "padding" },
+              { "id": "opt_b", "text": "margin" },
+              { "id": "opt_c", "text": "outline" },
+              { "id": "opt_d", "text": "gap" }
+            ],
+            "correct_option_id": "opt_a",
+            "explanation": "¡Correcto! `padding` es el espacio interno entre el contenido y su borde; `margin` es la separación externa hacia otros elementos."
+          }
+        }
+      ]
+    }
+  ]
+}

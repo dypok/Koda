@@ -1,0 +1,28 @@
+[
+  {
+    "id": "q_html_01_01",
+    "type": "single_choice",
+    "prompt": "¿Qué declaración debe colocarse en la primera línea de cualquier archivo HTML5?",
+    "options": [
+      { "id": "opt_a", "text": "<!DOCTYPE html>" },
+      { "id": "opt_b", "text": "<doctype html5>" },
+      { "id": "opt_c", "text": "<html>" },
+      { "id": "opt_d", "text": "<xml version=\"1.0\">" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "`<!DOCTYPE html>` instruye al navegador a renderizar la página bajo el modo de estándares modernos de HTML5."
+  },
+  {
+    "id": "q_html_01_02",
+    "type": "single_choice",
+    "prompt": "¿Qué atributo en la etiqueta `<a>` define la URL de destino hacia donde navegar?",
+    "options": [
+      { "id": "opt_a", "text": "href" },
+      { "id": "opt_b", "text": "src" },
+      { "id": "opt_c", "text": "url" },
+      { "id": "opt_d", "text": "link" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "`href` (Hypertext Reference) especifica la dirección web del hipervínculo."
+  }
+]
