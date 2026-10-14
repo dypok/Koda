@@ -25,6 +25,7 @@ import { RoadmapGraphQLModule } from './presentation/graphql/roadmap/roadmap-gra
 import { LearningGraphQLModule } from './presentation/graphql/learning/learning-graphql.module';
 import { NotebookGraphQLModule } from './presentation/graphql/notebook/notebook-graphql.module';
 import { LanguagesGraphQLModule } from './presentation/graphql/languages/languages-graphql.module';
+import { EvaluationGraphQLModule } from './presentation/graphql/evaluation/evaluation-graphql.module';
 
 @Module({
   imports: [
@@ -65,6 +66,7 @@ import { LanguagesGraphQLModule } from './presentation/graphql/languages/languag
     LearningGraphQLModule,
     NotebookGraphQLModule,
     LanguagesGraphQLModule,
+    EvaluationGraphQLModule,
   ],
   controllers: [AppController],
   providers: [
