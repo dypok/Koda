@@ -1,5 +1,6 @@
 import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 import { LearningService } from './learning.service';
 import { CURRICULUM_REPOSITORY_TOKEN } from '../../domain/repositories/curriculum.repository';
 import { PROGRESS_REPOSITORY_TOKEN } from '../../domain/repositories/progress.repository';
@@ -13,6 +14,9 @@ describe('LearningService (Hybrid Progress Fusion)', () => {
     findTrackBySlug: jest.fn(),
     findModulesByCourse: jest.fn(),
     findSectionsByModule: jest.fn(),
+    findSectionBySlug: jest.fn(),
+    findModuleBySlug: jest.fn(),
+    findCourseBySlug: jest.fn(),
     findLessonBySlug: jest.fn(),
   };
 
@@ -39,6 +43,12 @@ describe('LearningService (Hybrid Progress Fusion)', () => {
         {
           provide: PROGRESS_REPOSITORY_TOKEN,
           useValue: mockProgressRepo,
+        },
+        {
+          provide: EventEmitter2,
+          useValue: {
+            emit: jest.fn(),
+          },
         },
       ],
     }).compile();

@@ -16,6 +16,7 @@ import { PrismaModule } from '@infra/database/postgres/prisma.module';
 import { AuthModule } from './presentation/rest/auth/auth.module';
 import { UsersModule } from './presentation/rest/users/users.module';
 import { ContentModule } from './presentation/rest/content/content.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppThrottlerGuard } from './common/guards/app-throttler.guard';
 
 // Adaptadores de entrada GraphQL
@@ -28,6 +29,12 @@ import { LanguagesGraphQLModule } from './presentation/graphql/languages/languag
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    EventEmitterModule.forRoot({
+      wildcard: false,
+      delimiter: '.',
+      maxListeners: 20,
+      verboseMemoryLeak: true,
+    }),
     ThrottlerModule.forRoot([
       {
         ttl: 60000, // Ventana de 1 minuto

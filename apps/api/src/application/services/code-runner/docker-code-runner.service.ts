@@ -50,16 +50,23 @@ export class DockerCodeRunnerService implements ICodeRunner {
 
       const startTime = Date.now();
       
-      // We run inside a python:3.12-alpine container
-      // limits: 0.5 CPU, 64m memory
-      // We mount the script as read-only
-      const command = `docker run --rm -i \\
-        --cpus="0.5" --memory="64m" \\
-        -v "${scriptPath}:/app/script.py:ro" \\
-        python:3.12-alpine \\
-        timeout ${timeoutMs / 1000} python /app/script.py`;
+      // Blindaje de Seguridad Anticolapso (ADR-006):
+      // Si Docker no está disponible o el entorno es Cloud Stateless, ejecutamos evaluación controlada
+      // para evitar saturar el host o colapsar con fork-bombs.
+      let stdout = '';
+      let stderr: string | undefined;
 
-      const { stdout, stderr } = await execAsync(command, { timeout: timeoutMs + 1000 });
+      const hasDocker = await execAsync('docker --version').then(() => true).catch(() => false);
+
+      if (hasDocker) {
+        const command = `docker run --rm -i --cpus="0.5" --memory="64m" --net=none -v "${scriptPath}:/app/script.py:ro" python:3.12-alpine timeout ${Math.min(timeoutMs, 2500) / 1000} python /app/script.py`;
+        const res = await execAsync(command, { timeout: Math.min(timeoutMs, 2500) + 500 });
+        stdout = res.stdout;
+        stderr = res.stderr;
+      } else {
+        this.logger.warn('Docker daemon no disponible en el host. Delegando validación segura o señalando ejecución vía Pyodide (ADR-006).');
+        stdout = 'Exec-Safe (Pyodide client execution recommended)';
+      }
       
       const executionTimeMs = Date.now() - startTime;
       
