@@ -49,6 +49,30 @@
       "total_lessons": 2,
       "status": "published",
       "path": "modules/02_interfaces"
+    },
+    {
+      "id": "ts_mod_03",
+      "code": "TS_MOD_03",
+      "slug": "genericos-y-union-types",
+      "title": "Tipos Genéricos y Unión de Tipos",
+      "description": "Genéricos <T>, preservación de tipo, Type Narrowing y Union Types con |.",
+      "position": 3,
+      "total_sections": 1,
+      "total_lessons": 1,
+      "status": "published",
+      "path": "modules/03_genericos"
+    },
+    {
+      "id": "ts_mod_04",
+      "code": "TS_MOD_04",
+      "slug": "clases-y-poo",
+      "title": "Programación Orientada a Objetos y Modificadores de Acceso",
+      "description": "Encapsulamiento con public, private y protected, implements y herencia.",
+      "position": 4,
+      "total_sections": 1,
+      "total_lessons": 1,
+      "status": "published",
+      "path": "modules/04_clases"
     }
   ]
 }

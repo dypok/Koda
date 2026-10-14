@@ -22,6 +22,8 @@ function parseCourse(courseId: string, sectionRef: string): { lang: string; modu
   if (courseId.startsWith('lua-') || courseId.startsWith('lua')) lang = 'lua';
   else if (courseId.startsWith('js-') || courseId.startsWith('javascript')) lang = 'javascript';
   else if (courseId.startsWith('ts-') || courseId.startsWith('typescript')) lang = 'typescript';
+  else if (courseId.startsWith('html') || courseId.includes('html') || courseId === 'fe-html') lang = 'html';
+  else if (courseId.startsWith('css') || courseId.includes('css') || courseId === 'fe-css') lang = 'css';
 
   // 1. Detectar Mini-Boss Gate o Boss Gate en el Roadmap
   if (sectionRef === 'les-miniboss' || sectionRef === 'py-boss-logic') {
@@ -31,8 +33,50 @@ function parseCourse(courseId: string, sectionRef: string): { lang: string; modu
     return { lang: 'python', moduleSlug: 'bucles-while', initialMode: 'quiz' };
   }
 
-  // 2. Mapeo para Python Nivel 1
+  // 2. Mapeo para HTML
+  if (lang === 'html') {
+    if (sectionRef === 'les-02' || sectionRef.includes('semant')) {
+      return { lang: 'html', moduleSlug: 'html-semantico-y-a11y', initialMode: 'lesson' };
+    }
+    return { lang: 'html', moduleSlug: 'fundamentos-de-html', initialMode: 'lesson' };
+  }
+
+  // 3. Mapeo para CSS
+  if (lang === 'css') {
+    if (sectionRef === 'les-02' || sectionRef.includes('flex')) {
+      return { lang: 'css', moduleSlug: 'flexbox-layout', initialMode: 'lesson' };
+    }
+    return { lang: 'css', moduleSlug: 'selectores-y-box-model', initialMode: 'lesson' };
+  }
+
+  // 4. Mapeo para Python (Nivel 1, Nivel 2, FastAPI y Django)
   if (lang === 'python') {
+    // Especialización FastAPI
+    if (courseId === 'fastapi-async' || sectionRef.startsWith('fa-') || sectionRef.includes('fastapi')) {
+      if (sectionRef === 'fa-m02' || sectionRef.includes('pydantic')) {
+        return { lang: 'python', moduleSlug: 'fastapi-pydantic', initialMode: 'lesson' };
+      }
+      return { lang: 'python', moduleSlug: 'fastapi-asgi', initialMode: 'lesson' };
+    }
+
+    // Especialización Django
+    if (courseId === 'django-enterprise' || sectionRef.startsWith('dj-') || sectionRef.includes('django')) {
+      if (sectionRef === 'dj-m02' || sectionRef.includes('orm')) {
+        return { lang: 'python', moduleSlug: 'django-orm', initialMode: 'lesson' };
+      }
+      return { lang: 'python', moduleSlug: 'django-mvt', initialMode: 'lesson' };
+    }
+
+    // Python Nivel 2
+    if (courseId === 'python-2' || sectionRef.startsWith('py2-')) {
+      if (sectionRef === 'py2-m01' || sectionRef.includes('funcion')) return { lang: 'python', moduleSlug: 'funciones-y-modularidad', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m02' || sectionRef.includes('coleccion') || sectionRef.includes('lista')) return { lang: 'python', moduleSlug: 'colecciones', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m03' || sectionRef.includes('string') || sectionRef.includes('dict')) return { lang: 'python', moduleSlug: 'strings-avanzados', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m04' || sectionRef.includes('error') || sectionRef.includes('archivo')) return { lang: 'python', moduleSlug: 'manejo-de-errores', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m05' || sectionRef.includes('poo') || sectionRef.includes('clase')) return { lang: 'python', moduleSlug: 'programacion-orientada-a-objetos', initialMode: 'lesson' };
+    }
+
+    // Python Nivel 1
     if (sectionRef === 'les-01' || sectionRef === 'py-m01' || sectionRef.includes('fundamentos')) {
       return { lang: 'python', moduleSlug: 'fundamentos-de-python', initialMode: 'lesson' };
     }
@@ -56,7 +100,7 @@ function parseCourse(courseId: string, sectionRef: string): { lang: string; modu
     return { lang: 'python', moduleSlug: sectionRef.includes('-') ? sectionRef : 'fundamentos-de-python', initialMode: 'lesson' };
   }
 
-  // 3. Lua
+  // 5. Lua
   if (lang === 'lua') {
     if (sectionRef === 'les-01' || sectionRef.includes('fundamento')) {
       return { lang: 'lua', moduleSlug: 'fundamentos-de-lua', initialMode: 'lesson' };
@@ -71,7 +115,7 @@ function parseCourse(courseId: string, sectionRef: string): { lang: string; modu
     return { lang: 'lua', moduleSlug: slug, initialMode: 'lesson' };
   }
 
-  // 4. JS y TS
+  // 6. JavaScript
   if (lang === 'javascript') {
     if (sectionRef === 'les-02' || sectionRef.includes('variable')) {
       return { lang: 'javascript', moduleSlug: 'variables-y-tipos-de-datos', initialMode: 'lesson' };
@@ -79,12 +123,25 @@ function parseCourse(courseId: string, sectionRef: string): { lang: string; modu
     if (sectionRef === 'les-03' || sectionRef.includes('funcion')) {
       return { lang: 'javascript', moduleSlug: 'funciones-y-arrow-functions', initialMode: 'lesson' };
     }
+    if (sectionRef === 'les-04' || sectionRef.includes('array') || sectionRef.includes('objeto')) {
+      return { lang: 'javascript', moduleSlug: 'arrays-y-objetos', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-05' || sectionRef.includes('async') || sectionRef.includes('fetch')) {
+      return { lang: 'javascript', moduleSlug: 'asincronia-y-fetch', initialMode: 'lesson' };
+    }
     return { lang: 'javascript', moduleSlug: sectionRef.includes('-') ? sectionRef : 'fundamentos-de-javascript', initialMode: 'lesson' };
   }
 
+  // 7. TypeScript
   if (lang === 'typescript') {
     if (sectionRef === 'les-02' || sectionRef.includes('interface')) {
       return { lang: 'typescript', moduleSlug: 'interfaces-y-type-aliases', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-03' || sectionRef.includes('generic') || sectionRef.includes('union')) {
+      return { lang: 'typescript', moduleSlug: 'genericos-y-union-types', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-04' || sectionRef.includes('clase') || sectionRef.includes('poo')) {
+      return { lang: 'typescript', moduleSlug: 'clases-y-poo', initialMode: 'lesson' };
     }
     return { lang: 'typescript', moduleSlug: sectionRef.includes('-') ? sectionRef : 'fundamentos-de-typescript', initialMode: 'lesson' };
   }

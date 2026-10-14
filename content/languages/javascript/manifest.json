@@ -61,6 +61,30 @@
       "total_lessons": 2,
       "status": "published",
       "path": "modules/03_funciones"
+    },
+    {
+      "id": "js_mod_04",
+      "code": "JS_MOD_04",
+      "slug": "arrays-y-objetos",
+      "title": "Arrays, Métodos de Iteración y Objetos Literales",
+      "description": "Transformación con map/filter, objetos literales y desestructuración moderna.",
+      "position": 4,
+      "total_sections": 1,
+      "total_lessons": 1,
+      "status": "published",
+      "path": "modules/04_arrays_objetos"
+    },
+    {
+      "id": "js_mod_05",
+      "code": "JS_MOD_05",
+      "slug": "asincronia-y-fetch",
+      "title": "Asincronía: Promesas, Async/Await y Fetch API",
+      "description": "El Event Loop, consumo de Promesas, async/await y peticiones HTTP fetch.",
+      "position": 5,
+      "total_sections": 1,
+      "total_lessons": 1,
+      "status": "published",
+      "path": "modules/05_asincronia"
     }
   ]
 }

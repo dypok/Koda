@@ -194,6 +194,54 @@
       "total_lessons": 100,
       "status": "published",
       "path": "modules/12_proyecto_final"
+    },
+    {
+      "id": "py_mod_14_fastapi_asgi",
+      "code": "FA_MOD_01",
+      "slug": "fastapi-asgi",
+      "title": "Arquitectura ASGI y Primera API con FastAPI",
+      "description": "El framework web moderno de Python de alto rendimiento basado en tipado y concurrencia nativa.",
+      "position": 14,
+      "total_sections": 1,
+      "total_lessons": 1,
+      "status": "published",
+      "path": "modules/13_fastapi_asgi"
+    },
+    {
+      "id": "py_mod_15_fastapi_pydantic",
+      "code": "FA_MOD_02",
+      "slug": "fastapi-pydantic",
+      "title": "Validación y Modelado con Pydantic v2",
+      "description": "Garantiza la integridad y seguridad de cada dato que entra y sale de tus APIs con Pydantic.",
+      "position": 15,
+      "total_sections": 1,
+      "total_lessons": 1,
+      "status": "published",
+      "path": "modules/14_fastapi_pydantic"
+    },
+    {
+      "id": "py_mod_16_django_mvt",
+      "code": "DJ_MOD_01",
+      "slug": "django-mvt",
+      "title": "Arquitectura MVT y Estructura de Proyectos Django",
+      "description": "El framework web empresarial por excelencia para crear plataformas web completas y escalables.",
+      "position": 16,
+      "total_sections": 1,
+      "total_lessons": 1,
+      "status": "published",
+      "path": "modules/15_django_mvt"
+    },
+    {
+      "id": "py_mod_17_django_orm",
+      "code": "DJ_MOD_02",
+      "slug": "django-orm",
+      "title": "Django ORM: Modelos, Migraciones y Consultas",
+      "description": "Manipula bases de datos relacionales directamente en Python sin escribir una sola línea de SQL manual.",
+      "position": 17,
+      "total_sections": 1,
+      "total_lessons": 1,
+      "status": "published",
+      "path": "modules/16_django_orm"
     }
   ]
 }

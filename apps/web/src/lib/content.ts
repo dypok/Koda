@@ -75,13 +75,34 @@ const MODULES: Record<string, ModuleImporter> = {
   'python/condicionales': () => import('../../../../content/languages/python/modules/04_condicionales/module.json'),
   'python/bucles-for': () => import('../../../../content/languages/python/modules/05_bucles_for/module.json'),
   'python/bucles-while': () => import('../../../../content/languages/python/modules/06_bucles_while/module.json'),
+  // Python Nivel 2 & 3
+  'python/funciones-y-modularidad': () => import('../../../../content/languages/python/modules/06_funciones/module.json'),
+  'python/colecciones': () => import('../../../../content/languages/python/modules/07_colecciones/module.json'),
+  'python/strings-avanzados': () => import('../../../../content/languages/python/modules/08_strings_avanzados/module.json'),
+  'python/manejo-de-errores': () => import('../../../../content/languages/python/modules/09_manejo_errores/module.json'),
+  'python/archivos-y-modulos': () => import('../../../../content/languages/python/modules/10_archivos_modulos/module.json'),
+  'python/programacion-orientada-a-objetos': () => import('../../../../content/languages/python/modules/11_poo/module.json'),
+  'python/fastapi-asgi': () => import('../../../../content/languages/python/modules/13_fastapi_asgi/module.json'),
+  'python/fastapi-pydantic': () => import('../../../../content/languages/python/modules/14_fastapi_pydantic/module.json'),
+  'python/django-mvt': () => import('../../../../content/languages/python/modules/15_django_mvt/module.json'),
+  'python/django-orm': () => import('../../../../content/languages/python/modules/16_django_orm/module.json'),
   // JavaScript
   'javascript/fundamentos-de-javascript': () => import('../../../../content/languages/javascript/modules/01_fundamentos/module.json'),
   'javascript/variables-y-tipos-de-datos': () => import('../../../../content/languages/javascript/modules/02_variables/module.json'),
   'javascript/funciones-y-arrow-functions': () => import('../../../../content/languages/javascript/modules/03_funciones/module.json'),
+  'javascript/arrays-y-objetos': () => import('../../../../content/languages/javascript/modules/04_arrays_objetos/module.json'),
+  'javascript/asincronia-y-fetch': () => import('../../../../content/languages/javascript/modules/05_asincronia/module.json'),
   // TypeScript
   'typescript/fundamentos-de-typescript': () => import('../../../../content/languages/typescript/modules/01_fundamentos/module.json'),
   'typescript/interfaces-y-type-aliases': () => import('../../../../content/languages/typescript/modules/02_interfaces/module.json'),
+  'typescript/genericos-y-union-types': () => import('../../../../content/languages/typescript/modules/03_genericos/module.json'),
+  'typescript/clases-y-poo': () => import('../../../../content/languages/typescript/modules/04_clases/module.json'),
+  // HTML
+  'html/fundamentos-de-html': () => import('../../../../content/languages/html/modules/01_fundamentos_html/module.json'),
+  'html/html-semantico-y-a11y': () => import('../../../../content/languages/html/modules/02_semantica_a11y/module.json'),
+  // CSS
+  'css/selectores-y-box-model': () => import('../../../../content/languages/css/modules/01_selectores_boxmodel/module.json'),
+  'css/flexbox-layout': () => import('../../../../content/languages/css/modules/02_flexbox/module.json'),
 };
 
 const BANKS: Record<string, BankImporter> = {
@@ -92,14 +113,38 @@ const BANKS: Record<string, BankImporter> = {
   // Python Nivel 1
   'python/fundamentos-de-python': () => import('../../../../content/languages/python/modules/01_fundamentos/bank.json'),
   'python/variables-y-tipos-de-datos': () => import('../../../../content/languages/python/modules/02_variables/bank.json'),
+  'python/operadores-y-expresiones': () => import('../../../../content/languages/python/modules/03_operadores/bank.json'),
   'python/condicionales': () => import('../../../../content/languages/python/modules/04_condicionales/bank.json'),
   'python/bucles-for': () => import('../../../../content/languages/python/modules/05_bucles_for/bank.json'),
   'python/bucles-while': () => import('../../../../content/languages/python/modules/06_bucles_while/bank.json'),
+  // Python Nivel 2 & 3
+  'python/funciones-y-modularidad': () => import('../../../../content/languages/python/modules/06_funciones/bank.json'),
+  'python/colecciones': () => import('../../../../content/languages/python/modules/07_colecciones/bank.json'),
+  'python/strings-avanzados': () => import('../../../../content/languages/python/modules/08_strings_avanzados/bank.json'),
+  'python/manejo-de-errores': () => import('../../../../content/languages/python/modules/09_manejo_errores/bank.json'),
+  'python/archivos-y-modulos': () => import('../../../../content/languages/python/modules/10_archivos_modulos/bank.json'),
+  'python/programacion-orientada-a-objetos': () => import('../../../../content/languages/python/modules/11_poo/bank.json'),
+  'python/fastapi-asgi': () => import('../../../../content/languages/python/modules/13_fastapi_asgi/bank.json'),
+  'python/fastapi-pydantic': () => import('../../../../content/languages/python/modules/14_fastapi_pydantic/bank.json'),
+  'python/django-mvt': () => import('../../../../content/languages/python/modules/15_django_mvt/bank.json'),
+  'python/django-orm': () => import('../../../../content/languages/python/modules/16_django_orm/bank.json'),
   // JavaScript
+  'javascript/fundamentos-de-javascript': () => import('../../../../content/languages/javascript/modules/01_fundamentos/bank.json'),
   'javascript/variables-y-tipos-de-datos': () => import('../../../../content/languages/javascript/modules/02_variables/bank.json'),
   'javascript/funciones-y-arrow-functions': () => import('../../../../content/languages/javascript/modules/03_funciones/bank.json'),
+  'javascript/arrays-y-objetos': () => import('../../../../content/languages/javascript/modules/04_arrays_objetos/bank.json'),
+  'javascript/asincronia-y-fetch': () => import('../../../../content/languages/javascript/modules/05_asincronia/bank.json'),
   // TypeScript
+  'typescript/fundamentos-de-typescript': () => import('../../../../content/languages/typescript/modules/01_fundamentos/bank.json'),
   'typescript/interfaces-y-type-aliases': () => import('../../../../content/languages/typescript/modules/02_interfaces/bank.json'),
+  'typescript/genericos-y-union-types': () => import('../../../../content/languages/typescript/modules/03_genericos/bank.json'),
+  'typescript/clases-y-poo': () => import('../../../../content/languages/typescript/modules/04_clases/bank.json'),
+  // HTML
+  'html/fundamentos-de-html': () => import('../../../../content/languages/html/modules/01_fundamentos_html/bank.json'),
+  'html/html-semantico-y-a11y': () => import('../../../../content/languages/html/modules/02_semantica_a11y/bank.json'),
+  // CSS
+  'css/selectores-y-box-model': () => import('../../../../content/languages/css/modules/01_selectores_boxmodel/bank.json'),
+  'css/flexbox-layout': () => import('../../../../content/languages/css/modules/02_flexbox/bank.json'),
 };
 
 function normalizeLesson(raw: any, index: number): ContentLesson {

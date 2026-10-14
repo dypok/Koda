@@ -1,0 +1,61 @@
+{
+  "id": "html_mod_02",
+  "language_id": "d4e5f6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a",
+  "course_id": "fe-html",
+  "code": "HTML_MOD_02",
+  "slug": "html-semantico-y-a11y",
+  "title": "HTML Semántico y Accesibilidad Web",
+  "objective": "Aprender a estructurar páginas web con elementos semánticos de HTML5 en lugar de genéricos div, optimizando SEO y accesibilidad.",
+  "description": "Brinda significado a cada sección de tu página para motores de búsqueda y tecnologías de asistencia.",
+  "position": 2,
+  "status": "published",
+  "content_version": 1,
+  "prerequisite_module_id": "html_mod_01",
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 150
+  },
+  "sections": [
+    {
+      "id": "sec_html_02_01",
+      "code": "S01",
+      "title": "Estructura Semántica Moderna",
+      "slug": "etiquetas-semanticas",
+      "position": 1,
+      "type": "theory",
+      "status": "published",
+      "content_version": 1,
+      "estimated_minutes": 10,
+      "xp_on_complete": 10,
+      "lessons": [
+        {
+          "id": "les_html_02_01",
+          "code": "L01",
+          "title": "header, nav, main y footer",
+          "position": 1,
+          "theory_markdown": "En lugar de abusar de etiquetas genéricas `<div>`, HTML5 introdujo etiquetas con significado intrínseco: `<header>` (encabezado o cabecera), `<nav>` (menú de enlaces de navegación), `<main>` (contenido nuclear único de la página) y `<footer>` (pie de página con créditos o enlaces legales).",
+          "code_example": "<header>\n  <nav>\n    <a href=\"/\">Inicio</a>\n    <a href=\"/cursos\">Cursos</a>\n  </nav>\n</header>\n<main>\n  <article>\n    <h2>Aprende Desarrollo Web</h2>\n  </article>\n</main>\n<footer>\n  <p>© 2026 Koda</p>\n</footer>",
+          "expected_output": "Inicio Cursos\nAprende Desarrollo Web\n© 2026 Koda",
+          "tip_markdown": "Solo debe existir un único elemento <main> visible por página web.",
+          "exercise": {
+            "id": "ex_html_02_01",
+            "type": "single_choice",
+            "prompt": "¿Qué etiqueta semántica debe envolver el bloque principal de enlaces de navegación de un sitio?",
+            "hint": "Abreviatura de navegación.",
+            "options": [
+              { "id": "opt_a", "text": "<nav>" },
+              { "id": "opt_b", "text": "<menu>" },
+              { "id": "opt_c", "text": "<links>" },
+              { "id": "opt_d", "text": "<navbar>" }
+            ],
+            "correct_option_id": "opt_a",
+            "explanation": "¡Correcto! La etiqueta semántica oficial de HTML5 para agrupar enlaces de navegación principal es `<nav>`."
+          }
+        }
+      ]
+    }
+  ]
+}
