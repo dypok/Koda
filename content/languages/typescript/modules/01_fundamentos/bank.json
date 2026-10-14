@@ -1,0 +1,41 @@
+[
+  {
+    "id": "q_ts_01_01",
+    "type": "single_choice",
+    "prompt": "¿Cuál es la sintaxis correcta para declarar una variable de tipo string en TypeScript?",
+    "options": [
+      { "id": "opt_a", "text": "let ciudad: string = \"Madrid\";" },
+      { "id": "opt_b", "text": "let string ciudad = \"Madrid\";" },
+      { "id": "opt_c", "text": "let ciudad(string) = \"Madrid\";" },
+      { "id": "opt_d", "text": "ciudad : string := \"Madrid\";" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "En TypeScript la anotación de tipo se coloca tras el identificador precedida de dos puntos: `let nombre: tipo = valor;`."
+  },
+  {
+    "id": "q_ts_01_02",
+    "type": "single_choice",
+    "prompt": "¿Qué ocurre si no especificas el tipo de una variable pero la inicializas con un valor (ej. `let puntos = 10`)?",
+    "options": [
+      { "id": "opt_a", "text": "TypeScript infiere automáticamente el tipo 'number'" },
+      { "id": "opt_b", "text": "Se convierte automáticamente en tipo 'any'" },
+      { "id": "opt_c", "text": "Lanza un error de compilación por falta de tipo" },
+      { "id": "opt_d", "text": "Se convierte en 'unknown'" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "TypeScript tiene un potente motor de inferencia de tipos; al asignar un número, deduce de inmediato que su tipo es `number`."
+  },
+  {
+    "id": "q_ts_01_03",
+    "type": "single_choice",
+    "prompt": "¿Qué comando es el compilador oficial de TypeScript para transpolar código a JavaScript?",
+    "options": [
+      { "id": "opt_a", "text": "tsc" },
+      { "id": "opt_b", "text": "ts-node" },
+      { "id": "opt_c", "text": "types" },
+      { "id": "opt_d", "text": "ts-build" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "`tsc` (TypeScript Compiler) es la herramienta CLI oficial que verifica tipos y emite código JavaScript compatible."
+  }
+]

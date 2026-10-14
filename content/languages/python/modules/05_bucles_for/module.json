@@ -1,0 +1,174 @@
+{
+  "id": "py_mod_05_for",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY_MOD_05",
+  "slug": "bucles-for",
+  "title": "Bucle for e Iteración Estructurada",
+  "objective": "Dominar la iteración con for, la función range(start, stop, step), y el control de flujo con break y continue.",
+  "description": "Automatiza tareas repetitivas de forma limpia y elegante usando bucles for sobre secuencias y rangos numéricos.",
+  "position": 5,
+  "status": "published",
+  "content_version": 2,
+  "prerequisite_module_id": "py_mod_04",
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 200
+  },
+  "sections": [
+    {
+      "id": "sec_py_05_01",
+      "code": "S01",
+      "title": "Iteración Determinista con for y range",
+      "slug": "iteracion-for-range",
+      "position": 1,
+      "type": "theory",
+      "status": "published",
+      "content_version": 2,
+      "estimated_minutes": 15,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_py_05_01",
+          "title": "Tu primer bucle for",
+          "slug": "primer-bucle-for",
+          "position": 1,
+          "concept_id": "py-for-basics",
+          "explanation": "El bucle for en Python recorre cada elemento de una secuencia de principio a fin, ejecutando su bloque de código para cada elemento sin requerir contadores manuales.",
+          "is_required": true,
+          "examples": [
+            {
+              "title": "Iteración básica",
+              "code": "for letra in 'Koda':\n    print(letra)",
+              "output": "K\no\nd\na",
+              "explanation": "La variable letra toma el valor de cada caracter en cada repetición."
+            }
+          ],
+          "exercises": [
+            {
+              "id": "ex_py_05_01",
+              "type": "predict_output",
+              "difficulty": "easy",
+              "prompt": "¿Qué imprimirá este bucle for?",
+              "prompt_code": "for char in 'Sol':\n    print(char)",
+              "answers": [
+                { "id": "a", "label": "A", "body": "S, o, l en líneas separadas", "is_correct": true },
+                { "id": "b", "label": "B", "body": "Sol en una sola línea", "is_correct": false },
+                { "id": "c", "label": "C", "body": "char", "is_correct": false },
+                { "id": "d", "label": "D", "body": "Error de sintaxis", "is_correct": false }
+              ],
+              "correct_answer_ids": ["a"],
+              "explanation": "print() agrega un salto de línea en cada iteración del bucle.",
+              "hints": ["Cada ciclo imprime una sola letra."]
+            }
+          ]
+        },
+        {
+          "id": "les_py_05_02",
+          "title": "Generando secuencias con range()",
+          "slug": "funcion-range-basica",
+          "position": 2,
+          "concept_id": "py-range-single",
+          "explanation": "La función range(n) genera una secuencia de números enteros comenzando en 0 hasta n - 1. El límite superior n nunca se incluye en el resultado.",
+          "is_required": true,
+          "examples": [
+            {
+              "title": "Conteo con range(4)",
+              "code": "for i in range(4):\n    print(i)",
+              "output": "0\n1\n2\n3",
+              "explanation": "range(4) produce exactamente 4 números: 0, 1, 2 y 3."
+            }
+          ],
+          "exercises": [
+            {
+              "id": "ex_py_05_02",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Cuáles son los valores generados por range(3)?",
+              "answers": [
+                { "id": "a", "label": "A", "body": "0, 1, 2", "is_correct": true },
+                { "id": "b", "label": "B", "body": "1, 2, 3", "is_correct": false },
+                { "id": "c", "label": "C", "body": "0, 1, 2, 3", "is_correct": false },
+                { "id": "d", "label": "D", "body": "1, 2", "is_correct": false }
+              ],
+              "correct_answer_ids": ["a"],
+              "explanation": "range(3) inicia en 0 y se detiene antes del 3.",
+              "hints": ["Inicia en cero y genera 3 números."]
+            }
+          ]
+        },
+        {
+          "id": "les_py_05_03",
+          "title": "range() con inicio y paso (start, stop, step)",
+          "slug": "range-avanzado",
+          "position": 3,
+          "concept_id": "py-range-steps",
+          "explanation": "range(inicio, fin, paso) te da control total. Por ejemplo, range(2, 9, 2) genera números pares desde 2 saltando de 2 en 2 hasta antes de 9.",
+          "is_required": true,
+          "examples": [
+            {
+              "title": "Pares del 2 al 6",
+              "code": "for n in range(2, 7, 2):\n    print(n)",
+              "output": "2\n4\n6",
+              "explanation": "Comienza en 2, incrementa de 2 en 2, y termina antes del 7."
+            }
+          ],
+          "exercises": [
+            {
+              "id": "ex_py_05_03",
+              "type": "predict_output",
+              "difficulty": "medium",
+              "prompt": "¿Qué números imprime range(1, 6, 2)?",
+              "prompt_code": "for n in range(1, 6, 2):\n    print(n)",
+              "answers": [
+                { "id": "a", "label": "A", "body": "1, 3, 5", "is_correct": true },
+                { "id": "b", "label": "B", "body": "1, 2, 3, 4, 5", "is_correct": false },
+                { "id": "c", "label": "C", "body": "2, 4, 6", "is_correct": false },
+                { "id": "d", "label": "D", "body": "1, 3", "is_correct": false }
+              ],
+              "correct_answer_ids": ["a"],
+              "explanation": "Inicia en 1: 1 + 2 = 3; 3 + 2 = 5; 5 + 2 = 7 (excede el límite 6).",
+              "hints": ["Suma de 2 en 2 comenzando en 1."]
+            }
+          ]
+        },
+        {
+          "id": "les_py_05_04",
+          "title": "Control con break y continue",
+          "slug": "break-continue-for",
+          "position": 4,
+          "concept_id": "py-loop-control",
+          "explanation": "break interrumpe de inmediato el bucle y sale de él. continue salta la iteración actual e inicia de inmediato la siguiente repetición.",
+          "is_required": true,
+          "examples": [
+            {
+              "title": "Detener el bucle con break",
+              "code": "for x in range(5):\n    if x == 2:\n        break\n    print(x)",
+              "output": "0\n1",
+              "explanation": "Cuando x es 2, el bucle se detiene por completo."
+            }
+          ],
+          "exercises": [
+            {
+              "id": "ex_py_05_04",
+              "type": "single_choice",
+              "difficulty": "medium",
+              "prompt": "¿Qué instrucción omite el resto del ciclo actual y pasa a la siguiente iteración?",
+              "answers": [
+                { "id": "a", "label": "A", "body": "continue", "is_correct": true },
+                { "id": "b", "label": "B", "body": "break", "is_correct": false },
+                { "id": "c", "label": "C", "body": "pass", "is_correct": false },
+                { "id": "d", "label": "D", "body": "stop", "is_correct": false }
+              ],
+              "correct_answer_ids": ["a"],
+              "explanation": "continue reinicia el ciclo en el siguiente elemento sin abortar el bucle completo.",
+              "hints": ["En inglés significa continuar."]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+[
+  {
+    "id": "q_ts_02_01",
+    "type": "single_choice",
+    "prompt": "¿Qué modificador impide la reasignación de una propiedad en una interfaz de TypeScript?",
+    "options": [
+      { "id": "opt_a", "text": "readonly" },
+      { "id": "opt_b", "text": "const" },
+      { "id": "opt_c", "text": "immutable" },
+      { "id": "opt_d", "text": "final" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "`readonly` indica que la propiedad sólo puede inicializarse al crear el objeto y no modificarse después."
+  },
+  {
+    "id": "q_ts_02_02",
+    "type": "single_choice",
+    "prompt": "¿Cómo se define un alias de tipo en TypeScript?",
+    "options": [
+      { "id": "opt_a", "text": "type ID = string | number;" },
+      { "id": "opt_b", "text": "typedef string | number as ID;" },
+      { "id": "opt_c", "text": "alias ID = string | number;" },
+      { "id": "opt_d", "text": "def ID = string | number;" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "La palabra reservada `type` se emplea para crear Type Aliases con uniones u otros tipos complejos."
+  }
+]
