@@ -17,10 +17,136 @@ interface LessonWorkspaceProps {
   sectionRef: string;
 }
 
-function parseCourse(courseId: string): { lang: string; moduleSlug: string } | null {
-  if (courseId.startsWith('lua-')) return { lang: 'lua', moduleSlug: courseId.slice(4) };
-  if (courseId.startsWith('py-')) return { lang: 'python', moduleSlug: 'fundamentos-de-python' };
-  return null;
+function parseCourse(courseId: string, sectionRef: string): { lang: string; moduleSlug: string; initialMode: 'lesson' | 'quiz' } {
+  let lang = 'python';
+  if (courseId.startsWith('lua-') || courseId.startsWith('lua')) lang = 'lua';
+  else if (courseId.startsWith('js-') || courseId.startsWith('javascript')) lang = 'javascript';
+  else if (courseId.startsWith('ts-') || courseId.startsWith('typescript')) lang = 'typescript';
+  else if (courseId.startsWith('html') || courseId.includes('html') || courseId === 'fe-html') lang = 'html';
+  else if (courseId.startsWith('css') || courseId.includes('css') || courseId === 'fe-css') lang = 'css';
+
+  // 1. Detectar Mini-Boss Gate o Boss Gate en el Roadmap
+  if (sectionRef === 'les-miniboss' || sectionRef === 'py-boss-logic') {
+    return { lang: 'python', moduleSlug: 'condicionales', initialMode: 'quiz' };
+  }
+  if (sectionRef === 'les-boss' || sectionRef === 'py-apex-1') {
+    return { lang: 'python', moduleSlug: 'bucles-while', initialMode: 'quiz' };
+  }
+
+  // 2. Mapeo para HTML
+  if (lang === 'html') {
+    if (sectionRef === 'les-02' || sectionRef.includes('semant')) {
+      return { lang: 'html', moduleSlug: 'html-semantico-y-a11y', initialMode: 'lesson' };
+    }
+    return { lang: 'html', moduleSlug: 'fundamentos-de-html', initialMode: 'lesson' };
+  }
+
+  // 3. Mapeo para CSS
+  if (lang === 'css') {
+    if (sectionRef === 'les-02' || sectionRef.includes('flex')) {
+      return { lang: 'css', moduleSlug: 'flexbox-layout', initialMode: 'lesson' };
+    }
+    return { lang: 'css', moduleSlug: 'selectores-y-box-model', initialMode: 'lesson' };
+  }
+
+  // 4. Mapeo para Python (Nivel 1, Nivel 2, FastAPI y Django)
+  if (lang === 'python') {
+    // Especialización FastAPI
+    if (courseId === 'fastapi-async' || sectionRef.startsWith('fa-') || sectionRef.includes('fastapi')) {
+      if (sectionRef === 'fa-m02' || sectionRef.includes('pydantic')) {
+        return { lang: 'python', moduleSlug: 'fastapi-pydantic', initialMode: 'lesson' };
+      }
+      return { lang: 'python', moduleSlug: 'fastapi-asgi', initialMode: 'lesson' };
+    }
+
+    // Especialización Django
+    if (courseId === 'django-enterprise' || sectionRef.startsWith('dj-') || sectionRef.includes('django')) {
+      if (sectionRef === 'dj-m02' || sectionRef.includes('orm')) {
+        return { lang: 'python', moduleSlug: 'django-orm', initialMode: 'lesson' };
+      }
+      return { lang: 'python', moduleSlug: 'django-mvt', initialMode: 'lesson' };
+    }
+
+    // Python Nivel 2
+    if (courseId === 'python-2' || sectionRef.startsWith('py2-')) {
+      if (sectionRef === 'py2-m01' || sectionRef.includes('funcion')) return { lang: 'python', moduleSlug: 'funciones-y-modularidad', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m02' || sectionRef.includes('coleccion') || sectionRef.includes('lista')) return { lang: 'python', moduleSlug: 'colecciones', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m03' || sectionRef.includes('string') || sectionRef.includes('dict')) return { lang: 'python', moduleSlug: 'strings-avanzados', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m04' || sectionRef.includes('error') || sectionRef.includes('archivo')) return { lang: 'python', moduleSlug: 'manejo-de-errores', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m05' || sectionRef.includes('poo') || sectionRef.includes('clase')) return { lang: 'python', moduleSlug: 'programacion-orientada-a-objetos', initialMode: 'lesson' };
+    }
+
+    // Python Nivel 1
+    if (sectionRef === 'les-01' || sectionRef === 'py-m01' || sectionRef.includes('fundamentos')) {
+      return { lang: 'python', moduleSlug: 'fundamentos-de-python', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-02' || sectionRef === 'py-m02' || sectionRef.includes('variable')) {
+      return { lang: 'python', moduleSlug: 'variables-y-tipos-de-datos', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-03' || sectionRef === 'py-m03' || sectionRef.includes('operador')) {
+      return { lang: 'python', moduleSlug: 'operadores-y-expresiones', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-04' || sectionRef === 'py-m04' || sectionRef.includes('condicional')) {
+      return { lang: 'python', moduleSlug: 'condicionales', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-05' || sectionRef === 'py-m05' || sectionRef.includes('for')) {
+      return { lang: 'python', moduleSlug: 'bucles-for', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-06' || sectionRef === 'py-m06' || sectionRef.includes('while')) {
+      return { lang: 'python', moduleSlug: 'bucles-while', initialMode: 'lesson' };
+    }
+
+    // Si coincide con slug directo de módulo disponible
+    return { lang: 'python', moduleSlug: sectionRef.includes('-') ? sectionRef : 'fundamentos-de-python', initialMode: 'lesson' };
+  }
+
+  // 5. Lua
+  if (lang === 'lua') {
+    if (sectionRef === 'les-01' || sectionRef.includes('fundamento')) {
+      return { lang: 'lua', moduleSlug: 'fundamentos-de-lua', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-02' || sectionRef.includes('variable')) {
+      return { lang: 'lua', moduleSlug: 'variables-y-tipos-de-datos', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-03' || sectionRef.includes('operador')) {
+      return { lang: 'lua', moduleSlug: 'operadores', initialMode: 'lesson' };
+    }
+    const slug = sectionRef.includes('-') ? sectionRef : (courseId.startsWith('lua-') ? courseId.slice(4) : 'fundamentos-de-lua');
+    return { lang: 'lua', moduleSlug: slug, initialMode: 'lesson' };
+  }
+
+  // 6. JavaScript
+  if (lang === 'javascript') {
+    if (sectionRef === 'les-02' || sectionRef.includes('variable')) {
+      return { lang: 'javascript', moduleSlug: 'variables-y-tipos-de-datos', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-03' || sectionRef.includes('funcion')) {
+      return { lang: 'javascript', moduleSlug: 'funciones-y-arrow-functions', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-04' || sectionRef.includes('array') || sectionRef.includes('objeto')) {
+      return { lang: 'javascript', moduleSlug: 'arrays-y-objetos', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-05' || sectionRef.includes('async') || sectionRef.includes('fetch')) {
+      return { lang: 'javascript', moduleSlug: 'asincronia-y-fetch', initialMode: 'lesson' };
+    }
+    return { lang: 'javascript', moduleSlug: sectionRef.includes('-') ? sectionRef : 'fundamentos-de-javascript', initialMode: 'lesson' };
+  }
+
+  // 7. TypeScript
+  if (lang === 'typescript') {
+    if (sectionRef === 'les-02' || sectionRef.includes('interface')) {
+      return { lang: 'typescript', moduleSlug: 'interfaces-y-type-aliases', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-03' || sectionRef.includes('generic') || sectionRef.includes('union')) {
+      return { lang: 'typescript', moduleSlug: 'genericos-y-union-types', initialMode: 'lesson' };
+    }
+    if (sectionRef === 'les-04' || sectionRef.includes('clase') || sectionRef.includes('poo')) {
+      return { lang: 'typescript', moduleSlug: 'clases-y-poo', initialMode: 'lesson' };
+    }
+    return { lang: 'typescript', moduleSlug: sectionRef.includes('-') ? sectionRef : 'fundamentos-de-typescript', initialMode: 'lesson' };
+  }
+
+  return { lang: 'python', moduleSlug: 'fundamentos-de-python', initialMode: 'lesson' };
 }
 
 const QUIZ_COMPOSITION: Record<string, number> = {
@@ -33,6 +159,9 @@ const QUIZ_COMPOSITION: Record<string, number> = {
 };
 
 function sampleQuiz(bank: ContentExercise[], seed: number): ContentExercise[] {
+  if (bank.length === 0) return [];
+  // Si el banco trae preguntas de cualquier tipo, asegurar al menos una selección variada
+  if (bank.length <= 10) return shuffled(bank, seed);
   const picked: ContentExercise[] = [];
   Object.entries(QUIZ_COMPOSITION).forEach(([type, n], ti) => {
     const pool = shuffled(
@@ -41,11 +170,12 @@ function sampleQuiz(bank: ContentExercise[], seed: number): ContentExercise[] {
     );
     picked.push(...pool.slice(0, n));
   });
+  if (picked.length === 0) return shuffled(bank, seed).slice(0, 5);
   return shuffled(picked, seed + 99);
 }
 
 export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sectionRef }) => {
-  const parsed = useMemo(() => parseCourse(courseId), [courseId]);
+  const parsed = useMemo(() => parseCourse(courseId, sectionRef), [courseId, sectionRef]);
   const [module, setModule] = useState<ContentModule | null>(null);
   const [bank, setBank] = useState<ContentExercise[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,6 +183,28 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   const [mode, setMode] = useState<'lesson' | 'quiz' | 'done'>('lesson');
   const [quizScore, setQuizScore] = useState<{ ok: number; total: number } | null>(null);
   const completeSectionNode = useRoadmapStore((s) => s.completeSectionNode);
+
+  // Registro atómico de lecciones completadas
+  const [completedLessons, setCompletedLessons] = useState<Set<string>>(() => {
+    try {
+      const saved = window.localStorage.getItem('koda_completed_lessons');
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  });
+
+  const handleLessonCompleted = (lessonId: string) => {
+    setCompletedLessons((prev) => {
+      const next = new Set(prev).add(lessonId);
+      try {
+        window.localStorage.setItem('koda_completed_lessons', JSON.stringify(Array.from(next)));
+      } catch {}
+      return next;
+    });
+    // Notificar al roadmap store para encender el nodo actual
+    completeSectionNode(sectionRef, 3);
+  };
 
   useEffect(() => {
     let alive = true;
@@ -69,6 +221,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       if (alive) {
         setModule(mod);
         setBank(questions);
+        setMode(parsed.initialMode);
         setLoading(false);
       }
     })();
@@ -118,14 +271,13 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     return (
       <QuizMode
         bank={bank}
-        sectionTitle={section.title}
+        sectionTitle={parsed.initialMode === 'quiz' && (sectionRef === 'les-miniboss' || sectionRef === 'py-boss-logic') ? '🛡️ El Centinela de la Lógica' : section.title}
         courseTitle={module.title}
         onFinish={(ok, total) => {
           setQuizScore({ ok, total });
           setMode('done');
           if (ok / Math.max(1, total) >= 0.7) {
-            const nodeId = `lua-${parsed.moduleSlug}-s${section.position}`;
-            completeSectionNode(nodeId, ok === total ? 3 : 2);
+            completeSectionNode(sectionRef, ok === total ? 3 : 2);
           }
         }}
       />
@@ -214,26 +366,31 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             </div>
           </div>
 
-          {/* Stepper horizontal con glow naranja */}
+          {/* Stepper horizontal con glow naranja e indicación de completitud */}
           <div className="flex items-center gap-1.5" role="tablist" aria-label="Progreso de lecciones">
-            {section.lessons.map((l, i) => (
-              <button
-                key={l.id}
-                type="button"
-                role="tab"
-                aria-selected={i === lessonIdx}
-                aria-label={`Lección ${i + 1}: ${l.title}`}
-                onClick={() => setLessonIdx(i)}
-                className={cn(
-                  'h-1.5 flex-1 rounded-full transition-all duration-300 cursor-pointer',
-                  i === lessonIdx
-                    ? 'bg-gradient-to-r from-orange-500 to-amber-400 shadow-[0_0_10px_rgba(255,106,0,0.8)] ring-1 ring-orange-400/50'
-                    : i < lessonIdx
-                    ? 'bg-emerald-500/80 shadow-[0_0_6px_rgba(16,185,129,0.3)]'
-                    : 'bg-slate-800/80 hover:bg-slate-700'
-                )}
-              />
-            ))}
+            {section.lessons.map((l, i) => {
+              const isDone = completedLessons.has(l.id);
+              const isCurrent = i === lessonIdx;
+              return (
+                <button
+                  key={l.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isCurrent}
+                  aria-label={`Lección ${i + 1}: ${l.title} ${isDone ? '(Completada)' : ''}`}
+                  onClick={() => setLessonIdx(i)}
+                  className={cn(
+                    'h-2 flex-1 rounded-full transition-all duration-300 cursor-pointer relative',
+                    isCurrent
+                      ? 'bg-gradient-to-r from-orange-500 to-amber-400 shadow-[0_0_10px_rgba(255,106,0,0.8)] ring-1 ring-orange-400/50'
+                      : isDone
+                      ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]'
+                      : 'bg-slate-800/80 hover:bg-slate-700'
+                  )}
+                  title={`0${i + 1}. ${l.title}${isDone ? ' (✓ Completada)' : ''}`}
+                />
+              );
+            })}
           </div>
         </div>
       </header>
@@ -243,13 +400,21 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
           <LessonView
             key={lesson.id}
             lesson={lesson}
+            isCompleted={completedLessons.has(lesson.id)}
+            onComplete={() => handleLessonCompleted(lesson.id)}
             onNext={() => {
+              handleLessonCompleted(lesson.id);
               if (lessonIdx + 1 < section.lessons.length) setLessonIdx(lessonIdx + 1);
               else setMode('quiz');
             }}
             onPrev={() => {
               if (lessonIdx > 0) setLessonIdx(lessonIdx - 1);
             }}
+            onJumpTo={(idx) => {
+              if (idx >= 0 && idx < section.lessons.length) setLessonIdx(idx);
+            }}
+            currentIndex={lessonIdx}
+            totalCount={section.lessons.length}
             isLast={lessonIdx + 1 >= section.lessons.length}
           />
         ) : (
@@ -271,17 +436,34 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
 
 function LessonView({
   lesson,
+  isCompleted,
+  onComplete,
   onNext,
   onPrev,
+  onJumpTo: _onJumpTo,
+  currentIndex = 0,
+  totalCount = 1,
   isLast,
 }: {
   lesson: ContentLesson;
+  isCompleted?: boolean;
+  onComplete?: () => void;
   onNext: () => void;
   onPrev: () => void;
+  onJumpTo?: (idx: number) => void;
+  currentIndex?: number;
+  totalCount?: number;
   isLast: boolean;
 }) {
   const exercise = lesson.exercises[0] ?? null;
   const engine = useLessonEngine(exercise ? [exercise] : [], lesson.position);
+
+  // Notificar completitud automática si el ejercicio es correcto
+  useEffect(() => {
+    if (engine.result?.correct) {
+      onComplete?.();
+    }
+  }, [engine.result, onComplete]);
 
   // Hook de atajos ergonómicos por teclado
   const { pressedIndex, pressedAction } = useLessonKeyboardShortcuts({
@@ -295,9 +477,14 @@ function LessonView({
     },
     onNext: () => {
       if (engine.result) {
-        if (engine.result.correct) onNext();
-        else engine.resetSelection();
+        if (engine.result.correct) {
+          onComplete?.();
+          onNext();
+        } else {
+          engine.resetSelection();
+        }
       } else if (!exercise) {
+        onComplete?.();
         onNext();
       }
     },
@@ -313,8 +500,16 @@ function LessonView({
       {/* Columna Izquierda: Teoría & Terminal */}
       <section aria-label="Teoría" className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col justify-between gap-6 shadow-2xl">
         <div className="space-y-4">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-orange-500/10 border border-orange-500/20 text-[10px] font-mono font-bold text-orange-300 uppercase tracking-wider">
-            <span>Lección 0{lesson.position ?? 1}</span>
+          <div className="flex items-center gap-2">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-orange-500/10 border border-orange-500/20 text-[10px] font-mono font-bold text-orange-300 uppercase tracking-wider">
+              <span>Lección 0{lesson.position ?? 1}</span>
+            </div>
+            {isCompleted ? (
+              <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
+                <Check className="w-3 h-3 text-emerald-400" />
+                <span>Completada</span>
+              </div>
+            ) : null}
           </div>
           <h1 className="font-display text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">
             {lesson.title}
@@ -362,7 +557,10 @@ function LessonView({
             </div>
             <button
               type="button"
-              onClick={onNext}
+              onClick={() => {
+                onComplete?.();
+                onNext();
+              }}
               className={cn(
                 'group relative inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.18em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none select-none',
                 pressedAction === 'next' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-amber-400'
@@ -476,6 +674,28 @@ function LessonView({
                   </div>
                 </div>
               )}
+            </div>
+
+            {/* Pie de navegación libre entre lecciones independientes */}
+            <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-xs font-mono text-slate-400">
+              <button
+                type="button"
+                onClick={onPrev}
+                disabled={currentIndex === 0}
+                className="hover:text-slate-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+              >
+                ← Lección anterior
+              </button>
+              <span className="text-[11px] text-slate-500">
+                0{currentIndex + 1} / 0{totalCount}
+              </span>
+              <button
+                type="button"
+                onClick={onNext}
+                className="hover:text-orange-400 transition-colors cursor-pointer"
+              >
+                {isLast ? 'Ir al Quiz →' : 'Saltar / Siguiente →'}
+              </button>
             </div>
           </div>
         )}

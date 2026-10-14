@@ -1,0 +1,28 @@
+[
+  {
+    "id": "q_css_02_01",
+    "type": "single_choice",
+    "prompt": "¿Qué valor de `flex-direction` invierte el eje principal para que los elementos se apilen verticalmente en columna?",
+    "options": [
+      { "id": "opt_a", "text": "column" },
+      { "id": "opt_b", "text": "vertical" },
+      { "id": "opt_c", "text": "stack" },
+      { "id": "opt_d", "text": "block" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "`flex-direction: column` rota el eje principal hacia la vertical, haciendo que los elementos se apilen uno debajo de otro."
+  },
+  {
+    "id": "q_css_02_02",
+    "type": "single_choice",
+    "prompt": "¿Qué propiedad moderna de Flexbox permite agregar espacio regular entre elementos hijos sin tener que usar márgenes en cada uno?",
+    "options": [
+      { "id": "opt_a", "text": "gap" },
+      { "id": "opt_b", "text": "spacing" },
+      { "id": "opt_c", "text": "gutter" },
+      { "id": "opt_d", "text": "padding-between" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "La propiedad `gap` define la separación exacta entre filas y columnas de hijos flexibles."
+  }
+]

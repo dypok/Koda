@@ -1,0 +1,60 @@
+{
+  "id": "py_mod_16_django_mvt",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "course_id": "django-enterprise",
+  "code": "DJ_MOD_01",
+  "slug": "django-mvt",
+  "title": "Arquitectura MVT y Estructura de Proyectos Django",
+  "objective": "Comprender la filosofía 'baterías incluidas' de Django, su patrón Modelo-Vista-Template y la anatomía de un proyecto Django.",
+  "description": "El framework web empresarial por excelencia para crear plataformas web completas y escalables.",
+  "position": 16,
+  "status": "published",
+  "content_version": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 200
+  },
+  "sections": [
+    {
+      "id": "sec_dj_01",
+      "code": "S01",
+      "title": "El Patrón MVT",
+      "slug": "patron-mvt-django",
+      "position": 1,
+      "type": "theory",
+      "status": "published",
+      "content_version": 1,
+      "estimated_minutes": 10,
+      "xp_on_complete": 15,
+      "lessons": [
+        {
+          "id": "les_dj_01_01",
+          "code": "L01",
+          "title": "¿Qué es el patrón MVT de Django?",
+          "position": 1,
+          "theory_markdown": "Django organiza las aplicaciones mediante MVT: el **Modelo** gestiona los datos y la base de datos; la **Vista** procesa la lógica de negocio y responde a las peticiones HTTP; y el **Template** renderiza el HTML visible para el usuario final.",
+          "code_example": "# Vista básica en Django (views.py)\nfrom django.http import HttpResponse\n\ndef inicio(request):\n    return HttpResponse(\"¡Bienvenido a Django!\")",
+          "expected_output": "¡Bienvenido a Django!",
+          "tip_markdown": "En Django, la 'Vista' equivale al Controlador en la arquitectura MVC clásica.",
+          "exercise": {
+            "id": "ex_dj_01_01",
+            "type": "single_choice",
+            "prompt": "En la arquitectura MVT de Django, ¿qué componente es responsable de renderizar el HTML al usuario?",
+            "hint": "Comienza con la letra T.",
+            "options": [
+              { "id": "opt_a", "text": "Template" },
+              { "id": "opt_b", "text": "Model" },
+              { "id": "opt_c", "text": "View" },
+              { "id": "opt_d", "text": "Middleware" }
+            ],
+            "correct_option_id": "opt_a",
+            "explanation": "¡Correcto! En MVT, el Template es la capa de presentación encargada de la estructura HTML y presentación visual."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,61 @@
+{
+  "id": "css_mod_02",
+  "language_id": "e5f6a7b8-c9d0-4e1f-2a3b-4c5d6e7f8a9b",
+  "course_id": "fe-css",
+  "code": "CSS_MOD_02",
+  "slug": "flexbox-layout",
+  "title": "Diseño Unidimensional con Flexbox",
+  "objective": "Dominar el modelo de caja flexible con display flex, alinear elementos en los ejes principal y cruzado, y crear barras de navegación y tarjetas responsivas.",
+  "description": "Distribuye y alinea elementos en filas o columnas con control total sobre el espacio sobrante.",
+  "position": 2,
+  "status": "published",
+  "content_version": 1,
+  "prerequisite_module_id": "css_mod_01",
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 150
+  },
+  "sections": [
+    {
+      "id": "sec_css_02_01",
+      "code": "S01",
+      "title": "Ejes y Alineación en Flexbox",
+      "slug": "ejes-flexbox",
+      "position": 1,
+      "type": "theory",
+      "status": "published",
+      "content_version": 1,
+      "estimated_minutes": 10,
+      "xp_on_complete": 10,
+      "lessons": [
+        {
+          "id": "les_css_02_01",
+          "code": "L01",
+          "title": "justify-content vs align-items",
+          "position": 1,
+          "theory_markdown": "Al aplicar `display: flex`, los hijos directos se colocan en una fila horizontal (eje principal). `justify-content` controla la distribución a lo largo del eje principal (ej. `center`, `space-between`), mientras que `align-items` alinea en el eje cruzado perpendicular.",
+          "code_example": ".contenedor {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  gap: 16px;\n}",
+          "expected_output": "Elementos distribuidos y centrados verticalmente con separación de 16px",
+          "tip_markdown": "La propiedad 'gap' añade separación uniforme entre hijos flex sin necesidad de margins individuales.",
+          "exercise": {
+            "id": "ex_css_02_01",
+            "type": "single_choice",
+            "prompt": "En un contenedor con `flex-direction: row`, ¿qué propiedad alinea los elementos a lo largo del eje horizontal (eje principal)?",
+            "hint": "Comienza con justify...",
+            "options": [
+              { "id": "opt_a", "text": "justify-content" },
+              { "id": "opt_b", "text": "align-items" },
+              { "id": "opt_c", "text": "align-content" },
+              { "id": "opt_d", "text": "flex-align" }
+            ],
+            "correct_option_id": "opt_a",
+            "explanation": "¡Correcto! `justify-content` alinea siempre en el eje principal (horizontal en row, vertical en column)."
+          }
+        }
+      ]
+    }
+  ]
+}

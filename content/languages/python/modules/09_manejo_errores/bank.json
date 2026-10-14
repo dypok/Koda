@@ -1,0 +1,28 @@
+[
+  {
+    "id": "q_py_09_01",
+    "type": "single_choice",
+    "prompt": "¿Qué bloque de código se ejecuta SIEMPRE en una estructura try/except, ocurra o no una excepción?",
+    "options": [
+      { "id": "opt_a", "text": "finally" },
+      { "id": "opt_b", "text": "else" },
+      { "id": "opt_c", "text": "catch" },
+      { "id": "opt_d", "text": "always" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "El bloque `finally` garantiza su ejecución para tareas de limpieza (como cerrar conexiones o archivos), independientemente de que se haya lanzado un error o no."
+  },
+  {
+    "id": "q_py_09_02",
+    "type": "single_choice",
+    "prompt": "¿Qué instrucción permite provocar o lanzar intencionalmente una excepción en Python?",
+    "options": [
+      { "id": "opt_a", "text": "raise" },
+      { "id": "opt_b", "text": "throw" },
+      { "id": "opt_c", "text": "error" },
+      { "id": "opt_d", "text": "panic" }
+    ],
+    "correct_option_id": "opt_a",
+    "explanation": "En Python se utiliza la palabra reservada `raise` (ej. `raise ValueError(\"dato inválido\")`)."
+  }
+]

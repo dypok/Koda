@@ -17,11 +17,14 @@ import { DatabaseModule } from '../../database/database.module';
 import { ContentModule } from '../../presentation/rest/content/content.module';
 import { CodeRunnerModule } from '../../application/services/code-runner/code-runner.module';
 
+import { ContentLoaderService } from './content-loader.service';
+
 @Module({
   imports: [DatabaseModule, ContentModule, CodeRunnerModule],
   controllers: [LearningController, DiagnosticController],
   providers: [
     LearningService,
+    ContentLoaderService,
     GetDiagnosticQuestionsUseCase,
     EvaluateDiagnosticUseCase,
     CompleteSectionUseCase,
@@ -40,6 +43,7 @@ import { CodeRunnerModule } from '../../application/services/code-runner/code-ru
   ],
   exports: [
     LearningService,
+    ContentLoaderService,
     GetDiagnosticQuestionsUseCase,
     EvaluateDiagnosticUseCase,
     CompleteSectionUseCase,
