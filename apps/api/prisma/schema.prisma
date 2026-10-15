@@ -325,26 +325,24 @@ model UserAchievement {
 }
 
 model Certificate {
-  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId              String   @map("user_id") @db.Uuid
-  languageCode        String   @map("language_code") @db.VarChar(10)
-  trackCode           String?  @map("track_code") @db.VarChar(30)
-  title               String   @db.VarChar(150)
-  studentName         String   @map("student_name") @db.VarChar(150)
-  studentIdMasked     String?  @map("student_id_masked") @db.VarChar(50)
-  issueDate           DateTime @default(now()) @map("issue_date") @db.Timestamptz(6)
-  verificationCode    String   @unique @map("verification_code") @db.VarChar(64)
-  verificationQrUrl   String?  @map("verification_qr_url") @db.VarChar(512)
-  storagePath         String?  @map("storage_path") @db.VarChar(255)
-  storageUrl          String?  @map("storage_url") @db.Text
-  pdfFileSizeBytes    Int?     @map("pdf_file_size_bytes")
-  pdfSha256Hash       String?  @map("pdf_sha256_hash") @db.VarChar(64)
-  metadata            Json?
-  isRevoked           Boolean  @default(false) @map("is_revoked")
-  createdAt           DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
-  updatedAt           DateTime @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id                    String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                  String    @unique @db.VarChar(64)
+  userId                String    @map("user_id") @db.Uuid
+  languageSlug          String    @map("language_slug") @db.VarChar(30)
+  trackSlug             String?   @map("track_slug") @db.VarChar(30)
+  status                String    @default("valid") @db.VarChar(20)
+  issuedAt              DateTime  @default(now()) @map("issued_at") @db.Timestamptz(6)
+  holderName            String    @map("holder_name") @db.VarChar(150)
+  holderDocumentMasked  String?   @map("holder_document_masked") @db.VarChar(50)
+  metadata              Json?
+  qrPayload             String?   @map("qr_payload") @db.VarChar(512)
+  pdfSha256             String?   @map("pdf_sha256") @db.VarChar(64)
+  storagePath           String?   @map("storage_path") @db.VarChar(255)
+  storageUrl            String?   @map("storage_url") @db.Text
+  createdAt             DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt             DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("certificates")
 }
