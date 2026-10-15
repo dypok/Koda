@@ -1,0 +1,33 @@
+{
+  "module_code": "IA_M10",
+  "module_slug": "ia-proyecto-agente-completo",
+  "course_slug": "ai-agents",
+  "questions": [
+    {
+      "id": "q_ia_10_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuáles son los componentes esenciales de un sistema de agente autónomo moderno de grado de producción?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Modelo de Lenguaje (razonador) + Herramientas/APIs (acción) + Memoria/Contexto + Guardrails de seguridad"
+        },
+        {
+          "id": "b",
+          "text": "Solo un archivo HTML estático"
+        },
+        {
+          "id": "c",
+          "text": "Un compilador de Java sin conexión a Internet"
+        },
+        {
+          "id": "d",
+          "text": "Una hoja de cálculo de Excel"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Esta arquitectura cuádruple (LLM + Tools + Memory + Guardrails) define el estado del arte de los agentes autónomos de software."
+    }
+  ]
+}

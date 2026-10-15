@@ -1,0 +1,78 @@
+{
+  "module_code": "PY1_M04",
+  "module_slug": "entrada-salida-y-strings",
+  "course_slug": "python-1",
+  "questions": [
+    {
+      "id": "q_py1_04_01",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué tipo de dato devuelve SIEMPRE la función input()?",
+      "options": [
+        {
+          "id": "a",
+          "text": "str"
+        },
+        {
+          "id": "b",
+          "text": "Depende de lo que el usuario escriba"
+        },
+        {
+          "id": "c",
+          "text": "int si escribe solo dígitos"
+        },
+        {
+          "id": "d",
+          "text": "bool"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "En Python 3, input() retorna invariablemente un objeto de tipo str (cadena de texto)."
+    },
+    {
+      "id": "q_py1_04_02",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué imprime el siguiente fragmento?",
+      "prompt_code": "precio = 19.999\nprint(f\"Total: ${precio:.2f}\")",
+      "options": [
+        {
+          "id": "a",
+          "text": "Total: $20.00"
+        },
+        {
+          "id": "b",
+          "text": "Total: $19.99"
+        },
+        {
+          "id": "c",
+          "text": "Total: $19.999"
+        },
+        {
+          "id": "d",
+          "text": "Total: 20"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El especificador :.2f redondea al número de decimales más cercano (19.999 se redondea a 20.00)."
+    },
+    {
+      "id": "q_py1_04_03",
+      "type": "true_false",
+      "difficulty": "easy",
+      "prompt": "Los strings en Python son mutables, por lo que texto.replace(\"a\", \"b\") modifica el valor original de la variable texto.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Falso, los strings son inmutables y los métodos devuelven una nueva copia modificada"
+        },
+        {
+          "id": "b",
+          "text": "Verdadero, modifica el objeto directamente en memoria"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Los strings en Python son inmutables. Todo método devuelve una nueva cadena y nunca modifica la original in-situ."
+    }
+  ]
+}

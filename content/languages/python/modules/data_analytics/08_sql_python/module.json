@@ -1,0 +1,91 @@
+{
+  "id": "da_mod_08",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "DA_M08",
+  "slug": "sql-con-python",
+  "course_slug": "data-analytics",
+  "title": "Consultas SQL con Python, SQLite y DuckDB",
+  "objective": "Integrar consultas SQL en scripts de análisis con sqlite3, pandas.read_sql y acelerar consultas analíticas con DuckDB.",
+  "description": "El puente entre analistas y bases de datos relacionales: ejecuta queries complejas directamente en memoria con DuckDB.",
+  "position": 48,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 350
+  },
+  "sections": [
+    {
+      "id": "sec_da_08_01",
+      "code": "S01",
+      "title": "pandas.read_sql y DuckDB Analítico",
+      "slug": "sql-y-duckdb",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_da_08_01",
+          "code": "L01",
+          "title": "Ejecución de SQL desde Python y DuckDB en Memoria",
+          "slug": "sql-duckdb-base",
+          "position": 1,
+          "concept_id": "da-sql",
+          "objective": "Combinar la expresividad de SQL con el poder de transformación de Python.",
+          "theory_markdown": "Con `pd.read_sql(query, conexion)`, ejecutas una sentencia SQL en cualquier base de datos relacional y recibes el resultado inmediatamente como un DataFrame de Pandas.\n\nPara análisis de big data local, **DuckDB** es el \"SQLite para analítica\": un motor SQL columnar vectorial embebido en Python que procesa archivos Parquet y CSV de gigabytes en milisegundos usando todos los núcleos de tu procesador.",
+          "examples": [
+            {
+              "title": "Consulta SQL analítica con SQLite y Pandas",
+              "code": "import sqlite3\nimport pandas as pd\n\n# Base de datos en memoria\nconn = sqlite3.connect(\":memory:\")\nconn.execute(\"CREATE TABLE ventas (pais TEXT, monto REAL)\")\nconn.execute(\"INSERT INTO ventas VALUES ('México', 1500), ('México', 2300), ('Chile', 1800)\")\n\n# Query analítica directo a DataFrame\ndf = pd.read_sql(\"\"\"\n    SELECT pais, COUNT(*) AS num_ventas, SUM(monto) AS total\n    FROM ventas\n    GROUP BY pais\n\"\"\", conn)\nprint(df)",
+              "output": "     pais  num_ventas   total\n0   Chile           1  1800.0\n1  México           2  3800.0",
+              "explanation": "pd.read_sql transfiere los tipos y resultados de la consulta relacional a Pandas de forma transparente."
+            }
+          ],
+          "common_errors": "Concatenar variables de usuario directamente en strings de consulta SQL (vulnerabilidad SQL Injection). Siempre usa parámetros con tuplas: `cursor.execute(\"SELECT ... WHERE id = ?\", (id_usuario,))`.",
+          "mini_exercise": {
+            "starter_code": "# Consulta básica con read_sql\n# df = pd.read_sql(\"SELECT * FROM tabla\", conn)",
+            "instructions": "Observa la sintaxis limpia de integración con read_sql.",
+            "solution": "# read_sql listo"
+          },
+          "key_takeaways": [
+            "pd.read_sql() ejecuta queries y entrega DataFrames.",
+            "DuckDB procesa consultas analíticas columnares a velocidad extrema.",
+            "Siempre parametriza las consultas para evitar inyección SQL."
+          ],
+          "exercise": {
+            "id": "ex_da_08_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Por qué DuckDB es especialmente rápido para tareas de analítica frente a motores transaccionales tradicionales?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque es un motor orientado a columnas (column-oriented) y vectorizado"
+              },
+              {
+                "id": "b",
+                "text": "Porque no utiliza SQL"
+              },
+              {
+                "id": "c",
+                "text": "Porque no requiere memoria RAM"
+              },
+              {
+                "id": "d",
+                "text": "Porque solo corre en supercomputadoras"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El almacenamiento columnar lee solo las columnas necesarias para la agregación sin cargar filas completas a memoria."
+          }
+        }
+      ]
+    }
+  ]
+}

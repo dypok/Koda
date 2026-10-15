@@ -1,0 +1,91 @@
+{
+  "id": "ia_mod_04",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "IA_M04",
+  "slug": "ia-function-calling",
+  "course_slug": "ai-agents",
+  "title": "Function Calling y Conexión de Herramientas (Tools)",
+  "objective": "Dotar al modelo de capacidades del mundo real mediante Function Calling: declarar herramientas, procesar solicitudes de llamada y ejecutar código Python.",
+  "description": "Transforma al LLM de un simple generador de texto en un operador activo: dale la capacidad de consultar APIs climáticas, bases de datos o calculadoras.",
+  "position": 54,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 320
+  },
+  "sections": [
+    {
+      "id": "sec_ia_04_01",
+      "code": "S01",
+      "title": "Declaración y Ejecución de Herramientas (Tools)",
+      "slug": "tools-function-calling",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_ia_04_01",
+          "code": "L01",
+          "title": "El Ciclo de Function Calling en 4 Pasos",
+          "slug": "function-calling-ciclo",
+          "position": 1,
+          "concept_id": "ia-tools",
+          "objective": "Comprender que el LLM no ejecuta el código por sí mismo; te pide a ti que lo ejecutes y le devuelvas el resultado.",
+          "theory_markdown": "Un error conceptual común es pensar que el LLM ejecuta código en los servidores de OpenAI o Anthropic. El flujo real de **Function Calling** funciona en 4 pasos rigurosos:\n\n1. **Declaración**: Le envías al modelo tu lista de funciones en formato JSON Schema (ej: `obtener_clima(ciudad: str)`).\n2. **Decisión**: El modelo razona y, en vez de emitir texto, responde: *\"Por favor ejecuta `obtener_clima(ciudad='Tokio')`\"*. \n3. **Ejecución local**: Tu código Python ejecuta la función real (hace una consulta a una API o base de datos).\n4. **Inyección de resultado**: Le envías el resultado al modelo con el rol `tool`, y el modelo formula su respuesta final en lenguaje natural para el usuario.",
+          "examples": [
+            {
+              "title": "Declaración de herramienta para el modelo",
+              "code": "def sumar(a: int, b: int) -> int:\n    return a + b\n\ntool_def = {\n    \"type\": \"function\",\n    \"function\": {\n        \"name\": \"sumar\",\n        \"description\": \"Calcula la suma exacta de dos números enteros\",\n        \"parameters\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"a\": {\"type\": \"integer\"},\n                \"b\": {\"type\": \"integer\"}\n            },\n            \"required\": [\"a\", \"b\"]\n        }\n    }\n}\nprint(\"Herramienta lista:\", tool_def[\"function\"][\"name\"])",
+              "output": "Herramienta lista: sumar",
+              "explanation": "La descripción de la función es crucial: el LLM la lee para saber cuándo tiene sentido invocarla."
+            }
+          ],
+          "common_errors": "Escribir descripciones de herramientas vagas o vacías. El modelo decide invocar una herramienta basándose en la semántica de la descripción.",
+          "mini_exercise": {
+            "starter_code": "# Mapeo de despacho de herramientas en Python\ntools_disponibles = {\"sumar\": lambda a, b: a + b}\nfn = tools_disponibles[\"sumar\"]\nprint(\"Resultado:\", fn(5, 7))",
+            "instructions": "Observa cómo un diccionario de funciones despacha la herramienta invocada por el modelo.",
+            "solution": "tools_disponibles = {\"sumar\": lambda a, b: a + b}\nfn = tools_disponibles[\"sumar\"]\nprint(\"Resultado:\", fn(5, 7))"
+          },
+          "key_takeaways": [
+            "El LLM no ejecuta el código; solicita la llamada y tú la ejecutas localmente.",
+            "Las descripciones detalladas de funciones guían la decisión del modelo.",
+            "El resultado de la ejecución se reinyecta con rol \"tool\"."
+          ],
+          "exercise": {
+            "id": "ex_ia_04_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "En el patrón de Function Calling, ¿quién ejecuta realmente la función de Python en su máquina?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Tu propio servidor o aplicación Python local"
+              },
+              {
+                "id": "b",
+                "text": "Los servidores de OpenAI / Google directamente"
+              },
+              {
+                "id": "c",
+                "text": "El navegador del usuario"
+              },
+              {
+                "id": "d",
+                "text": "Nadie, la función se simula"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El LLM solo genera los argumentos en formato JSON; tu código en Python es quien ejecuta la función y devuelve el resultado al modelo."
+          }
+        }
+      ]
+    }
+  ]
+}

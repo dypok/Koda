@@ -1,0 +1,33 @@
+{
+  "module_code": "DA_M04",
+  "module_slug": "pandas-agrupaciones-merges",
+  "course_slug": "data-analytics",
+  "questions": [
+    {
+      "id": "q_da_04_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál método de Pandas genera tablas dinámicas cruzadas equivalentes a las Pivot Tables de Excel o consultas multidimensionales?",
+      "options": [
+        {
+          "id": "a",
+          "text": "df.pivot_table()"
+        },
+        {
+          "id": "b",
+          "text": "df.transpose()"
+        },
+        {
+          "id": "c",
+          "text": "df.cross_tabulate()"
+        },
+        {
+          "id": "d",
+          "text": "df.reshape()"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "pivot_table permite especificar values, index, columns y aggfunc para crear resúmenes multidimensionales."
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "module_code": "DA_M02",
+  "module_slug": "pandas-series-dataframes",
+  "course_slug": "data-analytics",
+  "questions": [
+    {
+      "id": "q_da_02_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la diferencia entre df.loc[0] y df.iloc[0]?",
+      "options": [
+        {
+          "id": "a",
+          "text": "loc busca por el nombre de la etiqueta del índice; iloc busca por la posición numérica entera de la fila"
+        },
+        {
+          "id": "b",
+          "text": "loc es solo para columnas e iloc para filas"
+        },
+        {
+          "id": "c",
+          "text": "iloc está obsoleto"
+        },
+        {
+          "id": "d",
+          "text": "Son exactamente idénticos en todos los casos"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "loc es label-based (basado en etiquetas) e iloc es integer-position based (basado en posiciones enteras 0-indexed)."
+    }
+  ]
+}

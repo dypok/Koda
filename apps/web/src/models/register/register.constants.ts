@@ -4,7 +4,7 @@ import {
 } from './register.model';
 
 /** Única fuente de verdad de disponibilidad (el badge se deriva de aquí). */
-export const AVAILABLE_IDS = ['python', 'lua'] as const;
+export const AVAILABLE_IDS = ['python'] as const;
 
 export function techAvailability(id: string): { isAvailable: boolean; badge: string } {
   const isAvailable = (AVAILABLE_IDS as readonly string[]).includes(id);
@@ -39,8 +39,8 @@ export const GOAL_OPTIONS: GoalOption[] = [
 ];
 
 export const AVAILABLE_LANGUAGES: LanguageOption[] = [
-  { id: 'python', name: 'Python', slug: 'python', color: '#38BDF8', icon: CodeSimple, isAvailable: true, badge: 'Disponible', category: 'language', description: 'Sintaxis limpia y fundamentos desde cero.' },
-  { id: 'lua', name: 'Lua', slug: 'lua', color: '#8FA8FF', icon: Moon, isAvailable: true, badge: 'Disponible', category: 'language', description: 'Lenguaje ligero y embebido: de fundamentos a metatablas.' },
+  { id: 'python', name: 'Python Specialist', slug: 'python', color: '#F59E0B', icon: CodeSimple, isAvailable: true, badge: 'Disponible', category: 'language', description: 'De Fundamentos a Backend, Análisis de Datos y Agentes de IA.' },
+  { id: 'lua', name: 'Lua', slug: 'lua', color: '#8FA8FF', icon: Moon, isAvailable: false, badge: 'Próximamente', category: 'language', description: 'Lenguaje embebido ligero.' },
   { id: 'html', name: 'HTML', slug: 'html', color: '#E34F26', icon: Code, isAvailable: false, badge: 'Próximamente', category: 'language', description: 'Estructura semántica de la web desde cero.' },
   { id: 'css', name: 'CSS', slug: 'css', color: '#1572B6', icon: Palette, isAvailable: false, badge: 'Próximamente', category: 'language', description: 'Diseño visual, layouts modernos y estilos.' },
   { id: 'javascript', name: 'JavaScript', slug: 'javascript', color: '#FACC15', icon: BracketsCurly, isAvailable: false, badge: 'Próximamente', category: 'language', description: 'Interactividad y desarrollo en navegadores.' },

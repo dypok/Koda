@@ -1,0 +1,59 @@
+{
+  "module_code": "PY1_M09",
+  "module_slug": "diccionarios-y-sets",
+  "course_slug": "python-1",
+  "questions": [
+    {
+      "id": "q_py1_09_01",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cómo se crea un conjunto (set) vacío en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "set()"
+        },
+        {
+          "id": "b",
+          "text": "{}"
+        },
+        {
+          "id": "c",
+          "text": "[]"
+        },
+        {
+          "id": "d",
+          "text": "set([])"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "{} crea un diccionario vacío. Para instanciar un set vacío se utiliza la función constructora set()."
+    },
+    {
+      "id": "q_py1_09_02",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué imprime el operador de intersección & entre {1, 2, 3} y {2, 3, 4}?",
+      "options": [
+        {
+          "id": "a",
+          "text": "{2, 3}"
+        },
+        {
+          "id": "b",
+          "text": "{1, 2, 3, 4}"
+        },
+        {
+          "id": "c",
+          "text": "{1, 4}"
+        },
+        {
+          "id": "d",
+          "text": "5"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La intersección (&) extrae los elementos presentes en ambos conjuntos simultáneamente (2 y 3)."
+    }
+  ]
+}
