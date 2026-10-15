@@ -21,8 +21,16 @@ export default function SectionPage() {
   }, [hasHydrated, isAuthenticated, router]);
 
   if (!hasHydrated || !isAuthenticated) {
-    return <div className="min-h-screen bg-slate-950" />;
+    return (
+      <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-3">
+        <div className="h-8 w-8 rounded-full border-2 border-slate-700 border-t-orange-400 animate-spin" />
+        <p className="font-mono text-xs text-slate-400 tracking-wider">CARGANDO ESPACIO DE APRENDIZAJE…</p>
+      </div>
+    );
   }
 
-  return <LessonWorkspace courseId={params.course} sectionRef={params.section} />;
+  const courseId = typeof params?.course === 'string' ? params.course : Array.isArray(params?.course) ? params.course[0] : '';
+  const sectionRef = typeof params?.section === 'string' ? params.section : Array.isArray(params?.section) ? params.section[0] : '';
+
+  return <LessonWorkspace courseId={courseId} sectionRef={sectionRef} />;
 }
