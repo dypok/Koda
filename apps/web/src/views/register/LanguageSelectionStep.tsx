@@ -189,7 +189,7 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
     </motion.div>
     {visible.length === 0 && (
       <p className="rounded-[8px] border border-dashed border-slate-800 px-4 py-6 text-center font-mono text-xs text-slate-500">
-        {'// sin coincidencias para "'}{query.trim()}{'" — prueba "python"'}
+        {'Sin coincidencias para "'}{query.trim()}{'" — prueba "python"'}
       </p>
     )}
     </div>

@@ -32,6 +32,7 @@ export class LearningService {
     private readonly eventEmitter?: EventEmitter2,
     @Optional()
     private readonly contentLoaderService?: ContentLoaderService,
+    @Optional() private readonly contentLoaderService?: ContentLoaderService,
   ) {}
 
   async getRoadmap(languageSlug: string, userId?: string): Promise<RoadmapResponse> {
