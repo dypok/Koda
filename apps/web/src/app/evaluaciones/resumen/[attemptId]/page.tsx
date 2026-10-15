@@ -5,6 +5,7 @@ import { useRouter, useParams } from 'next/navigation';
 import {
   EvaluationService,
   AttemptSummaryResponse,
+  IssueCertificateResponse,
 } from '@/services/learning/evaluation.service';
 import { CheckCircle, XCircle, ArrowRight, Certificate, DownloadSimple } from '@phosphor-icons/react';
 
@@ -21,7 +22,7 @@ export default function AttemptReviewScreen(props: AttemptReviewScreenProps) {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'correct' | 'incorrect'>('all');
   const [isIssuingCert, setIsIssuingCert] = useState(false);
-  const [certData, setCertData] = useState<{ verificationCode: string; storageUrl: string } | null>(null);
+  const [certData, setCertData] = useState<IssueCertificateResponse | null>(null);
 
   useEffect(() => {
     async function resolveId() {
@@ -133,13 +134,13 @@ export default function AttemptReviewScreen(props: AttemptReviewScreenProps) {
             {certData ? (
               <div className="flex gap-2">
                 <button
-                  onClick={() => router.push(`/verificar/${certData.verificationCode}`)}
+                  onClick={() => router.push(`/verificar/${certData.code || certData.verificationCode}`)}
                   className="px-4 py-2 bg-indigo-600 text-white text-xs font-semibold rounded-xl hover:bg-indigo-700 transition"
                 >
                   Ver Certificado
                 </button>
                 <a
-                  href={`/api/v1/certificates/${certData.verificationCode}/pdf`}
+                  href={`/api/v1/certificates/${certData.code || certData.verificationCode}/pdf`}
                   download
                   className="px-4 py-2 bg-slate-900 text-white text-xs font-semibold rounded-xl hover:bg-slate-800 transition flex items-center gap-1.5"
                 >

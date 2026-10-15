@@ -707,9 +707,20 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
           holder.addChild(label);
 
           holder.on('pointertap', (e) => {
-            const native = (e as unknown as { nativeEvent?: { clientX?: number; clientY?: number } }).nativeEvent;
+            const ev = e as unknown as { nativeEvent?: MouseEvent | TouchEvent; client?: { x: number; y: number } };
+            const native = ev.nativeEvent;
             const down = downRef.current;
-            if (down && native && Math.hypot((native.clientX ?? 0) - down.x, (native.clientY ?? 0) - down.y) > 6) return;
+            const clientX =
+              (native as MouseEvent)?.clientX ??
+              (native as TouchEvent)?.changedTouches?.[0]?.clientX ??
+              ev.client?.x;
+            const clientY =
+              (native as MouseEvent)?.clientY ??
+              (native as TouchEvent)?.changedTouches?.[0]?.clientY ??
+              ev.client?.y;
+            if (down && clientX !== undefined && clientY !== undefined) {
+              if (Math.hypot(clientX - down.x, clientY - down.y) > 16) return;
+            }
             select(n);
           });
           if (n.isUnlocked && !reduced) {

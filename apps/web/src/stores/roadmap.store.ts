@@ -298,9 +298,24 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     if (courseNode && !courseNode.isUnlocked) return;
     set({ viewMode: 'lessons', selectedCourseId: courseId, isLoading: true, panOffset: { x: 0, y: 0 } });
     const dataset = await RoadmapService.getCourseLessonsGraph(courseId);
-    set({ lessonsDataset: dataset, isLoading: false });
+    const activeLesson = dataset.nodes.find((n) => n.variant === 'active' || n.isUnlocked) || dataset.nodes[0];
+    set({
+      lessonsDataset: dataset,
+      activeNodeId: activeLesson ? activeLesson.id : null,
+      isLoading: false,
+    });
   },
-  returnToCourses: () => set({ viewMode: 'courses', panOffset: { x: 0, y: 0 } }),
+  returnToCourses: () => {
+    const courses = get().coursesDataset;
+    const currentCourseId = get().selectedCourseId;
+    const matchingCourse = courses.nodes.find((n) => n.targetCourseId === currentCourseId || n.id === currentCourseId);
+    const activeCourse = matchingCourse || courses.nodes.find((n) => n.variant === 'active' || n.isUnlocked) || courses.nodes[0];
+    set({
+      viewMode: 'courses',
+      panOffset: { x: 0, y: 0 },
+      activeNodeId: activeCourse ? activeCourse.id : null,
+    });
+  },
   setActiveNode: (id) => set({ activeNodeId: id }),
   setBranch: (branchId) => {
     const branch = CAREER_BRANCHES.find((b) => b.id === branchId) || CAREER_BRANCHES[0];
