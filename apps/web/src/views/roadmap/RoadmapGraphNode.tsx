@@ -5,7 +5,7 @@ import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { RoadmapNodeRings } from './RoadmapNodeRings';
 import { RoadmapNodeIcon } from './RoadmapNodeIcon';
 import { useRoadmapStore } from '@/stores/roadmap.store';
-import { Lock, LockOpen } from '@phosphor-icons/react';
+import { Lock } from '@phosphor-icons/react';
 import gsap from 'gsap';
 
 interface RoadmapGraphNodeProps {
@@ -18,10 +18,9 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
   const nodeGroupRef = useRef<SVGGElement | null>(null);
   const iconWrapperRef = useRef<HTMLDivElement | null>(null);
   const lockShatterGlowRef = useRef<SVGCircleElement | null>(null);
-  const quickToggleRef = useRef<SVGGElement | null>(null);
   const shardsRef = useRef<SVGGElement | null>(null);
 
-  const { toggleNodeLock, unlockNodeWithCinematic } = useRoadmapStore();
+  const { unlockNodeWithCinematic } = useRoadmapStore();
   const zoomLevel = useRoadmapStore((s) => s.zoomLevel);
   // Contreescala el texto para que no crezca con el zoom del canvas.
   const textScale = 100 / Math.max(50, zoomLevel);
@@ -34,14 +33,6 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
       duration: 0.25,
       ease: 'power2.out',
     });
-    if (quickToggleRef.current) {
-      gsap.to(quickToggleRef.current, {
-        opacity: 1,
-        scale: 1,
-        duration: 0.2,
-        ease: 'back.out(1.7)',
-      });
-    }
   };
 
   const handleMouseLeave = () => {
@@ -51,31 +42,6 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
       duration: 0.25,
       ease: 'power2.out',
     });
-    if (quickToggleRef.current) {
-      gsap.to(quickToggleRef.current, {
-        opacity: 0,
-        scale: 0.8,
-        duration: 0.15,
-        ease: 'power2.in',
-      });
-    }
-  };
-
-  // Alternar bloqueo/desbloqueo directo con pulso GSAP (el desbloqueo usa cinemática)
-  const handleQuickToggle = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!node.isUnlocked) {
-      unlockNodeWithCinematic(node.id);
-      return;
-    }
-    const group = nodeGroupRef.current;
-    if (group) {
-      gsap.timeline()
-        .to(group, { scale: 0.92, duration: 0.1, ease: 'power2.in' })
-        .to(group, { scale: 1.08, duration: 0.2, ease: 'back.out(2)' })
-        .to(group, { scale: 1, duration: 0.15, ease: 'power2.out' });
-    }
-    toggleNodeLock(node.id);
   };
 
   // Animación GSAP de apertura mecánica de Iris B y detonación cuántica térmica
@@ -250,32 +216,6 @@ export function RoadmapGraphNode({ node, onSelectNode, isUnlocking }: RoadmapGra
           />
         </div>
       </foreignObject>
-
-      {/* Direct Individual Lock/Unlock Holographic Toggle Badge */}
-      <g
-        ref={quickToggleRef}
-        transform="translate(24, -24)"
-        onClick={handleQuickToggle}
-        className="opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 focus-within:opacity-100 cursor-pointer pointer-events-auto transition-opacity"
-      >
-        <title>{node.isUnlocked ? 'Clic para bloquear este círculo' : 'Clic para desbloquear este círculo'}</title>
-        <circle
-          r="11"
-          fill={node.isUnlocked ? '#0F172A' : '#083344'}
-          stroke={node.isUnlocked ? '#F43F5E' : '#22D3EE'}
-          strokeWidth="1.5"
-          className="drop-shadow-[0_0_8px_rgba(6,182,212,0.8)] hover:scale-125 transition-transform"
-        />
-        <foreignObject x="-6" y="-6" width="12" height="12" className="pointer-events-none">
-          <div className="w-full h-full flex items-center justify-center">
-            {node.isUnlocked ? (
-              <Lock className="w-2.5 h-2.5 text-rose-400" />
-            ) : (
-              <LockOpen className="w-2.5 h-2.5 text-cyan-300" />
-            )}
-          </div>
-        </foreignObject>
-      </g>
 
       {/* Stars Badge: Repositioned as a compact floating tactical pill */}
       {node.stars !== undefined && node.maxStars !== undefined && (

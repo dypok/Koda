@@ -13,6 +13,7 @@ import { NotebookModule } from './modules/notebook/notebook.module';
 import { RoadmapModule } from './modules/roadmap/roadmap.module';
 import { DatabaseModule } from './database/database.module';
 import { PrismaModule } from '@infra/database/postgres/prisma.module';
+import { StorageModule } from './infrastructure/storage/storage.module';
 import { AuthModule } from './presentation/rest/auth/auth.module';
 import { UsersModule } from './presentation/rest/users/users.module';
 import { ContentModule } from './presentation/rest/content/content.module';
@@ -43,6 +44,7 @@ import { LanguagesGraphQLModule } from './presentation/graphql/languages/languag
     }),
     PrismaModule,
     DatabaseModule,
+    StorageModule,
     // Adaptadores primarios REST (/api/v1)
     AuthModule,
     UsersModule,
