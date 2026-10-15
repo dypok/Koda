@@ -1,0 +1,111 @@
+{
+  "module_code": "PY1_M03",
+  "module_slug": "operadores-y-expresiones",
+  "course_slug": "python-1",
+  "questions": [
+    {
+      "id": "q_py1_03_01",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué devuelve print(2 ** 3 ** 2)? (Nota: la potencia en Python asocia de derecha a izquierda)",
+      "options": [
+        {
+          "id": "a",
+          "text": "512"
+        },
+        {
+          "id": "b",
+          "text": "64"
+        },
+        {
+          "id": "c",
+          "text": "36"
+        },
+        {
+          "id": "d",
+          "text": "18"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Las potencias se evalúan de derecha a izquierda: 3 ** 2 = 9, y luego 2 ** 9 = 512."
+    },
+    {
+      "id": "q_py1_03_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es la forma correcta y pythónica de verificar si una variable num está entre 10 y 20 (inclusive)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "10 <= num <= 20"
+        },
+        {
+          "id": "b",
+          "text": "num >= 10 && num <= 20"
+        },
+        {
+          "id": "c",
+          "text": "10 <= num AND num <= 20"
+        },
+        {
+          "id": "d",
+          "text": "between(num, 10, 20)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Python soporta comparación encadenada 10 <= num <= 20, siendo la sintaxis más limpia y pythónica."
+    },
+    {
+      "id": "q_py1_03_03",
+      "type": "find_error",
+      "difficulty": "medium",
+      "prompt": "¿Qué error hay en: `if x = 10:`?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Se usó el operador de asignación (=) en vez del de comparación (==)"
+        },
+        {
+          "id": "b",
+          "text": "Falta un punto y coma al final"
+        },
+        {
+          "id": "c",
+          "text": "El número 10 debe ir entre comillas"
+        },
+        {
+          "id": "d",
+          "text": "No se puede usar la palabra if en Python"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "= asigna un valor a una variable. Para verificar si x es igual a 10 se debe usar el comparador de igualdad ==."
+    },
+    {
+      "id": "q_py1_03_04",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué valor produce 16 % 5?",
+      "options": [
+        {
+          "id": "a",
+          "text": "1"
+        },
+        {
+          "id": "b",
+          "text": "3"
+        },
+        {
+          "id": "c",
+          "text": "3.2"
+        },
+        {
+          "id": "d",
+          "text": "0"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "16 dividido entre 5 cabe a 3 con residuo 1 (5 * 3 = 15; 16 - 15 = 1)."
+    }
+  ]
+}

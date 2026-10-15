@@ -1,0 +1,91 @@
+{
+  "id": "dj_mod_05",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "DJ_M05",
+  "slug": "django-auth-security-deploy",
+  "course_slug": "django-enterprise",
+  "title": "Seguridad Web, Permisos y Despliegue en Producción",
+  "objective": "Blindar la aplicación contra CSRF, XSS, SQLi, gestionar grupos/permisos y configurar Gunicorn con WhiteNoise para despliegue.",
+  "description": "Pon tu aplicación Django en producción: checklist de seguridad, gestión estática con WhiteNoise y servidores WSGI.",
+  "position": 40,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 400
+  },
+  "sections": [
+    {
+      "id": "sec_dj_05_01",
+      "code": "S01",
+      "title": "Checklist de Producción y Gunicorn",
+      "slug": "seguridad-y-produccion",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_dj_05_01",
+          "code": "L01",
+          "title": "Checklist de Seguridad (DEBUG=False) y Servidor Gunicorn",
+          "slug": "produccion-gunicorn-base",
+          "position": 1,
+          "concept_id": "dj-deploy",
+          "objective": "Configurar settings para producción y servir archivos estáticos con WhiteNoise.",
+          "theory_markdown": "Antes de poner un proyecto Django en Internet, la regla número 1 absoluta es:\n```python\nDEBUG = False\nALLOWED_HOSTS = [\"midominio.com\", \"api.midominio.com\"]\nSECRET_KEY = os.environ[\"DJANGO_SECRET_KEY\"]\n```\n\nSi dejas `DEBUG = True` en producción, cualquier fallo revelará tu código fuente, variables de entorno y contraseñas de base de datos a los usuarios.\n\nPara servir la app usamos **Gunicorn** como servidor WSGI detrás de un reverse proxy (como Nginx o Cloudflare), y **WhiteNoise** para servir archivos estáticos eficientemente sin necesidad de un servidor web separado.",
+          "examples": [
+            {
+              "title": "Comando de ejecución de producción",
+              "code": "# Comando típico en Procfile o Docker\n# gunicorn mi_proyecto.wsgi:application --workers 4 --bind 0.0.0.0:8000",
+              "output": "[INFO] Starting gunicorn 22.0.0\n[INFO] Listening at: http://0.0.0.0:8000 (4 workers)",
+              "explanation": "Gunicorn distribuye la carga en 4 procesos trabajadores paralelos para alta disponibilidad."
+            }
+          ],
+          "common_errors": "Subir la `SECRET_KEY` quemada en el código a GitHub. Debe cargarse obligatoriamente desde variables de entorno.",
+          "mini_exercise": {
+            "starter_code": "# Verifica la configuración del proyecto antes de desplegar con:\n# python manage.py check --deploy",
+            "instructions": "Recuerda usar check --deploy para auditoría de seguridad automática.",
+            "solution": "# python manage.py check --deploy"
+          },
+          "key_takeaways": [
+            "DEBUG=False es obligatorio en producción.",
+            "ALLOWED_HOSTS previene ataques de envenenamiento de cabecera Host.",
+            "python manage.py check --deploy audita la configuración de seguridad."
+          ],
+          "exercise": {
+            "id": "ex_dj_05_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Por qué es extremadamente peligroso dejar `DEBUG = True` en un entorno de producción accesible en Internet?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque ante cualquier error expone trazas de código, configuraciones y credenciales sensibles a los usuarios"
+              },
+              {
+                "id": "b",
+                "text": "Porque hace que el servidor no acepte más de 2 visitas"
+              },
+              {
+                "id": "c",
+                "text": "Porque borra la base de datos automáticamente cada 24 horas"
+              },
+              {
+                "id": "d",
+                "text": "Porque bloquea el puerto 80"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La pantalla de depuración interactiva de Django revela variables de entorno, consultas SQL y secretos si DEBUG está habilitado."
+          }
+        }
+      ]
+    }
+  ]
+}

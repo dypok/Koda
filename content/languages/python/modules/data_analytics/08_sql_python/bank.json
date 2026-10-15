@@ -1,0 +1,33 @@
+{
+  "module_code": "DA_M08",
+  "module_slug": "sql-con-python",
+  "course_slug": "data-analytics",
+  "questions": [
+    {
+      "id": "q_da_08_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la forma segura de prevenir SQL Injection al ejecutar consultas con el módulo sqlite3 en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Pasar los parámetros como tupla separada en cursor.execute(\"SELECT ... WHERE id = ?\", (id,))"
+        },
+        {
+          "id": "b",
+          "text": "Usar f-strings f\"SELECT ... WHERE id = {id}\""
+        },
+        {
+          "id": "c",
+          "text": "Convertir todo el SQL a mayúsculas"
+        },
+        {
+          "id": "d",
+          "text": "Eliminar los espacios en blanco"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Los placeholders (?) con parámetros vinculados separan la sintaxis SQL de los datos proporcionados por el usuario."
+    }
+  ]
+}

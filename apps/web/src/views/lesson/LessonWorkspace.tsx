@@ -17,136 +17,118 @@ interface LessonWorkspaceProps {
   sectionRef: string;
 }
 
+const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'lesson' | 'quiz' }> = {
+  // Python 1: Fundamentos
+  'les-01': { moduleSlug: 'fundamentos-de-python' },
+  'les-02': { moduleSlug: 'variables-y-tipos-de-datos' },
+  'les-03': { moduleSlug: 'operadores-y-expresiones' },
+  'les-04': { moduleSlug: 'entrada-salida-y-strings' },
+  'les-05': { moduleSlug: 'condicionales' },
+  'les-miniboss': { moduleSlug: 'condicionales', initialMode: 'quiz' },
+  'les-06': { moduleSlug: 'bucles-for' },
+  'les-07': { moduleSlug: 'bucles-while' },
+  'les-08': { moduleSlug: 'listas-y-tuplas' },
+  'les-09': { moduleSlug: 'diccionarios-y-sets' },
+  'les-10': { moduleSlug: 'funciones-fundamentales' },
+  'les-boss': { moduleSlug: 'funciones-fundamentales', initialMode: 'quiz' },
+
+  // Python 2: Intermedio
+  'py2-01': { moduleSlug: 'comprensiones' },
+  'py2-02': { moduleSlug: 'funciones-avanzadas' },
+  'py2-03': { moduleSlug: 'modulos-y-paquetes' },
+  'py2-04': { moduleSlug: 'manejo-de-excepciones' },
+  'py2-05': { moduleSlug: 'archivos-txt-csv-json' },
+  'py2-miniboss': { moduleSlug: 'archivos-txt-csv-json', initialMode: 'quiz' },
+  'py2-06': { moduleSlug: 'poo-clases-y-objetos' },
+  'py2-07': { moduleSlug: 'poo-herencia-y-polimorfismo' },
+  'py2-08': { moduleSlug: 'datetime-y-regex' },
+  'py2-09': { moduleSlug: 'pip-entornos-y-git' },
+  'py2-10': { moduleSlug: 'testing-con-pytest' },
+  'py2-boss': { moduleSlug: 'testing-con-pytest', initialMode: 'quiz' },
+
+  // Python 3: Avanzado
+  'py3-01': { moduleSlug: 'iteradores-y-generadores' },
+  'py3-02': { moduleSlug: 'decoradores' },
+  'py3-03': { moduleSlug: 'context-managers' },
+  'py3-04': { moduleSlug: 'type-hints-y-dataclasses' },
+  'py3-05': { moduleSlug: 'programacion-funcional' },
+  'py3-miniboss': { moduleSlug: 'programacion-funcional', initialMode: 'quiz' },
+  'py3-06': { moduleSlug: 'concurrencia-asyncio' },
+  'py3-07': { moduleSlug: 'buenas-practicas-pep8' },
+  'py3-08': { moduleSlug: 'logging-y-empaquetado' },
+  'py3-09': { moduleSlug: 'rendimiento-y-profiling' },
+  'py3-10': { moduleSlug: 'patrones-de-diseno' },
+  'py3-boss': { moduleSlug: 'patrones-de-diseno', initialMode: 'quiz' },
+
+  // FastAPI
+  'fa-01': { moduleSlug: 'fastapi-http-rest' },
+  'fa-02': { moduleSlug: 'fastapi-pydantic' },
+  'fa-03': { moduleSlug: 'fastapi-sqlalchemy-alembic' },
+  'fa-04': { moduleSlug: 'fastapi-auth-jwt' },
+  'fa-05': { moduleSlug: 'fastapi-docker-deploy' },
+
+  // Django
+  'dj-01': { moduleSlug: 'django-mtv-routing' },
+  'dj-02': { moduleSlug: 'django-orm-models' },
+  'dj-03': { moduleSlug: 'django-forms-admin' },
+  'dj-04': { moduleSlug: 'django-rest-framework' },
+  'dj-05': { moduleSlug: 'django-auth-security-deploy' },
+
+  // Data Analytics
+  'da-01': { moduleSlug: 'numpy-fundamentos' },
+  'da-02': { moduleSlug: 'pandas-series-dataframes' },
+  'da-03': { moduleSlug: 'pandas-limpieza-transformacion' },
+  'da-04': { moduleSlug: 'pandas-agrupaciones-merges' },
+  'da-05': { moduleSlug: 'matplotlib-seaborn' },
+  'da-miniboss': { moduleSlug: 'matplotlib-seaborn', initialMode: 'quiz' },
+  'da-06': { moduleSlug: 'plotly-interactivo' },
+  'da-07': { moduleSlug: 'analisis-exploratorio-eda' },
+  'da-08': { moduleSlug: 'sql-con-python' },
+  'da-09': { moduleSlug: 'scikit-learn-intro-ml' },
+  'da-10': { moduleSlug: 'streamlit-dashboards' },
+  'da-boss': { moduleSlug: 'streamlit-dashboards', initialMode: 'quiz' },
+
+  // AI Agents
+  'ia-01': { moduleSlug: 'ia-llms-y-prompts' },
+  'ia-02': { moduleSlug: 'ia-apis-modelos' },
+  'ia-03': { moduleSlug: 'ia-salidas-estructuradas' },
+  'ia-04': { moduleSlug: 'ia-function-calling' },
+  'ia-miniboss': { moduleSlug: 'ia-function-calling', initialMode: 'quiz' },
+  'ia-05': { moduleSlug: 'ia-memoria-y-contexto' },
+  'ia-06': { moduleSlug: 'ia-embeddings-vector-dbs' },
+  'ia-07': { moduleSlug: 'ia-rag-recuperacion' },
+  'ia-08': { moduleSlug: 'ia-agentes-bucle-react' },
+  'ia-09': { moduleSlug: 'ia-guardrails-y-evaluacion' },
+  'ia-10': { moduleSlug: 'ia-proyecto-agente-completo' },
+
+  // Apex Master Gate
+  'apex-01': { moduleSlug: 'apex-master-gate' },
+  'apex-02': { moduleSlug: 'apex-master-gate' },
+  'apex-03': { moduleSlug: 'apex-master-gate', initialMode: 'quiz' },
+};
+
 function parseCourse(courseId: string, sectionRef: string): { lang: string; moduleSlug: string; initialMode: 'lesson' | 'quiz' } {
-  let lang = 'python';
-  if (courseId.startsWith('lua-') || courseId.startsWith('lua')) lang = 'lua';
-  else if (courseId.startsWith('js-') || courseId.startsWith('javascript')) lang = 'javascript';
-  else if (courseId.startsWith('ts-') || courseId.startsWith('typescript')) lang = 'typescript';
-  else if (courseId.startsWith('html') || courseId.includes('html') || courseId === 'fe-html') lang = 'html';
-  else if (courseId.startsWith('css') || courseId.includes('css') || courseId === 'fe-css') lang = 'css';
+  const lang = 'python';
 
-  // 1. Detectar Mini-Boss Gate o Boss Gate en el Roadmap
-  if (sectionRef === 'les-miniboss' || sectionRef === 'py-boss-logic') {
-    return { lang: 'python', moduleSlug: 'condicionales', initialMode: 'quiz' };
-  }
-  if (sectionRef === 'les-boss' || sectionRef === 'py-apex-1') {
-    return { lang: 'python', moduleSlug: 'bucles-while', initialMode: 'quiz' };
+  // 1. Verificación por mapa directo de IDs de nodos del roadmap
+  const mapped = NODE_TO_SLUG_MAP[sectionRef];
+  if (mapped) {
+    return {
+      lang,
+      moduleSlug: mapped.moduleSlug,
+      initialMode: mapped.initialMode || (sectionRef.includes('boss') ? 'quiz' : 'lesson'),
+    };
   }
 
-  // 2. Mapeo para HTML
-  if (lang === 'html') {
-    if (sectionRef === 'les-02' || sectionRef.includes('semant')) {
-      return { lang: 'html', moduleSlug: 'html-semantico-y-a11y', initialMode: 'lesson' };
-    }
-    return { lang: 'html', moduleSlug: 'fundamentos-de-html', initialMode: 'lesson' };
-  }
+  // 2. Si el sectionRef es directamente un slug de módulo conocido
+  const isDirectSlug = sectionRef.includes('-');
+  const isQuizMode = sectionRef.includes('boss') || sectionRef.includes('quiz') || sectionRef.includes('exam');
 
-  // 3. Mapeo para CSS
-  if (lang === 'css') {
-    if (sectionRef === 'les-02' || sectionRef.includes('flex')) {
-      return { lang: 'css', moduleSlug: 'flexbox-layout', initialMode: 'lesson' };
-    }
-    return { lang: 'css', moduleSlug: 'selectores-y-box-model', initialMode: 'lesson' };
-  }
-
-  // 4. Mapeo para Python (Nivel 1, Nivel 2, FastAPI y Django)
-  if (lang === 'python') {
-    // Especialización FastAPI
-    if (courseId === 'fastapi-async' || sectionRef.startsWith('fa-') || sectionRef.includes('fastapi')) {
-      if (sectionRef === 'fa-m02' || sectionRef.includes('pydantic')) {
-        return { lang: 'python', moduleSlug: 'fastapi-pydantic', initialMode: 'lesson' };
-      }
-      return { lang: 'python', moduleSlug: 'fastapi-asgi', initialMode: 'lesson' };
-    }
-
-    // Especialización Django
-    if (courseId === 'django-enterprise' || sectionRef.startsWith('dj-') || sectionRef.includes('django')) {
-      if (sectionRef === 'dj-m02' || sectionRef.includes('orm')) {
-        return { lang: 'python', moduleSlug: 'django-orm', initialMode: 'lesson' };
-      }
-      return { lang: 'python', moduleSlug: 'django-mvt', initialMode: 'lesson' };
-    }
-
-    // Python Nivel 2
-    if (courseId === 'python-2' || sectionRef.startsWith('py2-')) {
-      if (sectionRef === 'py2-m01' || sectionRef.includes('funcion')) return { lang: 'python', moduleSlug: 'funciones-y-modularidad', initialMode: 'lesson' };
-      if (sectionRef === 'py2-m02' || sectionRef.includes('coleccion') || sectionRef.includes('lista')) return { lang: 'python', moduleSlug: 'colecciones', initialMode: 'lesson' };
-      if (sectionRef === 'py2-m03' || sectionRef.includes('string') || sectionRef.includes('dict')) return { lang: 'python', moduleSlug: 'strings-avanzados', initialMode: 'lesson' };
-      if (sectionRef === 'py2-m04' || sectionRef.includes('error') || sectionRef.includes('archivo')) return { lang: 'python', moduleSlug: 'manejo-de-errores', initialMode: 'lesson' };
-      if (sectionRef === 'py2-m05' || sectionRef.includes('poo') || sectionRef.includes('clase')) return { lang: 'python', moduleSlug: 'programacion-orientada-a-objetos', initialMode: 'lesson' };
-    }
-
-    // Python Nivel 1
-    if (sectionRef === 'les-01' || sectionRef === 'py-m01' || sectionRef.includes('fundamentos')) {
-      return { lang: 'python', moduleSlug: 'fundamentos-de-python', initialMode: 'lesson' };
-    }
-    if (sectionRef === 'les-02' || sectionRef === 'py-m02' || sectionRef.includes('variable')) {
-      return { lang: 'python', moduleSlug: 'variables-y-tipos-de-datos', initialMode: 'lesson' };
-    }
-    if (sectionRef === 'les-03' || sectionRef === 'py-m03' || sectionRef.includes('operador')) {
-      return { lang: 'python', moduleSlug: 'operadores-y-expresiones', initialMode: 'lesson' };
-    }
-    if (sectionRef === 'les-04' || sectionRef === 'py-m04' || sectionRef.includes('condicional')) {
-      return { lang: 'python', moduleSlug: 'condicionales', initialMode: 'lesson' };
-    }
-    if (sectionRef === 'les-05' || sectionRef === 'py-m05' || sectionRef.includes('for')) {
-      return { lang: 'python', moduleSlug: 'bucles-for', initialMode: 'lesson' };
-    }
-    if (sectionRef === 'les-06' || sectionRef === 'py-m06' || sectionRef.includes('while')) {
-      return { lang: 'python', moduleSlug: 'bucles-while', initialMode: 'lesson' };
-    }
-
-    // Si coincide con slug directo de módulo disponible
-    return { lang: 'python', moduleSlug: sectionRef.includes('-') ? sectionRef : 'fundamentos-de-python', initialMode: 'lesson' };
-  }
-
-  // 5. Lua
-  if (lang === 'lua') {
-    if (sectionRef === 'les-01' || sectionRef.includes('fundamento')) {
-      return { lang: 'lua', moduleSlug: 'fundamentos-de-lua', initialMode: 'lesson' };
-    }
-    if (sectionRef === 'les-02' || sectionRef.includes('variable')) {
-      return { lang: 'lua', moduleSlug: 'variables-y-tipos-de-datos', initialMode: 'lesson' };
-    }
-    if (sectionRef === 'les-03' || sectionRef.includes('operador')) {
-      return { lang: 'lua', moduleSlug: 'operadores', initialMode: 'lesson' };
-    }
-    const slug = sectionRef.includes('-') ? sectionRef : (courseId.startsWith('lua-') ? courseId.slice(4) : 'fundamentos-de-lua');
-    return { lang: 'lua', moduleSlug: slug, initialMode: 'lesson' };
-  }
-
-  // 6. JavaScript
-  if (lang === 'javascript') {
-    if (sectionRef === 'les-02' || sectionRef.includes('variable')) {
-      return { lang: 'javascript', moduleSlug: 'variables-y-tipos-de-datos', initialMode: 'lesson' };
-    }
-    if (sectionRef === 'les-03' || sectionRef.includes('funcion')) {
-      return { lang: 'javascript', moduleSlug: 'funciones-y-arrow-functions', initialMode: 'lesson' };
-    }
-    if (sectionRef === 'les-04' || sectionRef.includes('array') || sectionRef.includes('objeto')) {
-      return { lang: 'javascript', moduleSlug: 'arrays-y-objetos', initialMode: 'lesson' };
-    }
-    if (sectionRef === 'les-05' || sectionRef.includes('async') || sectionRef.includes('fetch')) {
-      return { lang: 'javascript', moduleSlug: 'asincronia-y-fetch', initialMode: 'lesson' };
-    }
-    return { lang: 'javascript', moduleSlug: sectionRef.includes('-') ? sectionRef : 'fundamentos-de-javascript', initialMode: 'lesson' };
-  }
-
-  // 7. TypeScript
-  if (lang === 'typescript') {
-    if (sectionRef === 'les-02' || sectionRef.includes('interface')) {
-      return { lang: 'typescript', moduleSlug: 'interfaces-y-type-aliases', initialMode: 'lesson' };
-    }
-    if (sectionRef === 'les-03' || sectionRef.includes('generic') || sectionRef.includes('union')) {
-      return { lang: 'typescript', moduleSlug: 'genericos-y-union-types', initialMode: 'lesson' };
-    }
-    if (sectionRef === 'les-04' || sectionRef.includes('clase') || sectionRef.includes('poo')) {
-      return { lang: 'typescript', moduleSlug: 'clases-y-poo', initialMode: 'lesson' };
-    }
-    return { lang: 'typescript', moduleSlug: sectionRef.includes('-') ? sectionRef : 'fundamentos-de-typescript', initialMode: 'lesson' };
-  }
-
-  return { lang: 'python', moduleSlug: 'fundamentos-de-python', initialMode: 'lesson' };
+  return {
+    lang,
+    moduleSlug: isDirectSlug ? sectionRef : 'fundamentos-de-python',
+    initialMode: isQuizMode ? 'quiz' : 'lesson',
+  };
 }
 
 const QUIZ_COMPOSITION: Record<string, number> = {
@@ -255,7 +237,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
         <p className="font-display text-2xl font-bold text-white">Sección no disponible todavía</p>
         <p className="text-sm text-slate-400 max-w-md">
-          Este curso aún no tiene contenido interactivo. Vuelve al roadmap y sigue con Python o Lua publicados.
+          Este módulo se encuentra en sincronización. Vuelve al roadmap para continuar con las lecciones activas de Python Specialist.
         </p>
         <Link
           href="/"

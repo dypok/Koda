@@ -1,0 +1,91 @@
+{
+  "id": "fa_mod_05",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "FA_M05",
+  "slug": "fastapi-docker-deploy",
+  "course_slug": "fastapi-async",
+  "title": "Testing con TestClient, Dockerización y Despliegue",
+  "objective": "Testear endpoints HTTP con TestClient de pytest, construir imágenes Docker optimizadas multi-stage y desplegar la API en producción.",
+  "description": "Empaqueta y distribuye tu microservicio: pruebas automatizadas de integración, contenedores Docker ligeros y variables de entorno.",
+  "position": 35,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 400
+  },
+  "sections": [
+    {
+      "id": "sec_fa_05_01",
+      "code": "S01",
+      "title": "Pruebas de Integración y Docker Multi-Stage",
+      "slug": "testing-docker",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_fa_05_01",
+          "code": "L01",
+          "title": "TestClient de FastAPI y Dockerfile de Producción",
+          "slug": "testclient-docker-base",
+          "position": 1,
+          "concept_id": "fa-deploy",
+          "objective": "Escribir pruebas end-to-end con TestClient y compilar un Dockerfile seguro y ligero.",
+          "theory_markdown": "FastAPI incluye un cliente de pruebas de primera clase basado en `httpx`: **TestClient**.\n\nPermite simular peticiones HTTP completas a tus endpoints dentro de `pytest` sin tener que levantar un servidor en un puerto real.\n\nPara el despliegue en producción, empaquetamos la API en un contenedor **Docker** usando una imagen base ligera como `python:3.12-slim`.",
+          "examples": [
+            {
+              "title": "Test unitario de endpoint con TestClient",
+              "code": "from fastapi.testclient import TestClient\nfrom fastapi import FastAPI\n\napp = FastAPI()\n@app.get(\"/items/{item_id}\")\ndef leer_item(item_id: int):\n    return {\"id\": item_id, \"nombre\": \"Widget\"}\n\nclient = TestClient(app)\n\ndef test_leer_item():\n    response = client.get(\"/items/42\")\n    assert response.status_code == 200\n    assert response.json() == {\"id\": 42, \"nombre\": \"Widget\"}",
+              "output": "PASSED test_leer_item",
+              "explanation": "TestClient ejecuta la pila de FastAPI completa de forma síncrona y transparente para pytest."
+            }
+          ],
+          "common_errors": "Ejecutar el contenedor Docker como usuario root en producción. Es una buena práctica de seguridad crear un usuario sin privilegios en el Dockerfile.",
+          "mini_exercise": {
+            "starter_code": "# Dockerfile simplificado\n# FROM python:3.12-slim\n# WORKDIR /app\n# COPY requirements.txt .\n# RUN pip install --no-cache-dir -r requirements.txt\n# COPY . .\n# CMD [\"uvicorn\", \"main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]",
+            "instructions": "Revisa la estructura de un contenedor FastAPI estándar.",
+            "solution": "# Dockerfile listo"
+          },
+          "key_takeaways": [
+            "TestClient simula peticiones HTTP directamente en memoria.",
+            "python:3.12-slim genera imágenes Docker de menos de 150MB.",
+            "Gunicorn con workers Uvicorn escala la API a múltiples núcleos."
+          ],
+          "exercise": {
+            "id": "ex_fa_05_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Por qué TestClient de FastAPI es preferible frente a hacer requests reales en las pruebas automatizadas?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque no requiere abrir un puerto de red real y se ejecuta de forma inmediata en memoria"
+              },
+              {
+                "id": "b",
+                "text": "Porque solo funciona con bases de datos Oracle"
+              },
+              {
+                "id": "c",
+                "text": "Porque no requiere tener Python instalado"
+              },
+              {
+                "id": "d",
+                "text": "Porque desactiva la seguridad"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "TestClient invoca la aplicación directamente a través de la interfaz ASGI en memoria, haciendo las pruebas ultra veloces y aisladas."
+          }
+        }
+      ]
+    }
+  ]
+}

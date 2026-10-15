@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { GraphViewMode, GraphDataset, NodeVariant, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { PYTHON_BASIC_LESSONS_DATASET } from '@/models/roadmap/python-lessons-graph.mock';
 import { CareerBranchId, CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
-import { FRONTEND_COURSES_DATASET } from '@/models/roadmap/tracks/frontend-track.mock';
+import { PYTHON_COURSES_DATASET } from '@/models/roadmap/tracks/python-track.mock';
 import { RoadmapService } from '@/services/roadmap/roadmap.service';
 
 const PROGRESS_KEY = 'koda_roadmap_progress';
@@ -73,13 +73,13 @@ interface RoadmapStoreState {
 
 export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   viewMode: 'courses',
-  activeBranchId: 'frontend',
-  selectedCourseId: 'fe-html',
-  activeNodeId: 'fe-html',
+  activeBranchId: 'python',
+  selectedCourseId: 'python-1',
+  activeNodeId: 'py-level-1',
   zoomLevel: 100,
   panOffset: { x: 0, y: 0 },
   isLoading: false,
-  coursesDataset: FRONTEND_COURSES_DATASET,
+  coursesDataset: PYTHON_COURSES_DATASET,
   lessonsDataset: PYTHON_BASIC_LESSONS_DATASET,
   retreatTrigger: 0,
   triggerRetreatToCourses: () => set((s) => ({ retreatTrigger: s.retreatTrigger + 1 })),
