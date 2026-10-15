@@ -1,0 +1,92 @@
+{
+  "id": "py1_mod_07",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY1_M07",
+  "slug": "bucles-while",
+  "course_slug": "python-1",
+  "title": "Bucle while, Centinelas y Banderas",
+  "objective": "Controlar repeticiones basadas en condiciones dinámicas con while, variables centinela y evitar bucles infinitos.",
+  "description": "Aprende a ejecutar código mientras una condición permanezca verdadera: ideal para menús interactivos, juegos y validaciones de entrada.",
+  "position": 7,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 200
+  },
+  "sections": [
+    {
+      "id": "sec_py1_07_01",
+      "code": "S01",
+      "title": "Condición while y Prevención de Bucles Infinitos",
+      "slug": "condicion-while",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 15,
+      "xp_on_complete": 40,
+      "lessons": [
+        {
+          "id": "les_py1_07_01",
+          "code": "L01",
+          "title": "El Bucle while y Modificación de la Condición",
+          "slug": "bucle-while-base",
+          "position": 1,
+          "concept_id": "py-while-loops",
+          "objective": "Construir bucles while con variables de control que garanticen una terminación segura.",
+          "theory_markdown": "A diferencia del `for` (que recorre una cantidad conocida de elementos), el bucle `while` se ejecuta **mientras una condición booleana sea True**.\n\n> **¡Alerta de bucle infinito!** Para que un `while` no se ejecute para siempre y congele tu computadora, dentro del bucle **debe ocurrir algo que eventualmente cambie la condición a False** (por ejemplo, incrementar un contador o recibir una entrada específica).",
+          "examples": [
+            {
+              "title": "Contador regresivo con terminación garantizada",
+              "code": "cuenta = 3\nwhile cuenta > 0:\n    print(f\"Lanzamiento en {cuenta}...\")\n    cuenta -= 1  # Crucial: acerca la condición a False\nprint(\"¡Despegue exitoso!\")",
+              "output": "Lanzamiento en 3...\nLanzamiento en 2...\nLanzamiento en 1...\n¡Despegue exitoso!",
+              "explanation": "cuenta -= 1 reduce el valor hasta que cuenta es 0, haciendo que cuenta > 0 sea False."
+            }
+          ],
+          "common_errors": "Olvidar actualizar la variable de control dentro del cuerpo del while (por ejemplo, olvidar cuenta -= 1), provocando un bucle infinito.",
+          "mini_exercise": {
+            "starter_code": "vidas = 3\n# Mientras vidas > 0, imprime \"Jugando\" y resta 1 vida\nwhile ...:\n    ...\nprint(\"Game Over\")",
+            "instructions": "Completa el bucle while para que se ejecute exactamente 3 veces.",
+            "solution": "vidas = 3\nwhile vidas > 0:\n    print(\"Jugando\")\n    vidas -= 1\nprint(\"Game Over\")"
+          },
+          "key_takeaways": [
+            "while evalúa la condición antes de cada iteración.",
+            "Siempre debe modificarse la variable de control hacia la condición de salida.",
+            "Ctrl + C en la terminal interrumpe un bucle infinito accidental."
+          ],
+          "exercise": {
+            "id": "ex_py1_07_01",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Cuántas líneas imprimirá este código?",
+            "prompt_code": "i = 0\nwhile i < 3:\n    print(\"Koda\")\n    i += 1",
+            "options": [
+              {
+                "id": "a",
+                "text": "3 líneas con \"Koda\""
+              },
+              {
+                "id": "b",
+                "text": "4 líneas con \"Koda\""
+              },
+              {
+                "id": "c",
+                "text": "Infinitas líneas"
+              },
+              {
+                "id": "d",
+                "text": "Ninguna"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "i toma los valores 0, 1, 2 (3 iteraciones). Cuando i llega a 3, i < 3 es False y el bucle termina."
+          }
+        }
+      ]
+    }
+  ]
+}

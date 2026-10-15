@@ -1,0 +1,61 @@
+{
+  "module_code": "PY1_M10",
+  "module_slug": "funciones-fundamentales",
+  "course_slug": "python-1",
+  "questions": [
+    {
+      "id": "q_py1_10_01",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué salida produce este código?",
+      "prompt_code": "def operar(x, factor=2):\n    return x * factor\n\nprint(operar(5) + operar(3, 4))",
+      "options": [
+        {
+          "id": "a",
+          "text": "22"
+        },
+        {
+          "id": "b",
+          "text": "16"
+        },
+        {
+          "id": "c",
+          "text": "20"
+        },
+        {
+          "id": "d",
+          "text": "TypeError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "operar(5) usa el factor por defecto (5 * 2 = 10). operar(3, 4) usa factor=4 (3 * 4 = 12). 10 + 12 = 22."
+    },
+    {
+      "id": "q_py1_10_02",
+      "type": "find_error",
+      "difficulty": "medium",
+      "prompt": "¿Qué error de sintaxis tiene la siguiente cabecera de función?",
+      "prompt_code": "def configurar(tema=\"oscuro\", usuario):\n    pass",
+      "options": [
+        {
+          "id": "a",
+          "text": "SyntaxError: los parámetros sin valor por defecto no pueden ir después de los que sí tienen"
+        },
+        {
+          "id": "b",
+          "text": "Falta especificar el tipo de retorno"
+        },
+        {
+          "id": "c",
+          "text": "La palabra pass es inválida"
+        },
+        {
+          "id": "d",
+          "text": "No se pueden tener parámetros con comillas"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "En Python, todos los parámetros posicionales obligatorios deben colocarse antes de cualquier parámetro con valor por defecto."
+    }
+  ]
+}

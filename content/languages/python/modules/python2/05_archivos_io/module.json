@@ -1,0 +1,91 @@
+{
+  "id": "py2_mod_05",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY2_M05",
+  "slug": "archivos-txt-csv-json",
+  "course_slug": "python-2",
+  "title": "Persistencia: Archivos TXT, CSV y JSON",
+  "objective": "Leer y escribir archivos de forma segura con el context manager with open(), serializar datos estructurados con json y procesar tablas con csv.",
+  "description": "Guarda información de manera persistente en disco: almacena configuraciones en JSON, procesa hojas de datos en CSV y gestiona recursos con with.",
+  "position": 15,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 250
+  },
+  "sections": [
+    {
+      "id": "sec_py2_05_01",
+      "code": "S01",
+      "title": "Context Manager with open() y JSON",
+      "slug": "open-y-json",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 45,
+      "lessons": [
+        {
+          "id": "les_py2_05_01",
+          "code": "L01",
+          "title": "Manejo Seguro con with open() y JSON dumps/loads",
+          "slug": "open-json-base",
+          "position": 1,
+          "concept_id": "py2-file-io",
+          "objective": "Aprender por qué with open garantiza el cierre automático del descriptor de archivo y cómo persistir JSON.",
+          "theory_markdown": "Si abres un archivo con `f = open(\"datos.txt\")` y ocurre un error antes de `f.close()`, el archivo quedará bloqueado en el sistema operativo.\n\nLa sintaxis profesional es el **context manager with**:\n```python\nwith open(\"archivo.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"Línea guardada\\n\")\n# Al salir de la sangría, Python cierra el archivo automáticamente.\n```\n\nPara datos estructurados usamos el módulo nativo `json`:\n- `json.dumps(obj)`: Convierte un diccionario de Python a string JSON.\n- `json.loads(str)`: Parsea un string JSON a diccionario de Python.\n- `json.dump(obj, f)` / `json.load(f)`: Leen/escriben directamente en el archivo abierto.",
+          "examples": [
+            {
+              "title": "Serialización y recuperación JSON en disco",
+              "code": "import json\n\nusuario = {\"id\": 1, \"nombre\": \"Koda\", \"activo\": True}\n# Guardar como JSON\njson_str = json.dumps(usuario, indent=2)\nprint(\"JSON resultante:\\n\", json_str)\n\n# Recuperar como diccionario\nrecuperado = json.loads(json_str)\nprint(\"Nombre recuperado:\", recuperado[\"nombre\"])",
+              "output": "JSON resultante:\n {\n  \"id\": 1,\n  \"nombre\": \"Koda\",\n  \"activo\": true\n}\nNombre recuperado: Koda",
+              "explanation": "True en Python se serializa automáticamente a true en JSON estándar."
+            }
+          ],
+          "common_errors": "Olvidar el parámetro `encoding=\"utf-8\"`, lo que causa errores UnicodeDecodeError en Windows con caracteres como tildes o la letra ñ.",
+          "mini_exercise": {
+            "starter_code": "import json\ndata = '{\"puntos\": 100}'\n# Parsea data a diccionario usando json.loads\nresultado = ...\nprint(resultado[\"puntos\"])",
+            "instructions": "Usa json.loads(data).",
+            "solution": "import json\ndata = '{\"puntos\": 100}'\nresultado = json.loads(data)\nprint(resultado[\"puntos\"])"
+          },
+          "key_takeaways": [
+            "with open() cierra el archivo automáticamente pase lo que pase.",
+            "Siempre especifica encoding=\"utf-8\".",
+            "json.loads convierte string a dict; json.dumps convierte dict a string."
+          ],
+          "exercise": {
+            "id": "ex_py2_05_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Cuál es el beneficio de usar la instrucción `with open(...) as f:` sobre `f = open(...)`?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Garantiza el cierre del archivo automáticamente incluso si ocurre una excepción"
+              },
+              {
+                "id": "b",
+                "text": "Comprime el archivo en formato zip"
+              },
+              {
+                "id": "c",
+                "text": "Aumenta la velocidad de lectura en disco un 500%"
+              },
+              {
+                "id": "d",
+                "text": "Evita tener que escribir comillas"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El context manager with invoca __exit__ al salir del bloque, garantizando la liberación del recurso sin fugas de memoria."
+          }
+        }
+      ]
+    }
+  ]
+}

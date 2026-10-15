@@ -1,0 +1,33 @@
+{
+  "module_code": "FA_M01",
+  "module_slug": "fastapi-http-rest",
+  "course_slug": "fastapi-async",
+  "questions": [
+    {
+      "id": "q_fa_01_01",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué es Uvicorn en el ecosistema de FastAPI?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Un servidor web ASGI de alto rendimiento para ejecutar aplicaciones asíncronas de Python"
+        },
+        {
+          "id": "b",
+          "text": "Un motor de base de datos relacional"
+        },
+        {
+          "id": "c",
+          "text": "Un formateador de código similar a Black"
+        },
+        {
+          "id": "d",
+          "text": "Un plugin de VS Code"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Uvicorn es el servidor HTTP ASGI basado en uvloop que ejecuta las aplicaciones FastAPI."
+    }
+  ]
+}

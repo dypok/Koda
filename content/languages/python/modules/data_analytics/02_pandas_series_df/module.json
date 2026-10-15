@@ -1,0 +1,91 @@
+{
+  "id": "da_mod_02",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "DA_M02",
+  "slug": "pandas-series-dataframes",
+  "course_slug": "data-analytics",
+  "title": "Pandas: Estructuras Series, DataFrames e Ingestión",
+  "objective": "Cargar datasets masivos desde CSV, Excel y Parquet en DataFrames de Pandas, e inspeccionar con .head(), .info() y .describe().",
+  "description": "La navaja suiza del analista de datos: tablas bidimensionales con índices etiquetados, selección por loc/iloc y profiling estadístico.",
+  "position": 42,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 280
+  },
+  "sections": [
+    {
+      "id": "sec_da_02_01",
+      "code": "S01",
+      "title": "DataFrames e Inspección Inicial",
+      "slug": "dataframes-inspeccion",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_da_02_01",
+          "code": "L01",
+          "title": "Estructura de un DataFrame y Carga con read_csv",
+          "slug": "dataframe-base",
+          "position": 1,
+          "concept_id": "da-pandas",
+          "objective": "Dominar la anatomía de un DataFrame: índice, columnas y tipos de datos (dtypes).",
+          "theory_markdown": "En **Pandas**, una columna individual es una **Series**, y una tabla completa es un **DataFrame**.\n\nTres métodos para entender cualquier dataset en 5 segundos:\n1. `df.head(5)`: Muestra las primeras 5 filas.\n2. `df.info()`: Revela tipos de datos (int64, float64, object), columnas y recuento de valores no nulos.\n3. `df.describe()`: Genera un resumen estadístico instantáneo (media, desviación estándar, percentiles 25%, 50%, 75%, mínimo y máximo).",
+          "examples": [
+            {
+              "title": "Creación y análisis descriptivo de un DataFrame",
+              "code": "import pandas as pd\n\ndata = {\n    \"estudiante\": [\"Ana\", \"Carlos\", \"Elena\", \"Marcos\"],\n    \"calificacion\": [95, 82, 90, 78],\n    \"aprobado\": [True, True, True, True]\n}\ndf = pd.DataFrame(data)\nprint(df.head(2))\nprint(\"\\nPromedio:\", df[\"calificacion\"].mean())",
+              "output": "  estudiante  calificacion  aprobado\n0        Ana            95      True\n1     Carlos            82      True\n\nPromedio: 86.25",
+              "explanation": "Pandas combina etiquetas de filas y columnas con operaciones agregadas automáticas."
+            }
+          ],
+          "common_errors": "Confundir `.loc[]` (selección por nombre de etiqueta o condición booleana) con `.iloc[]` (selección por posición entera numérica).",
+          "mini_exercise": {
+            "starter_code": "import pandas as pd\ndf = pd.DataFrame({\"ventas\": [100, 250, 400]})\n# Calcula el total de ventas con df[\"ventas\"].sum()\ntotal = ...\nprint(total)",
+            "instructions": "Usa df[\"ventas\"].sum() para obtener 750.",
+            "solution": "import pandas as pd\ndf = pd.DataFrame({\"ventas\": [100, 250, 400]})\ntotal = df[\"ventas\"].sum()\nprint(total)"
+          },
+          "key_takeaways": [
+            "Un DataFrame es una tabla 2D compuesta por Series.",
+            "pd.read_csv() y pd.read_parquet() ingieren datos a alta velocidad.",
+            ".describe() calcula estadísticas de todas las columnas numéricas."
+          ],
+          "exercise": {
+            "id": "ex_da_02_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Qué método de un DataFrame de Pandas debes usar para ver el tipo de dato de cada columna y si existen valores nulos?",
+            "options": [
+              {
+                "id": "a",
+                "text": "df.info()"
+              },
+              {
+                "id": "b",
+                "text": "df.check()"
+              },
+              {
+                "id": "c",
+                "text": "df.summary()"
+              },
+              {
+                "id": "d",
+                "text": "df.types()"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "df.info() muestra el recuento de no nulos, los dtypes de cada columna y el uso de memoria RAM total."
+          }
+        }
+      ]
+    }
+  ]
+}

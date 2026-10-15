@@ -2,8 +2,8 @@
   {
     "slug": "python-1",
     "track_slug": "python",
-    "name": "Python 1: Fundamentos & Lógica de Programación",
-    "description": "Sintaxis limpia, variables, tipos primitivos, operadores y condicionales con Mini-Boss Gate.",
+    "name": "Python 1: Fundamentos",
+    "description": "Entorno, variables, tipos, operadores, I/O, condicionales, bucles for/while, colecciones y funciones.",
     "color": "#38BDF8",
     "icon": "IconBrandPython",
     "topology": {
@@ -24,8 +24,8 @@
   {
     "slug": "python-2",
     "track_slug": "python",
-    "name": "Python 2: Estructuras de Datos & POO",
-    "description": "Funciones, listas, diccionarios, excepciones, manejo de archivos y objetos.",
+    "name": "Python 2: Intermedio",
+    "description": "Comprensiones, funciones avanzadas, módulos, excepciones, I/O archivos, POO, datetime, regex, git y pytest.",
     "color": "#06B6D4",
     "icon": "IconBrandPython",
     "topology": {
@@ -48,8 +48,8 @@
   {
     "slug": "python-3",
     "track_slug": "python",
-    "name": "Python 3: Avanzado, Concurrencia & Tipado",
-    "description": "POO avanzada, generadores, decoradores, tipado estático y modularidad profesional.",
+    "name": "Python 3: Avanzado",
+    "description": "Iteradores, decoradores, context managers, type hints, dataclasses, asyncio, profiling y patrones de diseño.",
     "color": "#F59E0B",
     "icon": "IconBrandPython",
     "topology": {
@@ -67,10 +67,16 @@
         "edge_color": "#8B5CF6"
       },
       {
-        "target_course_slug": "django-enterprise",
+        "target_course_slug": "data-analytics",
         "connection_type": "unlocks",
         "visual_effect_code": "laser_flow_fast",
         "edge_color": "#10B981"
+      },
+      {
+        "target_course_slug": "ai-agents",
+        "connection_type": "unlocks",
+        "visual_effect_code": "laser_flow_fast",
+        "edge_color": "#EC4899"
       }
     ],
     "is_active": true
@@ -78,8 +84,8 @@
   {
     "slug": "fastapi-async",
     "track_slug": "python",
-    "name": "Especialización: Microservicios con FastAPI (Nivel 3.A)",
-    "description": "APIs ultra rápidas, validación con Pydantic v2, endpoints asíncronos e inyección de dependencias.",
+    "name": "Rama Backend: FastAPI",
+    "description": "APIs REST ultra rápidas, Pydantic v2, SQLAlchemy 2.0, Alembic, JWT, Docker y despliegue.",
     "color": "#8B5CF6",
     "icon": "IconServer",
     "topology": {
@@ -90,6 +96,12 @@
       "python-3"
     ],
     "edges": [
+      {
+        "target_course_slug": "django-enterprise",
+        "connection_type": "unlocks",
+        "visual_effect_code": "energy_beam_solid",
+        "edge_color": "#8B5CF6"
+      },
       {
         "target_course_slug": "python-apex",
         "connection_type": "unlocks",
@@ -102,16 +114,16 @@
   {
     "slug": "django-enterprise",
     "track_slug": "python",
-    "name": "Especialización: Desarrollo Web con Django (Nivel 3.B)",
-    "description": "Arquitectura MVT, Django ORM, migraciones, vistas basadas en clases y panel administrativo.",
+    "name": "Rama Backend: Django",
+    "description": "Arquitectura MVT, Django ORM, migraciones, Django REST Framework, vistas, admin y seguridad.",
     "color": "#10B981",
     "icon": "IconServer",
     "topology": {
-      "tier": 3,
-      "lane": 1
+      "tier": 4,
+      "lane": -1
     },
     "prerequisites": [
-      "python-3"
+      "fastapi-async"
     ],
     "edges": [
       {
@@ -124,70 +136,66 @@
     "is_active": true
   },
   {
-    "slug": "python-apex",
+    "slug": "data-analytics",
     "track_slug": "python",
-    "name": "Apex Master Gate: Proyecto Integrador",
-    "description": "Desafío integral de certificación en 3 fases combinando fundamentos, POO y especializaciones.",
-    "color": "#F43F5E",
-    "icon": "terminal",
+    "name": "Rama Análisis de Datos",
+    "description": "NumPy, Pandas, EDA, Matplotlib, Seaborn, Plotly, estadística aplicada, SQL, Scikit-learn y Streamlit.",
+    "color": "#06B6D4",
+    "icon": "IconChartBar",
     "topology": {
-      "tier": 4,
+      "tier": 3,
       "lane": 0
     },
     "prerequisites": [
-      "fastapi-async",
-      "django-enterprise"
+      "python-3"
     ],
-    "edges": [],
+    "edges": [
+      {
+        "target_course_slug": "python-apex",
+        "connection_type": "unlocks",
+        "visual_effect_code": "dotted_amber_pulse",
+        "edge_color": "#06B6D4"
+      }
+    ],
     "is_active": true
   },
   {
-    "slug": "frontend-core",
-    "track_slug": "frontend",
-    "name": "Frontend Web con React 19 y Next.js",
-    "description": "Desarrollo de interfaces interactivas, componentes atómicos, SSR y Tailwind CSS.",
-    "color": "#10B981",
-    "icon": "IconDeviceDesktop",
+    "slug": "ai-agents",
+    "track_slug": "python",
+    "name": "Rama Python + IA: Crear tu Agente",
+    "description": "LLMs, APIs, prompting, salidas estructuradas, function calling, memoria, RAG, bucle ReAct y agente multi-herramienta.",
+    "color": "#EC4899",
+    "icon": "IconRobot",
     "topology": {
-      "tier": 1,
-      "lane": -1
-    },
-    "prerequisites": [
-      "python-1"
-    ],
-    "edges": [],
-    "is_active": true
-  },
-  {
-    "slug": "backend-core",
-    "track_slug": "backend",
-    "name": "Backend Engineering con NestJS",
-    "description": "Construcción de arquitecturas modulares y hexagonales, persistencia relacional y APIs robustas.",
-    "color": "#8B5CF6",
-    "icon": "IconServer",
-    "topology": {
-      "tier": 1,
-      "lane": 0
-    },
-    "prerequisites": [
-      "python-1"
-    ],
-    "edges": [],
-    "is_active": true
-  },
-  {
-    "slug": "devops-core",
-    "track_slug": "devops",
-    "name": "DevOps, Docker & Cloud Infrastructure",
-    "description": "Automatización de pipelines CI/CD, contenedores Docker y monitoreo en la nube.",
-    "color": "#F59E0B",
-    "icon": "IconCloudComputing",
-    "topology": {
-      "tier": 1,
+      "tier": 3,
       "lane": 1
     },
     "prerequisites": [
-      "python-1"
+      "python-3"
+    ],
+    "edges": [
+      {
+        "target_course_slug": "python-apex",
+        "connection_type": "unlocks",
+        "visual_effect_code": "dotted_amber_pulse",
+        "edge_color": "#EC4899"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "slug": "python-apex",
+    "track_slug": "python",
+    "name": "Apex Master Gate: Proyecto Integrador",
+    "description": "Desafío integral de certificación combinando el tronco común avanzado y la especialidad elegida.",
+    "color": "#F43F5E",
+    "icon": "terminal",
+    "topology": {
+      "tier": 5,
+      "lane": 0
+    },
+    "prerequisites": [
+      "python-3"
     ],
     "edges": [],
     "is_active": true

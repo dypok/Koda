@@ -1,0 +1,33 @@
+{
+  "module_code": "PY2_M06",
+  "module_slug": "poo-clases-y-objetos",
+  "course_slug": "python-2",
+  "questions": [
+    {
+      "id": "q_py2_06_01",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué método mágico de Python se invoca al llamar a str(objeto) o print(objeto)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "__str__"
+        },
+        {
+          "id": "b",
+          "text": "__print__"
+        },
+        {
+          "id": "c",
+          "text": "__to_string__"
+        },
+        {
+          "id": "d",
+          "text": "__text__"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "__str__ es el método especial que devuelve la representación en string legible para el usuario."
+    }
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "module_code": "PY1_M05",
+  "module_slug": "condicionales",
+  "course_slug": "python-1",
+  "questions": [
+    {
+      "id": "q_py1_05_01",
+      "type": "find_error",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es el error de sintaxis en el siguiente bloque?",
+      "prompt_code": "if edad >= 18\n    print(\"Mayor de edad\")",
+      "options": [
+        {
+          "id": "a",
+          "text": "Faltan los dos puntos (:) al final de la línea del if"
+        },
+        {
+          "id": "b",
+          "text": "La palabra print debe ir sin sangría"
+        },
+        {
+          "id": "c",
+          "text": "La condición debe ir entre paréntesis obligatoriamente"
+        },
+        {
+          "id": "d",
+          "text": "El número 18 debe ser un flotante"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "En Python toda cabecera de control de flujo (if, elif, else, for, while, def) debe finalizar con dos puntos (:)."
+    },
+    {
+      "id": "q_py1_05_02",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué se imprimirá?",
+      "prompt_code": "x = 0\nif x:\n    print(\"Verdadero\")\nelse:\n    print(\"Falso\")",
+      "options": [
+        {
+          "id": "a",
+          "text": "Falso"
+        },
+        {
+          "id": "b",
+          "text": "Verdadero"
+        },
+        {
+          "id": "c",
+          "text": "0"
+        },
+        {
+          "id": "d",
+          "text": "TypeError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "En Python, el número 0 es considerado \"falsy\" (evalúa a False en un contexto booleano), por lo que se ejecuta el else."
+    },
+    {
+      "id": "q_py1_05_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la convención oficial de sangría en Python según PEP 8?",
+      "options": [
+        {
+          "id": "a",
+          "text": "4 espacios por nivel de indentación"
+        },
+        {
+          "id": "b",
+          "text": "1 tabulación obligatoria"
+        },
+        {
+          "id": "c",
+          "text": "2 espacios como en JavaScript"
+        },
+        {
+          "id": "d",
+          "text": "No importa la cantidad mientras se use punto y coma"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "id": "py3_mod_05",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY3_M05",
+  "slug": "programacion-funcional",
+  "course_slug": "python-3",
+  "title": "Programación Funcional: itertools y functools",
+  "objective": "Aplicar patrones funcionales puros, memorización de caché con @lru_cache y herramientas de combinación con itertools.",
+  "description": "Acelera funciones matemáticas 100x con caché automático y combina secuencias infinitas con las utilidades de itertools.",
+  "position": 25,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 320
+  },
+  "sections": [
+    {
+      "id": "sec_py3_05_01",
+      "code": "S01",
+      "title": "Caché con @lru_cache e Itertools",
+      "slug": "lru-cache-itertools",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 45,
+      "lessons": [
+        {
+          "id": "les_py3_05_01",
+          "code": "L01",
+          "title": "Memorización Automática con @functools.lru_cache",
+          "slug": "lru-cache-base",
+          "position": 1,
+          "concept_id": "py3-functional",
+          "objective": "Optimizar algoritmos recursivos de tiempo exponencial O(2^n) a tiempo lineal O(n).",
+          "theory_markdown": "El decorador `@functools.lru_cache` (Least Recently Used Cache) almacena en memoria los resultados de llamadas previas con los mismos argumentos.\n\nSi calculas `fibonacci(35)` de forma recursiva ingenua, se realizan más de 20 millones de llamadas repetitivas. Agregando una sola línea con `@lru_cache(maxsize=128)`, el cálculo pasa de tardar 5 segundos a tardar **0.00001 segundos**.",
+          "examples": [
+            {
+              "title": "Fibonacci ultra-optimizado con lru_cache",
+              "code": "from functools import lru_cache\n\n@lru_cache(maxsize=None)\ndef fib(n: int) -> int:\n    if n < 2:\n        return n\n    return fib(n - 1) + fib(n - 2)\n\nprint(\"Fib(50):\", fib(50))",
+              "output": "Fib(50): 12586269025",
+              "explanation": "Calcula el número 50 de Fibonacci en microsegundos gracias al almacenamiento en caché."
+            }
+          ],
+          "common_errors": "Usar lru_cache en funciones con argumentos mutables (como listas o diccionarios). Como la clave del caché se calcula con hash(args), los argumentos deben ser inmutables.",
+          "mini_exercise": {
+            "starter_code": "from functools import lru_cache\n@lru_cache(maxsize=32)\ndef multiplicar(a, b):\n    return a * b\n\nprint(multiplicar(10, 5))",
+            "instructions": "Prueba la función memorizada.",
+            "solution": "from functools import lru_cache\n@lru_cache(maxsize=32)\ndef multiplicar(a, b):\n    return a * b\n\nprint(multiplicar(10, 5))"
+          },
+          "key_takeaways": [
+            "@lru_cache memoriza resultados previos para evitar recalcular.",
+            "Los argumentos deben ser inmutables (hashables).",
+            "Reduce la complejidad temporal drásticamente."
+          ],
+          "exercise": {
+            "id": "ex_py3_05_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Qué significa la sigla LRU en el decorador lru_cache?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Least Recently Used (desalojo del elemento usado hace más tiempo)"
+              },
+              {
+                "id": "b",
+                "text": "Linear Recursive Unit"
+              },
+              {
+                "id": "c",
+                "text": "Loop Return Unifier"
+              },
+              {
+                "id": "d",
+                "text": "Local Resource Utility"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "LRU mantiene en caché los elementos más recientes y descarta los menos consultados cuando se alcanza el límite maxsize."
+          }
+        }
+      ]
+    }
+  ]
+}

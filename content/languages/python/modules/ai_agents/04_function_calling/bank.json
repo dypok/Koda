@@ -1,0 +1,33 @@
+{
+  "module_code": "IA_M04",
+  "module_slug": "ia-function-calling",
+  "course_slug": "ai-agents",
+  "questions": [
+    {
+      "id": "q_ia_04_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué rol de mensaje se utiliza para devolver el resultado de una función ejecutada al modelo de lenguaje?",
+      "options": [
+        {
+          "id": "a",
+          "text": "tool (o function)"
+        },
+        {
+          "id": "b",
+          "text": "system"
+        },
+        {
+          "id": "c",
+          "text": "user"
+        },
+        {
+          "id": "d",
+          "text": "admin"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Las especificaciones modernas de Chat Completions usan el rol tool junto con el tool_call_id para asociar el resultado a la llamada previa."
+    }
+  ]
+}

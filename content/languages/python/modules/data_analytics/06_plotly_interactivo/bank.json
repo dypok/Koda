@@ -1,0 +1,33 @@
+{
+  "module_code": "DA_M06",
+  "module_slug": "plotly-interactivo",
+  "course_slug": "data-analytics",
+  "questions": [
+    {
+      "id": "q_da_06_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué método de un objeto Figure de Plotly permite guardar la gráfica como un archivo HTML interactivo completo?",
+      "options": [
+        {
+          "id": "a",
+          "text": "fig.write_html(\"nombre.html\")"
+        },
+        {
+          "id": "b",
+          "text": "fig.save_web()"
+        },
+        {
+          "id": "c",
+          "text": "fig.export_dom()"
+        },
+        {
+          "id": "d",
+          "text": "fig.to_browser()"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "write_html exporta la visualización lista para abrirse en cualquier navegador sin dependencias de Python."
+    }
+  ]
+}
