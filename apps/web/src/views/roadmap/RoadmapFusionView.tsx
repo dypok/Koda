@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowRight, Flame, Lock, LockOpen, Sidebar, SidebarSimple, Star } from '@phosphor-icons/react';
+import { ArrowRight, Flame, Lock, Sidebar, SidebarSimple, Star } from '@phosphor-icons/react';
 import { GraphDataset, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 import { useAuthStore } from '@/stores/auth.store';
@@ -23,7 +23,6 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
     setActiveNode,
     setPanOffset,
     unlockingNodeId,
-    toggleNodeLock,
     viewMode,
   } = useRoadmapStore();
   const inLessons = viewMode === 'lessons';
@@ -171,7 +170,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
         >
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-mono font-bold tracking-widest text-slate-400 uppercase">
-              {inLessons ? 'Lección' : 'Módulo'} // {activeNode.code}
+              {inLessons ? 'Lección' : 'Módulo'} · {activeNode.code}
             </span>
             <div className="flex items-center gap-2">
               <span
@@ -224,10 +223,10 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
             )}
           </div>
 
-          <div className="pt-3 border-t border-slate-700/50 flex items-center justify-between gap-2">
+          <div className="pt-3 border-t border-slate-700/50">
             {isLocked ? (
-              <div className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-400 font-mono text-[11px] font-bold">
-                <Lock className="w-3.5 h-3.5" />
+              <div className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-400 font-mono text-xs font-bold">
+                <Lock className="w-3.5 h-3.5 text-rose-400" />
                 <span>{activeNode.statusText || 'Bloqueado'}</span>
               </div>
             ) : (
@@ -235,7 +234,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
                 type="button"
                 onClick={() => onDeploy(activeNode)}
                 className={cn(
-                  'inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-mono text-xs font-black transition-all hover:scale-[1.03] active:scale-95 cursor-pointer shadow-lg hover:brightness-110',
+                  'w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-mono text-xs font-black transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shadow-lg hover:brightness-110',
                   isBoss
                     ? 'bg-gradient-to-r from-rose-500 to-rose-600 text-white shadow-rose-500/30 hover:shadow-rose-500/50'
                     : 'bg-gradient-to-r from-orange-500 to-amber-500 text-slate-950 shadow-[0_0_18px_rgba(255,106,0,0.45)] hover:shadow-[0_0_24px_rgba(255,106,0,0.65)]'
@@ -245,22 +244,6 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             )}
-            <button
-              type="button"
-              onClick={() => toggleNodeLock(activeNode.id)}
-              disabled={unlockingNodeId === activeNode.id}
-              aria-pressed={!isLocked}
-              aria-label={isLocked ? `Desbloquear ${activeNode.label}` : `Bloquear ${activeNode.label}`}
-              title="Bloquear o desbloquear a voluntad"
-              className="inline-flex items-center gap-1.5 px-3 py-2.5 rounded-xl border border-orange-500/30 bg-orange-500/10 font-mono text-[11px] font-bold text-orange-300 transition-all hover:bg-orange-500/20 hover:border-orange-500/60 hover:text-orange-200 disabled:cursor-wait disabled:opacity-50 cursor-pointer shadow-[0_0_10px_rgba(255,106,0,0.15)]"
-            >
-              {isLocked ? (
-                <LockOpen aria-hidden="true" className="w-3.5 h-3.5" />
-              ) : (
-                <Lock aria-hidden="true" className="w-3.5 h-3.5" />
-              )}
-              <span>{unlockingNodeId === activeNode.id ? '…' : isLocked ? 'Abrir' : 'Cerrar'}</span>
-            </button>
           </div>
         </aside>
       )}

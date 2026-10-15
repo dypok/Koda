@@ -72,7 +72,7 @@ function RowBody({
         {badge}
       </span>
       <span className="block font-sans text-xs leading-relaxed text-slate-400">
-        {tokens.logLocked && !option.isAvailable ? `// ${option.slug} — queued` : option.description}
+        {tokens.logLocked && !option.isAvailable ? `${option.slug} — en espera` : option.description}
       </span>
       {tokens.installLine && selected && (
         <span className="mt-1 block font-mono text-[11px] text-amber-300">{`$ install ${option.slug}`}</span>

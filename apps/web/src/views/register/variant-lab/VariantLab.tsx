@@ -94,7 +94,7 @@ export const VariantLab: React.FC = () => {
       />
 
       <p className="font-mono text-[11px] text-slate-600">
-        {'// ←/→ para ciclar · #vN compartible · solo preview, el flujo real no cambia'}
+        {'←/→ para ciclar · #vN compartible · solo preview, el flujo real no cambia'}
       </p>
     </div>
   );

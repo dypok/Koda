@@ -556,7 +556,7 @@ function LessonView({
           {lesson.examples.map((ex, i) => (
             <div key={i} className="space-y-3">
               <div className="rounded-xl border border-slate-800 bg-slate-950/80 p-4 font-mono text-sm leading-relaxed text-slate-200 shadow-inner">
-                <span className="text-slate-600 select-none">// Ejemplo interactivo</span>
+                <span className="text-slate-500 select-none"># Ejemplo interactivo</span>
                 <div className="text-amber-300 pt-1">
                   <code>{ex.code}</code>
                 </div>

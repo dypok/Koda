@@ -9,3 +9,5 @@
 - [Thursday]-[15/10/2026]-[09:18]-[Dylan Gamero] : Connected LessonWorkspace to backend evaluation and section completion endpoints.
 - [Thursday]-[15/10/2026]-[09:18]-[Dylan Gamero] : Created public certificate verification screen in apps/web/src/app/verificar/[code]/page.tsx with live credential validation and PDF download.
 - [Thursday]-[15/10/2026]-[09:18]-[Dylan Gamero] : Verified monorepo type safety (0 tsc errors across web and api) and ensured all 20 test suites (75 tests) pass.
+- [Thursday]-[15/10/2026]-[11:04]-[Dylan Gamero] : Removed debug lock/unlock toggle buttons and HUD dev controls from RoadmapFusionView, RoadmapGraphNode, and StudentRoadmapView.
+- [Thursday]-[15/10/2026]-[11:04]-[Dylan Gamero] : Replaced // separators with clean middle dot (·) indicators across roadmap cards, telemetry headers, and Pixi graph labels.
