@@ -11,6 +11,7 @@ import { useRoadmapStore } from '@/stores/roadmap.store';
 import { cn } from '@/lib/utils';
 
 import { OrbitFieldBackground } from '@/components/landing/OrbitFieldBackground';
+import { EvaluationService } from '@/services/learning/evaluation.service';
 
 interface LessonWorkspaceProps {
   courseId: string;
@@ -204,6 +205,18 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     });
     // Notificar al roadmap store para encender el nodo actual
     completeSectionNode(sectionRef, 3);
+
+    // Sincronizar completitud de la sección en PostgreSQL
+    if (parsed) {
+      EvaluationService.completeSection(sectionRef, {
+        moduleId: parsed.moduleSlug,
+        courseId,
+        accuracyPercentage: 100,
+      }).catch((err) => {
+        // Fallback silencioso si el usuario está offline o sin sesión activa
+        console.warn('Sync section completion offline fallback:', err?.message);
+      });
+    }
   };
 
   useEffect(() => {
@@ -276,8 +289,18 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         onFinish={(ok, total) => {
           setQuizScore({ ok, total });
           setMode('done');
-          if (ok / Math.max(1, total) >= 0.7) {
+          const accuracy = Math.round((ok / Math.max(1, total)) * 100);
+          if (accuracy >= 70) {
             completeSectionNode(sectionRef, ok === total ? 3 : 2);
+            if (parsed) {
+              EvaluationService.completeSection(sectionRef, {
+                moduleId: parsed.moduleSlug,
+                courseId,
+                accuracyPercentage: accuracy,
+              }).catch((err) => {
+                console.warn('Sync quiz section completion offline fallback:', err?.message);
+              });
+            }
           }
         }}
       />
@@ -473,7 +496,16 @@ function LessonView({
       if (opt && !engine.result) engine.toggle(opt.id);
     },
     onSubmit: () => {
-      if (!engine.result && engine.selected.length > 0) engine.check();
+      if (!engine.result && engine.selected.length > 0) {
+        engine.check();
+        if (lesson?.id) {
+          EvaluationService.evaluateLessonAnswer(lesson.id, {
+            selected_option_ids: engine.selected,
+          }).catch((err) => {
+            console.warn('Backend lesson answer sync fallback:', err?.message);
+          });
+        }
+      }
     },
     onNext: () => {
       if (engine.result) {
@@ -605,7 +637,16 @@ function LessonView({
               {!engine.result ? (
                 <button
                   type="button"
-                  onClick={() => engine.check()}
+                  onClick={() => {
+                    engine.check();
+                    if (lesson?.id) {
+                      EvaluationService.evaluateLessonAnswer(lesson.id, {
+                        selected_option_ids: engine.selected,
+                      }).catch((err) => {
+                        console.warn('Backend lesson answer sync fallback:', err?.message);
+                      });
+                    }
+                  }}
                   disabled={engine.selected.length === 0}
                   className={cn(
                     'group relative inline-flex min-h-[50px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.25em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
