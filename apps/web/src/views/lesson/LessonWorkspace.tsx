@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key, Code } from '@phosphor-icons/react';
 import { ContentExercise, ContentLesson, ContentModule, loadBank, loadModule, shuffled } from '@/lib/content';
@@ -195,29 +195,44 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     }
   });
 
-  const handleLessonCompleted = (lessonId: string) => {
-    setCompletedLessons((prev) => {
-      const next = new Set(prev).add(lessonId);
-      try {
-        window.localStorage.setItem('koda_completed_lessons', JSON.stringify(Array.from(next)));
-      } catch {}
-      return next;
-    });
-    // Notificar al roadmap store para encender el nodo actual
-    completeSectionNode(sectionRef, 3);
+  const completedLessonsRef = useRef(completedLessons);
+  useEffect(() => {
+    completedLessonsRef.current = completedLessons;
+  }, [completedLessons]);
 
-    // Sincronizar completitud de la sección en PostgreSQL
-    if (parsed) {
-      EvaluationService.completeSection(sectionRef, {
-        moduleId: parsed.moduleSlug,
-        courseId,
-        accuracyPercentage: 100,
-      }).catch((err) => {
-        // Fallback silencioso si el usuario está offline o sin sesión activa
-        console.warn('Sync section completion offline fallback:', err?.message);
+  const handleLessonCompleted = useCallback(
+    (lessonId: string) => {
+      if (!lessonId) return;
+
+      // Si la lección ya fue registrada como completada, evitar re-renders en bucle
+      if (completedLessonsRef.current.has(lessonId)) return;
+
+      setCompletedLessons((prev) => {
+        if (prev.has(lessonId)) return prev;
+        const next = new Set(prev).add(lessonId);
+        try {
+          window.localStorage.setItem('koda_completed_lessons', JSON.stringify(Array.from(next)));
+        } catch {}
+        return next;
       });
-    }
-  };
+
+      // Notificar al roadmap store para encender el nodo actual
+      completeSectionNode(sectionRef, 3);
+
+      // Sincronizar completitud de la sección en PostgreSQL
+      if (parsed) {
+        EvaluationService.completeSection(sectionRef, {
+          moduleId: parsed.moduleSlug,
+          courseId,
+          accuracyPercentage: 100,
+        }).catch((err) => {
+          // Fallback silencioso si el usuario está offline o sin sesión activa
+          console.warn('Sync section completion offline fallback:', err?.message);
+        });
+      }
+    },
+    [completeSectionNode, sectionRef, parsed, courseId]
+  );
 
   useEffect(() => {
     let alive = true;
@@ -280,29 +295,34 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     );
   }
 
+  const handleQuizFinish = useCallback(
+    (ok: number, total: number) => {
+      setQuizScore({ ok, total });
+      setMode('done');
+      const accuracy = Math.round((ok / Math.max(1, total)) * 100);
+      if (accuracy >= 70) {
+        completeSectionNode(sectionRef, ok === total ? 3 : 2);
+        if (parsed) {
+          EvaluationService.completeSection(sectionRef, {
+            moduleId: parsed.moduleSlug,
+            courseId,
+            accuracyPercentage: accuracy,
+          }).catch((err) => {
+            console.warn('Sync quiz section completion offline fallback:', err?.message);
+          });
+        }
+      }
+    },
+    [completeSectionNode, sectionRef, parsed, courseId]
+  );
+
   if (mode === 'quiz') {
     return (
       <QuizMode
         bank={bank}
         sectionTitle={parsed.initialMode === 'quiz' && (sectionRef === 'les-miniboss' || sectionRef === 'py-boss-logic') ? '🛡️ El Centinela de la Lógica' : section.title}
         courseTitle={module.title}
-        onFinish={(ok, total) => {
-          setQuizScore({ ok, total });
-          setMode('done');
-          const accuracy = Math.round((ok / Math.max(1, total)) * 100);
-          if (accuracy >= 70) {
-            completeSectionNode(sectionRef, ok === total ? 3 : 2);
-            if (parsed) {
-              EvaluationService.completeSection(sectionRef, {
-                moduleId: parsed.moduleSlug,
-                courseId,
-                accuracyPercentage: accuracy,
-              }).catch((err) => {
-                console.warn('Sync quiz section completion offline fallback:', err?.message);
-              });
-            }
-          }
-        }}
+        onFinish={handleQuizFinish}
       />
     );
   }
@@ -355,6 +375,37 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   }
 
   const lesson = section.lessons[lessonIdx] ?? null;
+
+  const handleCompleteCurrent = useCallback(() => {
+    if (lesson?.id) {
+      handleLessonCompleted(lesson.id);
+    }
+  }, [lesson?.id, handleLessonCompleted]);
+
+  const handleNext = useCallback(() => {
+    if (lesson?.id) {
+      handleLessonCompleted(lesson.id);
+    }
+    if (section && lessonIdx + 1 < section.lessons.length) {
+      setLessonIdx((idx) => idx + 1);
+    } else {
+      setMode('quiz');
+    }
+  }, [lesson?.id, handleLessonCompleted, section, lessonIdx]);
+
+  const handlePrev = useCallback(() => {
+    setLessonIdx((idx) => (idx > 0 ? idx - 1 : 0));
+  }, []);
+
+  const handleJumpTo = useCallback(
+    (idx: number) => {
+      if (section && idx >= 0 && idx < section.lessons.length) {
+        setLessonIdx(idx);
+      }
+    },
+    [section]
+  );
+
   return (
     <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
       <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
@@ -424,18 +475,10 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             key={lesson.id}
             lesson={lesson}
             isCompleted={completedLessons.has(lesson.id)}
-            onComplete={() => handleLessonCompleted(lesson.id)}
-            onNext={() => {
-              handleLessonCompleted(lesson.id);
-              if (lessonIdx + 1 < section.lessons.length) setLessonIdx(lessonIdx + 1);
-              else setMode('quiz');
-            }}
-            onPrev={() => {
-              if (lessonIdx > 0) setLessonIdx(lessonIdx - 1);
-            }}
-            onJumpTo={(idx) => {
-              if (idx >= 0 && idx < section.lessons.length) setLessonIdx(idx);
-            }}
+            onComplete={handleCompleteCurrent}
+            onNext={handleNext}
+            onPrev={handlePrev}
+            onJumpTo={handleJumpTo}
             currentIndex={lessonIdx}
             totalCount={section.lessons.length}
             isLast={lessonIdx + 1 >= section.lessons.length}
@@ -481,12 +524,23 @@ function LessonView({
   const exercise = lesson.exercises[0] ?? null;
   const engine = useLessonEngine(exercise ? [exercise] : [], lesson.position);
 
-  // Notificar completitud automática si el ejercicio es correcto
+  const onCompleteRef = useRef(onComplete);
   useEffect(() => {
-    if (engine.result?.correct) {
-      onComplete?.();
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
+  // Guardia con ref para disparar completitud exactamente UNA vez por lección
+  const hasNotifiedRef = useRef(false);
+  useEffect(() => {
+    hasNotifiedRef.current = false;
+  }, [lesson.id]);
+
+  useEffect(() => {
+    if (engine.result?.correct && !hasNotifiedRef.current) {
+      hasNotifiedRef.current = true;
+      onCompleteRef.current?.();
     }
-  }, [engine.result, onComplete]);
+  }, [engine.result?.correct]);
 
   // Hook de atajos ergonómicos por teclado
   const { pressedIndex, pressedAction } = useLessonKeyboardShortcuts({
@@ -765,11 +819,18 @@ function QuizMode({
   const answered = engine.index;
   const total = engine.total;
 
+  const onFinishRef = useRef(onFinish);
   useEffect(() => {
-    if (engine.done) {
-      onFinish(okCount, total);
+    onFinishRef.current = onFinish;
+  }, [onFinish]);
+
+  const hasFinishedRef = useRef(false);
+  useEffect(() => {
+    if (engine.done && !hasFinishedRef.current) {
+      hasFinishedRef.current = true;
+      onFinishRef.current(okCount, total);
     }
-  }, [engine.done, okCount, total, onFinish]);
+  }, [engine.done, okCount, total]);
 
   // Hook de atajos de teclado para Quiz
   const { pressedIndex, pressedAction } = useLessonKeyboardShortcuts({
