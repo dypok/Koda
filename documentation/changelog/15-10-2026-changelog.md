@@ -15,3 +15,4 @@
 - [Thursday]-[15/10/2026]-[16:05]-[Dylan Gamero] : Synchronized Prisma Certificate model and CertificationService with PostgreSQL Supabase database schema (code, language_slug, track_slug, holder_name, holder_document_masked, qr_payload, pdf_sha256).
 - [Thursday]-[15/10/2026]-[16:05]-[Dylan Gamero] : Verified backend runtime functionality (REST and GraphQL endpoints responding 200 OK) and confirmed 100% test pass rate (24 suites, 82 tests).
 - [Thursday]-[15/10/2026]-[16:11]-[Dylan Gamero] : Verified frontend-backend contract integration and added dual code/verificationCode compatibility across EvaluationService, CertificationService, and AttemptReviewScreen; full next build passed.
+- [Thursday]-[15/10/2026]-[16:41]-[Dylan Gamero] : Fixed Maximum update depth exceeded error in LessonWorkspace.tsx by memoizing completion callbacks, adding hasNotifiedRef and completedLessonsRef guards.
