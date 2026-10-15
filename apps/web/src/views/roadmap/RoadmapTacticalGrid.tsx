@@ -45,28 +45,28 @@ export function RoadmapTacticalGrid() {
       <g fontFamily="monospace" fontSize="9" fill="#475569" letterSpacing="1.5" opacity="0.55">
         {/* Left Sector: Core Foundations */}
         <g transform="translate(60, 60)">
-          <text x="0" y="0" fontWeight="bold" fill="#64748B">SEC-01 // FOUNDATIONS</text>
+          <text x="0" y="0" fontWeight="bold" fill="#64748B">SEC-01 · FOUNDATIONS</text>
           <text x="0" y="14" fontSize="7.5">COORD: [24.12°N : 88.04°W]</text>
           <path d="M 0 22 L 180 22" stroke="#334155" strokeWidth="1" strokeDasharray="2 4" />
         </g>
 
         {/* Center Sector: Intermediate Mastery */}
         <g transform="translate(480, 50)">
-          <text x="0" y="0" fontWeight="bold" fill="#64748B">SEC-02 // ARCHITECTURE & RUNTIME</text>
+          <text x="0" y="0" fontWeight="bold" fill="#64748B">SEC-02 · ARCHITECTURE & RUNTIME</text>
           <text x="0" y="14" fontSize="7.5">STATUS: SYNCHRONIZING TELEMETRY</text>
           <path d="M 0 22 L 240 22" stroke="#334155" strokeWidth="1" strokeDasharray="2 4" />
         </g>
 
         {/* Right Sector: Apex Gate / Deep Void */}
         <g transform="translate(860, 70)">
-          <text x="0" y="0" fontWeight="bold" fill="#F87171" opacity="0.8">SEC-03 // APEX MONOLITH</text>
+          <text x="0" y="0" fontWeight="bold" fill="#F87171" opacity="0.8">SEC-03 · APEX MONOLITH</text>
           <text x="0" y="14" fontSize="7.5" fill="#EF4444" opacity="0.6">HAZARD: RESTRICTED AIRSPACE</text>
           <path d="M 0 22 L 200 22" stroke="#7F1D1D" strokeWidth="1" strokeDasharray="3 3" />
         </g>
 
         {/* Bottom Calibration Markings */}
         <g transform="translate(60, 570)">
-          <text x="0" y="0" fontSize="8" fill="#334155">SYS-ORBITAL // LATENCY: 12ms // BUFFER: OPTIMAL</text>
+          <text x="0" y="0" fontSize="8" fill="#334155">SYS-ORBITAL · LATENCY: 12ms · BUFFER: OPTIMAL</text>
           <text x="750" y="0" fontSize="8" fill="#334155">CARTOGRAPHY PROTOCOL: KODA-NAV-V4</text>
         </g>
       </g>

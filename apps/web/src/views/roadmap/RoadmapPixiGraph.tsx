@@ -682,7 +682,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
           }
 
           // Etiquetas técnicas de telemetría cartográfica
-          const tagSuffix = st === 'done' ? '// OK' : st === 'active' ? '// ACTV' : st === 'locked' ? '// LOCK' : '// OPEN';
+          const tagSuffix = st === 'done' ? '· OK' : st === 'active' ? '· ACTV' : st === 'locked' ? '· LOCK' : '· OPEN';
           const codeText = nodeStyle === 'hex' ? `${n.code} ${tagSuffix}` : n.code;
           const code = new PIXI.Text(codeText, {
             fontFamily: '"JetBrains Mono", ui-monospace, monospace',

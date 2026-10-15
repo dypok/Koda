@@ -117,7 +117,7 @@ export const RouteLab: React.FC = () => {
       </div>
 
       <p className="font-mono text-[11px] text-slate-600">
-        {'// ←/→ para ciclar · #rN compartible · solo preview, ruta en / no cambia'}
+        {'←/→ para ciclar · #rN compartible · solo preview, ruta en / no cambia'}
       </p>
     </div>
   );
