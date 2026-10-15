@@ -125,11 +125,27 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
     dragRef.current = null;
   }, []);
 
+  const lastClickRef = useRef<{ id: string; time: number }>({ id: '', time: 0 });
+
   const handleSelectNode = useCallback(
     (node: GraphNode) => {
+      const now = Date.now();
+      const isConsecutiveClick = lastClickRef.current.id === node.id && now - lastClickRef.current.time < 800;
+      const isAlreadyActive = activeNodeId === node.id;
+      lastClickRef.current = { id: node.id, time: now };
+
+      setShowPanel(true);
       setActiveNode(node.id);
+
+      // Si el nodo está desbloqueado:
+      // 1. Si ya era el nodo activo seleccionado, o
+      // 2. Si se le hace doble clic / tap consecutivo rápido
+      // -> Desplegar inmediatamente (abrir módulo en vista courses, o iniciar lección en vista lessons)
+      if (node.isUnlocked && (isAlreadyActive || isConsecutiveClick)) {
+        onDeploy(node);
+      }
     },
-    [setActiveNode]
+    [activeNodeId, onDeploy, setActiveNode]
   );
 
   const progressPercent = Math.round(((activeIndex + 1) / Math.max(1, nodes.length)) * 100);

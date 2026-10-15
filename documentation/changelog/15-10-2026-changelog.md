@@ -16,3 +16,5 @@
 - [Thursday]-[15/10/2026]-[16:05]-[Dylan Gamero] : Verified backend runtime functionality (REST and GraphQL endpoints responding 200 OK) and confirmed 100% test pass rate (24 suites, 82 tests).
 - [Thursday]-[15/10/2026]-[16:11]-[Dylan Gamero] : Verified frontend-backend contract integration and added dual code/verificationCode compatibility across EvaluationService, CertificationService, and AttemptReviewScreen; full next build passed.
 - [Thursday]-[15/10/2026]-[16:41]-[Dylan Gamero] : Fixed Maximum update depth exceeded error in LessonWorkspace.tsx by memoizing completion callbacks, adding hasNotifiedRef and completedLessonsRef guards.
+- [Thursday]-[15/10/2026]-[17:01]-[Dylan Gamero] : Fixed module and lesson launching when clicking nodes by triggering onDeploy on active/double-clicked unlocked nodes in RoadmapFusionView, synchronizing activeNodeId in openCourseLessons and returnToCourses in roadmap.store, and correcting touch/mouse coordinate extraction in RoadmapPixiGraph.
+
