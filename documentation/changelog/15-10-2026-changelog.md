@@ -11,3 +11,10 @@
 - [Thursday]-[15/10/2026]-[09:18]-[Dylan Gamero] : Verified monorepo type safety (0 tsc errors across web and api) and ensured all 20 test suites (75 tests) pass.
 - [Thursday]-[15/10/2026]-[11:04]-[Dylan Gamero] : Removed debug lock/unlock toggle buttons and HUD dev controls from RoadmapFusionView, RoadmapGraphNode, and StudentRoadmapView.
 - [Thursday]-[15/10/2026]-[11:04]-[Dylan Gamero] : Replaced // separators with clean middle dot (·) indicators across roadmap cards, telemetry headers, and Pixi graph labels.
+- [Thursday]-[15/10/2026]-[16:05]-[Dylan Gamero] : Merged latest develop changes (7e70f69) and resolved duplicate parameter in learning.service.ts and missing ContentModule dependency in EvaluationModule.
+- [Thursday]-[15/10/2026]-[16:05]-[Dylan Gamero] : Synchronized Prisma Certificate model and CertificationService with PostgreSQL Supabase database schema (code, language_slug, track_slug, holder_name, holder_document_masked, qr_payload, pdf_sha256).
+- [Thursday]-[15/10/2026]-[16:05]-[Dylan Gamero] : Verified backend runtime functionality (REST and GraphQL endpoints responding 200 OK) and confirmed 100% test pass rate (24 suites, 82 tests).
+- [Thursday]-[15/10/2026]-[16:11]-[Dylan Gamero] : Verified frontend-backend contract integration and added dual code/verificationCode compatibility across EvaluationService, CertificationService, and AttemptReviewScreen; full next build passed.
+- [Thursday]-[15/10/2026]-[16:41]-[Dylan Gamero] : Fixed Maximum update depth exceeded error in LessonWorkspace.tsx by memoizing completion callbacks, adding hasNotifiedRef and completedLessonsRef guards.
+- [Thursday]-[15/10/2026]-[17:01]-[Dylan Gamero] : Fixed module and lesson launching when clicking nodes by triggering onDeploy on active/double-clicked unlocked nodes in RoadmapFusionView, synchronizing activeNodeId in openCourseLessons and returnToCourses in roadmap.store, and correcting touch/mouse coordinate extraction in RoadmapPixiGraph.
+

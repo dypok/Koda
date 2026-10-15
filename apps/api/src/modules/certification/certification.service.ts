@@ -38,7 +38,7 @@ export class CertificationService {
   /** Verificación pública: no requiere autenticación ni expone datos sensibles. */
   async verifyCertificate(code: string): Promise<CertificateVerificationResponse> {
     const cert = await this.prisma.certificate.findUnique({
-      where: { verificationCode: code },
+      where: { code },
     });
 
     if (!cert) {
@@ -48,18 +48,20 @@ export class CertificationService {
     const metadata = cert.metadata as Record<string, unknown> | null;
     const languageName =
       (metadata?.language_name as string) ||
-      LANGUAGE_TITLES[cert.languageCode] ||
-      cert.title;
+      LANGUAGE_TITLES[cert.languageSlug] ||
+      `${cert.languageSlug.toUpperCase()} Fundamentos`;
+
+    const isValid = cert.status === 'valid';
 
     return {
-      is_valid: !cert.isRevoked,
-      code: cert.verificationCode,
-      holder_name: cert.studentName,
-      holder_document_masked: cert.studentIdMasked || undefined,
+      is_valid: isValid,
+      code: cert.code,
+      holder_name: cert.holderName,
+      holder_document_masked: cert.holderDocumentMasked || 'CC ***000',
       language_name: languageName,
-      issued_at: cert.issueDate.toISOString(),
-      status: cert.isRevoked ? 'revoked' : 'valid',
-      verification_url: cert.verificationQrUrl || undefined,
+      issued_at: cert.issuedAt.toISOString(),
+      status: (cert.status as 'valid' | 'revoked' | 'obsolete') || 'valid',
+      verification_url: cert.qrPayload || `https://koda.app/verificar/${cert.code}`,
     };
   }
 
@@ -72,7 +74,7 @@ export class CertificationService {
   ): Promise<{ code: string; storage_path: string | null; storage_url: string | null; cached: boolean }> {
     const cert = await this.prisma.certificate.findFirst({
       where: {
-        OR: [{ id: idOrCode }, { verificationCode: idOrCode }],
+        OR: [{ id: idOrCode }, { code: idOrCode }],
         userId,
       },
     });
@@ -82,7 +84,7 @@ export class CertificationService {
     }
 
     return {
-      code: cert.verificationCode,
+      code: cert.code,
       storage_path: cert.storagePath,
       storage_url: cert.storageUrl,
       cached: Boolean(cert.storagePath),
@@ -105,14 +107,17 @@ export class CertificationService {
     const existing = await this.prisma.certificate.findFirst({
       where: {
         userId,
-        languageCode: cleanSlug,
-        isRevoked: false,
+        languageSlug: cleanSlug,
+        status: 'valid',
       },
     });
 
     if (existing) {
-      this.logger.log(`Certificado existente devuelto para usuario ${userId} en ${cleanSlug}: ${existing.verificationCode}`);
-      return existing;
+      this.logger.log(`Certificado existente devuelto para usuario ${userId} en ${cleanSlug}: ${existing.code}`);
+      return {
+        ...existing,
+        verificationCode: existing.code,
+      };
     }
 
     // 2. Obtener usuario graduado
@@ -133,7 +138,7 @@ export class CertificationService {
 
     // 3. Generar código correlativo único atómico
     const count = await this.prisma.certificate.count({
-      where: { languageCode: cleanSlug },
+      where: { languageSlug: cleanSlug },
     });
     const prefix = cleanSlug.slice(0, 3).toUpperCase();
     const seqNumber = String(count + 1).padStart(6, '0');
@@ -173,28 +178,31 @@ export class CertificationService {
     const certificate = await this.prisma.certificate.create({
       data: {
         userId,
-        languageCode: cleanSlug,
-        trackCode: cleanSlug,
-        title: courseTitle,
-        studentName,
-        studentIdMasked,
-        issueDate,
-        verificationCode,
-        verificationQrUrl: verificationUrl,
+        code: verificationCode,
+        languageSlug: cleanSlug,
+        trackSlug: cleanSlug,
+        status: 'valid',
+        issuedAt: issueDate,
+        holderName: studentName,
+        holderDocumentMasked: studentIdMasked,
+        qrPayload: verificationUrl,
+        pdfSha256: pdfResult.sha256Hash,
         storagePath: uploadResult.storagePath,
         storageUrl: uploadResult.storageUrl,
-        pdfFileSizeBytes: pdfResult.fileSizeBytes,
-        pdfSha256Hash: pdfResult.sha256Hash,
         metadata: {
           language_name: courseTitle,
           verification_url: verificationUrl,
+          file_size_bytes: pdfResult.fileSizeBytes,
         },
       },
     });
 
     this.logger.log(`Certificado ${verificationCode} emitido y custodiado en ${uploadResult.storagePath}`);
 
-    return certificate;
+    return {
+      ...certificate,
+      verificationCode: certificate.code,
+    };
   }
 
   /**
@@ -208,7 +216,7 @@ export class CertificationService {
   }> {
     const cert = await this.prisma.certificate.findFirst({
       where: {
-        OR: [{ id: idOrCode }, { verificationCode: idOrCode }],
+        OR: [{ id: idOrCode }, { code: idOrCode }],
       },
     });
 
@@ -217,15 +225,16 @@ export class CertificationService {
     }
 
     const bucket = process.env.MINIO_BUCKET_CERTIFICATES || 'certificates';
-    const fileKey = `${cert.verificationCode}.pdf`;
+    const fileKey = `${cert.code}.pdf`;
 
     try {
       const fileData = await this.storageService.getFileStream(bucket, fileKey);
+      const metadata = cert.metadata as Record<string, unknown> | null;
       return {
         stream: fileData.stream,
-        filename: `${cert.verificationCode}.pdf`,
+        filename: `${cert.code}.pdf`,
         mimeType: fileData.mimeType,
-        size: cert.pdfFileSizeBytes || fileData.size,
+        size: (metadata?.file_size_bytes as number) || fileData.size,
       };
     } catch (err: any) {
       this.logger.error(`Error al recuperar stream de '${fileKey}': ${err.message}`);
