@@ -29,7 +29,27 @@ services:
       timeout: 5s
       retries: 5
 
+  minio:
+    image: cgr.dev/chainguard/minio:latest
+    container_name: koda-minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-koda_admin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-koda_secret_key_2026}
+    volumes:
+      - koda_minio_data:/data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
 volumes:
   koda_mongo_data:
   koda_redis_data:
+  koda_minio_data:
 

@@ -85,7 +85,7 @@ export const DemoLab: React.FC = () => {
       </div>
 
       <p className="font-mono text-[11px] text-slate-600">
-        {'// ←/→ para ciclar (pausado en P9 para no chocar con A–D) · #pN compartible · solo preview'}
+        {'←/→ para ciclar (pausado en P9 para no chocar con A–D) · #pN compartible · solo preview'}
       </p>
     </div>
   );
