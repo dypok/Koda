@@ -17,6 +17,7 @@ import { DatabaseModule } from '../../database/database.module';
 import { ContentModule } from '../../presentation/rest/content/content.module';
 import { CodeRunnerModule } from '../../application/services/code-runner/code-runner.module';
 
+import { LessonAnsweredListener } from '@infra/events/listeners/lesson-answered.listener';
 import { ContentLoaderService } from './content-loader.service';
 
 @Module({
@@ -25,6 +26,7 @@ import { ContentLoaderService } from './content-loader.service';
   providers: [
     LearningService,
     ContentLoaderService,
+    LessonAnsweredListener,
     GetDiagnosticQuestionsUseCase,
     EvaluateDiagnosticUseCase,
     CompleteSectionUseCase,
@@ -53,4 +55,3 @@ import { ContentLoaderService } from './content-loader.service';
   ],
 })
 export class LearningModule {}
-

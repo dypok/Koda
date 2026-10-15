@@ -17,6 +17,7 @@ import { StorageModule } from './infrastructure/storage/storage.module';
 import { AuthModule } from './presentation/rest/auth/auth.module';
 import { UsersModule } from './presentation/rest/users/users.module';
 import { ContentModule } from './presentation/rest/content/content.module';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 import { AppThrottlerGuard } from './common/guards/app-throttler.guard';
 
 // Adaptadores de entrada GraphQL
@@ -25,10 +26,17 @@ import { RoadmapGraphQLModule } from './presentation/graphql/roadmap/roadmap-gra
 import { LearningGraphQLModule } from './presentation/graphql/learning/learning-graphql.module';
 import { NotebookGraphQLModule } from './presentation/graphql/notebook/notebook-graphql.module';
 import { LanguagesGraphQLModule } from './presentation/graphql/languages/languages-graphql.module';
+import { EvaluationGraphQLModule } from './presentation/graphql/evaluation/evaluation-graphql.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
+    EventEmitterModule.forRoot({
+      wildcard: false,
+      delimiter: '.',
+      maxListeners: 20,
+      verboseMemoryLeak: true,
+    }),
     ThrottlerModule.forRoot([
       {
         ttl: 60000, // Ventana de 1 minuto
@@ -60,6 +68,7 @@ import { LanguagesGraphQLModule } from './presentation/graphql/languages/languag
     LearningGraphQLModule,
     NotebookGraphQLModule,
     LanguagesGraphQLModule,
+    EvaluationGraphQLModule,
   ],
   controllers: [AppController],
   providers: [
