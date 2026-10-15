@@ -114,7 +114,10 @@ export class CertificationService {
 
     if (existing) {
       this.logger.log(`Certificado existente devuelto para usuario ${userId} en ${cleanSlug}: ${existing.code}`);
-      return existing;
+      return {
+        ...existing,
+        verificationCode: existing.code,
+      };
     }
 
     // 2. Obtener usuario graduado
@@ -196,7 +199,10 @@ export class CertificationService {
 
     this.logger.log(`Certificado ${verificationCode} emitido y custodiado en ${uploadResult.storagePath}`);
 
-    return certificate;
+    return {
+      ...certificate,
+      verificationCode: certificate.code,
+    };
   }
 
   /**

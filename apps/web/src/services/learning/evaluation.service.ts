@@ -78,6 +78,14 @@ export interface AttemptSummaryResponse {
   details: AttemptDetailItem[];
 }
 
+export interface IssueCertificateResponse {
+  code: string;
+  verificationCode: string;
+  storageUrl?: string;
+  storage_url?: string;
+  [key: string]: any;
+}
+
 const RAW_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
 const DIRECT_BASE_URL = RAW_BASE_URL.replace(/\/$/, '').endsWith('/api/v1')
   ? RAW_BASE_URL.replace(/\/$/, '')
@@ -175,11 +183,18 @@ export class EvaluationService {
   /**
    * Emite el certificado oficial si el examen fue aprobado.
    */
-  public static async issueCertificate(languageSlug: string): Promise<{ verificationCode: string; storageUrl: string }> {
-    return requestWithAuth<{ verificationCode: string; storageUrl: string }>('/certificates/issue', {
+  public static async issueCertificate(languageSlug: string): Promise<IssueCertificateResponse> {
+    const res = await requestWithAuth<any>('/certificates/issue', {
       method: 'POST',
       body: JSON.stringify({ languageSlug }),
     });
+    const code = res.code || res.verificationCode || '';
+    return {
+      ...res,
+      code,
+      verificationCode: res.verificationCode || code,
+      storageUrl: res.storageUrl || res.storage_url,
+    };
   }
 
   /**
