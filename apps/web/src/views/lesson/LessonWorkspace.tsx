@@ -249,6 +249,59 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     return module.sections[0] ?? null;
   }, [module, sectionRef]);
 
+  const lesson = section?.lessons?.[lessonIdx] ?? null;
+
+  const handleQuizFinish = useCallback(
+    (ok: number, total: number) => {
+      setQuizScore({ ok, total });
+      setMode('done');
+      const accuracy = Math.round((ok / Math.max(1, total)) * 100);
+      if (accuracy >= 70) {
+        completeSectionNode(sectionRef, ok === total ? 3 : 2);
+        if (parsed) {
+          EvaluationService.completeSection(sectionRef, {
+            moduleId: parsed.moduleSlug,
+            courseId,
+            accuracyPercentage: accuracy,
+          }).catch((err) => {
+            console.warn('Sync quiz section completion offline fallback:', err?.message);
+          });
+        }
+      }
+    },
+    [completeSectionNode, sectionRef, parsed, courseId]
+  );
+
+  const handleCompleteCurrent = useCallback(() => {
+    if (lesson?.id) {
+      handleLessonCompleted(lesson.id);
+    }
+  }, [lesson?.id, handleLessonCompleted]);
+
+  const handleNext = useCallback(() => {
+    if (lesson?.id) {
+      handleLessonCompleted(lesson.id);
+    }
+    if (section && lessonIdx + 1 < section.lessons.length) {
+      setLessonIdx((idx) => idx + 1);
+    } else {
+      setMode('quiz');
+    }
+  }, [lesson?.id, handleLessonCompleted, section, lessonIdx]);
+
+  const handlePrev = useCallback(() => {
+    setLessonIdx((idx) => (idx > 0 ? idx - 1 : 0));
+  }, []);
+
+  const handleJumpTo = useCallback(
+    (idx: number) => {
+      if (section && idx >= 0 && idx < section.lessons.length) {
+        setLessonIdx(idx);
+      }
+    },
+    [section]
+  );
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
@@ -276,27 +329,6 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       </div>
     );
   }
-
-  const handleQuizFinish = useCallback(
-    (ok: number, total: number) => {
-      setQuizScore({ ok, total });
-      setMode('done');
-      const accuracy = Math.round((ok / Math.max(1, total)) * 100);
-      if (accuracy >= 70) {
-        completeSectionNode(sectionRef, ok === total ? 3 : 2);
-        if (parsed) {
-          EvaluationService.completeSection(sectionRef, {
-            moduleId: parsed.moduleSlug,
-            courseId,
-            accuracyPercentage: accuracy,
-          }).catch((err) => {
-            console.warn('Sync quiz section completion offline fallback:', err?.message);
-          });
-        }
-      }
-    },
-    [completeSectionNode, sectionRef, parsed, courseId]
-  );
 
   if (mode === 'quiz') {
     return (
@@ -355,38 +387,6 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       </div>
     );
   }
-
-  const lesson = section.lessons[lessonIdx] ?? null;
-
-  const handleCompleteCurrent = useCallback(() => {
-    if (lesson?.id) {
-      handleLessonCompleted(lesson.id);
-    }
-  }, [lesson?.id, handleLessonCompleted]);
-
-  const handleNext = useCallback(() => {
-    if (lesson?.id) {
-      handleLessonCompleted(lesson.id);
-    }
-    if (section && lessonIdx + 1 < section.lessons.length) {
-      setLessonIdx((idx) => idx + 1);
-    } else {
-      setMode('quiz');
-    }
-  }, [lesson?.id, handleLessonCompleted, section, lessonIdx]);
-
-  const handlePrev = useCallback(() => {
-    setLessonIdx((idx) => (idx > 0 ? idx - 1 : 0));
-  }, []);
-
-  const handleJumpTo = useCallback(
-    (idx: number) => {
-      if (section && idx >= 0 && idx < section.lessons.length) {
-        setLessonIdx(idx);
-      }
-    },
-    [section]
-  );
 
   return (
     <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">

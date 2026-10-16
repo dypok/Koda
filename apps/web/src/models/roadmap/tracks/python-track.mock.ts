@@ -11,10 +11,10 @@ const NODES: GraphNode[] = [
     y: 310,
     variant: 'active',
     iconType: 'brackets',
-    stars: 8,
+    stars: 0,
     maxStars: 30,
     xp: 300,
-    statusText: 'ACTIVO • EN PROGRESO',
+    statusText: 'DISPONIBLE • EN PROGRESO',
     targetCourseId: 'python-1',
     isUnlocked: true,
   },
@@ -140,7 +140,7 @@ const NODES: GraphNode[] = [
 
 const CONNECTIONS: GraphConnection[] = [
   // Tronco Común
-  { id: 'c-py-1-to-2', fromId: 'py-level-1', toId: 'py-level-2', color: '#38BDF8', path: 'M 120 310 C 180 310, 230 310, 290 310' },
+  { id: 'c-py-1-to-2', fromId: 'py-level-1', toId: 'py-level-2', color: '#38BDF8', path: 'M 120 310 C 180 310, 230 310, 290 310', isDashed: true },
   { id: 'c-py-2-to-3', fromId: 'py-level-2', toId: 'py-level-3', color: '#06B6D4', path: 'M 290 310 C 350 310, 410 310, 470 310', isDashed: true },
 
   // Bifurcación en 4 ramas paralelas desde Python 3
@@ -158,7 +158,7 @@ const CONNECTIONS: GraphConnection[] = [
 
 export const PYTHON_COURSES_DATASET: GraphDataset = {
   sectorTitle: 'PYTHON SPECIALIST: DE FUNDAMENTOS A AGENTES AUTÓNOMOS',
-  progressPercent: 20,
+  progressPercent: 0,
   nodes: NODES,
   connections: CONNECTIONS,
 };
