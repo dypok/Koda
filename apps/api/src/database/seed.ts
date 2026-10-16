@@ -1,5 +1,5 @@
 /**
- * Script de siembra de contenido curricular en MongoDB para Koda 🦊.
+ * Script de siembra de contenido curricular en MongoDB para Koda.
  *
  * Uso: pnpm --filter api db:seed
  *
@@ -179,13 +179,13 @@ function processJsonFile(filePath: string, catalog: SeedCatalog): void {
       }
     }
   } catch (err: any) {
-    console.warn(`⚠️ [Koda Seeder] No se pudo parsear el archivo ${filePath}: ${err.message}`);
+    console.warn(`[Koda Seeder] No se pudo parsear el archivo ${filePath}: ${err.message}`);
   }
 }
 
 async function seed(): Promise<void> {
   const uri = process.env.MONGODB_URI || 'mongodb://localhost:27017/koda';
-  console.log(`🦊 [Koda MongoDB Seeder] Conectando a MongoDB en ${uri}...`);
+  console.log(`[Koda MongoDB Seeder] Conectando a MongoDB en ${uri}...`);
   await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
 
   const VisualEffectModel = mongoose.model(VisualEffect.name, VisualEffectSchema);
@@ -209,15 +209,15 @@ async function seed(): Promise<void> {
   const contentDir = resolveContentDir();
 
   if (contentDir) {
-    console.log(`📂 [Koda Seeder] Escaneando directorio de contenido: ${contentDir}`);
+    console.log(`[Koda Seeder] Escaneando directorio de contenido: ${contentDir}`);
     const files = scanJsonFiles(contentDir);
-    console.log(`📄 [Koda Seeder] Se encontraron ${files.length} archivos JSON para procesar.`);
+    console.log(`[Koda Seeder] Se encontraron ${files.length} archivos JSON para procesar.`);
 
     for (const file of files) {
       processJsonFile(file, catalog);
     }
   } else {
-    console.warn('⚠️ [Koda Seeder] No se localizó la carpeta `content/`. Usando semillas estáticas integradas.');
+    console.warn('[Koda Seeder] No se localizo la carpeta content/. Usando semillas estaticas integradas.');
   }
 
   // Fallback si alguna colección quedó vacía
@@ -244,43 +244,43 @@ async function seed(): Promise<void> {
   }
 
   // 1. Efectos visuales de aristas GPU
-  console.log(`✨ Sembrando ${catalog.visual_effects.size} efectos visuales...`);
+  console.log(`[Koda Seeder] Sembrando ${catalog.visual_effects.size} efectos visuales...`);
   for (const effect of catalog.visual_effects.values()) {
     await VisualEffectModel.updateOne({ code: effect.code }, { $set: effect }, { upsert: true });
   }
 
   // 2. Pistas profesionales (Tracks)
-  console.log(`🗺️ Sembrando ${catalog.tracks.size} pistas profesionales (tracks)...`);
+  console.log(`[Koda Seeder] Sembrando ${catalog.tracks.size} pistas profesionales (tracks)...`);
   for (const track of catalog.tracks.values()) {
     await TrackModel.updateOne({ slug: track.slug }, { $set: track }, { upsert: true });
   }
 
   // 3. Cursos del Grafo DAG
-  console.log(`📚 Sembrando ${catalog.courses.size} cursos en grafo DAG...`);
+  console.log(`[Koda Seeder] Sembrando ${catalog.courses.size} cursos en grafo DAG...`);
   for (const course of catalog.courses.values()) {
     await CourseModel.updateOne({ slug: course.slug }, { $set: course }, { upsert: true });
   }
 
   // 4. Módulos canónicos
-  console.log(`📦 Sembrando ${catalog.modules.size} módulos...`);
+  console.log(`[Koda Seeder] Sembrando ${catalog.modules.size} modulos...`);
   for (const mod of catalog.modules.values()) {
     await ModuleModel.updateOne({ slug: mod.slug }, { $set: mod }, { upsert: true });
   }
 
   // 5. Secciones secuenciales
-  console.log(`📑 Sembrando ${catalog.sections.size} secciones...`);
+  console.log(`[Koda Seeder] Sembrando ${catalog.sections.size} secciones...`);
   for (const section of catalog.sections.values()) {
     await SectionModel.updateOne({ slug: section.slug }, { $set: section }, { upsert: true });
   }
 
   // 6. Micro-lecciones con la Tríada Evaluativa
-  console.log(`🧩 Sembrando ${catalog.lessons.size} micro-lecciones con Tríada Evaluativa...`);
+  console.log(`[Koda Seeder] Sembrando ${catalog.lessons.size} micro-lecciones con Triada Evaluativa...`);
   for (const lesson of catalog.lessons.values()) {
     await LessonModel.updateOne({ slug: lesson.slug }, { $set: lesson }, { upsert: true });
   }
 
   // 7. Bancos de preguntas diagnósticas y de examen
-  console.log(`🧠 Sembrando ${catalog.question_banks.size} bancos de reactivos evaluativos...`);
+  console.log(`[Koda Seeder] Sembrando ${catalog.question_banks.size} bancos de reactivos evaluativos...`);
   for (const bank of catalog.question_banks.values()) {
     await QuestionBankModel.updateOne(
       { module_slug: bank.module_slug, difficulty: bank.difficulty },
@@ -289,7 +289,7 @@ async function seed(): Promise<void> {
     );
   }
 
-  console.log('🎉 [Koda MongoDB Seeder] ¡Siembra curricular completada exitosamente desde content/ hacia MongoDB!');
+  console.log('[Koda MongoDB Seeder] Siembra curricular completada exitosamente desde content/ hacia MongoDB.');
   await mongoose.disconnect();
 }
 

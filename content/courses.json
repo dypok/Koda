@@ -67,10 +67,16 @@
         "edge_color": "#8B5CF6"
       },
       {
-        "target_course_slug": "data-analytics",
+        "target_course_slug": "django-enterprise",
         "connection_type": "unlocks",
         "visual_effect_code": "laser_flow_fast",
         "edge_color": "#10B981"
+      },
+      {
+        "target_course_slug": "data-analytics",
+        "connection_type": "unlocks",
+        "visual_effect_code": "laser_flow_fast",
+        "edge_color": "#06B6D4"
       },
       {
         "target_course_slug": "ai-agents",
@@ -90,18 +96,12 @@
     "icon": "IconServer",
     "topology": {
       "tier": 3,
-      "lane": -1
+      "lane": -2
     },
     "prerequisites": [
       "python-3"
     ],
     "edges": [
-      {
-        "target_course_slug": "django-enterprise",
-        "connection_type": "unlocks",
-        "visual_effect_code": "energy_beam_solid",
-        "edge_color": "#8B5CF6"
-      },
       {
         "target_course_slug": "python-apex",
         "connection_type": "unlocks",
@@ -119,11 +119,11 @@
     "color": "#10B981",
     "icon": "IconServer",
     "topology": {
-      "tier": 4,
+      "tier": 3,
       "lane": -1
     },
     "prerequisites": [
-      "fastapi-async"
+      "python-3"
     ],
     "edges": [
       {
@@ -144,7 +144,7 @@
     "icon": "IconChartBar",
     "topology": {
       "tier": 3,
-      "lane": 0
+      "lane": 1
     },
     "prerequisites": [
       "python-3"
@@ -168,7 +168,7 @@
     "icon": "IconRobot",
     "topology": {
       "tier": 3,
-      "lane": 1
+      "lane": 2
     },
     "prerequisites": [
       "python-3"
@@ -191,7 +191,7 @@
     "color": "#F43F5E",
     "icon": "terminal",
     "topology": {
-      "tier": 5,
+      "tier": 4,
       "lane": 0
     },
     "prerequisites": [
