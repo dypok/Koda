@@ -1,0 +1,146 @@
+{
+  "id": "py1_mod_08",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY1_M08",
+  "slug": "listas-y-tuplas",
+  "course_slug": "python-1",
+  "title": "Colecciones Fundamentales: Listas y Tuplas",
+  "objective": "Dominar la mutabilidad, indexación 0-based, slicing y métodos de listas (append, pop, sort), junto con tuplas inmutables.",
+  "description": "Organiza múltiples datos en una sola estructura: colecciones ordenadas, mutabilidad vs inmutabilidad y desempaquetado de tuplas.",
+  "position": 8,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 2,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 220
+  },
+  "sections": [
+    {
+      "id": "sec_py1_08_01",
+      "code": "S01",
+      "title": "Listas Mutables y Slicing",
+      "slug": "listas-y-slicing",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 45,
+      "lessons": [
+        {
+          "id": "les_py1_08_01",
+          "code": "L01",
+          "title": "Listas: Creación, Indexación y Métodos Mutables",
+          "slug": "listas-metodos",
+          "position": 1,
+          "concept_id": "py-lists",
+          "objective": "Manipular listas ordenadas usando índices positivos, negativos y métodos nativos.",
+          "theory_markdown": "Una **lista** es una secuencia ordenada y **mutable** (modificable) de elementos entre corchetes `[ ]`.\n\n- **Indexación base 0**: El primer elemento es `lista[0]`.\n- **Índices negativos**: El último elemento es `lista[-1]`, el penúltimo es `lista[-2]`.\n- Métodos comunes:\n  - `.append(x)`: Agrega `x` al final.\n  - `.insert(i, x)`: Inserta `x` en el índice `i`.\n  - `.pop()`: Remueve y devuelve el último elemento.\n  - `.remove(x)`: Elimina la primera aparición del valor `x`.\n  - `.sort()`: Ordena la lista in-situ.",
+          "examples": [
+            {
+              "title": "Operaciones con listas",
+              "code": "lenguajes = [\"Python\", \"Rust\", \"Go\"]\nlenguajes.append(\"TypeScript\")\nprint(lenguajes)          # [\"Python\", \"Rust\", \"Go\", \"TypeScript\"]\nprint(\"Primero:\", lenguajes[0])\nprint(\"Último:\", lenguajes[-1])\nultimo = lenguajes.pop()\nprint(\"Removido:\", ultimo)",
+              "output": "['Python', 'Rust', 'Go', 'TypeScript']\nPrimero: Python\nÚltimo: TypeScript\nRemovido: TypeScript",
+              "explanation": "Las listas pueden crecer o reducirse dinámicamente en tiempo de ejecución."
+            }
+          ],
+          "common_errors": "Acceder a un índice que no existe (IndexError: list index out of range). Recuerda que una lista de 3 elementos tiene índices 0, 1 y 2.",
+          "mini_exercise": {
+            "starter_code": "nums = [10, 20, 30]\n# Agrega 40 al final y luego muestra el último elemento con índice negativo\nnums.append(...)\nprint(nums[...])",
+            "instructions": "Agrega 40 y accede con [-1] para imprimir 40.",
+            "solution": "nums = [10, 20, 30]\nnums.append(40)\nprint(nums[-1])"
+          },
+          "key_takeaways": [
+            "Las listas se declaran con corchetes []. Son mutables.",
+            "Los índices inician en 0; los índices negativos cuentan desde el final (-1).",
+            ".append() agrega al final; .pop() retira el último elemento."
+          ],
+          "exercise": {
+            "id": "ex_py1_08_01",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Qué devolverá lista[-1] si lista = [5, 10, 15, 20]?",
+            "options": [
+              {
+                "id": "a",
+                "text": "20"
+              },
+              {
+                "id": "b",
+                "text": "5"
+              },
+              {
+                "id": "c",
+                "text": "-1"
+              },
+              {
+                "id": "d",
+                "text": "IndexError"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El índice -1 siempre apunta al último elemento de la colección, en este caso 20."
+          }
+        },
+        {
+          "id": "les_py1_08_02",
+          "code": "L02",
+          "title": "Tuplas Inmutables y Desempaquetado (Unpacking)",
+          "slug": "tuplas-y-desempaquetado",
+          "position": 2,
+          "concept_id": "py-tuples",
+          "objective": "Diferenciar tuplas de listas y utilizar el desempaquetado simultáneo de variables.",
+          "theory_markdown": "Una **tupla** es una secuencia ordenada entre paréntesis `( )` pero **INMUTABLE**: una vez creada, no puedes agregar, borrar ni modificar sus elementos.\n\n¿Por qué existen las tuplas si las listas son más flexibles?\n1. **Seguridad e integridad**: Garantizan que datos fijos (como coordenadas `(lat, lon)` o colores RGB) no sean alterados por error.\n2. **Rendimiento**: Ocupan menos memoria y son más rápidas que las listas.\n\nEl **desempaquetado** permite extraer valores a variables individuales en una sola línea:\n`x, y = (10, 20)`.",
+          "examples": [
+            {
+              "title": "Tupla de coordenadas y desempaquetado",
+              "code": "punto = (19.4326, -99.1332)\nlatitud, longitud = punto\nprint(f\"Lat: {latitud}, Lon: {longitud}\")",
+              "output": "Lat: 19.4326, Lon: -99.1332",
+              "explanation": "Cada variable recibe su valor posicional correspondiente de la tupla."
+            }
+          ],
+          "common_errors": "Intentar modificar una tupla: `punto[0] = 20` lanza `TypeError: \"tuple\" object does not support item assignment`.",
+          "mini_exercise": {
+            "starter_code": "datos = (\"Alex\", 28)\n# Desempaqueta en nombre y edad\nnombre, edad = ...\nprint(f\"{nombre} tiene {edad} años\")",
+            "instructions": "Desempaqueta datos en nombre y edad.",
+            "solution": "datos = (\"Alex\", 28)\nnombre, edad = datos\nprint(f\"{nombre} tiene {edad} años\")"
+          },
+          "key_takeaways": [
+            "Las tuplas usan paréntesis () y son inmutables.",
+            "No permiten append, pop ni reasignación de índices.",
+            "El desempaquetado asigna múltiples variables a la vez: a, b = tupla."
+          ],
+          "exercise": {
+            "id": "ex_py1_08_02",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Cuál es la principal diferencia entre una lista y una tupla en Python?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Las listas son mutables (modificables) y las tuplas son inmutables"
+              },
+              {
+                "id": "b",
+                "text": "Las listas solo aceptan números y las tuplas solo textos"
+              },
+              {
+                "id": "c",
+                "text": "Las tuplas no permiten acceder a elementos por índice"
+              },
+              {
+                "id": "d",
+                "text": "Las listas no se pueden iterar con bucles for"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La mutabilidad es la diferencia fundamental: las listas pueden modificarse tras crearse; las tuplas permanecen congeladas."
+          }
+        }
+      ]
+    }
+  ]
+}

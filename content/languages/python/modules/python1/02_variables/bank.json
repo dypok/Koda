@@ -1,0 +1,104 @@
+{
+  "module_code": "PY1_M02",
+  "module_slug": "variables-y-tipos-de-datos",
+  "course_slug": "python-1",
+  "questions": [
+    {
+      "id": "q_py1_02_01",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es la salida de print(type(True))?",
+      "options": [
+        {
+          "id": "a",
+          "text": "<class 'bool'>"
+        },
+        {
+          "id": "b",
+          "text": "<class 'boolean'>"
+        },
+        {
+          "id": "c",
+          "text": "True"
+        },
+        {
+          "id": "d",
+          "text": "1"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "En Python, el tipo de datos booleano se representa formalmente con la clase bool."
+    },
+    {
+      "id": "q_py1_02_02",
+      "type": "find_error",
+      "difficulty": "medium",
+      "prompt": "¿Qué error producirá la siguiente línea de código?",
+      "prompt_code": "resultado = int(\"koda_fox\")",
+      "options": [
+        {
+          "id": "a",
+          "text": "ValueError: no se puede convertir un texto no numérico a entero"
+        },
+        {
+          "id": "b",
+          "text": "TypeError: la función int solo acepta flotantes"
+        },
+        {
+          "id": "c",
+          "text": "NameError: koda_fox no está definida"
+        },
+        {
+          "id": "d",
+          "text": "Ninguno, devuelve 0"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "int() solo puede convertir cadenas que contengan dígitos numéricos válidos en base 10. De lo contrario lanza ValueError."
+    },
+    {
+      "id": "q_py1_02_03",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Según las convenciones de estilo oficiales de Python (PEP 8), ¿cómo se deben nombrar las variables?",
+      "options": [
+        {
+          "id": "a",
+          "text": "En minúsculas con palabras separadas por guiones bajos (snake_case)"
+        },
+        {
+          "id": "b",
+          "text": "En mayúsculas compactas sin separación (UPPERCASE)"
+        },
+        {
+          "id": "c",
+          "text": "Iniciando cada palabra con mayúscula sin espacios (CamelCase)"
+        },
+        {
+          "id": "d",
+          "text": "Con el prefijo obligatorio var_ al inicio"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "PEP 8 estipula snake_case (por ejemplo: saldo_cuenta, total_puntos) para variables y funciones en Python."
+    },
+    {
+      "id": "q_py1_02_04",
+      "type": "true_false",
+      "difficulty": "easy",
+      "prompt": "En Python, la instrucción \"10\" + 5 funciona automáticamente convirtiendo el número 5 a texto.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Falso, Python tiene tipado fuerte y lanza TypeError si no se convierte explícitamente"
+        },
+        {
+          "id": "b",
+          "text": "Verdadero, Python convierte tipos de forma implícita como JavaScript"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Python es de tipado fuerte (strong typing); no realiza conversiones automáticas entre tipos incompatibles como str e int."
+    }
+  ]
+}

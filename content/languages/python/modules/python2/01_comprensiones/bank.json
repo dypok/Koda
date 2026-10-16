@@ -1,0 +1,33 @@
+{
+  "module_code": "PY2_M01",
+  "module_slug": "comprensiones",
+  "course_slug": "python-2",
+  "questions": [
+    {
+      "id": "q_py2_01_01",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué genera {x: x**2 for x in (1, 2, 3)}?",
+      "options": [
+        {
+          "id": "a",
+          "text": "{1: 1, 2: 4, 3: 9}"
+        },
+        {
+          "id": "b",
+          "text": "[1, 4, 9]"
+        },
+        {
+          "id": "c",
+          "text": "{1, 4, 9}"
+        },
+        {
+          "id": "d",
+          "text": "TypeError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Es una dict comprehension que crea un diccionario mapeando cada x a su cuadrado."
+    }
+  ]
+}

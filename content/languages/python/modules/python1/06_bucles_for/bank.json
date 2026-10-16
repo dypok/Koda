@@ -1,0 +1,59 @@
+{
+  "module_code": "PY1_M06",
+  "module_slug": "bucles-for",
+  "course_slug": "python-1",
+  "questions": [
+    {
+      "id": "q_py1_06_01",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué genera list(range(3, 7))?",
+      "options": [
+        {
+          "id": "a",
+          "text": "[3, 4, 5, 6]"
+        },
+        {
+          "id": "b",
+          "text": "[3, 4, 5, 6, 7]"
+        },
+        {
+          "id": "c",
+          "text": "[4, 5, 6, 7]"
+        },
+        {
+          "id": "d",
+          "text": "[3, 7]"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Inicia en 3 y termina antes del 7, produciendo los números 3, 4, 5 y 6."
+    },
+    {
+      "id": "q_py1_06_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué hace la instrucción continue dentro de un bucle for?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Salta el código restante de la iteración actual y pasa a la siguiente"
+        },
+        {
+          "id": "b",
+          "text": "Termina y rompe el bucle por completo"
+        },
+        {
+          "id": "c",
+          "text": "Reinicia el bucle desde el primer elemento"
+        },
+        {
+          "id": "d",
+          "text": "Pausa el programa durante 1 segundo"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "continue descarta el resto del bloque para el elemento actual y procede con el siguiente elemento."
+    }
+  ]
+}

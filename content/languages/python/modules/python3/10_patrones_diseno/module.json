@@ -1,0 +1,91 @@
+{
+  "id": "py3_mod_10",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY3_M10",
+  "slug": "patrones-de-diseno",
+  "course_slug": "python-3",
+  "title": "Patrones de Diseño en Python: Factory, Singleton y Strategy",
+  "objective": "Implementar patrones de diseño clásicos aprovechando las características dinámicas y funciones de primer orden de Python.",
+  "description": "Arquitectura de software madura: desacopla dependencias con Factory, maneja configuraciones con Singleton y aplica Strategy mediante funciones puras.",
+  "position": 30,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 400
+  },
+  "sections": [
+    {
+      "id": "sec_py3_09_01",
+      "code": "S01",
+      "title": "Patrones Idiomáticos en Python",
+      "slug": "patrones-idiomaticos",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_py3_10_01",
+          "code": "L01",
+          "title": "Factory y Strategy de Forma Pythónica",
+          "slug": "factory-strategy",
+          "position": 1,
+          "concept_id": "py3-design-patterns",
+          "objective": "Implementar patrones de diseño sin la sobreingeniería típica de lenguajes como Java o C++.",
+          "theory_markdown": "En lenguajes estrictos, implementar el patrón **Strategy** requiere crear interfaces formales y clases envoltorias. En Python, al ser las **funciones ciudadanos de primer orden**, el patrón Strategy se resuelve simplemente pasando una función como argumento.\n\nEl patrón **Factory** desacopla al consumidor de la clase concreta que se instancia, permitiendo crear objetos basados en parámetros o configuraciones.",
+          "examples": [
+            {
+              "title": "Patrón Factory desacoplado",
+              "code": "class NotificadorEmail:\n    def enviar(self, msg): return f\"Email: {msg}\"\n\nclass NotificadorSMS:\n    def enviar(self, msg): return f\"SMS: {msg}\"\n\ndef obtener_notificador(canal: str):\n    canales = {\"email\": NotificadorEmail, \"sms\": NotificadorSMS}\n    clase = canales.get(canal.lower())\n    if not clase:\n        raise ValueError(f\"Canal desconocido: {canal}\")\n    return clase()\n\nservicio = obtener_notificador(\"email\")\nprint(servicio.enviar(\"¡Bienvenido al nivel avanzado!\"))",
+              "output": "Email: ¡Bienvenido al nivel avanzado!",
+              "explanation": "La función Factory usa un diccionario de clases para instanciar dinámicamente sin un if/elif gigante."
+            }
+          ],
+          "common_errors": "Forzar patrones de diseño innecesarios para problemas simples (sobreingeniería). Los patrones resuelven problemas reales de acoplamiento y mantenimiento.",
+          "mini_exercise": {
+            "starter_code": "# Agrega soporte para el canal \"slack\" en el Factory\n# class NotificadorSlack: def enviar(self, m): return f\"Slack: {m}\"",
+            "instructions": "Observa cómo extender el factory solo requiere registrar la nueva clase.",
+            "solution": "class NotificadorSlack:\n    def enviar(self, m): return f\"Slack: {m}\""
+          },
+          "key_takeaways": [
+            "En Python, las funciones como objetos de primer orden simplifican Strategy.",
+            "Factory centraliza la creación de objetos desacoplando clientes.",
+            "Un módulo de Python es naturalmente un Singleton."
+          ],
+          "exercise": {
+            "id": "ex_py3_10_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Por qué en Python el patrón de diseño Singleton a menudo se resuelve simplemente creando un módulo (.py)?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque Python cachea los módulos en sys.modules y nunca los re-ejecuta al volver a importarlos"
+              },
+              {
+                "id": "b",
+                "text": "Porque los módulos no pueden contener clases"
+              },
+              {
+                "id": "c",
+                "text": "Porque los módulos se ejecutan en memoria GPU"
+              },
+              {
+                "id": "d",
+                "text": "Porque el Singleton está prohibido en Python"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Un módulo importado se carga una sola vez en memoria y se comparte en toda la aplicación, funcionando como un Singleton natural."
+          }
+        }
+      ]
+    }
+  ]
+}

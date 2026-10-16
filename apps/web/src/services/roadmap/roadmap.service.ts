@@ -1,7 +1,6 @@
 import { GraphDataset } from '@/models/roadmap/roadmap-graph.types';
 import { PYTHON_COURSES_DATASET } from '@/models/roadmap/python-courses-graph.mock';
-import { PYTHON_BASIC_LESSONS_DATASET } from '@/models/roadmap/python-lessons-graph.mock';
-import { LUA_LESSONS } from '@/models/roadmap/tracks/lua-lessons-graph.mock';
+import { PYTHON_BASIC_LESSONS_DATASET, getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
 
 const RAW_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
 // Evita duplicar `/api/v1` cuando el env ya lo incluye.
@@ -26,10 +25,6 @@ export class RoadmapService {
   }
 
   public static async getCourseLessonsGraph(courseId: string): Promise<GraphDataset> {
-    // Contenido Lua real generado en build-time: primero lo local.
-    if (courseId.startsWith('lua-') && LUA_LESSONS[courseId]) {
-      return LUA_LESSONS[courseId];
-    }
     try {
       const res = await fetch(`${API_BASE_URL}/roadmap/courses/${courseId}/lessons`, {
         headers: { 'Content-Type': 'application/json' },
@@ -37,10 +32,10 @@ export class RoadmapService {
       });
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       const data = await res.json();
-      return data?.dataset || PYTHON_BASIC_LESSONS_DATASET;
+      return data?.dataset || getLessonsDatasetForCourse(courseId);
     } catch {
       // Graceful offline-first fallback to canonical seed
-      return PYTHON_BASIC_LESSONS_DATASET;
+      return getLessonsDatasetForCourse(courseId);
     }
   }
 

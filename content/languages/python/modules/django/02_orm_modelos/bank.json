@@ -1,0 +1,33 @@
+{
+  "module_code": "DJ_M02",
+  "module_slug": "django-orm-models",
+  "course_slug": "django-enterprise",
+  "questions": [
+    {
+      "id": "q_dj_02_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué tipo de campo de Django ORM se utiliza para modelar una relación 1 a N (por ejemplo: Un Autor tiene muchos Libros)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "models.ForeignKey(..., on_delete=models.CASCADE)"
+        },
+        {
+          "id": "b",
+          "text": "models.ManyToManyField()"
+        },
+        {
+          "id": "c",
+          "text": "models.OneToOneField()"
+        },
+        {
+          "id": "d",
+          "text": "models.ArrayField()"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "ForeignKey crea una clave foránea en la tabla, estableciendo una relación 1 a muchos."
+    }
+  ]
+}

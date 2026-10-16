@@ -1,0 +1,148 @@
+{
+  "id": "py1_mod_04",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY1_M04",
+  "slug": "entrada-salida-y-strings",
+  "course_slug": "python-1",
+  "title": "Entrada/Salida y Manipulación de Strings",
+  "objective": "Capturar datos del usuario con input(), formatear cadenas con f-strings modernas y manipular texto con len(), strip(), lower() y upper().",
+  "description": "Haz que tus programas interactúen con personas reales: lee datos del teclado, sanea entradas de texto y muestra reportes visualmente atractivos.",
+  "position": 4,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 2,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 180
+  },
+  "sections": [
+    {
+      "id": "sec_py1_04_01",
+      "code": "S01",
+      "title": "Interacción con input() y F-Strings",
+      "slug": "input-y-fstrings",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 15,
+      "xp_on_complete": 35,
+      "lessons": [
+        {
+          "id": "les_py1_04_01",
+          "code": "L01",
+          "title": "Lectura Dinámica con input() y f-strings",
+          "slug": "input-y-fstrings-base",
+          "position": 1,
+          "concept_id": "py-input-fstrings",
+          "objective": "Capturar texto desde la consola y embeber variables de forma limpia usando f-strings (formatted string literals).",
+          "theory_markdown": "La función `input(\"Mensaje: \")` pausa la ejecución del programa y espera a que el usuario escriba algo en el teclado y presione Enter.\n\n> **¡Regla de oro de input()!** Todo lo que devuelve `input()` es SIEMPRE un string (`str`). Si el usuario escribe `25`, recibirás `\"25\"`. Si necesitas operar matemáticamente, debes envolverlo con `int()` o `float()`: `edad = int(input(\"Edad: \"))`.\n\nPara mostrar variables dentro de textos sin concatenaciones engorrosas con signos `+`, Python 3 introdujo las **f-strings**:\n```python\nnombre = \"Koda\"\nxp = 1500\nprint(f\"Agente {nombre} acumula {xp} XP.\")\n```",
+          "examples": [
+            {
+              "title": "Formateo elegante con f-strings",
+              "code": "usuario = \"Elena\"\nhoras = 3\ntasa = 25.50\ntotal = horas * tasa\nprint(f\"Factura para {usuario}: total de ${total:.2f}\")",
+              "output": "Factura para Elena: total de $76.50",
+              "explanation": "El modificador :.2f redondea el flotante a 2 decimales automáticamente."
+            }
+          ],
+          "common_errors": "Olvidar la letra f al inicio de la cadena: `\"Hola {nombre}\"` se imprimirá literalmente como texto sin reemplazar la variable.",
+          "mini_exercise": {
+            "starter_code": "lenguaje = \"Python\"\nversion = 3.12\n# Genera un f-string que diga \"Aprendiendo Python 3.12\"\nmensaje = ...\nprint(mensaje)",
+            "instructions": "Usa f-strings para interpolar lenguaje y version.",
+            "solution": "lenguaje = \"Python\"\nversion = 3.12\nmensaje = f\"Aprendiendo {lenguaje} {version}\"\nprint(mensaje)"
+          },
+          "key_takeaways": [
+            "input() siempre retorna un string; requiere casting para operaciones numéricas.",
+            "Las f-strings inician con f antes de las comillas: f\"Hola {variable}\".",
+            "Permiten formatear números con modificadores como :.2f."
+          ],
+          "exercise": {
+            "id": "ex_py1_04_01",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "Si el usuario introduce el número 10 cuando se ejecuta este código, ¿qué se imprimirá?",
+            "prompt_code": "# Supón que el usuario teclea 10\n# n = input(\"Ingresa número: \")\nn = \"10\"\nprint(n * 2)",
+            "options": [
+              {
+                "id": "a",
+                "text": "1010"
+              },
+              {
+                "id": "b",
+                "text": "20"
+              },
+              {
+                "id": "c",
+                "text": "TypeError"
+              },
+              {
+                "id": "d",
+                "text": "10"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "input() retorna el string \"10\". En Python, multiplicar un string por un entero (\"10\" * 2) repite el texto dos veces produciendo \"1010\"."
+          }
+        },
+        {
+          "id": "les_py1_04_02",
+          "code": "L02",
+          "title": "Métodos Esenciales de Strings: strip, lower, upper y len",
+          "slug": "metodos-de-strings",
+          "position": 2,
+          "concept_id": "py-string-methods",
+          "objective": "Limpiar y transformar textos usando los métodos nativos más frecuentes.",
+          "theory_markdown": "En programación real, los usuarios suelen escribir espacios accidentales o mayúsculas desordenadas (por ejemplo: `\"  admin@koda.com  \"`).\n\nLos strings en Python son **inmutables** (no cambian en memoria; sus métodos retornan una nueva cadena con el cambio aplicado):\n- `.strip()`: Elimina espacios en blanco al inicio y al final.\n- `.lower()`: Convierte todo el texto a minúsculas.\n- `.upper()`: Convierte todo el texto a mayúsculas.\n- `.replace(\"antiguo\", \"nuevo\")`: Reemplaza ocurrencias.\n- `len(texto)`: Función que devuelve la cantidad de caracteres de la cadena.",
+          "examples": [
+            {
+              "title": "Normalización de correo de usuario",
+              "code": "correo_sucio = \"   USUARIO@KodaAcademy.COM  \\n\"\ncorreo_limpio = correo_sucio.strip().lower()\nprint(correo_limpio)\nprint(\"Caracteres:\", len(correo_limpio))",
+              "output": "usuario@kodaacademy.com\nCaracteres: 23",
+              "explanation": "Encadenamos .strip() y .lower() para sanitizar la entrada de datos en una sola línea limpia."
+            }
+          ],
+          "common_errors": "Pensar que `texto.upper()` modifica la variable original. Al ser inmutables, debes reasignar: `texto = texto.upper()`.",
+          "mini_exercise": {
+            "starter_code": "codigo = \"  py-level-1  \"\n# Límpialo con strip() y conviértelo a mayúsculas\ncodigo_final = ...\nprint(codigo_final)",
+            "instructions": "Aplica .strip() y .upper() para obtener \"PY-LEVEL-1\".",
+            "solution": "codigo = \"  py-level-1  \"\ncodigo_final = codigo.strip().upper()\nprint(codigo_final)"
+          },
+          "key_takeaways": [
+            "Los strings son inmutables en Python.",
+            ".strip() remueve espacios y saltos de línea sobrantes en los extremos.",
+            ".lower() y .upper() normalizan el texto para comparaciones seguras.",
+            "len(s) retorna la longitud total de la cadena."
+          ],
+          "exercise": {
+            "id": "ex_py1_04_02",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Cuál es la salida de print(len(\"Python\".lower()))?",
+            "options": [
+              {
+                "id": "a",
+                "text": "6"
+              },
+              {
+                "id": "b",
+                "text": "5"
+              },
+              {
+                "id": "c",
+                "text": "'python'"
+              },
+              {
+                "id": "d",
+                "text": "Error"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "\"Python\".lower() produce \"python\", y len(\"python\") cuenta exactamente 6 caracteres."
+          }
+        }
+      ]
+    }
+  ]
+}
