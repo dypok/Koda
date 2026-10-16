@@ -99,29 +99,78 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
   }, [activeIndex, goTo, activeNode, onDeploy]);
 
   // Arrastre para paneo (el zoom vive en el store y lo consume el grafo Pixi).
-  const dragRef = useRef<{ px: number; py: number; ox: number; oy: number } | null>(null);
+  const dragRef = useRef<{ px: number; py: number; ox: number; oy: number; isPanning: boolean } | null>(null);
+
+  // Fallback global de seguridad: si el usuario suelta el click fuera del canvas o la ventana pierde foco, cancelar arrastre
+  useEffect(() => {
+    const cancelDrag = () => {
+      dragRef.current = null;
+    };
+    window.addEventListener('pointerup', cancelDrag);
+    window.addEventListener('pointercancel', cancelDrag);
+    window.addEventListener('blur', cancelDrag);
+    return () => {
+      window.removeEventListener('pointerup', cancelDrag);
+      window.removeEventListener('pointercancel', cancelDrag);
+      window.removeEventListener('blur', cancelDrag);
+    };
+  }, []);
+
   const handlePointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (e.button !== 0) return;
     const target = e.target as HTMLElement | null;
-    if (target?.closest('button, a, [role="button"]')) return;
+    if (target?.closest('button, a, [role="button"], .no-drag')) return;
     const { panOffset } = useRoadmapStore.getState();
-    dragRef.current = { px: e.clientX, py: e.clientY, ox: panOffset.x, oy: panOffset.y };
+    dragRef.current = { px: e.clientX, py: e.clientY, ox: panOffset.x, oy: panOffset.y, isPanning: false };
   }, []);
+
   const handlePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       const start = dragRef.current;
       if (!start) return;
+
+      // Si no hay botones del ratón presionados, cancelar arrastre residual
+      if (e.buttons === 0) {
+        dragRef.current = null;
+        try {
+          if ((e.currentTarget as HTMLElement).hasPointerCapture(e.pointerId)) {
+            (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+          }
+        } catch {}
+        return;
+      }
+
+      const dx = e.clientX - start.px;
+      const dy = e.clientY - start.py;
+
+      // Umbral mínimo de 5px para no interferir con clicks sobre nodos de Pixi
+      if (!start.isPanning) {
+        if (Math.hypot(dx, dy) < 5) return;
+        start.isPanning = true;
+        try {
+          if (!(e.currentTarget as HTMLElement).hasPointerCapture(e.pointerId)) {
+            (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+          }
+        } catch {}
+      }
+
       const { zoomLevel } = useRoadmapStore.getState();
       const scale = zoomLevel / 100;
       const boundX = 550 * scale;
       const boundY = 380 * scale;
-      const x = Math.max(-boundX, Math.min(boundX, start.ox + (e.clientX - start.px)));
-      const y = Math.max(-boundY, Math.min(boundY, start.oy + (e.clientY - start.py)));
+      const x = Math.max(-boundX, Math.min(boundX, start.ox + dx));
+      const y = Math.max(-boundY, Math.min(boundY, start.oy + dy));
       setPanOffset({ x, y });
     },
     [setPanOffset]
   );
-  const handlePointerUp = useCallback(() => {
+
+  const handlePointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    try {
+      if ((e.currentTarget as HTMLElement).hasPointerCapture(e.pointerId)) {
+        (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+      }
+    } catch {}
     dragRef.current = null;
   }, []);
 
@@ -177,8 +226,10 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
 
       {activeNode && (
         <aside
+          onPointerDown={(e) => e.stopPropagation()}
+          onPointerUp={(e) => e.stopPropagation()}
           className={cn(
-            'absolute right-4 sm:right-6 top-20 z-20 w-80 sm:w-96 max-w-[calc(100%-2rem)] max-h-[calc(100%-6.5rem)] overflow-y-auto rounded-2xl border bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col gap-4 shadow-2xl transition-all duration-300',
+            'absolute right-4 sm:right-6 top-20 z-20 w-80 sm:w-96 max-w-[calc(100%-2rem)] max-h-[calc(100%-6.5rem)] overflow-y-auto rounded-2xl border bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col gap-4 shadow-2xl transition-all duration-300 no-drag',
             showPanel ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'
           )}
           style={{ borderColor: isBoss ? 'rgba(244,63,94,0.5)' : 'rgba(255,106,0,0.35)' }}
@@ -267,15 +318,21 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
       {!showPanel && (
         <button
           type="button"
+          onPointerDown={(e) => e.stopPropagation()}
+          onPointerUp={(e) => e.stopPropagation()}
           onClick={() => setShowPanel(true)}
           aria-label="Mostrar detalle"
-          className="absolute right-4 top-20 z-20 p-2.5 rounded-xl border border-slate-700/50 bg-slate-900/40 backdrop-blur-xl text-slate-300 hover:text-orange-400 hover:border-orange-500/50 shadow-xl transition-colors cursor-pointer"
+          className="absolute right-4 top-20 z-20 p-2.5 rounded-xl border border-slate-700/50 bg-slate-900/40 backdrop-blur-xl text-slate-300 hover:text-orange-400 hover:border-orange-500/50 shadow-xl transition-colors cursor-pointer no-drag"
         >
           <Sidebar className="w-4 h-4" />
         </button>
       )}
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-2xl border border-slate-700/50 bg-slate-900/40 backdrop-blur-xl shadow-2xl">
+      <div
+        onPointerDown={(e) => e.stopPropagation()}
+        onPointerUp={(e) => e.stopPropagation()}
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-2xl border border-slate-700/50 bg-slate-900/40 backdrop-blur-xl shadow-2xl no-drag"
+      >
         <div className="flex items-center gap-3">
           <span className="font-mono text-xs font-bold tabular-nums text-orange-400">
             0{activeIndex + 1} / 0{nodes.length}

@@ -24,7 +24,7 @@ export const RoadmapProfilePill: React.FC = () => {
   const [settingsTab, setSettingsTab] = useState<SettingsTab>('profile');
   const [imgError, setImgError] = useState(false);
 
-  const triggerRef = useRef<HTMLButtonElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const rawAvatar = user?.avatarUrl;
   const avatarSrc = (!rawAvatar || rawAvatar.includes('koda-mascot-cartoon-2d'))
@@ -34,6 +34,29 @@ export const RoadmapProfilePill: React.FC = () => {
   useEffect(() => {
     setImgError(false);
   }, [avatarSrc]);
+
+  // Cerrar al hacer clic fuera del contenedor (que engloba el botón y el menú)
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const handleOutsideClick = (e: MouseEvent | TouchEvent) => {
+      const target = e.target as Node;
+      if (containerRef.current && !containerRef.current.contains(target)) {
+        setDropdownOpen(false);
+      }
+    };
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setDropdownOpen(false);
+    };
+
+    document.addEventListener('click', handleOutsideClick);
+    document.addEventListener('touchstart', handleOutsideClick);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+      document.removeEventListener('touchstart', handleOutsideClick);
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [dropdownOpen]);
 
   const level = user?.level || 1;
   const initials = user?.fullName
@@ -59,12 +82,14 @@ export const RoadmapProfilePill: React.FC = () => {
 
   return (
     <>
-      <div className="absolute right-4 top-4 z-40">
+      <div ref={containerRef} className="absolute right-4 top-4 z-40">
         {/* Trigger de la Píldora de Perfil */}
         <button
-          ref={triggerRef}
           type="button"
-          onClick={() => setDropdownOpen((prev) => !prev)}
+          onClick={(e) => {
+            e.stopPropagation();
+            setDropdownOpen((prev) => !prev);
+          }}
           aria-expanded={dropdownOpen}
           aria-label="Menú de perfil y configuración"
           style={
@@ -132,7 +157,6 @@ export const RoadmapProfilePill: React.FC = () => {
           user={user}
           onOpenSettings={handleOpenSettings}
           onLogout={handleLogout}
-          triggerRef={triggerRef}
         />
       </div>
 

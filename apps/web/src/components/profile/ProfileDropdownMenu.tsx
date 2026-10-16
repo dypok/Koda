@@ -21,7 +21,6 @@ interface ProfileDropdownMenuProps {
   user: AuthUser | null;
   onOpenSettings: (tab: SettingsTab) => void;
   onLogout: () => void;
-  triggerRef?: React.RefObject<HTMLElement | null>;
 }
 
 export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
@@ -30,7 +29,6 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
   user,
   onOpenSettings,
   onLogout,
-  triggerRef,
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const { accentTheme } = useAppearanceStore();
@@ -46,29 +44,18 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
     setImgError(false);
   }, [avatarSrc]);
 
-  // Cerrar al hacer click afuera (ignorando clicks sobre el botón trigger para evitar loops de toggle)
+  // Cerrar al pulsar Escape
   useEffect(() => {
     if (!isOpen) return;
-    const handleClickOutside = (e: MouseEvent) => {
-      const target = e.target as Node;
-      if (triggerRef?.current && triggerRef.current.contains(target)) {
-        return;
-      }
-      if (menuRef.current && !menuRef.current.contains(target)) {
-        onClose();
-      }
-    };
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
     document.addEventListener('keydown', handleKeyDown);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, onClose, triggerRef]);
+  }, [isOpen, onClose]);
 
   const initials = user?.fullName
     ? user.fullName
@@ -84,6 +71,7 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
       {isOpen && (
         <motion.div
           ref={menuRef}
+          onClick={(e) => e.stopPropagation()}
           initial={{ opacity: 0, y: -8, scale: 0.96 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: -8, scale: 0.96 }}
