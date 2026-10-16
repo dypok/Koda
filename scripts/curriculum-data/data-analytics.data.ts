@@ -851,7 +851,7 @@ export const DATA_ANALYTICS_MODULES: RawModule[] = [
             examples: [
               {
                 title: 'Estructura canónica de un dashboard Streamlit',
-                code: 'import streamlit as st\nimport pandas as pd\nimport plotly.express as px\n\nst.title("🦊 Koda Analytics Hub")\nst.sidebar.header("Filtros")\n\ndf = pd.DataFrame({\n    "categoria": ["AI", "Web", "Cloud", "AI"],\n    "ventas": [120, 90, 80, 150]\n})\n\ncat = st.sidebar.selectbox("Filtrar por categoría", ["Todas"] + list(df["categoria"].unique()))\nif cat != "Todas":\n    df = df[df["categoria"] == cat]\n\nst.metric(label="Total Ventas", value=f"${df[\'ventas\'].sum():,}")\nst.dataframe(df)',
+                code: 'import streamlit as st\nimport pandas as pd\nimport plotly.express as px\n\nst.title("Koda Analytics Hub")\nst.sidebar.header("Filtros")\n\ndf = pd.DataFrame({\n    "categoria": ["AI", "Web", "Cloud", "AI"],\n    "ventas": [120, 90, 80, 150]\n})\n\ncat = st.sidebar.selectbox("Filtrar por categoría", ["Todas"] + list(df["categoria"].unique()))\nif cat != "Todas":\n    df = df[df["categoria"] == cat]\n\nst.metric(label="Total Ventas", value=f"${df[\'ventas\'].sum():,}")\nst.dataframe(df)',
                 output: 'Dashboard interactivo servido en http://localhost:8501',
                 explanation: 'Streamlit convierte código de análisis Python en una interfaz web elegante y reactiva.'
               }

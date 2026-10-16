@@ -9,7 +9,7 @@ export class AppController {
   @ApiResponse({ status: 200, description: 'API operativa' })
   getRoot() {
     return {
-      name: 'Koda Backend API 🦊',
+      name: 'Koda Backend API',
       description: 'API REST v2.0 para la plataforma de aprendizaje gamificado Koda',
       version: '2.0.0',
       status: 'online',

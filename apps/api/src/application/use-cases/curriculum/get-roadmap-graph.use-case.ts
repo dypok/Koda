@@ -188,7 +188,7 @@ export class GetRoadmapGraphUseCase {
           statusText: 'EN PROGRESO • +200 XP', isUnlocked: true,
         },
         {
-          id: 'py-boss-logic', code: '🛡️', label: 'GUARDIÁN DE LA LÓGICA', subtitle: 'MINI-BOSS: QUIZ MÓDULOS 1-4',
+          id: 'py-boss-logic', code: 'MB', label: 'GUARDIÁN DE LA LÓGICA', subtitle: 'MINI-BOSS: QUIZ MÓDULOS 1-4',
           x: 690, y: 350, variant: 'branch', iconType: 'code', xp: 250,
           statusText: 'MINI-BOSS • REQUIERE M04', isUnlocked: false,
         },

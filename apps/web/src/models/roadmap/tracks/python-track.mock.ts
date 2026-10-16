@@ -51,14 +51,15 @@ const NODES: GraphNode[] = [
     isUnlocked: false,
   },
 
-  // Rama A: Backend (FastAPI + Django)
+  // 4 Ramas Paralelas de Especialización (después de Python 3)
+  // 1. FastAPI
   {
     id: 'py-fastapi',
-    code: 'A1',
+    code: '04',
     label: 'BACKEND: FASTAPI',
     subtitle: 'APIS ASYNC, PYDANTIC & DOCKER',
-    x: 650,
-    y: 140,
+    x: 740,
+    y: 110,
     variant: 'branch',
     iconType: 'server',
     stars: 0,
@@ -68,31 +69,31 @@ const NODES: GraphNode[] = [
     targetCourseId: 'fastapi-async',
     isUnlocked: false,
   },
+  // 2. Django
   {
     id: 'py-django',
-    code: 'A2',
+    code: '05',
     label: 'BACKEND: DJANGO',
     subtitle: 'MVT, ORM, DRF & SEGURIDAD',
-    x: 830,
-    y: 140,
+    x: 740,
+    y: 240,
     variant: 'branch',
     iconType: 'server',
     stars: 0,
     maxStars: 15,
     xp: 350,
-    statusText: 'RQ FASTAPI',
+    statusText: 'RQ PYTHON 3',
     targetCourseId: 'django-enterprise',
     isUnlocked: false,
   },
-
-  // Rama B: Análisis de Datos
+  // 3. Análisis de Datos
   {
     id: 'py-data',
-    code: 'B',
+    code: '06',
     label: 'ANÁLISIS DE DATOS',
     subtitle: 'PANDAS, EDA, ML & STREAMLIT',
     x: 740,
-    y: 310,
+    y: 380,
     variant: 'branch',
     iconType: 'atom',
     stars: 0,
@@ -102,15 +103,14 @@ const NODES: GraphNode[] = [
     targetCourseId: 'data-analytics',
     isUnlocked: false,
   },
-
-  // Rama C: Python + IA
+  // 4. Python + IA
   {
     id: 'py-ia',
-    code: 'C',
+    code: '07',
     label: 'PYTHON + IA: AGENTES',
     subtitle: 'LLMS, RAG & AGENTES REACT',
     x: 740,
-    y: 480,
+    y: 510,
     variant: 'branch',
     iconType: 'matrix',
     stars: 0,
@@ -121,13 +121,13 @@ const NODES: GraphNode[] = [
     isUnlocked: false,
   },
 
-  // Apex Master Gate (Nodo integrador final donde desembocan todas las ramas)
+  // Apex Master Gate (Nodo integrador final donde desembocan las 4 ramas)
   {
     id: 'py-apex',
     code: 'Ω',
     label: 'APEX MASTER GATE',
     subtitle: 'PROYECTO INTEGRADOR FINAL',
-    x: 1020,
+    x: 1010,
     y: 310,
     variant: 'boss',
     iconType: 'skull',
@@ -143,16 +143,17 @@ const CONNECTIONS: GraphConnection[] = [
   { id: 'c-py-1-to-2', fromId: 'py-level-1', toId: 'py-level-2', color: '#38BDF8', path: 'M 120 310 C 180 310, 230 310, 290 310' },
   { id: 'c-py-2-to-3', fromId: 'py-level-2', toId: 'py-level-3', color: '#06B6D4', path: 'M 290 310 C 350 310, 410 310, 470 310', isDashed: true },
 
-  // Bifurcación en 3 ramas desde Python 3
-  { id: 'c-py-3-to-fa', fromId: 'py-level-3', toId: 'py-fastapi', color: '#8B5CF6', path: 'M 470 310 C 530 310, 580 140, 650 140', isDashed: true },
-  { id: 'c-fa-to-dj', fromId: 'py-fastapi', toId: 'py-django', color: '#8B5CF6', path: 'M 650 140 C 710 140, 770 140, 830 140', isDashed: true },
-  { id: 'c-py-3-to-data', fromId: 'py-level-3', toId: 'py-data', color: '#06B6D4', path: 'M 470 310 C 560 310, 650 310, 740 310', isDashed: true },
-  { id: 'c-py-3-to-ia', fromId: 'py-level-3', toId: 'py-ia', color: '#EC4899', path: 'M 470 310 C 560 310, 650 480, 740 480', isDashed: true },
+  // Bifurcación en 4 ramas paralelas desde Python 3
+  { id: 'c-py-3-to-fa', fromId: 'py-level-3', toId: 'py-fastapi', color: '#8B5CF6', path: 'M 470 310 C 605 310, 605 110, 740 110', isDashed: true },
+  { id: 'c-py-3-to-dj', fromId: 'py-level-3', toId: 'py-django', color: '#10B981', path: 'M 470 310 C 605 310, 605 240, 740 240', isDashed: true },
+  { id: 'c-py-3-to-data', fromId: 'py-level-3', toId: 'py-data', color: '#06B6D4', path: 'M 470 310 C 605 310, 605 380, 740 380', isDashed: true },
+  { id: 'c-py-3-to-ia', fromId: 'py-level-3', toId: 'py-ia', color: '#EC4899', path: 'M 470 310 C 605 310, 605 510, 740 510', isDashed: true },
 
-  // Desembocadura en Apex Master Gate
-  { id: 'c-dj-to-apex', fromId: 'py-django', toId: 'py-apex', color: '#10B981', path: 'M 830 140 C 900 140, 950 310, 1020 310', isDashed: true },
-  { id: 'c-data-to-apex', fromId: 'py-data', toId: 'py-apex', color: '#06B6D4', path: 'M 740 310 C 830 310, 930 310, 1020 310', isDashed: true },
-  { id: 'c-ia-to-apex', fromId: 'py-ia', toId: 'py-apex', color: '#EC4899', path: 'M 740 480 C 830 480, 930 310, 1020 310', isDashed: true },
+  // Desembocadura de las 4 ramas en Apex Master Gate
+  { id: 'c-fa-to-apex', fromId: 'py-fastapi', toId: 'py-apex', color: '#8B5CF6', path: 'M 740 110 C 875 110, 875 310, 1010 310', isDashed: true },
+  { id: 'c-dj-to-apex', fromId: 'py-django', toId: 'py-apex', color: '#10B981', path: 'M 740 240 C 875 240, 875 310, 1010 310', isDashed: true },
+  { id: 'c-data-to-apex', fromId: 'py-data', toId: 'py-apex', color: '#06B6D4', path: 'M 740 380 C 875 380, 875 310, 1010 310', isDashed: true },
+  { id: 'c-ia-to-apex', fromId: 'py-ia', toId: 'py-apex', color: '#EC4899', path: 'M 740 510 C 875 510, 875 310, 1010 310', isDashed: true },
 ];
 
 export const PYTHON_COURSES_DATASET: GraphDataset = {
