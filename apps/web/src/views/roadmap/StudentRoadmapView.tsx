@@ -46,9 +46,8 @@ export const StudentRoadmapView: React.FC = () => {
       void openCourseLessons(node.targetCourseId ?? node.id);
       return;
     }
-    const currentCourse = selectedCourseId || node.targetCourseId || useRoadmapStore.getState().activeBranchId || 'fe-html';
-    const tail = node.id.split('-').pop() ?? '';
-    const sectionRef = /^s\d+$/.test(tail) ? tail : node.id;
+    const currentCourse = selectedCourseId || node.targetCourseId || useRoadmapStore.getState().activeBranchId || 'python-1';
+    const sectionRef = node.id;
     router.push(`/app/curso/${currentCourse}/seccion/${sectionRef}`);
   };
 

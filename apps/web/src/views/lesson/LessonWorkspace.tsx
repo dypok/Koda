@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key, Code } from '@phosphor-icons/react';
-import { ContentExercise, ContentLesson, ContentModule, loadBank, loadModule, shuffled } from '@/lib/content';
+import { ContentExercise, ContentLesson, ContentModule, isModuleAvailable, loadBank, loadModule, shuffled } from '@/lib/content';
 import { QuestionRenderer } from './QuestionRenderer';
 import { useLessonEngine } from './useLessonEngine';
 import { useLessonKeyboardShortcuts } from '@/hooks/useLessonKeyboardShortcuts';
@@ -19,7 +19,17 @@ interface LessonWorkspaceProps {
 }
 
 const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'lesson' | 'quiz' }> = {
-  // Python 1: Fundamentos
+  // Python 1: Fundamentos (IDs emitidos por Backend / API)
+  'py-m01': { moduleSlug: 'fundamentos-de-python' },
+  'py-m02': { moduleSlug: 'variables-y-tipos-de-datos' },
+  'py-m03': { moduleSlug: 'operadores-y-expresiones' },
+  'py-m04': { moduleSlug: 'condicionales' },
+  'py-boss-logic': { moduleSlug: 'condicionales', initialMode: 'quiz' },
+  'py-m05': { moduleSlug: 'bucles-for' },
+  'py-m06': { moduleSlug: 'bucles-while' },
+  'py-apex-1': { moduleSlug: 'funciones-fundamentales', initialMode: 'quiz' },
+
+  // Python 1: Fundamentos (IDs canónicos de dataset mock frontend)
   'les-01': { moduleSlug: 'fundamentos-de-python' },
   'les-02': { moduleSlug: 'variables-y-tipos-de-datos' },
   'les-03': { moduleSlug: 'operadores-y-expresiones' },
@@ -33,7 +43,14 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'les-10': { moduleSlug: 'funciones-fundamentales' },
   'les-boss': { moduleSlug: 'funciones-fundamentales', initialMode: 'quiz' },
 
-  // Python 2: Intermedio
+  // Python 2: Intermedio (IDs Backend / API)
+  'py2-m01': { moduleSlug: 'comprensiones' },
+  'py2-m02': { moduleSlug: 'funciones-avanzadas' },
+  'py2-m03': { moduleSlug: 'modulos-y-paquetes' },
+  'py2-m04': { moduleSlug: 'manejo-de-excepciones' },
+  'py2-m05': { moduleSlug: 'archivos-txt-csv-json' },
+
+  // Python 2: Intermedio (IDs dataset mock frontend)
   'py2-01': { moduleSlug: 'comprensiones' },
   'py2-02': { moduleSlug: 'funciones-avanzadas' },
   'py2-03': { moduleSlug: 'modulos-y-paquetes' },
@@ -47,7 +64,14 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'py2-10': { moduleSlug: 'testing-con-pytest' },
   'py2-boss': { moduleSlug: 'testing-con-pytest', initialMode: 'quiz' },
 
-  // Python 3: Avanzado
+  // Python 3: Avanzado (IDs Backend / API)
+  'py3-m01': { moduleSlug: 'iteradores-y-generadores' },
+  'py3-m02': { moduleSlug: 'decoradores' },
+  'py3-m03': { moduleSlug: 'context-managers' },
+  'py3-m04': { moduleSlug: 'type-hints-y-dataclasses' },
+  'py3-m05': { moduleSlug: 'programacion-funcional' },
+
+  // Python 3: Avanzado (IDs dataset mock frontend)
   'py3-01': { moduleSlug: 'iteradores-y-generadores' },
   'py3-02': { moduleSlug: 'decoradores' },
   'py3-03': { moduleSlug: 'context-managers' },
@@ -61,21 +85,30 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'py3-10': { moduleSlug: 'patrones-de-diseno' },
   'py3-boss': { moduleSlug: 'patrones-de-diseno', initialMode: 'quiz' },
 
-  // FastAPI
+  // FastAPI (IDs Backend y Mock)
+  'fa-m01': { moduleSlug: 'fastapi-http-rest' },
+  'fa-m02': { moduleSlug: 'fastapi-pydantic' },
+  'fa-m03': { moduleSlug: 'fastapi-sqlalchemy-alembic' },
+  'fa-m04': { moduleSlug: 'fastapi-auth-jwt' },
   'fa-01': { moduleSlug: 'fastapi-http-rest' },
   'fa-02': { moduleSlug: 'fastapi-pydantic' },
   'fa-03': { moduleSlug: 'fastapi-sqlalchemy-alembic' },
   'fa-04': { moduleSlug: 'fastapi-auth-jwt' },
   'fa-05': { moduleSlug: 'fastapi-docker-deploy' },
 
-  // Django
+  // Django (IDs Backend y Mock)
+  'dj-m01': { moduleSlug: 'django-mtv-routing' },
+  'dj-m02': { moduleSlug: 'django-orm-models' },
+  'dj-m03': { moduleSlug: 'django-forms-admin' },
+  'dj-m04': { moduleSlug: 'django-rest-framework' },
   'dj-01': { moduleSlug: 'django-mtv-routing' },
   'dj-02': { moduleSlug: 'django-orm-models' },
   'dj-03': { moduleSlug: 'django-forms-admin' },
   'dj-04': { moduleSlug: 'django-rest-framework' },
   'dj-05': { moduleSlug: 'django-auth-security-deploy' },
 
-  // Data Analytics
+  // Data Analytics (IDs Backend y Mock)
+  'data-analytics-s01': { moduleSlug: 'numpy-fundamentos' },
   'da-01': { moduleSlug: 'numpy-fundamentos' },
   'da-02': { moduleSlug: 'pandas-series-dataframes' },
   'da-03': { moduleSlug: 'pandas-limpieza-transformacion' },
@@ -89,7 +122,8 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'da-10': { moduleSlug: 'streamlit-dashboards' },
   'da-boss': { moduleSlug: 'streamlit-dashboards', initialMode: 'quiz' },
 
-  // AI Agents
+  // AI Agents (IDs Backend y Mock)
+  'ai-agents-s01': { moduleSlug: 'ia-llms-y-prompts' },
   'ia-01': { moduleSlug: 'ia-llms-y-prompts' },
   'ia-02': { moduleSlug: 'ia-apis-modelos' },
   'ia-03': { moduleSlug: 'ia-salidas-estructuradas' },
@@ -102,10 +136,22 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'ia-09': { moduleSlug: 'ia-guardrails-y-evaluacion' },
   'ia-10': { moduleSlug: 'ia-proyecto-agente-completo' },
 
-  // Apex Master Gate
+  // Apex (IDs Backend y Mock)
+  'python-apex-s01': { moduleSlug: 'apex-master-gate' },
   'apex-01': { moduleSlug: 'apex-master-gate' },
   'apex-02': { moduleSlug: 'apex-master-gate' },
   'apex-03': { moduleSlug: 'apex-master-gate', initialMode: 'quiz' },
+};
+
+const COURSE_DEFAULT_SLUGS: Record<string, string> = {
+  'python-1': 'fundamentos-de-python',
+  'python-2': 'comprensiones',
+  'python-3': 'iteradores-y-generadores',
+  'fastapi-async': 'fastapi-http-rest',
+  'django-enterprise': 'django-mtv-routing',
+  'data-analytics': 'numpy-fundamentos',
+  'ai-agents': 'ia-llms-y-prompts',
+  'python-apex': 'apex-master-gate',
 };
 
 function parseCourse(courseId: string, sectionRef: string): { lang: string; moduleSlug: string; initialMode: 'lesson' | 'quiz' } {
@@ -121,13 +167,23 @@ function parseCourse(courseId: string, sectionRef: string): { lang: string; modu
     };
   }
 
-  // 2. Si el sectionRef es directamente un slug de módulo conocido
-  const isDirectSlug = sectionRef.includes('-');
+  // 2. Si sectionRef es directamente un slug de módulo conocido y disponible
+  if (isModuleAvailable(lang, sectionRef)) {
+    const isQuizMode = sectionRef.includes('boss') || sectionRef.includes('quiz') || sectionRef.includes('exam');
+    return {
+      lang,
+      moduleSlug: sectionRef,
+      initialMode: isQuizMode ? 'quiz' : 'lesson',
+    };
+  }
+
+  // 3. Fallback inteligente según curso para evitar que un ID de sección no mapeado rompa el workspace
+  const defaultSlug = COURSE_DEFAULT_SLUGS[courseId] || 'fundamentos-de-python';
   const isQuizMode = sectionRef.includes('boss') || sectionRef.includes('quiz') || sectionRef.includes('exam');
 
   return {
     lang,
-    moduleSlug: isDirectSlug ? sectionRef : 'fundamentos-de-python',
+    moduleSlug: defaultSlug,
     initialMode: isQuizMode ? 'quiz' : 'lesson',
   };
 }

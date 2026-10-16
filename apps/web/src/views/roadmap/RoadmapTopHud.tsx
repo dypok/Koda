@@ -47,8 +47,7 @@ export function RoadmapTopHud({
 
   const handleContinueInLessons = () => {
     if (!activeLessonNode) return;
-    const tail = activeLessonNode.id.split('-').pop() ?? '';
-    const sectionRef = /^s\d+$/.test(tail) ? tail : activeLessonNode.id;
+    const sectionRef = activeLessonNode.id;
     router.push(`/app/curso/${selectedCourseId || 'python-1'}/seccion/${sectionRef}`);
   };
 
