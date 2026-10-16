@@ -118,12 +118,12 @@ export class GetRoadmapGraphUseCase {
         y,
         variant: isTrunk ? 'active' : 'locked',
         iconType: this.mapIconType(c.icon),
-        stars: isTrunk ? 3 : 0,
+        stars: 0,
         maxStars: 3,
         xp: 150,
         targetCourseId: c.slug,
         isUnlocked: isTrunk,
-        statusText: isTrunk ? 'ACTIVO' : 'BLOQUEADO',
+        statusText: isTrunk ? 'DISPONIBLE' : 'BLOQUEADO',
       };
     });
 
@@ -145,14 +145,14 @@ export class GetRoadmapGraphUseCase {
           toId: edge.targetCourseSlug,
           color: edge.edgeColor || '#38BDF8',
           path: this.generateSvgPath(fromCoord.x, fromCoord.y, toCoord.x, toCoord.y),
-          isDashed: edge.connectionType === 'recommended',
+          isDashed: true,
         });
       });
     });
 
     return {
       sectorTitle: `SECTOR: ${slug.toUpperCase()} ROADMAP (DAG)`,
-      progressPercent: 20,
+      progressPercent: 0,
       nodes,
       connections,
     };
@@ -169,27 +169,27 @@ export class GetRoadmapGraphUseCase {
       const nodes: GraphNode[] = [
         {
           id: 'py-m01', code: '01', label: 'SINTAXIS & E/S', subtitle: 'PRINT, INPUT & COMENTARIOS',
-          x: 130, y: 320, variant: 'completed', iconType: 'brackets', stars: 3, maxStars: 3, xp: 150,
-          statusText: 'DOMINADO • +150 XP', isUnlocked: true,
+          x: 130, y: 320, variant: 'active', iconType: 'brackets', stars: 0, maxStars: 3, xp: 150,
+          statusText: 'DISPONIBLE • +150 XP', isUnlocked: true,
         },
         {
           id: 'py-m02', code: '02', label: 'VARIABLES & TIPOS', subtitle: 'INT, FLOAT, STR, BOOL & TYPE',
-          x: 270, y: 230, variant: 'completed', iconType: 'flow', stars: 3, maxStars: 3, xp: 150,
-          statusText: 'DOMINADO • +150 XP', isUnlocked: true,
+          x: 270, y: 230, variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 150,
+          statusText: 'RQ M01', isUnlocked: false,
         },
         {
           id: 'py-m03', code: '03', label: 'OPERADORES & LÓGICA', subtitle: 'ARITMÉTICA & BOOLEANOS',
-          x: 410, y: 350, variant: 'completed', iconType: 'atom', stars: 3, maxStars: 3, xp: 180,
-          statusText: 'DOMINADO • +180 XP', isUnlocked: true,
+          x: 410, y: 350, variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 180,
+          statusText: 'RQ M02', isUnlocked: false,
         },
         {
           id: 'py-m04', code: '04', label: 'CONDICIONALES', subtitle: 'IF, ELIF, ELSE & DECISIONES',
-          x: 550, y: 250, variant: 'active', iconType: 'matrix', stars: 1, maxStars: 3, xp: 200,
-          statusText: 'EN PROGRESO • +200 XP', isUnlocked: true,
+          x: 550, y: 250, variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 200,
+          statusText: 'RQ M03', isUnlocked: false,
         },
         {
           id: 'py-boss-logic', code: '🛡️', label: 'GUARDIÁN DE LA LÓGICA', subtitle: 'MINI-BOSS: QUIZ MÓDULOS 1-4',
-          x: 690, y: 350, variant: 'branch', iconType: 'code', xp: 250,
+          x: 690, y: 350, variant: 'branch', iconType: 'lock', xp: 250,
           statusText: 'MINI-BOSS • REQUIERE M04', isUnlocked: false,
         },
         {
@@ -210,10 +210,10 @@ export class GetRoadmapGraphUseCase {
       ];
 
       const connections: GraphConnection[] = [
-        { id: 'c-01-02', fromId: 'py-m01', toId: 'py-m02', color: '#38BDF8', path: this.generateSvgPath(130, 320, 270, 230) },
-        { id: 'c-02-03', fromId: 'py-m02', toId: 'py-m03', color: '#38BDF8', path: this.generateSvgPath(270, 230, 410, 350) },
-        { id: 'c-03-04', fromId: 'py-m03', toId: 'py-m04', color: '#38BDF8', path: this.generateSvgPath(410, 350, 550, 250) },
-        { id: 'c-04-boss', fromId: 'py-m04', toId: 'py-boss-logic', color: '#F59E0B', path: this.generateSvgPath(550, 250, 690, 350) },
+        { id: 'c-01-02', fromId: 'py-m01', toId: 'py-m02', color: '#38BDF8', path: this.generateSvgPath(130, 320, 270, 230), isDashed: true },
+        { id: 'c-02-03', fromId: 'py-m02', toId: 'py-m03', color: '#38BDF8', path: this.generateSvgPath(270, 230, 410, 350), isDashed: true },
+        { id: 'c-03-04', fromId: 'py-m03', toId: 'py-m04', color: '#38BDF8', path: this.generateSvgPath(410, 350, 550, 250), isDashed: true },
+        { id: 'c-04-boss', fromId: 'py-m04', toId: 'py-boss-logic', color: '#F59E0B', path: this.generateSvgPath(550, 250, 690, 350), isDashed: true },
         { id: 'c-boss-05', fromId: 'py-boss-logic', toId: 'py-m05', color: '#10B981', path: this.generateSvgPath(690, 350, 830, 230), isDashed: true },
         { id: 'c-05-06', fromId: 'py-m05', toId: 'py-m06', color: '#10B981', path: this.generateSvgPath(830, 230, 970, 350), isDashed: true },
         { id: 'c-06-apex', fromId: 'py-m06', toId: 'py-apex-1', color: '#F43F5E', path: this.generateSvgPath(970, 350, 1120, 290), isDashed: true },
@@ -221,7 +221,7 @@ export class GetRoadmapGraphUseCase {
 
       return {
         sectorTitle: 'PYTHON 1: FUNDAMENTOS & SINTAXIS',
-        progressPercent: 55,
+        progressPercent: 0,
         nodes,
         connections,
       };
@@ -242,7 +242,7 @@ export class GetRoadmapGraphUseCase {
         { id: 'c-p2-3-4', fromId: 'py2-m03', toId: 'py2-m04', color: '#06B6D4', path: this.generateSvgPath(540, 290, 740, 290), isDashed: true },
         { id: 'c-p2-4-5', fromId: 'py2-m04', toId: 'py2-m05', color: '#06B6D4', path: this.generateSvgPath(740, 290, 940, 290), isDashed: true },
       ];
-      return { sectorTitle: 'PYTHON 2: ESTRUCTURAS & POO', progressPercent: 10, nodes, connections };
+      return { sectorTitle: 'PYTHON 2: ESTRUCTURAS & POO', progressPercent: 0, nodes, connections };
     }
 
     // Grafo para Python 3
@@ -260,7 +260,7 @@ export class GetRoadmapGraphUseCase {
         { id: 'c-p3-3-4', fromId: 'py3-m03', toId: 'py3-m04', color: '#F59E0B', path: this.generateSvgPath(540, 290, 740, 290), isDashed: true },
         { id: 'c-p3-4-5', fromId: 'py3-m04', toId: 'py3-m05', color: '#F59E0B', path: this.generateSvgPath(740, 290, 940, 290), isDashed: true },
       ];
-      return { sectorTitle: 'PYTHON 3: AVANZADO & MODULAR', progressPercent: 10, nodes, connections };
+      return { sectorTitle: 'PYTHON 3: AVANZADO & MODULAR', progressPercent: 0, nodes, connections };
     }
 
     // Grafo para Especialización FastAPI
@@ -276,7 +276,7 @@ export class GetRoadmapGraphUseCase {
         { id: 'c-fa-2-3', fromId: 'fa-m02', toId: 'fa-m03', color: '#8B5CF6', path: this.generateSvgPath(370, 290, 600, 290), isDashed: true },
         { id: 'c-fa-3-4', fromId: 'fa-m03', toId: 'fa-m04', color: '#8B5CF6', path: this.generateSvgPath(600, 290, 830, 290), isDashed: true },
       ];
-      return { sectorTitle: 'ESPECIALIZACIÓN FASTAPI', progressPercent: 10, nodes, connections };
+      return { sectorTitle: 'ESPECIALIZACIÓN FASTAPI', progressPercent: 0, nodes, connections };
     }
 
     // Grafo para Especialización Django
@@ -292,7 +292,7 @@ export class GetRoadmapGraphUseCase {
         { id: 'c-dj-2-3', fromId: 'dj-m02', toId: 'dj-m03', color: '#10B981', path: this.generateSvgPath(370, 290, 600, 290), isDashed: true },
         { id: 'c-dj-3-4', fromId: 'dj-m03', toId: 'dj-m04', color: '#10B981', path: this.generateSvgPath(600, 290, 830, 290), isDashed: true },
       ];
-      return { sectorTitle: 'ESPECIALIZACIÓN DJANGO', progressPercent: 10, nodes, connections };
+      return { sectorTitle: 'ESPECIALIZACIÓN DJANGO', progressPercent: 0, nodes, connections };
     }
 
     // Fallback general para otros cursos

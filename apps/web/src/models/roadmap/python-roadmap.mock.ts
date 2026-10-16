@@ -2,10 +2,10 @@ import { CodeSimple, BracketsCurly, Gear } from '@phosphor-icons/react';
 import { LanguageTrack, RoadmapCourse, SidebarLanguageItem } from './roadmap.types';
 
 const BASIC_LESSONS = [
-  { id: 'py-b-01', title: 'Variables y tipos de datos', order: 1, durationMinutes: 5, xp: 15, stars: 3, maxStars: 3, isUnlocked: true, isCompleted: true },
-  { id: 'py-b-02', title: 'Operadores y expresiones', order: 2, durationMinutes: 8, xp: 20, stars: 3, maxStars: 3, isUnlocked: true, isCompleted: true },
-  { id: 'py-b-03', title: 'Estructuras condicionales (if/else)', order: 3, durationMinutes: 10, xp: 25, stars: 2, maxStars: 3, isUnlocked: true, isCompleted: true },
-  { id: 'py-b-04', title: 'Bucles y repetición (while/for)', order: 4, durationMinutes: 10, xp: 25, stars: 0, maxStars: 3, isUnlocked: true, isCompleted: false },
+  { id: 'py-b-01', title: 'Variables y tipos de datos', order: 1, durationMinutes: 5, xp: 15, stars: 0, maxStars: 3, isUnlocked: true, isCompleted: false },
+  { id: 'py-b-02', title: 'Operadores y expresiones', order: 2, durationMinutes: 8, xp: 20, stars: 0, maxStars: 3, isUnlocked: false, isCompleted: false },
+  { id: 'py-b-03', title: 'Estructuras condicionales (if/else)', order: 3, durationMinutes: 10, xp: 25, stars: 0, maxStars: 3, isUnlocked: false, isCompleted: false },
+  { id: 'py-b-04', title: 'Bucles y repetición (while/for)', order: 4, durationMinutes: 10, xp: 25, stars: 0, maxStars: 3, isUnlocked: false, isCompleted: false },
   { id: 'py-b-05', title: 'Funciones y modularidad', order: 5, durationMinutes: 12, xp: 30, stars: 0, maxStars: 3, isUnlocked: false, isCompleted: false },
 ];
 
@@ -23,7 +23,7 @@ const ADVANCED_LESSONS = [
 ];
 
 export const PYTHON_MAIN_COURSES: RoadmapCourse[] = [
-  { id: 'py-basic', title: 'Python Básico', shortTitle: 'Básico', level: 'basic', description: 'Sintaxis inicial, variables, condicionales y funciones.', isUnlocked: true, isCompleted: false, totalStars: 15, earnedStars: 8, lessons: BASIC_LESSONS },
+  { id: 'py-basic', title: 'Python Básico', shortTitle: 'Básico', level: 'basic', description: 'Sintaxis inicial, variables, condicionales y funciones.', isUnlocked: true, isCompleted: false, totalStars: 15, earnedStars: 0, lessons: BASIC_LESSONS },
   { id: 'py-intermediate', title: 'Python Intermedio', shortTitle: 'Intermedio', level: 'intermediate', description: 'Estructuras de datos, POO y manejo de excepciones.', isUnlocked: false, isCompleted: false, prerequisite: 'Completa Python Básico', totalStars: 12, earnedStars: 0, lessons: INTERMEDIATE_LESSONS },
   { id: 'py-advanced', title: 'Python Avanzado', shortTitle: 'Avanzado', level: 'advanced', description: 'Concurrencia, decoradores, asyncio y testing profesional.', isUnlocked: false, isCompleted: false, prerequisite: 'Completa Python Intermedio', totalStars: 9, earnedStars: 0, lessons: ADVANCED_LESSONS },
 ];
@@ -50,7 +50,7 @@ export const PYTHON_TRACK: LanguageTrack = {
 };
 
 export const SIDEBAR_LANGUAGES: SidebarLanguageItem[] = [
-  { id: 'python', name: 'Python', icon: CodeSimple, color: '#38BDF8', isAvailable: true, totalStars: 54, earnedStars: 8, completedCourses: 1, totalCourses: 5, progressPercent: 24, currentStage: '01 Básico' },
+  { id: 'python', name: 'Python', icon: CodeSimple, color: '#38BDF8', isAvailable: true, totalStars: 54, earnedStars: 0, completedCourses: 0, totalCourses: 5, progressPercent: 0, currentStage: '01 Básico' },
   { id: 'javascript', name: 'JavaScript', icon: BracketsCurly, color: '#FACC15', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
   { id: 'typescript', name: 'TypeScript', icon: BracketsCurly, color: '#60A5FA', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
   { id: 'rust', name: 'Rust', icon: Gear, color: '#FB923C', isAvailable: false, totalStars: 45, earnedStars: 0, completedCourses: 0, totalCourses: 4, progressPercent: 0, currentStage: 'Próximamente' },
