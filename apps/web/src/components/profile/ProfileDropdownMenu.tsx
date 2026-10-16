@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Gear,
@@ -21,6 +21,7 @@ interface ProfileDropdownMenuProps {
   user: AuthUser | null;
   onOpenSettings: (tab: SettingsTab) => void;
   onLogout: () => void;
+  triggerRef?: React.RefObject<HTMLElement | null>;
 }
 
 export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
@@ -29,16 +30,31 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
   user,
   onOpenSettings,
   onLogout,
+  triggerRef,
 }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const { accentTheme } = useAppearanceStore();
   const palette = ACCENT_PALETTES[accentTheme] || ACCENT_PALETTES.amber;
+  const [imgError, setImgError] = useState(false);
 
-  // Cerrar al hacer click afuera
+  const rawAvatar = user?.avatarUrl;
+  const avatarSrc = (!rawAvatar || rawAvatar.includes('koda-mascot-cartoon-2d'))
+    ? '/avatars/koda-classic.svg'
+    : rawAvatar;
+
+  useEffect(() => {
+    setImgError(false);
+  }, [avatarSrc]);
+
+  // Cerrar al hacer click afuera (ignorando clicks sobre el botón trigger para evitar loops de toggle)
   useEffect(() => {
     if (!isOpen) return;
     const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      if (triggerRef?.current && triggerRef.current.contains(target)) {
+        return;
+      }
+      if (menuRef.current && !menuRef.current.contains(target)) {
         onClose();
       }
     };
@@ -52,7 +68,7 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, triggerRef]);
 
   const initials = user?.fullName
     ? user.fullName
@@ -62,8 +78,6 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
         .slice(0, 2)
         .toUpperCase()
     : 'KD';
-
-  const avatarSrc = user?.avatarUrl || '/avatars/koda-classic.svg';
 
   return (
     <AnimatePresence>
@@ -79,17 +93,21 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
           {/* Header del Usuario */}
           <div className="flex items-center gap-3 rounded-xl bg-slate-950/60 p-3">
             <div
-              className="relative h-11 w-11 flex-shrink-0 overflow-hidden rounded-full border-2 bg-slate-800 p-0.5 shadow-inner transition-colors"
+              className="relative h-11 w-11 flex-shrink-0 overflow-hidden rounded-full border-2 bg-slate-800 shadow-inner transition-colors flex items-center justify-center"
               style={{ borderColor: palette.primary }}
             >
-              <img
-                src={avatarSrc}
-                alt={user?.fullName || 'Usuario Koda'}
-                className="h-full w-full object-contain"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src = '/avatars/koda-classic.svg';
-                }}
-              />
+              {!imgError && avatarSrc ? (
+                <img
+                  src={avatarSrc}
+                  alt={user?.fullName || 'Usuario Koda'}
+                  className="h-full w-full object-cover"
+                  onError={() => setImgError(true)}
+                />
+              ) : (
+                <span className="font-mono text-xs font-bold" style={{ color: palette.light }}>
+                  {initials}
+                </span>
+              )}
             </div>
             <div className="min-w-0 flex-1">
               <span className="block truncate text-xs font-bold text-slate-100">

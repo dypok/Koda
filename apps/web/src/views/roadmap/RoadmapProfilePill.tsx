@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { CaretDown } from '@phosphor-icons/react';
 import { useAuthStore } from '@/stores/auth.store';
@@ -22,8 +22,19 @@ export const RoadmapProfilePill: React.FC = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsTab, setSettingsTab] = useState<SettingsTab>('profile');
+  const [imgError, setImgError] = useState(false);
 
-  const avatarSrc = user?.avatarUrl || '/avatars/koda-classic.svg';
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  const rawAvatar = user?.avatarUrl;
+  const avatarSrc = (!rawAvatar || rawAvatar.includes('koda-mascot-cartoon-2d'))
+    ? '/avatars/koda-classic.svg'
+    : rawAvatar;
+
+  useEffect(() => {
+    setImgError(false);
+  }, [avatarSrc]);
+
   const level = user?.level || 1;
   const initials = user?.fullName
     ? user.fullName
@@ -51,6 +62,7 @@ export const RoadmapProfilePill: React.FC = () => {
       <div className="absolute right-4 top-4 z-40">
         {/* Trigger de la Píldora de Perfil */}
         <button
+          ref={triggerRef}
           type="button"
           onClick={() => setDropdownOpen((prev) => !prev)}
           aria-expanded={dropdownOpen}
@@ -70,34 +82,35 @@ export const RoadmapProfilePill: React.FC = () => {
           }`}
         >
           {/* Avatar del usuario con badge de nivel */}
-          <span
-            className="relative flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border bg-slate-800 shadow-md transition-colors"
-            style={{ borderColor: palette.primary }}
-          >
-            <img
-              src={avatarSrc}
-              alt={user?.fullName || 'Avatar del usuario'}
-              className="h-full w-full object-contain"
-              onError={(e) => {
-                // Fallback a iniciales si falla la carga
-                const target = e.target as HTMLImageElement;
-                target.style.display = 'none';
-                target.parentElement!.classList.add('fallback-initials');
-              }}
-            />
-            <span
-              className="hidden fallback:block font-mono text-[10px] font-bold"
-              style={{ color: palette.light }}
+          <div className="relative flex h-8 w-8 flex-shrink-0 items-center justify-center">
+            <div
+              className="h-full w-full overflow-hidden rounded-full border bg-slate-800 shadow-md transition-colors flex items-center justify-center"
+              style={{ borderColor: palette.primary }}
             >
-              {initials}
-            </span>
+              {!imgError && avatarSrc ? (
+                <img
+                  src={avatarSrc}
+                  alt={user?.fullName || 'Avatar del usuario'}
+                  className="h-full w-full object-cover"
+                  onError={() => setImgError(true)}
+                />
+              ) : (
+                <span
+                  className="font-mono text-[10px] font-bold"
+                  style={{ color: palette.light }}
+                >
+                  {initials}
+                </span>
+              )}
+            </div>
+            {/* Badge de nivel (fuera del contenedor con overflow-hidden para evitar que se corte) */}
             <span
-              className="absolute -bottom-1 -right-1 rounded-md border bg-slate-950 px-1 font-mono text-[8px] font-bold leading-none shadow-sm transition-colors"
+              className="absolute -bottom-1 -right-1 z-10 rounded-full border bg-slate-950 px-1 py-0.5 font-mono text-[8px] font-bold leading-none shadow-sm transition-colors"
               style={{ borderColor: palette.primary, color: palette.light }}
             >
               {level}
             </span>
-          </span>
+          </div>
 
           {/* Nombre / Chevron */}
           <span className="hidden sm:inline-block max-w-[90px] truncate text-xs font-semibold text-slate-200 group-hover:text-white transition-colors">
@@ -119,6 +132,7 @@ export const RoadmapProfilePill: React.FC = () => {
           user={user}
           onOpenSettings={handleOpenSettings}
           onLogout={handleLogout}
+          triggerRef={triggerRef}
         />
       </div>
 
