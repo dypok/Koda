@@ -4,7 +4,7 @@
 - **Historia de Usuario Relacionada:** AUTH-03 — Gestión de Perfil de Usuario y Preferencias
 - **Solicitado por:** Equipo Frontend (Koda Web)
 - **Fecha:** 20/09/2026
-- **Estado:** 🟡 PENDIENTE DE IMPLEMENTACIÓN EN BACKEND
+- **Estado:** 🟢 IMPLEMENTADO EN BACKEND (Ver `backend-11-auth-03-avatar-upload.md`)
 
 ---
 

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
+import { join } from 'path';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
@@ -30,7 +31,14 @@ import { EvaluationGraphQLModule } from './presentation/graphql/evaluation/evalu
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      // El API se ejecuta con cwd = apps/api, por lo que el .env del monorepo
+      // (raíz) no se carga por defecto. Aquí lo resolvemos de forma relativa al
+      // archivo compilado (apps/api/dist o apps/api/src → raíz del monorepo).
+      // Un .env local en apps/api tiene prioridad sobre el de la raíz.
+      envFilePath: ['.env', join(__dirname, '..', '..', '..', '.env')],
+    }),
     EventEmitterModule.forRoot({
       wildcard: false,
       delimiter: '.',

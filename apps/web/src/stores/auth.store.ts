@@ -28,6 +28,7 @@ interface AuthState {
   initAuth: () => void;
   setUserSession: (session: BackendUserSession, accessToken: string, refreshToken?: string) => void;
   updateUserProfile: (partial: Partial<AuthUser>) => void;
+  loginAsGuest: () => void;
   login: (email: string, fullName?: string) => void;
   loginSocial: (provider: 'google' | 'github') => void;
   logout: () => void;
@@ -39,6 +40,9 @@ const STORAGE_KEYS = {
   REFRESH_TOKEN: 'koda_auth_refresh_token',
   HAS_LOGGED: 'koda_has_ever_logged_in',
 };
+
+/** Token centinela para la sesión de invitado (modo demo, sin backend). */
+const GUEST_TOKEN = 'koda-guest-session';
 
 function parseJwtExp(token: string): number | null {
   try {
@@ -208,6 +212,42 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(updatedUser));
       }
       return { user: updatedUser };
+    });
+  },
+
+  /**
+   * Inicia una sesión de invitado (modo demo) sin backend ni Supabase Auth.
+   * Permite recorrer la app (roadmap y lecciones) con datos locales.
+   */
+  loginAsGuest: () => {
+    const guestUser: AuthUser = {
+      id: 'koda-guest',
+      email: 'invitado@koda.academy',
+      fullName: 'Invitado',
+      avatarUrl: '/brand/koda-mascot-cartoon-2d.svg',
+      totalXp: 0,
+      level: 1,
+      streak: 0,
+      initialLanguageSlug: 'python',
+      experienceLevel: 'beginner',
+      learningStyle: 'hands-on',
+      dailyGoalMinutes: 10,
+      onboardingCompleted: true,
+    };
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(guestUser));
+      localStorage.setItem(STORAGE_KEYS.TOKEN, GUEST_TOKEN);
+      localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+      localStorage.setItem(STORAGE_KEYS.HAS_LOGGED, 'true');
+    }
+
+    set({
+      user: guestUser,
+      token: GUEST_TOKEN,
+      refreshToken: null,
+      isAuthenticated: true,
+      hasEverLoggedIn: true,
     });
   },
 

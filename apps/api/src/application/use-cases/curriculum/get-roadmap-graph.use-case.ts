@@ -158,10 +158,146 @@ export class GetRoadmapGraphUseCase {
     };
   }
 
+  private loadDeclarativeLanguageGraph(langSlug: string): GraphDataset | null {
+    const possibleRoots = [
+      path.resolve(process.cwd(), 'content/languages', langSlug),
+      path.resolve(process.cwd(), '../../content/languages', langSlug),
+      path.resolve(__dirname, '../../../../../../../content/languages', langSlug),
+      path.resolve(__dirname, '../../../../../../content/languages', langSlug),
+    ];
+    const langDir = possibleRoots.find((p) => fs.existsSync(path.join(p, 'manifest.json')));
+    if (!langDir) return null;
+
+    try {
+      const manifest = JSON.parse(fs.readFileSync(path.join(langDir, 'manifest.json'), 'utf8'));
+      const rawModules: any[] = Array.isArray(manifest.modules) ? manifest.modules : [];
+      if (rawModules.length === 0) return null;
+
+      const nodes: GraphNode[] = rawModules.map((modRef: any, idx: number) => {
+        let modJson: any = null;
+        if (modRef.path) {
+          const modPath = path.join(langDir, modRef.path, 'module.json');
+          if (fs.existsSync(modPath)) {
+            try {
+              modJson = JSON.parse(fs.readFileSync(modPath, 'utf8'));
+            } catch {
+              modJson = null;
+            }
+          }
+        }
+
+        const graphMeta = modJson?.graph || modRef?.graph || {};
+        const x = typeof graphMeta.x === 'number' ? graphMeta.x : 140 + idx * 180;
+        const y = typeof graphMeta.y === 'number' ? graphMeta.y : idx % 2 === 0 ? 320 : 240;
+        const isFirst = idx === 0 || modRef.position === 1;
+
+        return {
+          id: modRef.id || modRef.slug,
+          code: String(modRef.position ?? idx + 1).padStart(2, '0'),
+          label: String(modRef.title || modJson?.title || modRef.slug).toUpperCase(),
+          subtitle: String(modRef.description || modJson?.description || '').toUpperCase().slice(0, 48),
+          x,
+          y,
+          variant: isFirst ? 'active' : 'locked',
+          iconType: isFirst ? 'brackets' : 'lock',
+          stars: isFirst ? 1 : 0,
+          maxStars: 3,
+          xp: graphMeta.xp || 200,
+          isUnlocked: isFirst,
+          statusText: isFirst ? 'ACTIVO' : 'BLOQUEADO',
+        };
+      });
+
+      const connections: GraphConnection[] = [];
+      for (let i = 0; i < nodes.length - 1; i++) {
+        const from = nodes[i];
+        const to = nodes[i + 1];
+        connections.push({
+          id: `c-${from.id}-${to.id}`,
+          fromId: from.id,
+          toId: to.id,
+          color: '#8FA8FF',
+          path: this.generateSvgPath(from.x, from.y, to.x, to.y),
+          isDashed: i > 0,
+        });
+      }
+
+      return {
+        sectorTitle: `${String(manifest.name || langSlug).toUpperCase()}: RUTA CURRICULAR`,
+        progressPercent: 15,
+        nodes,
+        connections,
+      };
+    } catch {
+      return null;
+    }
+  }
+
   async getLessonsGraph(courseSlug: string): Promise<GraphDataset> {
+    // 1. Intentar construir el grafo dinámicamente desde el repositorio (MongoDB) si tiene lecciones sembradas
+    try {
+      const modules = await this.curriculumRepository.findModulesByCourse(courseSlug);
+      if (Array.isArray(modules) && modules.length > 0) {
+        const sectionsNested = await Promise.all(
+          modules.map((m) => this.curriculumRepository.findSectionsByModule(m.slug)),
+        );
+        const sections = sectionsNested.flat().filter(Boolean);
+        if (sections.length > 0) {
+          const lessonsNested = await Promise.all(
+            sections.map((s) => this.curriculumRepository.findLessonsBySection(s.slug)),
+          );
+          const lessons = lessonsNested.flat().filter(Boolean);
+          if (lessons.length > 0) {
+            const nodes: GraphNode[] = lessons.map((l, idx) => ({
+              id: l.slug,
+              code: String(l.position ?? idx + 1).padStart(2, '0'),
+              label: l.title.toUpperCase(),
+              subtitle: `SECCIÓN ${l.sectionSlug.toUpperCase()}`,
+              x: 140 + idx * 200,
+              y: idx % 2 === 0 ? 300 : 230,
+              variant: idx === 0 ? 'active' : 'locked',
+              iconType: idx === 0 ? 'brackets' : 'lock',
+              stars: idx === 0 ? 3 : 0,
+              maxStars: 3,
+              xp: l.xpReward || 150,
+              isUnlocked: idx === 0,
+              statusText: idx === 0 ? 'ACTIVO' : 'BLOQUEADO',
+            }));
+
+            const connections: GraphConnection[] = [];
+            for (let i = 0; i < nodes.length - 1; i++) {
+              connections.push({
+                id: `c-${nodes[i].id}-${nodes[i + 1].id}`,
+                fromId: nodes[i].id,
+                toId: nodes[i + 1].id,
+                color: '#38BDF8',
+                path: this.generateSvgPath(nodes[i].x, nodes[i].y, nodes[i + 1].x, nodes[i + 1].y),
+                isDashed: i > 0,
+              });
+            }
+
+            return {
+              sectorTitle: `CURSO: ${courseSlug.toUpperCase()}`,
+              progressPercent: 25,
+              nodes,
+              connections,
+            };
+          }
+        }
+      }
+    } catch {
+      // Fallback a grafos declarativos / preconfigurados
+    }
+
     let normalizedSlug = courseSlug.toLowerCase();
     if (normalizedSlug === 'py-basic' || normalizedSlug === 'python-basico' || normalizedSlug === 'python-core') {
       normalizedSlug = 'python-1';
+    }
+
+    // Soporte declarativo para Lua (L-02)
+    if (normalizedSlug === 'lua' || normalizedSlug.startsWith('lua-')) {
+      const luaGraph = this.loadDeclarativeLanguageGraph('lua');
+      if (luaGraph) return luaGraph;
     }
 
     // Grafo especializado para Python 1 con Mini-Boss Gate tras Módulo 4
