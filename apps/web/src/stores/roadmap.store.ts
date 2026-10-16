@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { GraphViewMode, GraphDataset, NodeVariant, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { PYTHON_BASIC_LESSONS_DATASET } from '@/models/roadmap/python-lessons-graph.mock';
 import { CareerBranchId, CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
-import { FRONTEND_COURSES_DATASET } from '@/models/roadmap/tracks/frontend-track.mock';
+import { PYTHON_COURSES_DATASET } from '@/models/roadmap/tracks/python-track.mock';
 import { RoadmapService } from '@/services/roadmap/roadmap.service';
 
 const PROGRESS_KEY = 'koda_roadmap_progress';
@@ -73,13 +73,13 @@ interface RoadmapStoreState {
 
 export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   viewMode: 'courses',
-  activeBranchId: 'frontend',
-  selectedCourseId: 'fe-html',
-  activeNodeId: 'fe-html',
+  activeBranchId: 'python',
+  selectedCourseId: 'python-1',
+  activeNodeId: 'py-level-1',
   zoomLevel: 100,
   panOffset: { x: 0, y: 0 },
   isLoading: false,
-  coursesDataset: FRONTEND_COURSES_DATASET,
+  coursesDataset: PYTHON_COURSES_DATASET,
   lessonsDataset: PYTHON_BASIC_LESSONS_DATASET,
   retreatTrigger: 0,
   triggerRetreatToCourses: () => set((s) => ({ retreatTrigger: s.retreatTrigger + 1 })),
@@ -298,9 +298,24 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     if (courseNode && !courseNode.isUnlocked) return;
     set({ viewMode: 'lessons', selectedCourseId: courseId, isLoading: true, panOffset: { x: 0, y: 0 } });
     const dataset = await RoadmapService.getCourseLessonsGraph(courseId);
-    set({ lessonsDataset: dataset, isLoading: false });
+    const activeLesson = dataset.nodes.find((n) => n.variant === 'active' || n.isUnlocked) || dataset.nodes[0];
+    set({
+      lessonsDataset: dataset,
+      activeNodeId: activeLesson ? activeLesson.id : null,
+      isLoading: false,
+    });
   },
-  returnToCourses: () => set({ viewMode: 'courses', panOffset: { x: 0, y: 0 } }),
+  returnToCourses: () => {
+    const courses = get().coursesDataset;
+    const currentCourseId = get().selectedCourseId;
+    const matchingCourse = courses.nodes.find((n) => n.targetCourseId === currentCourseId || n.id === currentCourseId);
+    const activeCourse = matchingCourse || courses.nodes.find((n) => n.variant === 'active' || n.isUnlocked) || courses.nodes[0];
+    set({
+      viewMode: 'courses',
+      panOffset: { x: 0, y: 0 },
+      activeNodeId: activeCourse ? activeCourse.id : null,
+    });
+  },
   setActiveNode: (id) => set({ activeNodeId: id }),
   setBranch: (branchId) => {
     const branch = CAREER_BRANCHES.find((b) => b.id === branchId) || CAREER_BRANCHES[0];

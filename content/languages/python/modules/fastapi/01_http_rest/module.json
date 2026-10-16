@@ -1,0 +1,91 @@
+{
+  "id": "fa_mod_01",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "FA_M01",
+  "slug": "fastapi-http-rest",
+  "course_slug": "fastapi-async",
+  "title": "Protocolo HTTP, Arquitectura ASGI y Primera API con FastAPI",
+  "objective": "Comprender el ciclo Request/Response de HTTP, la arquitectura ASGI y levantar una API con FastAPI y Uvicorn.",
+  "description": "El framework web moderno de Python con tipado estricto, documentación interactiva Swagger y rendimiento ASGI a la par de Node y Go.",
+  "position": 31,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 250
+  },
+  "sections": [
+    {
+      "id": "sec_fa_01_01",
+      "code": "S01",
+      "title": "Servidores ASGI y Creación de Endpoints",
+      "slug": "asgi-endpoints",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_fa_01_01",
+          "code": "L01",
+          "title": "¿Por qué FastAPI? ASGI, Uvicorn y Primer Endpoint",
+          "slug": "fastapi-asgi-base",
+          "position": 1,
+          "concept_id": "fa-intro",
+          "objective": "Inicializar una aplicación FastAPI y servir endpoints HTTP con el servidor asíncrono Uvicorn.",
+          "theory_markdown": "Tradicionalmente, Python usaba **WSGI** (como en Django o Flask clásicos), que procesaba una petición por hilo de forma sincrónica.\n\n**FastAPI** está construido sobre **ASGI** (Asynchronous Server Gateway Interface) y la librería **Starlette**, permitiendo manejar miles de conexiones WebSocket y HTTP concurrentes mediante el Event Loop de Python.\n\nPara ejecutar la app en desarrollo usamos **Uvicorn**:\n`uvicorn main:app --reload`.",
+          "examples": [
+            {
+              "title": "Tu primera API REST asíncrona",
+              "code": "from fastapi import FastAPI\n\napp = FastAPI(title=\"Koda API\", version=\"1.0.0\")\n\n@app.get(\"/\")\nasync def root():\n    return {\"status\": \"online\", \"mensaje\": \"Bienvenido a FastAPI\"}\n\n@app.get(\"/salud\")\ndef health_check():\n    return {\"ok\": True, \"servicios\": \"operativos\"}",
+              "output": "{\"status\": \"online\", \"mensaje\": \"Bienvenido a FastAPI\"}",
+              "explanation": "FastAPI serializa automáticamente los diccionarios de Python a JSON con las cabeceras HTTP correctas."
+            }
+          ],
+          "common_errors": "Olvidar el parámetro `--reload` en uvicorn durante el desarrollo, teniendo que reiniciar el servidor manualmente en cada cambio.",
+          "mini_exercise": {
+            "starter_code": "from fastapi import FastAPI\napp = FastAPI()\n\n# Define un endpoint GET en \"/ping\" que retorne {\"pong\": True}\n@app.get(\"/ping\")\ndef ping():\n    return ...",
+            "instructions": "Retorna {\"pong\": True}.",
+            "solution": "from fastapi import FastAPI\napp = FastAPI()\n\n@app.get(\"/ping\")\ndef ping():\n    return {\"pong\": True}"
+          },
+          "key_takeaways": [
+            "FastAPI genera documentación interactiva automática en /docs (Swagger UI).",
+            "ASGI permite concurrencia masiva nativa.",
+            "Los endpoints pueden ser def síncronos o async def no bloqueantes."
+          ],
+          "exercise": {
+            "id": "ex_fa_01_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿En qué ruta genera FastAPI automáticamente la documentación interactiva Swagger?",
+            "options": [
+              {
+                "id": "a",
+                "text": "/docs"
+              },
+              {
+                "id": "b",
+                "text": "/swagger.html"
+              },
+              {
+                "id": "c",
+                "text": "/api/v1/help"
+              },
+              {
+                "id": "d",
+                "text": "/readme"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "FastAPI expone la interfaz interactiva de Swagger UI en /docs y ReDoc en /redoc por defecto."
+          }
+        }
+      ]
+    }
+  ]
+}

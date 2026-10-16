@@ -7,7 +7,6 @@ import { useRoadmapStore } from '@/stores/roadmap.store';
 import { RoadmapBranchPill } from './RoadmapBranchPill';
 import { RoadmapProfilePill } from './RoadmapProfilePill';
 import { RoadmapTopHud } from './RoadmapTopHud';
-import { RoadmapLegend } from './RoadmapLegend';
 import { RoadmapFusionView } from './RoadmapFusionView';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { useRouter } from 'next/navigation';
@@ -47,9 +46,10 @@ export const StudentRoadmapView: React.FC = () => {
       void openCourseLessons(node.targetCourseId ?? node.id);
       return;
     }
+    const currentCourse = selectedCourseId || node.targetCourseId || useRoadmapStore.getState().activeBranchId || 'fe-html';
     const tail = node.id.split('-').pop() ?? '';
     const sectionRef = /^s\d+$/.test(tail) ? tail : node.id;
-    router.push(`/app/curso/${selectedCourseId}/seccion/${sectionRef}`);
+    router.push(`/app/curso/${currentCourse}/seccion/${sectionRef}`);
   };
 
   return (
@@ -90,8 +90,6 @@ export const StudentRoadmapView: React.FC = () => {
             </div>
           ) : null}
         </main>
-
-        <RoadmapLegend />
       </div>
     </div>
   );

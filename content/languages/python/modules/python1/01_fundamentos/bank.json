@@ -1,0 +1,131 @@
+{
+  "module_code": "PY1_M01",
+  "module_slug": "fundamentos-de-python",
+  "course_slug": "python-1",
+  "questions": [
+    {
+      "id": "q_py1_01_01",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál de las siguientes afirmaciones sobre Python es CORRECTA?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Es un lenguaje interpretado que prioriza la legibilidad del código"
+        },
+        {
+          "id": "b",
+          "text": "Requiere obligatoriamente punto y coma (;) al final de cada línea"
+        },
+        {
+          "id": "c",
+          "text": "No distingue entre mayúsculas y minúsculas en nombres de funciones"
+        },
+        {
+          "id": "d",
+          "text": "Solo puede ejecutarse dentro de un navegador web"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Python es interpretado, altamente legible y no exige puntos y coma al final de las sentencias."
+    },
+    {
+      "id": "q_py1_01_02",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué salida produce la ejecución del siguiente código?",
+      "prompt_code": "print(\"Hola\", \"Mundo\", sep=\"-\")",
+      "options": [
+        {
+          "id": "a",
+          "text": "Hola-Mundo"
+        },
+        {
+          "id": "b",
+          "text": "Hola Mundo"
+        },
+        {
+          "id": "c",
+          "text": "Hola, Mundo"
+        },
+        {
+          "id": "d",
+          "text": "HolaMundo-"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El parámetro nombrado sep=\"-\" en print() define el separador entre los argumentos impresos."
+    },
+    {
+      "id": "q_py1_01_03",
+      "type": "find_error",
+      "difficulty": "medium",
+      "prompt": "¿Por qué la siguiente línea de código fallará al ejecutarse?",
+      "prompt_code": "print(\"Aprender Python es genial)",
+      "options": [
+        {
+          "id": "a",
+          "text": "Falta la comilla de cierre de la cadena de texto (SyntaxError)"
+        },
+        {
+          "id": "b",
+          "text": "La palabra print debe ir con mayúscula inicial"
+        },
+        {
+          "id": "c",
+          "text": "Los textos deben escribirse con comillas triples únicamente"
+        },
+        {
+          "id": "d",
+          "text": "No se puede imprimir texto en español con tildes"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Toda cadena iniciada con comillas dobles debe cerrarse con comillas dobles antes de cerrar el paréntesis."
+    },
+    {
+      "id": "q_py1_01_04",
+      "type": "fill_blank",
+      "difficulty": "easy",
+      "prompt": "Para escribir un comentario de una sola línea en Python se utiliza el carácter: _____",
+      "options": [
+        {
+          "id": "a",
+          "text": "#"
+        },
+        {
+          "id": "b",
+          "text": "//"
+        },
+        {
+          "id": "c",
+          "text": "/*"
+        },
+        {
+          "id": "d",
+          "text": "--"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "En Python, el carácter # se utiliza para comentarios de una línea."
+    },
+    {
+      "id": "q_py1_01_05",
+      "type": "true_false",
+      "difficulty": "easy",
+      "prompt": "En Python, las instrucciones PRINT(\"hola\") y print(\"hola\") son idénticas para el intérprete.",
+      "options": [
+        {
+          "id": "a",
+          "text": "Falso, Python es sensible a mayúsculas y PRINT generará un NameError"
+        },
+        {
+          "id": "b",
+          "text": "Verdadero, Python ignora las mayúsculas en funciones nativas"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Python es estricto con las mayúsculas y minúsculas (case-sensitive). La función nativa se llama print en minúsculas."
+    }
+  ]
+}

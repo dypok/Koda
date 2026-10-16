@@ -1,0 +1,91 @@
+{
+  "id": "py2_mod_01",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY2_M01",
+  "slug": "comprensiones",
+  "course_slug": "python-2",
+  "title": "Comprensiones de Listas, Diccionarios y Sets",
+  "objective": "Transformar y filtrar colecciones en una sola línea concisa mediante list, dict y set comprehensions.",
+  "description": "Escribe código elegante y veloz sustituyendo bucles for acumulativos por comprensiones funcionales legibles.",
+  "position": 11,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 220
+  },
+  "sections": [
+    {
+      "id": "sec_py2_01_01",
+      "code": "S01",
+      "title": "List Comprehensions y Filtrado",
+      "slug": "list-comprehensions",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 15,
+      "xp_on_complete": 40,
+      "lessons": [
+        {
+          "id": "les_py2_01_01",
+          "code": "L01",
+          "title": "Sintaxis de List Comprehensions",
+          "slug": "sintaxis-list-comprehensions",
+          "position": 1,
+          "concept_id": "py2-list-comp",
+          "objective": "Dominar la fórmula [expresion for item in iterable if condicion].",
+          "theory_markdown": "En lugar de crear una lista vacía, iterar con un for y hacer .append(), una **list comprehension** condensa esa transformación en una sola expresión idiomática:\n\n`[expresion for elemento in secuencia if condicion]`\n\nNo solo es más limpio de leer; el intérprete de Python lo ejecuta a nivel de bytecode C, haciéndolo sensiblemente más rápido que un bucle for manual.",
+          "examples": [
+            {
+              "title": "Transformación y filtro simultáneo",
+              "code": "numeros = [1, 2, 3, 4, 5, 6]\ncuadrados_pares = [n ** 2 for n in numeros if n % 2 == 0]\nprint(\"Pares al cuadrado:\", cuadrados_pares)",
+              "output": "Pares al cuadrado: [4, 16, 36]",
+              "explanation": "Filtra solo los pares (2, 4, 6) y los eleva al cuadrado (4, 16, 36)."
+            }
+          ],
+          "common_errors": "Hacer comprensiones de 3 o 4 líneas anidadas. Si la comprensión requiere lógica compleja o más de un if, es preferible un bucle for tradicional.",
+          "mini_exercise": {
+            "starter_code": "palabras = [\"koda\", \"python\", \"ai\"]\n# Genera una lista con las palabras en mayúscula\nmayus = ...\nprint(mayus)",
+            "instructions": "Usa [p.upper() for p in palabras].",
+            "solution": "palabras = [\"koda\", \"python\", \"ai\"]\nmayus = [p.upper() for p in palabras]\nprint(mayus)"
+          },
+          "key_takeaways": [
+            "[exp for x in lista] crea una lista transformada.",
+            "Se pueden agregar filtros finales con if condicion.",
+            "Es más rápido y conciso que for + append."
+          ],
+          "exercise": {
+            "id": "ex_py2_01_01",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Qué genera [x * 2 for x in [1, 2, 3]]?",
+            "options": [
+              {
+                "id": "a",
+                "text": "[2, 4, 6]"
+              },
+              {
+                "id": "b",
+                "text": "[1, 2, 3, 1, 2, 3]"
+              },
+              {
+                "id": "c",
+                "text": "[2, 2, 2]"
+              },
+              {
+                "id": "d",
+                "text": "Error"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Multiplica cada elemento x individual por 2, produciendo [2, 4, 6]."
+          }
+        }
+      ]
+    }
+  ]
+}

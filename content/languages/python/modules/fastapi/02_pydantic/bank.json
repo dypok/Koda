@@ -1,0 +1,33 @@
+{
+  "module_code": "FA_M02",
+  "module_slug": "fastapi-pydantic",
+  "course_slug": "fastapi-async",
+  "questions": [
+    {
+      "id": "q_fa_02_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Para qué sirve el parámetro response_model en un decorador de FastAPI (ej: @app.get(..., response_model=UsuarioPublico))?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Filtra y restringe los datos enviados al cliente, protegiendo campos confidenciales como contraseñas"
+        },
+        {
+          "id": "b",
+          "text": "Para conectarse a la base de datos"
+        },
+        {
+          "id": "c",
+          "text": "Para redirigir la página"
+        },
+        {
+          "id": "d",
+          "text": "Es un parámetro decorativo sin efecto"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "response_model garantiza que solo los campos definidos en ese modelo público salgan al cliente, previniendo fugas de contraseñas o datos sensibles."
+    }
+  ]
+}

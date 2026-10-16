@@ -1,0 +1,91 @@
+{
+  "id": "ia_mod_10",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "IA_M10",
+  "slug": "ia-proyecto-agente-completo",
+  "course_slug": "ai-agents",
+  "title": "Proyecto Integrador: Agente Autónomo Multi-Herramienta",
+  "objective": "Integrar todos los conceptos: agente con bucle ReAct, herramientas personalizadas (SQL, búsqueda, calculadora), memoria y frontend en Streamlit.",
+  "description": "La culminación de la especialización en Inteligencia Artificial: construye y despliega un agente autónomo de grado profesional capaz de resolver problemas complejos de principio a fin.",
+  "position": 60,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 500
+  },
+  "sections": [
+    {
+      "id": "sec_ia_10_01",
+      "code": "S01",
+      "title": "Arquitectura del Agente Autónomo Completo",
+      "slug": "agente-autonomo-final",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
+      "lessons": [
+        {
+          "id": "les_ia_10_01",
+          "code": "L01",
+          "title": "Ensamblaje del Agente Multi-Herramienta con Memoria y UI",
+          "slug": "ensamblaje-agente-final",
+          "position": 1,
+          "concept_id": "ia-capstone-agent",
+          "objective": "Conectar el bucle de razonamiento con el toolkit de ejecución y la interfaz web interactiva.",
+          "theory_markdown": "En este proyecto final ensamblamos la arquitectura completa de un agente de investigación autónomo:\n\n1. **Toolkit de herramientas**:\n   - Herramienta de búsqueda en base de conocimiento documental (RAG).\n   - Herramienta de consulta estructurada a base de datos (SQL).\n   - Herramienta de cálculos matemáticos seguros.\n2. **Bucle ReAct**: Planifica y ejecuta las herramientas secuencialmente.\n3. **Capa de Guardrails**: Valida que no existan inyecciones maliciosas.\n4. **Interfaz Streamlit**: Visualiza los pensamientos del agente (`st.status`, `st.expander`) y muestra la respuesta enriquecida al usuario final.",
+          "examples": [
+            {
+              "title": "Orquestación de ejecución multi-tool",
+              "code": "class AgenteInvestigador:\n    def __init__(self, herramientas):\n        self.herramientas = herramientas\n        self.historial = []\n        \n    def ejecutar(self, consulta):\n        # 1. Razonar\n        # 2. Despachar herramienta\n        # 3. Formular respuesta final\n        return f\"Reporte final generado para: '{consulta}' con {len(self.herramientas)} herramientas disponibles.\"\n\nagente = AgenteInvestigador([\"buscar_rag\", \"consultar_sql\", \"calcular\"])\nprint(agente.ejecutar(\"Analizar balance de ventas trimestrales\"))",
+              "output": "Reporte final generado para: 'Analizar balance de ventas trimestrales' con 3 herramientas disponibles.",
+              "explanation": "El agente orquesta de forma autónoma el conjunto de herramientas para resolver la consulta."
+            }
+          ],
+          "common_errors": "No informar al usuario qué está haciendo el agente en cada momento. En interfaces con agentes autónomos es vital mostrar el estado (\"Consultando base de datos...\", \"Analizando documentos...\") para mitigar la percepción de latencia.",
+          "mini_exercise": {
+            "starter_code": "# En Streamlit, usa st.status para mostrar las acciones del agente\n# with st.status(\"Agente trabajando...\") as status:\n#     st.write(\"Buscando en documentos...\")\n#     st.write(\"Generando gráfico...\")\n#     status.update(label=\"¡Listo!\", state=\"complete\")",
+            "instructions": "Comprende el uso de st.status para transparencia operativa.",
+            "solution": "# st.status listo"
+          },
+          "key_takeaways": [
+            "Un agente completo combina LLMs, Function Calling, RAG, Memoria y Guardrails.",
+            "La interfaz debe transparentar el proceso de razonamiento del agente.",
+            "¡Felicidades! Has completado el dominio integral de Inteligencia Artificial con Python."
+          ],
+          "exercise": {
+            "id": "ex_ia_10_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Cuál es el beneficio de mostrar los pasos intermedios (\"Thought\" y \"Action\") de un agente autónomo en la interfaz de usuario?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Brinda transparencia, permite auditar el razonamiento del agente y mejora la experiencia de espera del usuario"
+              },
+              {
+                "id": "b",
+                "text": "Hace que el modelo cobre menos por token"
+              },
+              {
+                "id": "c",
+                "text": "Es un requisito obligatorio del sistema operativo"
+              },
+              {
+                "id": "d",
+                "text": "Oculta los errores"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La transparencia genera confianza en el usuario al evidenciar de qué fuentes extrajo el agente la información para su conclusión final."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "module_code": "IA_M09",
+  "module_slug": "ia-guardrails-y-evaluacion",
+  "course_slug": "ai-agents",
+  "questions": [
+    {
+      "id": "q_ia_09_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿En qué consiste el patrón de evaluación \"LLM-as-a-Judge\"?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Utilizar un LLM potente con una rúbrica formal para calificar y auditar automáticamente las respuestas de otro modelo o agente"
+        },
+        {
+          "id": "b",
+          "text": "Llevar a juicio a la empresa creadora del modelo"
+        },
+        {
+          "id": "c",
+          "text": "Un modelo que solo redacta leyes"
+        },
+        {
+          "id": "d",
+          "text": "Un compilador de código C"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "LLM-as-a-Judge automatiza la evaluación de fidelidad, relevancia y coherencia a gran escala sin depender de etiquetadores humanos para cada prueba."
+    }
+  ]
+}

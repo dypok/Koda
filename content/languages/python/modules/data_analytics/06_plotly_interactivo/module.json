@@ -1,0 +1,91 @@
+{
+  "id": "da_mod_06",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "DA_M06",
+  "slug": "plotly-interactivo",
+  "course_slug": "data-analytics",
+  "title": "Visualización Interactiva Moderna con Plotly Express",
+  "objective": "Construir gráficos web interactivos con zoom, pan, hover tooltips y mapas coropléticos usando Plotly Express.",
+  "description": "Lleva tus datos al navegador: gráficos reactivos que permiten a directores y usuarios explorar cada punto con el cursor.",
+  "position": 46,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 340
+  },
+  "sections": [
+    {
+      "id": "sec_da_06_01",
+      "code": "S01",
+      "title": "Plotly Express y Gráficos Reactivos",
+      "slug": "plotly-express",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_da_06_01",
+          "code": "L01",
+          "title": "Gráficos Interactivos en Una Línea con px",
+          "slug": "plotly-base",
+          "position": 1,
+          "concept_id": "da-plotly",
+          "objective": "Crear gráficos de dispersión multidimensionales con tooltips dinámicos.",
+          "theory_markdown": "A diferencia de Matplotlib (que produce imágenes estáticas PNG), **Plotly** genera gráficos basados en **D3.js y WebGL** renderizados directamente en el navegador.\n\nCon **Plotly Express (`px`)**, creas visualizaciones interactivas con hover, zoom y selección en una sola línea:\n```python\nimport plotly.express as px\nfig = px.scatter(df, x=\"gdp\", y=\"esperanza_vida\", color=\"continente\", hover_name=\"pais\")\nfig.show()\n```",
+          "examples": [
+            {
+              "title": "Exportación de gráfico interactivo a HTML",
+              "code": "import plotly.express as px\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"mes\": [\"Ene\", \"Feb\", \"Mar\", \"Abr\"],\n    \"ingresos\": [12000, 15000, 18500, 22000]\n})\nfig = px.line(df, x=\"mes\", y=\"ingresos\", title=\"Crecimiento MRR\", markers=True)\n# fig.write_html(\"reporte.html\")\nprint(\"Gráfico Plotly configurado con título:\", fig.layout.title.text)",
+              "output": "Gráfico Plotly configurado con título: Crecimiento MRR",
+              "explanation": "fig.write_html() genera un archivo HTML autónomo con todo el motor interactivo incluido."
+            }
+          ],
+          "common_errors": "Intentar renderizar gráficos de Plotly en terminales de texto sin un entorno gráfico o navegador compatible.",
+          "mini_exercise": {
+            "starter_code": "# Crea un gráfico de barras con px.bar(df, x=\"categoria\", y=\"total\")\n# fig.show()",
+            "instructions": "Revisa la sintaxis de px.bar.",
+            "solution": "# px.bar listo"
+          },
+          "key_takeaways": [
+            "Plotly genera gráficos HTML interactivos basados en JavaScript.",
+            "px.scatter, px.bar, px.line simplifican la API.",
+            "Los gráficos pueden exportarse a HTML interactivo o integrarse en Streamlit."
+          ],
+          "exercise": {
+            "id": "ex_da_06_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Cuál es la principal ventaja de Plotly frente a Matplotlib para reportes corporativos?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Permite interactividad en el navegador (zoom, hover sobre datos, filtrado dinámico)"
+              },
+              {
+                "id": "b",
+                "text": "Es un lenguaje de programación diferente"
+              },
+              {
+                "id": "c",
+                "text": "Solo funciona en servidores Linux"
+              },
+              {
+                "id": "d",
+                "text": "No permite exportar gráficos"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Plotly genera visualizaciones interactivas donde el usuario puede pasar el cursor para ver detalles, aislar series y hacer zoom."
+          }
+        }
+      ]
+    }
+  ]
+}

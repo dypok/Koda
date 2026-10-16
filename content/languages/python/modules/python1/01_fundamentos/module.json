@@ -1,0 +1,147 @@
+{
+  "id": "py1_mod_01",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY1_M01",
+  "slug": "fundamentos-de-python",
+  "course_slug": "python-1",
+  "title": "Entorno de Desarrollo y Primeros Pasos",
+  "objective": "Configurar un entorno profesional con VS Code y venv, dominar la función print() y la sintaxis base.",
+  "description": "Aprende qué es Python, cómo se ejecuta tu código, cómo configurar un entorno virtual y cómo comunicarte con la consola.",
+  "position": 1,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 2,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 150
+  },
+  "sections": [
+    {
+      "id": "sec_py1_01_01",
+      "code": "S01",
+      "title": "El Intérprete y la Función print()",
+      "slug": "interprete-y-print",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 15,
+      "xp_on_complete": 30,
+      "lessons": [
+        {
+          "id": "les_py1_01_01",
+          "code": "L01",
+          "title": "¿Cómo Piensa Python y Cómo se Ejecuta?",
+          "slug": "como-piensa-python",
+          "position": 1,
+          "concept_id": "py-runtime",
+          "objective": "Comprender el ciclo de ejecución interpretado de Python frente a lenguajes compilados.",
+          "theory_markdown": "Python es un lenguaje **interpretado y de alto nivel**. Imagina al intérprete de Python como un traductor simultáneo en las Naciones Unidas: en lugar de exigir que compiles todo un libro de una sola vez antes de leerlo (como C++ o Rust), Python lee tu archivo línea por línea de arriba hacia abajo y lo ejecuta en tiempo real.\n\nPara comunicarnos con el mundo exterior desde nuestro script, utilizamos la función nativa `print()`. Todo lo que pongas dentro de sus paréntesis será enviado a la salida estándar (la consola).\n\n> **Analogía del mundo real:** Un script de Python es como una receta de cocina paso a paso. El chef (el intérprete) lee la instrucción 1, la ejecuta en su estación de trabajo, luego pasa a la instrucción 2. Si la instrucción 2 tiene un error ortográfico, se detiene exactamente en esa línea.",
+          "examples": [
+            {
+              "title": "Primer script ejecutable",
+              "code": "# Línea 1: Mensaje de bienvenida\nprint(\"¡Hola, programador!\")\n\n# Línea 2: Impresión de números y cálculos directos\nprint(42)\nprint(10 + 5)",
+              "output": "¡Hola, programador!\n42\n15",
+              "explanation": "print() puede recibir texto entre comillas o expresiones numéricas directamente."
+            }
+          ],
+          "common_errors": "Olvidar cerrar comillas (SyntaxError: unterminated string literal) o escribir Print con mayúscula inicial (NameError: name \"Print\" is not defined; Python es sensible a mayúsculas).",
+          "mini_exercise": {
+            "starter_code": "# Imprime tu nombre y tu lenguaje favorito en dos líneas\nprint(\"...\")",
+            "instructions": "Usa print() para mostrar tu nombre en la primera línea y Python 3 en la segunda.",
+            "solution": "print(\"Dev\")\nprint(\"Python 3\")"
+          },
+          "key_takeaways": [
+            "Python se ejecuta línea por línea de forma interpretada.",
+            "print() envía datos a la terminal.",
+            "Python distingue estrictamente entre mayúsculas y minúsculas."
+          ],
+          "exercise": {
+            "id": "ex_py1_01_01",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Qué mostrará la consola tras ejecutar este código?",
+            "prompt_code": "print(\"3\" + \"3\")\nprint(3 + 3)",
+            "options": [
+              {
+                "id": "a",
+                "text": "33 en la primera línea y 6 en la segunda"
+              },
+              {
+                "id": "b",
+                "text": "6 en ambas líneas"
+              },
+              {
+                "id": "c",
+                "text": "Error de tipo"
+              },
+              {
+                "id": "d",
+                "text": "\"3+3\""
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Entre comillas (\"3\" + \"3\"), el operador + concatena texto generando \"33\". Sin comillas (3 + 3), suma aritméticamente generando 6."
+          }
+        },
+        {
+          "id": "les_py1_01_02",
+          "code": "L02",
+          "title": "Entornos Virtuales (venv) y Comentarios Limpios",
+          "slug": "entornos-virtuales-y-comentarios",
+          "position": 2,
+          "concept_id": "py-venv",
+          "objective": "Aprender la importancia de aislar dependencias con venv y documentar con comentarios PEP 8.",
+          "theory_markdown": "En proyectos reales, cada aplicación puede requerir versiones distintas de librerías. Un **entorno virtual (venv)** es una burbuja aislada en tu disco que contiene su propia copia del ejecutable de Python y sus paquetes, evitando que un proyecto rompa a otro.\n\nPara documentar código en Python, usamos el símbolo numeral (`#`). El intérprete ignora por completo cualquier texto que comience con `#`, permitiéndote dejar notas para tu equipo o tu \"yo\" del futuro.\n\n```bash\n# Crear un entorno virtual en terminal\npython -m venv .venv\n# Activar en Windows\n.venv\\Scripts\\activate\n```",
+          "examples": [
+            {
+              "title": "Comentarios efectivos y auto-explicativos",
+              "code": "# Calcula el precio con impuesto del 16%\nprecio_base = 100\nimpuesto = precio_base * 0.16\ntotal = precio_base + impuesto\nprint(total)  # Muestra 116.0",
+              "output": "116.0",
+              "explanation": "Los comentarios explican el \"por qué\", no lo que el código ya dice a simple vista."
+            }
+          ],
+          "common_errors": "No activar el entorno virtual antes de instalar paquetes, o abusar de comentarios obvios como `# suma 1` en vez de dar nombres claros a las variables.",
+          "mini_exercise": {
+            "starter_code": "# Escribe un comentario explicando tu meta de aprendizaje\nprint(\"Koda Specialist\")",
+            "instructions": "Agrega un comentario de una línea antes del print.",
+            "solution": "# Mi objetivo es dominar Python Specialist\nprint(\"Koda Specialist\")"
+          },
+          "key_takeaways": [
+            "venv previene conflictos de versiones entre proyectos.",
+            "Los comentarios inician con # y son ignorados por el intérprete.",
+            "El código limpio reduce la necesidad de comentarios excesivos."
+          ],
+          "exercise": {
+            "id": "ex_py1_01_02",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Cuál es el propósito principal de crear un entorno virtual con `python -m venv .venv`?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Aislar las librerías y dependencias específicas del proyecto"
+              },
+              {
+                "id": "b",
+                "text": "Hacer que Python se ejecute 10 veces más rápido"
+              },
+              {
+                "id": "c",
+                "text": "Compilar el código a lenguaje máquina"
+              },
+              {
+                "id": "d",
+                "text": "Instalar Windows en una máquina virtual"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Un entorno virtual aísla las librerías del proyecto para evitar colisiones con paquetes globales u otros proyectos del sistema."
+          }
+        }
+      ]
+    }
+  ]
+}

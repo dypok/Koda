@@ -1,0 +1,33 @@
+{
+  "module_code": "PY3_M04",
+  "module_slug": "type-hints-y-dataclasses",
+  "course_slug": "python-3",
+  "questions": [
+    {
+      "id": "q_py3_04_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cómo se debe definir un atributo de lista con valor por defecto vacío en una @dataclass?",
+      "options": [
+        {
+          "id": "a",
+          "text": "tags: list[str] = field(default_factory=list)"
+        },
+        {
+          "id": "b",
+          "text": "tags: list[str] = []"
+        },
+        {
+          "id": "c",
+          "text": "tags: list[str] = list()"
+        },
+        {
+          "id": "d",
+          "text": "tags: list[str] = None"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Las listas por defecto en dataclasses requieren field(default_factory=list) para evitar compartir la misma instancia entre objetos."
+    }
+  ]
+}

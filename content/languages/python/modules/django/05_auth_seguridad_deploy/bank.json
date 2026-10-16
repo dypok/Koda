@@ -1,0 +1,33 @@
+{
+  "module_code": "DJ_M05",
+  "module_slug": "django-auth-security-deploy",
+  "course_slug": "django-enterprise",
+  "questions": [
+    {
+      "id": "q_dj_05_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué comando de Django recolecta todos los archivos estáticos (CSS, JS, imágenes) de todas las apps en una sola carpeta central (STATIC_ROOT) para producción?",
+      "options": [
+        {
+          "id": "a",
+          "text": "python manage.py collectstatic"
+        },
+        {
+          "id": "b",
+          "text": "python manage.py buildstatic"
+        },
+        {
+          "id": "c",
+          "text": "python manage.py export_assets"
+        },
+        {
+          "id": "d",
+          "text": "python manage.py sync_media"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "collectstatic unifica todos los recursos estáticos en STATIC_ROOT para que WhiteNoise o Nginx puedan servirlos con alto rendimiento."
+    }
+  ]
+}

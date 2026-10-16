@@ -1,0 +1,91 @@
+{
+  "id": "dj_mod_01",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "DJ_M01",
+  "slug": "django-mtv-routing",
+  "course_slug": "django-enterprise",
+  "title": "Arquitectura MTV, Settings y Routing en Django",
+  "objective": "Comprender la filosofía \"baterías incluidas\" de Django, la arquitectura Modelo-Template-Vista (MTV) y configurar el enrutamiento.",
+  "description": "El framework web empresarial por excelencia: crea proyectos robustos, desacoplados en apps modulares con configuración segura.",
+  "position": 36,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 250
+  },
+  "sections": [
+    {
+      "id": "sec_dj_01_01",
+      "code": "S01",
+      "title": "Estructura de un Proyecto Django",
+      "slug": "estructura-django",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_dj_01_01",
+          "code": "L01",
+          "title": "Filosofía Batteries Included y el Patrón MTV",
+          "slug": "filosofia-mtv",
+          "position": 1,
+          "concept_id": "dj-intro",
+          "objective": "Diferenciar entre Proyecto Django y Aplicaciones (apps) individuales.",
+          "theory_markdown": "Django promueve la filosofía de **\"baterías incluidas\"**: incluye de serie autenticación, panel administrativo, ORM y protección CSRF sin configurar librerías externas.\n\nSu arquitectura se basa en **MTV (Model - Template - View)**:\n- **Model**: Capa de datos y reglas de negocio (ORM).\n- **Template**: Capa de presentación (HTML con motor de plantillas de Django DTL).\n- **View**: Capa de control que recibe la petición HTTP, consulta los modelos y renderiza el template o respuesta JSON.",
+          "examples": [
+            {
+              "title": "Vista básica basada en función",
+              "code": "from django.http import JsonResponse\n\ndef estado_sistema(request):\n    datos = {\"plataforma\": \"Koda Academy\", \"version\": \"5.1\", \"online\": True}\n    return JsonResponse(datos)",
+              "output": "HTTP 200 OK\n{\"plataforma\": \"Koda Academy\", \"version\": \"5.1\", \"online\": true}",
+              "explanation": "JsonResponse serializa diccionarios con la cabecera application/json automáticamente."
+            }
+          ],
+          "common_errors": "Olvidar registrar una nueva app creada con `django-admin startapp` dentro de la lista `INSTALLED_APPS` en `settings.py`.",
+          "mini_exercise": {
+            "starter_code": "# settings.py\n# INSTALLED_APPS = [\n#     ...\n#     \"mi_app\",\n# ]",
+            "instructions": "Recuerda que toda app modular debe añadirse a INSTALLED_APPS.",
+            "solution": "# app registrada en INSTALLED_APPS"
+          },
+          "key_takeaways": [
+            "Django es batteries-included: trae seguridad, auth y admin integrados.",
+            "Un proyecto contiene una o varias apps modulares reutilizables.",
+            "MTV mapea datos (Model), lógica (View) y visualización (Template)."
+          ],
+          "exercise": {
+            "id": "ex_dj_01_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "En la arquitectura MTV de Django, ¿cuál capa es la encargada de procesar la lógica de la petición y devolver una respuesta?",
+            "options": [
+              {
+                "id": "a",
+                "text": "View (Vista)"
+              },
+              {
+                "id": "b",
+                "text": "Template (Plantilla)"
+              },
+              {
+                "id": "c",
+                "text": "Model (Modelo)"
+              },
+              {
+                "id": "d",
+                "text": "Settings"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La View (en views.py) recibe el request, ejecuta la lógica y devuelve la HttpResponse correspondiente."
+          }
+        }
+      ]
+    }
+  ]
+}

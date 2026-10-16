@@ -1,0 +1,91 @@
+{
+  "id": "ia_mod_06",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "IA_M06",
+  "slug": "ia-embeddings-vector-dbs",
+  "course_slug": "ai-agents",
+  "title": "Embeddings Semánticos y Bases de Datos Vectoriales",
+  "objective": "Transformar texto en vectores semánticos de alta dimensión, calcular distancias por similitud coseno e indexar con ChromaDB.",
+  "description": "La clave de la búsqueda semántica: cómo las computadoras entienden significados conceptuales y no solo coincidencias exactas de palabras.",
+  "position": 56,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 340
+  },
+  "sections": [
+    {
+      "id": "sec_ia_06_01",
+      "code": "S01",
+      "title": "Vectores Semánticos y ChromaDB",
+      "slug": "embeddings-y-chromadb",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_ia_06_01",
+          "code": "L01",
+          "title": "¿Qué es un Embedding y Cómo Funciona la Similitud Coseno?",
+          "slug": "embeddings-coseno-base",
+          "position": 1,
+          "concept_id": "ia-embeddings",
+          "objective": "Comprender la representación vectorial de conceptos y la búsqueda por cercanía espacial.",
+          "theory_markdown": "Una búsqueda tradicional por palabras clave (como `LIKE '%perro%'` en SQL) falla si el usuario escribe `\"canino\"` o `\"cachorro\"`.\n\nUn **embedding** es una función matemática que convierte un texto en un vector numérico (una lista de ~1536 números flotantes). Frases con significados similares quedan ubicadas muy cerca unas de otras en ese espacio multidimensional.\n\nPara medir qué tan similares son dos textos, calculamos la **similitud coseno** (ángulo entre sus vectores):\n- `1.0`: Significados idénticos.\n- `0.0`: Conceptos completamente inconexos.\n\nPara buscar entre millones de vectores a gran velocidad usamos **Bases de Datos Vectoriales** como **ChromaDB**, **FAISS** o **Pinecone**.",
+          "examples": [
+            {
+              "title": "Simulación conceptual de similitud coseno con NumPy",
+              "code": "import numpy as np\n\ndef similitud_coseno(v1, v2):\n    return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))\n\n# Vectores conceptuales simplificados\nv_perro = np.array([0.9, 0.8, 0.1])\nv_cachorro = np.array([0.88, 0.79, 0.12])\nv_avion = np.array([0.05, 0.1, 0.95])\n\nprint(\"Perro vs Cachorro:\", round(similitud_coseno(v_perro, v_cachorro), 4))\nprint(\"Perro vs Avión:\", round(similitud_coseno(v_perro, v_avion), 4))",
+              "output": "Perro vs Cachorro: 0.9997\nPerro vs Avión: 0.2241",
+              "explanation": "Perro y cachorro tienen una similitud cercana a 1.0, mientras que avión está espacialmente distante."
+            }
+          ],
+          "common_errors": "Intentar comparar embeddings generados por modelos distintos (ej: comparar un embedding de OpenAI con uno de Google). Sus espacios vectoriales son incompatibles.",
+          "mini_exercise": {
+            "starter_code": "# En ChromaDB:\n# import chromadb\n# client = chromadb.Client()\n# coleccion = client.create_collection(\"documentos\")",
+            "instructions": "Observa la API minimalista de ChromaDB en Python.",
+            "solution": "# ChromaDB listo"
+          },
+          "key_takeaways": [
+            "Los embeddings capturan el significado semántico en vectores continuos.",
+            "La similitud coseno mide la cercanía angular entre significados.",
+            "Las bases de datos vectoriales indexan embeddings para búsqueda k-NN ultrarrápida."
+          ],
+          "exercise": {
+            "id": "ex_ia_06_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Por qué la búsqueda mediante embeddings semánticos es superior a la búsqueda tradicional por palabras clave?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque encuentra textos con significado conceptual similar aunque no compartan exactamente las mismas palabras"
+              },
+              {
+                "id": "b",
+                "text": "Porque no requiere computadoras para funcionar"
+              },
+              {
+                "id": "c",
+                "text": "Porque almacena archivos de audio únicamente"
+              },
+              {
+                "id": "d",
+                "text": "Porque solo funciona con números pares"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La búsqueda semántica mapea conceptos (ej: \"clima frío\" y \"bajas temperaturas\"), superando la limitación sintáctica del matching literal de palabras."
+          }
+        }
+      ]
+    }
+  ]
+}

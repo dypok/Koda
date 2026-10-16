@@ -1,0 +1,148 @@
+{
+  "id": "py1_mod_05",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY1_M05",
+  "slug": "condicionales",
+  "course_slug": "python-1",
+  "title": "Estructuras de Control: Condicionales",
+  "objective": "Bifurcar la ejecución de programas mediante if, elif, else, operadores ternarios y anidamientos limpios.",
+  "description": "Aprende a dotar a tus programas de inteligencia lógica: toma decisiones condicionales según el estado de las variables y evita anidamientos profundos.",
+  "position": 5,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 2,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 190
+  },
+  "sections": [
+    {
+      "id": "sec_py1_05_01",
+      "code": "S01",
+      "title": "Toma de Decisiones con if, elif y else",
+      "slug": "if-elif-else",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 40,
+      "lessons": [
+        {
+          "id": "les_py1_05_01",
+          "code": "L01",
+          "title": "La Estructura if-elif-else y la Sangría (Indentación)",
+          "slug": "estructura-if-elif-else",
+          "position": 1,
+          "concept_id": "py-conditionals",
+          "objective": "Dominar la sintaxis de bifurcación y la regla de indentación de 4 espacios de Python.",
+          "theory_markdown": "En la mayoría de los lenguajes se usan llaves `{ }` para agrupar bloques de código. En Python, **la sangría (indentación) es obligatoria y define la estructura** del programa (estándar PEP 8: 4 espacios).\n\nEl flujo de decisión condicional opera así:\n1. `if condicion:`: Se evalúa primero. Si es `True`, ejecuta su bloque indentado y salta el resto.\n2. `elif otra_condicion:` (else if): Si el `if` anterior fue `False`, evalúa esta alternativa.\n3. `else:`: Si ninguna condición previa fue verdadera, se ejecuta este bloque por defecto.",
+          "examples": [
+            {
+              "title": "Clasificador de notas de estudiantes",
+              "code": "nota = 85\n\nif nota >= 90:\n    print(\"Calificación: A (Excelente)\")\nelif nota >= 80:\n    print(\"Calificación: B (Notable)\")\nelif nota >= 70:\n    print(\"Calificación: C (Aprobado)\")\nelse:\n    print(\"Calificación: F (Reprobado)\")",
+              "output": "Calificación: B (Notable)",
+              "explanation": "Como 85 no es >= 90, salta el primer if. Luego 85 >= 80 es True, ejecuta ese bloque y finaliza la estructura."
+            }
+          ],
+          "common_errors": "Mezclar tabulaciones y espacios (TabError), olvidar los dos puntos (:) al final de la línea del if/elif/else, o no indentar el bloque interior (IndentationError).",
+          "mini_exercise": {
+            "starter_code": "temperatura = 32\n# Si temperatura > 30 imprime \"Calor\", sino \"Agradable\"\nif ...:\n    ...\nelse:\n    ...",
+            "instructions": "Completa la condición if-else respetando los 4 espacios de sangría.",
+            "solution": "temperatura = 32\nif temperatura > 30:\n    print(\"Calor\")\nelse:\n    print(\"Agradable\")"
+          },
+          "key_takeaways": [
+            "La indentación de 4 espacios es obligatoria y define qué pertenece al bloque.",
+            "Toda sentencia condicional finaliza con dos puntos (:).",
+            "Tan pronto una condición es True, las siguientes ramas elif/else son ignoradas."
+          ],
+          "exercise": {
+            "id": "ex_py1_05_01",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Qué imprimirá el siguiente código?",
+            "prompt_code": "x = 10\nif x > 20:\n    print(\"Mayor a 20\")\nelif x == 10:\n    print(\"Es diez\")\nelse:\n    print(\"Otro\")",
+            "options": [
+              {
+                "id": "a",
+                "text": "Es diez"
+              },
+              {
+                "id": "b",
+                "text": "Mayor a 20"
+              },
+              {
+                "id": "c",
+                "text": "Otro"
+              },
+              {
+                "id": "d",
+                "text": "Es diez\nOtro"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "x > 20 es False. elif x == 10 es True, por lo que imprime \"Es diez\" y el else no se evalúa."
+          }
+        },
+        {
+          "id": "les_py1_05_02",
+          "code": "L02",
+          "title": "Operador Ternario y Condiciones Concensadas",
+          "slug": "operador-ternario",
+          "position": 2,
+          "concept_id": "py-ternary-operator",
+          "objective": "Asignar valores basados en condiciones en una sola línea elegante.",
+          "theory_markdown": "Cuando necesitas asignar una variable dependiendo de una condición simple, escribir 4 líneas de `if-else` puede resultar repetitivo. Python ofrece la **expresión condicional (operador ternario)**:\n\n`valor_si_verdadero if condicion else valor_si_falso`\n\n> **Ejemplo cotidiano:** `estado = \"Adulto\" if edad >= 18 else \"Menor\"`. Lee casi como lenguaje natural en inglés.",
+          "examples": [
+            {
+              "title": "Asignación compacta y pythónica",
+              "code": "puntos = 120\nresultado = \"Aprobado\" if puntos >= 100 else \"Reintentar\"\nprint(resultado)",
+              "output": "Aprobado",
+              "explanation": "Como puntos (120) es >= 100, la variable resultado recibe \"Aprobado\" en una sola línea."
+            }
+          ],
+          "common_errors": "Abusar del operador ternario anidando varios ternarios en una línea, lo cual destruye la legibilidad del código (regla del Zen de Python: \"Legible es mejor que complejo\").",
+          "mini_exercise": {
+            "starter_code": "stock = 0\n# Usa ternario: \"Disponible\" si stock > 0 sino \"Agotado\"\nestado = ...\nprint(estado)",
+            "instructions": "Escribe la expresión ternaria en una sola línea.",
+            "solution": "stock = 0\nestado = \"Disponible\" if stock > 0 else \"Agotado\"\nprint(estado)"
+          },
+          "key_takeaways": [
+            "El operador ternario asigna en formato: A if condicion else B.",
+            "Debe reservarse para decisiones directas y legibles.",
+            "Siempre requiere una cláusula else obligatoria."
+          ],
+          "exercise": {
+            "id": "ex_py1_05_02",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Cuál es el valor final de etiqueta?",
+            "prompt_code": "es_admin = False\netiqueta = \"Root\" if es_admin else \"Guest\"\nprint(etiqueta)",
+            "options": [
+              {
+                "id": "a",
+                "text": "Guest"
+              },
+              {
+                "id": "b",
+                "text": "Root"
+              },
+              {
+                "id": "c",
+                "text": "False"
+              },
+              {
+                "id": "d",
+                "text": "Error"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Como es_admin es False, el operador ternario toma la rama del else (\"Guest\")."
+          }
+        }
+      ]
+    }
+  ]
+}
