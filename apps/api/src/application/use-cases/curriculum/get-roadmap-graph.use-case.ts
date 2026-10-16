@@ -188,7 +188,7 @@ export class GetRoadmapGraphUseCase {
           statusText: 'RQ M03', isUnlocked: false,
         },
         {
-          id: 'py-boss-logic', code: '🛡️', label: 'GUARDIÁN DE LA LÓGICA', subtitle: 'MINI-BOSS: QUIZ MÓDULOS 1-4',
+          id: 'py-boss-logic', code: 'MB', label: 'GUARDIÁN DE LA LÓGICA', subtitle: 'MINI-BOSS: QUIZ MÓDULOS 1-4',
           x: 690, y: 350, variant: 'branch', iconType: 'lock', xp: 250,
           statusText: 'MINI-BOSS • REQUIERE M04', isUnlocked: false,
         },

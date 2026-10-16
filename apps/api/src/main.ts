@@ -59,7 +59,7 @@ async function bootstrap() {
   const isProduction = process.env.NODE_ENV === 'production';
   if (!isProduction) {
     const config = new DocumentBuilder()
-      .setTitle('Koda API 🦊 (REST v2.0 - Superficie Transaccional)')
+      .setTitle('Koda API (REST v2.0 - Superficie Transaccional)')
       .setDescription(
         'Especificación OpenAPI 3.0 para la plataforma Koda. ' +
         'Conforme a la Arquitectura Híbrida formalizada en ADR-012, la superficie REST (/api/v1) está reservada exclusivamente para ' +
@@ -85,9 +85,9 @@ async function bootstrap() {
 
   const port = process.env.PORT || 4000;
   await app.listen(port);
-  console.log(`🚀 Koda Backend API running at http://localhost:${port}/api/v1`);
+  console.log(`[Koda API] Backend running at http://localhost:${port}/api/v1`);
   if (!isProduction) {
-    console.log(`📚 Swagger Documentation at http://localhost:${port}/api/docs`);
+    console.log(`[Koda API] Swagger Documentation at http://localhost:${port}/api/docs`);
   }
 }
 
