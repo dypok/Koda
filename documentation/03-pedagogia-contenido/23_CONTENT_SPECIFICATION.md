@@ -4,6 +4,9 @@
 > **Zona horaria:** America/Bogota (UTC-5)
 > Complementa a `01_PROJECT_OVERVIEW.md` §7/§31, `03_OBJECTIVES.md` OT-02/OT-03, `04_SCOPE.md` §10.3, `05_FUNCTIONAL_REQUIREMENTS.md` RF-LANG/RF-MOD/RF-SEC/RF-LEC/RF-PREG/RF-ADM, `06_NON_FUNCTIONAL_REQUIREMENTS.md` RNF-006/RNF-017/RNF-031/RNF-035/RNF-036, `11_SYSTEM_ARCHITECTURE.md` §15 (Content Engine), `12_DATABASE_DESIGN.md` §6.3–§6.11, `14_LEARNING_SYSTEM.md` §2 y `15_QUIZ_EXAM_SYSTEM.md` §3–§5. No duplica; es la **fuente de verdad del formato declarativo**.
 
+> [!NOTE]
+> El **formato físico canónico y verificable de una pregunta** vive en [`29_QUESTION_JSON_CONTRACT.md`](29_QUESTION_JSON_CONTRACT.md) y en el JSON Schema [`content/schemas/question.schema.json`](../../content/schemas/question.schema.json). Donde este documento describa campos de pregunta (IDs en UUID, dificultad en códigos `EASY/MEDIUM/HARD`, etc.) debe leerse como **aspiracional**; en caso de conflicto mandan `29` + el schema. Las **coordenadas y el orden** del roadmap se detallan en [`30_ROADMAP_STRUCTURE_AND_COORDINATES.md`](30_ROADMAP_STRUCTURE_AND_COORDINATES.md).
+
 ---
 
 ## 1. Propósito y alcance

@@ -4,6 +4,9 @@
 > Complementa a `01_PROJECT_OVERVIEW.md` §6–§7/§31/§38, `02_PROBLEM_STATEMENT.md` PS-01–PS-10, `04_SCOPE.md` §2.2/§5–§6, `05_FUNCTIONAL_REQUIREMENTS.md` RF-PREG/RF-LEC/RF-SEC/RF-ADM/RF-EVAL, `06_NON_FUNCTIONAL_REQUIREMENTS.md` RNF-022/RNF-031/RNF-035/RNF-036, `11_SYSTEM_ARCHITECTURE.md` §15 (Content Engine), `12_DATABASE_DESIGN.md` §6.8–6.9, `14_LEARNING_SYSTEM.md` §2.5/§13, `15_QUIZ_EXAM_SYSTEM.md` §3–§5/§15. No duplica; es la norma operativa para autores, revisores y publicadores de contenido. La especificación de **formato declarativo y almacenamiento** vive en `23_CONTENT_SPECIFICATION.md`; aquí se define **cómo escribir bien** dentro de ese formato.
 > **Principio rector:** `01` §38 — cada concepto se aprende → se practica → se puede fallar → se recibe feedback inmediato → se reintenta. El contenido es el vehículo de ese ciclo; si el texto es ambiguo, el ciclo se rompe.
 
+> [!NOTE]
+> El **contrato JSON de cada pregunta** (campos, 11 tipos, payload y validaciones) está en [`29_QUESTION_JSON_CONTRACT.md`](29_QUESTION_JSON_CONTRACT.md) y en [`content/schemas/question.schema.json`](../../content/schemas/question.schema.json). Esta guía define el **cómo escribir**; `29` define el **cómo se estructura**. Donde difieran, mandan `29` + el schema.
+
 ---
 
 ## 1. Propósito y alcance
