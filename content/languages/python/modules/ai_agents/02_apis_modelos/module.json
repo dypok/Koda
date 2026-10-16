@@ -1,0 +1,91 @@
+{
+  "id": "ia_mod_02",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "IA_M02",
+  "slug": "ia-apis-modelos",
+  "course_slug": "ai-agents",
+  "title": "Consumo de APIs de Modelos en Python y Streaming",
+  "objective": "Interactuar programáticamente con APIs de LLMs modernos (OpenAI, Anthropic, Gemini), gestionar API Keys y transmitir respuestas en streaming.",
+  "description": "Conecta tu código Python con los cerebros de IA más avanzados del planeta: llamadas síncronas, asíncronas y streaming en tiempo real.",
+  "position": 52,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 280
+  },
+  "sections": [
+    {
+      "id": "sec_ia_02_01",
+      "code": "S01",
+      "title": "Clientes API y Respuestas en Streaming",
+      "slug": "clientes-api-streaming",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_ia_02_01",
+          "code": "L01",
+          "title": "Llamadas a APIs con Mensajes de Chat y Streaming",
+          "slug": "api-chat-streaming-base",
+          "position": 1,
+          "concept_id": "ia-api-client",
+          "objective": "Manejar la estructura de roles (system, user, assistant) y recibir texto token por token con stream=True.",
+          "theory_markdown": "Las APIs modernas de LLMs operan sobre una lista de mensajes con tres roles principales:\n- `system`: Instrucciones generales y personalidad del modelo.\n- `user`: La pregunta o instrucción del usuario.\n- `assistant`: Respuestas previas generadas por el modelo (historial conversacional).\n\nCon `stream=True`, la API no espera a que termine de generarse todo el párrafo (lo que tardaría varios segundos); transmite cada token en cuanto es emitido (Server-Sent Events), permitiendo esa experiencia tipo \"máquina de escribir\" en tiempo real.",
+          "examples": [
+            {
+              "title": "Patrón canónico de llamada a modelo con streaming",
+              "code": "# Simulación del patrón de API de LLMs\nmensajes = [\n    {\"role\": \"system\", \"content\": \"Eres Koda AI, un tutor conciso.\"},\n    {\"role\": \"user\", \"content\": \"¿Qué es un generador en Python?\"}\n]\nprint(\"Mensajes estructurados listos para API:\", len(mensajes))",
+              "output": "Mensajes estructurados listos para API: 2",
+              "explanation": "La lista de mensajes preserva el contexto y los límites de seguridad de la interacción."
+            }
+          ],
+          "common_errors": "Quemarla API Key en el código fuente (`api_key = \"sk-...\"`) y subirla accidentalmente a GitHub. Siempre usa `os.getenv(\"OPENAI_API_KEY\")`.",
+          "mini_exercise": {
+            "starter_code": "import os\n# Lee la API Key de forma segura desde las variables de entorno\napi_key = os.getenv(\"API_KEY\")\nprint(\"Key configurada:\", api_key is not None)",
+            "instructions": "Observa cómo os.getenv evita exponer credenciales.",
+            "solution": "import os\napi_key = os.getenv(\"API_KEY\")\nprint(\"Key configurada:\", api_key is not None)"
+          },
+          "key_takeaways": [
+            "Las APIs usan roles: system (reglas), user (solicitud), assistant (historial).",
+            "stream=True permite renderizar texto en tiempo real token a token.",
+            "Las API keys deben vivir en archivos .env protegidos."
+          ],
+          "exercise": {
+            "id": "ex_ia_02_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Cuál es el beneficio de habilitar streaming (stream=True) al consultar una API de LLM?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Reduce el tiempo de primera respuesta percibida (TTFT) mostrando los tokens a medida que se generan"
+              },
+              {
+                "id": "b",
+                "text": "Hace que el modelo sea completamente gratuito"
+              },
+              {
+                "id": "c",
+                "text": "Elimina el consumo de tokens"
+              },
+              {
+                "id": "d",
+                "text": "Permite que el modelo funcione sin Internet"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Time-To-First-Token (TTFT) es crítico para la experiencia de usuario: con streaming el usuario lee de inmediato sin esperar la respuesta completa."
+          }
+        }
+      ]
+    }
+  ]
+}

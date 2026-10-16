@@ -1,0 +1,92 @@
+{
+  "id": "py3_mod_01",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY3_M01",
+  "slug": "iteradores-y-generadores",
+  "course_slug": "python-3",
+  "title": "Iteradores, Generadores y el Protocolo de Iteración",
+  "objective": "Implementar el protocolo __iter__ y __next__, y crear funciones generadoras con yield para procesar flujos masivos con memoria O(1).",
+  "description": "Procesa millones de registros sin saturar la RAM: aprende la evaluación perezosa (lazy evaluation) y la potencia de yield.",
+  "position": 21,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 280
+  },
+  "sections": [
+    {
+      "id": "sec_py3_01_01",
+      "code": "S01",
+      "title": "Generadores con yield y Memoria Constante",
+      "slug": "generadores-yield",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_py3_01_01",
+          "code": "L01",
+          "title": "Funciones Generadoras con yield vs Listas en Memoria",
+          "slug": "generadores-yield-base",
+          "position": 1,
+          "concept_id": "py3-generators",
+          "objective": "Dominar yield para suspender y reanudar funciones sin calcular toda la colección de antemano.",
+          "theory_markdown": "Si creas una lista de 10 millones de números con `[x for x in range(10_000_000)]`, tu servidor consumirá gigabytes de memoria RAM al instante.\n\nUn **generador** utiliza la palabra clave `yield` en lugar de `return`. Cuando Python encuentra un `yield`, produce el valor actual, **pausa la ejecución de la función congelando sus variables locales**, y espera a que el consumidor pida el siguiente valor con `next()` o en un bucle `for`.\n\nMemoria consumida: **O(1) (constante)**, sin importar si procesas 10 o 10 billones de elementos.",
+          "examples": [
+            {
+              "title": "Generador infinito de números de Fibonacci",
+              "code": "def fibonacci():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n\ngen = fibonacci()\nprimeros = [next(gen) for _ in range(7)]\nprint(\"Primeros 7 de Fibonacci:\", primeros)",
+              "output": "Primeros 7 de Fibonacci: [0, 1, 1, 2, 3, 5, 8]",
+              "explanation": "La función nunca termina gracias al bucle infinito, pero solo calcula el siguiente número cuando se invoca next(gen)."
+            }
+          ],
+          "common_errors": "Intentar acceder por índice numérico a un generador (`gen[0]`). Los generadores no admiten indexación directa; solo avance secuencial con next() o iteración for.",
+          "mini_exercise": {
+            "starter_code": "# Crea un generador que produzca el doble de los números del 1 al 3\ndef duplicador():\n    for i in range(1, 4):\n        yield ...\n\nprint(list(duplicador()))  # [2, 4, 6]",
+            "instructions": "Usa yield i * 2.",
+            "solution": "def duplicador():\n    for i in range(1, 4):\n        yield i * 2\n\nprint(list(duplicador()))"
+          },
+          "key_takeaways": [
+            "yield pausa la función y conserva su estado de ejecución.",
+            "Los generadores producen valores bajo demanda (evaluación perezosa).",
+            "Ahorran gigabytes de memoria en flujos de datos grandes."
+          ],
+          "exercise": {
+            "id": "ex_py3_01_01",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Qué devuelve una llamada directa a una función que contiene la palabra yield?",
+            "prompt_code": "def mi_gen():\n    yield 1\n\ng = mi_gen()\nprint(type(g))",
+            "options": [
+              {
+                "id": "a",
+                "text": "<class 'generator'>"
+              },
+              {
+                "id": "b",
+                "text": "<class 'int'>"
+              },
+              {
+                "id": "c",
+                "text": "<class 'list'>"
+              },
+              {
+                "id": "d",
+                "text": "1"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Llamar a la función no ejecuta su código de inmediato, sino que retorna un objeto generador iterador."
+          }
+        }
+      ]
+    }
+  ]
+}

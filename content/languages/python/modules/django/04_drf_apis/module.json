@@ -1,0 +1,91 @@
+{
+  "id": "dj_mod_04",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "DJ_M04",
+  "slug": "django-rest-framework",
+  "course_slug": "django-enterprise",
+  "title": "Django REST Framework (DRF): Serializadores y ViewSets",
+  "objective": "Transformar Django en una fábrica de APIs REST de nivel empresarial con ModelSerializer, ViewSets y DefaultRouter.",
+  "description": "Construye APIs REST escalables sobre tus modelos de Django con paginación, filtros y documentación OpenAPI.",
+  "position": 39,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 350
+  },
+  "sections": [
+    {
+      "id": "sec_dj_04_01",
+      "code": "S01",
+      "title": "ModelSerializers y ViewSets en DRF",
+      "slug": "drf-viewsets",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_dj_04_01",
+          "code": "L01",
+          "title": "Arquitectura de DRF: Serializers, ViewSets y Routers",
+          "slug": "drf-base",
+          "position": 1,
+          "concept_id": "dj-drf",
+          "objective": "Generar endpoints CRUD completos en menos de 20 líneas de código.",
+          "theory_markdown": "**Django REST Framework (DRF)** es la librería estándar para crear APIs con Django:\n1. `ModelSerializer`: Convierte instancias complejas de modelos ORM en diccionarios serializables a JSON y viceversa.\n2. `ModelViewSet`: Implementa automáticamente las acciones `list`, `create`, `retrieve`, `update` y `destroy`.\n3. `DefaultRouter`: Genera todas las rutas URL REST automáticamente (`GET /api/cursos/`, `POST /api/cursos/`, `GET /api/cursos/1/`, etc.).",
+          "examples": [
+            {
+              "title": "API CRUD completa con DRF",
+              "code": "from rest_framework import serializers, viewsets, routers\nfrom .models import Curso\n\nclass CursoSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Curso\n        fields = \"__all__\"\n\nclass CursoViewSet(viewsets.ModelViewSet):\n    queryset = Curso.objects.all()\n    serializer_class = CursoSerializer\n\n# En urls.py:\nrouter = routers.DefaultRouter()\nrouter.register(r\"cursos\", CursoViewSet)",
+              "output": "Endpoints REST generados: GET, POST, PUT, PATCH, DELETE en /api/cursos/",
+              "explanation": "DRF resuelve toda la infraestructura CRUD estándar con máxima consistencia."
+            }
+          ],
+          "common_errors": "Olvidar agregar `\"rest_framework\"` en la lista `INSTALLED_APPS` de `settings.py`.",
+          "mini_exercise": {
+            "starter_code": "# Crea un ModelSerializer para el modelo Perfil\n# class PerfilSerializer(serializers.ModelSerializer):\n#     class Meta:\n#         model = Perfil\n#         fields = [\"id\", \"bio\"]",
+            "instructions": "Revisa la sintaxis canónica de un ModelSerializer.",
+            "solution": "# Serializer listo"
+          },
+          "key_takeaways": [
+            "ModelSerializer traduce modelos ORM a JSON bidireccionalmente.",
+            "ModelViewSet genera las 5 operaciones CRUD en una sola clase.",
+            "DefaultRouter mapea las URLs estándar automáticamente."
+          ],
+          "exercise": {
+            "id": "ex_dj_04_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Qué componente de DRF genera automáticamente el mapa de URLs para un ViewSet?",
+            "options": [
+              {
+                "id": "a",
+                "text": "DefaultRouter"
+              },
+              {
+                "id": "b",
+                "text": "UrlDispatcher"
+              },
+              {
+                "id": "c",
+                "text": "ModelBuilder"
+              },
+              {
+                "id": "d",
+                "text": "ApiGateway"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "DefaultRouter registra ViewSets y crea las rutas REST correspondientes con soporte de formato extensible."
+          }
+        }
+      ]
+    }
+  ]
+}

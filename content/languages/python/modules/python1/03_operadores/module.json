@@ -1,0 +1,150 @@
+{
+  "id": "py1_mod_03",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY1_M03",
+  "slug": "operadores-y-expresiones",
+  "course_slug": "python-1",
+  "title": "Operadores Aritméticos, Comparativos y Lógicos",
+  "objective": "Dominar la matemática de Python (+, -, *, /, //, %, **), las comparaciones relacionales y los operadores booleanos and, or, not con reglas de precedencia.",
+  "description": "Aprende a realizar cálculos exactos, división entera, potencias, residuos modulares y evaluar condiciones compuestas con lógica booleana estricta.",
+  "position": 3,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 2,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 170
+  },
+  "sections": [
+    {
+      "id": "sec_py1_03_01",
+      "code": "S01",
+      "title": "Operadores Aritméticos y Precedencia PEMDAS",
+      "slug": "aritmetica-y-precedencia",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 15,
+      "xp_on_complete": 35,
+      "lessons": [
+        {
+          "id": "les_py1_03_01",
+          "code": "L01",
+          "title": "División Clásica (/), División Entera (//) y Módulo (%)",
+          "slug": "division-y-modulo",
+          "position": 1,
+          "concept_id": "py-arithmetic-operators",
+          "objective": "Distinguir entre división flotante, cociente entero truncado y resto de la división.",
+          "theory_markdown": "Python incluye dos operadores de división cruciales que debes conocer:\n- `/` **División flotante**: Siempre devuelve un `float`, incluso si la división es exacta (`4 / 2` devuelve `2.0`).\n- `//` **División entera (floor division)**: Descarta los decimales y devuelve únicamente el cociente entero hacia abajo (`7 // 2` devuelve `3`).\n- `%` **Operador módulo**: Devuelve el **residuo** o resto de la división. Es el truco por excelencia para saber si un número es par (`n % 2 == 0`).\n- `**` **Potenciación**: Eleva la base al exponente (`2 ** 3` es 8).",
+          "examples": [
+            {
+              "title": "Cálculo de cocientes y residuos",
+              "code": "galletas = 17\nninos = 4\n\npor_nino = galletas // ninos\nsobrantes = galletas % ninos\n\nprint(\"Galletas por niño:\", por_nino)  # 4\nprint(\"Galletas sobrantes:\", sobrantes) # 1",
+              "output": "Galletas por niño: 4\nGalletas sobrantes: 1",
+              "explanation": "17 dividido entre 4 es 4 con residuo 1 (4*4 + 1 = 17)."
+            }
+          ],
+          "common_errors": "Confundir el operador de potencia (**) con el acento circunflejo (^). En Python, ^ es una operación bit a bit (XOR), no una potencia.",
+          "mini_exercise": {
+            "starter_code": "# Calcula 2 elevado a la 8va potencia usando **\npotencia = ...\nprint(potencia)",
+            "instructions": "Calcula 2 elevado a la 8 (debe dar 256).",
+            "solution": "potencia = 2 ** 8\nprint(potencia)"
+          },
+          "key_takeaways": [
+            "/ siempre produce un float.",
+            "// trunca hacia abajo el cociente entero.",
+            "% devuelve el residuo de la división.",
+            "** es el operador de potencia (no ^)."
+          ],
+          "exercise": {
+            "id": "ex_py1_03_01",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Qué valor imprimirá la siguiente expresión?",
+            "prompt_code": "print(10 // 3 + 10 % 3)",
+            "options": [
+              {
+                "id": "a",
+                "text": "4"
+              },
+              {
+                "id": "b",
+                "text": "3.33"
+              },
+              {
+                "id": "c",
+                "text": "3"
+              },
+              {
+                "id": "d",
+                "text": "1"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "10 // 3 es 3 (cociente entero) y 10 % 3 es 1 (residuo). 3 + 1 = 4."
+          }
+        },
+        {
+          "id": "les_py1_03_02",
+          "code": "L02",
+          "title": "Operadores Relacionales y Lógica Booleana (and, or, not)",
+          "slug": "relacionales-y-logica",
+          "position": 2,
+          "concept_id": "py-logical-operators",
+          "objective": "Construir condiciones lógicas complejas combinando comparaciones con and, or y not.",
+          "theory_markdown": "Para tomar decisiones en tu programa, comparas valores usando operadores relacionales:\n- `==` (igual a), `!=` (diferente de)\n- `>`, `<`, `>=`, `<=`\n\nPara combinar múltiples condiciones, Python usa palabras en inglés en lugar de símbolos crípticos:\n- `and`: Verdadero **solo si ambas** condiciones son verdaderas.\n- `or`: Verdadero **si al menos una** condición es verdadera.\n- `not`: Invierte el valor de verdad (`not True` es `False`).\n\n> **Tip Pro:** Python permite encadenar comparaciones matemáticas como en álgebra: `18 <= edad < 65`.",
+          "examples": [
+            {
+              "title": "Evaluación lógica de acceso",
+              "code": "edad = 20\ntiene_pase = True\n\npuede_entrar = (edad >= 18) and tiene_pase\nprint(\"Acceso permitido:\", puede_entrar)  # True",
+              "output": "Acceso permitido: True",
+              "explanation": "Ambas condiciones son True, por lo que and devuelve True."
+            }
+          ],
+          "common_errors": "Usar un solo signo igual (=) para comparar. = es asignación; la comparación de igualdad requiere doble igual (==).",
+          "mini_exercise": {
+            "starter_code": "nivel = 5\nes_vip = False\n# Verifica si nivel >= 5 o es_vip\npuede_acceder = ...\nprint(puede_acceder)",
+            "instructions": "Usa el operador or para verificar si cumple al menos una de las dos condiciones.",
+            "solution": "nivel = 5\nes_vip = False\npuede_acceder = (nivel >= 5) or es_vip\nprint(puede_acceder)"
+          },
+          "key_takeaways": [
+            "== compara igualdad; = asigna valor a una variable.",
+            "and exige que todas las partes sean True.",
+            "or exige que al menos una parte sea True.",
+            "not invierte el valor booleano."
+          ],
+          "exercise": {
+            "id": "ex_py1_03_02",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Cuál es el resultado de la siguiente expresión booleana?",
+            "prompt_code": "print(not (5 > 2) or (10 == 10 and 3 < 1))",
+            "options": [
+              {
+                "id": "a",
+                "text": "False"
+              },
+              {
+                "id": "b",
+                "text": "True"
+              },
+              {
+                "id": "c",
+                "text": "None"
+              },
+              {
+                "id": "d",
+                "text": "Error de sintaxis"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "5 > 2 es True, por lo que not (5 > 2) es False. En la segunda parte, 3 < 1 es False, por lo que el and es False. False or False resulta en False."
+          }
+        }
+      ]
+    }
+  ]
+}

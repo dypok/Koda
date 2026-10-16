@@ -1,0 +1,91 @@
+{
+  "id": "da_mod_09",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "DA_M09",
+  "slug": "scikit-learn-intro-ml",
+  "course_slug": "data-analytics",
+  "title": "Introducción a Machine Learning con Scikit-Learn",
+  "objective": "Construir el pipeline clásico de ML: división train/test, preprocesamiento con StandardScaler, Regresión Lineal y Clasificación con Random Forest.",
+  "description": "Da el salto al aprendizaje automático: entrena tus primeros modelos predictivos y evalúa con precisión métricas reales (R2, MSE, Accuracy, F1).",
+  "position": 49,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 380
+  },
+  "sections": [
+    {
+      "id": "sec_da_09_01",
+      "code": "S01",
+      "title": "El Ciclo de Vida de Machine Learning en Scikit-Learn",
+      "slug": "scikit-learn-pipeline",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 22,
+      "xp_on_complete": 55,
+      "lessons": [
+        {
+          "id": "les_da_09_01",
+          "code": "L01",
+          "title": "Features, Target, train_test_split y fit/predict",
+          "slug": "scikit-pipeline-base",
+          "position": 1,
+          "concept_id": "da-ml",
+          "objective": "Separar variables independientes (X) y dependiente (y), entrenar con .fit() y predecir con .predict().",
+          "theory_markdown": "En **Machine Learning Supervisado**:\n- **X (Features)**: Matriz con las variables predictoras (ej: metros cuadrados, habitaciones).\n- **y (Target)**: Vector con el valor que queremos predecir (ej: precio de la casa).\n\nPara no memorizar los datos (sobreajuste o **overfitting**), siempre dividimos el dataset con `train_test_split` (habitualmente 80% entrenamiento, 20% prueba).\n\nTodos los modelos de Scikit-Learn siguen la misma API universal y limpia:\n1. `modelo.fit(X_train, y_train)`: Entrena el modelo.\n2. `predicciones = modelo.predict(X_test)`: Realiza predicciones sobre datos nunca vistos.\n3. Evaluamos métricas (`r2_score` para regresión, `accuracy_score` para clasificación).",
+          "examples": [
+            {
+              "title": "Modelo de regresión lineal simple",
+              "code": "from sklearn.linear_model import LinearRegression\nimport numpy as np\n\n# Horas de estudio vs Calificación\nX = np.array([[1], [2], [3], [4], [5]])\ny = np.array([55, 65, 75, 85, 95])\n\nmodelo = LinearRegression()\nmodelo.fit(X, y)\n\n# Predecir para un estudiante que estudió 6 horas\nprediccion = modelo.predict([[6]])\nprint(f\"Predicción para 6 horas: {prediccion[0]:.1f} pts\")",
+              "output": "Predicción para 6 horas: 105.0 pts",
+              "explanation": "El modelo aprendió la pendiente de 10 puntos por hora adicional."
+            }
+          ],
+          "common_errors": "Fuga de datos (Data Leakage): ajustar un escalador (`StandardScaler.fit()`) con todo el dataset en lugar de usar solo el conjunto de entrenamiento (`X_train`).",
+          "mini_exercise": {
+            "starter_code": "# from sklearn.model_selection import train_test_split\n# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)",
+            "instructions": "Revisa la división canónica 80/20.",
+            "solution": "# train_test_split listo"
+          },
+          "key_takeaways": [
+            "X es la matriz de features 2D; y es el vector objetivo 1D.",
+            "train_test_split previene el sobreajuste evaluando datos no vistos.",
+            ".fit() entrena y .predict() realiza inferencias."
+          ],
+          "exercise": {
+            "id": "ex_da_09_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Por qué es indispensable separar el dataset en subconjuntos de entrenamiento (train) y prueba (test)?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Para evaluar la capacidad de generalización del modelo sobre datos nuevos y evitar overfitting"
+              },
+              {
+                "id": "b",
+                "text": "Porque Scikit-Learn no acepta datasets de más de 100 filas"
+              },
+              {
+                "id": "c",
+                "text": "Para reducir el tamaño del disco duro"
+              },
+              {
+                "id": "d",
+                "text": "Es un paso opcional sin impacto"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Si evaluamos con los mismos datos con los que entrenamos, no sabemos si el modelo aprendió patrones o si solo memorizó el dataset."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useElementVisible } from '@/lib/pixi/engine';
-import { createEngine, type BgKey } from '@/views/roadmap/route-lab/bg-lab/ascii-engines';
+import { createEngine, type BgKey } from '@/lib/ascii-engines';
 
 /** Fondo del roadmap: órbita kepleriana, lluvia matrix o espiral ASCII en un solo canvas contenido. */
 export const OrbitFieldBackground: React.FC<{ className?: string; engineKey?: BgKey }> = ({

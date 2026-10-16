@@ -1,0 +1,33 @@
+{
+  "module_code": "PY2_M05",
+  "module_slug": "archivos-txt-csv-json",
+  "course_slug": "python-2",
+  "questions": [
+    {
+      "id": "q_py2_05_01",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué modo de apertura debes usar en open(\"log.txt\", modo) para añadir nuevas líneas al final sin borrar el contenido existente?",
+      "options": [
+        {
+          "id": "a",
+          "text": "\"a\" (append)"
+        },
+        {
+          "id": "b",
+          "text": "\"w\" (write)"
+        },
+        {
+          "id": "c",
+          "text": "\"r\" (read)"
+        },
+        {
+          "id": "d",
+          "text": "\"x\" (exclusive)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El modo \"a\" (append) añade al final del archivo existente; \"w\" sobrescribe y borra el contenido previo."
+    }
+  ]
+}

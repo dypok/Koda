@@ -1,0 +1,91 @@
+{
+  "id": "da_mod_04",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "DA_M04",
+  "slug": "pandas-agrupaciones-merges",
+  "course_slug": "data-analytics",
+  "title": "Agrupaciones (groupby), Tablas Dinámicas y Merges",
+  "objective": "Realizar análisis agregado con groupby y agg, crear tablas dinámicas con pivot_table y combinar fuentes de datos con merge y concat.",
+  "description": "Une y agrega información como en SQL: cruces relacionales (inner, left, right), agregaciones por categoría y transformaciones cruzadas.",
+  "position": 44,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 320
+  },
+  "sections": [
+    {
+      "id": "sec_da_04_01",
+      "code": "S01",
+      "title": "groupby y Cruces con merge",
+      "slug": "groupby-y-merge",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_da_04_01",
+          "code": "L01",
+          "title": "El Paradigma Split-Apply-Combine y Relaciones SQL con merge",
+          "slug": "groupby-merge-base",
+          "position": 1,
+          "concept_id": "da-groupby",
+          "objective": "Agrupar registros por categorías y combinar DataFrames mediante claves foráneas.",
+          "theory_markdown": "El patrón **Split-Apply-Combine** de `groupby`:\n1. **Split**: Divide los datos en grupos basados en los valores de una o más columnas (ej: por `pais` o `departamento`).\n2. **Apply**: Aplica una función a cada grupo (ej: `mean()`, `sum()`, `count()`).\n3. **Combine**: Une los resultados en un nuevo DataFrame.\n\nPara unir dos DataFrames como un `JOIN` de SQL usamos `pd.merge(df1, df2, on=\"id_clave\", how=\"inner\")` (`how` puede ser `\"inner\"`, `\"left\"`, `\"right\"` o `\"outer\"`).",
+          "examples": [
+            {
+              "title": "Métricas agregadas por departamento",
+              "code": "import pandas as pd\n\ndf = pd.DataFrame({\n    \"depto\": [\"Ventas\", \"Ventas\", \"IT\", \"IT\"],\n    \"empleado\": [\"Ana\", \"Carlos\", \"Elena\", \"Marcos\"],\n    \"sueldo\": [3000, 3500, 4200, 4800]\n})\nresumen = df.groupby(\"depto\")[\"sueldo\"].agg([\"count\", \"mean\", \"max\"])\nprint(resumen)",
+              "output": "        count    mean   max\ndepto                      \nIT          2  4500.0  4800\nVentas      2  3250.0  3500",
+              "explanation": "agg([\"count\", \"mean\", \"max\"]) calcula múltiples métricas en una sola pasada."
+            }
+          ],
+          "common_errors": "Olvidar el parámetro `how=\"left\"` al hacer merge, provocando que por defecto se use `inner` y se descarten filas que no tengan correspondencia en la tabla secundaria.",
+          "mini_exercise": {
+            "starter_code": "import pandas as pd\ndf = pd.DataFrame({\"ciudad\": [\"CDMX\", \"CDMX\", \"MVD\"], \"temp\": [22, 24, 18]})\n# Agrupa por ciudad y calcula el promedio de temp\nprom = df.groupby(\"ciudad\")[\"temp\"].mean()\nprint(prom[\"CDMX\"])",
+            "instructions": "Calcula el promedio y verifica que en CDMX sea 23.0.",
+            "solution": "import pandas as pd\ndf = pd.DataFrame({\"ciudad\": [\"CDMX\", \"CDMX\", \"MVD\"], \"temp\": [22, 24, 18]})\nprom = df.groupby(\"ciudad\")[\"temp\"].mean()\nprint(prom[\"CDMX\"])"
+          },
+          "key_takeaways": [
+            "groupby divide el dataset por categorías para calcular métricas.",
+            ".agg() permite calcular sum, mean, std simultáneamente.",
+            "pd.merge() equivale a un JOIN relacional de SQL."
+          ],
+          "exercise": {
+            "id": "ex_da_04_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Qué tipo de unión (how) en pd.merge conserva todas las filas del DataFrame izquierdo, rellenando con NaN si no hay coincidencia en el derecho?",
+            "options": [
+              {
+                "id": "a",
+                "text": "how=\"left\""
+              },
+              {
+                "id": "b",
+                "text": "how=\"inner\""
+              },
+              {
+                "id": "c",
+                "text": "how=\"right\""
+              },
+              {
+                "id": "d",
+                "text": "how=\"cross\""
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Un LEFT JOIN (how=\"left\") preserva la totalidad de los registros de la tabla izquierda sin pérdidas."
+          }
+        }
+      ]
+    }
+  ]
+}
