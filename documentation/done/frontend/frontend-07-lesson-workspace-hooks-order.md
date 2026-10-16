@@ -51,12 +51,33 @@ En `apps/web/src/views/lesson/LessonWorkspace.tsx`:
 
 ---
 
-## 3. 🧪 Verificación y Pruebas
+## 3. 🗺️ Reseteo del Estado Inicial de Roadmaps a 0%
+
+Se corrigió la inconsistencia donde nuevos estudiantes veían módulos completados con estrellas previas en los roadmaps visuales:
+- **Backend (`GetRoadmapGraphUseCase`):**
+  - Reiniciado el cálculo inicial de progreso a `progressPercent: 0`.
+  - Módulo `py-m01` inicializado en `variant: 'active'`, `stars: 0`, `statusText: 'DISPONIBLE • +150 XP'`.
+  - Módulos `py-m02` a `py-apex-1` bloqueados con `variant: 'locked'`, `stars: 0`, `isUnlocked: false`.
+  - Conexiones DAG inicializadas con `isDashed: true`.
+  - Cursos complementarios (`python-2`, `python-3`, `fastapi-async`, `django-enterprise`) reseteados a `progressPercent: 0`.
+- **Frontend Mocks & Datasets (`apps/web`):**
+  - `python-lessons-graph.mock.ts`: `PYTHON_1_LESSONS_DATASET` establecido en `progressPercent: 0`, `les-01` en `active` con 0 estrellas, y del módulo 02 en adelante en `locked`.
+  - `python-track.mock.ts`: `py-level-1` en 0 estrellas, conector `c-py-1-to-2` punteado (`isDashed: true`) y `progressPercent: 0`.
+  - `track-catalog.ts`: Rama de Python inicializada en 0% progreso, 0 estrellas ganadas y 0 cursos completados.
+  - `python-roadmap.mock.ts`: Lecciones básicas y totales reseteadas a 0 estrellas y 0% de avance.
+
+---
+
+## 4. 🧪 Verificación y Pruebas
 
 - **Compilación Web (Next.js 16.4 Turbopack):**
   - Comando: `pnpm --filter web build`
   - Resultado: Exitoso (15/15 páginas generadas sin errores).
-- **Typecheck TypeScript:**
-  - `apps/web`: 0 errores de TypeScript (`tsc --noEmit` limpio).
+- **Compilación Backend (NestJS + Prisma):**
+  - Comando: `pnpm --filter api build`
+  - Resultado: Exitoso (0 errores de TypeScript, dist generado).
 - **Backend Test Suites:**
   - 24/24 test suites pasadas (82/82 tests unitarios en verde).
+- **Endpoints Verificados vía cURL:**
+  - `GET /api/v1/roadmap/courses/python-1/lessons`: `progressPercent: 0`, nodo 1 activo con 0 estrellas, nodos 2+ bloqueados con 0 estrellas.
+  - `GET /api/v1/roadmap/python/courses`: `progressPercent: 0`, nodo 1 disponible con 0 estrellas.
