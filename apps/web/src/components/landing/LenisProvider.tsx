@@ -15,9 +15,10 @@ export const LenisProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
     const lenis = new Lenis({
-      duration: 1.15,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      duration: 0.7,
+      easing: (t: number) => 1 - Math.pow(1 - t, 3),
       smoothWheel: true,
+      wheelMultiplier: 1.1,
     });
     setLenisInstance(lenis);
 
@@ -27,7 +28,7 @@ export const LenisProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       lenis.raf(time * 1000);
     };
     gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(500, 33);
 
     const onClick = (e: MouseEvent) => {
       const anchor = (e.target as HTMLElement).closest?.('a[href^="#"]') as

@@ -30,7 +30,6 @@ import { PartyMode } from '@/components/landing/PartyMode';
 export const LandingPageView: React.FC = () => {
   return (
     <LenisProvider>
-      <SectionSnap />
       <ScrollProgress />
       <Preloader />
       <AuroraProvider />

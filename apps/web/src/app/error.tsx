@@ -36,7 +36,7 @@ export default function Error({
           Reintentar
         </button>
         <Link
-          href="/"
+          href="/?landing=true"
           className="inline-flex min-h-[48px] items-center rounded-xl border border-slate-700 px-6 text-sm font-bold text-white hover:border-amber-400/50"
         >
           Volver a la landing

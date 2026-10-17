@@ -134,6 +134,24 @@ export const LoginForm: React.FC = () => {
           terminalHint="> auth :: autenticando"
         />
       )}
+      {/* Logo Koda enlazando a la landing */}
+      <div className="flex items-center justify-between pb-1">
+        <Link
+          href="/?landing=true"
+          title="Volver a la landing page"
+          className="inline-flex items-center gap-2 group transition-transform hover:scale-105"
+        >
+          <img
+            src="/icon.svg"
+            alt="Koda"
+            className="w-8 h-8 object-contain"
+          />
+          <span className="font-mono text-xl font-bold text-white tracking-tight">
+            k<span className="text-amber-400 font-black">{'{ }'}</span>da
+          </span>
+        </Link>
+      </div>
+
       <div className="space-y-1.5 text-left">
         <h1 className="text-3xl sm:text-4xl font-black text-white tracking-tight">¡Hola de nuevo!</h1>
         <p className="text-sm sm:text-base text-slate-400">Inicia sesión para continuar tu progreso en Koda.</p>

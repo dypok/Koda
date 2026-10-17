@@ -18,15 +18,23 @@ export default function HomePage() {
   useEffect(() => {
     if (!hasHydrated) return;
 
+    // Si el usuario llega explicitamente solicitando la landing (ej. desde 404, error o login)
+    const isExplicitLanding = typeof window !== 'undefined' && window.location.search.includes('landing=true');
+    if (isExplicitLanding) {
+      return;
+    }
+
     if (isAuthenticated) {
       if (user && user.onboardingCompleted === false && user?.role !== 'admin') {
         router.replace('/register');
       }
     } else if (hasEverLoggedIn) {
-      // Un usuario que ya ha iniciado sesión antes no puede volver a ver la landing page
+      // Un usuario que ya ha iniciado sesión antes va al login por defecto
       router.replace('/login');
     }
   }, [hasHydrated, isAuthenticated, hasEverLoggedIn, user, router]);
+
+  const isExplicitLanding = typeof window !== 'undefined' && window.location.search.includes('landing=true');
 
   if (!hasHydrated) {
     return (
@@ -36,6 +44,11 @@ export default function HomePage() {
         terminalHint="> auth :: verificando sesion"
       />
     );
+  }
+
+  // Si se solicita expresamente ver la landing page
+  if (isExplicitLanding && !isAuthenticated) {
+    return <LandingPageView />;
   }
 
   // Si ya inició sesión alguna vez pero no está autenticado, está siendo redirigido a /login

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { SHOWCASE_SLIDES } from '@/models/auth/login-showcase.constants';
@@ -22,15 +23,21 @@ export const LoginShowcaseCarousel: React.FC = () => {
   return (
     <div className="w-full h-full flex flex-col justify-between p-8 sm:p-12 lg:p-16 select-none">
       {/* Brand Header */}
-      <div className="flex items-center gap-3 pointer-events-none">
-        <Image
-          src="/brand/logo.svg"
-          alt="KodaAcademy"
-          width={498}
-          height={185}
-          className="h-8 w-auto object-contain"
-          priority
-        />
+      <div className="flex items-center gap-3">
+        <Link
+          href="/?landing=true"
+          title="Volver a la landing de Koda"
+          className="transition-transform hover:scale-105 cursor-pointer"
+        >
+          <Image
+            src="/brand/logo.svg"
+            alt="KodaAcademy"
+            width={498}
+            height={185}
+            className="h-8 w-auto object-contain"
+            priority
+          />
+        </Link>
       </div>
 
       {/* Center Animated Slide Area con transiciones fluidas */}
