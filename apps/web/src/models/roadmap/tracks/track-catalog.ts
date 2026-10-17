@@ -3,7 +3,7 @@ import React from 'react';
 import { GraphDataset } from '../roadmap-graph.types';
 import { PYTHON_COURSES_DATASET } from './python-track.mock';
 
-export type CareerBranchId = 'python';
+export type CareerBranchId = string;
 
 export interface CareerBranchInfo {
   id: CareerBranchId;

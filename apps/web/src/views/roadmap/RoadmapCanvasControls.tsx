@@ -9,14 +9,14 @@ export function RoadmapCanvasControls() {
 
   return (
     <div
-      className="absolute bottom-6 right-6 z-30 flex items-center no-drag"
+      className="absolute bottom-20 sm:bottom-6 right-3 sm:right-6 z-30 flex items-center no-drag"
       onPointerDown={(e) => e.stopPropagation()}
       onPointerUp={(e) => e.stopPropagation()}
       onMouseDown={(e) => e.stopPropagation()}
       onMouseUp={(e) => e.stopPropagation()}
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="flex items-center bg-slate-900/40 backdrop-blur-xl border border-slate-700/50 rounded-xl p-1 text-slate-300 font-mono text-xs shadow-2xl gap-1">
+      <div className="flex items-center bg-slate-900/60 backdrop-blur-xl border border-slate-700/50 rounded-xl p-0.5 sm:p-1 text-slate-300 font-mono text-xs shadow-2xl gap-0.5 sm:gap-1">
         <button
           type="button"
           onClick={(e) => {

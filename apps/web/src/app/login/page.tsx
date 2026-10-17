@@ -18,7 +18,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (hasHydrated && isAuthenticated) {
-      if (user && user.onboardingCompleted === false) {
+      if (user && user.onboardingCompleted === false && user?.role !== 'admin') {
         router.replace('/register');
       } else {
         router.replace('/');
@@ -27,11 +27,12 @@ export default function LoginPage() {
   }, [hasHydrated, isAuthenticated, user, router]);
 
   if (hasHydrated && isAuthenticated) {
+    const isAdmin = user?.role === 'admin' || user?.email?.toLowerCase().includes('admin');
     return (
       <KodaLoadingScreen
-        title="Redirigiendo a tu espacio..."
-        subtitle="Preparando tu ruta de aprendizaje..."
-        terminalHint="> auth :: sesion_activa"
+        title={isAdmin ? "Cargando Panel de Administrador..." : "Redirigiendo a tu espacio..."}
+        subtitle={isAdmin ? "Iniciando Cockpit de Control y Gestion de Rutas..." : "Preparando tu ruta de aprendizaje..."}
+        terminalHint={isAdmin ? "> admin :: acceso_autorizado" : "> auth :: sesion_activa"}
       />
     );
   }

@@ -19,7 +19,7 @@ export default function HomePage() {
     if (!hasHydrated) return;
 
     if (isAuthenticated) {
-      if (user && user.onboardingCompleted === false) {
+      if (user && user.onboardingCompleted === false && user?.role !== 'admin') {
         router.replace('/register');
       }
     } else if (hasEverLoggedIn) {

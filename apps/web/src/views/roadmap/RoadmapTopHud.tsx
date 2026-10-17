@@ -9,12 +9,14 @@ import { CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 interface RoadmapTopHudProps {
   sectorTitle: string;
   progressPercent?: number;
+  hasAdminToolbar?: boolean;
 }
 
 /** HUD superior en píldoras flotantes: título + continuar al centro. */
 export function RoadmapTopHud({
   sectorTitle,
   progressPercent = 0,
+  hasAdminToolbar = false,
 }: RoadmapTopHudProps) {
   const router = useRouter();
   const {
@@ -58,7 +60,11 @@ export function RoadmapTopHud({
   return (
     <>
       {inLessons ? (
-        <div className="absolute left-4 top-4 z-20 flex w-max max-w-[calc(100%-2rem)] items-center gap-2 rounded-full border border-slate-700/50 bg-slate-900/40 py-1.5 pl-1.5 pr-2 backdrop-blur-xl shadow-xl">
+        <div
+          className={`absolute left-1/2 -translate-x-1/2 z-20 flex w-max max-w-[calc(100vw-2rem)] items-center gap-2 rounded-full border border-slate-700/50 bg-slate-900/60 py-1 sm:py-1.5 pl-2 sm:pl-3 pr-2 backdrop-blur-xl shadow-xl transition-all duration-200 ${
+            hasAdminToolbar ? 'top-14 sm:top-16' : 'top-3 sm:top-4'
+          }`}
+        >
           <button
             type="button"
             onClick={triggerRetreatToCourses}
@@ -82,17 +88,21 @@ export function RoadmapTopHud({
           </button>
         </div>
       ) : (
-        <div className="absolute left-1/2 top-4 z-20 flex w-max max-w-[calc(100%-2rem)] -translate-x-1/2 items-center gap-3 rounded-full border border-slate-700/50 bg-slate-900/40 py-1.5 pl-4 pr-1.5 backdrop-blur-xl shadow-xl">
-          <span className="shrink-0 font-mono text-[11px] font-bold tabular-nums text-orange-400/90">
+        <div
+          className={`absolute left-1/2 z-20 flex w-max max-w-[calc(100vw-2rem)] -translate-x-1/2 items-center gap-2 sm:gap-3 rounded-full border border-slate-700/50 bg-slate-900/60 py-1 sm:py-1.5 pl-3 sm:pl-4 pr-1.5 backdrop-blur-xl shadow-xl transition-all duration-200 ${
+            hasAdminToolbar ? 'top-14 sm:top-20' : 'top-3 sm:top-4'
+          }`}
+        >
+          <span className="shrink-0 font-mono text-[10px] sm:text-[11px] font-bold tabular-nums text-orange-400/90">
             {Math.round(progressPercent)}%
           </span>
-          <span className="max-w-40 truncate font-display text-xs font-black uppercase tracking-wide text-white sm:max-w-xs">
+          <span className="max-w-[120px] xs:max-w-40 sm:max-w-xs truncate font-display text-[11px] sm:text-xs font-black uppercase tracking-wide text-white">
             {displayTitle}
           </span>
           <button
             type="button"
             onClick={() => activeCourseId && openCourseLessons(activeCourseId)}
-            className="shrink-0 rounded-full px-3.5 py-1.5 font-mono text-[11px] font-black text-slate-950 transition-all hover:scale-105 active:scale-95 cursor-pointer bg-gradient-to-r from-orange-500 to-amber-500 shadow-[0_0_14px_rgba(255,106,0,0.45)] hover:shadow-[0_0_20px_rgba(255,106,0,0.65)] hover:brightness-110"
+            className="shrink-0 rounded-full px-2.5 sm:px-3.5 py-1 sm:py-1.5 font-mono text-[10px] sm:text-[11px] font-black text-slate-950 transition-all hover:scale-105 active:scale-95 cursor-pointer bg-gradient-to-r from-orange-500 to-amber-500 shadow-[0_0_14px_rgba(255,106,0,0.45)] hover:shadow-[0_0_20px_rgba(255,106,0,0.65)] hover:brightness-110"
           >
             Continuar →
           </button>

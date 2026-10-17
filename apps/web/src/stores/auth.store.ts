@@ -11,6 +11,7 @@ export interface AuthUser {
   totalXp: number;
   level: number;
   streak: number;
+  role?: string;
   initialLanguageSlug?: string;
   experienceLevel?: string;
   learningStyle?: string;
@@ -27,6 +28,7 @@ interface AuthState {
   hasHydrated: boolean;
   initAuth: () => void;
   setUserSession: (session: BackendUserSession, accessToken: string, refreshToken?: string) => void;
+  loginAsAdmin: (override?: Partial<AuthUser>) => void;
   updateUserProfile: (partial: Partial<AuthUser>) => void;
   login: (email: string, fullName?: string) => void;
   loginSocial: (provider: 'google' | 'github') => void;
@@ -161,6 +163,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   setUserSession: (session: BackendUserSession, accessToken: string, refreshToken?: string) => {
+    const role = (session as any).role || (session.email?.toLowerCase().includes('admin') ? 'admin' : 'user');
     const user: AuthUser = {
       id: session.id,
       email: session.email,
@@ -169,6 +172,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       totalXp: session.totalXp ?? 0,
       level: session.currentLevel ?? 1,
       streak: session.currentStreak ?? 0,
+      role,
       initialLanguageSlug: session.initialLanguageSlug,
       experienceLevel: session.experienceLevel,
       learningStyle: session.learningStyle,
@@ -197,6 +201,41 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     scheduleBackgroundRefresh(accessToken, finalRefresh, (newToken, newRefresh) => {
       set({ token: newToken, refreshToken: newRefresh });
+    });
+  },
+
+  loginAsAdmin: (override?: Partial<AuthUser>) => {
+    const adminUser: AuthUser = {
+      id: 'adm_koda_001',
+      email: 'admin@koda.academy',
+      fullName: 'Administrador Koda',
+      avatarUrl: '/brand/koda-mascot-cartoon-2d.svg',
+      totalXp: 9999,
+      level: 99,
+      streak: 42,
+      role: 'admin',
+      initialLanguageSlug: 'python',
+      experienceLevel: 'advanced',
+      learningStyle: 'hands-on',
+      dailyGoalMinutes: 30,
+      onboardingCompleted: true,
+      ...override,
+    };
+
+    const adminToken = 'koda_internal_admin_token_' + Date.now();
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(adminUser));
+      localStorage.setItem(STORAGE_KEYS.TOKEN, adminToken);
+      localStorage.setItem(STORAGE_KEYS.HAS_LOGGED, 'true');
+    }
+
+    set({
+      user: adminUser,
+      token: adminToken,
+      refreshToken: 'admin_refresh_token',
+      isAuthenticated: true,
+      hasEverLoggedIn: true,
     });
   },
 

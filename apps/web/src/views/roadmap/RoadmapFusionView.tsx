@@ -13,10 +13,15 @@ import { cn } from '@/lib/utils';
 interface RoadmapFusionViewProps {
   dataset: GraphDataset;
   onDeploy: (node: GraphNode) => void;
+  isAdminMode?: boolean;
 }
 
 /** Vista Fusión minimalista: fondo ASCII + grafo Pixi + panel plano. Sin 3D ni láseres. */
-export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, onDeploy }) => {
+export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({
+  dataset,
+  onDeploy,
+  isAdminMode,
+}) => {
   const {
     activeBranchId,
     activeNodeId,
@@ -137,19 +142,19 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
       setShowPanel(true);
       setActiveNode(node.id);
 
-      // Si el nodo está desbloqueado:
+      // Si el nodo está desbloqueado (o es admin):
       // 1. Si ya era el nodo activo seleccionado, o
       // 2. Si se le hace doble clic / tap consecutivo rápido
       // -> Desplegar inmediatamente (abrir módulo en vista courses, o iniciar lección en vista lessons)
-      if (node.isUnlocked && (isAlreadyActive || isConsecutiveClick)) {
+      if ((isAdminMode || node.isUnlocked) && (isAlreadyActive || isConsecutiveClick)) {
         onDeploy(node);
       }
     },
-    [activeNodeId, onDeploy, setActiveNode]
+    [activeNodeId, onDeploy, setActiveNode, isAdminMode]
   );
 
   const progressPercent = Math.round(((activeIndex + 1) / Math.max(1, nodes.length)) * 100);
-  const isLocked = activeNode ? !activeNode.isUnlocked : true;
+  const isLocked = activeNode ? (isAdminMode ? false : !activeNode.isUnlocked) : false;
   const isBoss = activeNode?.variant === 'boss';
 
   return (
@@ -172,17 +177,18 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
           nodeStyle="hex"
           unlockingNodeId={unlockingNodeId}
           unlockStyle="shockwave"
+          isAdminMode={isAdminMode}
         />
       </div>
 
       {activeNode && (
         <aside
           className={cn(
-            'absolute right-4 sm:right-6 top-20 z-20 w-80 sm:w-96 max-w-[calc(100%-2rem)] max-h-[calc(100%-6.5rem)] overflow-y-auto rounded-2xl border bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col gap-4 shadow-2xl transition-all duration-300',
-            showPanel ? 'translate-x-0 opacity-100' : 'translate-x-full opacity-0 pointer-events-none'
+            'absolute right-2 sm:right-6 top-16 sm:top-20 z-20 w-[calc(100vw-1rem)] sm:w-96 max-w-sm max-h-[calc(100vh-8.5rem)] overflow-y-auto rounded-2xl border bg-slate-900/90 sm:bg-slate-900/40 backdrop-blur-xl p-4 sm:p-6 flex flex-col gap-3 sm:gap-4 shadow-2xl transition-all duration-300',
+            showPanel ? 'translate-x-0 opacity-100 pointer-events-auto' : 'translate-x-full opacity-0 pointer-events-none'
           )}
           style={{ borderColor: isBoss ? 'rgba(244,63,94,0.5)' : 'rgba(255,106,0,0.35)' }}
-          aria-label={`Detalle del módulo ${activeNode.label}`}
+          aria-label={`Detalle del modulo ${activeNode.label}`}
         >
           <div className="flex items-center justify-between">
             <span className="text-[10px] font-mono font-bold tracking-widest text-slate-400 uppercase">
@@ -240,7 +246,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
           </div>
 
           <div className="pt-3 border-t border-slate-700/50">
-            {isLocked ? (
+            {isLocked && !isAdminMode ? (
               <div className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-slate-800/60 border border-slate-700/60 text-slate-400 font-mono text-xs font-bold">
                 <Lock className="w-3.5 h-3.5 text-rose-400" />
                 <span>{activeNode.statusText || 'Bloqueado'}</span>
@@ -260,6 +266,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             )}
+
           </div>
         </aside>
       )}
@@ -275,12 +282,12 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
         </button>
       )}
 
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-3 px-4 py-2 rounded-2xl border border-slate-700/50 bg-slate-900/40 backdrop-blur-xl shadow-2xl">
-        <div className="flex items-center gap-3">
+      <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 sm:gap-3 px-3 sm:px-4 py-1.5 sm:py-2 rounded-2xl border border-slate-700/50 bg-slate-900/60 sm:bg-slate-900/40 backdrop-blur-xl shadow-2xl max-w-[calc(100vw-1rem)]">
+        <div className="flex items-center gap-2 sm:gap-3">
           <span className="font-mono text-xs font-bold tabular-nums text-orange-400">
             0{activeIndex + 1} / 0{nodes.length}
           </span>
-          <div className="flex items-center gap-1.5" role="list" aria-label={`Paso ${activeIndex + 1} de ${nodes.length}`}>
+          <div className="flex items-center gap-1 sm:gap-1.5 max-w-[140px] sm:max-w-none overflow-x-auto no-scrollbar" role="list" aria-label={`Paso ${activeIndex + 1} de ${nodes.length}`}>
             {nodes.map((n, i) => (
               <button
                 key={n.id}
