@@ -76,7 +76,7 @@ export const PYTHON_1_LESSONS_DATASET = buildSectionDataset(
   'PYTHON 1: FUNDAMENTOS & SINTAXIS',
   45,
   [
-    { id: 'les-01', code: '01', label: 'ENTORNO & SINTAXIS', subtitle: 'VS CODE, VENV & PRINT', variant: 'completed', iconType: 'brackets', stars: 3, maxStars: 3, xp: 120, statusText: 'DOMINADO • +120 XP' },
+    { id: 'les-01', code: '01', label: 'TU PRIMER PROGRAMA', subtitle: 'PRINT, SINTAXIS & COMENTARIOS', variant: 'completed', iconType: 'brackets', stars: 3, maxStars: 3, xp: 120, statusText: 'DOMINADO • +120 XP' },
     { id: 'les-02', code: '02', label: 'VARIABLES & TIPOS', subtitle: 'INT, FLOAT, STR, BOOL & TYPE', variant: 'completed', iconType: 'flow', stars: 3, maxStars: 3, xp: 150, statusText: 'DOMINADO • +150 XP' },
     { id: 'les-03', code: '03', label: 'OPERADORES & LÓGICA', subtitle: 'ARITMÉTICA & BOOLEANOS', variant: 'completed', iconType: 'atom', stars: 3, maxStars: 3, xp: 180, statusText: 'DOMINADO • +180 XP' },
     { id: 'les-04', code: '04', label: 'ENTRADA/SALIDA & STRINGS', subtitle: 'INPUT(), PRINT() & F-STRINGS', variant: 'completed', iconType: 'matrix', stars: 3, maxStars: 3, xp: 180, statusText: 'DOMINADO • +180 XP' },
