@@ -7,7 +7,7 @@
       "id": "q_py1_05_01",
       "type": "find_error",
       "difficulty": "easy",
-      "prompt": "¿Cuál es el error de sintaxis en el siguiente bloque?",
+      "prompt": "¿Cuál es el error de sintaxis en el siguiente bloque de código?",
       "prompt_code": "if edad >= 18\n    print(\"Mayor de edad\")",
       "options": [
         {
@@ -20,7 +20,7 @@
         },
         {
           "id": "c",
-          "text": "La condición debe ir entre paréntesis obligatoriamente"
+          "text": "La condición debe ir obligatoriamente entre paréntesis"
         },
         {
           "id": "d",
@@ -28,13 +28,93 @@
         }
       ],
       "correct_option_id": "a",
-      "explanation": "En Python toda cabecera de control de flujo (if, elif, else, for, while, def) debe finalizar con dos puntos (:)."
+      "explanation": "En Python toda cabecera de control de flujo (if, elif, else) debe finalizar obligatoriamente con dos puntos (:)."
     },
     {
       "id": "q_py1_05_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es la convención oficial de sangría (indentación) en Python según el estándar PEP 8?",
+      "options": [
+        {
+          "id": "a",
+          "text": "4 espacios por nivel de indentación"
+        },
+        {
+          "id": "b",
+          "text": "1 tabulación obligatoria"
+        },
+        {
+          "id": "c",
+          "text": "2 espacios como en JavaScript"
+        },
+        {
+          "id": "d",
+          "text": "No importa la cantidad mientras se use punto y coma"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La guía oficial de estilo de Python (PEP 8) establece 4 espacios por nivel de sangría para estructurar los bloques de código."
+    },
+    {
+      "id": "q_py1_05_03",
       "type": "predict_output",
-      "difficulty": "medium",
-      "prompt": "¿Qué se imprimirá?",
+      "difficulty": "easy",
+      "prompt": "¿Qué salida producirá la ejecución del siguiente código?",
+      "prompt_code": "saldo = 30\nif saldo >= 50:\n    print(\"Compra aprobada\")\nelse:\n    print(\"Saldo insuficiente\")",
+      "options": [
+        {
+          "id": "a",
+          "text": "Saldo insuficiente"
+        },
+        {
+          "id": "b",
+          "text": "Compra aprobada"
+        },
+        {
+          "id": "c",
+          "text": "Compra aprobada\nSaldo insuficiente"
+        },
+        {
+          "id": "d",
+          "text": "Error de sintaxis"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La condición 30 >= 50 es False, por lo que Python descarta el bloque del if y ejecuta el bloque del else mostrando 'Saldo insuficiente'."
+    },
+    {
+      "id": "q_py1_05_04",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué imprimirá la consola al ejecutar esta cadena de condiciones?",
+      "prompt_code": "x = 10\nif x > 20:\n    print(\"Mayor a 20\")\nelif x == 10:\n    print(\"Es diez\")\nelse:\n    print(\"Otro\")",
+      "options": [
+        {
+          "id": "a",
+          "text": "Es diez"
+        },
+        {
+          "id": "b",
+          "text": "Mayor a 20"
+        },
+        {
+          "id": "c",
+          "text": "Otro"
+        },
+        {
+          "id": "d",
+          "text": "Es diez\nOtro"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "x > 20 es False. Luego elif x == 10 es True: ejecuta 'Es diez' y el resto de la estructura es descartada."
+    },
+    {
+      "id": "q_py1_05_05",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué se imprimirá tras ejecutar el siguiente código?",
       "prompt_code": "x = 0\nif x:\n    print(\"Verdadero\")\nelse:\n    print(\"Falso\")",
       "options": [
         {
@@ -55,31 +135,34 @@
         }
       ],
       "correct_option_id": "a",
-      "explanation": "En Python, el número 0 es considerado \"falsy\" (evalúa a False en un contexto booleano), por lo que se ejecuta el else."
+      "explanation": "En Python, el número 0 se evalúa como falso (falsy) en un contexto condicional, por lo que se ejecuta la rama else mostrando 'Falso'."
     },
     {
-      "id": "q_py1_05_03",
-      "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Cuál es la convención oficial de sangría en Python según PEP 8?",
+      "id": "q_py1_05_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué se imprimirá al evaluar esta condición compuesta con and?",
+      "prompt_code": "edad = 20\ntiene_pase = False\nif edad >= 18 and tiene_pase:\n    print(\"Autorizado\")\nelse:\n    print(\"Denegado\")",
       "options": [
         {
           "id": "a",
-          "text": "4 espacios por nivel de indentación"
+          "text": "Denegado"
         },
         {
           "id": "b",
-          "text": "1 tabulación obligatoria"
+          "text": "Autorizado"
         },
         {
           "id": "c",
-          "text": "2 espacios como en JavaScript"
+          "text": "Autorizado\nDenegado"
         },
         {
           "id": "d",
-          "text": "No importa la cantidad mientras se use punto y coma"
+          "text": "Error de lógica"
         }
-      ]
+      ],
+      "correct_option_id": "a",
+      "explanation": "El operador and exige que ambas condiciones sean True. Como tiene_pase es False, la expresión completa resulta en False y se ejecuta el else."
     }
   ]
 }
