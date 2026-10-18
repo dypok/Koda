@@ -28,8 +28,12 @@
 - Modal de celebración de "Level Up!" con animación de fuegos artificiales y Koda 🦊 ascendiendo de rango.
 
 **Subtasks:**
+- [x] [BD] Persistencia atomica de incremento de `users.total_xp` en PostgreSQL por respuestas correctas y cierre de seccion/quiz.
 - [ ] [BD] Tabla `xp_transactions` con trigger que actualice `users.total_xp` y `users.level`.
-- [ ] [BACKEND] Servicio `GamificationService.awardXp()` con validación anti-farming e idempotencia por request.
+- [x] [BACKEND] Acumulacion de XP por ejercicio (+5 XP / +2 XP) en `LessonAnsweredListener` y en `saveSectionCompletion` (+25 XP).
+- [ ] [BACKEND] Servicio `GamificationService.awardXp()` con validacion anti-farming e idempotencia por request.
+- [x] [FRONTEND] Desquemado de saldo XP en dock flotante (`RoadmapFusionView`), Popover e hidratacion en `StudentRoadmapView`.
+- [x] [FRONTEND] Despacho reactivo de XP ganado (+5 XP en ejercicios y +25 XP en quizzes) a `useAuthStore` en `LessonWorkspace`.
 - [ ] [FRONTEND] Barra de nivel animada en el Header global con porcentaje de avance hacia el siguiente nivel.
 - [ ] [FRONTEND] Modal interactivo de subida de nivel con sonido triunfal y tarjeta compartible.
 
@@ -56,9 +60,9 @@
 - Estado visual del fuego: encendido (naranja brillante) si ya practicó hoy; apagado/grisáceo si aún no ha completado su lección diaria.
 
 **Subtasks:**
-- [ ] [BD] Tabla `user_streaks` con `current_streak`, `max_streak`, `freeze_count`, `last_activity_date`.
-- [ ] [BACKEND] Cron job diario o trigger al inicio del día que evalúe y aplique consumos de freeze o reinicio de rachas.
-- [ ] [FRONTEND] Widget de racha en el Header con tooltip explicativo del estado del día y protectores restantes.
+- [x] [BD] Tabla `user_streaks` / `streaks` con `current_streak`, `longest_streak`, `freeze_count`, `last_activity_date`.
+- [x] [BACKEND] Cálculo y actualización atómica de racha y freeze en `saveSectionCompletion` con manejo de zona horaria y retorno en DTO.
+- [x] [FRONTEND] Widget y dock de racha interactivo con Popover explicativo del estado del día, protectores y desglose semanal (L-D).
 - [ ] [FRONTEND] Modal de rescate de racha si se consumió un Freeze: *"¡Tu protector de racha te ha salvado ayer! Continúa hoy para mantener el fuego encendido 🛡️"*.
 
 **DoD adicional para esta US:**

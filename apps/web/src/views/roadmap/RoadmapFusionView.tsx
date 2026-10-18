@@ -8,6 +8,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { RoadmapPixiGraph } from './RoadmapPixiGraph';
 import { RoadmapCanvasControls } from './RoadmapCanvasControls';
+import { RoadmapStreakPopover } from './RoadmapStreakPopover';
 import { cn } from '@/lib/utils';
 
 interface RoadmapFusionViewProps {
@@ -28,8 +29,23 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
   const inLessons = viewMode === 'lessons';
 
   const { user } = useAuthStore();
-  const streak = user?.streak ?? 1;
-  const xp = user?.totalXp ?? 100;
+  const streak = user?.streak ?? 0;
+  const xp = user?.totalXp ?? 0;
+  const longestStreak = user?.longestStreak ?? user?.streak ?? 0;
+  const streakFreezeCount = user?.streakFreezeCount ?? 1;
+
+  const isActiveToday = useMemo(() => {
+    if (!user?.lastStudyDate) return false;
+    try {
+      const studyDate = new Date(user.lastStudyDate).toISOString().slice(0, 10);
+      const today = new Date().toISOString().slice(0, 10);
+      return studyDate === today;
+    } catch {
+      return false;
+    }
+  }, [user?.lastStudyDate]);
+
+  const [showStreakPopover, setShowStreakPopover] = useState(false);
 
   const nodes = dataset.nodes;
   const [showPanel, setShowPanel] = useState(true);
@@ -328,6 +344,18 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
         </button>
       )}
 
+      {/* Popover interactivo de racha diaria */}
+      <RoadmapStreakPopover
+        isOpen={showStreakPopover}
+        onClose={() => setShowStreakPopover(false)}
+        streak={streak}
+        xp={xp}
+        longestStreak={longestStreak}
+        streakFreezeCount={streakFreezeCount}
+        isActiveToday={isActiveToday}
+        onContinue={activeNode?.isUnlocked ? () => onDeploy(activeNode) : undefined}
+      />
+
       <div
         onPointerDown={(e) => e.stopPropagation()}
         onPointerUp={(e) => e.stopPropagation()}
@@ -357,17 +385,44 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
           </div>
         </div>
         <span aria-hidden="true" className="hidden sm:block w-px h-6 bg-slate-700/60" />
-        <div className="flex items-center gap-2">
-          <Flame aria-hidden="true" weight="fill" className="h-4 w-4 text-orange-500" />
-          <span className="flex flex-col leading-none">
-            <span className="font-mono text-xs font-black tracking-wider text-orange-300">
+        <button
+          type="button"
+          onClick={() => setShowStreakPopover((prev) => !prev)}
+          aria-expanded={showStreakPopover}
+          aria-label="Ver estado de racha y experiencia"
+          className="group flex items-center gap-2 rounded-xl px-2 py-1 -my-1 transition-all hover:bg-slate-800/60 cursor-pointer"
+        >
+          <div className="relative flex items-center justify-center">
+            <Flame
+              aria-hidden="true"
+              weight="fill"
+              className={cn(
+                'h-4 w-4 transition-transform group-hover:scale-110',
+                isActiveToday
+                  ? 'text-orange-500 drop-shadow-[0_0_8px_rgba(255,106,0,0.85)] animate-pulse'
+                  : 'text-slate-500 group-hover:text-slate-400'
+              )}
+            />
+            {isActiveToday && (
+              <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-emerald-400 ring-1 ring-slate-950" />
+            )}
+          </div>
+          <span className="flex flex-col items-start leading-none">
+            <span
+              className={cn(
+                'font-mono text-xs font-black tracking-wider transition-colors',
+                isActiveToday
+                  ? 'text-orange-300 group-hover:text-orange-200'
+                  : 'text-slate-400 group-hover:text-slate-300'
+              )}
+            >
               {streak}D
             </span>
-            <span className="font-mono text-[9px] font-bold tabular-nums tracking-wide text-amber-300/90">
-              +{xp} XP
+            <span className="font-mono text-[9px] font-bold tabular-nums tracking-wide text-amber-300/90 group-hover:text-amber-200">
+              {xp} XP
             </span>
           </span>
-        </div>
+        </button>
       </div>
     </div>
   );

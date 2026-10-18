@@ -45,6 +45,10 @@ export class CompleteSectionUseCase {
       isNewBest: result.isNewBest,
       xpAwarded: result.xpAwarded,
       userTotalXp: result.userTotalXp,
+      currentStreak: result.currentStreak,
+      longestStreak: result.longestStreak,
+      streakFreezeCount: result.streakFreezeCount,
+      isActiveToday: result.isActiveToday,
     });
   }
 }

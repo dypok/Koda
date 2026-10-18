@@ -12,6 +12,7 @@ import { cn } from '@/lib/utils';
 
 import { OrbitFieldBackground } from '@/components/landing/OrbitFieldBackground';
 import { EvaluationService } from '@/services/learning/evaluation.service';
+import { useAuthStore } from '@/stores/auth.store';
 import { MarkdownContent, renderMarkdownInline } from '@/components/ui/markdown-content';
 
 interface LessonWorkspaceProps {
@@ -258,16 +259,39 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       // Notificar al roadmap store para encender el nodo actual
       completeSectionNode(sectionRef, 3);
 
-      // Sincronizar completitud de la sección en PostgreSQL
+      // Sincronizar completitud de la sección en PostgreSQL y actualizar AuthStore en tiempo real
       if (parsed) {
         EvaluationService.completeSection(sectionRef, {
           moduleId: parsed.moduleSlug,
           courseId,
           accuracyPercentage: 100,
-        }).catch((err) => {
-          // Fallback silencioso si el usuario está offline o sin sesión activa
-          console.warn('Sync section completion offline fallback:', err?.message);
-        });
+        })
+          .then((res) => {
+            const currentUser = useAuthStore.getState().user;
+            if (currentUser) {
+              useAuthStore.getState().updateUserProfile({
+                totalXp: res.userTotalXp ?? (currentUser.totalXp + (res.xpAwarded ?? 10)),
+                streak: res.currentStreak ?? (currentUser.streak > 0 ? currentUser.streak : 1),
+                longestStreak: res.longestStreak ?? currentUser.longestStreak,
+                streakFreezeCount: res.streakFreezeCount ?? currentUser.streakFreezeCount,
+                lastStudyDate: new Date().toISOString(),
+              });
+            }
+          })
+          .catch((err) => {
+            // Fallback optimista local si el usuario está offline o sin sesión activa
+            console.warn('Sync section completion offline fallback:', err?.message);
+            const currentUser = useAuthStore.getState().user;
+            if (currentUser) {
+              const currentStreak = currentUser.streak > 0 ? currentUser.streak : 1;
+              useAuthStore.getState().updateUserProfile({
+                totalXp: currentUser.totalXp + 10,
+                streak: currentStreak,
+                longestStreak: Math.max(currentUser.longestStreak ?? 1, currentStreak),
+                lastStudyDate: new Date().toISOString(),
+              });
+            }
+          });
       }
     },
     [completeSectionNode, sectionRef, parsed, courseId]
@@ -320,9 +344,28 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             moduleId: parsed.moduleSlug,
             courseId,
             accuracyPercentage: accuracy,
-          }).catch((err) => {
-            console.warn('Sync quiz section completion offline fallback:', err?.message);
-          });
+          })
+            .then((res) => {
+              const currentUser = useAuthStore.getState().user;
+              if (currentUser) {
+                useAuthStore.getState().updateUserProfile({
+                  totalXp: res.userTotalXp ?? (currentUser.totalXp + (res.xpAwarded ?? 25)),
+                  streak: res.currentStreak ?? (currentUser.streak > 0 ? currentUser.streak : 1),
+                  longestStreak: res.longestStreak ?? currentUser.longestStreak,
+                  streakFreezeCount: res.streakFreezeCount ?? currentUser.streakFreezeCount,
+                  lastStudyDate: new Date().toISOString(),
+                });
+              }
+            })
+            .catch((err) => {
+              console.warn('Sync quiz section completion offline fallback:', err?.message);
+              const currentUser = useAuthStore.getState().user;
+              if (currentUser) {
+                useAuthStore.getState().updateUserProfile({
+                  totalXp: (currentUser.totalXp ?? 0) + 25,
+                });
+              }
+            });
         }
       }
     },
@@ -590,7 +633,15 @@ function LessonView({
     },
     onSubmit: () => {
       if (!engine.result && engine.selected.length > 0) {
-        engine.check();
+        const checkRes = engine.check();
+        if (checkRes?.correct && checkRes.xp > 0) {
+          const curUser = useAuthStore.getState().user;
+          if (curUser) {
+            useAuthStore.getState().updateUserProfile({
+              totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
+            });
+          }
+        }
         if (lesson?.id) {
           EvaluationService.evaluateLessonAnswer(lesson.id, {
             selected_option_ids: engine.selected,
@@ -733,7 +784,15 @@ function LessonView({
                 <button
                   type="button"
                   onClick={() => {
-                    engine.check();
+                    const checkRes = engine.check();
+                    if (checkRes?.correct && checkRes.xp > 0) {
+                      const curUser = useAuthStore.getState().user;
+                      if (curUser) {
+                        useAuthStore.getState().updateUserProfile({
+                          totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
+                        });
+                      }
+                    }
                     if (lesson?.id) {
                       EvaluationService.evaluateLessonAnswer(lesson.id, {
                         selected_option_ids: engine.selected,

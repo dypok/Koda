@@ -19,6 +19,10 @@ export interface SectionCompletionResult {
   isNewBest?: boolean;
   xpAwarded?: number;
   userTotalXp?: number;
+  currentStreak?: number;
+  longestStreak?: number;
+  streakFreezeCount?: number;
+  isActiveToday?: boolean;
 }
 
 export interface EvaluationQuestion {

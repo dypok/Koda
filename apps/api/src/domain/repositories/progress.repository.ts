@@ -15,6 +15,10 @@ export interface SaveSectionCompletionResult {
   isNewlyPassed: boolean;
   isNewBest: boolean;
   userTotalXp: number;
+  currentStreak?: number;
+  longestStreak?: number;
+  streakFreezeCount?: number;
+  isActiveToday?: boolean;
 }
 
 export interface IProgressRepository {

@@ -13,6 +13,10 @@ export class SectionCompletionResponseDto {
   isNewBest!: boolean;
   xpAwarded!: number;
   userTotalXp!: number;
+  currentStreak!: number;
+  longestStreak!: number;
+  streakFreezeCount!: number;
+  isActiveToday!: boolean;
   completedAt!: string | null;
 
   static fromResult(params: {
@@ -22,8 +26,23 @@ export class SectionCompletionResponseDto {
     isNewBest: boolean;
     xpAwarded: number;
     userTotalXp: number;
+    currentStreak?: number;
+    longestStreak?: number;
+    streakFreezeCount?: number;
+    isActiveToday?: boolean;
   }): SectionCompletionResponseDto {
-    const { entity, attemptStars, isNewlyPassed, isNewBest, xpAwarded, userTotalXp } = params;
+    const {
+      entity,
+      attemptStars,
+      isNewlyPassed,
+      isNewBest,
+      xpAwarded,
+      userTotalXp,
+      currentStreak = 0,
+      longestStreak = 0,
+      streakFreezeCount = 1,
+      isActiveToday = true,
+    } = params;
 
     const dto = new SectionCompletionResponseDto();
     dto.sectionId = entity.sectionId;
@@ -38,6 +57,10 @@ export class SectionCompletionResponseDto {
     dto.isNewBest = isNewBest;
     dto.xpAwarded = xpAwarded;
     dto.userTotalXp = userTotalXp;
+    dto.currentStreak = currentStreak;
+    dto.longestStreak = longestStreak;
+    dto.streakFreezeCount = streakFreezeCount;
+    dto.isActiveToday = isActiveToday;
     dto.completedAt = entity.completedAt ? entity.completedAt.toISOString() : null;
 
     return dto;

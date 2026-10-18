@@ -10,6 +10,8 @@ import { RoadmapTopHud } from './RoadmapTopHud';
 import { RoadmapFusionView } from './RoadmapFusionView';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { useRouter } from 'next/navigation';
+import { UserProfileService } from '@/services/user/user-profile.service';
+import { useAuthStore } from '@/stores/auth.store';
 
 export const StudentRoadmapView: React.FC = () => {
   const router = useRouter();
@@ -17,6 +19,21 @@ export const StudentRoadmapView: React.FC = () => {
 
   React.useEffect(() => {
     hydrateProgress();
+    if (typeof window !== 'undefined') {
+      UserProfileService.getProfile()
+        .then((profile) => {
+          if (profile) {
+            useAuthStore.getState().updateUserProfile({
+              totalXp: profile.totalXp ?? 0,
+              streak: profile.currentStreak ?? 0,
+              longestStreak: profile.longestStreak ?? 0,
+              streakFreezeCount: profile.streakFreezeCount ?? 1,
+              lastStudyDate: profile.lastStudyDate ?? null,
+            });
+          }
+        })
+        .catch(() => {});
+    }
   }, [hydrateProgress]);
 
   React.useEffect(() => {
