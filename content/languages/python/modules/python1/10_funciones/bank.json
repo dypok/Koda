@@ -28,34 +28,141 @@
         }
       ],
       "correct_option_id": "a",
-      "explanation": "operar(5) usa el factor por defecto (5 * 2 = 10). operar(3, 4) usa factor=4 (3 * 4 = 12). 10 + 12 = 22."
+      "explanation": "operar(5) usa el factor por defecto 2 (5 * 2 = 10). operar(3, 4) especifica factor=4 (3 * 4 = 12). 10 + 12 = 22."
     },
     {
       "id": "q_py1_10_02",
       "type": "find_error",
       "difficulty": "medium",
       "prompt": "¿Qué error de sintaxis tiene la siguiente cabecera de función?",
-      "prompt_code": "def configurar(tema=\"oscuro\", usuario):\n    pass",
+      "prompt_code": "def configurar(tema=\"oscuro\", usuario):\n    return f\"{usuario}: {tema}\"",
       "options": [
         {
           "id": "a",
-          "text": "SyntaxError: los parámetros sin valor por defecto no pueden ir después de los que sí tienen"
+          "text": "SyntaxError: los parámetros obligatorios no pueden ir después de los que tienen valor por defecto"
         },
         {
           "id": "b",
-          "text": "Falta especificar el tipo de retorno"
+          "text": "Falta especificar el tipo de retorno explícito"
         },
         {
           "id": "c",
-          "text": "La palabra pass es inválida"
+          "text": "El nombre configurar es una palabra reservada en Python"
         },
         {
           "id": "d",
-          "text": "No se pueden tener parámetros con comillas"
+          "text": "No se pueden usar cadenas de texto como valores por defecto"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "En Python, todos los parámetros posicionales obligatorios deben colocarse antes de cualquier parámetro con valor por defecto."
+      "explanation": "En Python, los parámetros sin valor por defecto (obligatorios) deben colocarse antes de cualquier parámetro con valor por defecto."
+    },
+    {
+      "id": "q_py1_10_03",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué valor almacena la variable 'resultado' al llamar una función sin return?",
+      "prompt_code": "def imprimir_doble(n):\n    print(n * 2)\n\nresultado = imprimir_doble(10)\nprint(resultado)",
+      "options": [
+        {
+          "id": "a",
+          "text": "None"
+        },
+        {
+          "id": "b",
+          "text": "20"
+        },
+        {
+          "id": "c",
+          "text": "0"
+        },
+        {
+          "id": "d",
+          "text": "TypeError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "imprimir_doble muestra 20 en la consola pero no tiene return, por lo que entrega automáticamente el valor especial None."
+    },
+    {
+      "id": "q_py1_10_04",
+      "type": "find_error",
+      "difficulty": "medium",
+      "prompt": "¿Qué error ocurre al intentar leer 'descuento' fuera de la función?",
+      "prompt_code": "def aplicar_rebaja(precio):\n    descuento = 15\n    return precio - descuento\n\naplicar_rebaja(100)\nprint(descuento)",
+      "options": [
+        {
+          "id": "a",
+          "text": "NameError: name 'descuento' is not defined"
+        },
+        {
+          "id": "b",
+          "text": "15"
+        },
+        {
+          "id": "c",
+          "text": "TypeError: local variable is private"
+        },
+        {
+          "id": "d",
+          "text": "UnboundLocalError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La variable 'descuento' tiene ámbito local dentro de aplicar_rebaja; no existe en el ámbito global, por lo que print(descuento) lanza NameError."
+    },
+    {
+      "id": "q_py1_10_05",
+      "type": "find_error",
+      "difficulty": "easy",
+      "prompt": "¿Qué excepción genera llamar a la función sin pasar los argumentos obligatorios?",
+      "prompt_code": "def conectar(host, puerto):\n    return f\"{host}:{puerto}\"\n\nconectar(\"localhost\")",
+      "options": [
+        {
+          "id": "a",
+          "text": "TypeError: missing 1 required positional argument: 'puerto'"
+        },
+        {
+          "id": "b",
+          "text": "ValueError: missing argument"
+        },
+        {
+          "id": "c",
+          "text": "IndexError: tuple index out of range"
+        },
+        {
+          "id": "d",
+          "text": "SyntaxError: incomplete call"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La función exige dos argumentos posicionales obligatorios. Al proporcionar solo uno, Python reporta TypeError por argumento faltante."
+    },
+    {
+      "id": "q_py1_10_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es la forma más rápida y recomendada de identificar el origen de un error al leer un Traceback?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Leer la última línea del Traceback para conocer el tipo exacto de error y su descripción, luego revisar la línea superior inmediata para ubicar el archivo y número de línea"
+        },
+        {
+          "id": "b",
+          "text": "Leer únicamente la primera línea del Traceback porque ahí siempre está la solución"
+        },
+        {
+          "id": "c",
+          "text": "Eliminar la función completa y reescribirla sin mirar el mensaje de error"
+        },
+        {
+          "id": "d",
+          "text": "Los Tracebacks solo sirven para los desarrolladores de Python, no para los programadores de aplicaciones"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La convención profesional es leer de abajo hacia arriba: la última línea nombra la excepción y la causa, y la línea anterior especifica el archivo y línea donde se detonó."
     }
   ]
 }
