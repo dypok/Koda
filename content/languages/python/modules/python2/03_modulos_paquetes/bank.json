@@ -7,7 +7,111 @@
       "id": "q_py2_03_01",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "¿Cuál es el archivo especial que tradicionalmente indica que una carpeta debe tratarse como un paquete de Python?",
+      "prompt": "¿Qué valor adopta la variable especial __name__ cuando un archivo operaciones.py es ejecutado directamente desde la terminal con 'python operaciones.py'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "\"__main__\""
+        },
+        {
+          "id": "b",
+          "text": "\"operaciones\""
+        },
+        {
+          "id": "c",
+          "text": "\"__file__\""
+        },
+        {
+          "id": "d",
+          "text": "None"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Al lanzarse de forma directa como punto de entrada del programa, Python asigna la cadena '__main__' a la variable __name__."
+    },
+    {
+      "id": "q_py2_03_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué valor tiene __name__ dentro de matematicas.py cuando otro script lo carga con 'import matematicas'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "\"matematicas\""
+        },
+        {
+          "id": "b",
+          "text": "\"__main__\""
+        },
+        {
+          "id": "c",
+          "text": "\"root\""
+        },
+        {
+          "id": "d",
+          "text": "True"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Cuando un módulo es importado por otro script, __name__ adopta el nombre del módulo importado, en este caso 'matematicas'."
+    },
+    {
+      "id": "q_py2_03_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué excepción lanza Python si intentas importar un módulo que no existe en ninguna de las rutas de sys.path?",
+      "options": [
+        {
+          "id": "a",
+          "text": "ModuleNotFoundError"
+        },
+        {
+          "id": "b",
+          "text": "KeyError"
+        },
+        {
+          "id": "c",
+          "text": "FileNotFoundError"
+        },
+        {
+          "id": "d",
+          "text": "IndexError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "ModuleNotFoundError (subclase de ImportError) se dispara cuando el sistema de importación no encuentra el módulo en sys.path."
+    },
+    {
+      "id": "q_py2_03_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Por qué la sentencia 'from modulo import *' se considera una mala práctica en código profesional?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque contamina el namespace, puede sobreescribir funciones locales con el mismo nombre y oculta el origen de cada función importada"
+        },
+        {
+          "id": "b",
+          "text": "Porque no es compatible con procesadores de 64 bits"
+        },
+        {
+          "id": "c",
+          "text": "Porque obliga a instalar dependencias adicionales en Windows"
+        },
+        {
+          "id": "d",
+          "text": "Porque ralentiza la conexión a internet"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Importar con asterisco introduce todos los símbolos al espacio de nombres actual, ocasionando colisiones y eliminando la claridad de qué librería aporta cada función."
+    },
+    {
+      "id": "q_py2_03_05",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué archivo permite a Python reconocer un directorio como un paquete e inicializar su espacio de nombres?",
       "options": [
         {
           "id": "a",
@@ -15,19 +119,46 @@
         },
         {
           "id": "b",
-          "text": "package.json"
-        },
-        {
-          "id": "c",
           "text": "__main__.py"
         },
         {
+          "id": "c",
+          "text": "package.json"
+        },
+        {
           "id": "d",
-          "text": "module.config"
+          "text": "requirements.txt"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "__init__.py inicializa el paquete e indica al intérprete que la carpeta es un módulo estructurado."
+      "explanation": "__init__.py es el archivo estándar que inicializa y estructura un paquete en el ecosistema de Python."
+    },
+    {
+      "id": "q_py2_03_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué imprime este código al importar un módulo con alias usando 'as'?",
+      "prompt_code": "import math as m\nprint(m.floor(5.8))",
+      "options": [
+        {
+          "id": "a",
+          "text": "5"
+        },
+        {
+          "id": "b",
+          "text": "6"
+        },
+        {
+          "id": "c",
+          "text": "5.8"
+        },
+        {
+          "id": "d",
+          "text": "NameError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "m es un alias válido para math. m.floor(5.8) calcula el redondeo hacia abajo, produciendo 5."
     }
   ]
 }

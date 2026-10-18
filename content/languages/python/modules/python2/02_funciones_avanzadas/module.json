@@ -4,65 +4,65 @@
   "code": "PY2_M02",
   "slug": "funciones-avanzadas",
   "course_slug": "python-2",
-  "title": "Funciones Avanzadas: *args, **kwargs y Lambdas",
-  "objective": "Escribir funciones flexibles con cantidad variable de argumentos posicionales (*args) y nombrados (**kwargs), junto con funciones anónimas lambda.",
-  "description": "Lleva tus funciones al siguiente nivel: parámetros dinámicos, empaquetado/desempaquetado y funciones de primer orden.",
-  "position": 12,
+  "title": "Funciones Avanzadas: *args, **kwargs, Desempaquetado y Lambdas",
+  "objective": "Escribir funciones altamente flexibles mediante empaquetado/desempaquetado (*args, **kwargs), respetar el orden de firmas y dominar funciones anónimas lambda.",
+  "description": "Lleva tus funciones al siguiente nivel: parámetros dinámicos, invocaciones genéricas y funciones de orden superior para escribir software reutilizable y profesional.",
+  "position": 2,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 230
+    "on_pass": 240
   },
   "sections": [
     {
       "id": "sec_py2_02_01",
       "code": "S01",
-      "title": "Empaquetado *args y **kwargs",
-      "slug": "args-kwargs",
+      "title": "Funciones Avanzadas en Python",
+      "slug": "funciones-avanzadas-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 18,
-      "xp_on_complete": 45,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py2_02_01",
           "code": "L01",
-          "title": "*args y **kwargs en Profundidad",
-          "slug": "args-y-kwargs-base",
+          "title": "Empaquetado de Argumentos con *args y **kwargs",
+          "slug": "empaquetado-args-kwargs",
           "position": 1,
-          "concept_id": "py2-args-kwargs",
-          "objective": "Recibir una cantidad arbitraria de argumentos en tus funciones.",
-          "theory_markdown": "En muchas situaciones no sabes cuántos argumentos pasará el usuario:\n- `*args` (arguments): Empaqueta todos los argumentos posicionales adicionales en una **tupla**.\n- `**kwargs` (keyword arguments): Empaqueta todos los argumentos nombrados adicionales en un **diccionario**.\n\nEl nombre de la variable no es lo importante; el poder reside en el operador asterisco (`*` y `**`).",
+          "concept_id": "py2-args-kwargs-pack",
+          "objective": "Recibir cantidades arbitrarias de argumentos posicionales como tupla (*args) y nombrados como diccionario (**kwargs).",
+          "theory_markdown": "En muchas funciones de producción no es posible saber de antemano cuántos argumentos suministrará el llamador. Python soluciona esto con los operadores de empaquetado `*` y `**`:\n\n1. **`*args` (Argumentos Posicionales Variables)**: Empaqueta todos los argumentos posicionales adicionales en una **tupla** inmutable.\n   ```python\n   def sumar_todo(*args):\n       print(type(args))  # <class 'tuple'>\n       return sum(args)\n   ```\n2. **`**kwargs` (Keyword Arguments Variables)**: Empaqueta todos los argumentos nombrados adicionales (`clave=valor`) en un **diccionario** estándar.\n   ```python\n   def registrar_usuario(**kwargs):\n       print(type(kwargs))  # <class 'dict'>\n       for k, v in kwargs.items():\n           print(f\"{k}: {v}\")\n   ```\n\nEl nombre de las variables `args` y `kwargs` es una convención comunitaria PEP 8; el comportamiento real lo definen los asteriscos `*` y `**`.",
           "examples": [
             {
-              "title": "Función sumadora flexible y logger de metadatos",
-              "code": "def sumar_todo(*numeros):\n    return sum(numeros)\n\ndef registrar_evento(evento, **metadata):\n    print(f\"Evento: {evento}\")\n    for k, v in metadata.items():\n        print(f\"  {k}: {v}\")\n\nprint(\"Suma:\", sumar_todo(10, 20, 30, 40))\nregistrar_evento(\"LOGIN\", usuario=\"alex\", ip=\"192.168.1.1\", exito=True)",
-              "output": "Suma: 100\nEvento: LOGIN\n  usuario: alex\n  ip: 192.168.1.1\n  exito: True",
-              "explanation": "sumar_todo acepta cualquier número de argumentos como tupla, y registrar_evento recibe pares clave-valor como dict."
+              "title": "Función flexible que combina argumentos fijos y variables",
+              "code": "def notificar(usuario, *mensajes, **canales):\n    print(f\"Destinatario: {usuario}\")\n    print(f\"Mensajes recibidos: {len(mensajes)}\")\n    print(f\"Canal prioritario: {canales.get('primario', 'email')}\")\n\nnotificar(\"Koda\", \"Alerta 1\", \"Alerta 2\", primario=\"sms\", reintentos=3)",
+              "output": "Destinatario: Koda\nMensajes recibidos: 2\nCanal prioritario: sms",
+              "explanation": "'Koda' se asigna al parámetro fijo 'usuario', los dos textos se empaquetan en la tupla 'mensajes' y las opciones nombradas se empaquetan en el dict 'canales'."
             }
           ],
-          "common_errors": "Colocar *args después de **kwargs. El orden estricto de parámetros en Python es: posicionales, *args, por defecto, **kwargs.",
+          "common_errors": "Intentar modificar args pensando que es una lista. args es una tupla inmutable. Si necesitas mutarlo, debes convertirlo con list(args).",
           "mini_exercise": {
-            "starter_code": "# Crea una función que multiplique todos los números pasados en *args\ndef multiplicar(*nums):\n    res = 1\n    for n in nums:\n        res *= n\n    return res\n\nprint(multiplicar(2, 3, 4))",
-            "instructions": "Verifica que la función retorne 24.",
-            "solution": "def multiplicar(*nums):\n    res = 1\n    for n in nums:\n        res *= n\n    return res\n\nprint(multiplicar(2, 3, 4))"
+            "starter_code": "# Retorna la cantidad de argumentos posicionales recibidos en *args\ndef contar_args(*args):\n    return ...\n\nprint(contar_args(1, 2, 3, 4))  # Debe imprimir 4",
+            "instructions": "Usa len(args) para contar los elementos de la tupla empaquetada.",
+            "solution": "def contar_args(*args):\n    return len(args)\n\nprint(contar_args(1, 2, 3, 4))"
           },
           "key_takeaways": [
-            "*args empaqueta argumentos posicionales en una tupla.",
-            "**kwargs empaqueta argumentos nombrados en un diccionario.",
-            "El orden estricto es obligatorio en la cabecera def."
+            "*args agrupa argumentos posicionales arbitrarios en una tupla.",
+            "**kwargs agrupa argumentos nombrados arbitrarios en un diccionario.",
+            "Permiten diseñar funciones extensibles y adaptables a cambios de especificación."
           ],
           "exercise": {
             "id": "ex_py2_02_01",
-            "type": "predict_output",
+            "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿De qué tipo es args dentro de una función definida como def f(*args)?",
+            "prompt": "¿De qué tipo de datos es el objeto recibido como 'valores' dentro de def prueba(*valores)?",
             "options": [
               {
                 "id": "a",
@@ -82,7 +82,175 @@
               }
             ],
             "correct_option_id": "a",
-            "explanation": "*args empaqueta siempre en una tupla inmutable."
+            "explanation": "El operador * de empaquetado posicional crea obligatoriamente una tupla inmutable."
+          }
+        },
+        {
+          "id": "les_py2_02_02",
+          "code": "L02",
+          "title": "Desempaquetado de Colecciones al Invocar Funciones (* y **)",
+          "slug": "desempaquetado-invocacion-funciones",
+          "position": 2,
+          "concept_id": "py2-unpacking-call",
+          "objective": "Desempaquetar listas, tuplas y diccionarios como argumentos individuales en llamadas a funciones existentes.",
+          "theory_markdown": "Los asteriscos también operan en sentido inverso: cuando se colocan **al momento de llamar** a una función, desempaquetan colecciones existentes para distribuirlas en parámetros individuales.\n\n### Desempaquetado posicional con `*`\nSi tienes una lista o tupla y la función espera parámetros separados:\n```python\ndef crear_punto(x, y, z):\n    return f\"({x}, {y}, {z})\"\n\ncoordenadas = [10, 20, 30]\n# Sin desempaquetar fallaría con TypeError (recibiría 1 argumento en vez de 3)\n# Con *: distribuye cada elemento en x, y, z\nprint(crear_punto(*coordenadas))  # \"(10, 20, 30)\"\n```\n\n### Desempaquetado de clave-valor con `**`\nSi tienes un diccionario cuyas claves coinciden exactamente con los nombres de los parámetros:\n```python\ndef conectar(host, puerto, timeout):\n    return f\"{host}:{puerto} (timeout: {timeout}s)\"\n\nconfig = {\"host\": \"localhost\", \"puerto\": 8080, \"timeout\": 5}\nprint(conectar(**config))\n```",
+          "examples": [
+            {
+              "title": "Llamada con desempaquetado de tupla y diccionario",
+              "code": "def presentar(nombre, edad, rol=\"Usuario\"):\n    return f\"{nombre} ({edad} años) - {rol}\"\n\ndatos_base = (\"Ana\", 28)\nprint(presentar(*datos_base))\n\nopciones = {\"nombre\": \"Carlos\", \"edad\": 35, \"rol\": \"Admin\"}\nprint(presentar(**opciones))",
+              "output": "Ana (28 años) - Usuario\nCarlos (35 años) - Admin",
+              "explanation": "*datos_base entrega los dos primeros argumentos y **opciones asigna cada clave al parámetro correspondiente."
+            }
+          ],
+          "common_errors": "Usar ** con un diccionario cuyas claves no coinciden con los nombres de los parámetros de la función; esto produce TypeError: unexpected keyword argument.",
+          "mini_exercise": {
+            "starter_code": "def sumar_tres(a, b, c):\n    return a + b + c\n\nvalores = [4, 5, 6]\n# Invoca sumar_tres desempaquetando la lista valores con *\nprint(sumar_tres(...))",
+            "instructions": "Usa sumar_tres(*valores) para pasar la lista como 3 argumentos separados.",
+            "solution": "def sumar_tres(a, b, c):\n    return a + b + c\n\nvalores = [4, 5, 6]\nprint(sumar_tres(*valores))"
+          },
+          "key_takeaways": [
+            "*coleccion en la llamada distribuye cada elemento posicionalmente.",
+            "**diccionario en la llamada distribuye cada par clave-valor como argumento con nombre.",
+            "Evita indexaciones manuales repetitivas como func(l[0], l[1], l[2])."
+          ],
+          "exercise": {
+            "id": "ex_py2_02_02",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué imprime este código al desempaquetar la lista?",
+            "prompt_code": "def restar(a, b):\n    return a - b\n\nnumeros = [10, 4]\nprint(restar(*numeros))",
+            "options": [
+              {
+                "id": "a",
+                "text": "6"
+              },
+              {
+                "id": "b",
+                "text": "-6"
+              },
+              {
+                "id": "c",
+                "text": "TypeError: restar() missing 1 required positional argument"
+              },
+              {
+                "id": "d",
+                "text": "[10, 4]"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "*numeros desempaqueta 10 en 'a' y 4 en 'b', resultando en 10 - 4 = 6."
+          }
+        },
+        {
+          "id": "les_py2_02_03",
+          "code": "L03",
+          "title": "Orden Estricto de Parámetros en la Firma def",
+          "slug": "orden-estricto-firmas",
+          "position": 3,
+          "concept_id": "py2-function-signature-order",
+          "objective": "Construir firmas de función válidas respetando la jerarquía obligatoria de parámetros exigida por la gramática de Python.",
+          "theory_markdown": "Python impone un **orden estricto y sin excepciones** para declarar parámetros en la cabecera `def`:\n\n```python\ndef funcion(pos1, pos2, *args, kw_only=1, **kwargs):\n    pass\n```\n\n### La jerarquía oficial de izquierda a derecha\n1. **Parámetros posicionales obligatorios**: `a, b`.\n2. **Empaquetado posicional**: `*args`.\n3. **Parámetros keyword-only o con valor por defecto**: Parámetros que aparecen después de `*args` solo pueden pasarse especificando su nombre.\n4. **Empaquetado de diccionario**: `**kwargs` (siempre al final absoluto).\n\n### Errores fatales de sintaxis\n- Colocar `**kwargs` antes de `*args` -> `SyntaxError: invalid syntax`.\n- Colocar un parámetro posicional obligatorio después de `*args` sin nombre -> `SyntaxError`.\n- Colocar un parámetro obligatorio después de uno con valor por defecto antes de `*args` -> `SyntaxError: non-default parameter follows default parameter`.",
+          "examples": [
+            {
+              "title": "Firma compleja válida y su invocación",
+              "code": "def registrar(modulo, *detalles, nivel=\"INFO\", **metadatos):\n    print(f\"[{nivel}] {modulo}\")\n    print(f\"Detalles: {detalles}\")\n    print(f\"Metadatos: {metadatos}\")\n\nregistrar(\"AUTH\", \"Intento 1\", \"Ip bloqueada\", nivel=\"WARN\", ip=\"10.0.0.1\")",
+              "output": "[WARN] AUTH\nDetalles: ('Intento 1', 'Ip bloqueada')\nMetadatos: {'ip': '10.0.0.1'}",
+              "explanation": "La firma respeta la secuencia: posicional (modulo), *detalles, keyword por defecto (nivel) y **metadatos."
+            }
+          ],
+          "common_errors": "Escribir `def f(**kwargs, *args):`. Python no puede interpretar argumentos posicionales una vez abierto el diccionario arbitrario.",
+          "mini_exercise": {
+            "starter_code": "# Ordena correctamente los parametros: a, *args, modo=\"dev\", **kwargs\ndef servidor(a, *args, modo=\"dev\", **kwargs):\n    return f\"{a}-{modo}\"\n\nprint(servidor(\"web\"))",
+            "instructions": "Verifica que la cabecera respete la jerarquía estándar.",
+            "solution": "def servidor(a, *args, modo=\"dev\", **kwargs):\n    return f\"{a}-{modo}\"\n\nprint(servidor(\"web\"))"
+          },
+          "key_takeaways": [
+            "El orden obligatorio es: posicionales -> *args -> parámetros nombrados/default -> **kwargs.",
+            "**kwargs debe ocupar siempre la última posición de la firma.",
+            "Cualquier violación del orden es detectada en tiempo de compilación con SyntaxError."
+          ],
+          "exercise": {
+            "id": "ex_py2_02_03",
+            "type": "find_error",
+            "difficulty": "medium",
+            "prompt": "¿Por qué fallará esta declaración de función?",
+            "prompt_code": "def proceso(**kwargs, *args):\n    pass",
+            "options": [
+              {
+                "id": "a",
+                "text": "SyntaxError: invalid syntax (**kwargs no puede colocarse antes de *args)"
+              },
+              {
+                "id": "b",
+                "text": "TypeError: faltan tipos estáticos"
+              },
+              {
+                "id": "c",
+                "text": "NameError: args no está inicializado"
+              },
+              {
+                "id": "d",
+                "text": "IndentationError: pass no es válido"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "En la gramática de Python, **kwargs es terminal y debe ser siempre el último parámetro de la cabecera."
+          }
+        },
+        {
+          "id": "les_py2_02_04",
+          "code": "L04",
+          "title": "Funciones Lambda y Funciones de Orden Superior",
+          "slug": "lambdas-funciones-orden-superior",
+          "position": 4,
+          "concept_id": "py2-lambdas-higher-order",
+          "objective": "Escribir funciones anónimas concisas con lambda y usarlas como funciones de clave en sorted(), min() y max().",
+          "theory_markdown": "Una **función lambda** es una función anónima de una sola línea concebida para casos donde necesitas pasar una pequeña lógica como argumento sin definir formalmente una función con `def`.\n\n### Sintaxis\n```python\nlambda parametro1, parametro2: expresion_retornada\n```\n- No lleva la palabra `return`; el resultado de la expresión se retorna implícitamente.\n- Solo puede contener una **única expresión** (no admite bucles ni asignaciones con `=`).\n\n### Uso idiomático con `sorted(..., key=...)`\nEl uso más frecuente de lambdas en Python moderno es ordenar colecciones complejas por un criterio específico:\n```python\nusuarios = [\n    {\"nombre\": \"Ana\", \"puntos\": 85},\n    {\"nombre\": \"Carlos\", \"puntos\": 95},\n    {\"nombre\": \"Elena\", \"puntos\": 70}\n]\n# Ordenar por puntuación ascendente\nordenados = sorted(usuarios, key=lambda u: u[\"puntos\"])\n```",
+          "examples": [
+            {
+              "title": "Ordenamiento con función lambda por longitud de texto",
+              "code": "palabras = [\"elefante\", \"sol\", \"guitarra\", \"pez\"]\nordenadas = sorted(palabras, key=lambda p: len(p))\nprint(ordenadas)",
+              "output": "['sol', 'pez', 'elefante', 'guitarra']",
+              "explanation": "sorted() evalúa lambda p: len(p) para cada palabra y las ordena de menor a mayor cantidad de letras."
+            }
+          ],
+          "common_errors": "Asignar lambdas a variables con nombre: `cuadrado = lambda x: x ** 2`. PEP 8 recomienda usar siempre `def cuadrado(x):` si la función tendrá un nombre persistente.",
+          "mini_exercise": {
+            "starter_code": "puntos = [(1, 9), (4, 2), (2, 5)]\n# Ordena la lista de tuplas por su segundo elemento usando lambda t: t[1]\nordenados = sorted(puntos, key=...)\nprint(ordenados)",
+            "instructions": "Usa lambda t: t[1] como clave de ordenación.",
+            "solution": "puntos = [(1, 9), (4, 2), (2, 5)]\nordenados = sorted(puntos, key=lambda t: t[1])\nprint(ordenados)"
+          },
+          "key_takeaways": [
+            "lambda parametros: expresion crea una función anónima compacta.",
+            "Retorna automáticamente el valor de su única expresión interna.",
+            "Es ideal como función clave en sorted(), min() y max()."
+          ],
+          "exercise": {
+            "id": "ex_py2_02_04",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué imprime este código?",
+            "prompt_code": "operacion = lambda a, b: a * 2 + b\nprint(operacion(3, 4))",
+            "options": [
+              {
+                "id": "a",
+                "text": "10"
+              },
+              {
+                "id": "b",
+                "text": "14"
+              },
+              {
+                "id": "c",
+                "text": "7"
+              },
+              {
+                "id": "d",
+                "text": "TypeError"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La lambda calcula (3 * 2) + 4 = 6 + 4 = 10."
           }
         }
       ]
