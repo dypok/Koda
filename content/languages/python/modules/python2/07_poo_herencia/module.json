@@ -4,14 +4,14 @@
   "code": "PY2_M07",
   "slug": "poo-herencia-y-polimorfismo",
   "course_slug": "python-2",
-  "title": "POO II: Herencia, super() y Polimorfismo",
-  "objective": "Reutilizar y especializar comportamientos mediante herencia simple, super() y aplicar polimorfismo mediante interfaces conceptuales.",
-  "description": "Extiende jerarquías de clases sin duplicar código, invoca constructores padre con super() y diseña sistemas polimórficos.",
-  "position": 17,
+  "title": "POO II: Herencia, super(), Sobrescritura y Polimorfismo",
+  "objective": "Especializar comportamientos mediante herencia simple, dominar la delegación con super(), sobrescribir métodos y diseñar sistemas polimórficos basados en duck typing.",
+  "description": "Extiende jerarquías de clases sin duplicar código, delega tareas de inicialización con super() y crea arquitecturas polimórficas desacopladas y mantenibles.",
+  "position": 7,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,232 @@
     {
       "id": "sec_py2_07_01",
       "code": "S01",
-      "title": "Herencia y la Función super()",
-      "slug": "herencia-super",
+      "title": "Herencia y Polimorfismo en Python",
+      "slug": "herencia-polimorfismo-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 18,
-      "xp_on_complete": 45,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py2_07_01",
           "code": "L01",
-          "title": "Herencia y Reutilización con super()",
-          "slug": "herencia-super-base",
+          "title": "Herencia Simple y Reutilización de Código",
+          "slug": "herencia-simple-reutilizacion",
           "position": 1,
-          "concept_id": "py2-inheritance",
-          "objective": "Heredar atributos y métodos de una clase base e invocar el constructor padre.",
-          "theory_markdown": "La **herencia** permite que una clase hija (`Empleado`) herede todos los atributos y métodos de una clase padre (`Persona`), evitando reescribir código idéntico.\n\nPara invocar el método de la clase padre (por ejemplo su constructor), usamos `super()`:\n```python\nclass Persona:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nclass Empleado(Persona):\n    def __init__(self, nombre, puesto):\n        super().__init__(nombre)  # Delega la inicialización del nombre a Persona\n        self.puesto = puesto\n```\n\nEl **polimorfismo** permite tratar a distintas clases hijas de la misma manera si comparten los mismos métodos (ej: `animal.hablar()`).",
+          "concept_id": "py2-inheritance-simple",
+          "objective": "Crear clases derivadas especificando la clase base entre paréntesis y reutilizar sus atributos y métodos.",
+          "theory_markdown": "La **herencia** permite que una nueva clase (llamada **clase hija, derivada o subclase**) adquiera automáticamente todos los atributos y métodos de una clase preexistente (**clase padre, base o superclase**).\n\n### Sintaxis\n```python\nclass Dispositivo:\n    def encender(self):\n        return \"Dispositivo encendido\"\n\n# Telefono hereda de Dispositivo\nclass Telefono(Dispositivo):\n    pass\n\nt = Telefono()\nprint(t.encender())  # \"Dispositivo encendido\"\n```\n\n### ¿Cuándo usar herencia?\nÚsala cuando exista una relación genuina del tipo **\"es un\" (is-a)**: un `Perro` **es un** `Animal`, una `CuentaAhorro` **es una** `CuentaBancaria`. Si la relación es \"tiene un\" (un auto *tiene un* motor), se debe emplear **composición** (guardar el motor como atributo).",
           "examples": [
             {
-              "title": "Polimorfismo con figuras geométricas",
-              "code": "class Circulo:\n    def __init__(self, radio):\n        self.radio = radio\n    def area(self):\n        return 3.14159 * (self.radio ** 2)\n\nclass Cuadrado:\n    def __init__(self, lado):\n        self.lado = lado\n    def area(self):\n        return self.lado * self.lado\n\nfiguras = [Circulo(5), Cuadrado(4)]\nfor f in figuras:\n    print(f\"Área: {f.area():.2f}\")",
-              "output": "Área: 78.54\nÁrea: 16.00",
-              "explanation": "El bucle no necesita saber la clase exacta; solo llama a .area() gracias al polimorfismo (duck typing)."
+              "title": "Herencia directa de métodos",
+              "code": "class Empleado:\n    def fichar(self):\n        return \"Fichaje registrado\"\n\nclass Gerente(Empleado):\n    pass\n\ng = Gerente()\nprint(g.fichar())",
+              "output": "Fichaje registrado",
+              "explanation": "Gerente hereda y ejecuta fichar() de Empleado sin tener que duplicar una sola línea de lógica."
             }
           ],
-          "common_errors": "Crear jerarquías de herencia profundas de 5 o 6 niveles. En ingeniería de software se prefiere la composición sobre la herencia.",
+          "common_errors": "Heredar de clases no relacionadas solo para 'robar' una función. La herencia debe reflejar una jerarquía conceptual sólida.",
           "mini_exercise": {
-            "starter_code": "class Vehiculo:\n    def arrancar(self):\n        return \"Motor encendido\"\n\nclass Moto(Vehiculo):\n    pass\n\nm = Moto()\nprint(m.arrancar())",
-            "instructions": "Observa cómo Moto hereda el método arrancar() sin reescribirlo.",
-            "solution": "class Vehiculo:\n    def arrancar(self):\n        return \"Motor encendido\"\n\nclass Moto(Vehiculo):\n    pass\n\nm = Moto()\nprint(m.arrancar())"
+            "starter_code": "class Animal:\n    def respirar(self):\n        return \"Oxigeno absorbido\"\n\n# Haz que Gato herede de Animal\nclass Gato(...):\n    pass\n\ng = Gato()\nprint(g.respirar())",
+            "instructions": "Escribe Animal dentro de los paréntesis de Gato.",
+            "solution": "class Animal:\n    def respirar(self):\n        return \"Oxigeno absorbido\"\n\nclass Gato(Animal):\n    pass\n\ng = Gato()\nprint(g.respirar())"
           },
           "key_takeaways": [
-            "class Hija(Padre): establece la relación de herencia.",
-            "super().__init__(...) delega al constructor de la clase base.",
-            "Polimorfismo permite llamar al mismo método en clases distintas sin importar el tipo."
+            "class Hija(Padre): declara la relación de herencia.",
+            "La subclase tiene acceso directo a los métodos de la clase base.",
+            "Aplica el principio de relación 'es un' (is-a)."
           ],
           "exercise": {
             "id": "ex_py2_07_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Qué hace la instrucción `super().__init__(nombre)` dentro del constructor de una clase hija?",
+            "prompt": "¿Cuál es la sintaxis correcta en Python para que la clase Perro herede de la clase Mamifero?",
             "options": [
               {
                 "id": "a",
-                "text": "Llama al constructor de la clase padre pasándole el argumento nombre"
+                "text": "class Perro(Mamifero):"
               },
               {
                 "id": "b",
-                "text": "Borra la clase padre de la memoria"
+                "text": "class Perro extends Mamifero:"
               },
               {
                 "id": "c",
-                "text": "Crea una supervariable global"
+                "text": "class Perro inherits Mamifero:"
               },
               {
                 "id": "d",
-                "text": "Duplica el objeto en memoria"
+                "text": "class Perro : Mamifero:"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "super() retorna un proxy a la clase padre para delegar la inicialización de atributos compartidos."
+            "explanation": "En Python, la herencia se expresa colocando la clase base entre paréntesis justo después del nombre de la clase derivada."
+          }
+        },
+        {
+          "id": "les_py2_07_02",
+          "code": "L02",
+          "title": "Constructores y la Función super()",
+          "slug": "constructores-funcion-super",
+          "position": 2,
+          "concept_id": "py2-super-init",
+          "objective": "Invocar el constructor de la clase base mediante super().__init__() para delegar la inicialización de atributos compartidos.",
+          "theory_markdown": "Cuando una clase hija define su propio método `__init__`, **anula el `__init__` de la clase padre**. Para que los atributos base sigan existiendo, debemos invocar explícitamente el constructor padre usando la función `super()`.\n\n```python\nclass Persona:\n    def __init__(self, nombre, edad):\n        self.nombre = nombre\n        self.edad = edad\n\nclass Estudiante(Persona):\n    def __init__(self, nombre, edad, matricula):\n        # 1. Delegar a Persona la inicializacion de nombre y edad\n        super().__init__(nombre, edad)\n        # 2. Inicializar atributos exclusivos del Estudiante\n        self.matricula = matricula\n```\n\n### Ventajas de `super()`\n- Elimina la necesidad de escribir el nombre de la clase padre de forma rígida (`Persona.__init__(self, ...)`).\n- Resuelve dinámicamente el orden de resolución de métodos (**MRO: Method Resolution Order**).",
+          "examples": [
+            {
+              "title": "Delegación exitosa con super()",
+              "code": "class Vehiculo:\n    def __init__(self, marca):\n        self.marca = marca\n\nclass Auto(Vehiculo):\n    def __init__(self, marca, puertas):\n        super().__init__(marca)\n        self.puertas = puertas\n\na = Auto(\"Toyota\", 4)\nprint(f\"Marca: {a.marca}, Puertas: {a.puertas}\")",
+              "output": "Marca: Toyota, Puertas: 4",
+              "explanation": "super().__init__(marca) garantiza que el atributo self.marca quede registrado correctamente en el objeto 'a'."
+            }
+          ],
+          "common_errors": "Pasar `self` a `super().__init__(self, ...)`. Al llamar a super(), Python enlaza la instancia automáticamente; escribir self ahí provoca un TypeError por exceso de argumentos.",
+          "mini_exercise": {
+            "starter_code": "class Base:\n    def __init__(self, x):\n        self.x = x\n\nclass Derivada(Base):\n    def __init__(self, x, y):\n        # Llama a super().__init__(x)\n        ...().__init__(x)\n        self.y = y\n\nd = Derivada(10, 20)\nprint(d.x, d.y)",
+            "instructions": "Escribe super para completar la llamada.",
+            "solution": "class Base:\n    def __init__(self, x):\n        self.x = x\n\nclass Derivada(Base):\n    def __init__(self, x, y):\n        super().__init__(x)\n        self.y = y\n\nd = Derivada(10, 20)\nprint(d.x, d.y)"
+          },
+          "key_takeaways": [
+            "super().__init__(...) invoca el constructor de la clase base.",
+            "Permite añadir nuevos atributos a la subclase sin perder los atributos base.",
+            "No se debe pasar self como argumento a las llamadas de super()."
+          ],
+          "exercise": {
+            "id": "ex_py2_07_02",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Qué error ocurre si escribes super().__init__(self, nombre) dentro del constructor de una subclase?",
+            "options": [
+              {
+                "id": "a",
+                "text": "TypeError: super() ya inyecta self de forma automática, por lo que se envía un argumento de más"
+              },
+              {
+                "id": "b",
+                "text": "SyntaxError: falta importar el módulo super"
+              },
+              {
+                "id": "c",
+                "text": "RecursionError: bucle infinito"
+              },
+              {
+                "id": "d",
+                "text": "No ocurre ningún error, es la sintaxis estándar"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "super() es un proxy que vincula automáticamente la instancia actual (self), por lo que no debe incluirse en la lista de argumentos."
+          }
+        },
+        {
+          "id": "les_py2_07_03",
+          "code": "L03",
+          "title": "Sobrescritura de Métodos (Method Overriding)",
+          "slug": "sobrescritura-metodos",
+          "position": 3,
+          "concept_id": "py2-method-overriding",
+          "objective": "Personalizar o extender el comportamiento de métodos heredados redefiniéndolos en la clase hija.",
+          "theory_markdown": "La **sobrescritura de métodos (overriding)** ocurre cuando una clase hija define un método con el mismo nombre exacto que uno presente en su clase padre.\n\n### Dos patrones de sobrescritura\n1. **Reemplazo total**: La subclase provee una implementación completamente diferente.\n   ```python\n   class Notificador:\n       def enviar(self, msj):\n           return f\"Enviando por defecto: {msj}\"\n\n   class NotificadorSMS(Notificador):\n       def enviar(self, msj):\n           return f\"SMS [Gateway]: {msj}\"\n   ```\n2. **Extensión con `super()`**: La subclase ejecuta la lógica original del padre y añade pasos adicionales antes o después:\n   ```python\n   class NotificadorConLog(Notificador):\n       def enviar(self, msj):\n           registro = super().enviar(msj)  # Llama al padre\n           return f\"[LOG AUDIT] {registro}\"\n   ```",
+          "examples": [
+            {
+              "title": "Extensión de método usando super().metodo()",
+              "code": "class CalculadoraBase:\n    def calcular(self, n):\n        return n * 2\n\nclass CalculadoraConBono(CalculadoraBase):\n    def calcular(self, n):\n        base = super().calcular(n)\n        return base + 10\n\ncalc = CalculadoraConBono()\nprint(\"Resultado con bono:\", calc.calcular(5))",
+              "output": "Resultado con bono: 20",
+              "explanation": "super().calcular(5) devuelve 10 (5 * 2) y la subclase suma 10 adicionales, produciendo 20."
+            }
+          ],
+          "common_errors": "Cambiar drásticamente el tipo de retorno en la subclase (por ejemplo devolver un string donde el padre devolvía un int), rompiendo las expectativas de quien consuma el método.",
+          "mini_exercise": {
+            "starter_code": "class A:\n    def saludo(self):\n        return \"Hola\"\n\nclass B(A):\n    # Sobrescribe saludo para que devuelva \"Hola mundo\"\n    def saludo(self):\n        return super().saludo() + \" ...\"\n\nprint(B().saludo())",
+            "instructions": "Escribe ' mundo' para completar el texto.",
+            "solution": "class A:\n    def saludo(self):\n        return \"Hola\"\n\nclass B(A):\n    def saludo(self):\n        return super().saludo() + \" mundo\"\n\nprint(B().saludo())"
+          },
+          "key_takeaways": [
+            "Sobrescribir un método permite especializar la acción para la subclase.",
+            "super().metodo() permite reutilizar la lógica de la clase padre.",
+            "Preserva los contratos de parámetros y tipos de retorno para mantener la coherencia del diseño."
+          ],
+          "exercise": {
+            "id": "ex_py2_07_03",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué imprime este código al ejecutar el método sobrescrito?",
+            "prompt_code": "class Padre:\n    def valor(self):\n        return 10\n\nclass Hijo(Padre):\n    def valor(self):\n        return super().valor() * 3\n\nh = Hijo()\nprint(h.valor())",
+            "options": [
+              {
+                "id": "a",
+                "text": "30"
+              },
+              {
+                "id": "b",
+                "text": "10"
+              },
+              {
+                "id": "c",
+                "text": "40"
+              },
+              {
+                "id": "d",
+                "text": "AttributeError"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "super().valor() obtiene 10 del Padre. Luego Hijo multiplica 10 * 3 = 30."
+          }
+        },
+        {
+          "id": "les_py2_07_04",
+          "code": "L04",
+          "title": "Polimorfismo, Duck Typing e isinstance()",
+          "slug": "polimorfismo-duck-typing-isinstance",
+          "position": 4,
+          "concept_id": "py2-polymorphism-duck-typing",
+          "objective": "Diseñar interfaces uniformes aprovechando el polimorfismo y el tipado dinámico 'Duck Typing', y verificar pertenencia con isinstance().",
+          "theory_markdown": "El **polimorfismo** (del griego: 'muchas formas') es la capacidad de tratar a objetos de clases distintas a través de una interfaz común uniforme.\n\n### La filosofía de Python: Duck Typing\n> *\"Si camina como un pato y grazna como un pato, entonces es un pato.\"*\n\nEn Python no necesitas declarar interfaces formales rígidas. Si dos objetos implementan un método llamado `.render()`, cualquier función puede ejecutarlos sin importar su clase biológica:\n\n```python\ndef dibujar_escena(elementos):\n    for item in elementos:\n        # No nos importa la clase exacta; solo que tenga .render()\n        item.render()\n```\n\n### Verificación con `isinstance()`\nCuando necesitas comprobar si un objeto pertenece a una clase o a cualquiera de sus subclases derivadas, se usa `isinstance(objeto, Clase)`:\n```python\nes_valido = isinstance(mi_empleado, Persona)  # True si Empleado hereda de Persona\n```",
+          "examples": [
+            {
+              "title": "Polimorfismo en acción con procesadores de pago",
+              "code": "class PagoTarjeta:\n    def procesar(self, monto):\n        return f\"Cobrado ${monto} con Tarjeta\"\n\nclass PagoCripto:\n    def procesar(self, monto):\n        return f\"Cobrado ${monto} con Blockchain\"\n\ndef cobrar_cliente(pasarela, monto):\n    # Polimorfismo puro: misma llamada, distinto comportamiento\n    return pasarela.procesar(monto)\n\nprint(cobrar_cliente(PagoTarjeta(), 150))\nprint(cobrar_cliente(PagoCripto(), 150))",
+              "output": "Cobrado $150 con Tarjeta\nCobrado $150 con Blockchain",
+              "explanation": "cobrar_cliente funciona con cualquier clase que provea un método procesar(monto)."
+            }
+          ],
+          "common_errors": "Usar `type(obj) == Padre` en lugar de `isinstance(obj, Padre)`. La comprobación con `type()` no reconoce la herencia en las subclases.",
+          "mini_exercise": {
+            "starter_code": "class Figura:\n    pass\nclass Triangulo(Figura):\n    pass\n\nt = Triangulo()\n# Usa isinstance para comprobar si t deriva de Figura\nprint(isinstance(t, ...))",
+            "instructions": "Escribe Figura como segundo argumento.",
+            "solution": "class Figura:\n    pass\nclass Triangulo(Figura):\n    pass\n\nt = Triangulo()\nprint(isinstance(t, Figura))"
+          },
+          "key_takeaways": [
+            "Polimorfismo permite llamar al mismo método en clases diferentes produciendo resultados especializados.",
+            "Duck Typing prioriza qué métodos tiene el objeto por encima de cuál es su clase exacta.",
+            "isinstance(obj, Clase) reconoce tanto la clase directa como cualquiera de sus clases padre en el árbol de herencia."
+          ],
+          "exercise": {
+            "id": "ex_py2_07_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Si 'class Gerente(Empleado): pass' y creas 'g = Gerente()', ¿cuál es el resultado de isinstance(g, Empleado)?",
+            "options": [
+              {
+                "id": "a",
+                "text": "True, porque isinstance evalúa positivamente la relación de herencia con las clases padre"
+              },
+              {
+                "id": "b",
+                "text": "False, porque g fue instanciado exclusivamente como Gerente"
+              },
+              {
+                "id": "c",
+                "text": "TypeError"
+              },
+              {
+                "id": "d",
+                "text": "None"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "isinstance reconoce la relación jerárquica: al ser Gerente una subclase de Empleado, cualquier instancia de Gerente es también un Empleado."
           }
         }
       ]

@@ -5,13 +5,13 @@
   "slug": "poo-clases-y-objetos",
   "course_slug": "python-2",
   "title": "POO I: Clases, Instancias y Métodos Especiales",
-  "objective": "Modelar conceptos del mundo real mediante clases, entender el rol de self, el constructor __init__ y los métodos __str__ y __repr__.",
-  "description": "La base de la arquitectura de software moderna: empaqueta estado (atributos) y comportamiento (métodos) en clases reutilizables.",
-  "position": 16,
+  "objective": "Modelar entidades del mundo real mediante clases, dominar el constructor __init__, entender el rol de self, diferenciar atributos de clase vs instancia y personalizar __str__ y __repr__.",
+  "description": "La base de la arquitectura de software profesional: empaqueta estado (atributos) y comportamiento (métodos) en clases reutilizables y desacopladas.",
+  "position": 6,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,67 +23,233 @@
     {
       "id": "sec_py2_06_01",
       "code": "S01",
-      "title": "Clases, Instancias y self",
-      "slug": "clases-y-self",
+      "title": "Programación Orientada a Objetos en Python",
+      "slug": "poo-clases-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py2_06_01",
           "code": "L01",
-          "title": "El Molde y la Galleta: Clases y el Constructor __init__",
-          "slug": "clases-init-self",
+          "title": "Clases, Instancias y el Rol Vital de self",
+          "slug": "clases-instancias-self",
           "position": 1,
-          "concept_id": "py2-oop-basics",
-          "objective": "Comprender que una clase es un plano y self es la referencia a la instancia viva en memoria.",
-          "theory_markdown": "Piensa en una **clase** como el plano arquitectónico de una casa, y en un **objeto (o instancia)** como la casa física construida con ladrillos en un terreno real.\n\n- `__init__(self, ...)`: Es el método inicializador que se ejecuta automáticamente al crear un nuevo objeto (`u = Usuario(\"Alex\")`).\n- `self`: Es la referencia a la instancia concreta sobre la que se está operando. Cuando llamas a `u.saludar()`, Python lo traduce internamente a `Usuario.saludar(u)`.\n- `__str__(self)`: Define cómo se muestra tu objeto como texto cuando alguien hace `print(objeto)`.",
+          "concept_id": "py2-classes-instances-self",
+          "objective": "Comprender la relación entre una clase como molde y sus instancias vivas en memoria, dominando el parámetro explícito self.",
+          "theory_markdown": "La **Programación Orientada a Objetos (POO)** organiza el código agrupando datos (atributos) y las funciones que operan sobre ellos (métodos) en una sola unidad llamada **clase**.\n\n- **Clase**: El molde o plano conceptual (por ejemplo: `Usuario`).\n- **Instancia (Objeto)**: La entidad concreta creada a partir de ese molde (por ejemplo: el usuario `carlos` con sus propios datos en RAM).\n\n### El misterio de `self` resuelto\nEn Python, cada método de instancia debe declarar como primer parámetro a `self`:\n```python\nclass Robot:\n    def saludar(self):\n        return \"Bip bop, saludos!\"\n```\nCuando llamas a `mi_robot.saludar()`, Python traduce entre bastidores esa llamada a: `Robot.saludar(mi_robot)`. Es decir, `self` es la referencia explícita al objeto concreto que ejecutó la acción.",
           "examples": [
             {
-              "title": "Definición de una clase de cuenta bancaria",
-              "code": "class CuentaBancaria:\n    def __init__(self, titular, saldo_inicial=0.0):\n        self.titular = titular\n        self.saldo = saldo_inicial\n\n    def depositar(self, monto):\n        if monto > 0:\n            self.saldo += monto\n\n    def __str__(self):\n        return f\"Cuenta({self.titular}, Saldo: ${self.saldo:.2f})\"\n\ncuenta = CuentaBancaria(\"Elena\", 100.0)\ncuenta.depositar(50.0)\nprint(cuenta)",
-              "output": "Cuenta(Elena, Saldo: $150.00)",
-              "explanation": "self.saldo mantiene el estado privado de esa cuenta específica."
+              "title": "Definición e instanciación básica",
+              "code": "class Termostato:\n    def calibrar(self):\n        return \"Calibracion completada con exito\"\n\nt1 = Termostato()\nprint(t1.calibrar())",
+              "output": "Calibracion completada con exito",
+              "explanation": "t1 es una instancia de Termostato. Al invocar t1.calibrar(), Python pasa t1 como self automáticamente."
             }
           ],
-          "common_errors": "Olvidar poner self como primer parámetro de los métodos de instancia (TypeError: metodo() takes 0 positional arguments but 1 was given).",
+          "common_errors": "Olvidar escribir self en la definición del método: `def saludar():`. Al invocarlo fallará con: `TypeError: saludar() takes 0 positional arguments but 1 was given`.",
           "mini_exercise": {
-            "starter_code": "class Jugador:\n    def __init__(self, nombre):\n        self.nombre = nombre\n        self.nivel = 1\n\nj = Jugador(\"Koda\")\nprint(j.nombre, j.nivel)",
-            "instructions": "Crea una instancia Jugador(\"Koda\") y verifica que su nivel inicial sea 1.",
-            "solution": "class Jugador:\n    def __init__(self, nombre):\n        self.nombre = nombre\n        self.nivel = 1\n\nj = Jugador(\"Koda\")\nprint(j.nombre, j.nivel)"
+            "starter_code": "class Motor:\n    # Agrega self como primer parametro del metodo encender\n    def encender(...):\n        return \"Motor en marcha\"\n\nm = Motor()\nprint(m.encender())",
+            "instructions": "Escribe self en los paréntesis de encender.",
+            "solution": "class Motor:\n    def encender(self):\n        return \"Motor en marcha\"\n\nm = Motor()\nprint(m.encender())"
           },
           "key_takeaways": [
-            "class NombreClase: define un nuevo tipo.",
-            "__init__ inicializa los atributos de instancia.",
-            "self representa a la instancia viva que llama al método.",
-            "__str__ define la representación textual para print()."
+            "class define un nuevo tipo de dato personalizado.",
+            "Cada objeto instanciado tiene su propia identidad en memoria.",
+            "self es la referencia explícita a la instancia que invoca el método."
           ],
           "exercise": {
             "id": "ex_py2_06_01",
-            "type": "single_choice",
+            "type": "find_error",
             "difficulty": "easy",
-            "prompt": "¿Qué representa el primer parámetro `self` en los métodos de una clase en Python?",
+            "prompt": "¿Por qué fallará este código al intentar ejecutar p.activar()?",
+            "prompt_code": "class Portal:\n    def activar():\n        return \"Activado\"\n\np = Portal()\np.activar()",
             "options": [
               {
                 "id": "a",
-                "text": "Una referencia explícita a la instancia actual del objeto"
+                "text": "TypeError: activar() takes 0 positional arguments but 1 was given (falta self en la cabecera)"
               },
               {
                 "id": "b",
-                "text": "Una palabra reservada para acceder a la base de datos"
+                "text": "NameError: Portal no está definido"
               },
               {
                 "id": "c",
-                "text": "El número de veces que se ha instanciado la clase"
+                "text": "AttributeError: p no tiene el método activar"
               },
               {
                 "id": "d",
-                "text": "El archivo .py donde vive la clase"
+                "text": "SyntaxError: falta return None"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "self permite a los métodos de instancia acceder y modificar los atributos de ese objeto en particular."
+            "explanation": "Al invocar p.activar(), Python envía implícitamente 'p' como primer argumento, pero activar() no fue definida con el parámetro self para recibirlo."
+          }
+        },
+        {
+          "id": "les_py2_06_02",
+          "code": "L02",
+          "title": "El Constructor __init__ y Atributos de Instancia",
+          "slug": "constructor-init-atributos",
+          "position": 2,
+          "concept_id": "py2-init-constructor",
+          "objective": "Inicializar el estado particular de cada objeto mediante el método constructor __init__.",
+          "theory_markdown": "El método especial `__init__` se ejecuta de forma automática inmediatamente después de que un objeto ha sido creado en memoria. Su propósito exclusivo es **inicializar los atributos de la instancia**.\n\n```python\nclass CuentaBancaria:\n    def __init__(self, titular, saldo_inicial=0.0):\n        self.titular = titular        # Atributo de instancia\n        self.saldo = saldo_inicial    # Atributo de instancia\n\n    def depositar(self, cantidad):\n        self.saldo += cantidad\n```\n\n### Aislamiento de estado\nCada instancia es soberana e independiente: si modificas `cuenta_a.saldo`, el saldo de `cuenta_b` permanece intacto, porque cada una posee su propio diccionario de atributos en memoria (`__dict__`).",
+          "examples": [
+            {
+              "title": "Instancias independientes con su propio estado",
+              "code": "class Jugador:\n    def __init__(self, alias, puntos=0):\n        self.alias = alias\n        self.puntos = puntos\n\nj1 = Jugador(\"Ana\", 100)\nj2 = Jugador(\"Carlos\", 50)\nj1.puntos += 20\n\nprint(f\"{j1.alias}: {j1.puntos}\")\nprint(f\"{j2.alias}: {j2.puntos}\")",
+              "output": "Ana: 120\nCarlos: 50",
+              "explanation": "Modificar los puntos de Ana (j1) no altera en absoluto el estado de Carlos (j2)."
+            }
+          ],
+          "common_errors": "Intentar hacer return de un valor dentro de __init__. El constructor __init__ debe retornar obligatoriamente None; si intentas retornar algo más, Python lanza TypeError.",
+          "mini_exercise": {
+            "starter_code": "class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        # Asigna precio al atributo de instancia self.precio\n        self.precio = ...\n\np = Producto(\"Teclado\", 45)\nprint(p.precio)",
+            "instructions": "Escribe precio para inicializar self.precio.",
+            "solution": "class Producto:\n    def __init__(self, nombre, precio):\n        self.nombre = nombre\n        self.precio = precio\n\np = Producto(\"Teclado\", 45)\nprint(p.precio)"
+          },
+          "key_takeaways": [
+            "__init__ se dispara automáticamente al instanciar una clase.",
+            "Los atributos asignados a self.nombre pertenecen exclusivamente a esa instancia.",
+            "__init__ nunca debe retornar valores explícitos (siempre None)."
+          ],
+          "exercise": {
+            "id": "ex_py2_06_02",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué imprime este código?",
+            "prompt_code": "class Contador:\n    def __init__(self, inicial=0):\n        self.valor = inicial\n    def sumar(self):\n        self.valor += 1\n\nc1 = Contador(5)\nc2 = Contador()\nc1.sumar()\nprint(c1.valor, c2.valor)",
+            "options": [
+              {
+                "id": "a",
+                "text": "6 0"
+              },
+              {
+                "id": "b",
+                "text": "6 1"
+              },
+              {
+                "id": "c",
+                "text": "5 0"
+              },
+              {
+                "id": "d",
+                "text": "1 0"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "c1 inicia en 5 y suma 1 pasando a 6. c2 inicia en el valor por defecto 0 y no se modifica, imprimiendo '6 0'."
+          }
+        },
+        {
+          "id": "les_py2_06_03",
+          "code": "L03",
+          "title": "Atributos de Clase vs Atributos de Instancia",
+          "slug": "atributos-clase-vs-instancia",
+          "position": 3,
+          "concept_id": "py2-class-vs-instance-attrs",
+          "objective": "Distinguir atributos compartidos a nivel de clase de aquellos particulares de cada instancia para evitar mutaciones accidentales.",
+          "theory_markdown": "En Python existen dos niveles donde pueden residir los atributos:\n\n1. **Atributo de Clase**: Se define directamente en el cuerpo de la clase (fuera de cualquier método). Es **compartido por todas las instancias** de esa clase. Ideal para constantes, configuraciones globales o contadores de instancias.\n   ```python\n   class Servidor:\n       puerto_por_defecto = 8080  # Atributo de clase\n   ```\n2. **Atributo de Instancia**: Se define anteponiendo `self.` (comúnmente dentro de `__init__`). Pertenece **únicamente a ese objeto en particular**.\n\n### El peligro del enmascaramiento (Shadowing)\nSi modificas un atributo de clase usando `self.atributo = x`, Python no modifica el atributo compartido: **crea un nuevo atributo de instancia con el mismo nombre**, enmascarando el atributo de clase para ese objeto. Para modificar el atributo compartido debes acceder a través del nombre de la clase: `Servidor.puerto_por_defecto = 9000`.",
+          "examples": [
+            {
+              "title": "Contador de instancias global usando atributo de clase",
+              "code": "class Usuario:\n    total_usuarios = 0  # Atributo de clase compartido\n\n    def __init__(self, nombre):\n        self.nombre = nombre\n        Usuario.total_usuarios += 1\n\nu1 = Usuario(\"Ana\")\nu2 = Usuario(\"Beto\")\nprint(\"Total creados:\", Usuario.total_usuarios)",
+              "output": "Total creados: 2",
+              "explanation": "Cada vez que se ejecuta __init__, se incrementa la variable única Usuario.total_usuarios compartida por toda la clase."
+            }
+          ],
+          "common_errors": "Usar una lista mutable como atributo de clase: `class Carrito: items = []`. Todas las instancias compartirán la misma lista, mezclando los productos de todos los clientes.",
+          "mini_exercise": {
+            "starter_code": "class App:\n    version = \"1.0.0\"  # Atributo de clase\n\n# Modifica la version global accediendo desde la clase\nApp.version = \"1.1.0\"\nprint(App.version)",
+            "instructions": "Verifica cómo App.version actualiza el valor para todas las instancias.",
+            "solution": "class App:\n    version = \"1.0.0\"\nApp.version = \"1.1.0\"\nprint(App.version)"
+          },
+          "key_takeaways": [
+            "Los atributos de clase se definen a nivel raíz y son compartidos por todos los objetos.",
+            "Los atributos de instancia se asignan a self y son privados de cada objeto.",
+            "Evita colecciones mutables (listas, dicts) como atributos de clase a menos que sea intencional."
+          ],
+          "exercise": {
+            "id": "ex_py2_06_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Si defines 'items = []' a nivel de clase y dos instancias llaman a self.items.append(x), ¿qué ocurrirá?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Ambas instancias compartirán la misma lista, por lo que los elementos agregados por la primera aparecerán también en la segunda"
+              },
+              {
+                "id": "b",
+                "text": "Cada instancia creará una lista independiente de forma automática"
+              },
+              {
+                "id": "c",
+                "text": "Python lanzará un AttributeError"
+              },
+              {
+                "id": "d",
+                "text": "La lista se borrará cada vez que se cree un objeto"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Al ser un atributo mutable de clase, existe una sola lista en memoria referenciada por todas las instancias de esa clase."
+          }
+        },
+        {
+          "id": "les_py2_06_04",
+          "code": "L04",
+          "title": "Métodos Especiales (Dunder): __str__ y __repr__",
+          "slug": "metodos-dunder-str-repr",
+          "position": 4,
+          "concept_id": "py2-dunder-str-repr",
+          "objective": "Implementar representaciones textuales claras y depurables para humanos y desarrolladores con __str__ y __repr__.",
+          "theory_markdown": "Los métodos cuyos nombres comienzan y terminan con dos guiones bajos se conocen coloquialmente como **métodos dunder** (double underscore).\n\nPor defecto, si imprimes un objeto en consola verás algo críptico como `<__main__.Usuario object at 0x000001>`. Para darle una identidad legible se implementan dos métodos fundamentales:\n\n1. **`__str__(self)`**: Diseñado para el **usuario final**. Es la cadena amigable que devuelven `print(objeto)` y `str(objeto)`.\n2. **`__repr__(self)`**: Diseñado para el **desarrollador y la depuración**. Debe ser una representación no ambigua (idealmente código Python válido para recrear el objeto) utilizada en logs y consolas interactivas.\n\n### Regla de respaldo\nSi no implementas `__str__`, Python usa automáticamente `__repr__` como respaldo. Por ello, la regla de buenas prácticas indica implementar siempre al menos `__repr__` en tus clases.",
+          "examples": [
+            {
+              "title": "Implementación combinada de __str__ y __repr__",
+              "code": "class Coordenada:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\n    def __str__(self):\n        return f\"Punto({self.x}, {self.y})\"\n\n    def __repr__(self):\n        return f\"Coordenada(x={self.x}, y={self.y})\"\n\np = Coordenada(10, 20)\nprint(\"Para usuario:\", str(p))\nprint(\"Para depurador:\", repr(p))",
+              "output": "Para usuario: Punto(10, 20)\nPara depurador: Coordenada(x=10, y=20)",
+              "explanation": "__str__ entrega un formato amigable para la interfaz y __repr__ un formato técnico preciso para desarrolladores."
+            }
+          ],
+          "common_errors": "Hacer que `__str__` o `__repr__` devuelvan algo que no sea una cadena de texto (`str`). Si retornan números u otros tipos, Python lanzará TypeError.",
+          "mini_exercise": {
+            "starter_code": "class Libro:\n    def __init__(self, titulo):\n        self.titulo = titulo\n    def __str__(self):\n        # Retorna el titulo formateado\n        return f\"Libro: {self.titulo}\"\n\nprint(Libro(\"1984\"))",
+            "instructions": "Verifica que print imprima la representación formateada.",
+            "solution": "class Libro:\n    def __init__(self, titulo):\n        self.titulo = titulo\n    def __str__(self):\n        return f\"Libro: {self.titulo}\"\n\nprint(Libro(\"1984\"))"
+          },
+          "key_takeaways": [
+            "__str__ produce una cadena amigable para el usuario final en print().",
+            "__repr__ produce una cadena técnica precisa para depuración y logs.",
+            "Ambos métodos deben retornar obligatoriamente un string (str)."
+          ],
+          "exercise": {
+            "id": "ex_py2_06_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Si una clase no implementa __str__, pero sí implementa __repr__, ¿qué muestra la llamada print(instancia)?",
+            "options": [
+              {
+                "id": "a",
+                "text": "La cadena retornada por __repr__, ya que Python lo utiliza como mecanismo de respaldo (fallback)"
+              },
+              {
+                "id": "b",
+                "text": "TypeError: __str__ es estrictamente obligatorio"
+              },
+              {
+                "id": "c",
+                "text": "None"
+              },
+              {
+                "id": "d",
+                "text": "La dirección hexadecimal en memoria RAM"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Cuando print() busca una representación textual y no encuentra __str__, delega automáticamente en el método __repr__."
           }
         }
       ]
