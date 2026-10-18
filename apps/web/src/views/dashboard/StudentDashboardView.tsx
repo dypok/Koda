@@ -29,11 +29,11 @@ export const StudentDashboardView: React.FC = () => {
           <div className="flex items-center gap-3">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-500/15 border border-orange-500/30 text-orange-400 text-xs font-bold">
               <Flame className="w-4 h-4 fill-orange-500" />
-              {user?.streak || 1} días
+              {user?.streak ?? 0} días
             </span>
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-xs font-bold">
               <Star className="w-4 h-4 fill-amber-400" />
-              {user?.totalXp || 50} XP
+              {user?.totalXp ?? 0} XP
             </span>
             <button
               onClick={handleLogout}

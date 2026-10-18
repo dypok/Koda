@@ -56,9 +56,9 @@
 - Estado visual del fuego: encendido (naranja brillante) si ya practicó hoy; apagado/grisáceo si aún no ha completado su lección diaria.
 
 **Subtasks:**
-- [ ] [BD] Tabla `user_streaks` con `current_streak`, `max_streak`, `freeze_count`, `last_activity_date`.
-- [ ] [BACKEND] Cron job diario o trigger al inicio del día que evalúe y aplique consumos de freeze o reinicio de rachas.
-- [ ] [FRONTEND] Widget de racha en el Header con tooltip explicativo del estado del día y protectores restantes.
+- [x] [BD] Tabla `user_streaks` / `streaks` con `current_streak`, `longest_streak`, `freeze_count`, `last_activity_date`.
+- [x] [BACKEND] Cálculo y actualización atómica de racha y freeze en `saveSectionCompletion` con manejo de zona horaria y retorno en DTO.
+- [x] [FRONTEND] Widget y dock de racha interactivo con Popover explicativo del estado del día, protectores y desglose semanal (L-D).
 - [ ] [FRONTEND] Modal de rescate de racha si se consumió un Freeze: *"¡Tu protector de racha te ha salvado ayer! Continúa hoy para mantener el fuego encendido 🛡️"*.
 
 **DoD adicional para esta US:**
