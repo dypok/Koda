@@ -4,6 +4,7 @@ import React from 'react';
 import { Check } from '@phosphor-icons/react';
 import { ContentExercise } from '@/lib/content';
 import { cn } from '@/lib/utils';
+import { renderMarkdownInline } from '@/components/ui/markdown-content';
 
 interface QuestionRendererProps {
   exercise: ContentExercise;
@@ -91,7 +92,9 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
                     opt.label ?? shortcutChar
                   )}
                 </span>
-                <span className="font-mono text-xs sm:text-sm leading-snug break-words group-hover:text-white transition-colors">{opt.body}</span>
+                <span className="font-mono text-xs sm:text-sm leading-snug break-words group-hover:text-white transition-colors">
+                  {renderMarkdownInline(opt.body)}
+                </span>
               </div>
 
               {/* Keycap Badge táctil visible en desktop */}

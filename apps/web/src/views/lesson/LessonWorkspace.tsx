@@ -13,6 +13,7 @@ import { cn } from '@/lib/utils';
 import { OrbitFieldBackground } from '@/components/landing/OrbitFieldBackground';
 import { EvaluationService } from '@/services/learning/evaluation.service';
 import { useAuthStore } from '@/stores/auth.store';
+import { MarkdownContent, renderMarkdownInline } from '@/components/ui/markdown-content';
 
 interface LessonWorkspaceProps {
   courseId: string;
@@ -691,9 +692,9 @@ function LessonView({
           <h1 className="font-display text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">
             {lesson.title}
           </h1>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            {lesson.explanation}
-          </p>
+          <div className="pt-1">
+            <MarkdownContent content={lesson.explanation} />
+          </div>
         </div>
 
         {/* Terminal interactiva */}
@@ -713,7 +714,9 @@ function LessonView({
                 </div>
               ) : null}
               {ex.explanation ? (
-                <p className="text-[11px] text-slate-400 leading-normal pl-1">{ex.explanation}</p>
+                <div className="text-[11px] text-slate-400 leading-normal pl-1">
+                  <MarkdownContent content={ex.explanation} inline />
+                </div>
               ) : null}
             </div>
           ))}
@@ -762,9 +765,9 @@ function LessonView({
                 </span>
               </div>
 
-              <p className="text-base sm:text-lg font-bold text-white leading-snug">
-                {exercise.prompt}
-              </p>
+              <div className="text-base sm:text-lg font-bold text-white leading-snug">
+                <MarkdownContent content={exercise.prompt} inline />
+              </div>
 
               <div className="pt-2">
                 <QuestionRenderer
@@ -828,16 +831,17 @@ function LessonView({
                       {engine.result.correct ? `¡Excelente! +${engine.result.xp} XP` : 'Respuesta incorrecta'}
                     </p>
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                    {engine.result.feedback}
-                  </p>
+                  <div className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    <MarkdownContent content={engine.result.feedback} />
+                  </div>
                   {engine.result.hint ? (
-                    <p className="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg flex items-start gap-2">
+                    <div className="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg flex items-start gap-2">
                       <Lightbulb className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" aria-hidden="true" />
-                      <span>
-                        <strong>Pista:</strong> {engine.result.hint}
-                      </span>
-                    </p>
+                      <div>
+                        <strong className="font-bold text-amber-300 mr-1">Pista:</strong>
+                        <MarkdownContent content={engine.result.hint} inline />
+                      </div>
+                    </div>
                   ) : null}
                   <div className="flex gap-2.5 pt-1">
                     {!engine.result.correct ? (
@@ -1023,9 +1027,9 @@ function QuizMode({
               </span>
             </div>
 
-            <p className="text-lg sm:text-xl font-bold text-white leading-snug">
-              {engine.current.prompt}
-            </p>
+            <div className="text-lg sm:text-xl font-bold text-white leading-snug">
+              <MarkdownContent content={engine.current.prompt} inline />
+            </div>
 
             <QuestionRenderer
               exercise={engine.current}
