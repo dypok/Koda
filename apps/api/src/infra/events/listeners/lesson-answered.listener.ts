@@ -47,7 +47,24 @@ export class LessonAnsweredListener {
         });
       }
 
-      // 2. Si es incorrecta, upsert en user_mistakes_notebook
+      // 2. Si la respuesta fue correcta y gano XP, actualizar total_xp del usuario en PostgreSQL
+      if (payload.isCorrect && payload.xpEarned > 0) {
+        const { data: userRec } = await client
+          .from('users')
+          .select('total_xp')
+          .eq('id', payload.userId)
+          .single();
+
+        if (userRec) {
+          const currentXp = userRec.total_xp || 0;
+          await client
+            .from('users')
+            .update({ total_xp: currentXp + payload.xpEarned })
+            .eq('id', payload.userId);
+        }
+      }
+
+      // 3. Si es incorrecta, upsert en user_mistakes_notebook
       if (!payload.isCorrect) {
         const questionId = `${payload.lessonId}_q1`;
         const { data: existingMistake } = await client

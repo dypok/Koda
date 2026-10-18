@@ -223,7 +223,7 @@ export const RoadmapStreakPopover: React.FC<RoadmapStreakPopoverProps> = ({
                 <span>XP</span>
               </div>
               <span className="font-mono text-base font-extrabold text-white">
-                +{xp}
+                {xp}
               </span>
               <p className="text-[9px] text-slate-400 leading-tight mt-0.5">Puntos</p>
             </div>

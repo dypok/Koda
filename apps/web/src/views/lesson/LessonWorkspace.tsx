@@ -343,9 +343,28 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             moduleId: parsed.moduleSlug,
             courseId,
             accuracyPercentage: accuracy,
-          }).catch((err) => {
-            console.warn('Sync quiz section completion offline fallback:', err?.message);
-          });
+          })
+            .then((res) => {
+              const currentUser = useAuthStore.getState().user;
+              if (currentUser) {
+                useAuthStore.getState().updateUserProfile({
+                  totalXp: res.userTotalXp ?? (currentUser.totalXp + (res.xpAwarded ?? 25)),
+                  streak: res.currentStreak ?? (currentUser.streak > 0 ? currentUser.streak : 1),
+                  longestStreak: res.longestStreak ?? currentUser.longestStreak,
+                  streakFreezeCount: res.streakFreezeCount ?? currentUser.streakFreezeCount,
+                  lastStudyDate: new Date().toISOString(),
+                });
+              }
+            })
+            .catch((err) => {
+              console.warn('Sync quiz section completion offline fallback:', err?.message);
+              const currentUser = useAuthStore.getState().user;
+              if (currentUser) {
+                useAuthStore.getState().updateUserProfile({
+                  totalXp: (currentUser.totalXp ?? 0) + 25,
+                });
+              }
+            });
         }
       }
     },
@@ -613,7 +632,15 @@ function LessonView({
     },
     onSubmit: () => {
       if (!engine.result && engine.selected.length > 0) {
-        engine.check();
+        const checkRes = engine.check();
+        if (checkRes?.correct && checkRes.xp > 0) {
+          const curUser = useAuthStore.getState().user;
+          if (curUser) {
+            useAuthStore.getState().updateUserProfile({
+              totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
+            });
+          }
+        }
         if (lesson?.id) {
           EvaluationService.evaluateLessonAnswer(lesson.id, {
             selected_option_ids: engine.selected,
@@ -754,7 +781,15 @@ function LessonView({
                 <button
                   type="button"
                   onClick={() => {
-                    engine.check();
+                    const checkRes = engine.check();
+                    if (checkRes?.correct && checkRes.xp > 0) {
+                      const curUser = useAuthStore.getState().user;
+                      if (curUser) {
+                        useAuthStore.getState().updateUserProfile({
+                          totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
+                        });
+                      }
+                    }
                     if (lesson?.id) {
                       EvaluationService.evaluateLessonAnswer(lesson.id, {
                         selected_option_ids: engine.selected,

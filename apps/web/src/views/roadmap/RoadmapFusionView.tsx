@@ -419,7 +419,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
               {streak}D
             </span>
             <span className="font-mono text-[9px] font-bold tabular-nums tracking-wide text-amber-300/90 group-hover:text-amber-200">
-              +{xp} XP
+              {xp} XP
             </span>
           </span>
         </button>

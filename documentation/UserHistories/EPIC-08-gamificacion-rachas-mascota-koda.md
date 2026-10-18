@@ -28,8 +28,12 @@
 - Modal de celebración de "Level Up!" con animación de fuegos artificiales y Koda 🦊 ascendiendo de rango.
 
 **Subtasks:**
+- [x] [BD] Persistencia atomica de incremento de `users.total_xp` en PostgreSQL por respuestas correctas y cierre de seccion/quiz.
 - [ ] [BD] Tabla `xp_transactions` con trigger que actualice `users.total_xp` y `users.level`.
-- [ ] [BACKEND] Servicio `GamificationService.awardXp()` con validación anti-farming e idempotencia por request.
+- [x] [BACKEND] Acumulacion de XP por ejercicio (+5 XP / +2 XP) en `LessonAnsweredListener` y en `saveSectionCompletion` (+25 XP).
+- [ ] [BACKEND] Servicio `GamificationService.awardXp()` con validacion anti-farming e idempotencia por request.
+- [x] [FRONTEND] Desquemado de saldo XP en dock flotante (`RoadmapFusionView`), Popover e hidratacion en `StudentRoadmapView`.
+- [x] [FRONTEND] Despacho reactivo de XP ganado (+5 XP en ejercicios y +25 XP en quizzes) a `useAuthStore` en `LessonWorkspace`.
 - [ ] [FRONTEND] Barra de nivel animada en el Header global con porcentaje de avance hacia el siguiente nivel.
 - [ ] [FRONTEND] Modal interactivo de subida de nivel con sonido triunfal y tarjeta compartible.
 
