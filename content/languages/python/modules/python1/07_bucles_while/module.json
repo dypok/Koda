@@ -4,14 +4,14 @@
   "code": "PY1_M07",
   "slug": "bucles-while",
   "course_slug": "python-1",
-  "title": "Bucle while, Centinelas y Banderas",
-  "objective": "Controlar repeticiones basadas en condiciones dinámicas con while, variables centinela y evitar bucles infinitos.",
-  "description": "Aprende a ejecutar código mientras una condición permanezca verdadera: ideal para menús interactivos, juegos y validaciones de entrada.",
+  "title": "Bucle while, Banderas y Control de Repetición",
+  "objective": "Aprender a controlar repeticiones dinámicas con while, prevenir bucles infinitos, gestionar banderas booleanas (flags) y utilizar el patrón while True con break para validaciones.",
+  "description": "Aprende a ejecutar código mientras una condición permanezca verdadera: ideal para menús interactivos, lógica de juegos y validaciones donde no sabes de antemano cuántas veces se repetirá.",
   "position": 7,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,67 +23,233 @@
     {
       "id": "sec_py1_07_01",
       "code": "S01",
-      "title": "Condición while y Prevención de Bucles Infinitos",
-      "slug": "condicion-while",
+      "title": "Repetición Condicional con while",
+      "slug": "repeticion-con-while",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 15,
-      "xp_on_complete": 40,
+      "estimated_minutes": 25,
+      "xp_on_complete": 50,
       "lessons": [
         {
           "id": "les_py1_07_01",
           "code": "L01",
-          "title": "El Bucle while y Modificación de la Condición",
-          "slug": "bucle-while-base",
+          "title": "El Bucle while: Repetición Basada en Condiciones",
+          "slug": "bucle-while-condicion",
           "position": 1,
-          "concept_id": "py-while-loops",
-          "objective": "Construir bucles while con variables de control que garanticen una terminación segura.",
-          "theory_markdown": "A diferencia del `for` (que recorre una cantidad conocida de elementos), el bucle `while` se ejecuta **mientras una condición booleana sea True**.\n\n> **¡Alerta de bucle infinito!** Para que un `while` no se ejecute para siempre y congele tu computadora, dentro del bucle **debe ocurrir algo que eventualmente cambie la condición a False** (por ejemplo, incrementar un contador o recibir una entrada específica).",
+          "concept_id": "py-while-basics",
+          "objective": "Comprender la diferencia entre for (secuencias conocidas) y while (repetición hasta que una condición sea False).",
+          "theory_markdown": "A diferencia del bucle `for` (que recorre un rango o secuencia definida de antemano), el bucle `while` se ejecuta **mientras una condición booleana permanezca siendo True**:\n```python\nwhile condicion:\n    # Se repite una y otra vez mientras condicion sea True\n```\n\nEn cada vuelta, Python revisa la condición:\n- Si es `True`, ejecuta el bloque interior con 4 espacios de sangría.\n- Si es `False`, el bucle termina inmediatamente y el programa continúa con la siguiente instrucción fuera de él.\n\nEs la herramienta por excelencia cuando **no sabemos cuántas veces** se repetirá una acción (por ejemplo: reintentar pedir una contraseña hasta que sea correcta, o mantener un juego activo mientras el jugador tenga vidas).",
           "examples": [
             {
-              "title": "Contador regresivo con terminación garantizada",
-              "code": "cuenta = 3\nwhile cuenta > 0:\n    print(f\"Lanzamiento en {cuenta}...\")\n    cuenta -= 1  # Crucial: acerca la condición a False\nprint(\"¡Despegue exitoso!\")",
-              "output": "Lanzamiento en 3...\nLanzamiento en 2...\nLanzamiento en 1...\n¡Despegue exitoso!",
-              "explanation": "cuenta -= 1 reduce el valor hasta que cuenta es 0, haciendo que cuenta > 0 sea False."
+              "title": "Contador básico con while",
+              "code": "i = 0\nwhile i < 3:\n    print(\"Vuelta:\", i)\n    i += 1  # Incrementamos la variable en cada ciclo\n\nprint(\"Fin del bucle while\")",
+              "output": "Vuelta: 0\nVuelta: 1\nVuelta: 2\nFin del bucle while",
+              "explanation": "i inicia en 0. Se repite para 0, 1 y 2. Al llegar a 3, 3 < 3 es False y el bucle finaliza."
             }
           ],
-          "common_errors": "Olvidar actualizar la variable de control dentro del cuerpo del while (por ejemplo, olvidar cuenta -= 1), provocando un bucle infinito.",
+          "common_errors": "Olvidar actualizar la variable de control (olvidar i += 1), lo que provoca que i siempre sea 0 y el bucle nunca termine.",
           "mini_exercise": {
-            "starter_code": "vidas = 3\n# Mientras vidas > 0, imprime \"Jugando\" y resta 1 vida\nwhile ...:\n    ...\nprint(\"Game Over\")",
-            "instructions": "Completa el bucle while para que se ejecute exactamente 3 veces.",
-            "solution": "vidas = 3\nwhile vidas > 0:\n    print(\"Jugando\")\n    vidas -= 1\nprint(\"Game Over\")"
+            "starter_code": "contador = 1\n# Muestra 1, 2 y 3 usando while\nwhile contador <= ...:\n    print(contador)\n    contador += 1",
+            "instructions": "Pon 3 en la condición del while.",
+            "solution": "contador = 1\nwhile contador <= 3:\n    print(contador)\n    contador += 1"
           },
           "key_takeaways": [
-            "while evalúa la condición antes de cada iteración.",
-            "Siempre debe modificarse la variable de control hacia la condición de salida.",
-            "Ctrl + C en la terminal interrumpe un bucle infinito accidental."
+            "while se repite mientras su condición sea True.",
+            "Se utiliza cuando la cantidad de repeticiones depende de un evento y no de un número fijo.",
+            "Requiere actualizar una variable interna para acercarse a la condición de salida."
           ],
           "exercise": {
             "id": "ex_py1_07_01",
-            "type": "predict_output",
+            "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Cuántas líneas imprimirá este código?",
-            "prompt_code": "i = 0\nwhile i < 3:\n    print(\"Koda\")\n    i += 1",
+            "prompt": "¿Cuándo es preferible utilizar un bucle while en lugar de un bucle for?",
             "options": [
               {
                 "id": "a",
-                "text": "3 líneas con \"Koda\""
+                "text": "Cuando no sabemos de antemano cuántas veces se debe repetir el bucle"
               },
               {
                 "id": "b",
-                "text": "4 líneas con \"Koda\""
+                "text": "Cuando queremos recorrer exactamente una lista de 5 elementos"
               },
               {
                 "id": "c",
-                "text": "Infinitas líneas"
+                "text": "Cuando el código solo se debe ejecutar una única vez"
               },
               {
                 "id": "d",
-                "text": "Ninguna"
+                "text": "Nunca, while no se usa en Python moderno"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "i toma los valores 0, 1, 2 (3 iteraciones). Cuando i llega a 3, i < 3 es False y el bucle termina."
+            "explanation": "while es ideal para repeticiones dinámicas cuyo final depende de una condición cambiante (como la entrada de un usuario o el estado de un juego)."
+          }
+        },
+        {
+          "id": "les_py1_07_02",
+          "code": "L02",
+          "title": "Prevención de Bucles Infinitos y Terminación Segura",
+          "slug": "prevencion-bucles-infinitos",
+          "position": 2,
+          "concept_id": "py-infinite-loop-prevention",
+          "objective": "Identificar qué causa un bucle infinito y asegurar que cada iteración modifique la condición de salida.",
+          "theory_markdown": "El riesgo más común al usar `while` es el **bucle infinito**: una repetición que nunca se detiene porque su condición jamás se vuelve `False`.\n\nPor ejemplo:\n```python\n# ¡CUIDADO! Bucle infinito:\ni = 1\nwhile i > 0:\n    print(i)\n    # Falta i -= 1, por lo que i siempre es mayor que 0\n```\nCuando esto ocurre, la terminal se satura y el programa parece congelado. En la terminal puedes pulsar `Ctrl + C` para forzar la interrupción del programa.\n\n> **La Regla de Terminación Segura:**\n> Dentro del cuerpo de todo `while`, **debe existir al menos una instrucción que acerque la condición hacia False** (por ejemplo: decrementar vidas, sumar al contador o recibir una orden de salida).",
+          "examples": [
+            {
+              "title": "Cuenta regresiva con salida garantizada",
+              "code": "cuenta = 3\nwhile cuenta > 0:\n    print(f\"Lanzamiento en {cuenta}...\")\n    cuenta -= 1  # Crucial: acerca cuenta a 0\n\nprint(\"¡Despegue exitoso!\")",
+              "output": "Lanzamiento en 3...\nLanzamiento en 2...\nLanzamiento en 1...\n¡Despegue exitoso!",
+              "explanation": "cuenta -= 1 reduce el valor progresivamente. Al llegar a 0, cuenta > 0 se vuelve False y el bucle termina con seguridad."
+            }
+          ],
+          "common_errors": "Equivocarse de signo (por ejemplo sumar cuenta += 1 en una cuenta regresiva), alejando la variable de la condición de fin.",
+          "mini_exercise": {
+            "starter_code": "vidas = 3\nwhile vidas > 0:\n    print(\"Vidas:\", vidas)\n    # Resta 1 vida en cada vuelta\n    vidas ... 1",
+            "instructions": "Usa vidas -= 1.",
+            "solution": "vidas = 3\nwhile vidas > 0:\n    print(\"Vidas:\", vidas)\n    vidas -= 1"
+          },
+          "key_takeaways": [
+            "Un bucle infinito ocurre cuando la condición del while nunca se vuelve False.",
+            "Cada iteración debe modificar la variable de control hacia la salida.",
+            "Ctrl + C en la consola detiene un bucle infinito en ejecución."
+          ],
+          "exercise": {
+            "id": "ex_py1_07_02",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Qué números imprimirá en consola este bucle?",
+            "prompt_code": "n = 3\nwhile n > 0:\n    print(n)\n    n -= 1",
+            "options": [
+              {
+                "id": "a",
+                "text": "3, 2, 1"
+              },
+              {
+                "id": "b",
+                "text": "3, 2, 1, 0"
+              },
+              {
+                "id": "c",
+                "text": "Infinitos números 3"
+              },
+              {
+                "id": "d",
+                "text": "2, 1, 0"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El bucle imprime 3, luego 2, luego 1. Al restar a 0, la condición 0 > 0 es False y se detiene sin imprimir el 0."
+          }
+        },
+        {
+          "id": "les_py1_07_03",
+          "code": "L03",
+          "title": "Banderas Lógicas (Flags) y Variables Centinela",
+          "slug": "banderas-flags-centinelas",
+          "position": 3,
+          "concept_id": "py-while-flags-sentinels",
+          "objective": "Utilizar variables booleanas como banderas de encendido/apagado para controlar bucles complejos.",
+          "theory_markdown": "A medida que los programas se vuelven más completos, la condición para detener un bucle puede depender de múltiples factores: el usuario decide salir, se agotan los intentos o ocurre un error.\n\nEn lugar de escribir una condición gigantesca en la cabecera del `while`, usamos una **bandera lógica** (*flag*):\n- Una variable booleana que actúa como un interruptor: `activo = True`.\n- El bucle corre `while activo:`.\n- Cuando queremos detener el programa por cualquier motivo, simplemente cambiamos la bandera: `activo = False`.",
+          "examples": [
+            {
+              "title": "Control con bandera booleana",
+              "code": "jugando = True\nturnos = 1\n\nwhile jugando:\n    print(f\"Turno actual: {turnos}\")\n    if turnos == 3:\n        print(\"Limite de turnos alcanzado.\")\n        jugando = False  # Apagamos la bandera\n    turnos += 1\n\nprint(\"Juego finalizado.\")",
+              "output": "Turno actual: 1\nTurno actual: 2\nTurno actual: 3\nLimite de turnos alcanzado.\nJuego finalizado.",
+              "explanation": "La bandera 'jugando' se mantiene en True hasta que turnos llega a 3, momento en el que se apaga a False."
+            }
+          ],
+          "common_errors": "Olvidar apagar la bandera (dejarla en True para siempre), lo que vuelve al bucle infinito.",
+          "mini_exercise": {
+            "starter_code": "activo = True\ncontador = 1\nwhile activo:\n    print(contador)\n    if contador == 2:\n        activo = ...\n    contador += 1",
+            "instructions": "Pon activo = False para apagar el bucle en el turno 2.",
+            "solution": "activo = True\ncontador = 1\nwhile activo:\n    print(contador)\n    if contador == 2:\n        activo = False\n    contador += 1"
+          },
+          "key_takeaways": [
+            "Una bandera (flag) es una variable booleana que actúa como interruptor del bucle.",
+            "Permite controlar el bucle desde múltiples puntos internos asignando False.",
+            "Hace que el código sea mucho más legible y estructurado."
+          ],
+          "exercise": {
+            "id": "ex_py1_07_03",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "En programación con Python, ¿cuál es el propósito principal de una \"bandera\" (flag)?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Una variable booleana (True/False) que actúa como interruptor para continuar o detener un bucle"
+              },
+              {
+                "id": "b",
+                "text": "Una función especial para imprimir colores en la terminal"
+              },
+              {
+                "id": "c",
+                "text": "Un tipo de dato para guardar contraseñas encriptadas"
+              },
+              {
+                "id": "d",
+                "text": "Un comando para acelerar la velocidad del procesador"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Una bandera lógica es una variable booleana que indica el estado del sistema y se apaga a False cuando se desea finalizar el bucle."
+          }
+        },
+        {
+          "id": "les_py1_07_04",
+          "code": "L04",
+          "title": "El Patrón while True con break para Menús y Validaciones",
+          "slug": "while-true-break",
+          "position": 4,
+          "concept_id": "py-while-true-pattern",
+          "objective": "Construir bucles controlados mediante while True con salida explícita usando if y break.",
+          "theory_markdown": "Un patrón muy popular y profesional en Python para menús interactivos o validación de entradas es **`while True:`**.\n\nA primera vista parece peligroso porque `True` siempre es `True` (un bucle infinito intencional). Sin embargo, se controla colocando una condición de salida con `break` en su interior:\n```python\nwhile True:\n    opcion = input(\"Escribe 'salir' para terminar: \")\n    if opcion == \"salir\":\n        print(\"Adios!\")\n        break  # Rompe y sale del bucle inmediatamente\n```\n\nEste patrón es excelente porque garantiza que el código se ejecute **al menos una vez** antes de decidir si debe continuar o finalizar.",
+          "examples": [
+            {
+              "title": "Bucle controlado con while True y break",
+              "code": "contador = 1\n\nwhile True:\n    print(\"Procesando intento:\", contador)\n    if contador == 2:\n        print(\"Intento exitoso, saliendo.\")\n        break\n    contador += 1",
+              "output": "Procesando intento: 1\nProcesando intento: 2\nIntento exitoso, saliendo.",
+              "explanation": "El bucle corre de forma continua hasta que contador llega a 2, donde el if activa el break y saca el flujo del programa."
+            }
+          ],
+          "common_errors": "Escribir while True sin un break dentro de un if, creando un bucle infinito que no puede terminar.",
+          "mini_exercise": {
+            "starter_code": "i = 1\nwhile True:\n    print(i)\n    if i == 3:\n        ...\n    i += 1",
+            "instructions": "Escribe break para detener el bucle cuando i llegue a 3.",
+            "solution": "i = 1\nwhile True:\n    print(i)\n    if i == 3:\n        break\n    i += 1"
+          },
+          "key_takeaways": [
+            "while True crea un bucle intencionalmente continuo.",
+            "DEBE contener obligatoriamente un if con break para terminar con seguridad.",
+            "Es ideal para menús interactivos, juegos y validaciones de entrada."
+          ],
+          "exercise": {
+            "id": "ex_py1_07_04",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Qué valor se imprimirá al final de este código?",
+            "prompt_code": "i = 1\nwhile True:\n    if i == 3:\n        break\n    i += 1\nprint(i)",
+            "options": [
+              {
+                "id": "a",
+                "text": "3"
+              },
+              {
+                "id": "b",
+                "text": "2"
+              },
+              {
+                "id": "c",
+                "text": "4"
+              },
+              {
+                "id": "d",
+                "text": "Infinito"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "i aumenta de 1 a 2, y luego de 2 a 3. Cuando i es 3, el if se cumple y ejecuta el break, saliendo del bucle. Al final print(i) muestra 3."
           }
         }
       ]
