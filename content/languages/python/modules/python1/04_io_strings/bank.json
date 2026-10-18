@@ -7,7 +7,7 @@
       "id": "q_py1_04_01",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "¿Qué tipo de dato devuelve SIEMPRE la función input()?",
+      "prompt": "¿Qué tipo de dato devuelve SIEMPRE la función nativa input() en Python 3?",
       "options": [
         {
           "id": "a",
@@ -15,11 +15,11 @@
         },
         {
           "id": "b",
-          "text": "Depende de lo que el usuario escriba"
+          "text": "Depende automáticamente de lo que el usuario escriba"
         },
         {
           "id": "c",
-          "text": "int si escribe solo dígitos"
+          "text": "int si escribe solo dígitos numéricos"
         },
         {
           "id": "d",
@@ -32,8 +32,35 @@
     {
       "id": "q_py1_04_02",
       "type": "predict_output",
-      "difficulty": "medium",
-      "prompt": "¿Qué imprime el siguiente fragmento?",
+      "difficulty": "easy",
+      "prompt": "Si una variable contiene el texto n = \"10\", ¿qué salida produce la instrucción print(n * 2)?",
+      "prompt_code": "n = \"10\"\nprint(n * 2)",
+      "options": [
+        {
+          "id": "a",
+          "text": "1010"
+        },
+        {
+          "id": "b",
+          "text": "20"
+        },
+        {
+          "id": "c",
+          "text": "TypeError"
+        },
+        {
+          "id": "d",
+          "text": "10 10"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Al multiplicar un string por un entero ('10' * 2), Python repite la cadena dos veces generando '1010'."
+    },
+    {
+      "id": "q_py1_04_03",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué imprime el siguiente fragmento de código usando f-strings y :.2f?",
       "prompt_code": "precio = 19.999\nprint(f\"Total: ${precio:.2f}\")",
       "options": [
         {
@@ -54,13 +81,13 @@
         }
       ],
       "correct_option_id": "a",
-      "explanation": "El especificador :.2f redondea al número de decimales más cercano (19.999 se redondea a 20.00)."
+      "explanation": "El especificador :.2f dentro de una f-string redondea el número al decimal más cercano con dos cifras, por lo que 19.999 pasa a 20.00."
     },
     {
-      "id": "q_py1_04_03",
+      "id": "q_py1_04_04",
       "type": "true_false",
       "difficulty": "easy",
-      "prompt": "Los strings en Python son mutables, por lo que texto.replace(\"a\", \"b\") modifica el valor original de la variable texto.",
+      "prompt": "Los strings en Python son mutables, por lo que texto.replace(\"a\", \"b\") modifica directamente el valor en memoria de la variable texto.",
       "options": [
         {
           "id": "a",
@@ -68,11 +95,65 @@
         },
         {
           "id": "b",
-          "text": "Verdadero, modifica el objeto directamente en memoria"
+          "text": "Verdadero, modifica el objeto original directamente en memoria"
         }
       ],
       "correct_option_id": "a",
       "explanation": "Los strings en Python son inmutables. Todo método devuelve una nueva cadena y nunca modifica la original in-situ."
+    },
+    {
+      "id": "q_py1_04_05",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué número mostrará la siguiente instrucción?",
+      "prompt_code": "print(len(\"Koda\" + \" \" + \"IA\"))",
+      "options": [
+        {
+          "id": "a",
+          "text": "7"
+        },
+        {
+          "id": "b",
+          "text": "6"
+        },
+        {
+          "id": "c",
+          "text": "8"
+        },
+        {
+          "id": "d",
+          "text": "Error de concatenación"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La concatenación 'Koda' + ' ' + 'IA' forma el string 'Koda IA', el cual contiene exactamente 7 caracteres contando el espacio intermedio."
+    },
+    {
+      "id": "q_py1_04_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué mostrará la consola tras ejecutar la siguiente instrucción?",
+      "prompt_code": "print(\"   python   \".strip())",
+      "options": [
+        {
+          "id": "a",
+          "text": "python"
+        },
+        {
+          "id": "b",
+          "text": "   python   "
+        },
+        {
+          "id": "c",
+          "text": "python   "
+        },
+        {
+          "id": "d",
+          "text": "   python"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El método .strip() remueve todos los espacios en blanco que se encuentren al inicio y al final de la cadena de texto."
     }
   ]
 }
