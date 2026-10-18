@@ -118,23 +118,125 @@ export class PrismaProgressRepository implements IProgressRepository {
         },
       });
 
-      // 4. Actualizar XP acumulado del usuario atómicamente si ganó XP
-      let updatedUserTotalXp = 0;
-      if (attemptResult.xpAwarded > 0) {
-        const user = await tx.user.update({
-          where: { id: userId },
-          data: {
-            totalXp: { increment: attemptResult.xpAwarded },
-          },
-          select: { totalXp: true },
-        });
-        updatedUserTotalXp = user.totalXp;
+      // 4. Obtener usuario para actualizar XP acumulado y ciclo de racha diario (GAMI-02)
+      const existingUser = await tx.user.findUnique({
+        where: { id: userId },
+        select: {
+          id: true,
+          totalXp: true,
+          currentStreak: true,
+          longestStreak: true,
+          streakFreezeCount: true,
+          lastStudyDate: true,
+          timezone: true,
+        },
+      });
+
+      const userTimezone = existingUser?.timezone || 'America/Bogota';
+      const now = new Date();
+
+      const formatCalDate = (d: Date | null | undefined, tz: string): string | null => {
+        if (!d) return null;
+        try {
+          return new Intl.DateTimeFormat('en-CA', {
+            timeZone: tz,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          }).format(d);
+        } catch {
+          return d.toISOString().slice(0, 10);
+        }
+      };
+
+      const todayStr = formatCalDate(now, userTimezone);
+      const lastStudyStr = formatCalDate(existingUser?.lastStudyDate, userTimezone);
+
+      let currentStreak = existingUser?.currentStreak ?? 0;
+      let longestStreak = existingUser?.longestStreak ?? 0;
+      let streakFreezeCount = existingUser?.streakFreezeCount ?? 1;
+      let streakFreezeUsedAt: Date | null = null;
+
+      if (!lastStudyStr) {
+        // Primera lección completada en la plataforma
+        currentStreak = 1;
+        longestStreak = Math.max(1, longestStreak);
+      } else if (lastStudyStr === todayStr) {
+        // Ya estudió hoy, la racha activa se preserva sin doble conteo
+        if (currentStreak === 0) currentStreak = 1;
+        longestStreak = Math.max(longestStreak, currentStreak);
       } else {
-        const user = await tx.user.findUnique({
-          where: { id: userId },
-          select: { totalXp: true },
+        const dToday = new Date(todayStr + 'T00:00:00Z');
+        const dLast = new Date(lastStudyStr + 'T00:00:00Z');
+        const diffDays = Math.round((dToday.getTime() - dLast.getTime()) / (1000 * 60 * 60 * 24));
+
+        if (diffDays === 1) {
+          // Día consecutivo exitoso
+          currentStreak += 1;
+          if (currentStreak > longestStreak) {
+            longestStreak = currentStreak;
+          }
+          // Otorgar 1 protector de racha cada 7 días continuos (máximo 2)
+          if (currentStreak % 7 === 0 && streakFreezeCount < 2) {
+            streakFreezeCount += 1;
+          }
+        } else if (diffDays === 2 && streakFreezeCount > 0) {
+          // Salvado por protector de racha (Streak Freeze)
+          streakFreezeCount -= 1;
+          streakFreezeUsedAt = now;
+          currentStreak += 1;
+          if (currentStreak > longestStreak) {
+            longestStreak = currentStreak;
+          }
+        } else {
+          // Racha reiniciada
+          currentStreak = 1;
+        }
+      }
+
+      const updatedUser = await tx.user.update({
+        where: { id: userId },
+        data: {
+          totalXp: attemptResult.xpAwarded > 0 ? { increment: attemptResult.xpAwarded } : undefined,
+          currentStreak,
+          longestStreak,
+          streakFreezeCount,
+          lastStudyDate: now,
+        },
+        select: {
+          totalXp: true,
+          currentStreak: true,
+          longestStreak: true,
+          streakFreezeCount: true,
+          lastStudyDate: true,
+        },
+      });
+
+      // Sincronizar tabla relacional streaks si existe
+      try {
+        await tx.streak.upsert({
+          where: { userId },
+          create: {
+            userId,
+            currentStreak,
+            longestStreak,
+            streakFreezeCount,
+            streakFreezeUsedAt,
+            lastActivityDate: now,
+            isActiveToday: true,
+          },
+          update: {
+            currentStreak,
+            longestStreak,
+            streakFreezeCount,
+            streakFreezeUsedAt: streakFreezeUsedAt ?? undefined,
+            lastActivityDate: now,
+            isActiveToday: true,
+            updatedAt: now,
+          },
         });
-        updatedUserTotalXp = user?.totalXp ?? 0;
+      } catch {
+        // Silencioso si la tabla streaks no está poblada para este usuario
       }
 
       // 5. Actualizar progreso del módulo
@@ -173,7 +275,11 @@ export class PrismaProgressRepository implements IProgressRepository {
         xpAwarded: attemptResult.xpAwarded,
         isNewlyPassed: attemptResult.isNewlyPassed,
         isNewBest: attemptResult.isNewBest,
-        userTotalXp: updatedUserTotalXp,
+        userTotalXp: updatedUser.totalXp,
+        currentStreak: updatedUser.currentStreak,
+        longestStreak: updatedUser.longestStreak,
+        streakFreezeCount: updatedUser.streakFreezeCount,
+        isActiveToday: true,
       };
     });
   }

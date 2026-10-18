@@ -11,6 +11,9 @@ export interface AuthUser {
   totalXp: number;
   level: number;
   streak: number;
+  longestStreak?: number;
+  streakFreezeCount?: number;
+  lastStudyDate?: string | null;
   initialLanguageSlug?: string;
   experienceLevel?: string;
   learningStyle?: string;
@@ -174,6 +177,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       totalXp: session.totalXp ?? 0,
       level: session.currentLevel ?? 1,
       streak: session.currentStreak ?? 0,
+      longestStreak: session.longestStreak ?? session.currentStreak ?? 0,
+      streakFreezeCount: session.streakFreezeCount ?? 1,
+      lastStudyDate: session.lastStudyDate ?? null,
       initialLanguageSlug: session.initialLanguageSlug,
       experienceLevel: session.experienceLevel,
       learningStyle: session.learningStyle,
