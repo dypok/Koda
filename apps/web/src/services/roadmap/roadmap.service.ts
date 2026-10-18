@@ -8,6 +8,27 @@ const API_BASE_URL = RAW_BASE_URL.replace(/\/$/, '').endsWith('/api/v1')
   ? RAW_BASE_URL.replace(/\/$/, '')
   : `${RAW_BASE_URL.replace(/\/$/, '')}/api/v1`;
 
+function sanitizeGraphDataset(dataset: GraphDataset): GraphDataset {
+  if (!dataset || !Array.isArray(dataset.nodes) || !Array.isArray(dataset.connections)) {
+    return dataset;
+  }
+  const nodeMap = new Map(dataset.nodes.map((n) => [n.id, n]));
+  const connections = dataset.connections.map((c) => {
+    const a = nodeMap.get(c.fromId);
+    const b = nodeMap.get(c.toId);
+    if (!a || !b) return c;
+    const dx = Math.abs(b.x - a.x) * 0.5;
+    return {
+      ...c,
+      path: `M ${a.x} ${a.y} C ${a.x + dx} ${a.y}, ${b.x - dx} ${b.y}, ${b.x} ${b.y}`,
+    };
+  });
+  return {
+    ...dataset,
+    connections,
+  };
+}
+
 export class RoadmapService {
   public static async getCoursesGraph(langSlug: string): Promise<GraphDataset> {
     try {
@@ -17,10 +38,10 @@ export class RoadmapService {
       });
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       const data = await res.json();
-      return data?.dataset || PYTHON_COURSES_DATASET;
+      return sanitizeGraphDataset(data?.dataset || PYTHON_COURSES_DATASET);
     } catch {
       // Graceful offline-first fallback to canonical seed
-      return PYTHON_COURSES_DATASET;
+      return sanitizeGraphDataset(PYTHON_COURSES_DATASET);
     }
   }
 
@@ -32,10 +53,10 @@ export class RoadmapService {
       });
       if (!res.ok) throw new Error(`HTTP error ${res.status}`);
       const data = await res.json();
-      return data?.dataset || getLessonsDatasetForCourse(courseId);
+      return sanitizeGraphDataset(data?.dataset || getLessonsDatasetForCourse(courseId));
     } catch {
       // Graceful offline-first fallback to canonical seed
-      return getLessonsDatasetForCourse(courseId);
+      return sanitizeGraphDataset(getLessonsDatasetForCourse(courseId));
     }
   }
 
