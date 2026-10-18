@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key, Code } from '@phosphor-icons/react';
+import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key, Code, Shield, Lightbulb } from '@phosphor-icons/react';
 import { ContentExercise, ContentLesson, ContentModule, isModuleAvailable, loadBank, loadModule, shuffled } from '@/lib/content';
 import { QuestionRenderer } from './QuestionRenderer';
 import { useLessonEngine } from './useLessonEngine';
@@ -430,11 +430,13 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   }
 
   if (mode === 'quiz') {
+    const isMiniBoss = sectionRef === 'les-miniboss' || sectionRef === 'py-boss-logic';
     return (
       <QuizMode
         bank={bank}
-        sectionTitle={parsed.initialMode === 'quiz' && (sectionRef === 'les-miniboss' || sectionRef === 'py-boss-logic') ? '🛡️ El Centinela de la Lógica' : section.title}
+        sectionTitle={isMiniBoss ? 'Guardián de la Lógica' : section.title}
         courseTitle={module.title}
+        isBoss={isMiniBoss}
         onFinish={handleQuizFinish}
       />
     );
@@ -830,8 +832,11 @@ function LessonView({
                     {engine.result.feedback}
                   </p>
                   {engine.result.hint ? (
-                    <p className="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg">
-                      💡 <strong>Pista:</strong> {engine.result.hint}
+                    <p className="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg flex items-start gap-2">
+                      <Lightbulb className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" aria-hidden="true" />
+                      <span>
+                        <strong>Pista:</strong> {engine.result.hint}
+                      </span>
                     </p>
                   ) : null}
                   <div className="flex gap-2.5 pt-1">
@@ -900,11 +905,13 @@ function QuizMode({
   bank,
   sectionTitle,
   courseTitle,
+  isBoss,
   onFinish,
 }: {
   bank: ContentExercise[];
   sectionTitle: string;
   courseTitle?: string;
+  isBoss?: boolean;
   onFinish: (ok: number, total: number) => void;
 }) {
   const questions = useMemo(
@@ -980,7 +987,10 @@ function QuizMode({
             <div className="flex items-center gap-2 font-mono text-xs">
               <span className="text-slate-400">{courseTitle ?? 'Curso'}</span>
               <span className="text-slate-600">›</span>
-              <span className="text-orange-400 font-bold uppercase tracking-wider">Quiz · {sectionTitle}</span>
+              <span className="text-orange-400 font-bold uppercase tracking-wider inline-flex items-center gap-1.5">
+                {isBoss && <Shield className="w-3.5 h-3.5 text-amber-400 shrink-0" aria-hidden="true" />}
+                <span>Quiz · {sectionTitle}</span>
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex items-center gap-1 text-[11px] font-mono text-slate-400 bg-slate-800/60 px-2.5 py-1 rounded-full border border-slate-700/50">
