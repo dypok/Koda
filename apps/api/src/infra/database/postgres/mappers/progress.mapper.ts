@@ -7,12 +7,11 @@ export class ProgressMapper {
     return new SectionStarsEntity({
       id: raw.id,
       userId: raw.userId,
-      sectionId: raw.sectionId,
-      moduleId: raw.moduleId,
-      starsEarned: raw.starsEarned,
-      bestAccuracyScore: raw.bestAccuracyScore ? Number(raw.bestAccuracyScore) : 0,
-      totalAttemptsCount: raw.totalAttemptsCount,
-      completedAt: raw.completedAt,
+      sectionId: raw.sectionSlug,
+      moduleId: raw.moduleSlug,
+      starsEarned: raw.maxStarsEarned,
+      totalAttemptsCount: raw.attemptsCount,
+      completedAt: raw.firstEarnedAt,
       updatedAt: raw.updatedAt,
     });
   }

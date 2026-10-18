@@ -137,19 +137,21 @@ model UserModuleProgress {
 }
 
 model UserSectionStars {
-  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  userId              String    @map("user_id") @db.Uuid
-  sectionId           String    @map("section_id") @db.VarChar(80)
-  moduleId            String    @map("module_id") @db.VarChar(80)
-  starsEarned         Int       @default(0) @map("stars_earned") @db.SmallInt
-  bestAccuracyScore   Decimal?  @map("best_accuracy_score") @db.Decimal(5, 2)
-  totalAttemptsCount  Int       @default(0) @map("total_attempts_count")
-  completedAt         DateTime? @map("completed_at") @db.Timestamptz(6)
-  updatedAt           DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  courseSlug      String    @map("course_slug") @db.VarChar(80)
+  moduleSlug      String    @map("module_slug") @db.VarChar(80)
+  sectionSlug     String    @map("section_slug") @db.VarChar(80)
+  maxStarsEarned  Int       @default(1) @map("max_stars_earned") @db.SmallInt
+  attemptsCount   Int       @default(1) @map("attempts_count")
+  firstEarnedAt   DateTime  @default(now()) @map("first_earned_at") @db.Timestamptz(6)
+  lastEarnedAt    DateTime  @default(now()) @map("last_earned_at") @db.Timestamptz(6)
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt       DateTime  @default(now()) @updatedAt @map("updated_at") @db.Timestamptz(6)
 
-  user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, sectionId], map: "uq_user_section")
+  @@unique([userId, courseSlug, moduleSlug, sectionSlug], map: "uq_user_section_stars")
   @@map("user_section_stars")
 }
 

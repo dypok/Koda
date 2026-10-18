@@ -17,12 +17,10 @@ export class PrismaProgressRepository implements IProgressRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findSectionStars(userId: string, sectionId: string): Promise<SectionStarsEntity | null> {
-    const record = await this.prisma.userSectionStars.findUnique({
+    const record = await this.prisma.userSectionStars.findFirst({
       where: {
-        userId_sectionId: {
-          userId,
-          sectionId,
-        },
+        userId,
+        sectionSlug: sectionId,
       },
     });
 
@@ -33,7 +31,7 @@ export class PrismaProgressRepository implements IProgressRepository {
     const records = await this.prisma.userSectionStars.findMany({
       where: {
         userId,
-        moduleId,
+        moduleSlug: moduleId,
       },
     });
 
@@ -74,13 +72,18 @@ export class PrismaProgressRepository implements IProgressRepository {
   }
 
   async saveSectionCompletion(params: SaveSectionCompletionParams): Promise<SaveSectionCompletionResult> {
-    const { userId, sectionId, moduleId, courseId, accuracyPercentage } = params;
+    const { userId, sectionId, moduleId, courseId, accuracyPercentage, targetXp } = params;
 
     return this.prisma.$transaction(async (tx) => {
       // 1. Obtener o inicializar entidad de estrellas de sección
       const existingRecord = await tx.userSectionStars.findUnique({
         where: {
-          userId_sectionId: { userId, sectionId },
+          userId_courseSlug_moduleSlug_sectionSlug: {
+            userId,
+            courseSlug: courseId,
+            moduleSlug: moduleId,
+            sectionSlug: sectionId,
+          },
         },
       });
 
@@ -93,27 +96,32 @@ export class PrismaProgressRepository implements IProgressRepository {
           });
 
       // 2. Registrar intento con el algoritmo de estrellas y blindaje histórico
-      const attemptResult = sectionStars.recordAttempt(accuracyPercentage);
+      const attemptResult = sectionStars.recordAttempt(accuracyPercentage, targetXp);
 
       // 3. Persistir user_section_stars
       const savedStarsRecord = await tx.userSectionStars.upsert({
         where: {
-          userId_sectionId: { userId, sectionId },
+          userId_courseSlug_moduleSlug_sectionSlug: {
+            userId,
+            courseSlug: courseId,
+            moduleSlug: moduleId,
+            sectionSlug: sectionId,
+          },
         },
         create: {
           userId,
-          sectionId,
-          moduleId,
-          starsEarned: sectionStars.starsEarned,
-          bestAccuracyScore: new Prisma.Decimal(sectionStars.bestAccuracyScore),
-          totalAttemptsCount: sectionStars.totalAttemptsCount,
-          completedAt: sectionStars.completedAt,
+          courseSlug: courseId,
+          moduleSlug: moduleId,
+          sectionSlug: sectionId,
+          maxStarsEarned: Math.max(1, sectionStars.starsEarned),
+          attemptsCount: Math.max(1, sectionStars.totalAttemptsCount),
+          firstEarnedAt: sectionStars.completedAt || new Date(),
+          lastEarnedAt: new Date(),
         },
         update: {
-          starsEarned: sectionStars.starsEarned,
-          bestAccuracyScore: new Prisma.Decimal(sectionStars.bestAccuracyScore),
-          totalAttemptsCount: sectionStars.totalAttemptsCount,
-          completedAt: sectionStars.completedAt,
+          maxStarsEarned: Math.max(1, sectionStars.starsEarned),
+          attemptsCount: Math.max(1, sectionStars.totalAttemptsCount),
+          lastEarnedAt: new Date(),
           updatedAt: new Date(),
         },
       });
@@ -241,10 +249,10 @@ export class PrismaProgressRepository implements IProgressRepository {
 
       // 5. Actualizar progreso del módulo
       const moduleStars = await tx.userSectionStars.findMany({
-        where: { userId, moduleId },
+        where: { userId, moduleSlug: moduleId },
       });
 
-      const totalEarnedStars = moduleStars.reduce((sum, s) => sum + s.starsEarned, 0);
+      const totalEarnedStars = moduleStars.reduce((sum, s) => sum + s.maxStarsEarned, 0);
       // Asumiendo hasta 8 secciones canónicas (24 estrellas posibles por módulo)
       const maxPossibleModuleStars = 24;
       const starsPercentage = Math.min(100, Math.round((totalEarnedStars / maxPossibleModuleStars) * 100));
@@ -322,13 +330,13 @@ export class PrismaProgressRepository implements IProgressRepository {
     const records = await this.prisma.userSectionStars.findMany({
       where: {
         userId,
-        sectionId: { in: prerequisiteSectionIds },
-        starsEarned: { gte: 1 }, // Aprobado con al menos 1 estrella
+        sectionSlug: { in: prerequisiteSectionIds },
+        maxStarsEarned: { gte: 1 }, // Aprobado con al menos 1 estrella
       },
-      select: { sectionId: true },
+      select: { sectionSlug: true },
     });
 
-    const passedIds = new Set(records.map((r) => r.sectionId));
+    const passedIds = new Set(records.map((r) => r.sectionSlug));
     return prerequisiteSectionIds.every((id) => passedIds.has(id));
   }
 }

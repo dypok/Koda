@@ -79,7 +79,10 @@ export class SectionStarsEntity {
    * Registra un nuevo intento de la sección.
    * La marca histórica de estrellas está blindada: nunca disminuye ante reintentos.
    */
-  public recordAttempt(accuracyPercentage: number): {
+  public recordAttempt(
+    accuracyPercentage: number,
+    targetXp?: number,
+  ): {
     attemptStars: number;
     starsEarnedOverall: number;
     isNewBest: boolean;
@@ -109,14 +112,18 @@ export class SectionStarsEntity {
       this._completedAt = new Date();
     }
 
-    // Regla de XP:
-    // +30 XP por aprobar por primera vez (al menos 1 estrella)
-    // +10 XP bono si alcanza la perfección (3 estrellas)
+    // Regla de XP determinista:
+    // Si se especifica targetXp (bono calibrado del nodo del roadmap), se otorga dicho valor.
+    // En caso contrario, regla base: +30 XP por primera aprobacion (+10 XP bono por perfeccion 3 estrellas).
     let xpAwarded = 0;
     if (isNewlyPassed) {
-      xpAwarded += 30;
+      if (typeof targetXp === 'number' && targetXp > 0) {
+        xpAwarded += targetXp;
+      } else {
+        xpAwarded += 30;
+      }
     }
-    if (attemptStars === 3 && previousStars < 3) {
+    if (attemptStars === 3 && previousStars < 3 && (!targetXp || targetXp <= 30)) {
       xpAwarded += 10;
     }
 

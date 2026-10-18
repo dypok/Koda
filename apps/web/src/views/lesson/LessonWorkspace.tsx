@@ -225,7 +225,24 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   const [quizScore, setQuizScore] = useState<{ ok: number; total: number } | null>(null);
   const completeSectionNode = useRoadmapStore((s) => s.completeSectionNode);
 
-  // Registro atómico de lecciones completadas
+  const lessonsDataset = useRoadmapStore((s) => s.lessonsDataset);
+  const currentNode = useMemo(() => {
+    return (
+      lessonsDataset?.nodes?.find(
+        (n) =>
+          n.id === sectionRef ||
+          n.id.toLowerCase().replace(/^py-m0?/, 'les-0') === sectionRef.toLowerCase().replace(/^py-m0?/, 'les-0')
+      ) ?? null
+    );
+  }, [lessonsDataset, sectionRef]);
+
+  const sessionExerciseXpRef = useRef<number>(0);
+
+  const handleExerciseCorrect = useCallback((xp: number) => {
+    sessionExerciseXpRef.current += xp;
+  }, []);
+
+  // Registro atomico de lecciones completadas
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(() => {
     try {
       const saved = window.localStorage.getItem('koda_completed_lessons');
@@ -244,7 +261,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     (lessonId: string) => {
       if (!lessonId) return;
 
-      // Si la lección ya fue registrada como completada, evitar re-renders en bucle
+      // Si la leccion ya fue registrada como completada, evitar re-renders en bucle
       if (completedLessonsRef.current.has(lessonId)) return;
 
       setCompletedLessons((prev) => {
@@ -259,18 +276,23 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       // Notificar al roadmap store para encender el nodo actual
       completeSectionNode(sectionRef, 3);
 
-      // Sincronizar completitud de la sección en PostgreSQL y actualizar AuthStore en tiempo real
+      // Calcular la recompensa de completitud para cumplir con la XP prometida en el nodo
+      const nodeTargetXp = currentNode?.xp ?? 120;
+      const completionReward = Math.max(30, nodeTargetXp - sessionExerciseXpRef.current);
+
+      // Sincronizar completitud de la seccion en PostgreSQL y actualizar AuthStore en tiempo real
       if (parsed) {
         EvaluationService.completeSection(sectionRef, {
           moduleId: parsed.moduleSlug,
           courseId,
           accuracyPercentage: 100,
+          targetXp: completionReward,
         })
           .then((res) => {
             const currentUser = useAuthStore.getState().user;
             if (currentUser) {
               useAuthStore.getState().updateUserProfile({
-                totalXp: res.userTotalXp ?? (currentUser.totalXp + (res.xpAwarded ?? 10)),
+                totalXp: res.userTotalXp ?? (currentUser.totalXp + (res.xpAwarded ?? completionReward)),
                 streak: res.currentStreak ?? (currentUser.streak > 0 ? currentUser.streak : 1),
                 longestStreak: res.longestStreak ?? currentUser.longestStreak,
                 streakFreezeCount: res.streakFreezeCount ?? currentUser.streakFreezeCount,
@@ -279,13 +301,13 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             }
           })
           .catch((err) => {
-            // Fallback optimista local si el usuario está offline o sin sesión activa
+            // Fallback optimista local si el usuario esta offline o sin sesion activa
             console.warn('Sync section completion offline fallback:', err?.message);
             const currentUser = useAuthStore.getState().user;
             if (currentUser) {
               const currentStreak = currentUser.streak > 0 ? currentUser.streak : 1;
               useAuthStore.getState().updateUserProfile({
-                totalXp: currentUser.totalXp + 10,
+                totalXp: (currentUser.totalXp ?? 0) + completionReward,
                 streak: currentStreak,
                 longestStreak: Math.max(currentUser.longestStreak ?? 1, currentStreak),
                 lastStudyDate: new Date().toISOString(),
@@ -294,7 +316,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
           });
       }
     },
-    [completeSectionNode, sectionRef, parsed, courseId]
+    [completeSectionNode, sectionRef, parsed, courseId, currentNode]
   );
 
   useEffect(() => {
@@ -339,17 +361,19 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       const accuracy = Math.round((ok / Math.max(1, total)) * 100);
       if (accuracy >= 70) {
         completeSectionNode(sectionRef, ok === total ? 3 : 2);
+        const quizTargetXp = currentNode?.xp ?? 250;
         if (parsed) {
           EvaluationService.completeSection(sectionRef, {
             moduleId: parsed.moduleSlug,
             courseId,
             accuracyPercentage: accuracy,
+            targetXp: quizTargetXp,
           })
             .then((res) => {
               const currentUser = useAuthStore.getState().user;
               if (currentUser) {
                 useAuthStore.getState().updateUserProfile({
-                  totalXp: res.userTotalXp ?? (currentUser.totalXp + (res.xpAwarded ?? 25)),
+                  totalXp: res.userTotalXp ?? (currentUser.totalXp + (res.xpAwarded ?? quizTargetXp)),
                   streak: res.currentStreak ?? (currentUser.streak > 0 ? currentUser.streak : 1),
                   longestStreak: res.longestStreak ?? currentUser.longestStreak,
                   streakFreezeCount: res.streakFreezeCount ?? currentUser.streakFreezeCount,
@@ -362,14 +386,14 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
               const currentUser = useAuthStore.getState().user;
               if (currentUser) {
                 useAuthStore.getState().updateUserProfile({
-                  totalXp: (currentUser.totalXp ?? 0) + 25,
+                  totalXp: (currentUser.totalXp ?? 0) + quizTargetXp,
                 });
               }
             });
         }
       }
     },
-    [completeSectionNode, sectionRef, parsed, courseId]
+    [completeSectionNode, sectionRef, parsed, courseId, currentNode]
   );
 
   const handleCompleteCurrent = useCallback(() => {
@@ -462,7 +486,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
           </h1>
           <p className="text-slate-400 text-sm sm:text-base max-w-md">
             Quiz: <span className="font-mono font-bold text-orange-400">{quizScore.ok}/{quizScore.total}</span> aciertos
-            {passed ? ' · +10 XP de maestría' : ' · necesitas 70% de aciertos para avanzar'}
+            {passed ? ` · +${currentNode?.xp ?? 250} XP de maestría` : ' · necesitas 70% de aciertos para avanzar'}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
@@ -560,6 +584,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             lesson={lesson}
             isCompleted={completedLessons.has(lesson.id)}
             onComplete={handleCompleteCurrent}
+            onExerciseCorrect={handleExerciseCorrect}
             onNext={handleNext}
             onPrev={handlePrev}
             onJumpTo={handleJumpTo}
@@ -588,6 +613,7 @@ function LessonView({
   lesson,
   isCompleted,
   onComplete,
+  onExerciseCorrect,
   onNext,
   onPrev,
   onJumpTo: _onJumpTo,
@@ -598,6 +624,7 @@ function LessonView({
   lesson: ContentLesson;
   isCompleted?: boolean;
   onComplete?: () => void;
+  onExerciseCorrect?: (xp: number) => void;
   onNext: () => void;
   onPrev: () => void;
   onJumpTo?: (idx: number) => void;
@@ -637,6 +664,7 @@ function LessonView({
       if (!engine.result && engine.selected.length > 0) {
         const checkRes = engine.check();
         if (checkRes?.correct && checkRes.xp > 0) {
+          onExerciseCorrect?.(checkRes.xp);
           const curUser = useAuthStore.getState().user;
           if (curUser) {
             useAuthStore.getState().updateUserProfile({
@@ -788,6 +816,7 @@ function LessonView({
                   onClick={() => {
                     const checkRes = engine.check();
                     if (checkRes?.correct && checkRes.xp > 0) {
+                      onExerciseCorrect?.(checkRes.xp);
                       const curUser = useAuthStore.getState().user;
                       if (curUser) {
                         useAuthStore.getState().updateUserProfile({

@@ -168,9 +168,9 @@ export class GetRoadmapGraphUseCase {
     if (normalizedSlug === 'python-1' || normalizedSlug === 'py-level-1') {
       const nodes: GraphNode[] = [
         {
-          id: 'py-m01', code: '01', label: 'SINTAXIS & E/S', subtitle: 'PRINT, INPUT & COMENTARIOS',
-          x: 130, y: 320, variant: 'active', iconType: 'brackets', stars: 0, maxStars: 3, xp: 150,
-          statusText: 'DISPONIBLE • +150 XP', isUnlocked: true,
+          id: 'py-m01', code: '01', label: 'ENTORNO & SINTAXIS', subtitle: 'VS CODE, VENV & PRINT',
+          x: 130, y: 320, variant: 'active', iconType: 'brackets', stars: 0, maxStars: 3, xp: 120,
+          statusText: 'DISPONIBLE • +120 XP', isUnlocked: true,
         },
         {
           id: 'py-m02', code: '02', label: 'VARIABLES & TIPOS', subtitle: 'INT, FLOAT, STR, BOOL & TYPE',

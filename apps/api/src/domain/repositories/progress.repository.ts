@@ -7,6 +7,7 @@ export interface SaveSectionCompletionParams {
   moduleId: string;
   courseId: string;
   accuracyPercentage: number;
+  targetXp?: number;
 }
 
 export interface SaveSectionCompletionResult {

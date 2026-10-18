@@ -34,6 +34,7 @@ export class CompleteSectionUseCase {
       moduleId,
       courseId,
       accuracyPercentage,
+      targetXp: dto.targetXp,
     });
 
     const attemptStars = SectionStarsEntity.calculateStars(accuracyPercentage);
