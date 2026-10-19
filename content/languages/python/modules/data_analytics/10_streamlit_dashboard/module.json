@@ -5,64 +5,174 @@
   "slug": "streamlit-dashboards",
   "course_slug": "data-analytics",
   "title": "Dashboards con Streamlit y Storytelling con Dataset Real",
-  "objective": "Construir una aplicación web interactiva completa en Python con Streamlit, sliders reactivos, filtros en tiempo real y storytelling con datos.",
-  "description": "El proyecto final de Análisis de Datos: convierte tus notebooks en una aplicación web interactiva lista para presentar a clientes y directivos.",
+  "objective": "Construir aplicaciones analiticas web interactivas en Python puro con Streamlit, cache de datos y visualizaciones reactivas.",
+  "description": "De scripts a aplicaciones web de impacto: layouts multipanel, widgets interactivos, cache inteligente con st.cache_data y storytelling con datos.",
   "position": 50,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 450
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_da_10_01",
       "code": "S01",
-      "title": "Construcción de Dashboards con Streamlit",
-      "slug": "streamlit-app",
+      "title": "Desarrollo de Dashboards Reactivos con Streamlit",
+      "slug": "dashboards-reactivos-streamlit",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 22,
-      "xp_on_complete": 55,
+      "estimated_minutes": 50,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_da_10_01",
           "code": "L01",
-          "title": "Widgets Reactivos en Streamlit: st.sidebar, st.dataframe y st.plotly_chart",
-          "slug": "streamlit-base",
+          "title": "Filosofia y Modelo de Ejecucion de Streamlit",
+          "slug": "filosofia-modelo-ejecucion",
           "position": 1,
-          "concept_id": "da-streamlit",
-          "objective": "Construir una aplicación analítica completa en un solo archivo Python sin tocar HTML ni JavaScript.",
-          "theory_markdown": "**Streamlit** es el estándar de oro para crear aplicaciones web de datos en minutos:\n- Cada vez que un usuario mueve un control deslizante (`slider`) o cambia un menú (`selectbox`), Streamlit re-ejecuta el script de arriba a abajo reactivamente.\n- `st.title(\"Mi Dashboard\")`: Título principal.\n- `st.sidebar.selectbox(...)`: Controles de filtrado en la barra lateral.\n- `st.plotly_chart(fig, use_container_width=True)`: Renderiza visualizaciones interactivas de Plotly adaptadas al ancho de pantalla.",
+          "concept_id": "da-streamlit-architecture",
+          "objective": "Comprender el modelo de ejecucion reactivo de arriba a abajo de Streamlit y levantar una aplicacion local.",
+          "theory_markdown": "**Streamlit** transforma scripts de Python ordinarios en aplicaciones web interactivas sin necesidad de escribir HTML, CSS ni JavaScript.\n\n### El Modelo de Ejecucion Reactivo\nEl paradigma de Streamlit es radicalmente simple:\n**Cada vez que un usuario interactua con cualquier widget (un slider, un boton, un dropdown), Streamlit re-ejecuta todo el archivo Python desde la primera linea hasta la ultima.**\n\nEste modelo elimina el manejo manual de callbacks y sincronizacion de estado complejo propio de otros frameworks web.\n\n### Ejecucion en consola\n```bash\nstreamlit run app.py\n```\nLevanta un servidor local (por defecto en `http://localhost:8501`) con recarga en caliente al guardar cambios en el codigo.",
           "examples": [
             {
-              "title": "Estructura canónica de un dashboard Streamlit",
-              "code": "import streamlit as st\nimport pandas as pd\nimport plotly.express as px\n\nst.title(\"🦊 Koda Analytics Hub\")\nst.sidebar.header(\"Filtros\")\n\ndf = pd.DataFrame({\n    \"categoria\": [\"AI\", \"Web\", \"Cloud\", \"AI\"],\n    \"ventas\": [120, 90, 80, 150]\n})\n\ncat = st.sidebar.selectbox(\"Filtrar por categoría\", [\"Todas\"] + list(df[\"categoria\"].unique()))\nif cat != \"Todas\":\n    df = df[df[\"categoria\"] == cat]\n\nst.metric(label=\"Total Ventas\", value=f\"${df['ventas'].sum():,}\")\nst.dataframe(df)",
-              "output": "Dashboard interactivo servido en http://localhost:8501",
-              "explanation": "Streamlit convierte código de análisis Python en una interfaz web elegante y reactiva."
+              "title": "Primera aplicacion con Streamlit",
+              "code": "import streamlit as st\nimport pandas as pd\n\nst.title(\"Dashboard de Analitica Koda\")\nst.write(\"Bienvenido a la plataforma interactiva de inteligencia de negocios.\")\n\ndf = pd.DataFrame({\"categoria\": [\"A\", \"B\", \"C\"], \"ventas\": [100, 250, 180]})\nst.dataframe(df)",
+              "output": "Aplicacion web interactiva con titulo, texto y tabla con busqueda y ordenamiento nativo.",
+              "explanation": "st.dataframe renderiza tablas interactivas de Pandas con capacidad de ordenamiento por columnas."
             }
           ],
-          "common_errors": "No cachear la carga de datasets pesados con `@st.cache_data`. Sin caché, mover un slider volverá a leer el archivo de disco cada vez.",
+          "common_errors": "Intentar ejecutar una app de Streamlit con 'python app.py' en lugar de usar el comando de CLI 'streamlit run app.py', lo que impide levantar el servidor web reactivo.",
           "mini_exercise": {
-            "starter_code": "# Comando para ejecutar una app Streamlit en la terminal\n# streamlit run app.py",
-            "instructions": "Recuerda el comando de arranque de Streamlit.",
-            "solution": "# streamlit run app.py"
+            "instructions": "Usa st.title para definir el titulo principal de la aplicacion con el texto 'Reporte Ejecutivo'.",
+            "starter_code": "import streamlit as st\n\n# Define el titulo\n",
+            "solution": "import streamlit as st\n\nst.title(\"Reporte Ejecutivo\")"
           },
           "key_takeaways": [
-            "Streamlit no requiere conocimientos de frontend (HTML/CSS/JS).",
-            "@st.cache_data optimiza la carga de datos en memoria.",
-            "Se integra nativamente con DataFrames de Pandas y figuras de Plotly."
+            "Streamlit convierte scripts de Python en interfaces web reactivas sin frontend.",
+            "El script se re-ejecuta de arriba a abajo ante cada interaccion de usuario.",
+            "Se lanza desde terminal con 'streamlit run app.py'."
           ],
           "exercise": {
             "id": "ex_da_10_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Qué decorador de Streamlit se utiliza para almacenar en caché los resultados de carga de un dataset pesado y evitar recargas lentas?",
+            "prompt": "Cual es el modelo de ejecucion fundamental de una aplicacion desarrollada con Streamlit?",
+            "options": [
+              {
+                "id": "a",
+                "text": "El script Python completo se re-ejecuta secuencialmente de arriba a abajo cada vez que el usuario interactua con un widget."
+              },
+              {
+                "id": "b",
+                "text": "Compila el codigo Python a bytecode de WebAssembly que corre en el navegador sin servidor."
+              },
+              {
+                "id": "c",
+                "text": "Requiere registrar listeners y manejadores de eventos manuales para cada boton."
+              },
+              {
+                "id": "d",
+                "text": "Solo se ejecuta una vez cuando el servidor inicia y nunca se vuelve a evaluar."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El modelo reactivo de Streamlit evalua todo el script de arriba a abajo en cada cambio de widget para mantener la vista sincronizada con el estado."
+          }
+        },
+        {
+          "id": "les_da_10_02",
+          "code": "L02",
+          "title": "Widgets Interactivos y Filtrado Reactivo",
+          "slug": "widgets-interactivos-filtrado",
+          "position": 2,
+          "concept_id": "da-streamlit-widgets",
+          "objective": "Integrar selectores, controles deslizantes y campos de entrada para filtrar DataFrames en tiempo real.",
+          "theory_markdown": "Los widgets de Streamlit retornan directamente el valor seleccionado por el usuario en tiempo real:\n\n- `st.selectbox('Etiqueta', opciones)`: Lista desplegable de seleccion unica.\n- `st.multiselect('Etiqueta', opciones, default=...)`: Seleccion multiple de elementos.\n- `st.slider('Etiqueta', min_val, max_val, valor_inicial)`: Barra deslizante numerica o de rangos.\n- `st.text_input('Buscar...')`: Entrada de texto libre.\n- `st.checkbox('Mostrar detalles')`: Casilla booleana.\n\n### Filtrado reactivo directo\n```python\ncategoria_sel = st.selectbox('Filtrar por Categoria', df['categoria'].unique())\ndf_filtrado = df[df['categoria'] == categoria_sel]\nst.dataframe(df_filtrado)\n```",
+          "examples": [
+            {
+              "title": "Filtrado interactivo con slider",
+              "code": "import streamlit as st\nimport pandas as pd\n\ndf = pd.DataFrame({\"producto\": [\"A\", \"B\", \"C\"], \"precio\": [50, 120, 300]})\nprecio_min = st.slider(\"Precio Minimo\", 0, 400, 100)\nfiltrados = df[df[\"precio\"] >= precio_min]\nst.write(f\"Productos con precio >= {precio_min}:\", len(filtrados))\nst.dataframe(filtrados)",
+              "output": "La tabla se actualiza instantaneamente al deslizar la barra de precio.",
+              "explanation": "precio_min captura el valor del slider e interactua directamente con la mascara booleana."
+            }
+          ],
+          "common_errors": "Crear bucles infinitos intentando modificar programaticamente el valor de un widget dentro del flujo de ejecucion del mismo widget sin usar session_state.",
+          "mini_exercise": {
+            "instructions": "Crea un slider con etiqueta 'Umbral', rango de 0 a 100 y valor inicial 50 usando st.slider.",
+            "starter_code": "import streamlit as st\n\n# Crea el slider\numbral = ...",
+            "solution": "umbral = st.slider(\"Umbral\", 0, 100, 50)"
+          },
+          "key_takeaways": [
+            "Los widgets devuelven el valor actual seleccionado por el usuario como variable nativa de Python.",
+            "st.multiselect y st.selectbox controlan filtros categoricos limpios.",
+            "El filtrado reactivo de DataFrames se logra combinando widgets con mascaras booleanas."
+          ],
+          "exercise": {
+            "id": "ex_da_10_02",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "Que devuelve la llamada opcion = st.selectbox('Elige color', ['Rojo', 'Verde', 'Azul']) cuando el usuario selecciona 'Verde' en la web?",
+            "options": [
+              {
+                "id": "a",
+                "text": "La cadena de texto 'Verde' directamente asignada a la variable opcion."
+              },
+              {
+                "id": "b",
+                "text": "Un objeto Promise asincrono que debe esperarse con await."
+              },
+              {
+                "id": "c",
+                "text": "Un indice entero 1 sin el texto."
+              },
+              {
+                "id": "d",
+                "text": "None hasta que se presione un boton de envio."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Los widgets en Streamlit retornan directamente el valor Python seleccionado de forma sincronica durante la ejecucion del script."
+          }
+        },
+        {
+          "id": "les_da_10_03",
+          "code": "L03",
+          "title": "Optimizacion de Rendimiento con Caching",
+          "slug": "optimizacion-rendimiento-caching",
+          "position": 3,
+          "concept_id": "da-streamlit-caching",
+          "objective": "Acelerar aplicaciones evitando recargas costosas de datos mediante @st.cache_data y @st.cache_resource.",
+          "theory_markdown": "Dado que Streamlit re-ejecuta todo el script ante cada clic, volver a leer un archivo CSV de 500 MB o reconectarse a una base de datos en cada interaccion destruiria el rendimiento.\n\nPara solucionar esto, Streamlit implementa decoradores de **Cache Inteligente**:\n\n1. **`@st.cache_data` (Para Datos y Computos):**\n   - Ideal para lecturas de archivos (`pd.read_csv`, `read_parquet`), transformaciones, queries SQL y peticiones HTTP.\n   - Guarda en memoria los datos retornados. Si la funcion se llama con los mismos argumentos, retorna el resultado cacheado instantaneamente sin re-ejecutar el cuerpo de la funcion.\n\n2. **`@st.cache_resource` (Para Recursos Globales no serializables):**\n   - Ideal para conexiones de bases de datos (`sqlite3.connect`), clientes de APIs o modelos de Machine Learning pesados cargados en memoria.",
+          "examples": [
+            {
+              "title": "Carga optimizada de dataset con @st.cache_data",
+              "code": "import streamlit as st\nimport pandas as pd\nimport time\n\n@st.cache_data\ndef cargar_datos(ruta: str) -> pd.DataFrame:\n    time.sleep(2) # Simula lectura costosa de disco\n    return pd.DataFrame({\"id\": [1, 2], \"monto\": [100, 200]})\n\n# La primera vez tarda 2s; en interacciones subsiguientes tarda 0.0001s:\ndatos = cargar_datos(\"ventas_anuales.parquet\")\nst.dataframe(datos)",
+              "output": "Carga instantanea en recargas sucesivas de la aplicacion.",
+              "explanation": "@st.cache_data detecta que la ruta no ha cambiado e inyecta la copia en memoria de inmediato."
+            }
+          ],
+          "common_errors": "Mutar in-place un DataFrame devuelto por una funcion con @st.cache_data (ej. df.drop(..., inplace=True)), lo que puede corromper el objeto en la cache para otras sesiones.",
+          "mini_exercise": {
+            "instructions": "Decora la funcion obtener_dataset con @st.cache_data para evitar recargas lentas.",
+            "starter_code": "import streamlit as st\nimport pandas as pd\n\n# Agrega el decorador\ndef obtener_dataset():\n    return pd.DataFrame({\"a\": [1, 2]})\n",
+            "solution": "import streamlit as st\nimport pandas as pd\n\n@st.cache_data\ndef obtener_dataset():\n    return pd.DataFrame({\"a\": [1, 2]})"
+          },
+          "key_takeaways": [
+            "@st.cache_data memoriza resultados de calculos y lectura de datasets.",
+            "@st.cache_resource persiste conexiones compartidas y modelos de machine learning.",
+            "El cacheo previene tiempos de espera innecesarios en la ejecucion reactiva."
+          ],
+          "exercise": {
+            "id": "ex_da_09_03_st",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual decorador de Streamlit se debe utilizar para memorizar la lectura de un dataset pesado en DataFrame y evitar leerlo de disco en cada interaccion de usuario?",
             "options": [
               {
                 "id": "a",
@@ -70,19 +180,74 @@
               },
               {
                 "id": "b",
-                "text": "@st.memo"
+                "text": "@st.cache_resource"
               },
               {
                 "id": "c",
-                "text": "@st.freeze"
+                "text": "@st.memo_fast"
               },
               {
                 "id": "d",
-                "text": "@st.keep"
+                "text": "@st.static_load"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "@st.cache_data es el decorador oficial y recomendado de Streamlit para cachear datos y cálculos puros."
+            "explanation": "@st.cache_data es el decorador recomendado para almacenar en cache datos serializables como DataFrames de Pandas, arrays y diccionarios."
+          }
+        },
+        {
+          "id": "les_da_10_04",
+          "code": "L04",
+          "title": "Layouts Profesionales, KPIs y Storytelling con Datos",
+          "slug": "layouts-kpis-storytelling",
+          "position": 4,
+          "concept_id": "da-streamlit-layouts-storytelling",
+          "objective": "Disenar dashboards profesionales con st.sidebar, columnas con st.columns, pestanas st.tabs y metricas st.metric.",
+          "theory_markdown": "Para transformar un reporte lineal en un dashboard ejecutivo de alto impacto, Streamlit proporciona herramientas de organizacion espacial:\n\n1. **Barra Lateral (`st.sidebar`):**\n   Ubica filtros y configuraciones globales en un panel retractil a la izquierda:\n   `filtro = st.sidebar.selectbox('Segmento', opciones)`.\n\n2. **Distribucion en Columnas (`st.columns`):**\n   Divide el ancho de la pagina en columnas proporcionales:\n   ```python\n   col1, col2, col3 = st.columns(3)\n   col1.metric('Ingresos Totales', '$1.2M', '+12%')\n   col2.metric('Clientes Activos', '4,520', '-3%')\n   col3.metric('Ticket Promedio', '$265', '+5%')\n   ```\n\n3. **Pestanas (`st.tabs`):**\n   Organiza secciones tematicas sin saturar la pantalla verticalmente:\n   `tab1, tab2 = st.tabs(['Resumen Ejecutivo', 'Analisis Detallado'])`.\n\n4. **Integracion con Plotly (`st.plotly_chart`):**\n   Muestra graficos interactivos ajustados al ancho del contenedor: `st.plotly_chart(fig, use_container_width=True)`.",
+          "examples": [
+            {
+              "title": "Estructura completa de un dashboard ejecutivo",
+              "code": "import streamlit as st\nimport plotly.express as px\nimport pandas as pd\n\nst.set_page_config(layout=\"wide\")\nst.sidebar.title(\"Filtros de Control\")\n\ndf = pd.DataFrame({\"mes\": [\"Ene\", \"Feb\", \"Mar\"], \"ventas\": [100, 150, 200]})\n\ncol1, col2 = st.columns([1, 2])\nwith col1:\n    st.metric(\"Crecimiento Trimestral\", \"+25%\", \"5% vs meta\")\nwith col2:\n    fig = px.line(df, x=\"mes\", y=\"ventas\", title=\"Tendencia de Ventas\")\n    st.plotly_chart(fig, use_container_width=True)",
+              "output": "Dashboard en formato panoramico con tarjeta KPI e integracion de grafico Plotly interactivo.",
+              "explanation": "use_container_width=True adapta el grafico responsive al ancho disponible de la columna."
+            }
+          ],
+          "common_errors": "No configurar st.set_page_config(layout='wide') como primera instruccion del script, obligando a que el dashboard quede confinado en una columna central estrecha.",
+          "mini_exercise": {
+            "instructions": "Usa st.metric para mostrar una tarjeta KPI con etiqueta 'Usuarios', valor '1,500' y variacion '+10%'.",
+            "starter_code": "import streamlit as st\n\n# Muestra el KPI con st.metric\n",
+            "solution": "st.metric(label=\"Usuarios\", value=\"1,500\", delta=\"+10%\")"
+          },
+          "key_takeaways": [
+            "st.sidebar aloja controles de filtrado liberando el area principal de visualizacion.",
+            "st.columns y st.metric presentan tarjetas de KPIs ejecutivas de forma concisa.",
+            "st.plotly_chart(fig, use_container_width=True) embebe graficos interactivos responsivos."
+          ],
+          "exercise": {
+            "id": "ex_da_10_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual componente de Streamlit se utiliza para mostrar tarjetas de indicadores clave de rendimiento (KPIs) con una etiqueta principal, un valor numérico y una variacion porcentual con flecha de direccion?",
+            "options": [
+              {
+                "id": "a",
+                "text": "st.metric()"
+              },
+              {
+                "id": "b",
+                "text": "st.kpi_card()"
+              },
+              {
+                "id": "c",
+                "text": "st.indicator()"
+              },
+              {
+                "id": "d",
+                "text": "st.stat_box()"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "st.metric(label=..., value=..., delta=...) renderiza una tarjeta de KPI con formato visual y soporte de delta positivo o negativo."
           }
         }
       ]

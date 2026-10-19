@@ -13,8 +13,12 @@ import {
   BookOpen,
   Lightning,
   ArrowsClockwise,
+  Shield,
+  Lightbulb,
+  Target,
+  WarningCircle,
 } from '@phosphor-icons/react';
-import { ContentExercise, ContentLesson, ContentModule, loadBank, loadModule, shuffled } from '@/lib/content';
+import { ContentExercise, ContentLesson, ContentModule, isModuleAvailable, loadBank, loadModule, shuffled } from '@/lib/content';
 import { QuestionRenderer, getExerciseTypeLabel } from './QuestionRenderer';
 import { useLessonEngine } from './useLessonEngine';
 import { useLessonKeyboardShortcuts } from '@/hooks/useLessonKeyboardShortcuts';
@@ -22,9 +26,13 @@ import { InteractiveCodeConsole } from '@/components/lesson/InteractiveCodeConso
 import { StarRatingDisplay, calculateStarsFromAccuracy } from '@/components/lesson/StarRatingDisplay';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { cn } from '@/lib/utils';
+import { getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
+import type { GraphDataset, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 
 import { OrbitFieldBackground } from '@/components/landing/OrbitFieldBackground';
 import { EvaluationService } from '@/services/learning/evaluation.service';
+import { useAuthStore } from '@/stores/auth.store';
+import { MarkdownContent, renderMarkdownInline } from '@/components/ui/markdown-content';
 
 interface LessonWorkspaceProps {
   courseId: string;
@@ -32,7 +40,17 @@ interface LessonWorkspaceProps {
 }
 
 const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'lesson' | 'quiz' }> = {
-  // Python 1: Fundamentos
+  // Python 1: Fundamentos (IDs emitidos por Backend / API)
+  'py-m01': { moduleSlug: 'fundamentos-de-python' },
+  'py-m02': { moduleSlug: 'variables-y-tipos-de-datos' },
+  'py-m03': { moduleSlug: 'operadores-y-expresiones' },
+  'py-m04': { moduleSlug: 'condicionales' },
+  'py-boss-logic': { moduleSlug: 'condicionales', initialMode: 'quiz' },
+  'py-m05': { moduleSlug: 'bucles-for' },
+  'py-m06': { moduleSlug: 'bucles-while' },
+  'py-apex-1': { moduleSlug: 'funciones-fundamentales', initialMode: 'quiz' },
+
+  // Python 1: Fundamentos (IDs canónicos de dataset mock frontend)
   'les-01': { moduleSlug: 'fundamentos-de-python' },
   'les-02': { moduleSlug: 'variables-y-tipos-de-datos' },
   'les-03': { moduleSlug: 'operadores-y-expresiones' },
@@ -46,7 +64,14 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'les-10': { moduleSlug: 'funciones-fundamentales' },
   'les-boss': { moduleSlug: 'funciones-fundamentales', initialMode: 'quiz' },
 
-  // Python 2: Intermedio
+  // Python 2: Intermedio (IDs Backend / API)
+  'py2-m01': { moduleSlug: 'comprensiones' },
+  'py2-m02': { moduleSlug: 'funciones-avanzadas' },
+  'py2-m03': { moduleSlug: 'modulos-y-paquetes' },
+  'py2-m04': { moduleSlug: 'manejo-de-excepciones' },
+  'py2-m05': { moduleSlug: 'archivos-txt-csv-json' },
+
+  // Python 2: Intermedio (IDs dataset mock frontend)
   'py2-01': { moduleSlug: 'comprensiones' },
   'py2-02': { moduleSlug: 'funciones-avanzadas' },
   'py2-03': { moduleSlug: 'modulos-y-paquetes' },
@@ -60,7 +85,14 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'py2-10': { moduleSlug: 'testing-con-pytest' },
   'py2-boss': { moduleSlug: 'testing-con-pytest', initialMode: 'quiz' },
 
-  // Python 3: Avanzado
+  // Python 3: Avanzado (IDs Backend / API)
+  'py3-m01': { moduleSlug: 'iteradores-y-generadores' },
+  'py3-m02': { moduleSlug: 'decoradores' },
+  'py3-m03': { moduleSlug: 'context-managers' },
+  'py3-m04': { moduleSlug: 'type-hints-y-dataclasses' },
+  'py3-m05': { moduleSlug: 'programacion-funcional' },
+
+  // Python 3: Avanzado (IDs dataset mock frontend)
   'py3-01': { moduleSlug: 'iteradores-y-generadores' },
   'py3-02': { moduleSlug: 'decoradores' },
   'py3-03': { moduleSlug: 'context-managers' },
@@ -74,21 +106,30 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'py3-10': { moduleSlug: 'patrones-de-diseno' },
   'py3-boss': { moduleSlug: 'patrones-de-diseno', initialMode: 'quiz' },
 
-  // FastAPI
+  // FastAPI (IDs Backend y Mock)
+  'fa-m01': { moduleSlug: 'fastapi-http-rest' },
+  'fa-m02': { moduleSlug: 'fastapi-pydantic' },
+  'fa-m03': { moduleSlug: 'fastapi-sqlalchemy-alembic' },
+  'fa-m04': { moduleSlug: 'fastapi-auth-jwt' },
   'fa-01': { moduleSlug: 'fastapi-http-rest' },
   'fa-02': { moduleSlug: 'fastapi-pydantic' },
   'fa-03': { moduleSlug: 'fastapi-sqlalchemy-alembic' },
   'fa-04': { moduleSlug: 'fastapi-auth-jwt' },
   'fa-05': { moduleSlug: 'fastapi-docker-deploy' },
 
-  // Django
+  // Django (IDs Backend y Mock)
+  'dj-m01': { moduleSlug: 'django-mtv-routing' },
+  'dj-m02': { moduleSlug: 'django-orm-models' },
+  'dj-m03': { moduleSlug: 'django-forms-admin' },
+  'dj-m04': { moduleSlug: 'django-rest-framework' },
   'dj-01': { moduleSlug: 'django-mtv-routing' },
   'dj-02': { moduleSlug: 'django-orm-models' },
   'dj-03': { moduleSlug: 'django-forms-admin' },
   'dj-04': { moduleSlug: 'django-rest-framework' },
   'dj-05': { moduleSlug: 'django-auth-security-deploy' },
 
-  // Data Analytics
+  // Data Analytics (IDs Backend y Mock)
+  'data-analytics-s01': { moduleSlug: 'numpy-fundamentos' },
   'da-01': { moduleSlug: 'numpy-fundamentos' },
   'da-02': { moduleSlug: 'pandas-series-dataframes' },
   'da-03': { moduleSlug: 'pandas-limpieza-transformacion' },
@@ -102,7 +143,8 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'da-10': { moduleSlug: 'streamlit-dashboards' },
   'da-boss': { moduleSlug: 'streamlit-dashboards', initialMode: 'quiz' },
 
-  // AI Agents
+  // AI Agents (IDs Backend y Mock)
+  'ai-agents-s01': { moduleSlug: 'ia-llms-y-prompts' },
   'ia-01': { moduleSlug: 'ia-llms-y-prompts' },
   'ia-02': { moduleSlug: 'ia-apis-modelos' },
   'ia-03': { moduleSlug: 'ia-salidas-estructuradas' },
@@ -115,10 +157,22 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'ia-09': { moduleSlug: 'ia-guardrails-y-evaluacion' },
   'ia-10': { moduleSlug: 'ia-proyecto-agente-completo' },
 
-  // Apex Master Gate
+  // Apex (IDs Backend y Mock)
+  'python-apex-s01': { moduleSlug: 'apex-master-gate' },
   'apex-01': { moduleSlug: 'apex-master-gate' },
   'apex-02': { moduleSlug: 'apex-master-gate' },
   'apex-03': { moduleSlug: 'apex-master-gate', initialMode: 'quiz' },
+};
+
+const COURSE_DEFAULT_SLUGS: Record<string, string> = {
+  'python-1': 'fundamentos-de-python',
+  'python-2': 'comprensiones',
+  'python-3': 'iteradores-y-generadores',
+  'fastapi-async': 'fastapi-http-rest',
+  'django-enterprise': 'django-mtv-routing',
+  'data-analytics': 'numpy-fundamentos',
+  'ai-agents': 'ia-llms-y-prompts',
+  'python-apex': 'apex-master-gate',
 };
 
 function parseCourse(courseId: string, sectionRef: string): { lang: string; moduleSlug: string; initialMode: 'lesson' | 'quiz' } {
@@ -134,13 +188,23 @@ function parseCourse(courseId: string, sectionRef: string): { lang: string; modu
     };
   }
 
-  // 2. Si el sectionRef es directamente un slug de módulo conocido
-  const isDirectSlug = sectionRef.includes('-');
+  // 2. Si sectionRef es directamente un slug de módulo conocido y disponible
+  if (isModuleAvailable(lang, sectionRef)) {
+    const isQuizMode = sectionRef.includes('boss') || sectionRef.includes('quiz') || sectionRef.includes('exam');
+    return {
+      lang,
+      moduleSlug: sectionRef,
+      initialMode: isQuizMode ? 'quiz' : 'lesson',
+    };
+  }
+
+  // 3. Fallback inteligente según curso para evitar que un ID de sección no mapeado rompa el workspace
+  const defaultSlug = COURSE_DEFAULT_SLUGS[courseId] || 'fundamentos-de-python';
   const isQuizMode = sectionRef.includes('boss') || sectionRef.includes('quiz') || sectionRef.includes('exam');
 
   return {
     lang,
-    moduleSlug: isDirectSlug ? sectionRef : 'fundamentos-de-python',
+    moduleSlug: defaultSlug,
     initialMode: isQuizMode ? 'quiz' : 'lesson',
   };
 }
@@ -188,6 +252,50 @@ function sampleQuiz(bank: ContentExercise[], seed: number): ContentExercise[] {
   return shuffled(picked, seed + 99);
 }
 
+function findNodeInDataset(
+  dataset: GraphDataset | null | undefined,
+  sectionRef: string,
+  moduleSlug?: string
+): GraphNode | null {
+  if (!dataset?.nodes?.length) return null;
+
+  const sRefLower = sectionRef.toLowerCase();
+
+  // 1. Coincidencia directa por ID exacto (ej. 'py-m04', 'les-05', 'py-boss-logic', 'py2-01')
+  const direct = dataset.nodes.find((n) => n.id.toLowerCase() === sRefLower);
+  if (direct) return direct;
+
+  // 2. Coincidencia por mapeo canónico de slug en NODE_TO_SLUG_MAP
+  if (moduleSlug) {
+    const targetSlugLower = moduleSlug.toLowerCase();
+    const bySlug = dataset.nodes.find((n) => {
+      const nodeSlug = NODE_TO_SLUG_MAP[n.id]?.moduleSlug;
+      return nodeSlug && nodeSlug.toLowerCase() === targetSlugLower;
+    });
+    if (bySlug) return bySlug;
+  }
+
+  // 3. Coincidencia por código numérico de lección (ej. '04', '4', 'm04', 'les-04')
+  const codeMatch = sectionRef.match(/(?:m|les-?)0?(\d+)/i);
+  if (codeMatch) {
+    const num = codeMatch[1].padStart(2, '0');
+    const byCode = dataset.nodes.find((n) => n.code === num);
+    if (byCode) return byCode;
+  }
+
+  // 4. Coincidencia por similitud de tokens en label
+  if (moduleSlug) {
+    const slugTokens = moduleSlug.toLowerCase().split('-');
+    const byToken = dataset.nodes.find((n) => {
+      const labelLower = n.label.toLowerCase();
+      return slugTokens.some((t) => t.length > 3 && labelLower.includes(t));
+    });
+    if (byToken) return byToken;
+  }
+
+  return null;
+}
+
 export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sectionRef }) => {
   const parsed = useMemo(() => parseCourse(courseId, sectionRef), [courseId, sectionRef]);
   const [module, setModule] = useState<ContentModule | null>(null);
@@ -199,7 +307,35 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   const [failedExercises, setFailedExercises] = useState<ContentExercise[]>([]);
   const completeSectionNode = useRoadmapStore((s) => s.completeSectionNode);
 
-  // Registro atómico de lecciones completadas
+  const lessonsDataset = useRoadmapStore((s) => s.lessonsDataset);
+  const courseDataset = useMemo(() => getLessonsDatasetForCourse(courseId), [courseId]);
+
+  const currentNode = useMemo(() => {
+    return (
+      findNodeInDataset(lessonsDataset, sectionRef, parsed?.moduleSlug) ||
+      findNodeInDataset(courseDataset, sectionRef, parsed?.moduleSlug) ||
+      null
+    );
+  }, [lessonsDataset, courseDataset, sectionRef, parsed?.moduleSlug]);
+
+  const isAlreadyCompleted = useMemo(() => {
+    return currentNode?.variant === 'completed' || (currentNode?.stars ?? 0) > 0;
+  }, [currentNode]);
+
+  const nodeTargetXp = useMemo(() => {
+    if (isAlreadyCompleted) return 0;
+    if (currentNode?.xp && currentNode.xp > 0) return currentNode.xp;
+    if ((module as any)?.xp?.on_pass && (module as any).xp.on_pass > 0) return (module as any).xp.on_pass;
+    return 120;
+  }, [currentNode?.xp, module, isAlreadyCompleted]);
+
+  const sessionExerciseXpRef = useRef<number>(0);
+
+  const handleExerciseCorrect = useCallback((xp: number) => {
+    sessionExerciseXpRef.current += xp;
+  }, []);
+
+  // Registro atomico de lecciones completadas
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(() => {
     try {
       const saved = window.localStorage.getItem('koda_completed_lessons');
@@ -244,6 +380,21 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
           console.warn('Sync section completion offline fallback:', err?.message);
         });
       }
+
+      // Asegurar que el usuario tenga racha e isActiveToday activos localmente de forma inmediata
+      const currentUser = useAuthStore.getState().user;
+      if (currentUser) {
+        const todayStr = new Date().toLocaleDateString('en-CA');
+        const lastStudyStr = currentUser.lastStudyDate ? currentUser.lastStudyDate.slice(0, 10) : null;
+        const isSameDay = lastStudyStr === todayStr;
+        const curStreak = isSameDay ? Math.max(1, currentUser.streak) : (currentUser.streak > 0 ? currentUser.streak : 1);
+        useAuthStore.getState().updateUserProfile({
+          streak: curStreak,
+          longestStreak: Math.max(currentUser.longestStreak ?? 1, curStreak),
+          isActiveToday: true,
+          lastStudyDate: new Date().toISOString(),
+        });
+      }
     },
     [completeSectionNode, sectionRef, parsed, courseId]
   );
@@ -286,6 +437,104 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     return module.sections[0] ?? null;
   }, [module, sectionRef]);
 
+  const lesson = section?.lessons?.[lessonIdx] ?? null;
+
+  const handleQuizFinish = useCallback(
+    (ok: number, total: number) => {
+      setQuizScore({ ok, total });
+      setMode('done');
+      const accuracy = total > 0 ? Math.round((ok / total) * 100) : 100;
+      if (accuracy >= 70) {
+        completeSectionNode(sectionRef, calculateStarsFromAccuracy(ok, total));
+        const completionReward = isAlreadyCompleted ? 0 : Math.max(30, nodeTargetXp - sessionExerciseXpRef.current);
+        if (parsed) {
+          EvaluationService.completeSection(sectionRef, {
+            moduleId: parsed.moduleSlug,
+            courseId,
+            accuracyPercentage: accuracy,
+            targetXp: completionReward,
+          })
+            .then((res) => {
+              const currentUser = useAuthStore.getState().user;
+              if (currentUser) {
+                const awardXp = isAlreadyCompleted
+                  ? 0
+                  : (typeof res.xpAwarded === 'number'
+                      ? res.xpAwarded
+                      : completionReward);
+                const newTotalXp = res.userTotalXp ?? (currentUser.totalXp + awardXp);
+                const todayStr = new Date().toLocaleDateString('en-CA');
+                const lastStudyStr = currentUser.lastStudyDate ? currentUser.lastStudyDate.slice(0, 10) : null;
+                const isSameDay = lastStudyStr === todayStr;
+                const newStreak = isSameDay
+                  ? Math.max(1, currentUser.streak)
+                  : (res.currentStreak ?? (currentUser.streak > 0 ? currentUser.streak : 1));
+                useAuthStore.getState().updateUserProfile({
+                  totalXp: Math.max(currentUser.totalXp, newTotalXp),
+                  streak: newStreak,
+                  longestStreak: Math.max(currentUser.longestStreak ?? 1, res.longestStreak ?? newStreak),
+                  streakFreezeCount: res.streakFreezeCount ?? currentUser.streakFreezeCount,
+                  lastStudyDate: new Date().toISOString(),
+                  isActiveToday: true,
+                });
+              }
+            })
+            .catch((err) => {
+              console.warn('Sync quiz section completion offline fallback:', err?.message);
+              const currentUser = useAuthStore.getState().user;
+              if (currentUser) {
+                const awardXp = isAlreadyCompleted ? 0 : completionReward;
+                const todayStr = new Date().toLocaleDateString('en-CA');
+                const lastStudyStr = currentUser.lastStudyDate ? currentUser.lastStudyDate.slice(0, 10) : null;
+                const isSameDay = lastStudyStr === todayStr;
+                const curStreak = isSameDay ? Math.max(1, currentUser.streak) : (currentUser.streak > 0 ? currentUser.streak : 1);
+                useAuthStore.getState().updateUserProfile({
+                  totalXp: (currentUser.totalXp ?? 0) + awardXp,
+                  streak: curStreak,
+                  longestStreak: Math.max(currentUser.longestStreak ?? 1, curStreak),
+                  lastStudyDate: new Date().toISOString(),
+                  isActiveToday: true,
+                });
+              }
+            });
+        }
+      }
+    },
+    [completeSectionNode, sectionRef, parsed, courseId, nodeTargetXp, isAlreadyCompleted]
+  );
+
+  const handleCompleteCurrent = useCallback(() => {
+    if (lesson?.id) {
+      handleLessonCompleted(lesson.id);
+    }
+  }, [lesson?.id, handleLessonCompleted]);
+
+  const handleNext = useCallback(() => {
+    if (lesson?.id) {
+      handleLessonCompleted(lesson.id);
+    }
+    if (section && lessonIdx + 1 < section.lessons.length) {
+      setLessonIdx((idx) => idx + 1);
+    } else if (failedExercises.length > 0) {
+      setMode('review');
+    } else {
+      setMode('quiz');
+    }
+  }, [lesson?.id, handleLessonCompleted, section, lessonIdx, failedExercises]);
+
+  const handlePrev = useCallback(() => {
+    setLessonIdx((idx) => (idx > 0 ? idx - 1 : 0));
+  }, []);
+
+  const handleJumpTo = useCallback(
+    (idx: number) => {
+      if (section && idx >= 0 && idx < section.lessons.length) {
+        setLessonIdx(idx);
+      }
+    },
+    [section]
+  );
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-950 flex items-center justify-center">
@@ -314,28 +563,6 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     );
   }
 
-  const handleQuizFinish = useCallback(
-    (ok: number, total: number) => {
-      setQuizScore({ ok, total });
-      setMode('done');
-      const accuracy = Math.round((ok / Math.max(1, total)) * 100);
-      const earnedStars = calculateStarsFromAccuracy(ok, total);
-      if (earnedStars >= 1) {
-        completeSectionNode(sectionRef, earnedStars);
-        if (parsed) {
-          EvaluationService.completeSection(sectionRef, {
-            moduleId: parsed.moduleSlug,
-            courseId,
-            accuracyPercentage: accuracy,
-          }).catch((err) => {
-            console.warn('Sync quiz section completion offline fallback:', err?.message);
-          });
-        }
-      }
-    },
-    [completeSectionNode, sectionRef, parsed, courseId]
-  );
-
   if (mode === 'review') {
     return (
       <ReviewMode
@@ -351,11 +578,13 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   }
 
   if (mode === 'quiz') {
+    const isMiniBoss = sectionRef === 'les-miniboss' || sectionRef === 'py-boss-logic';
     return (
       <QuizMode
         bank={bank}
-        sectionTitle={parsed.initialMode === 'quiz' && (sectionRef === 'les-miniboss' || sectionRef === 'py-boss-logic') ? '🛡️ El Centinela de la Lógica' : section.title}
+        sectionTitle={isMiniBoss ? 'Guardián de la Lógica' : section.title}
         courseTitle={module.title}
+        isBoss={isMiniBoss}
         onFinish={handleQuizFinish}
       />
     );
@@ -364,7 +593,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   if (mode === 'done' && quizScore) {
     const passed = quizScore.ok / Math.max(1, quizScore.total) >= 0.7;
     return (
-      <div className="relative isolate min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-6 px-4 text-center">
+      <div className="relative isolate h-screen max-h-screen bg-slate-950 flex flex-col items-center justify-center gap-6 px-4 text-center overflow-hidden">
         <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
         {passed ? (
           <div className="relative">
@@ -380,7 +609,11 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
           </h1>
           <p className="text-slate-400 text-sm sm:text-base max-w-md">
             Quiz: <span className="font-mono font-bold text-orange-400">{quizScore.ok}/{quizScore.total}</span> aciertos
-            {passed ? ' · +10 XP de maestría' : ' · necesitas 70% de aciertos para avanzar'}
+            {passed
+              ? isAlreadyCompleted
+                ? ' · +0 XP (Módulo ya dominado)'
+                : ` · +${nodeTargetXp} XP de maestría`
+              : ' · necesitas 70% de aciertos para avanzar'}
           </p>
         </div>
 
@@ -416,47 +649,13 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     );
   }
 
-  const lesson = section.lessons[lessonIdx] ?? null;
-
-  const handleCompleteCurrent = useCallback(() => {
-    if (lesson?.id) {
-      handleLessonCompleted(lesson.id);
-    }
-  }, [lesson?.id, handleLessonCompleted]);
-
-  const handleNext = useCallback(() => {
-    if (lesson?.id) {
-      handleLessonCompleted(lesson.id);
-    }
-    if (section && lessonIdx + 1 < section.lessons.length) {
-      setLessonIdx((idx) => idx + 1);
-    } else if (failedExercises.length > 0) {
-      setMode('review');
-    } else {
-      setMode('quiz');
-    }
-  }, [lesson?.id, handleLessonCompleted, section, lessonIdx, failedExercises]);
-
-  const handlePrev = useCallback(() => {
-    setLessonIdx((idx) => (idx > 0 ? idx - 1 : 0));
-  }, []);
-
-  const handleJumpTo = useCallback(
-    (idx: number) => {
-      if (section && idx >= 0 && idx < section.lessons.length) {
-        setLessonIdx(idx);
-      }
-    },
-    [section]
-  );
-
   return (
-    <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
+    <div className="relative isolate h-screen max-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-hidden font-sans">
       <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
 
-      {/* Header Fijo de Navegación HUD */}
-      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
-        <div className="mx-auto max-w-6xl space-y-2.5">
+      {/* Header Fijo de Navegación HUD Fullwidth */}
+      <header className="w-full shrink-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 sm:px-6 lg:px-8 py-2.5 shadow-2xl">
+        <div className="w-full space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <Link
@@ -513,14 +712,16 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center p-4 md:p-6 lg:p-8">
+      <main className="flex-1 min-h-0 w-full p-2.5 sm:p-4 lg:p-5 overflow-hidden flex flex-col">
         {lesson ? (
           <LessonView
             key={lesson.id}
             lesson={lesson}
             language={parsed.lang}
             isCompleted={completedLessons.has(lesson.id)}
+            isAlreadyCompleted={isAlreadyCompleted}
             onComplete={handleCompleteCurrent}
+            onExerciseCorrect={handleExerciseCorrect}
             onExerciseFailed={handleExerciseFailed}
             onNext={handleNext}
             onPrev={handlePrev}
@@ -528,9 +729,10 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             currentIndex={lessonIdx}
             totalCount={section.lessons.length}
             isLast={lessonIdx + 1 >= section.lessons.length}
+            nodeTargetXp={nodeTargetXp}
           />
         ) : (
-          <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-8 flex flex-col items-center gap-4 text-center shadow-2xl">
+          <div className="w-full max-w-md mx-auto my-auto rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-8 flex flex-col items-center gap-4 text-center shadow-2xl">
             <p className="text-slate-300 text-sm">Esta sección no trae lecciones todavía.</p>
             <button
               type="button"
@@ -550,29 +752,40 @@ function LessonView({
   lesson,
   language = 'python',
   isCompleted,
+  isAlreadyCompleted = false,
   onComplete,
   onExerciseFailed,
+  onExerciseCorrect,
   onNext,
   onPrev,
   onJumpTo: _onJumpTo,
   currentIndex = 0,
   totalCount = 1,
   isLast,
+  nodeTargetXp = 120,
 }: {
   lesson: ContentLesson;
   language?: string;
   isCompleted?: boolean;
+  isAlreadyCompleted?: boolean;
   onComplete?: () => void;
   onExerciseFailed?: (exercise: ContentExercise) => void;
+  onExerciseCorrect?: (xp: number) => void;
   onNext: () => void;
   onPrev: () => void;
   onJumpTo?: (idx: number) => void;
   currentIndex?: number;
   totalCount?: number;
   isLast: boolean;
+  nodeTargetXp?: number;
 }) {
+  const totalSteps = totalCount + 1; // Las N lecciones de la sección + el Quiz de cierre
+  const baseStepXp = isAlreadyCompleted ? 0 : Math.max(5, Math.floor(nodeTargetXp / totalSteps));
+  const exerciseCount = Math.max(1, lesson.exercises?.length ?? 1);
+  const questionXp = isAlreadyCompleted ? 0 : Math.max(1, Math.round(baseStepXp / exerciseCount));
+
   const exercise = lesson.exercises[0] ?? null;
-  const engine = useLessonEngine(exercise ? [exercise] : [], lesson.position);
+  const engine = useLessonEngine(exercise ? [exercise] : [], lesson.position, questionXp);
   const [mobileTab, setMobileTab] = useState<'concept' | 'practice'>('concept');
 
   const onCompleteRef = useRef(onComplete);
@@ -610,10 +823,28 @@ function LessonView({
     },
     onSubmit: () => {
       if (!engine.result && engine.selected.length > 0) {
-        engine.check();
+        const checkRes = engine.check();
+        if (checkRes?.correct && checkRes.xp > 0) {
+          onExerciseCorrect?.(checkRes.xp);
+          const curUser = useAuthStore.getState().user;
+          if (curUser) {
+            const todayStr = new Date().toLocaleDateString('en-CA');
+            const lastStudyStr = curUser.lastStudyDate ? curUser.lastStudyDate.slice(0, 10) : null;
+            const isSameDay = lastStudyStr === todayStr;
+            const curStreak = isSameDay ? Math.max(1, curUser.streak) : (curUser.streak > 0 ? curUser.streak : 1);
+            useAuthStore.getState().updateUserProfile({
+              totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
+              streak: curStreak,
+              longestStreak: Math.max(curUser.longestStreak ?? 1, curStreak),
+              isActiveToday: true,
+              lastStudyDate: new Date().toISOString(),
+            });
+          }
+        }
         if (lesson?.id) {
           EvaluationService.evaluateLessonAnswer(lesson.id, {
             selected_option_ids: engine.selected,
+            xp_earned: checkRes?.xp,
           }).catch((err) => {
             console.warn('Backend lesson answer sync fallback:', err?.message);
           });
@@ -639,6 +870,9 @@ function LessonView({
     isSubmitted: Boolean(engine.result),
     canSubmit: Boolean(!engine.result && engine.selected.length > 0),
   });
+
+  const isLongTitle = lesson.title.length > 40;
+  const isLongExplanation = (lesson.explanation?.length ?? 0) > 650;
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-4">
@@ -1044,7 +1278,7 @@ function ReviewMode({
                 <div
                   role={engine.result.correct ? 'status' : 'alert'}
                   className={cn(
-                    'rounded-xl border p-4 space-y-3 transition-all duration-300',
+                    'rounded-xl border p-3.5 space-y-2.5 transition-all duration-300',
                     engine.result.correct
                       ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-100'
                       : 'border-rose-500/40 bg-rose-500/10 text-rose-100'
@@ -1057,9 +1291,13 @@ function ReviewMode({
                       : 'Todavía no. Revisa la pista e inténtalo de nuevo.'}
                   </p>
                   {engine.result.hint ? (
-                    <p className="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg">
-                      💡 <strong>Pista:</strong> {engine.result.hint}
-                    </p>
+                    <div className="text-xs text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2 rounded-lg flex items-start gap-2">
+                      <Lightbulb className="w-3.5 h-3.5 text-amber-300 shrink-0 mt-0.5" aria-hidden="true" />
+                      <div>
+                        <strong className="font-bold text-amber-300 mr-1">Pista:</strong>
+                        <MarkdownContent content={engine.result.hint} inline />
+                      </div>
+                    </div>
                   ) : null}
                   {engine.result.correct ? (
                     <button
@@ -1094,11 +1332,13 @@ function QuizMode({
   bank,
   sectionTitle,
   courseTitle,
+  isBoss,
   onFinish,
 }: {
   bank: ContentExercise[];
   sectionTitle: string;
   courseTitle?: string;
+  isBoss?: boolean;
   onFinish: (ok: number, total: number) => void;
 }) {
   const questions = useMemo(
@@ -1150,7 +1390,7 @@ function QuizMode({
 
   if (questions.length === 0) {
     return (
-      <div className="relative isolate min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4 px-4 text-center">
+      <div className="relative isolate h-screen max-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4 px-4 text-center overflow-hidden">
         <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
         <p className="font-display text-2xl font-bold text-white">Quiz en camino</p>
         <p className="text-sm text-slate-400">Esta sección aún no tiene banco de preguntas.</p>
@@ -1165,16 +1405,19 @@ function QuizMode({
   }
 
   return (
-    <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
+    <div className="relative isolate h-screen max-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-hidden font-sans">
       <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
 
-      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
-        <div className="mx-auto max-w-4xl space-y-2.5">
+      <header className="w-full shrink-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 sm:px-6 lg:px-8 py-2.5 shadow-2xl">
+        <div className="w-full max-w-5xl mx-auto space-y-2">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 font-mono text-xs">
               <span className="text-slate-400">{courseTitle ?? 'Curso'}</span>
               <span className="text-slate-600">›</span>
-              <span className="text-orange-400 font-bold uppercase tracking-wider">Quiz · {sectionTitle}</span>
+              <span className="text-orange-400 font-bold uppercase tracking-wider inline-flex items-center gap-1.5">
+                {isBoss && <Shield className="w-3.5 h-3.5 text-amber-400 shrink-0" aria-hidden="true" />}
+                <span>Quiz · {sectionTitle}</span>
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex items-center gap-1 text-[11px] font-mono text-slate-400 bg-slate-800/60 px-2.5 py-1 rounded-full border border-slate-700/50">
@@ -1195,10 +1438,10 @@ function QuizMode({
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center p-4 md:p-6 lg:p-8">
+      <main className="flex-1 min-h-0 w-full p-2.5 sm:p-4 lg:p-6 flex items-center justify-center overflow-hidden">
         {engine.current ? (
-          <div className="w-full max-w-3xl rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-2xl">
-            <div className="flex items-center justify-between">
+          <div className="w-full max-w-4xl h-full max-h-[86vh] rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-4 sm:p-6 lg:p-8 flex flex-col justify-between shadow-2xl overflow-hidden">
+            <div className="shrink-0 flex items-center justify-between pb-2.5 border-b border-slate-800/80">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
                 Pregunta del Quiz · {getExerciseTypeLabel(engine.current.type)}
               </span>
@@ -1207,27 +1450,29 @@ function QuizMode({
               </span>
             </div>
 
-            <p className="text-lg sm:text-xl font-bold text-white leading-snug">
-              {engine.current.prompt}
-            </p>
+            <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 py-3 pr-1 sm:pr-2">
+              <div className="text-base sm:text-xl font-bold text-white leading-snug">
+                <MarkdownContent content={engine.current.prompt} inline />
+              </div>
 
-            <QuestionRenderer
-              exercise={engine.current}
-              selectedIds={engine.selected}
-              onToggle={engine.toggle}
-              onCustomChange={engine.setCustomAnswer}
-              disabled={Boolean(engine.result)}
-              pressedIndex={pressedIndex}
-            />
+              <QuestionRenderer
+                exercise={engine.current}
+                selectedIds={engine.selected}
+                onToggle={engine.toggle}
+                onCustomChange={engine.setCustomAnswer}
+                disabled={Boolean(engine.result)}
+                pressedIndex={pressedIndex}
+              />
+            </div>
 
-            <div className="pt-2">
+            <div className="shrink-0 pt-2.5 border-t border-slate-800/80">
               {!engine.result ? (
                 <button
                   type="button"
                   onClick={() => engine.check()}
                   disabled={engine.selected.length === 0}
                   className={cn(
-                    'group relative inline-flex min-h-[50px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.25em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
+                    'group relative inline-flex min-h-[48px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.25em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
                     pressedAction === 'submit' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-amber-400'
                   )}
                 >
@@ -1241,7 +1486,7 @@ function QuizMode({
                 <div
                   role={engine.result.correct ? 'status' : 'alert'}
                   className={cn(
-                    'rounded-xl border p-4 space-y-3 transition-all duration-300',
+                    'rounded-xl border p-3.5 space-y-2.5 transition-all duration-300',
                     engine.result.correct
                       ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.15)]'
                       : 'border-rose-500/40 bg-rose-500/10 text-rose-100'
@@ -1263,7 +1508,7 @@ function QuizMode({
                       engine.next();
                     }}
                     className={cn(
-                      'group relative inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-emerald-200 border-b-4 border-emerald-800 shadow-[0_4px_0_#065f46,0_8px_20px_rgba(16,185,129,0.45)] transition-all duration-200 cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none select-none',
+                      'group relative inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-emerald-200 border-b-4 border-emerald-800 shadow-[0_4px_0_#065f46,0_8px_20px_rgba(16,185,129,0.45)] transition-all duration-200 cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none select-none',
                       pressedAction === 'next' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-emerald-400'
                     )}
                   >

@@ -176,6 +176,18 @@ export class SectionCompletionType {
   @Field(() => Int)
   userTotalXp!: number;
 
+  @Field(() => Int, { nullable: true })
+  currentStreak?: number;
+
+  @Field(() => Int, { nullable: true })
+  longestStreak?: number;
+
+  @Field(() => Int, { nullable: true })
+  streakFreezeCount?: number;
+
+  @Field(() => Boolean, { nullable: true })
+  isActiveToday?: boolean;
+
   @Field(() => String, { nullable: true })
   completedAt!: string | null;
 }

@@ -6,28 +6,159 @@
     {
       "id": "q_py3_10_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Cuál es el objetivo principal del patrón de diseño Factory?",
+      "difficulty": "easy",
+      "prompt": "¿Por qué un módulo (.py) de Python actúa de forma nativa como una implementación perfecta del patrón Singleton?",
       "options": [
         {
           "id": "a",
-          "text": "Encapsular e independizar la lógica de instanciación de objetos de las clases que los consumen"
+          "text": "Porque Python ejecuta el archivo una sola vez al ser importado por primera vez y lo almacena en sys.modules, compartiendo la misma instancia en todas las importaciones posteriores"
         },
         {
           "id": "b",
-          "text": "Garantizar que solo exista una sola instancia de una clase"
+          "text": "Porque los archivos .py no pueden tener más de una función"
         },
         {
           "id": "c",
-          "text": "Convertir código asíncrono en síncrono"
+          "text": "Porque bloquea la escritura en disco duro"
         },
         {
           "id": "d",
-          "text": "Validar consultas SQL"
+          "text": "Porque el sistema operativo solo permite abrir un archivo a la vez"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Factory provee una interfaz para crear objetos permitiendo que las subclases o la configuración determinen qué clase instanciar."
+      "explanation": "El mecanismo de caché de módulos de Python (sys.modules) garantiza que el estado de un módulo se instancie una sola vez por proceso."
+    },
+    {
+      "id": "q_py3_10_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué método especial se debe sobrescribir si deseas implementar el patrón Singleton a nivel de clase para controlar la creación física de la instancia?",
+      "options": [
+        {
+          "id": "a",
+          "text": "__new__(cls, *args, **kwargs)"
+        },
+        {
+          "id": "b",
+          "text": "__init__(self)"
+        },
+        {
+          "id": "c",
+          "text": "__call__(self)"
+        },
+        {
+          "id": "d",
+          "text": "__repr__(self)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "__new__ es el método constructor responsable de reservar memoria y retornar la instancia; interceptarlo permite devolver una instancia preexistente."
+    },
+    {
+      "id": "q_py3_10_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cómo se implementa el patrón de diseño Strategy de la forma más idiomática y limpia en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Pasando funciones ordinarias o lambdas directamente como argumentos a la clase o función de contexto"
+        },
+        {
+          "id": "b",
+          "text": "Creando al menos 5 niveles de clases abstractas heredadas"
+        },
+        {
+          "id": "c",
+          "text": "Compilando un archivo binario en C"
+        },
+        {
+          "id": "d",
+          "text": "Usando el módulo asyncio obligatoriamente"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Al ser las funciones ciudadanos de primer orden en Python, pueden inyectarse e intercambiarse directamente sin requerir envoltorios de clases rígidos."
+    },
+    {
+      "id": "q_py3_10_04",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es la función del patrón Factory?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Encapsular y centralizar la creación de objetos, desacoplando el código consumidor de las clases concretas que se instancian"
+        },
+        {
+          "id": "b",
+          "text": "Garantizar que una clase solo tenga una única instancia viva en memoria"
+        },
+        {
+          "id": "c",
+          "text": "Convertir código síncrono en código asíncrono"
+        },
+        {
+          "id": "d",
+          "text": "Anotar tipos estáticos con Type Hints"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Factory permite que el cliente solicite un objeto por tipo o identificador sin acoplarse directamente al constructor concreto."
+    },
+    {
+      "id": "q_py3_10_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué problema arquitectónico resuelve el patrón Observer (Event Bus)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permite que múltiples componentes escuchen y reaccionen a eventos sin que el emisor esté fuertemente acoplado a ellos"
+        },
+        {
+          "id": "b",
+          "text": "Aumenta el consumo de memoria en servidores web"
+        },
+        {
+          "id": "c",
+          "text": "Evita tener que usar funciones puras"
+        },
+        {
+          "id": "d",
+          "text": "Reemplaza la necesidad de escribir pruebas con pytest"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Observer desacopla a los emisores de los receptores: el emisor publica el evento y los observadores registrados actúan de forma independiente."
+    },
+    {
+      "id": "q_py3_10_06",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué resultado arroja 'instancia1 is instancia2' si la clase implementa un Singleton correcto con __new__?",
+      "prompt_code": "s1 = MiSingleton()\ns2 = MiSingleton()\nprint(s1 is s2)",
+      "options": [
+        {
+          "id": "a",
+          "text": "True"
+        },
+        {
+          "id": "b",
+          "text": "False"
+        },
+        {
+          "id": "c",
+          "text": "None"
+        },
+        {
+          "id": "d",
+          "text": "TypeError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El operador 'is' compara identidad de memoria. Al ser un Singleton, ambas referencias apuntan exactamente al mismo objeto en memoria física."
     }
   ]
 }

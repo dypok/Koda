@@ -5,84 +5,249 @@
   "slug": "ia-apis-modelos",
   "course_slug": "ai-agents",
   "title": "Consumo de APIs de Modelos en Python y Streaming",
-  "objective": "Interactuar programáticamente con APIs de LLMs modernos (OpenAI, Anthropic, Gemini), gestionar API Keys y transmitir respuestas en streaming.",
-  "description": "Conecta tu código Python con los cerebros de IA más avanzados del planeta: llamadas síncronas, asíncronas y streaming en tiempo real.",
+  "objective": "Integrar clientes de inferencia asincronos en Python, gestionar roles de mensajes y consumir respuestas en streaming con control de rate limits.",
+  "description": "Desarrollo profesional sobre APIs de frontera: arquitectura asincrona, reduccion de latencia con streaming y reintentos con backoff exponencial.",
   "position": 52,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 280
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_ia_02_01",
       "code": "S01",
-      "title": "Clientes API y Respuestas en Streaming",
-      "slug": "clientes-api-streaming",
+      "title": "Clientes Asincronos, Streaming y Resiliencia de Red",
+      "slug": "clientes-asincronos-streaming-resiliencia",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 50,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_ia_02_01",
           "code": "L01",
-          "title": "Llamadas a APIs con Mensajes de Chat y Streaming",
-          "slug": "api-chat-streaming-base",
+          "title": "Configuracion de SDKs y Clientes Asincronos",
+          "slug": "sdks-clientes-asincronos",
           "position": 1,
-          "concept_id": "ia-api-client",
-          "objective": "Manejar la estructura de roles (system, user, assistant) y recibir texto token por token con stream=True.",
-          "theory_markdown": "Las APIs modernas de LLMs operan sobre una lista de mensajes con tres roles principales:\n- `system`: Instrucciones generales y personalidad del modelo.\n- `user`: La pregunta o instrucción del usuario.\n- `assistant`: Respuestas previas generadas por el modelo (historial conversacional).\n\nCon `stream=True`, la API no espera a que termine de generarse todo el párrafo (lo que tardaría varios segundos); transmite cada token en cuanto es emitido (Server-Sent Events), permitiendo esa experiencia tipo \"máquina de escribir\" en tiempo real.",
+          "concept_id": "ia-api-async-client",
+          "objective": "Instanciar clientes de inferencia asincronos en Python y proteger API keys mediante variables de entorno.",
+          "theory_markdown": "El consumo de APIs de modelos fundacionales (como OpenAI, Google Gemini o Anthropic) debe realizarse de forma asincrona en entornos de produccion para no bloquear el Event Loop de Python.\n\n### Gestion Segura de Credenciales\nLas API keys **nunca deben hardcodearse en el codigo**. Se leen desde el entorno del sistema operativo (`os.environ`):\n```python\nimport os\nfrom openai import AsyncOpenAI\n\n# El cliente busca automaticamente os.environ['OPENAI_API_KEY']\nclient = AsyncOpenAI()\n```\n\n### Llamadas Asincronas con AsyncClient\nAl usar `await client.chat.completions.create(...)`, la conexion de red se delega al bucle de eventos, permitiendo que el servidor atienda cientos de peticiones concurrentes mientras espera la respuesta del modelo.",
           "examples": [
             {
-              "title": "Patrón canónico de llamada a modelo con streaming",
-              "code": "# Simulación del patrón de API de LLMs\nmensajes = [\n    {\"role\": \"system\", \"content\": \"Eres Koda AI, un tutor conciso.\"},\n    {\"role\": \"user\", \"content\": \"¿Qué es un generador en Python?\"}\n]\nprint(\"Mensajes estructurados listos para API:\", len(mensajes))",
-              "output": "Mensajes estructurados listos para API: 2",
-              "explanation": "La lista de mensajes preserva el contexto y los límites de seguridad de la interacción."
+              "title": "Invocacion asincrona basica",
+              "code": "import asyncio\nfrom openai import AsyncOpenAI\n\nasync def consultar_ia():\n    client = AsyncOpenAI()\n    respuesta = await client.chat.completions.create(\n        model=\"gpt-4o-mini\",\n        messages=[{\"role\": \"user\", \"content\": \"Explica recursion en 1 linea\"}],\n        temperature=0.0\n    )\n    return respuesta.choices[0].message.content",
+              "output": "Funcion que llama a una copia de si misma hasta satisfacer un caso base.",
+              "explanation": "El uso de await evita congelar el hilo principal mientras viajan los paquetes de red."
             }
           ],
-          "common_errors": "Quemarla API Key en el código fuente (`api_key = \"sk-...\"`) y subirla accidentalmente a GitHub. Siempre usa `os.getenv(\"OPENAI_API_KEY\")`.",
+          "common_errors": "Hacer commit de archivos de prueba con claves 'sk-...' reales en repositorios publicos de GitHub, provocando su robo inmediato por bots de escaneo.",
           "mini_exercise": {
-            "starter_code": "import os\n# Lee la API Key de forma segura desde las variables de entorno\napi_key = os.getenv(\"API_KEY\")\nprint(\"Key configurada:\", api_key is not None)",
-            "instructions": "Observa cómo os.getenv evita exponer credenciales.",
-            "solution": "import os\napi_key = os.getenv(\"API_KEY\")\nprint(\"Key configurada:\", api_key is not None)"
+            "instructions": "Usa os.getenv para obtener la variable 'AI_API_KEY' o elevar ValueError si no existe.",
+            "starter_code": "import os\n\n# Lee la variable de entorno\napi_key = ...",
+            "solution": "api_key = os.getenv(\"AI_API_KEY\")\nif not api_key:\n    raise ValueError(\"Falta AI_API_KEY\")"
           },
           "key_takeaways": [
-            "Las APIs usan roles: system (reglas), user (solicitud), assistant (historial).",
-            "stream=True permite renderizar texto en tiempo real token a token.",
-            "Las API keys deben vivir en archivos .env protegidos."
+            "Las API keys deben administrarse exclusivamente por variables de entorno.",
+            "AsyncOpenAI permite llamadas concurrentes sobre el Event Loop de asyncio.",
+            "El modelo y los mensajes se estructuran de forma declarativa."
           ],
           "exercise": {
             "id": "ex_ia_02_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Cuál es el beneficio de habilitar streaming (stream=True) al consultar una API de LLM?",
+            "prompt": "Por que es mandatorio utilizar clientes asincronos (como AsyncOpenAI) al integrar LLMs en servidores web como FastAPI?",
             "options": [
               {
                 "id": "a",
-                "text": "Reduce el tiempo de primera respuesta percibida (TTFT) mostrando los tokens a medida que se generan"
+                "text": "Porque las respuestas de los LLMs toman varios segundos; usar clientes sincronos bloquearia el hilo del servidor impidiendo atender a otros usuarios."
               },
               {
                 "id": "b",
-                "text": "Hace que el modelo sea completamente gratuito"
+                "text": "Porque los clientes sincronos estan prohibidos por ley."
               },
               {
                 "id": "c",
-                "text": "Elimina el consumo de tokens"
+                "text": "Porque el cliente asincrono consume la mitad de tokens."
               },
               {
                 "id": "d",
-                "text": "Permite que el modelo funcione sin Internet"
+                "text": "Porque los clientes asincronos solo funcionan con Python 2.7."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Time-To-First-Token (TTFT) es crítico para la experiencia de usuario: con streaming el usuario lee de inmediato sin esperar la respuesta completa."
+            "explanation": "Las llamadas I/O a LLMs son lentas (latencia de red + generacion de tokens). Un cliente sincrono congelaria todo el proceso de peticiones concurrentes."
+          }
+        },
+        {
+          "id": "les_ia_02_02",
+          "code": "L02",
+          "title": "Estructura de Mensajes: System, User y Assistant",
+          "slug": "estructura-mensajes-roles",
+          "position": 2,
+          "concept_id": "ia-api-message-roles",
+          "objective": "Comprender la jerarquia de roles en el Chat Completion API y fijar directivas indelebles con el rol system.",
+          "theory_markdown": "Las APIs de chat estructuran la conversacion como una lista cronologica de diccionarios con tres roles fundamentales:\n\n1. **`system`:**\n   Instrucciones rectoras de maxima prioridad. Define la identidad, restricciones de seguridad, tono y formato de salida del modelo. El usuario final no suele ver este mensaje.\n2. **`user`:**\n   Los mensajes enviados por el usuario humano o la aplicacion solicitante.\n3. **`assistant`:**\n   Las respuestas emitidas previamente por el modelo. Permite inyectar historial conversacional para dar memoria de contexto.",
+          "examples": [
+            {
+              "title": "Conversacion contextual con los tres roles",
+              "code": "messages = [\n    {\"role\": \"system\", \"content\": \"Eres un tutor de Python estricto. Responde siempre con codigo ejecutable y explicacion breve.\"},\n    {\"role\": \"user\", \"content\": \"Como ordeno una lista?\"},\n    {\"role\": \"assistant\", \"content\": \"lista.sort() modifica in-place; sorted(lista) retorna una nueva lista.\"},\n    {\"role\": \"user\", \"content\": \"Y si quiero orden descendente?\"}\n]",
+              "output": "Usa lista.sort(reverse=True) o sorted(lista, reverse=True).",
+              "explanation": "El rol assistant permite que el modelo entienda que la segunda pregunta se refiere a la lista ordenada previamente."
+            }
+          ],
+          "common_errors": "Colocar instrucciones criticas de seguridad en el rol 'user' en vez del rol 'system', facilitando que el usuario sobreescriba las reglas con ataques de prompt injection.",
+          "mini_exercise": {
+            "instructions": "Escribe un mensaje de rol 'system' que ordene al modelo responder exclusivamente en formato JSON.",
+            "starter_code": "# Mensaje system\nsystem_msg = {\"role\": ..., \"content\": ...}",
+            "solution": "system_msg = {\"role\": \"system\", \"content\": \"Responde exclusivamente en formato JSON valido.\"}"
+          },
+          "key_takeaways": [
+            "El rol system fija directivas de identidad, reglas y formato no negociables.",
+            "El rol user transporta las preguntas del cliente.",
+            "El rol assistant preserva el historial previo para mantener continuidad de contexto."
+          ],
+          "exercise": {
+            "id": "ex_ia_02_02",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "Cual rol dentro de la lista de mensajes de una API de chat se utiliza para definir las reglas globales de comportamiento, personalidad y restricciones del modelo?",
+            "options": [
+              {
+                "id": "a",
+                "text": "system"
+              },
+              {
+                "id": "b",
+                "text": "user"
+              },
+              {
+                "id": "c",
+                "text": "assistant"
+              },
+              {
+                "id": "d",
+                "text": "admin"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El mensaje con rol 'system' establece las directrices maestras que orientan al modelo durante toda la interaccion."
+          }
+        },
+        {
+          "id": "les_ia_02_03",
+          "code": "L03",
+          "title": "Streaming de Tokens y Reduccion de Latencia",
+          "slug": "streaming-tokens-latencia",
+          "position": 3,
+          "concept_id": "ia-api-streaming-ttft",
+          "objective": "Consumir respuestas en streaming mediante generadores asincronos optimizando el Time-To-First-Token (TTFT).",
+          "theory_markdown": "Esperar a que un LLM genere una respuesta completa de 500 tokens puede tomar entre 3 y 8 segundos. Para el usuario humano, esa espera genera percepcion de lentitud.\n\n### La solucion: Streaming con `stream=True`\nAl habilitar `stream=True`, la API utiliza **Server-Sent Events (SSE)** para transmitir cada token tan pronto como es generado por el motor de inferencia.\n\nEsto reduce el **Time-To-First-Token (TTFT)** a menos de 300 milisegundos, mostrando el texto mecanografiandose en vivo en la pantalla del usuario:\n```python\nresponse = await client.chat.completions.create(\n    model='gpt-4o-mini',\n    messages=messages,\n    stream=True\n)\nasync for chunk in response:\n    delta = chunk.choices[0].delta.content\n    if delta:\n        print(delta, end='', flush=True)\n```",
+          "examples": [
+            {
+              "title": "Consumo de stream asincrono en consola",
+              "code": "import asyncio\nfrom openai import AsyncOpenAI\n\nasync def stream_demo():\n    client = AsyncOpenAI()\n    stream = await client.chat.completions.create(\n        model=\"gpt-4o-mini\",\n        messages=[{\"role\": \"user\", \"content\": \"Cuenta del 1 al 5\"}],\n        stream=True\n    )\n    async for chunk in stream:\n        texto = chunk.choices[0].delta.content or \"\"\n        print(texto, end=\"\", flush=True)",
+              "output": "1, 2, 3, 4, 5 (impreso progresivamente token a token)",
+              "explanation": "El bucle async for itera sobre cada fragmento (chunk) a medida que viaja por la conexion HTTP."
+            }
+          ],
+          "common_errors": "Intentar acceder a response.choices[0].message.content cuando se activa stream=True, arrojando AttributeError porque la respuesta es un flujo generador, no un objeto estatico.",
+          "mini_exercise": {
+            "instructions": "Escribe la condicion if para comprobar si chunk.choices[0].delta.content no es None antes de procesarlo.",
+            "starter_code": "# Comprueba delta\n# if ...:",
+            "solution": "if chunk.choices[0].delta.content is not None:"
+          },
+          "key_takeaways": [
+            "stream=True transmite tokens en tiempo real mediante Server-Sent Events (SSE).",
+            "Reduce el Time-To-First-Token (TTFT) mejorando radicalmente la UX.",
+            "Se consume iterando de forma asincrona con 'async for chunk in stream'."
+          ],
+          "exercise": {
+            "id": "ex_ia_02_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual metrica de experiencia de usuario mejora criticamente al activar stream=True en el consumo de APIs de LLMs?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Time-To-First-Token (TTFT), permitiendo al usuario comenzar a leer la respuesta casi de inmediato."
+              },
+              {
+                "id": "b",
+                "text": "El costo de facturacion por token."
+              },
+              {
+                "id": "c",
+                "text": "La resolucion de las imagenes generadas."
+              },
+              {
+                "id": "d",
+                "text": "El tamano del contexto del modelo."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El streaming entrega cada token segun se produce, abatiendo el tiempo de espera inicial percibido por el usuario final (TTFT)."
+          }
+        },
+        {
+          "id": "les_ia_02_04",
+          "code": "L04",
+          "title": "Rate Limits y Reintentos con Backoff Exponencial",
+          "slug": "rate-limits-backoff-exponencial",
+          "position": 4,
+          "concept_id": "da-api-rate-limits-backoff",
+          "objective": "Manejar errores HTTP 429 de saturacion de cuota aplicando backoff exponencial con jitter aleatorio mediante tenacity.",
+          "theory_markdown": "Las APIs de LLMs imponen limites de tasa estrictos:\n- **RPM:** Requests Per Minute (Peticiones por minuto).\n- **TPM:** Tokens Per Minute (Tokens por minuto).\n\nAl superar estos limites, la API responde con **HTTP 429 Too Many Requests**.\n\n### Estrategia de Reintento: Backoff Exponencial con Jitter\nReintentar inmediatamente solo agrava la saturacion del proveedor. La solucion de grado industrial es el **Backoff Exponencial con Jitter**:\n- Espera inicial: 1 segundo.\n- Segundo reintento: 2 segundos + variacion aleatoria (*jitter*).\n- Tercer reintento: 4 segundos + jitter.\n- Cuarto reintento: 8 segundos...\n\nEn Python se utiliza la libreria `tenacity`:\n```python\nfrom tenacity import retry, stop_after_attempt, wait_random_exponential\n\n@retry(wait=wait_random_exponential(min=1, max=60), stop=stop_after_attempt(5))\nasync def llamada_robusta():\n    return await client.chat.completions.create(...)\n```",
+          "examples": [
+            {
+              "title": "Decorador de reintento resiliente con tenacity",
+              "code": "from tenacity import retry, stop_after_attempt, wait_exponential\n\n@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))\ndef peticion_segura():\n    # Si lanza RateLimitError o APIConnectionError, reintenta esperando exponencialmente\n    pass",
+              "output": "La funcion reintenta de forma automatica espaciando los intentos si recibe un error 429.",
+              "explanation": "El jitter aleatorio previene el efecto 'thundering herd' (avalancha de clientes reintentando al mismo segundo)."
+            }
+          ],
+          "common_errors": "Implementar bucles while de reintento inmediato sin ningun tiempo de espera sleep, provocando que la cuenta sea bloqueada temporalmente por flood.",
+          "mini_exercise": {
+            "instructions": "Usa el decorador @retry con stop=stop_after_attempt(3) de tenacity.",
+            "starter_code": "from tenacity import retry, stop_after_attempt\n\n# Aplica el decorador para 3 intentos\ndef operacion():\n    pass",
+            "solution": "from tenacity import retry, stop_after_attempt\n\n@retry(stop=stop_after_attempt(3))\ndef operacion():\n    pass"
+          },
+          "key_takeaways": [
+            "El error HTTP 429 se produce al superar los limites de RPM o TPM.",
+            "El backoff exponencial duplica el tiempo de espera entre intentos fallidos sucesivos.",
+            "El jitter aleatorio evita que multiples hilos colisionen reintentando simultaneamente."
+          ],
+          "exercise": {
+            "id": "ex_ia_02_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual codigo de estado HTTP devuelve una API de LLM cuando la aplicacion ha superado la cuota de peticiones por minuto (RPM) o tokens por minuto (TPM)?",
+            "options": [
+              {
+                "id": "a",
+                "text": "429 Too Many Requests"
+              },
+              {
+                "id": "b",
+                "text": "404 Not Found"
+              },
+              {
+                "id": "c",
+                "text": "502 Bad Gateway"
+              },
+              {
+                "id": "d",
+                "text": "401 Unauthorized"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El codigo estandar HTTP 429 indica saturacion de cuota y exige aplicar pausas y reintentos con backoff exponencial."
           }
         }
       ]

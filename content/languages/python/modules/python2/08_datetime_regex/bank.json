@@ -5,29 +5,162 @@
   "questions": [
     {
       "id": "q_py2_08_01",
-      "type": "single_choice",
-      "difficulty": "easy",
-      "prompt": "¿Qué clase del módulo datetime se utiliza para representar la diferencia entre dos fechas?",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué imprime este código al sumar un timedelta de 10 días?",
+      "prompt_code": "from datetime import datetime, timedelta\nfecha = datetime(2026, 1, 10)\nnueva_fecha = fecha + timedelta(days=10)\nprint(nueva_fecha.day)",
       "options": [
         {
           "id": "a",
-          "text": "timedelta"
+          "text": "20"
         },
         {
           "id": "b",
-          "text": "timespan"
+          "text": "10"
         },
         {
           "id": "c",
-          "text": "datediff"
+          "text": "30"
         },
         {
           "id": "d",
-          "text": "duration"
+          "text": "TypeError"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "timedelta es la clase estándar para representar duraciones y diferencias temporales."
+      "explanation": "El día 10 sumado a un lapso de 10 días da como resultado el día 20 del mismo mes."
+    },
+    {
+      "id": "q_py2_08_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es la diferencia entre los métodos strftime() y strptime() en el módulo datetime?",
+      "options": [
+        {
+          "id": "a",
+          "text": "strftime formatea un objeto datetime a cadena de texto, mientras que strptime analiza un texto y lo convierte a objeto datetime"
+        },
+        {
+          "id": "b",
+          "text": "strftime es para fechas y strptime es solo para milisegundos"
+        },
+        {
+          "id": "c",
+          "text": "strptime es una función obsoleta reemplazada por strftime"
+        },
+        {
+          "id": "d",
+          "text": "No hay diferencia, son nombres alternativos"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "strftime (format time) convierte fecha -> texto; strptime (parse time) convierte texto -> fecha."
+    },
+    {
+      "id": "q_py2_08_03",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué devuelve re.findall con el patrón r'\\d+' en la siguiente cadena?",
+      "prompt_code": "import re\ntexto = \"Puerto 80 y puerto 443 activos\"\nprint(re.findall(r\"\\d+\", texto))",
+      "options": [
+        {
+          "id": "a",
+          "text": "['80', '443']"
+        },
+        {
+          "id": "b",
+          "text": "[80, 443]"
+        },
+        {
+          "id": "c",
+          "text": "['80']"
+        },
+        {
+          "id": "d",
+          "text": "523"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "re.findall extrae todas las coincidencias encontradas como una lista de strings: ['80', '443']."
+    },
+    {
+      "id": "q_py2_08_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Por qué es una buena práctica anteponer la letra 'r' (raw string) a las expresiones regulares en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque evita que Python interprete la barra invertida '\\' como un carácter de escape del lenguaje (como \\n o \\t), preservándola para el motor de regex"
+        },
+        {
+          "id": "b",
+          "text": "Porque hace que el patrón de búsqueda sea sensible a mayúsculas"
+        },
+        {
+          "id": "c",
+          "text": "Porque compila la expresión regular en memoria RAM compartida"
+        },
+        {
+          "id": "d",
+          "text": "Porque es obligatorio por la sintaxis de Python 3 o de lo contrario no compila"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "En un raw string r'...', los caracteres de barra invertida se tratan literalmente, evitando colisiones con secuencias de escape nativas de Python."
+    },
+    {
+      "id": "q_py2_08_05",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué objeto y valor produce el parseo con datetime.strptime?",
+      "prompt_code": "from datetime import datetime\nfecha = datetime.strptime(\"2026-12-25\", \"%Y-%m-%d\")\nprint(fecha.year, fecha.month)",
+      "options": [
+        {
+          "id": "a",
+          "text": "2026 12"
+        },
+        {
+          "id": "b",
+          "text": "2026 25"
+        },
+        {
+          "id": "c",
+          "text": "12 25"
+        },
+        {
+          "id": "d",
+          "text": "ValueError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La máscara %Y-%m-%d asigna 2026 al año y 12 al mes, imprimiendo '2026 12'."
+    },
+    {
+      "id": "q_py2_08_06",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la diferencia entre re.search() y re.findall()?",
+      "options": [
+        {
+          "id": "a",
+          "text": "re.search() busca la primera coincidencia y devuelve un objeto Match (o None), mientras que re.findall() extrae todas las coincidencias como una lista de strings"
+        },
+        {
+          "id": "b",
+          "text": "re.search() solo funciona con números y re.findall() solo con letras"
+        },
+        {
+          "id": "c",
+          "text": "re.search() reemplaza el texto y re.findall() lo borra"
+        },
+        {
+          "id": "d",
+          "text": "re.findall() solo busca al inicio de la cadena"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "re.search escanea toda la cadena hasta encontrar la primera coincidencia; re.findall continúa por toda la cadena reuniendo todas las apariciones en una lista."
     }
   ]
 }

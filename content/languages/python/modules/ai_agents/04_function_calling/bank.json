@@ -6,28 +6,158 @@
     {
       "id": "q_ia_04_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Qué rol de mensaje se utiliza para devolver el resultado de una función ejecutada al modelo de lenguaje?",
+      "difficulty": "easy",
+      "prompt": "Quien es responsable de ejecutar el codigo real de la funcion en el patron de Function Calling?",
       "options": [
         {
           "id": "a",
-          "text": "tool (o function)"
+          "text": "La aplicacion o backend en Python del desarrollador, nunca los servidores del proveedor del LLM."
         },
         {
           "id": "b",
-          "text": "system"
+          "text": "El servidor del modelo de lenguaje de forma remota en un sandbox."
         },
         {
           "id": "c",
-          "text": "user"
+          "text": "El navegador del usuario final mediante JavaScript."
         },
         {
           "id": "d",
-          "text": "admin"
+          "text": "El sistema operativo del router de red."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Las especificaciones modernas de Chat Completions usan el rol tool junto con el tool_call_id para asociar el resultado a la llamada previa."
+      "explanation": "El LLM solo genera los nombres y argumentos JSON; la ejecucion efectiva reside en el entorno y bajo la seguridad del backend del usuario."
+    },
+    {
+      "id": "q_ia_04_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cual formato estandar se utiliza para describir los parametros y tipos de una herramienta en el argumento tools de la API?",
+      "options": [
+        {
+          "id": "a",
+          "text": "JSON Schema"
+        },
+        {
+          "id": "b",
+          "text": "XML DTD"
+        },
+        {
+          "id": "c",
+          "text": "YAML 1.1"
+        },
+        {
+          "id": "d",
+          "text": "Protocol Buffers binario"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El estandar JSON Schema define los tipos (string, number, object), descripciones y restricciones requeridas para cada argumento de la herramienta."
+    },
+    {
+      "id": "q_ia_04_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que rol de mensaje debe asignarse al retornar el resultado de la ejecucion de una funcion al modelo?",
+      "options": [
+        {
+          "id": "a",
+          "text": "tool"
+        },
+        {
+          "id": "b",
+          "text": "function_result"
+        },
+        {
+          "id": "c",
+          "text": "system"
+        },
+        {
+          "id": "d",
+          "text": "environment"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "En el protocolo estandar de chat, los resultados de herramientas se inyectan como mensajes con 'role': 'tool'."
+    },
+    {
+      "id": "q_ia_04_04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Por que es obligatorio incluir el mensaje del assistant que origino las tool_calls en el historial antes de agregar las respuestas tool?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque la API requiere mantener la coherencia del protocolo; una respuesta tool sin su correspondiente peticion assistant previa es invalida y produce un error HTTP 400."
+        },
+        {
+          "id": "b",
+          "text": "Para duplicar el cobro de tokens."
+        },
+        {
+          "id": "c",
+          "text": "Para reiniciar el bucle de eventos."
+        },
+        {
+          "id": "d",
+          "text": "Porque Pydantic lo exige en sus decoradores."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El protocolo de Chat exige que toda respuesta con rol tool este antecedida de forma inmediata por el mensaje del assistant que solicito dicha llamada."
+    },
+    {
+      "id": "q_ia_04_05",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "Que funcion de asyncio permite ejecutar de forma concurrente una lista de llamadas a herramientas independientes generadas por Parallel Tool Calling?",
+      "options": [
+        {
+          "id": "a",
+          "text": "asyncio.gather()"
+        },
+        {
+          "id": "b",
+          "text": "asyncio.wait_one()"
+        },
+        {
+          "id": "c",
+          "text": "asyncio.chain()"
+        },
+        {
+          "id": "d",
+          "text": "asyncio.sequence()"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "asyncio.gather(*tareas) ejecuta multiples corutinas en paralelo esperando a que todas concluyan sus operaciones de red."
+    },
+    {
+      "id": "q_ia_04_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Como viajan los argumentos dentro del objeto tool_call emitido por el modelo?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Como una cadena serializada en formato JSON en tool_call.function.arguments."
+        },
+        {
+          "id": "b",
+          "text": "Como un objeto compilado en C++."
+        },
+        {
+          "id": "c",
+          "text": "Como una tupla de valores separados por comas sin nombres."
+        },
+        {
+          "id": "d",
+          "text": "Como un archivo comprimido en ZIP."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Los argumentos son transmitidos como una cadena de texto en JSON que debe parsearse con json.loads() en Python."
     }
   ]
 }

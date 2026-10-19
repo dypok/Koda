@@ -6,28 +6,158 @@
     {
       "id": "q_ia_08_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Cuál es la función del parámetro max_iterations en el bucle principal de un agente autónomo?",
+      "difficulty": "easy",
+      "prompt": "Cual es el rol del LLM dentro de la arquitectura de un Agente Autonomo?",
       "options": [
         {
           "id": "a",
-          "text": "Prevenir bucles infinitos y costos descontrolados de API si el agente no logra resolver el problema"
+          "text": "Actuar como motor central de razonamiento y toma de decisiones para planificar acciones, evaluar resultados y dirigir el bucle hacia el objetivo."
         },
         {
           "id": "b",
-          "text": "Aumentar la resolución de las imágenes"
+          "text": "Almacenar fisicamente la base de datos relacional de la empresa."
         },
         {
           "id": "c",
-          "text": "Validar la contraseña del usuario"
+          "text": "Compilar codigo C++ en segundo plano."
         },
         {
           "id": "d",
-          "text": "Apagar el computador tras 10 minutos"
+          "text": "Monitorear exclusivamente la temperatura del procesador."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Un guardrail de iteraciones máximas frena la ejecución si el agente se desorienta o la herramienta falla repetidamente."
+      "explanation": "El LLM funge como cerebro orquestador que analiza el estado, formula pensamientos y decide las acciones a emprender."
+    },
+    {
+      "id": "q_ia_08_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "En el framework ReAct, que accion realiza el componente 'Observation'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Inyectar en el contexto del agente el resultado factual devuelto por la ejecucion de la herramienta en el entorno."
+        },
+        {
+          "id": "b",
+          "text": "Verbalizar la reflexion interna del modelo antes de ejecutar una funcion."
+        },
+        {
+          "id": "c",
+          "text": "Cerrar la conexion de red inmediatamente."
+        },
+        {
+          "id": "d",
+          "text": "Eliminar el historial de la conversacion."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Observation es la evidencia empirica generada por el entorno que alimenta la percepcion del modelo para su siguiente razonamiento."
+    },
+    {
+      "id": "q_ia_08_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Por que es mandatorio implementar un parametro max_steps (o limite de recursion) en el bucle principal de un agente autonomo?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Para evitar bucles infinitos y consumo descontrolado de costos de API si el agente entra en un patron repetitivo de acciones sin llegar a una solucion."
+        },
+        {
+          "id": "b",
+          "text": "Porque Python solo permite ejecutar 10 iteraciones en bucles while."
+        },
+        {
+          "id": "c",
+          "text": "Porque las APIs de IA cobran una penalizacion si el agente tarda mas de un minuto."
+        },
+        {
+          "id": "d",
+          "text": "Para obligar al modelo a responder unicamente con si o no."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "max_steps impone una cota de seguridad garantizando la detencion del proceso ante comportamientos ciclicos no convergentes."
+    },
+    {
+      "id": "q_ia_08_04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Que ocurre en un agente ReAct implementado en Python cuando el modelo emite un mensaje que NO contiene tool_calls?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Se interpreta como la conclusion de la tarea (Final Answer) y el bucle termina retornando el texto de la respuesta al usuario."
+        },
+        {
+          "id": "b",
+          "text": "El bucle se reinicia desde cero borrando el historial."
+        },
+        {
+          "id": "c",
+          "text": "Se lanza una excepcion de sistema critico."
+        },
+        {
+          "id": "d",
+          "text": "El agente llama automaticamente a una herramienta por defecto."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Cuando el modelo no requiere ejecutar mas herramientas, su respuesta textual representa la conclusion final de la solicitud."
+    },
+    {
+      "id": "q_ia_08_05",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "Si una herramienta 'consultar_api' falla por Timeout y el backend captura el error devolviendo 'Error: Tiempo de espera agotado', como suele responder un agente inteligente?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lee la observacion del error, formula un nuevo pensamiento (Thought) y puede reintentar, utilizar una herramienta alternativa o informar al usuario con claridad."
+        },
+        {
+          "id": "b",
+          "text": "Se apaga inmediatamente sin emitir ningun token."
+        },
+        {
+          "id": "c",
+          "text": "Borra todos los archivos del directorio de trabajo."
+        },
+        {
+          "id": "d",
+          "text": "Convierte la respuesta a formato binario."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La resiliencia del patron de agentes radica en que los errores devueltos como observaciones se convierten en insumos cognitivos para cambiar de estrategia."
+    },
+    {
+      "id": "q_ia_08_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Que elemento distingue a un agente autonomo de un simple chatbot interactivo tradicional?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Su capacidad de interactuar con el entorno mediante herramientas, observar resultados y ejecutar multiples pasos de razonamiento hasta alcanzar una meta sin intervencion humana intermedia."
+        },
+        {
+          "id": "b",
+          "text": "El color de la ventana de chat."
+        },
+        {
+          "id": "c",
+          "text": "Que los agentes solo pueden programarse en lenguaje ensamblador."
+        },
+        {
+          "id": "d",
+          "text": "Que el chatbot tradicional no utiliza servidores web."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El agente cuenta con autonomia procedural: puede encadenar multiples acciones y herramientas guiado por su propio razonamiento iterativo."
     }
   ]
 }

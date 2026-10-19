@@ -5,13 +5,13 @@
   "slug": "entrada-salida-y-strings",
   "course_slug": "python-1",
   "title": "Entrada/Salida y Manipulación de Strings",
-  "objective": "Capturar datos del usuario con input(), formatear cadenas con f-strings modernas y manipular texto con len(), strip(), lower() y upper().",
-  "description": "Haz que tus programas interactúen con personas reales: lee datos del teclado, sanea entradas de texto y muestra reportes visualmente atractivos.",
+  "objective": "Aprender a capturar datos del usuario con input() y convertirlos adecuadamente, operar con texto mediante concatenación (+) y repetición (*), formatear con f-strings y :.2f, y dominar métodos como strip(), lower(), upper(), len() junto con la inmutabilidad de strings.",
+  "description": "Haz que tus programas interactúen con personas reales: captura datos desde el teclado, formatea reportes visuales con f-strings y limpia textos de forma pythónica.",
   "position": 4,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 2,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,47 +23,102 @@
     {
       "id": "sec_py1_04_01",
       "code": "S01",
-      "title": "Interacción con input() y F-Strings",
-      "slug": "input-y-fstrings",
+      "title": "Interacción con el Usuario y Cadenas de Texto",
+      "slug": "interaccion-y-strings",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 15,
-      "xp_on_complete": 35,
+      "estimated_minutes": 25,
+      "xp_on_complete": 50,
       "lessons": [
         {
           "id": "les_py1_04_01",
           "code": "L01",
-          "title": "Lectura Dinámica con input() y f-strings",
-          "slug": "input-y-fstrings-base",
+          "title": "Leyendo Datos del Teclado: input() y la Regla del String",
+          "slug": "input-y-regla-string",
           "position": 1,
-          "concept_id": "py-input-fstrings",
-          "objective": "Capturar texto desde la consola y embeber variables de forma limpia usando f-strings (formatted string literals).",
-          "theory_markdown": "La función `input(\"Mensaje: \")` pausa la ejecución del programa y espera a que el usuario escriba algo en el teclado y presione Enter.\n\n> **¡Regla de oro de input()!** Todo lo que devuelve `input()` es SIEMPRE un string (`str`). Si el usuario escribe `25`, recibirás `\"25\"`. Si necesitas operar matemáticamente, debes envolverlo con `int()` o `float()`: `edad = int(input(\"Edad: \"))`.\n\nPara mostrar variables dentro de textos sin concatenaciones engorrosas con signos `+`, Python 3 introdujo las **f-strings**:\n```python\nnombre = \"Koda\"\nxp = 1500\nprint(f\"Agente {nombre} acumula {xp} XP.\")\n```",
+          "concept_id": "py-input-casting",
+          "objective": "Capturar datos del usuario desde la terminal con input() y convertirlos a tipos numéricos con int() o float().",
+          "theory_markdown": "Para que tus programas sean dinámicos e interactivos, deben poder recibir datos que una persona escriba en su teclado. Para esto usamos la función nativa `input()`.\n\n`input(\"Mensaje: \")` pausa la ejecución del programa y espera pacientemente a que el usuario escriba algo en la terminal y presione la tecla **Enter**.\n\n> **¡La Regla de Oro de input()!**\n> Todo lo que devuelve `input()` es **SIEMPRE una cadena de texto (`str`)**, sin importar si el usuario escribe solo dígitos.\n> Si el usuario teclea `25`, Python recibe el texto `\"25\"`.\n\n**¿Por qué es indispensable saber esto?**\nSi intentas sumar dos datos recibidos directamente:\n```python\nnum1 = \"10\"  # Retornado por input()\nnum2 = \"5\"   # Retornado por input()\nprint(num1 + num2)  # ¡Muestra \"105\" porque une los textos!\n```\nPara realizar cálculos matemáticos con las entradas del usuario, debemos envolver el `input()` con `int()` o `float()`:\n```python\nedad = int(input(\"Ingresa tu edad: \"))\n```",
           "examples": [
             {
-              "title": "Formateo elegante con f-strings",
-              "code": "usuario = \"Elena\"\nhoras = 3\ntasa = 25.50\ntotal = horas * tasa\nprint(f\"Factura para {usuario}: total de ${total:.2f}\")",
-              "output": "Factura para Elena: total de $76.50",
-              "explanation": "El modificador :.2f redondea el flotante a 2 decimales automáticamente."
+              "title": "Captura y conversión de datos",
+              "code": "nombre = \"Alex\"        # Simula input(\"Nombre: \")\nedad_texto = \"20\"     # Simula input(\"Edad: \")\n\n# Conversion explicta para operar matematicamente\nedad = int(edad_texto)\nedad_proxima = edad + 1\n\nprint(\"Hola,\", nombre)\nprint(\"El proximo ano tendras:\", edad_proxima)",
+              "output": "Hola, Alex\nEl proximo ano tendras: 21",
+              "explanation": "input() siempre retorna str. Aplicamos int() para poder realizar sumas aritméticas."
             }
           ],
-          "common_errors": "Olvidar la letra f al inicio de la cadena: `\"Hola {nombre}\"` se imprimirá literalmente como texto sin reemplazar la variable.",
+          "common_errors": "Intentar hacer cálculos directamente con el resultado de input() sin convertirlo a int() o float(), produciendo uniones de texto no deseadas.",
           "mini_exercise": {
-            "starter_code": "lenguaje = \"Python\"\nversion = 3.12\n# Genera un f-string que diga \"Aprendiendo Python 3.12\"\nmensaje = ...\nprint(mensaje)",
-            "instructions": "Usa f-strings para interpolar lenguaje y version.",
-            "solution": "lenguaje = \"Python\"\nversion = 3.12\nmensaje = f\"Aprendiendo {lenguaje} {version}\"\nprint(mensaje)"
+            "starter_code": "# Convierte la entrada '15' a entero y sumale 5\nentrada = \"15\"\nresultado = ...\nprint(resultado)",
+            "instructions": "Usa int(entrada) + 5 para obtener 20.",
+            "solution": "entrada = \"15\"\nresultado = int(entrada) + 5\nprint(resultado)"
           },
           "key_takeaways": [
-            "input() siempre retorna un string; requiere casting para operaciones numéricas.",
-            "Las f-strings inician con f antes de las comillas: f\"Hola {variable}\".",
-            "Permiten formatear números con modificadores como :.2f."
+            "input() pausa el programa y captura lo que el usuario escribe.",
+            "input() SIEMPRE retorna un tipo de dato str.",
+            "Para cálculos matemáticos, debemos convertir la entrada con int(input(...)) o float(input(...))."
           ],
           "exercise": {
             "id": "ex_py1_04_01",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Qué tipo de dato devuelve SIEMPRE la función nativa input() en Python 3?",
+            "options": [
+              {
+                "id": "a",
+                "text": "str (siempre una cadena de texto, incluso si se escriben solo números)"
+              },
+              {
+                "id": "b",
+                "text": "int si el usuario ingresa dígitos numéricos"
+              },
+              {
+                "id": "c",
+                "text": "float si el usuario incluye un punto decimal"
+              },
+              {
+                "id": "d",
+                "text": "Depende automáticamente de lo que el usuario escriba"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "En Python 3, input() retorna invariablemente un objeto de tipo str (cadena de texto)."
+          }
+        },
+        {
+          "id": "les_py1_04_02",
+          "code": "L02",
+          "title": "Operando con Texto: Concatenación (+) y Repetición (*)",
+          "slug": "concatenacion-y-repeticion",
+          "position": 2,
+          "concept_id": "py-string-concatenation-repetition",
+          "objective": "Aprender a unir cadenas con el operador + y a repetir secuencias de texto con el operador *.",
+          "theory_markdown": "En Python, los operadores matemáticos `+` y `*` tienen un comportamiento especial cuando trabajan con cadenas de texto (`str`):\n\n**1. Concatenación con `+` (Pegar textos):**\nAl colocar `+` entre dos cadenas, Python las une en una sola:\n```python\nsaludo = \"Hola \" + \"Mundo\"  # Produce: \"Hola Mundo\"\n```\nAmbos lados deben ser texto. Si intentas unir texto con un número (`\"Puntos: \" + 10`), Python lanzará un `TypeError` debido a su tipado fuerte.\n\n**2. Repetición con `*` (Multiplicar texto):**\nSi multiplicas una cadena por un número entero positivo, Python repite el texto esa cantidad de veces:\n```python\nlinea = \"-\" * 10  # Produce: \"----------\"\n```\n\n> **¡Cuidado con la trampa!**\n> Si tienes una variable con texto numérico como `n = \"10\"` y haces `n * 2`, el resultado **no es 20**, sino `\"1010\"` (el texto \"10\" duplicado).",
+          "examples": [
+            {
+              "title": "Unión y repetición de cadenas",
+              "code": "nombre = \"Koda\"\ntitulo = \"Specialist\"\nnombre_completo = nombre + \" \" + titulo\n\nseparador = \"=\" * 15\nprint(nombre_completo)\nprint(separador)\n\ntexto_num = \"5\"\nprint(\"Repitiendo texto:\", texto_num * 3)  # \"555\"",
+              "output": "Koda Specialist\n===============\nRepitiendo texto: 555",
+              "explanation": "+ une las cadenas sin agregar espacios adicionales. * repite el texto tantas veces como indique el entero."
+            }
+          ],
+          "common_errors": "Creer que multiplicar un texto numérico como \"10\" * 2 dará 20. En Python produce \"1010\".",
+          "mini_exercise": {
+            "starter_code": "# Repite el texto \"*\" 10 veces para crear una barra\nbarra = ...\nprint(barra)",
+            "instructions": "Usa \"*\" * 10.",
+            "solution": "barra = \"*\" * 10\nprint(barra)"
+          },
+          "key_takeaways": [
+            "+ entre dos strings concatena (une) el contenido.",
+            "* entre un string y un entero repite el texto n veces.",
+            "Multiplicar un string por un entero repite los caracteres (ej: '5' * 2 es '55')."
+          ],
+          "exercise": {
+            "id": "ex_py1_04_02",
             "type": "predict_output",
             "difficulty": "easy",
-            "prompt": "Si el usuario introduce el número 10 cuando se ejecuta este código, ¿qué se imprimirá?",
-            "prompt_code": "# Supón que el usuario teclea 10\n# n = input(\"Ingresa número: \")\nn = \"10\"\nprint(n * 2)",
+            "prompt": "Si una variable contiene el texto n = \"10\", ¿qué mostrará la instrucción print(n * 2)?",
+            "prompt_code": "n = \"10\"\nprint(n * 2)",
             "options": [
               {
                 "id": "a",
@@ -83,63 +138,110 @@
               }
             ],
             "correct_option_id": "a",
-            "explanation": "input() retorna el string \"10\". En Python, multiplicar un string por un entero (\"10\" * 2) repite el texto dos veces produciendo \"1010\"."
+            "explanation": "Al multiplicar un string por un entero ('10' * 2), Python repite el texto dos veces produciendo '1010'."
           }
         },
         {
-          "id": "les_py1_04_02",
-          "code": "L02",
-          "title": "Métodos Esenciales de Strings: strip, lower, upper y len",
-          "slug": "metodos-de-strings",
-          "position": 2,
-          "concept_id": "py-string-methods",
-          "objective": "Limpiar y transformar textos usando los métodos nativos más frecuentes.",
-          "theory_markdown": "En programación real, los usuarios suelen escribir espacios accidentales o mayúsculas desordenadas (por ejemplo: `\"  admin@koda.com  \"`).\n\nLos strings en Python son **inmutables** (no cambian en memoria; sus métodos retornan una nueva cadena con el cambio aplicado):\n- `.strip()`: Elimina espacios en blanco al inicio y al final.\n- `.lower()`: Convierte todo el texto a minúsculas.\n- `.upper()`: Convierte todo el texto a mayúsculas.\n- `.replace(\"antiguo\", \"nuevo\")`: Reemplaza ocurrencias.\n- `len(texto)`: Función que devuelve la cantidad de caracteres de la cadena.",
+          "id": "les_py1_04_03",
+          "code": "L03",
+          "title": "Formateo Elegante con F-Strings y Modificadores Decimales (:.2f)",
+          "slug": "fstrings-y-formateo",
+          "position": 3,
+          "concept_id": "py-fstrings-formatting",
+          "objective": "Embeber variables dentro de textos usando f-strings y formatear números decimales con precisión :.2f.",
+          "theory_markdown": "Para mostrar variables combinadas con texto de forma limpia y moderna, Python utiliza las **f-strings** (*Formatted String Literals*).\n\n**Cómo usar f-strings:**\nSe coloca la letra `f` inmediatamente antes de la primera comilla. Luego, cualquier variable o cálculo que pongas entre llaves `{}` será evaluado e insertado automáticamente:\n```python\nusuario = \"Elena\"\nxp = 1500\nprint(f\"Agente {usuario} posee {xp} XP.\")\n```\n\n**Control de decimales con `:.2f`:**\nMuchas operaciones matemáticas producen números con demasiados decimales (por ejemplo: `19.999` o `3.33333`).\nPara redondear a 2 decimales exactos, agregamos `:.2f` dentro de las llaves:\n```python\nprecio = 19.999\nprint(f\"Total: ${precio:.2f}\")  # Muestra: Total: $20.00\n```\nPython redondea automáticamente al valor más cercano.",
           "examples": [
             {
-              "title": "Normalización de correo de usuario",
-              "code": "correo_sucio = \"   USUARIO@KodaAcademy.COM  \\n\"\ncorreo_limpio = correo_sucio.strip().lower()\nprint(correo_limpio)\nprint(\"Caracteres:\", len(correo_limpio))",
-              "output": "usuario@kodaacademy.com\nCaracteres: 23",
-              "explanation": "Encadenamos .strip() y .lower() para sanitizar la entrada de datos en una sola línea limpia."
+              "title": "Formateo de precios y datos de usuario",
+              "code": "producto = \"Monitor Gamer\"\nprecio = 199.996\n\nprint(f\"Producto: {producto}\")\nprint(f\"Precio final: ${precio:.2f}\")",
+              "output": "Producto: Monitor Gamer\nPrecio final: $200.00",
+              "explanation": "Las llaves {} evalúan variables, y :.2f redondea el flotante a dos decimales exactos."
             }
           ],
-          "common_errors": "Pensar que `texto.upper()` modifica la variable original. Al ser inmutables, debes reasignar: `texto = texto.upper()`.",
+          "common_errors": "Olvidar la letra f al inicio de la cadena. Sin la f (como \"Total: {precio}\"), Python imprimirá literalmente las llaves sin reemplazar la variable.",
           "mini_exercise": {
-            "starter_code": "codigo = \"  py-level-1  \"\n# Límpialo con strip() y conviértelo a mayúsculas\ncodigo_final = ...\nprint(codigo_final)",
-            "instructions": "Aplica .strip() y .upper() para obtener \"PY-LEVEL-1\".",
-            "solution": "codigo = \"  py-level-1  \"\ncodigo_final = codigo.strip().upper()\nprint(codigo_final)"
+            "starter_code": "nombre = \"Koda\"\nversion = 3.12\n# Genera un f-string: \"Aprendiendo Koda en version 3.12\"\nmensaje = ...\nprint(mensaje)",
+            "instructions": "Usa f\"Aprendiendo {nombre} en version {version}\".",
+            "solution": "nombre = \"Koda\"\nversion = 3.12\nmensaje = f\"Aprendiendo {nombre} en version {version}\"\nprint(mensaje)"
           },
           "key_takeaways": [
-            "Los strings son inmutables en Python.",
-            ".strip() remueve espacios y saltos de línea sobrantes en los extremos.",
-            ".lower() y .upper() normalizan el texto para comparaciones seguras.",
-            "len(s) retorna la longitud total de la cadena."
+            "Las f-strings inician con la letra f antes de las comillas: f\"Texto {variable}\".",
+            "Las llaves {} evalúan e interpolan variables o cálculos.",
+            ":.2f redondea números flotantes a exactamente dos decimales."
           ],
           "exercise": {
-            "id": "ex_py1_04_02",
+            "id": "ex_py1_04_03",
             "type": "predict_output",
             "difficulty": "easy",
-            "prompt": "¿Cuál es la salida de print(len(\"Python\".lower()))?",
+            "prompt": "¿Qué imprime el siguiente fragmento de código?",
+            "prompt_code": "precio = 19.999\nprint(f\"Total: ${precio:.2f}\")",
             "options": [
               {
                 "id": "a",
-                "text": "6"
+                "text": "Total: $20.00"
               },
               {
                 "id": "b",
-                "text": "5"
+                "text": "Total: $19.99"
               },
               {
                 "id": "c",
-                "text": "'python'"
+                "text": "Total: $19.999"
               },
               {
                 "id": "d",
-                "text": "Error"
+                "text": "Total: 20"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "\"Python\".lower() produce \"python\", y len(\"python\") cuenta exactamente 6 caracteres."
+            "explanation": "El especificador :.2f redondea al número decimal más cercano (19.999 se redondea hacia arriba a 20.00)."
+          }
+        },
+        {
+          "id": "les_py1_04_04",
+          "code": "L04",
+          "title": "Manipulación de Strings: strip(), lower(), upper(), len() e Inmutabilidad",
+          "slug": "metodos-strings-inmutabilidad",
+          "position": 4,
+          "concept_id": "py-string-methods-immutability",
+          "objective": "Limpiar textos con métodos nativos y comprender la regla fundamental de inmutabilidad de los strings.",
+          "theory_markdown": "Cuando recibes datos de usuarios, a menudo vienen con espacios accidentales o mayúsculas desordenadas. Python incluye métodos para sanear cadenas:\n\n**1. Métodos esenciales:**\n- `.strip()`: Elimina espacios en blanco sobrantes al principio y al final.\n- `.lower()`: Convierte todo el texto a minúsculas.\n- `.upper()`: Convierte todo el texto a mayúsculas.\n- `.replace(\"viejo\", \"nuevo\")`: Sustituye partes del texto.\n- `len(texto)`: Función que cuenta la cantidad total de caracteres (incluyendo espacios).\n\n**2. La Regla de Inmutabilidad:**\nEn Python, las cadenas de texto son **inmutables** (no pueden modificarse directamente en la memoria).\nCuando ejecutas `texto.upper()`, el valor original en `texto` **no cambia**: el método genera y devuelve una **nueva copia** modificada.\n\nPara conservar el cambio, debes reasignar la variable:\n```python\ncorreo = \"  USER@KODA.COM  \"\ncorreo = correo.strip().lower()  # Guardamos la nueva copia limpia\nprint(correo)  # \"user@koda.com\"\n```",
+          "examples": [
+            {
+              "title": "Limpieza y conteo de caracteres",
+              "code": "texto = \"   Python Specialist   \"\nlimpio = texto.strip()\n\nprint(\"Longitud con espacios:\", len(texto))  # 23\nprint(\"Texto limpio:\", limpio)              # \"Python Specialist\"\nprint(\"Longitud limpio:\", len(limpio))        # 17\nprint(\"En minusculas:\", limpio.lower())",
+              "output": "Longitud con espacios: 23\nTexto limpio: Python Specialist\nLongitud limpio: 17\nEn minusculas: python specialist",
+              "explanation": "strip() remueve espacios en los extremos y len() cuenta los caracteres. Ningún método altera la cadena original en memoria."
+            }
+          ],
+          "common_errors": "Creer que texto.strip() modifica la variable original sin necesidad de reasignarla (texto = texto.strip()). Recuerda: los strings son inmutables.",
+          "mini_exercise": {
+            "starter_code": "# Limpia los espacios y convierte a minusculas\nusuario = \"  Admin  \"\nusuario_limpio = ...\nprint(usuario_limpio)",
+            "instructions": "Aplica usuario.strip().lower().",
+            "solution": "usuario = \"  Admin  \"\nusuario_limpio = usuario.strip().lower()\nprint(usuario_limpio)"
+          },
+          "key_takeaways": [
+            "len(texto) devuelve la cantidad total de caracteres.",
+            ".strip() quita espacios externos; .lower() y .upper() cambian mayúsculas/minúsculas.",
+            "Los strings son inmutables: sus métodos devuelven una copia nueva y no modifican el original."
+          ],
+          "exercise": {
+            "id": "ex_py1_04_04",
+            "type": "true_false",
+            "difficulty": "easy",
+            "prompt": "Los strings en Python son mutables, por lo que texto.replace(\"a\", \"b\") modifica directamente el valor en memoria de la variable texto.",
+            "options": [
+              {
+                "id": "a",
+                "text": "Falso, los strings son inmutables y los métodos devuelven una nueva copia modificada"
+              },
+              {
+                "id": "b",
+                "text": "Verdadero, modifica el objeto original directamente en memoria"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Los strings en Python son inmutables. Todo método devuelve una nueva cadena y nunca modifica la original in-situ."
           }
         }
       ]

@@ -6,28 +6,162 @@
     {
       "id": "q_py2_02_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Qué estructura de datos recibe kwargs en def f(**kwargs)?",
+      "difficulty": "easy",
+      "prompt": "¿De qué tipo de datos es el objeto empaquetado en args dentro de una función definida como def procesar(*args)?",
       "options": [
         {
           "id": "a",
-          "text": "dict (diccionario)"
+          "text": "tuple"
         },
         {
           "id": "b",
-          "text": "tuple (tupla)"
+          "text": "list"
         },
         {
           "id": "c",
-          "text": "list (lista)"
+          "text": "dict"
         },
         {
           "id": "d",
-          "text": "str (cadena)"
+          "text": "set"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "**kwargs empaqueta los argumentos con nombre (clave=valor) en un diccionario dict."
+      "explanation": "*args empaqueta siempre todos los argumentos posicionales adicionales en una tupla inmutable."
+    },
+    {
+      "id": "q_py2_02_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿De qué tipo de datos es el objeto empaquetado en kwargs dentro de una función definida como def procesar(**kwargs)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "dict"
+        },
+        {
+          "id": "b",
+          "text": "tuple"
+        },
+        {
+          "id": "c",
+          "text": "list"
+        },
+        {
+          "id": "d",
+          "text": "str"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "**kwargs empaqueta todos los argumentos nombrados (clave=valor) en un diccionario estándar."
+    },
+    {
+      "id": "q_py2_02_03",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué imprime este código al desempaquetar la lista con el operador *?",
+      "prompt_code": "def calcular(a, b, c):\n    return a + (b * c)\n\nvalores = [2, 3, 4]\nprint(calcular(*valores))",
+      "options": [
+        {
+          "id": "a",
+          "text": "14"
+        },
+        {
+          "id": "b",
+          "text": "20"
+        },
+        {
+          "id": "c",
+          "text": "24"
+        },
+        {
+          "id": "d",
+          "text": "TypeError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "*valores distribuye 2 en 'a', 3 en 'b' y 4 en 'c'. La expresión calcula 2 + (3 * 4) = 2 + 12 = 14."
+    },
+    {
+      "id": "q_py2_02_04",
+      "type": "find_error",
+      "difficulty": "medium",
+      "prompt": "¿Qué error sintáctico presenta la siguiente declaración?",
+      "prompt_code": "def servicio(**kwargs, *args):\n    pass",
+      "options": [
+        {
+          "id": "a",
+          "text": "SyntaxError: invalid syntax (**kwargs no puede declararse antes de *args)"
+        },
+        {
+          "id": "b",
+          "text": "TypeError: args no puede ser tupla"
+        },
+        {
+          "id": "c",
+          "text": "IndentationError: cuerpo vacío"
+        },
+        {
+          "id": "d",
+          "text": "NameError: kwargs no existe"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El orden oficial de parámetros en Python exige que *args preceda a **kwargs. **kwargs debe ser siempre el último parámetro de la firma."
+    },
+    {
+      "id": "q_py2_02_05",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué salida produce el ordenamiento por clave lambda?",
+      "prompt_code": "palabras = [\"uva\", \"manzana\", \"kiwi\"]\nordenadas = sorted(palabras, key=lambda p: len(p))\nprint(ordenadas[0])",
+      "options": [
+        {
+          "id": "a",
+          "text": "uva"
+        },
+        {
+          "id": "b",
+          "text": "manzana"
+        },
+        {
+          "id": "c",
+          "text": "kiwi"
+        },
+        {
+          "id": "d",
+          "text": "3"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "'uva' tiene 3 letras, 'kiwi' tiene 4 y 'manzana' tiene 7. Al ordenar de menor a mayor longitud, el primer elemento es 'uva'."
+    },
+    {
+      "id": "q_py2_02_06",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué resultado imprime el desempaquetado de diccionario con ** en la llamada?",
+      "prompt_code": "def formato(titulo, autor):\n    return f\"{titulo} por {autor}\"\n\ndatos = {\"autor\": \"Borges\", \"titulo\": \"Ficciones\"}\nprint(formato(**datos))",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ficciones por Borges"
+        },
+        {
+          "id": "b",
+          "text": "Borges por Ficciones"
+        },
+        {
+          "id": "c",
+          "text": "{'autor': 'Borges', 'titulo': 'Ficciones'}"
+        },
+        {
+          "id": "d",
+          "text": "TypeError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "**datos pasa autor='Borges' y titulo='Ficciones' por coincidencia de claves nombradas, sin importar el orden en el diccionario."
     }
   ]
 }

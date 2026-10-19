@@ -4,14 +4,14 @@
   "code": "PY1_M06",
   "slug": "bucles-for",
   "course_slug": "python-1",
-  "title": "Bucle for e Iteración Estructurada",
-  "objective": "Dominar la iteración sobre secuencias, la función range(start, stop, step) y el control de flujo con break y continue.",
-  "description": "Automatiza tareas repetitivas de forma limpia y elegante usando bucles for sobre rangos numéricos y colecciones.",
+  "title": "Bucle for e Iteración Determinista",
+  "objective": "Aprender a automatizar repeticiones con bucles for, recorrer secuencias numéricas con range(start, stop, step), utilizar acumuladores con +=, y controlar el flujo con break y continue.",
+  "description": "Automatiza tareas repetitivas sin duplicar código: domina la iteración controlada sobre secuencias numéricas y textos de forma eficiente.",
   "position": 6,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 2,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,123 +23,234 @@
     {
       "id": "sec_py1_06_01",
       "code": "S01",
-      "title": "Iteración con for y la Función range()",
-      "slug": "for-y-range",
+      "title": "Iteración Controlada con for",
+      "slug": "iteracion-con-for",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 15,
-      "xp_on_complete": 40,
+      "estimated_minutes": 25,
+      "xp_on_complete": 50,
       "lessons": [
         {
           "id": "les_py1_06_01",
           "code": "L01",
-          "title": "Recorriendo Rangos Numéricos con range()",
-          "slug": "recorriendo-rangos",
+          "title": "¿Qué es un Bucle y Cómo Funciona for?",
+          "slug": "que-es-bucle-for",
           "position": 1,
-          "concept_id": "py-for-range",
-          "objective": "Utilizar range(stop), range(start, stop) y range(start, stop, step) para repeticiones controladas.",
-          "theory_markdown": "El bucle `for` en Python es un bucle de **iteración**: en cada paso, toma el siguiente elemento de una secuencia y lo asigna a una variable temporal.\n\nPara generar secuencias numéricas sin llenar la memoria, usamos `range()`:\n- `range(5)`: Genera `0, 1, 2, 3, 4` (el límite superior NUNCA se incluye).\n- `range(2, 6)`: Inicia en 2 y termina en 5.\n- `range(0, 10, 2)`: Paso de 2 en 2: `0, 2, 4, 6, 8`.\n- `range(10, 0, -1)`: Cuenta regresiva decreciente.",
+          "concept_id": "py-for-basics",
+          "objective": "Comprender la necesidad de los bucles para evitar la duplicación de código y la sintaxis de for variable in secuencia:.",
+          "theory_markdown": "Si necesitaras mostrar un mensaje 50 veces, escribir 50 líneas de `print()` sería tedioso y propenso a errores. En programación, para repetir instrucciones de forma automática usamos un **bucle** (*loop*).\n\nEn Python, el bucle `for` se encarga de recorrer los elementos de una secuencia uno a uno:\n```python\nfor variable_temporal in secuencia:\n    # Instrucciones que se repiten en cada vuelta (4 espacios de sangria)\n```\n\nEn cada repetición (llamada **iteración**), la variable temporal toma automáticamente el siguiente elemento de la secuencia hasta llegar al final.\n\nPor ejemplo: una cadena de texto es una secuencia de caracteres, por lo que podemos recorrerla letra por letra:\n```python\nfor letra in \"Koda\":\n    print(letra)\n```\nEsto imprimirá 'K', luego 'o', luego 'd' y finalmente 'a'.",
           "examples": [
             {
-              "title": "Cuenta progresiva y acumulador de suma",
-              "code": "total = 0\nfor i in range(1, 6):\n    total += i\n    print(f\"Paso {i}: total acumulado = {total}\")\nprint(f\"Suma final: {total}\")",
-              "output": "Paso 1: total acumulado = 1\nPaso 2: total acumulado = 3\nPaso 3: total acumulado = 6\nPaso 4: total acumulado = 10\nPaso 5: total acumulado = 15\nSuma final: 15",
-              "explanation": "La variable i recorre los valores del 1 al 5 y acumula la suma progresiva."
+              "title": "Recorriendo un texto letra a letra",
+              "code": "palabra = \"Python\"\nfor caracter in palabra:\n    print(\"Letra:\", caracter)",
+              "output": "Letra: P\nLetra: y\nLetra: t\nLetra: h\nLetra: o\nLetra: n",
+              "explanation": "La variable 'caracter' toma automáticamente el valor de cada letra en cada iteración del bucle."
             }
           ],
-          "common_errors": "Esperar que range(1, 5) incluya el número 5. En Python los rangos son semi-abiertos [inicio, fin): incluyen el inicio pero excluyen el fin.",
+          "common_errors": "Olvidar los dos puntos (:) al final de la línea del for o no respetar la sangría de 4 espacios en el bloque repetido.",
           "mini_exercise": {
-            "starter_code": "# Imprime los números pares del 2 al 10 inclusive usando range\nfor n in range(...):\n    print(n)",
-            "instructions": "Usa range(2, 11, 2) para mostrar 2, 4, 6, 8, 10.",
-            "solution": "for n in range(2, 11, 2):\n    print(n)"
+            "starter_code": "# Recorre la palabra 'IA' e imprime cada letra\nfor l in \"IA\":\n    ...",
+            "instructions": "Escribe print(l) con 4 espacios de sangría.",
+            "solution": "for l in \"IA\":\n    print(l)"
           },
           "key_takeaways": [
-            "for recorre elementos de una secuencia de principio a fin.",
-            "range(stop) genera números desde 0 hasta stop - 1.",
-            "range(start, stop, step) permite saltos e iteraciones inversas."
+            "Los bucles permiten repetir instrucciones sin duplicar código.",
+            "for toma un elemento a la vez de una secuencia y lo asigna a una variable temporal.",
+            "La cabecera del for termina con dos puntos (:) y su bloque interior lleva sangría."
           ],
           "exercise": {
             "id": "ex_py1_06_01",
             "type": "predict_output",
             "difficulty": "easy",
-            "prompt": "¿Cuántas veces se imprimirá la palabra \"Koda\"?",
-            "prompt_code": "for _ in range(4):\n    print(\"Koda\")",
+            "prompt": "¿Cuántas líneas de salida generará el siguiente bucle?",
+            "prompt_code": "for letra in \"Sol\":\n    print(letra)",
             "options": [
               {
                 "id": "a",
-                "text": "4 veces"
+                "text": "3 líneas (una por cada letra: S, o, l)"
               },
               {
                 "id": "b",
-                "text": "5 veces"
+                "text": "1 línea con la palabra completa"
               },
               {
                 "id": "c",
-                "text": "3 veces"
+                "text": "4 líneas"
               },
               {
                 "id": "d",
-                "text": "Ninguna"
+                "text": "Error de tipo"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "range(4) produce los índices 0, 1, 2, 3 (exactamente 4 iteraciones)."
+            "explanation": "El texto 'Sol' tiene 3 caracteres. El bucle for itera una vez por cada carácter, generando 3 líneas de salida."
           }
         },
         {
           "id": "les_py1_06_02",
           "code": "L02",
-          "title": "Control de Flujo: break y continue",
-          "slug": "break-y-continue",
+          "title": "La Función range(): start, stop y step",
+          "slug": "funcion-range",
           "position": 2,
-          "concept_id": "py-break-continue",
-          "objective": "Interrumpir o saltar iteraciones de forma controlada según condiciones.",
-          "theory_markdown": "Dentro de cualquier bucle, tienes dos comandos especiales para alterar su ritmo natural:\n- `break`: **Detiene el bucle por completo** inmediatamente y salta a la primera línea fuera del bucle.\n- `continue`: **Salta el resto de la iteración actual** y pasa de inmediato a la siguiente repetición.",
+          "concept_id": "py-for-range",
+          "objective": "Generar secuencias numéricas precisas usando range(stop), range(start, stop) y range(start, stop, step).",
+          "theory_markdown": "Para repetir un bucle una cantidad exacta de veces o trabajar con números, usamos la función nativa `range()`.\n\n`range()` tiene tres variantes:\n1. **`range(stop)`**: Genera números desde `0` hasta `stop - 1`.\n   - `range(4)` genera: `0, 1, 2, 3` (exactamente 4 iteraciones).\n2. **`range(start, stop)`**: Genera números desde `start` hasta `stop - 1`.\n   - `range(2, 5)` genera: `2, 3, 4`.\n3. **`range(start, stop, step)`**: Añade el salto (`step`) entre números.\n   - `range(1, 6, 2)` genera: `1, 3, 5` (salta de 2 en 2).\n\n> **¡Regla crucial de range()!**\n> El número de fin (`stop`) **NUNCA se incluye**. Si quieres llegar hasta el 5, debes poner `range(1, 6)`.",
           "examples": [
             {
-              "title": "Búsqueda con salida anticipada",
-              "code": "for num in range(1, 10):\n    if num == 3:\n        continue  # Salta el 3\n    if num == 6:\n        break     # Frena al llegar al 6\n    print(num, end=\" \")",
-              "output": "1 2 4 5 ",
-              "explanation": "El 3 es omitido por continue, y al llegar al 6 el break detiene el bucle antes de imprimirlo."
+              "title": "Secuencias con range()",
+              "code": "# 4 repeticiones exactas (0 al 3)\nfor i in range(4):\n    print(\"Iteracion:\", i)\n\n# Del 10 al 12\nfor n in range(10, 13):\n    print(\"Numero:\", n)",
+              "output": "Iteracion: 0\nIteracion: 1\nIteracion: 2\nIteracion: 3\nNumero: 10\nNumero: 11\nNumero: 12",
+              "explanation": "range(4) produce 0, 1, 2, 3. range(10, 13) produce 10, 11, 12 excluyendo el 13."
             }
           ],
-          "common_errors": "Colocar código después de un break en el mismo bloque; ese código nunca se ejecutará (código inalcanzable).",
+          "common_errors": "Creer que range(1, 5) incluye el número 5. En Python los rangos excluyen el límite superior, generando 1, 2, 3 y 4.",
           "mini_exercise": {
-            "starter_code": "# Imprime números del 1 al 10 pero salte los impares usando continue\nfor i in range(1, 11):\n    if i % 2 != 0:\n        ...\n    print(i)",
-            "instructions": "Usa continue para omitir los números impares.",
-            "solution": "for i in range(1, 11):\n    if i % 2 != 0:\n        continue\n    print(i)"
+            "starter_code": "# Imprime los numeros 1, 2 y 3 usando range\nfor i in range(...):\n    print(i)",
+            "instructions": "Usa range(1, 4) para llegar hasta el 3.",
+            "solution": "for i in range(1, 4):\n    print(i)"
           },
           "key_takeaways": [
-            "break cancela el bucle por completo.",
-            "continue omite la iteración actual y avanza a la siguiente.",
-            "Se utilizan comúnmente con condicionales if."
+            "range(n) genera números desde 0 hasta n - 1 (n vueltas exactas).",
+            "range(start, stop) siempre excluye el límite superior (stop).",
+            "range(start, stop, step) permite saltos numéricos personalizados."
           ],
           "exercise": {
             "id": "ex_py1_06_02",
             "type": "predict_output",
             "difficulty": "easy",
-            "prompt": "¿Cuál es la última salida que muestra este bucle?",
-            "prompt_code": "for i in range(10):\n    if i == 3:\n        break\n    print(i)",
+            "prompt": "¿Qué números imprimirá en consola el siguiente bucle?",
+            "prompt_code": "for n in range(2, 5):\n    print(n)",
             "options": [
               {
                 "id": "a",
-                "text": "2"
+                "text": "2, 3, 4"
               },
               {
                 "id": "b",
-                "text": "3"
+                "text": "2, 3, 4, 5"
               },
               {
                 "id": "c",
-                "text": "9"
+                "text": "1, 2, 3, 4"
               },
               {
                 "id": "d",
-                "text": "0"
+                "text": "2, 5"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Imprime 0, luego 1, luego 2. Cuando i es 3, se activa el break inmediatamente antes de imprimir el 3."
+            "explanation": "range(2, 5) inicia en 2 y finaliza antes del 5, produciendo exactamente los números 2, 3 y 4."
+          }
+        },
+        {
+          "id": "les_py1_06_03",
+          "code": "L03",
+          "title": "Acumuladores y Contadores con for (+ y +=)",
+          "slug": "acumuladores-y-contadores",
+          "position": 3,
+          "concept_id": "py-for-accumulators",
+          "objective": "Aplicar el patrón de acumulador inicializando variables antes del bucle y sumando progresivamente con +=.",
+          "theory_markdown": "Uno de los usos más habituales de un bucle es calcular totales o sumar una serie de números. A esto se le llama **patrón acumulador**.\n\n**Cómo funciona un acumulador:**\n1. Creas una variable fuera del bucle con valor inicial cero: `total = 0`.\n2. Dentro del bucle, en cada vuelta le sumas el valor actual: `total = total + numero`.\n\n**El operador abreviado `+=`:**\nEn lugar de escribir `total = total + numero`, en Python usamos el atajo `+=`:\n```python\ntotal += numero  # Significa exactamente lo mismo\n```",
+          "examples": [
+            {
+              "title": "Suma acumulada del 1 al 4",
+              "code": "total = 0\nfor i in range(1, 5):\n    total += i\n    print(f\"Sumando {i}, total parcial = {total}\")\n\nprint(\"Suma total final:\", total)",
+              "output": "Sumando 1, total parcial = 1\nSumando 2, total parcial = 3\nSumando 3, total parcial = 6\nSumando 4, total parcial = 10\nSuma total final: 10",
+              "explanation": "1 + 2 = 3; 3 + 3 = 6; 6 + 4 = 10. La variable total acumula cada valor progresivamente."
+            }
+          ],
+          "common_errors": "Reinicializar la variable acumuladora dentro del bucle (poner total = 0 adentro). Si haces eso, se reiniciará en cada vuelta perdiendo el cálculo.",
+          "mini_exercise": {
+            "starter_code": "# Calcula la suma de 1, 2 y 3\ntotal = 0\nfor n in range(1, 4):\n    total += ...\nprint(total)",
+            "instructions": "Usa total += n para sumar los valores.",
+            "solution": "total = 0\nfor n in range(1, 4):\n    total += n\nprint(total)"
+          },
+          "key_takeaways": [
+            "El acumulador debe inicializarse en 0 ANTES de que comience el bucle.",
+            "El operador += es la forma pythónica de sumar y reasignar una variable.",
+            "Al terminar el bucle, la variable acumuladora conserva el resultado definitivo."
+          ],
+          "exercise": {
+            "id": "ex_py1_06_03",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Cuál será el valor final de 'total' al terminar este bucle?",
+            "prompt_code": "total = 0\nfor n in range(1, 4):\n    total += n\nprint(total)",
+            "options": [
+              {
+                "id": "a",
+                "text": "6"
+              },
+              {
+                "id": "b",
+                "text": "4"
+              },
+              {
+                "id": "c",
+                "text": "3"
+              },
+              {
+                "id": "d",
+                "text": "10"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "range(1, 4) produce los números 1, 2 y 3. El acumulador realiza: 0 + 1 = 1; 1 + 2 = 3; 3 + 3 = 6."
+          }
+        },
+        {
+          "id": "les_py1_06_04",
+          "code": "L04",
+          "title": "Alterando el Flujo: break y continue",
+          "slug": "break-y-continue",
+          "position": 4,
+          "concept_id": "py-break-continue",
+          "objective": "Interrumpir bucles anticipadamente con break y omitir iteraciones puntuales con continue.",
+          "theory_markdown": "A veces necesitas cambiar el ritmo normal de un bucle cuando se cumple una condición especial. Para eso tenemos dos palabras clave:\n\n**1. `break` (Romper y salir):**\nDetiene el bucle **por completo** de forma inmediata. Python sale del bucle y continúa ejecutando la primera línea que esté fuera de él:\n```python\nfor i in range(1, 10):\n    if i == 3:\n        break  # Se detiene al llegar al 3\n    print(i)\n# Solo imprime 1 y 2\n```\n\n**2. `continue` (Saltar y continuar):**\n**Oリング** descarta únicamente el resto de la vuelta actual y salta de inmediato a la siguiente iteración:\n```python\nfor i in range(1, 5):\n    if i == 3:\n        continue  # Salta el 3\n    print(i)\n# Imprime 1, 2, 4 (omite el 3)\n```",
+          "examples": [
+            {
+              "title": "Búsqueda con break y filtrado con continue",
+              "code": "# Uso de continue para saltar el numero 2\nprint(\"Prueba continue:\")\nfor n in range(1, 4):\n    if n == 2:\n        continue\n    print(n)\n\n# Uso de break para detenerse en el numero 2\nprint(\"Prueba break:\")\nfor n in range(1, 4):\n    if n == 2:\n        break\n    print(n)",
+              "output": "Prueba continue:\n1\n3\nPrueba break:\n1",
+              "explanation": "continue salto el 2 e imprimio el 3. break detuvo el bucle al llegar al 2 sin imprimir nada mas."
+            }
+          ],
+          "common_errors": "Confundir break con continue. break apaga el bucle entero; continue solo descarta la vuelta presente.",
+          "mini_exercise": {
+            "starter_code": "# Deten el bucle cuando n sea igual a 2 usando break\nfor n in range(5):\n    if n == 2:\n        ...\n    print(n)",
+            "instructions": "Escribe break dentro del if.",
+            "solution": "for n in range(5):\n    if n == 2:\n        break\n    print(n)"
+          },
+          "key_takeaways": [
+            "break finaliza el bucle de inmediato sin evaluar más elementos.",
+            "continue omite el resto de la vuelta actual y avanza a la siguiente.",
+            "Ambos se utilizan habitualmente dentro de un if condicional."
+          ],
+          "exercise": {
+            "id": "ex_py1_06_04",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Qué hace la instrucción continue dentro de un bucle for?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Descarta el resto de la iteración actual y pasa de inmediato a la siguiente"
+              },
+              {
+                "id": "b",
+                "text": "Detiene y rompe el bucle por completo"
+              },
+              {
+                "id": "c",
+                "text": "Reinicia el bucle desde el principio"
+              },
+              {
+                "id": "d",
+                "text": "Pausa la ejecución durante 1 segundo"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "continue finaliza anticipadamente la vuelta actual del bucle e inicia de inmediato la siguiente iteración con el próximo elemento."
           }
         }
       ]

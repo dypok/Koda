@@ -66,9 +66,51 @@ function offsetPts(pts: [number, number][], d: number): [number, number][] {
 }
 
 function parsePath(path: string): Cubic | null {
-  const m = /^M ([\d.]+) ([\d.]+) C ([\d.]+) ([\d.]+), ([\d.]+) ([\d.]+), ([\d.]+) ([\d.]+)$/.exec(path.trim());
+  const m = /^M\s+([-\d.]+)\s+([-\d.]+)\s+C\s+([-\d.]+)\s+([-\d.]+),\s*([-\d.]+)\s+([-\d.]+),\s*([-\d.]+)\s+([-\d.]+)$/i.exec(
+    path.trim()
+  );
   if (!m) return null;
   return [1, 2, 3, 4, 5, 6, 7, 8].map((i) => Number(m[i])) as Cubic;
+}
+
+/**
+ * Resuelve una curva Bézier cúbica asegurando que inicie exactamente en el centro
+ * del nodo A y finalice en el nodo B, preservando tangentes relativas y corrigiendo
+ * cualquier desfasaje originado en fuentes de datos externas.
+ */
+function resolveCurve(
+  path: string | undefined,
+  a: GraphNode | undefined,
+  b: GraphNode | undefined
+): Cubic | null {
+  const raw = path ? parsePath(path) : null;
+  if (!a || !b) return raw;
+  if (raw) {
+    const [x0, y0, x1, y1, x2, y2, x3, y3] = raw;
+    // Si los puntos inicial y final ya coinciden con los centros de los nodos, se mantiene
+    if (
+      Math.abs(x0 - a.x) < 0.5 &&
+      Math.abs(y0 - a.y) < 0.5 &&
+      Math.abs(x3 - b.x) < 0.5 &&
+      Math.abs(y3 - b.y) < 0.5
+    ) {
+      return raw;
+    }
+    // Si hay desfasaje, anclamos rígidamente a (a.x, a.y) y (b.x, b.y) proyectando tangentes
+    return [
+      a.x,
+      a.y,
+      a.x + (x1 - x0),
+      a.y + (y1 - y0),
+      b.x + (x2 - x3),
+      b.y + (y2 - y3),
+      b.x,
+      b.y,
+    ];
+  }
+  // Curva horizontal suave por defecto entre centros de nodos
+  const dx = Math.abs(b.x - a.x) * 0.5;
+  return [a.x, a.y, a.x + dx, a.y, b.x - dx, b.y, b.x, b.y];
 }
 
 function hexToNumber(hex: string, fallback: number): number {
@@ -266,12 +308,13 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
 
       const sampleCurve = (cubic: Cubic | null, a: GraphNode | undefined, b: GraphNode | undefined): [number, number][] => {
         const pts: [number, number][] = [];
+        const curve = cubic ?? (a && b ? resolveCurve(undefined, a, b) : null);
         const N = 60;
         for (let i = 0; i <= N; i++) {
           const t = i / N;
-          if (cubic) {
+          if (curve) {
             const u = 1 - t;
-            const [x0, y0, x1, y1, x2, y2, x3, y3] = cubic;
+            const [x0, y0, x1, y1, x2, y2, x3, y3] = curve;
             pts.push([
               u * u * u * x0 + 3 * u * u * t * x1 + 3 * u * t * t * x2 + t * t * t * x3,
               u * u * u * y0 + 3 * u * u * t * y1 + 3 * u * t * t * y2 + t * t * t * y3,
@@ -293,7 +336,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
           const a = byId.get(c.fromId);
           const b = byId.get(c.toId);
           const lit = Boolean((a?.isUnlocked || a?.variant === 'completed') && (b?.isUnlocked || b?.variant === 'completed'));
-          const pts = sampleCurve(parsePath(c.path), a, b);
+          const pts = sampleCurve(resolveCurve(c.path, a, b), a, b);
           if (pts.length === 0) return;
           const { edgeDesign: design } = propsRef.current;
           const entry: EdgeCurve = {
@@ -371,7 +414,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
           const a = byId.get(c.fromId);
           const b = byId.get(c.toId);
           const lit = (a?.isUnlocked || a?.variant === 'completed') && (b?.isUnlocked || b?.variant === 'completed');
-          const cubic = parsePath(c.path);
+          const cubic = resolveCurve(c.path, a, b);
 
           if (lit) {
             // =========================================================================

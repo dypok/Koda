@@ -6,28 +6,158 @@
     {
       "id": "q_fa_05_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "En un contenedor Docker para producción, ¿por qué es fundamental enlazar Uvicorn a la dirección 0.0.0.0 en lugar de 127.0.0.1 (localhost)?",
+      "difficulty": "easy",
+      "prompt": "Que beneficio clave ofrece pydantic-settings para la configuracion de aplicaciones FastAPI en produccion?",
       "options": [
         {
           "id": "a",
-          "text": "Para que el servidor acepte tráfico proveniente desde fuera del contenedor (a través del puerto expuesto de Docker)"
+          "text": "Permite cargar variables de entorno y archivos .env con tipado estricto y validacion automatica 'fail-fast' al iniciar el servicio."
         },
         {
           "id": "b",
-          "text": "Porque 127.0.0.1 está prohibido en Linux"
+          "text": "Instala automaticamente librerias faltantes en el sistema operativo."
         },
         {
           "id": "c",
-          "text": "Para encriptar las conexiones"
+          "text": "Sustituye la necesidad de utilizar contenedores Docker."
         },
         {
           "id": "d",
-          "text": "No hace ninguna diferencia"
+          "text": "Convierte cualquier endpoint asincrono en sincrono."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "127.0.0.1 solo escucha peticiones dentro del contenedor mismo. 0.0.0.0 permite que el host y balanceadores de carga alcancen el servicio."
+      "explanation": "pydantic-settings valida al instante las variables de entorno, deteniendo el arranque si faltan claves criticas de configuracion."
+    },
+    {
+      "id": "q_fa_05_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Como se registra CORSMiddleware en FastAPI para permitir solicitudes desde el frontend 'https://miapp.com'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "app.add_middleware(CORSMiddleware, allow_origins=['https://miapp.com'], allow_methods=['*'], allow_headers=['*'])"
+        },
+        {
+          "id": "b",
+          "text": "app.enable_cors('https://miapp.com')"
+        },
+        {
+          "id": "c",
+          "text": "@app.cors(origin='https://miapp.com')"
+        },
+        {
+          "id": "d",
+          "text": "headers.set('CORS', 'https://miapp.com')"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "add_middleware(CORSMiddleware, allow_origins=...) es el metodo oficial de FastAPI y Starlette para configurar la politica CORS."
+    },
+    {
+      "id": "q_fa_05_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "En un middleware personalizado de FastAPI @app.middleware('http'), como se pasa el control al siguiente middleware o endpoint de la ruta?",
+      "options": [
+        {
+          "id": "a",
+          "text": "response = await call_next(request)"
+        },
+        {
+          "id": "b",
+          "text": "response = request.forward()"
+        },
+        {
+          "id": "c",
+          "text": "response = next(request)"
+        },
+        {
+          "id": "d",
+          "text": "response = await execute_route()"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "call_next(request) es la funcion proporcionada por FastAPI/Starlette para procesar la peticion en el siguiente nivel y retornar la respuesta."
+    },
+    {
+      "id": "q_fa_05_04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Por que es una buena practica de seguridad utilizar la construccion multi-stage en el Dockerfile de una aplicacion FastAPI?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque aisla herramientas de compilacion pesadas en una primera etapa y entrega una imagen final ligera con solo los artefactos necesarios y menor superficie de ataque."
+        },
+        {
+          "id": "b",
+          "text": "Porque permite compilar el kernel de Linux dentro de la imagen final."
+        },
+        {
+          "id": "c",
+          "text": "Porque evita la necesidad de exponer puertos de red en el contenedor."
+        },
+        {
+          "id": "d",
+          "text": "Porque multiplica por diez la velocidad de la base de datos."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Multi-stage builds reducen el peso de la imagen y eliminan compiladores y paquetes de desarrollo de la imagen de produccion, minimizando vulnerabilidades."
+    },
+    {
+      "id": "q_fa_05_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que bandera de Uvicorn NUNCA debe usarse al ejecutar FastAPI en un servidor de produccion?",
+      "options": [
+        {
+          "id": "a",
+          "text": "--reload"
+        },
+        {
+          "id": "b",
+          "text": "--host"
+        },
+        {
+          "id": "c",
+          "text": "--port"
+        },
+        {
+          "id": "d",
+          "text": "--workers"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "--reload monitoriza continuamente el sistema de archivos consumiendo recursos significativos e introduciendo inestabilidad en produccion."
+    },
+    {
+      "id": "q_fa_05_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "Cual es el proposito fundamental de un endpoint /healthz en una API que se despliega en Kubernetes?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permitir que el orquestador compruebe que el proceso de la aplicacion esta vivo y responder con 200 OK."
+        },
+        {
+          "id": "b",
+          "text": "Reiniciar la base de datos cada 5 minutos."
+        },
+        {
+          "id": "c",
+          "text": "Calcular la factura de la nube en tiempo real."
+        },
+        {
+          "id": "d",
+          "text": "Borrar los logs de error del servidor."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El endpoint /healthz (liveness probe) es consultado periodicamente por orquestadores para confirmar que el proceso sigue vivo y responde peticiones."
     }
   ]
 }

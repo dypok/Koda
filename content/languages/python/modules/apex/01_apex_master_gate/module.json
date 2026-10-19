@@ -4,14 +4,14 @@
   "code": "PY_APEX_GATE",
   "slug": "apex-master-gate",
   "course_slug": "python-apex",
-  "title": "Apex Master Gate: Proyecto Integrador de Certificación",
-  "objective": "Construir, auditar y desplegar una plataforma completa de software en Python que integre arquitectura avanzada, servicios asíncronos y componentes inteligentes.",
-  "description": "El desafío cumbre de Python Specialist. Unifica el tronco común avanzado con tu especialidad en una aplicación empresarial lista para producción.",
+  "title": "Apex Master Gate: Proyecto Integrador de Certificacion",
+  "objective": "Construir, auditar y desplegar una plataforma completa de software en Python que integre arquitectura avanzada, servicios asincronos y componentes inteligentes.",
+  "description": "El desafio cumbre de Python Specialist. Unifica el tronco comun avanzado con tu especialidad en una aplicacion empresarial lista para produccion.",
   "position": 61,
   "status": "published",
   "content_version": 1,
-  "total_sections": 3,
-  "total_lessons": 3,
+  "total_sections": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 85,
     "exam": 90
@@ -23,194 +23,223 @@
     {
       "id": "sec-apex-01",
       "code": "APEX-S1",
-      "title": "Fase 1: Arquitectura y Modelado del Dominio",
-      "slug": "fase-1-arquitectura",
+      "title": "Fases del Proyecto Integrador Apex",
+      "slug": "fases-proyecto-apex",
       "position": 1,
       "type": "project",
-      "estimated_minutes": 60,
-      "xp_on_complete": 400,
+      "estimated_minutes": 270,
+      "xp_on_complete": 1000,
       "lessons": [
         {
           "id": "apex-01",
           "code": "APEX-01",
-          "title": "Fase 1: Arquitectura Hexagonal y Contratos de Datos",
+          "title": "Fase 1: Arquitectura Limpia y Contratos de Dominio",
           "slug": "fase-1-arquitectura-contratos",
           "position": 1,
           "concept_id": "apex_clean_architecture",
-          "objective": "Estructurar una solución Python profesional desacoplando la lógica de negocio de la infraestructura mediante arquitectura limpia y tipado estricto.",
-          "theory_markdown": "El Apex Master Gate simula un encargo del mundo real: diseñar una plataforma de análisis y automatización empresarial.\n\n### 1. El Principio de Inversión de Dependencias (DIP)\nTu núcleo de dominio no debe importar frameworks externos (ni FastAPI, ni Django, ni ChromaDB). Las interfaces y entidades de negocio son código Python puro (`dataclasses`, `Protocol`, `AbstractBaseClasses`).\n\n```\n  +---------------------------------------------+\n  |               Entidades / Dominio            |\n  |  (Modelos inmutables, reglas de negocio)     |\n  +----------------------+----------------------+\n                         ^\n  +----------------------+----------------------+\n  |           Casos de Uso / Servicios          |\n  |  (Orquestación, protocolos de repositorios)  |\n  +----------------------+----------------------+\n                         ^\n  +----------------------+----------------------+\n  |          Adaptadores / Infraestructura       |\n  |  (FastAPI routers, SQLite/PostgreSQL, LLMs) |\n  +---------------------------------------------+\n```\n\n### 2. Estructura de Paquetes\nOrganiza el proyecto con un diseño modular:\n```text\nsrc/\n├── domain/\n│   ├── models.py\n│   └── ports.py\n├── application/\n│   └── use_cases.py\n└── infrastructure/\n    ├── api/\n    └── storage/\n```",
+          "objective": "Estructurar una solucion desacoplando la logica de negocio de la infraestructura mediante arquitectura limpia y tipado estricto con Protocol.",
+          "theory_markdown": "El Apex Master Gate simula un encargo del mundo real: disenar una plataforma empresarial escalable, mantenible y lista para produccion.\n\n### 1. Principio de Inversion de Dependencias (DIP)\nEl nucleo de dominio no debe importar frameworks externos (ni FastAPI, ni Django, ni drivers SQL, ni ChromaDB). Las interfaces y entidades de negocio se definen en Python puro utilizando `dataclasses` inmutables y `typing.Protocol`.\n\n```text\n+---------------------------------------------+\n|               Entidades / Dominio           |\n|  (Modelos inmutables, reglas de negocio)    |\n+----------------------+----------------------+\n                       ^\n+----------------------+----------------------+\n|           Casos de Uso / Servicios         |\n|  (Orquestacion, protocolos de repositorios) |\n+----------------------+----------------------+\n                       ^\n+----------------------+----------------------+\n|          Adaptadores / Infraestructura      |\n|  (FastAPI routers, SQLite/Postgres, LLMs)   |\n+---------------------------------------------+\n```\n\n### 2. Estructura de Paquetes\nOrganiza el proyecto con separacion de responsabilidades:\n```text\nsrc/\n├── domain/\n│   ├── models.py\n│   └── ports.py\n├── application/\n│   └── use_cases.py\n└── infrastructure/\n    ├── api/\n    └── storage/\n```",
           "examples": [
             {
-              "title": "Definición de Entidad y Protocolo de Repositorio",
-              "code": "from dataclasses import dataclass\nfrom typing import Protocol, List\nfrom datetime import datetime\n\n@dataclass(frozen=True)\nclass KnowledgeItem:\n    id: str\n    title: str\n    content: str\n    created_at: datetime\n\nclass KnowledgeRepository(Protocol):\n    async def save(self, item: KnowledgeItem) -> None: ...\n    async def get_by_id(self, item_id: str) -> KnowledgeItem | None: ...\n    async def search(self, query: str, limit: int = 5) -> List[KnowledgeItem]: ...",
-              "explanation": "El dominio solo depende de tipos estándar de Python y `typing.Protocol`."
+              "title": "Definicion de Entidad y Protocolo de Repositorio",
+              "code": "from dataclasses import dataclass\nfrom typing import Protocol, List, Optional\nfrom datetime import datetime\n\n@dataclass(frozen=True)\nclass KnowledgeItem:\n    id: str\n    title: str\n    content: str\n    created_at: datetime\n\nclass KnowledgeRepository(Protocol):\n    async def save(self, item: KnowledgeItem) -> None: ...\n    async def get_by_id(self, item_id: str) -> Optional[KnowledgeItem]: ...\n    async def search(self, query: str, limit: int = 5) -> List[KnowledgeItem]: ...",
+              "explanation": "El dominio solo depende de tipos nativos de Python y de typing.Protocol, garantizando independencia total de librerias externas."
             }
           ],
-          "common_errors": "Acoplar la base de datos o el framework web dentro de las clases del modelo de negocio, lo que impide probar o reemplazar componentes.",
+          "common_errors": "Acoplar modelos ORM o clientes de red dentro de la capa de dominio, impidiendo sustituir la base de datos o ejecutar pruebas unitarias puras.",
           "mini_exercise": {
-            "instructions": "Declara una dataclass inmutable Document y un Protocol DocumentEngine con un método process(doc: Document) -> bool.",
+            "instructions": "Declara una dataclass inmutable Document con campos doc_id y body, y un Protocol DocumentEngine con un metodo process(doc: Document) -> bool.",
             "starter_code": "from dataclasses import dataclass\nfrom typing import Protocol\n\n# Define Document y DocumentEngine\n",
             "solution": "from dataclasses import dataclass\nfrom typing import Protocol\n\n@dataclass(frozen=True)\nclass Document:\n    doc_id: str\n    body: str\n\nclass DocumentEngine(Protocol):\n    def process(self, doc: Document) -> bool:\n        ..."
           },
           "key_takeaways": [
-            "La arquitectura limpia aísla las reglas de negocio de librerías y bases de datos.",
-            "Los Protocols permiten tipado estático estructural sin acoplamiento por herencia."
+            "La arquitectura limpia aisla las reglas de negocio de frameworks y bases de datos.",
+            "Los Protocols permiten tipado estatico estructural sin acoplamiento rigido por herencia."
           ],
           "exercise": {
             "id": "ex-apex-01",
             "type": "single_choice",
             "difficulty": "hard",
-            "prompt": "¿Cuál es el beneficio de definir contratos de infraestructura mediante typing.Protocol en el módulo de dominio?",
+            "prompt": "Cual es el beneficio primordial de definir contratos de infraestructura mediante typing.Protocol en la capa de dominio?",
             "options": [
               {
                 "id": "a",
-                "text": "Permite que el dominio defina la interfaz requerida sin depender de implementaciones concretas."
+                "text": "Permite que el dominio declare la interfaz requerida sin depender de implementaciones concretas ni bibliotecas externas."
               },
               {
                 "id": "b",
-                "text": "Obliga a que Python compile el código a lenguaje ensamblador."
+                "text": "Obliga a Python a compilar las funciones a codigo C de forma estatica."
               },
               {
                 "id": "c",
-                "text": "Convierte todas las funciones síncronas en asíncronas automáticamente."
+                "text": "Convierte llamadas sincronas en asincronas de manera transparente."
               },
               {
                 "id": "d",
-                "text": "Elimina la necesidad de escribir pruebas unitarias."
+                "text": "Elimina la necesidad de escribir pruebas automatizadas."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Protocol establece un tipado estructural independiente de cómo y dónde se implemente la infraestructura."
+            "explanation": "Protocol establece un contrato estructural agnostico de la implementacion concreta (DIP)."
           }
-        }
-      ]
-    },
-    {
-      "id": "sec-apex-02",
-      "code": "APEX-S2",
-      "title": "Fase 2: Motor de Servicios y Capacidades Inteligentes",
-      "slug": "fase-2-servicios-ia",
-      "position": 2,
-      "type": "project",
-      "estimated_minutes": 90,
-      "xp_on_complete": 500,
-      "lessons": [
+        },
         {
           "id": "apex-02",
           "code": "APEX-02",
-          "title": "Fase 2: Orquestación Asíncrona y Agentes de Decisión",
-          "slug": "fase-2-orquestacion-agentes",
-          "position": 1,
+          "title": "Fase 2: Orquestacion Asincrona, Resiliencia y Fallbacks",
+          "slug": "fase-2-orquestacion-resiliencia",
+          "position": 2,
           "concept_id": "apex_async_orchestration",
-          "objective": "Implementar el motor asíncrono central combinando procesamiento concurrente seguro y toma de decisiones guiada por herramientas.",
-          "theory_markdown": "En la Fase 2, conectamos los adaptadores de infraestructura para dar vida al sistema.\n\n### 1. Concurrencia Robusta con AsyncIO\nAsegúrate de manejar excepciones concurrentes y tareas cancelables mediante `asyncio.TaskGroup` o `asyncio.gather` con `return_exceptions=True`.\n\n### 2. Integración de Herramientas y Fallbacks\nSi el sistema consulta un modelo de IA o una API externa, debe incluir:\n- **Timeouts explícitos:** Nunca dejes una llamada a la red sin límite de tiempo.\n- **Circuit Breaker:** Si la API externa falla reiteradamente, responder con un fallback predeterminado.\n- **Validación con Pydantic:** Todas las respuestas de modelos de lenguaje deben someterse a esquemas estrictos antes de ser procesadas por el negocio.",
+          "objective": "Implementar el motor asincrono combinando concurrencia no bloqueante con manejo de timeouts, circuit breakers y recoleccion segura de excepciones.",
+          "theory_markdown": "En la Fase 2, se conectan los adaptadores asincronos para garantizar alto rendimiento y tolerancia a fallos.\n\n### 1. Concurrencia Robusta con AsyncIO\nAl invocar multiples servicios concurrentemente con `asyncio.gather`, se debe utilizar `return_exceptions=True` para que una falla puntual en una fuente de datos no cancele abruptamente la ejecucion de las demas tareas.\n\n### 2. Timeouts y Proteccion de Red\nNinguna llamada I/O de red debe ejecutarse sin limite de tiempo:\n```python\nawait asyncio.wait_for(client.get(url), timeout=3.0)\n```\nSi se supera el tiempo maximo, se captura `asyncio.TimeoutError` y se activa una estrategia de fallback (degradacion elegante).",
           "examples": [
             {
-              "title": "Ejecución Resiliente con Timeout y Manejo de Errores",
-              "code": "import asyncio\nfrom typing import Any\n\nasync def fetch_with_safety(coro: Any, timeout_secs: float = 3.0) -> Any:\n    try:\n        return await asyncio.wait_for(coro, timeout=timeout_secs)\n    except asyncio.TimeoutError:\n        return {\"status\": \"error\", \"reason\": \"timeout_exceeded\"}\n    except Exception as exc:\n        return {\"status\": \"error\", \"reason\": str(exc)}",
-              "explanation": "Protege las llamadas a servicios externos para que una falla no bloquee todo el ciclo de eventos."
+              "title": "Ejecucion Segura con Timeout y Manejo de Errores",
+              "code": "import asyncio\nfrom typing import Any, Dict\n\nasync def fetch_with_safety(coro, timeout_secs: float = 3.0) -> Dict[str, Any]:\n    try:\n        res = await asyncio.wait_for(coro, timeout=timeout_secs)\n        return {\"status\": \"ok\", \"data\": res}\n    except asyncio.TimeoutError:\n        return {\"status\": \"error\", \"reason\": \"timeout_exceeded\"}\n    except Exception as exc:\n        return {\"status\": \"error\", \"reason\": str(exc)}",
+              "explanation": "Encapsula llamadas asincronas criticas evitando que la aplicacion quede bloqueada indefinidamente ante fallas de red."
             }
           ],
-          "common_errors": "No poner timeout a llamadas de red, provocando que los workers asíncronos queden colgados indefinidamente.",
+          "common_errors": "No configurar timeouts en operaciones asincronas externas, provocando el agotamiento del pool de conexiones del servidor.",
           "mini_exercise": {
-            "instructions": "Escribe una función asíncrona execute_tasks(task_list) que use asyncio.gather con return_exceptions=True.",
-            "starter_code": "import asyncio\n\nasync def execute_tasks(tasks: list):\n    # Completa la ejecución concurrente\n    pass",
+            "instructions": "Escribe una funcion asincrona execute_tasks(tasks) que ejecute la lista de corutinas concurrentemente con asyncio.gather y retorne las excepciones sin abortar.",
+            "starter_code": "import asyncio\n\nasync def execute_tasks(tasks: list):\n    # Ejecuta concurrentemente\n    pass",
             "solution": "import asyncio\n\nasync def execute_tasks(tasks: list):\n    return await asyncio.gather(*tasks, return_exceptions=True)"
           },
           "key_takeaways": [
-            "Las APIs y servicios externos requieren timeouts y esquemas estrictos de validación.",
-            "asyncio.gather con return_exceptions=True previene que una excepción individual cancele las demás tareas."
+            "asyncio.gather con return_exceptions=True preserva las respuestas exitosas aun si otras tareas fallan.",
+            "Toda llamada asincrona externa debe contener un timeout estricto para evitar bloqueos."
           ],
           "exercise": {
             "id": "ex-apex-02",
             "type": "single_choice",
             "difficulty": "hard",
-            "prompt": "¿Por qué es fundamental usar return_exceptions=True al invocar asyncio.gather en tareas críticas de recolección de datos?",
+            "prompt": "Por que es fundamental utilizar return_exceptions=True al invocar asyncio.gather en tareas de agregacion de datos concurrentes?",
             "options": [
               {
                 "id": "a",
-                "text": "Porque evita que una excepción en una tarea aborte de inmediato las demás operaciones concurrentes."
+                "text": "Porque evita que una excepcion en una tarea individual cancele inmediatamente las demas operaciones en curso."
               },
               {
                 "id": "b",
-                "text": "Porque incrementa el ancho de banda del canal de red."
+                "text": "Porque reduce el consumo de memoria a la mitad."
               },
               {
                 "id": "c",
-                "text": "Porque convierte los errores de sintaxis en avisos informativos."
+                "text": "Porque transforma excepciones en advertencias del compilador."
               },
               {
                 "id": "d",
-                "text": "Porque reemplaza la necesidad de usar bloques try/except en el código síncrono."
+                "text": "Porque delega la ejecucion a multiples procesos del sistema operativo."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Por defecto, gather cancela el grupo si una tarea falla; return_exceptions=True devuelve las excepciones como elementos de la lista de resultados para inspección controlada."
+            "explanation": "Sin return_exceptions=True, el primer fallo interrumpe y cancela todo el conjunto; con este parametro, las excepciones se devuelven como valores en la lista de resultados."
           }
-        }
-      ]
-    },
-    {
-      "id": "sec-apex-03",
-      "code": "APEX-S3",
-      "title": "Fase 3: Auditoría, Testing y Despliegue en Producción",
-      "slug": "fase-3-auditoria-deploy",
-      "position": 3,
-      "type": "exam",
-      "estimated_minutes": 120,
-      "xp_on_complete": 700,
-      "lessons": [
+        },
         {
           "id": "apex-03",
           "code": "APEX-03",
-          "title": "Fase 3: Pruebas Automatizadas, Dockerfile Multi-Stage y Certificación",
-          "slug": "fase-3-pruebas-docker-certificacion",
-          "position": 1,
-          "concept_id": "apex_testing_deployment",
-          "objective": "Auditar la calidad del código con cobertura de pruebas, empaquetar la solución en contenedores seguros y obtener la certificación Python Specialist.",
-          "theory_markdown": "La última fase evalúa la madurez ingenieril de la solución.\n\n### 1. Pirámide de Pruebas con Pytest\n- **Unitarias:** Pruebas instantáneas de la capa de dominio sin dependencias de red ni bases de datos.\n- **Integración:** Pruebas con bases de datos en memoria o fixtures con `httpx.AsyncClient`.\n- **Regresión y límites:** Pruebas parametrizadas para validar entradas inválidas, tokens expirados y cargas grandes.\n\n### 2. Dockerfile Multi-Stage de Producción\nUn contenedor de producción no debe contener compiladores ni herramientas de testing:\n```dockerfile\nFROM python:3.12-slim AS builder\nWORKDIR /app\nRUN pip install --no-cache-dir poetry\nCOPY pyproject.toml .\nRUN poetry export -f requirements.txt --output requirements.txt\n\nFROM python:3.12-slim AS runner\nWORKDIR /app\nRUN useradd -m appuser\nCOPY --from=builder /app/requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY src/ ./src/\nUSER appuser\nCMD [\"uvicorn\", \"src.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n```\n\n### 3. Criterio de Certificación Apex\n- Cobertura de pruebas superior al 85%.\n- Cumplimiento de PEP 8 y tipos estáticos validados con Mypy / Ruff.\n- Arquitectura desacoplada y lista para escalar vertical u horizontalmente.",
+          "title": "Fase 3: Pruebas Automatizadas y Fixtures Asincronas con Pytest",
+          "slug": "fase-3-testing-pytest-asyncio",
+          "position": 3,
+          "concept_id": "apex_testing_asyncio",
+          "objective": "Disenar una suite integral de pruebas unitarias y de integracion usando Pytest, fixtures asincronas y simulacion de contratos HTTP con AsyncClient.",
+          "theory_markdown": "Una aplicacion empresarial en Python requiere validacion rigurosa en su piramide de pruebas.\n\n### 1. Fixtures Asincronas con pytest-asyncio\nPara probar componentes que operan sobre el event loop o clientes HTTP asincronos, se decora la fixture con `@pytest_asyncio.fixture`:\n```python\nimport pytest_asyncio\nfrom httpx import AsyncClient, ASGITransport\n\n@pytest_asyncio.fixture\nasync def async_client():\n    transport = ASGITransport(app=app)\n    async with AsyncClient(transport=transport, base_url=\"http://test\") as client:\n        yield client\n```\n\n### 2. Pruebas de Limites y Mocks\n- **Unitarias:** Verifican los casos de uso inyectando falsos repositorios (fakes basados en diccionarios en memoria).\n- **Integracion:** Validan los endpoints ASGI con `AsyncClient`, comprobando codigos de estado HTTP y esquemas de respuesta.",
           "examples": [
             {
-              "title": "Fixture Asíncrono de Pytest para Pruebas E2E",
-              "code": "import pytest\nimport pytest_asyncio\nfrom httpx import AsyncClient, ASGITransport\n\n@pytest_asyncio.fixture\nasync def client():\n    # Asume que app es tu aplicación ASGI (ej. FastAPI)\n    from src.main import app\n    transport = ASGITransport(app=app)\n    async with AsyncClient(transport=transport, base_url=\"http://test\") as ac:\n        yield ac",
-              "explanation": "Permite probar rutas HTTP asíncronas de extremo a extremo sin levantar un servidor socket real."
+              "title": "Test Asincrono con Marcador de Pytest",
+              "code": "import pytest\n\n@pytest.mark.asyncio\nasync def test_health_check(async_client):\n    response = await async_client.get(\"/health\")\n    assert response.status_code == 200\n    assert response.json() == {\"status\": \"healthy\"}",
+              "explanation": "@pytest.mark.asyncio le indica al ejecutor de pruebas que ejecute la corutina dentro de un bucle de eventos."
             }
           ],
-          "common_errors": "Ejecutar contenedores de producción con el usuario root o dejar secretos y tokens hardcodeados en el Dockerfile.",
+          "common_errors": "Intentar probar funciones asincronas con funciones normales def sin decorador @pytest.mark.asyncio, lo que genera corutinas que nunca se esperan (unawaited coroutine warning).",
           "mini_exercise": {
-            "instructions": "Escribe una directiva de pytest para marcar un test como asíncrono y definir un caso de prueba para una función async que verifique un resultado.",
-            "starter_code": "import pytest\n\n# Marca la prueba y define test_async_operation\n",
-            "solution": "import pytest\n\n@pytest.mark.asyncio\nasync def test_async_operation():\n    result = await asyncio.sleep(0.01, result=42)\n    assert result == 42"
+            "instructions": "Escribe un test asincrono con pytest que compruebe que await calculate_score(10) es igual a 100.",
+            "starter_code": "import pytest\n\n# Define el test asincrono\n",
+            "solution": "import pytest\n\n@pytest.mark.asyncio\nasync def test_score():\n    result = await calculate_score(10)\n    assert result == 100"
           },
           "key_takeaways": [
-            "Las pruebas automatizadas y el tipado estático garantizan la estabilidad del software en el tiempo.",
-            "Los contenedores multi-stage y sin privilegios de root protegen el entorno de producción."
+            "pytest-asyncio proporciona el decorador @pytest.mark.asyncio para ejecutar tests en corutinas.",
+            "ASGITransport permite evaluar routers FastAPI o Starlette sin necesidad de sockets de red reales."
           ],
           "exercise": {
             "id": "ex-apex-03",
             "type": "single_choice",
             "difficulty": "hard",
-            "prompt": "¿Por qué se utiliza una imagen base \"multi-stage\" en Docker para desplegar aplicaciones de Python en producción?",
+            "prompt": "Cual es el decorador estandar que provee pytest-asyncio para definir fixtures generadoras asincronas con ciclo setup y teardown?",
             "options": [
               {
                 "id": "a",
-                "text": "Para aislar herramientas de compilación y pruebas del artefacto final, reduciendo el tamaño y la superficie de ataque."
+                "text": "@pytest_asyncio.fixture"
               },
               {
                 "id": "b",
-                "text": "Para que el código Python se ejecute en múltiples CPUs simultáneamente."
+                "text": "@pytest.fixture_async"
               },
               {
                 "id": "c",
-                "text": "Porque Docker no permite instalar librerías con pip en una sola etapa."
+                "text": "@asyncio.fixture"
               },
               {
                 "id": "d",
-                "text": "Para evitar tener que escribir un archivo requirements.txt."
+                "text": "@test.fixture(coroutine=True)"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Multi-stage builds permiten descartar compiladores y paquetes dev en la imagen de ejecución final, logrando contenedores mínimos, ligeros y más seguros."
+            "explanation": "@pytest_asyncio.fixture es la sintaxis oficial para declarar fixtures asincronas en Pytest."
+          }
+        },
+        {
+          "id": "apex-04",
+          "code": "APEX-04",
+          "title": "Fase 4: Dockerfile Multi-Stage, Seguridad y Despliegue en Produccion",
+          "slug": "fase-4-docker-seguridad-produccion",
+          "position": 4,
+          "concept_id": "apex_docker_deployment",
+          "objective": "Empaquetar la plataforma completa mediante un Dockerfile multi-stage, usuario sin privilegios y verificacion de salud (healthcheck).",
+          "theory_markdown": "La certificacion Apex exige que la solucion este preparada para entornos productivos reales.\n\n### 1. Construccion Multi-Stage\nEl patron multi-stage compila dependencias y ruedas en una primera etapa (builder) y copia unicamente los binarios requeridos a la imagen final (runner). Esto reduce el peso de la imagen de gigabytes a apenas megabytes y elimina compiladores como `gcc` de produccion.\n\n```dockerfile\n# Etapa 1: Compilacion y resolucion de dependencias\nFROM python:3.12-slim AS builder\nWORKDIR /app\nRUN pip install --no-cache-dir poetry\nCOPY pyproject.toml poetry.lock ./\nRUN poetry export -f requirements.txt --output requirements.txt --without-hashes\n\n# Etapa 2: Imagen final para ejecucion\nFROM python:3.12-slim AS runner\nWORKDIR /app\nRUN useradd -u 1001 -m appuser\nCOPY --from=builder /app/requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY src/ ./src/\nUSER appuser\nEXPOSE 8000\nHEALTHCHECK --interval=30s --timeout=5s CMD python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\" || exit 1\nCMD [\"uvicorn\", \"src.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n```\n\n### 2. Principios de Hardening y Seguridad\n- **No root:** El contenedor jamas debe ejecutarse como usuario root (`USER appuser`).\n- **Zero secrets in build:** Secretos de API y llaves criptograficas deben inyectarse en runtime via variables de entorno o gestores de secretos, jamas quemados en la imagen Docker.",
+          "examples": [
+            {
+              "title": "Creacion de usuario no privilegiado en Dockerfile",
+              "code": "RUN useradd -u 1001 -m appuser\nUSER appuser",
+              "explanation": "Establece que el proceso de la aplicacion se ejecute con privilegios minimos, impidiendo modificaciones al sistema de archivos del contenedor."
+            }
+          ],
+          "common_errors": "Dejar credenciales o tokens quemados en directivas ENV del Dockerfile, las cuales quedan expuestas en el historial de capas de la imagen.",
+          "mini_exercise": {
+            "instructions": "Escribe la directiva de Dockerfile para cambiar el usuario de ejecucion al usuario no privilegiado llamado kodauser.",
+            "starter_code": "# Cambia el usuario\n",
+            "solution": "USER kodauser"
+          },
+          "key_takeaways": [
+            "Las imagenes multi-stage minimizan el tamano y la superficie de ataque al descartar herramientas de build.",
+            "Ejecutar contenedores con un usuario no root es un requisito obligatorio de seguridad industrial."
+          ],
+          "exercise": {
+            "id": "ex-apex-04",
+            "type": "single_choice",
+            "difficulty": "hard",
+            "prompt": "Cual es la razon fundamental para emplear un esquema de construccion multi-stage en el Dockerfile de una aplicacion Python para produccion?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Aislar herramientas de compilacion y dependencias de build de la imagen final, reduciendo el tamano y la superficie de ataque."
+              },
+              {
+                "id": "b",
+                "text": "Permitir que la aplicacion utilice multiples procesadores de hardware sin soporte del sistema operativo."
+              },
+              {
+                "id": "c",
+                "text": "Eliminar la necesidad de utilizar variables de entorno para la configuracion."
+              },
+              {
+                "id": "d",
+                "text": "Garantizar que todo el codigo se reescriba en formato binario C."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Multi-stage permite descartar compiladores pesados y paquetes temporales, produciendo una imagen ligera y segura para produccion."
           }
         }
       ]

@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useLayoutEffect, useRef } from 'react';
-import Image from 'next/image';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 import { cn } from '@/lib/utils';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 
 interface KodaPeekProps {
   align?: 'left' | 'right';
@@ -42,12 +42,11 @@ export const KodaPeek: React.FC<KodaPeekProps> = ({ align = 'right', size = 72, 
         className
       )}
     >
-      <Image
-        src="/brand/koda-mascot-cartoon-2d-transparent.png"
-        alt=""
-        width={size}
-        height={size}
-        className="object-contain animate-float drop-shadow-[0_8px_20px_rgba(249,115,22,0.25)]"
+      <KodaMascot
+        state="thinking"
+        size={size}
+        animate="float"
+        glow
       />
     </div>
   );

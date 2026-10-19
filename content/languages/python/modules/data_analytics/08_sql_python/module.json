@@ -5,84 +5,249 @@
   "slug": "sql-con-python",
   "course_slug": "data-analytics",
   "title": "Consultas SQL con Python, SQLite y DuckDB",
-  "objective": "Integrar consultas SQL en scripts de análisis con sqlite3, pandas.read_sql y acelerar consultas analíticas con DuckDB.",
-  "description": "El puente entre analistas y bases de datos relacionales: ejecuta queries complejas directamente en memoria con DuckDB.",
+  "objective": "Integrar SQL con Pandas usando sqlite3, extraer datos relacionales y ejecutar analitica OLAP ultrarrapida con DuckDB.",
+  "description": "El puente entre bases de datos y Python: lectura nativa con read_sql_query, clausulas analiticas complejas y procesamiento columnar con DuckDB.",
   "position": 48,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 350
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_da_08_01",
       "code": "S01",
-      "title": "pandas.read_sql y DuckDB Analítico",
-      "slug": "sql-y-duckdb",
+      "title": "Bases de Datos, Integracion Pandas y Motores OLAP",
+      "slug": "sql-pandas-duckdb",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 50,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_da_08_01",
           "code": "L01",
-          "title": "Ejecución de SQL desde Python y DuckDB en Memoria",
-          "slug": "sql-duckdb-base",
+          "title": "Conexion SQL Nativa con sqlite3",
+          "slug": "conexion-nativa-sqlite3",
           "position": 1,
-          "concept_id": "da-sql",
-          "objective": "Combinar la expresividad de SQL con el poder de transformación de Python.",
-          "theory_markdown": "Con `pd.read_sql(query, conexion)`, ejecutas una sentencia SQL en cualquier base de datos relacional y recibes el resultado inmediatamente como un DataFrame de Pandas.\n\nPara análisis de big data local, **DuckDB** es el \"SQLite para analítica\": un motor SQL columnar vectorial embebido en Python que procesa archivos Parquet y CSV de gigabytes en milisegundos usando todos los núcleos de tu procesador.",
+          "concept_id": "da-sql-sqlite3-native",
+          "objective": "Gestionar conexiones, cursores y transacciones seguras con parametros en el modulo nativo sqlite3.",
+          "theory_markdown": "Python incluye de fabrica el modulo **`sqlite3`**, un motor relacional embebido sin configuracion de servidor.\n\n### Ciclo de vida estandar\n1. `conn = sqlite3.connect('datos.db')`: Abre o crea el archivo de base de datos.\n2. `cursor = conn.cursor()`: Objeto para enviar instrucciones SQL.\n3. `cursor.execute(sql, parametros)`: Ejecuta sentencias SQL. **Siempre se deben usar tuplas de parametros `?` para prevenir SQL Injection**.\n4. Recuperacion de resultados:\n   - `cursor.fetchall()`: Lista de todas las filas como tuplas.\n   - `cursor.fetchone()`: Siguiente fila individual o `None`.\n5. `conn.commit()`: Confirma transacciones de escritura (INSERT, UPDATE, DELETE).\n6. `conn.close()`: Libera el descriptor de archivo.",
           "examples": [
             {
-              "title": "Consulta SQL analítica con SQLite y Pandas",
-              "code": "import sqlite3\nimport pandas as pd\n\n# Base de datos en memoria\nconn = sqlite3.connect(\":memory:\")\nconn.execute(\"CREATE TABLE ventas (pais TEXT, monto REAL)\")\nconn.execute(\"INSERT INTO ventas VALUES ('México', 1500), ('México', 2300), ('Chile', 1800)\")\n\n# Query analítica directo a DataFrame\ndf = pd.read_sql(\"\"\"\n    SELECT pais, COUNT(*) AS num_ventas, SUM(monto) AS total\n    FROM ventas\n    GROUP BY pais\n\"\"\", conn)\nprint(df)",
-              "output": "     pais  num_ventas   total\n0   Chile           1  1800.0\n1  México           2  3800.0",
-              "explanation": "pd.read_sql transfiere los tipos y resultados de la consulta relacional a Pandas de forma transparente."
+              "title": "Consulta parametrizada segura en sqlite3",
+              "code": "import sqlite3\n\nconn = sqlite3.connect(\":memory:\") # Base de datos en RAM\ncursor = conn.cursor()\ncursor.execute(\"CREATE TABLE usuarios (id INT, nombre TEXT, saldo REAL)\")\ncursor.execute(\"INSERT INTO usuarios VALUES (?, ?, ?)\", (1, \"Ana\", 250.5))\nconn.commit()\n\ncursor.execute(\"SELECT * FROM usuarios WHERE saldo > ?\", (100.0,))\nfilas = cursor.fetchall()\nprint(filas)\nconn.close()",
+              "output": "[(1, 'Ana', 250.5)]",
+              "explanation": "El uso del marcador ? parametriza la consulta de forma inmune a inyeccion de codigo."
             }
           ],
-          "common_errors": "Concatenar variables de usuario directamente en strings de consulta SQL (vulnerabilidad SQL Injection). Siempre usa parámetros con tuplas: `cursor.execute(\"SELECT ... WHERE id = ?\", (id_usuario,))`.",
+          "common_errors": "Concatenar variables directamente en strings SQL con f-strings (f'SELECT * WHERE id={id}'), creando vulnerabilidades criticas de SQL Injection.",
           "mini_exercise": {
-            "starter_code": "# Consulta básica con read_sql\n# df = pd.read_sql(\"SELECT * FROM tabla\", conn)",
-            "instructions": "Observa la sintaxis limpia de integración con read_sql.",
-            "solution": "# read_sql listo"
+            "instructions": "Usa sqlite3.connect(':memory:') para abrir una base de datos temporal en memoria RAM.",
+            "starter_code": "import sqlite3\n\n# Abre conexion en memoria\nconn = ...",
+            "solution": "import sqlite3\n\nconn = sqlite3.connect(\":memory:\")"
           },
           "key_takeaways": [
-            "pd.read_sql() ejecuta queries y entrega DataFrames.",
-            "DuckDB procesa consultas analíticas columnares a velocidad extrema.",
-            "Siempre parametriza las consultas para evitar inyección SQL."
+            "sqlite3 viene integrado de forma nativa en la biblioteca estandar de Python.",
+            "Las consultas deben parametrizarse siempre usando el marcador ?.",
+            "conn.commit() consolida las escrituras y conn.close() libera la base de datos."
           ],
           "exercise": {
             "id": "ex_da_08_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Por qué DuckDB es especialmente rápido para tareas de analítica frente a motores transaccionales tradicionales?",
+            "prompt": "Cual es la forma correcta de ejecutar una consulta SQL con parametros variables en sqlite3 para evitar SQL Injection?",
             "options": [
               {
                 "id": "a",
-                "text": "Porque es un motor orientado a columnas (column-oriented) y vectorizado"
+                "text": "cursor.execute('SELECT * FROM clientes WHERE pais = ?', (pais_var,))"
               },
               {
                 "id": "b",
-                "text": "Porque no utiliza SQL"
+                "text": "cursor.execute(f'SELECT * FROM clientes WHERE pais = \"{pais_var}\"')"
               },
               {
                 "id": "c",
-                "text": "Porque no requiere memoria RAM"
+                "text": "cursor.execute('SELECT * FROM clientes WHERE pais = ' + pais_var)"
               },
               {
                 "id": "d",
-                "text": "Porque solo corre en supercomputadoras"
+                "text": "cursor.execute('SELECT * FROM clientes').filter(pais=pais_var)"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "El almacenamiento columnar lee solo las columnas necesarias para la agregación sin cargar filas completas a memoria."
+            "explanation": "El paso de tuplas de parametros mediante el marcador '?' delega el escape y tipado seguro al motor interno de SQLite."
+          }
+        },
+        {
+          "id": "les_da_08_02",
+          "code": "L02",
+          "title": "Integracion de Pandas con Bases de Datos SQL",
+          "slug": "integracion-pandas-sql",
+          "position": 2,
+          "concept_id": "da-sql-pandas-bridge",
+          "objective": "Leer consultas directamente a DataFrames con read_sql_query y persistir tablas con df.to_sql.",
+          "theory_markdown": "Pandas se integra directamente con conexiones SQL eliminando la conversion manual de tuplas:\n\n### 1. Ingestion con `pd.read_sql_query()`\nEjecuta la consulta y transforma el resultset directamente en un DataFrame con nombres de columnas y tipos inferidos:\n```python\nquery = \"SELECT producto, SUM(cantidad) AS total FROM ventas GROUP BY producto\"\ndf = pd.read_sql_query(query, conn)\n```\n\n### 2. Persistencia con `df.to_sql()`\nEscribe un DataFrame completo en una tabla SQL:\n```python\ndf.to_sql(\n    'reporte_ventas',\n    conn,\n    if_exists='replace', # 'fail' (defecto), 'replace' (recrea tabla) o 'append' (agrega filas)\n    index=False          # No guarda el indice de Pandas como columna SQL\n)\n```",
+          "examples": [
+            {
+              "title": "Flujo bidireccional entre Pandas y SQL",
+              "code": "import sqlite3\nimport pandas as pd\n\nconn = sqlite3.connect(\":memory:\")\ndf_origen = pd.DataFrame({\"id\": [1, 2], \"item\": [\"A\", \"B\"], \"precio\": [10.0, 20.0]})\n# Guardar a SQL:\ndf_origen.to_sql(\"items\", conn, if_exists=\"replace\", index=False)\n\n# Leer de SQL filtrando:\ndf_leido = pd.read_sql_query(\"SELECT * FROM items WHERE precio > 15\", conn)\nprint(df_leido)\nconn.close()",
+              "output": "   id item  precio\n0   2    B    20.0",
+              "explanation": "read_sql_query devuelve un DataFrame listo para analizar sin procesar cursores manualmente."
+            }
+          ],
+          "common_errors": "Olvidar index=False en df.to_sql(), creando una columna no deseada llamada 'index' o 'level_0' en la tabla relacional de destino.",
+          "mini_exercise": {
+            "instructions": "Usa pd.read_sql_query para ejecutar 'SELECT * FROM clientes' usando la conexion 'conn'.",
+            "starter_code": "import pandas as pd\n# Lee la tabla clientes con read_sql_query\n# df = ...",
+            "solution": "df = pd.read_sql_query(\"SELECT * FROM clientes\", conn)"
+          },
+          "key_takeaways": [
+            "pd.read_sql_query convierte resultados de sentencias SQL en DataFrames.",
+            "df.to_sql exporta tablas a motores relacionales con opciones replace o append.",
+            "index=False evita volcar indices numericos artificiales en la tabla de base de datos."
+          ],
+          "exercise": {
+            "id": "ex_da_08_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Que opcion de if_exists en df.to_sql('tabla', conn, if_exists=...) se debe utilizar para insertar nuevos registros sin borrar los datos existentes?",
+            "options": [
+              {
+                "id": "a",
+                "text": "if_exists='append'"
+              },
+              {
+                "id": "b",
+                "text": "if_exists='replace'"
+              },
+              {
+                "id": "c",
+                "text": "if_exists='fail'"
+              },
+              {
+                "id": "d",
+                "text": "if_exists='insert'"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "append agrega las nuevas filas al final de la tabla existente respetando el esquema previo."
+          }
+        },
+        {
+          "id": "les_da_08_03",
+          "code": "L03",
+          "title": "Consultas Analiticas: GROUP BY, HAVING y Funciones Ventana",
+          "slug": "consultas-analiticas-group-by-having",
+          "position": 3,
+          "concept_id": "da-sql-analytic-queries",
+          "objective": "Distinguir el filtrado antes y despues de agregacion (WHERE vs HAVING) y utilizar funciones ventana.",
+          "theory_markdown": "### La regla de oro: WHERE vs HAVING\n- **`WHERE`:** Filtra **filas individuales** antes de que ocurra la agrupacion.\n- **`HAVING`:** Filtra **grupos consolidados** despues de haber aplicado las funciones de agregacion (`COUNT`, `SUM`, `AVG`).\n\n```sql\nSELECT categoria, AVG(precio) AS precio_promedio\nFROM productos\nWHERE en_stock = 1       -- Filtra filas individuales primero\nGROUP BY categoria\nHAVING AVG(precio) > 100 -- Filtra los grupos resultantes\n```\n\n### Funciones Ventana (`OVER (PARTITION BY ...)`)\nCalculan valores agregados conservando las filas individuales (equivalente al `.transform()` de Pandas):\n```sql\nSELECT\n    id, categoria, precio,\n    AVG(precio) OVER(PARTITION BY categoria) AS promedio_cat,\n    ROW_NUMBER() OVER(PARTITION BY categoria ORDER BY precio DESC) AS ranking\nFROM productos;\n```",
+          "examples": [
+            {
+              "title": "Consulta con HAVING en sqlite3",
+              "code": "import sqlite3\nimport pandas as pd\n\nconn = sqlite3.connect(\":memory:\")\ndf = pd.DataFrame({\n    \"departamento\": [\"IT\", \"IT\", \"HR\", \"Ventas\", \"Ventas\"],\n    \"gasto\": [500, 700, 200, 800, 300]\n})\ndf.to_sql(\"gastos\", conn, index=False)\n\nsql = \"\"\"\nSELECT departamento, SUM(gasto) as total\nFROM gastos\nGROUP BY departamento\nHAVING SUM(gasto) > 600\n\"\"\"\nprint(pd.read_sql_query(sql, conn))",
+              "output": "  departamento  total\n0           IT   1200\n1       Ventas   1100",
+              "explanation": "El departamento HR tuvo un total de 200 y fue filtrado por la clausula HAVING."
+            }
+          ],
+          "common_errors": "Intentar usar una funcion agregadora como SUM o AVG dentro de la clausula WHERE (ej. WHERE SUM(ventas) > 100), arrojando un error de sintaxis SQL.",
+          "mini_exercise": {
+            "instructions": "Escribe una clausula HAVING que conserve unicamente los grupos donde COUNT(*) sea mayor o igual a 5.",
+            "starter_code": "-- Completa el HAVING\n-- HAVING ...",
+            "solution": "HAVING COUNT(*) >= 5"
+          },
+          "key_takeaways": [
+            "WHERE opera a nivel de fila individual; HAVING opera sobre grupos agregados.",
+            "HAVING requiere ir acompanado de una clausula GROUP BY.",
+            "Funciones ventana (OVER PARTITION BY) computan metricas analiticas sin colapsar filas."
+          ],
+          "exercise": {
+            "id": "ex_da_08_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Por que no es posible utilizar la condicion 'WHERE SUM(monto) > 500' en una consulta SQL estandar?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque WHERE se evalua antes de agrupar y desconoce las agregaciones; las condiciones sobre funciones agregadas deben colocarse en la clausula HAVING."
+              },
+              {
+                "id": "b",
+                "text": "Porque SQL no admite la funcion SUM."
+              },
+              {
+                "id": "c",
+                "text": "Porque el operador mayor que '>' esta prohibido en sentencias WHERE."
+              },
+              {
+                "id": "d",
+                "text": "Porque solo se pueden sumar cadenas de texto."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El orden logico de procesamiento de SQL evalua WHERE antes del GROUP BY; por tanto, para filtrar valores calculados por agregaciones se debe utilizar HAVING."
+          }
+        },
+        {
+          "id": "les_da_08_04",
+          "code": "L04",
+          "title": "Analitica OLAP Moderna con DuckDB",
+          "slug": "analitica-olap-duckdb",
+          "position": 4,
+          "concept_id": "da-sql-duckdb-olap",
+          "objective": "Ejecutar consultas SQL sobre DataFrames y archivos Parquet mediante DuckDB sin infraestructura de servidor.",
+          "theory_markdown": "Mientras que SQLite es un motor transaccional **OLTP** (orientado a filas), **DuckDB** es un motor analitico **OLAP** (orientado a columnas) disenado especificamente para ciencia de datos.\n\n### Caracteristicas revolucionarias de DuckDB\n1. **Zero-Copy con Pandas:** Puede consultar variables DataFrame de Python directamente dentro de sentencias SQL sin copiarlas a disco ni importarlas a tablas.\n2. **Ejecucion directa sobre Parquet:** Lee y filtra gigabytes de archivos `.parquet` directamente con ejecucion vectorizada multihilo sin cargarlos previamente en memoria.\n\n```python\nimport duckdb\nimport pandas as pd\n\ndf = pd.DataFrame({'edad': [25, 30, 45], 'salario': [2000, 3500, 5000]})\n\n# DuckDB reconoce 'df' en el entorno local directamente:\nresultado = duckdb.query('SELECT AVG(salario) AS media FROM df WHERE edad >= 30').to_df()\n```",
+          "examples": [
+            {
+              "title": "Consulta SQL directa sobre DataFrame con DuckDB",
+              "code": "import duckdb\nimport pandas as pd\n\ntransacciones = pd.DataFrame({\n    \"categoria\": [\"Tech\", \"Tech\", \"Moda\"],\n    \"precio\": [500, 800, 150]\n})\n# Consulta SQL nativa que retorna un nuevo DataFrame:\nres = duckdb.query(\"\"\"\n    SELECT categoria, COUNT(*) as ops, SUM(precio) as total\n    FROM transacciones\n    GROUP BY categoria\n\"\"\").to_df()\nprint(res)",
+              "output": "  categoria  ops  total\n0      Tech    2   1300\n1      Moda    1    150",
+              "explanation": "DuckDB procesa el DataFrame en memoria usando ejecucion columnar vectorizada en C++."
+            }
+          ],
+          "common_errors": "Creer que DuckDB requiere un servidor de base de datos escuchando en un puerto de red; DuckDB es un motor embebido que corre dentro del proceso de Python.",
+          "mini_exercise": {
+            "instructions": "Usa duckdb.query para seleccionar todas las filas del DataFrame 'datos' y convertirlas a DataFrame con .to_df().",
+            "starter_code": "import duckdb\nimport pandas as pd\ndatos = pd.DataFrame({\"a\": [1, 2]})\n\n# Consulta con duckdb\nresultado = ...",
+            "solution": "resultado = duckdb.query(\"SELECT * FROM datos\").to_df()"
+          },
+          "key_takeaways": [
+            "DuckDB es un motor analitico columnar embebido ('el SQLite para analitica').",
+            "Permite ejecutar SQL directamente sobre variables DataFrame de Pandas sin copias.",
+            "Consulta archivos Parquet masivos aprovechando vectorizacion y multi-threading nativo."
+          ],
+          "exercise": {
+            "id": "ex_da_08_04",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "Cual es la ventaja fundamental de DuckDB frente a motores relacionales tradicionales como SQLite para tareas de analitica de datos?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Su arquitectura de almacenamiento columnar vectorizada optimizada para agregaciones masivas y su capacidad de consultar DataFrames de Pandas y archivos Parquet sin servidor."
+              },
+              {
+                "id": "b",
+                "text": "Que requiere instalar un cluster de Hadoop para funcionar."
+              },
+              {
+                "id": "c",
+                "text": "Que solo funciona en navegadores web."
+              },
+              {
+                "id": "d",
+                "text": "Que no soporta sentencias SQL estandar."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "DuckDB combina almacenamiento columnar OLAP con ejecucion multihilo en memoria y enlace nativo con Pandas y Parquet."
           }
         }
       ]

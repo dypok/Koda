@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 import { MagnifyingGlass, X } from '@phosphor-icons/react';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 import { LanguageOption, TechCategory } from '@/models/register/register.model';
@@ -70,14 +70,10 @@ export const LanguageSelectionStep: React.FC<LanguageSelectionStepProps> = ({
     {/* Koda Welcome & Header */}
     <div className="flex items-center gap-4 text-left">
       <div className="relative shrink-0 flex flex-col items-center">
-        <div className="relative h-14 w-14 sm:h-16 sm:w-16">
-          <Image
-            src="/brand/koda-mascot-cartoon-2d.svg"
-            alt="Koda, tu guía de registro"
-            width={64}
-            height={64}
-            className="object-contain"
-            style={{ width: 'auto', height: 'auto' }}
+        <div className="relative flex items-center justify-center">
+          <KodaMascot
+            state="idle"
+            size={64}
             priority
           />
         </div>

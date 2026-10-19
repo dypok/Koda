@@ -4,85 +4,250 @@
   "code": "IA_M08",
   "slug": "ia-agentes-bucle-react",
   "course_slug": "ai-agents",
-  "title": "Arquitectura de Agentes Autónomos: El Bucle ReAct",
-  "objective": "Implementar el bucle de razonamiento y acción ReAct (Thought -> Action -> Observation) para agentes con autonomía de múltiples pasos.",
-  "description": "De chatbots pasivos a agentes autónomos: construye sistemas capaces de planificar, evaluar el entorno y tomar medidas correctivas hasta cumplir su meta.",
+  "title": "Arquitectura de Agentes Autonomos: El Bucle ReAct",
+  "objective": "Construir agentes autonomos basados en el framework ReAct (Thought, Action, Observation) con bucles de ejecucion en Python puro y prevencion de ciclos infinitos.",
+  "description": "De chatbots reactivos a sistemas autonomos orientados a objetivos: razonamiento estructurado, toma de decisiones dinamica y resolucion iterativa de problemas.",
   "position": 58,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 400
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_ia_08_01",
       "code": "S01",
-      "title": "El Bucle de Razonamiento ReAct",
-      "slug": "bucle-react",
+      "title": "Framework ReAct, Bucles de Agentes y Control de Parada",
+      "slug": "framework-react-bucles-agentes",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 22,
-      "xp_on_complete": 55,
+      "estimated_minutes": 55,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_ia_08_01",
           "code": "L01",
-          "title": "El Patrón ReAct: Thought, Action, Observation",
-          "slug": "react-loop-base",
+          "title": "Que es un Agente de IA: Razonamiento, Accion y Percepcion",
+          "slug": "que-es-agente-ia",
           "position": 1,
-          "concept_id": "ia-react-pattern",
-          "objective": "Programar un bucle while que permita al agente ejecutar múltiples herramientas encadenadas hasta alcanzar la solución.",
-          "theory_markdown": "El patrón **ReAct (Reasoning + Acting)** publicado por investigadores de Princeton y Google es la base de los agentes autónomos modernos:\n\n1. **Thought (Pensamiento)**: El agente reflexiona sobre el estado actual y su objetivo: *\"Necesito saber el precio de las acciones de Apple hoy y compararlo con el de Microsoft\"*\n2. **Action (Acción)**: Decide qué herramienta ejecutar y con qué argumentos: `obtener_precio(\"AAPL\")`\n3. **Observation (Observación)**: Lee el resultado devuelto por la herramienta: `225.50 USD`\n4. **Repite el bucle**: Razona con la nueva información y ejecuta la siguiente herramienta hasta que determina que tiene todo lo necesario para emitir la **Final Answer**.",
+          "concept_id": "ia-agent-definition-loop",
+          "objective": "Distinguir entre cadenas secuenciales fijas (chains) y agentes autonomos con capacidad de toma de decisiones dinamica.",
+          "theory_markdown": "### Cadena (Chain) vs Agente (Agent)\n- **Cadena (Chain):** Secuencia fija y determinista de pasos programados de forma estatica en codigo (`Paso 1 -> Paso 2 -> Paso 3`). Si el Paso 2 devuelve un error o un resultado imprevisto, la cadena se rompe.\n- **Agente (Agent):** Sistema autonomo impulsado por un LLM como 'cerebro de razonamiento'. Dada una meta del usuario, el agente **decide dinamicamente que pasos tomar, que herramientas usar, en que orden y cuantas veces**, evaluando los resultados de cada accion antes de decidir la siguiente.",
           "examples": [
             {
-              "title": "Estructura simplificada del bucle de un agente autónomo",
-              "code": "def ejecutar_agente(objetivo, max_pasos=5):\n    paso = 0\n    while paso < max_pasos:\n        paso += 1\n        # 1. El LLM decide si llama herramienta o emite respuesta\n        decision = \"FINAL_ANSWER\" if paso == 2 else \"CALL_TOOL\"\n        if decision == \"FINAL_ANSWER\":\n            return f\"Objetivo cumplido en el paso {paso}.\"\n    return \"Límite de pasos alcanzado sin finalizar.\"",
-              "output": "Objetivo cumplido en el paso 2.",
-              "explanation": "El bucle while con max_pasos es el guardrail fundamental para evitar bucles infinitos en agentes autónomos."
+              "title": "Comportamiento dinamico de un agente",
+              "code": "# Usuario: 'Investiga la cotizacion de Apple y si subio mas del 2%, avisa por email a finanzas'\n# El agente:\n# 1. Decide consultar la API de bolsa (Action: consultar_bolsa('AAPL'))\n# 2. Percibe el resultado (Observation: +3.5%)\n# 3. Razona que 3.5% > 2% (Thought)\n# 4. Decide disparar la herramienta de correo (Action: enviar_email(...))\n# 5. Concluye emitiendo respuesta final al usuario.",
+              "output": "Toma de decisiones contingente adaptada al estado del entorno.",
+              "explanation": "El agente adapta su comportamiento segun la observacion que recibe de sus herramientas."
             }
           ],
-          "common_errors": "No poner un límite máximo de iteraciones (`max_iterations = 10`) en el bucle del agente. Si el modelo entra en un bucle lógico alucinatorio, puede agotar todo tu saldo de API en minutos.",
+          "common_errors": "Creer que un script con tres llamadas anidadas a una API de LLM es un agente; un agente requiere un bucle de percepcion-accion con autonomia de seleccion de herramientas.",
           "mini_exercise": {
-            "starter_code": "# Siempre define un límite de pasos para evitar bucles infinitos\nMAX_PASOS_AGENTE = 10\nprint(\"Límite seguro configurado:\", MAX_PASOS_AGENTE)",
-            "instructions": "Verifica la variable de protección.",
-            "solution": "MAX_PASOS_AGENTE = 10\nprint(\"Límite seguro configurado:\", MAX_PASOS_AGENTE)"
+            "instructions": "Escribe una frase explicando la diferencia principal entre una cadena (chain) y un agente.",
+            "starter_code": "# Diferencia chain vs agent\ndiferencia = ...",
+            "solution": "diferencia = \"La cadena sigue pasos fijos hardcodeados; el agente decide dinamicamente sus acciones usando el LLM.\""
           },
           "key_takeaways": [
-            "ReAct combina pensamiento (razonamiento interno) y acción (uso de herramientas).",
-            "El agente itera dinámicamente según las observaciones que recibe.",
-            "Un límite max_iterations es un guardrail obligatorio de seguridad."
+            "Un agente utiliza un LLM para planificar y seleccionar acciones de forma autonoma.",
+            "Se adapta dinamicamente a la retroalimentacion recibida del entorno.",
+            "Combina percepcion (Observation), razonamiento (Thought) y ejecucion (Action)."
           ],
           "exercise": {
             "id": "ex_ia_08_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "En la arquitectura de agentes autónomos ReAct, ¿qué representa la fase de \"Observation\"?",
+            "prompt": "Cual es la diferencia arquitectonica definitoria entre una cadena lineal de LLM y un agente autonomo?",
             "options": [
               {
                 "id": "a",
-                "text": "El resultado devuelto por la herramienta ejecutada, el cual se reinyecta al modelo para el siguiente razonamiento"
+                "text": "La cadena sigue un flujo estatico de pasos predeterminado en el codigo; el agente decide dinamicamente que herramientas invocar y cuando detenerse evaluando las observaciones del entorno."
               },
               {
                 "id": "b",
-                "text": "Mirar al usuario a través de la webcam"
+                "text": "Las cadenas no usan modelos de lenguaje."
               },
               {
                 "id": "c",
-                "text": "Un error fatal del sistema operativo"
+                "text": "Los agentes solo funcionan en robots fisicos."
               },
               {
                 "id": "d",
-                "text": "El guardado del código en Git"
+                "text": "Las cadenas solo funcionan con bases de datos SQL."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Observation es la retroalimentación del mundo exterior (el retorno de la tool) que permite al agente evaluar si cumplió su objetivo o requiere otra acción."
+            "explanation": "El agente posee un bucle de control adaptativo donde el modelo determina la trayectoria de acciones en funcion de la evidencia que va recopilando."
+          }
+        },
+        {
+          "id": "les_ia_08_02",
+          "code": "L02",
+          "title": "El Framework ReAct: Reason + Act",
+          "slug": "framework-react-reason-act",
+          "position": 2,
+          "concept_id": "ia-agent-react-framework",
+          "objective": "Comprender la mecanica del ciclo ReAct articulando Pensamiento, Accion y Observacion.",
+          "theory_markdown": "El framework **ReAct** (Yao et al., 2022) unifica el razonamiento verbal (*Reasoning*) con la toma de acciones del mundo real (*Acting*).\n\nEn cada iteracion del ciclo, el agente opera en tres fases continuas:\n1. **Thought (Pensamiento):** El modelo verbaliza internamente su razonamiento sobre el estado actual del problema (*'Necesito primero conocer el ID del cliente para luego buscar sus facturas'*).\n2. **Action (Accion):** El modelo selecciona una herramienta y especifica sus argumentos de invocacion (`buscar_cliente(nombre='Carlos')`).\n3. **Observation (Observacion):** El entorno de ejecucion en Python ejecuta la herramienta y devuelve el resultado factual al contexto del modelo.\n\nCon esta nueva observacion, el ciclo se repite: nuevo `Thought`, nueva `Action`... hasta que el agente considera que tiene toda la informacion y emite el **`Final Answer`**.",
+          "examples": [
+            {
+              "title": "Traza clasica de ejecucion ReAct",
+              "code": "# Turno 1:\n# Thought: No conozco el precio actual de la accion. Debo consultarlo.\n# Action: get_stock_price(symbol='NVDA')\n# Observation: 125.50\n# Turno 2:\n# Thought: Ya tengo el precio (125.50). Con esto puedo responder la pregunta del usuario.\n# Final Answer: La accion de NVIDIA cotiza actualmente a $125.50 USD.",
+              "output": "Transparencia total y trazabilidad del razonamiento que llevo a la conclusion.",
+              "explanation": "La alternancia entre pensar y actuar mitiga errores y permite autocorregirse."
+            }
+          ],
+          "common_errors": "Suprimir la fase de Thought y forzar al modelo a emitir acciones sin razonamiento previo, lo que incrementa fallos y llamadas a herramientas incorrectas.",
+          "mini_exercise": {
+            "instructions": "Escribe las 3 palabras clave del ciclo ReAct en orden en una lista de Python.",
+            "starter_code": "ciclo_react = [...]",
+            "solution": "ciclo_react = [\"Thought\", \"Action\", \"Observation\"]"
+          },
+          "key_takeaways": [
+            "ReAct intercala pasos de razonamiento explicito con llamadas a herramientas.",
+            "Thought verbaliza la estrategia antes de actuar.",
+            "Observation entrega la evidencia factual del mundo exterior al modelo."
+          ],
+          "exercise": {
+            "id": "ex_ia_08_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cuales son las tres fases secuenciales que componen cada iteracion del framework ReAct?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Thought (Pensamiento), Action (Accion) y Observation (Observacion)"
+              },
+              {
+                "id": "b",
+                "text": "Input, Process y Output"
+              },
+              {
+                "id": "c",
+                "text": "Model, View y Controller"
+              },
+              {
+                "id": "d",
+                "text": "Select, Update y Commit"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "ReAct alterna iterativamente entre razonamiento interno (Thought), ejecucion de herramienta (Action) y recepcion de la evidencia ambiental (Observation)."
+          }
+        },
+        {
+          "id": "les_ia_08_03",
+          "code": "L03",
+          "title": "Implementacion del Bucle del Agente en Python Puro",
+          "slug": "implementacion-bucle-agente-python",
+          "position": 3,
+          "concept_id": "ia-agent-pure-python-loop",
+          "objective": "Programar el bucle de control while de un agente autonomo sin dependencias de frameworks externos como LangChain.",
+          "theory_markdown": "Comprender a fondo un agente requiere implementarlo en Python puro:\n\n```python\nasync def ejecutar_agente(pregunta: str, max_pasos: int = 5) -> str:\n    mensajes = [\n        {\"role\": \"system\", \"content\": \"Eres un agente ReAct. Resuelve la tarea usando las herramientas provistas.\"},\n        {\"role\": \"user\", \"content\": pregunta}\n    ]\n    for paso in range(max_pasos):\n        # 1. Llamar al modelo con tools\n        respuesta = await client.chat.completions.create(model=\"gpt-4o-mini\", messages=mensajes, tools=herramientas)\n        msg = respuesta.choices[0].message\n        mensajes.append(msg)\n\n        # 2. Si no pide herramientas, es la respuesta final:\n        if not msg.tool_calls:\n            return msg.content\n\n        # 3. Si pide herramientas, ejecutarlas y agregar observaciones:\n        for tc in msg.tool_calls:\n            fn = catalogo[tc.function.name]\n            args = json.loads(tc.function.arguments)\n            resultado = await fn(**args)\n            mensajes.append({\"role\": \"tool\", \"tool_call_id\": tc.id, \"content\": str(resultado)})\n\n    return \"Error: Se alcanzo el limite maximo de pasos sin resolver la tarea.\"\n```",
+          "examples": [
+            {
+              "title": "Bucle autonomo con limite de seguridad",
+              "code": "# El bucle se repite tantas veces como el modelo necesite (1, 2, 4 iteraciones)\n# Cuando el modelo finalmente genera texto ordinario sin tool_calls, se retorna ese texto como resultado.",
+              "output": "Agente autonomo conciso, robusto y 100% transparente sin cajas negras.",
+              "explanation": "El bucle while o for acotado es el corazon mecanico de todo agente moderno."
+            }
+          ],
+          "common_errors": "Crear un bucle while True sin ningun contador de pasos maximos, lo que puede causar un consumo descontrolado de tokens si el modelo entra en un bucle repetitivo.",
+          "mini_exercise": {
+            "instructions": "Escribe la condicion if para verificar si msg.tool_calls es vacio o None.",
+            "starter_code": "# Comprueba fin de herramientas\n# if ...:\n#     return msg.content",
+            "solution": "if not msg.tool_calls:\n    return msg.content"
+          },
+          "key_takeaways": [
+            "Un bucle de agente itera llamando al modelo hasta que no se emiten mas tool_calls.",
+            "El parametro max_pasos (max_iterations) es una salvaguarda obligatoria.",
+            "El historial se enriquece en cada ciclo con las respuestas de las herramientas."
+          ],
+          "exercise": {
+            "id": "ex_ia_08_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Como detecta el bucle de control de un agente en Python que el modelo ha concluido su tarea y esta listo para entregar el resultado final al usuario?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Cuando la respuesta del modelo no contiene solicitudes de llamadas a herramientas (msg.tool_calls esta vacio o es None) y emite texto de respuesta directo."
+              },
+              {
+                "id": "b",
+                "text": "Cuando la bateria de la computadora baja del 20%."
+              },
+              {
+                "id": "c",
+                "text": "Cuando la conexion de internet se desconecta."
+              },
+              {
+                "id": "d",
+                "text": "Cuando el archivo de log supera 1 Megabyte."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La ausencia de tool_calls indica que el agente no requiere mas interacciones con el entorno y ha formulado su respuesta conclusiva (Final Answer)."
+          }
+        },
+        {
+          "id": "les_ia_08_04",
+          "code": "L04",
+          "title": "Prevencion de Bucles Infinitos y Manejo de Errores",
+          "slug": "prevencion-bucles-infinitos-errores",
+          "position": 4,
+          "concept_id": "ia-agent-loop-safety",
+          "objective": "Implementar limites de recursion (max_steps), deteccion de llamadas ciclicas repetitivas y recuperacion ante fallos de herramientas.",
+          "theory_markdown": "Los agentes autonomos pueden exhibir comportamientos patologicos en situaciones imprevistas:\n\n1. **Bucles Infinitos de Herramientas:** El agente llama a `buscar('error')`, la herramienta devuelve vacio, y el modelo insiste llamando una y otra vez a `buscar('error')` gastando presupuesto.\n2. **Errores de Ejecucion en Herramientas:** Si una base de datos falla o una API externa arroja `Timeout`, **el programa no debe colapsar con una excepcion no controlada**. Se debe capturar el error y devolverselo al modelo como una `Observation` de error estructurada:\n   `'Error: La base de datos no respondio tras 3 segundos. Intenta otra alternativa o informa al usuario.'`\n\nEl LLM es capaz de leer ese mensaje de error, adaptar su `Thought` y probar una estrategia de fallback diferente.",
+          "examples": [
+            {
+              "title": "Retroalimentacion de excepciones al modelo",
+              "code": "try:\n    resultado = ejecutar_tool(nombre, args)\nexcept Exception as exc:\n    # Se convierte el fallo en observacion comprensible para el agente:\n    resultado = f\"Fallo al ejecutar herramienta: {str(exc)}. Modifica los parametros o utiliza una estrategia alternativa.\"\nmessages.append({\"role\": \"tool\", \"tool_call_id\": tc.id, \"content\": str(resultado)})",
+              "output": "El agente lee el error y decide una ruta alternativa en su siguiente Thought.",
+              "explanation": "La resiliencia de un agente reside en permitirle percibir sus propios fallos de ejecucion."
+            }
+          ],
+          "common_errors": "Permitir que una excepcion de Python en una herramienta aborte todo el proceso del agente, en lugar de capturarla y entregarsela al modelo como observacion para su recuperacion.",
+          "mini_exercise": {
+            "instructions": "Escribe un bloque try/except que capture Exception y asigne el string f'Error en herramienta: {exc}' a la variable 'res'.",
+            "starter_code": "# try / except\ntry:\n    res = operacion()\nexcept ...:\n    ...",
+            "solution": "try:\n    res = operacion()\nexcept Exception as exc:\n    res = f\"Error en herramienta: {exc}\""
+          },
+          "key_takeaways": [
+            "max_steps previene el consumo descontrolado de tokens ante ciclos estancados.",
+            "Las excepciones en herramientas deben capturarse y transmitirse como observaciones de texto.",
+            "Los agentes bien disenados pueden auto-corregir sus argumentos tras un fallo informado."
+          ],
+          "exercise": {
+            "id": "ex_ia_08_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es la mejor practica cuando una funcion invocada por un agente arroja una excepcion de red o de base de datos?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Capturar la excepcion y devolver un mensaje descriptivo del error en el contenido del rol tool, permitiendo que el LLM razone sobre el fallo y pruebe una alternativa."
+              },
+              {
+                "id": "b",
+                "text": "Permitir que el script de Python colapse inmediatamente deteniendo el servidor."
+              },
+              {
+                "id": "c",
+                "text": "Borrar el modelo de la memoria cache."
+              },
+              {
+                "id": "d",
+                "text": "Devolver una respuesta inventada al usuario simulando que la funcion fue exitosa."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Proporcionar el error como observacion factual permite que el agente use su capacidad de razonamiento para reintentar con otros parametros o emitir una explicacion clara al usuario."
           }
         }
       ]

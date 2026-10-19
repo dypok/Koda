@@ -27,6 +27,7 @@ export interface UserProfileResponse {
   streakFreezeCount: number;
   totalStudyTimeSeconds: number;
   lastStudyDate?: string | null;
+  isActiveToday?: boolean;
   createdAt: string;
   updatedAt: string;
 }

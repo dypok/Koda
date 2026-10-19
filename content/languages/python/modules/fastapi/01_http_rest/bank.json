@@ -7,27 +7,157 @@
       "id": "q_fa_01_01",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "¿Qué es Uvicorn en el ecosistema de FastAPI?",
+      "prompt": "Que funcion cumple Uvicorn en una aplicacion FastAPI?",
       "options": [
         {
           "id": "a",
-          "text": "Un servidor web ASGI de alto rendimiento para ejecutar aplicaciones asíncronas de Python"
+          "text": "Es el servidor web ASGI que ejecuta el codigo asincrono sobre el Event Loop."
         },
         {
           "id": "b",
-          "text": "Un motor de base de datos relacional"
+          "text": "Es un gestor de migraciones de base de datos relacionales."
         },
         {
           "id": "c",
-          "text": "Un formateador de código similar a Black"
+          "text": "Es un cliente HTTP para realizar solicitudes salientes."
         },
         {
           "id": "d",
-          "text": "Un plugin de VS Code"
+          "text": "Es el motor de plantillas HTML de FastAPI."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Uvicorn es el servidor HTTP ASGI basado en uvloop que ejecuta las aplicaciones FastAPI."
+      "explanation": "Uvicorn es una implementacion de servidor web ASGI para Python de alto rendimiento basado en uvloop y httptools."
+    },
+    {
+      "id": "q_fa_01_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Como interpreta FastAPI una variable declarada con llaves dentro del decorador, por ejemplo @app.get('/usuarios/{id}')?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Como un Path Parameter que se pasa como argumento a la funcion controladora."
+        },
+        {
+          "id": "b",
+          "text": "Como una variable de entorno del sistema operativo."
+        },
+        {
+          "id": "c",
+          "text": "Como una expresion regular obligatoria para validar cabeceras HTTP."
+        },
+        {
+          "id": "d",
+          "text": "Como una clave de sesion encriptada en una cookie."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Los parametros encerrados en llaves dentro de la URL son Path Parameters que FastAPI mapea con los argumentos homonimos de la funcion."
+    },
+    {
+      "id": "q_fa_01_03",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "Que codigo HTTP responde FastAPI si se declara @app.get('/ordenes/{orden_id}') con orden_id: int y el cliente envia GET /ordenes/abc?",
+      "options": [
+        {
+          "id": "a",
+          "text": "422 Unprocessable Entity"
+        },
+        {
+          "id": "b",
+          "text": "200 OK"
+        },
+        {
+          "id": "c",
+          "text": "500 Internal Server Error"
+        },
+        {
+          "id": "d",
+          "text": "400 Bad Request"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Cuando un path parameter falla la conversion al tipo especificado (en este caso int), FastAPI responde con 422 Unprocessable Entity."
+    },
+    {
+      "id": "q_fa_01_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cual es la diferencia en la declaracion de una ruta entre un Path Parameter y un Query Parameter en FastAPI?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El Path Parameter figura en la ruta del decorador '{param}', mientras que el Query Parameter solo figura como argumento de la funcion."
+        },
+        {
+          "id": "b",
+          "text": "Los Path Parameters son opcionales y los Query Parameters siempre obligatorios."
+        },
+        {
+          "id": "c",
+          "text": "Los Query Parameters requieren usar la libreria urllib."
+        },
+        {
+          "id": "d",
+          "text": "No existe diferencia, ambos se colocan en la URL despues del signo de interrogacion."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Si un argumento de la funcion no se encuentra en el path del decorador, FastAPI lo interpreta automaticamente como un Query Parameter."
+    },
+    {
+      "id": "q_fa_01_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "En que rutas expone FastAPI por defecto la documentacion interactiva generada desde la especificacion OpenAPI?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Swagger UI en /docs y ReDoc en /redoc"
+        },
+        {
+          "id": "b",
+          "text": "Swagger UI en /swagger y Postman en /postman"
+        },
+        {
+          "id": "c",
+          "text": "Documentacion estatica exclusivamente en /index.html"
+        },
+        {
+          "id": "d",
+          "text": "Unicamente en la consola de comandos de Uvicorn"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Por defecto, FastAPI habilita Swagger UI en /docs y la documentacion alternativa ReDoc en /redoc."
+    },
+    {
+      "id": "q_fa_01_06",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Que ocurre si se ejecuta dentro de un endpoint async def una llamada sincrona bloqueante como time.sleep(10)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Bloquea todo el Event Loop del worker de Uvicorn durante 10 segundos, impidiendo procesar otras peticiones."
+        },
+        {
+          "id": "b",
+          "text": "FastAPI la convierte automaticamente en una tarea no bloqueante en segundo plano."
+        },
+        {
+          "id": "c",
+          "text": "Uvicorn lanza una excepcion de compilacion inmediata."
+        },
+        {
+          "id": "d",
+          "text": "Se crea un nuevo hilo del sistema operativo para cada peticion como en WSGI."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Las funciones async def se ejecutan directamente en el Event Loop. Si se invoca codigo bloqueante sincrono en ellas, se congela el bucle de eventos para todos los clientes conectados a ese worker."
     }
   ]
 }

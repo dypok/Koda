@@ -6,28 +6,158 @@
     {
       "id": "q_ia_01_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿En qué consiste la técnica de Few-Shot Prompting?",
+      "difficulty": "easy",
+      "prompt": "Que significa que la generacion de un LLM sea autorregresiva?",
       "options": [
         {
           "id": "a",
-          "text": "Incluir dentro del prompt algunos ejemplos de pares de entrada y salida esperada para guiar al modelo"
+          "text": "Que predice un token a la vez, utilizando todos los tokens previamente generados como contexto de entrada para el siguiente calculo."
         },
         {
           "id": "b",
-          "text": "Entrenar el modelo desde cero con millones de libros"
+          "text": "Que entrena sus pesos en tiempo real mientras el usuario escribe."
         },
         {
           "id": "c",
-          "text": "Limitar el prompt a menos de 5 palabras"
+          "text": "Que solo puede responder con palabras de tres letras."
         },
         {
           "id": "d",
-          "text": "Ejecutar el modelo en 4 tarjetas gráficas"
+          "text": "Que no utiliza la memoria RAM del servidor."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Few-Shot proporciona demostraciones en el contexto para condicionar el patrón de respuesta sin modificar los pesos del modelo."
+      "explanation": "El proceso autorregresivo alimenta continuamente la salida generada de regreso a la entrada para calcular la distribucion de probabilidad del siguiente token."
+    },
+    {
+      "id": "q_ia_01_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cual es la unidad elemental de procesamiento de texto que consumen y emiten los modelos de lenguaje modernos como GPT o Gemini?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Tokens (fragmentos numericos de palabras codificados mediante algoritmos como BPE)"
+        },
+        {
+          "id": "b",
+          "text": "Lineas de codigo Python completas"
+        },
+        {
+          "id": "c",
+          "text": "Caracteres ASCII individuales exclusivamente"
+        },
+        {
+          "id": "d",
+          "text": "Parrafos completos en formato PDF"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Los LLMs operan sobre tokens numericos discretos definidos en un vocabulario fijo estructurado por tokenizadores como BPE."
+    },
+    {
+      "id": "q_ia_01_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que efecto produce elevar la Temperature de 0.2 a 1.2 en una llamada a la API de un modelo de lenguaje?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Aumenta la variabilidad y creatividad del texto al aplanar la distribucion de probabilidad, incrementando el riesgo de respuestas inesperadas o alucinaciones."
+        },
+        {
+          "id": "b",
+          "text": "Hace que el modelo responda diez veces mas rapido."
+        },
+        {
+          "id": "c",
+          "text": "Obliga a que el modelo responda exclusivamente en formato JSON."
+        },
+        {
+          "id": "d",
+          "text": "Reduce a cero el costo economico de la llamada."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Temperaturas elevadas suavizan las diferencias de probabilidad entre tokens, permitiendo que opciones menos frecuentes sean seleccionadas."
+    },
+    {
+      "id": "q_ia_01_04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "En que consiste el metodo de muestreo Top-p (Nucleus Sampling)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "En seleccionar unicamente entre el subconjunto de tokens mas probables cuya masa acumulada sume el porcentaje p indicado (ej. 90%), descartando la cola inferior."
+        },
+        {
+          "id": "b",
+          "text": "En evaluar solo los primeros p caracteres del prompt."
+        },
+        {
+          "id": "c",
+          "text": "En reintentar la llamada p veces si falla."
+        },
+        {
+          "id": "d",
+          "text": "En elegir siempre el token numero p del abecedario."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Top-p dynamicamente ajusta el numero de candidatos viables segun la concentracion de probabilidad del contexto, eliminando opciones disparatadas."
+    },
+    {
+      "id": "q_ia_01_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cual es la diferencia principal entre un enfoque Zero-Shot y un enfoque Few-Shot en Prompt Engineering?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Zero-Shot pide resolver la tarea directamente sin ejemplos; Few-Shot provee ejemplos demostrativos de entrada y salida previa para calibrar el comportamiento."
+        },
+        {
+          "id": "b",
+          "text": "Zero-Shot no cobra dinero por los tokens y Few-Shot si."
+        },
+        {
+          "id": "c",
+          "text": "Few-Shot requiere re-entrenar la red neuronal en GPUs."
+        },
+        {
+          "id": "d",
+          "text": "Zero-Shot solo funciona con modelos de audio."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Few-Shot se apoya en el aprendizaje en contexto (in-context learning) incorporando ejemplos directamente dentro del prompt."
+    },
+    {
+      "id": "q_ia_01_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "Cual es el termino que describe el limite maximo de tokens totales (prompt + respuesta) que un modelo puede procesar simultaneamente en una llamada?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ventana de Contexto (Context Window)"
+        },
+        {
+          "id": "b",
+          "text": "Tasa de refresco (Refresh Rate)"
+        },
+        {
+          "id": "c",
+          "text": "Batch Size"
+        },
+        {
+          "id": "d",
+          "text": "Latencia de conexion"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El Context Window define la capacidad maxima de tokens que el mecanismo de atencion del Transformer puede retener en memoria activa."
     }
   ]
 }

@@ -4,14 +4,14 @@
   "code": "PY2_M04",
   "slug": "manejo-de-excepciones",
   "course_slug": "python-2",
-  "title": "Manejo Robusto de Excepciones",
-  "objective": "Interceptar y gestionar fallos de forma elegante con try, except específico, else, finally y raise.",
-  "description": "Crea software resiliente que no se caiga ante errores imprevistos: manejo defensivo, jerarquía de excepciones y limpieza de recursos.",
-  "position": 14,
+  "title": "Manejo Robusto de Excepciones y Resiliencia",
+  "objective": "Interceptar y gestionar fallos de forma elegante con try, except específico, else, finally, propagar errores con raise y diseñar excepciones personalizadas.",
+  "description": "Crea software resiliente que no colapse ante errores imprevistos: manejo defensivo, jerarquía de excepciones y limpieza garantizada de recursos.",
+  "position": 4,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,232 @@
     {
       "id": "sec_py2_04_01",
       "code": "S01",
-      "title": "Bloques try-except-else-finally",
-      "slug": "try-except-finally",
+      "title": "Manejo de Excepciones en Python",
+      "slug": "excepciones-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 18,
-      "xp_on_complete": 45,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py2_04_01",
           "code": "L01",
-          "title": "Captura Específica de Excepciones",
-          "slug": "captura-especifica",
+          "title": "El Bloque try-except y Captura Específica",
+          "slug": "bloque-try-except-especifico",
           "position": 1,
-          "concept_id": "py2-exceptions",
-          "objective": "Evitar el antipatrón de captura genérica (except:) y manejar errores específicos.",
-          "theory_markdown": "En lugar de dejar que tu servidor colapse ante una entrada inválida, usas un bloque `try-except`:\n- `try:`: Bloque con código propenso a fallar.\n- `except ValueError as e:`: Se ejecuta SOLO si ocurre esa excepción específica.\n- `else:`: Se ejecuta si NO ocurrió ningún error en el `try`.\n- `finally:`: Se ejecuta **SIEMPRE**, haya o no error (ideal para cerrar conexiones o archivos).",
+          "concept_id": "py2-try-except-specific",
+          "objective": "Proteger bloques de código con try y capturar excepciones específicas (ValueError, ZeroDivisionError, TypeError) sin detener el programa.",
+          "theory_markdown": "Cuando un error en tiempo de ejecución ocurre en Python, se genera una **excepción**. Si no se intercepta, el programa termina de golpe con un Traceback.\n\nPara manejar situaciones controlables (como conversión de entradas de usuario o división numérica), se utiliza la estructura `try-except`:\n\n```python\ntry:\n    numero = int(entrada_usuario)\n    resultado = 100 / numero\nexcept ValueError:\n    print(\"Debes ingresar un número entero válido.\")\nexcept ZeroDivisionError:\n    print(\"El número no puede ser cero.\")\n```\n\n### Regla de especificidad\nPuedes encadenar múltiples bloques `except` para responder de forma diferenciada a cada tipo de error. Además, puedes capturar el objeto del error con `as e` para inspeccionar el mensaje original: `except ValueError as e:`.",
           "examples": [
             {
-              "title": "Conversión robusta con try-except completo",
-              "code": "def dividir_seguro(a, b):\n    try:\n        res = a / b\n    except ZeroDivisionError:\n        return \"Error: no puedes dividir entre cero\"\n    except TypeError:\n        return \"Error: los argumentos deben ser números\"\n    else:\n        return f\"Éxito: {res}\"\n    finally:\n        # Limpieza o log garantizado\n        pass\n\nprint(dividir_seguro(10, 2))\nprint(dividir_seguro(10, 0))",
-              "output": "Éxito: 5.0\nError: no puedes dividir entre cero",
-              "explanation": "Captura con precisión ZeroDivisionError sin silenciar otros posibles errores no previstos."
+              "title": "Captura diferenciada de errores de conversión y rango",
+              "code": "def obtener_elemento(lista, indice_str):\n    try:\n        idx = int(indice_str)\n        return lista[idx]\n    except ValueError:\n        return \"El índice debe ser un número entero\"\n    except IndexError:\n        return \"Índice fuera del rango de la lista\"\n\nprint(obtener_elemento([10, 20], \"0\"))\nprint(obtener_elemento([10, 20], \"5\"))\nprint(obtener_elemento([10, 20], \"abc\"))",
+              "output": "10\nÍndice fuera del rango de la lista\nEl índice debe ser un número entero",
+              "explanation": "El código responde amigablemente a cada posible error de entrada sin interrumpir la ejecución global."
             }
           ],
-          "common_errors": "Escribir un simple `except: pass` (captura muda). Oculta errores de sintaxis, variables mal escritas e interrupciones del teclado (KeyboardInterrupt).",
+          "common_errors": "Capturar una excepción genérica que oculta otros errores imprevistos. Captura siempre la excepción exacta esperada.",
           "mini_exercise": {
-            "starter_code": "# Captura ValueError al convertir texto a entero\ntry:\n    num = int(\"koda\")\nexcept ...:\n    print(\"Número inválido\")",
-            "instructions": "Usa except ValueError: para manejar el fallo.",
-            "solution": "try:\n    num = int(\"koda\")\nexcept ValueError:\n    print(\"Número inválido\")"
+            "starter_code": "try:\n    x = int(\"texto\")\nexcept ...:\n    print(\"Error de conversion\")",
+            "instructions": "Usa except ValueError: para capturar la falla de conversión.",
+            "solution": "try:\n    x = int(\"texto\")\nexcept ValueError:\n    print(\"Error de conversion\")"
           },
           "key_takeaways": [
-            "Captura siempre la excepción más específica posible.",
-            "else corre solo si el try tuvo éxito.",
-            "finally se ejecuta invariablemente al final."
+            "try envuelve código susceptible a fallar.",
+            "except intercepta la excepción especificada permitiendo recuperar el flujo.",
+            "Permite encadenar múltiples except para distintos tipos de error."
           ],
           "exercise": {
             "id": "ex_py2_04_01",
-            "type": "single_choice",
+            "type": "predict_output",
             "difficulty": "easy",
-            "prompt": "¿En qué caso se ejecuta el bloque finally de un try-except?",
+            "prompt": "¿Qué imprime este código al intentar dividir entre cero?",
+            "prompt_code": "try:\n    res = 10 / 0\nexcept ZeroDivisionError:\n    res = -1\nprint(res)",
             "options": [
               {
                 "id": "a",
-                "text": "Siempre, sin importar si hubo excepción o no"
+                "text": "-1"
               },
               {
                 "id": "b",
-                "text": "Solo si ocurrió un error"
+                "text": "0"
               },
               {
                 "id": "c",
-                "text": "Solo si el bloque try tuvo éxito"
+                "text": "ZeroDivisionError"
               },
               {
                 "id": "d",
-                "text": "Únicamente si se ejecuta un break"
+                "text": "None"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "El bloque finally está garantizado que se ejecutará siempre, haya o no ocurrido una excepción."
+            "explanation": "La división lanza ZeroDivisionError, que es interceptada por el bloque except asignando -1 a res."
+          }
+        },
+        {
+          "id": "les_py2_04_02",
+          "code": "L02",
+          "title": "El Flujo Completo: try, except, else y finally",
+          "slug": "try-except-else-finally",
+          "position": 2,
+          "concept_id": "py2-else-finally",
+          "objective": "Distinguir cuándo usar el bloque else para código exitoso y el bloque finally para limpieza garantizada de recursos.",
+          "theory_markdown": "La estructura completa de control de excepciones en Python consta de cuatro partes:\n\n```python\ntry:\n    # 1. Código riesgoso\n    resultado = operacion_arriesgada()\nexcept ErrorTipo:\n    # 2. Corre SOLO si ocurrió ErrorTipo\n    manejar_error()\nelse:\n    # 3. Corre SOLO si el bloque try terminó con ÉXITO (sin excepciones)\n    usar_resultado(resultado)\nfinally:\n    # 4. Corre SIEMPRE, haya ocurrido error o no\n    cerrar_recursos()\n```\n\n### El valor de `else`\nEvita atrapar accidentalmente errores dentro de código que no formaba parte de la operación riesgosa inicial.\n\n### La garantía de `finally`\nSe ejecuta incluso si ocurre una excepción no capturada, si hay un `return` anticipado o si se ejecuta un `break` dentro de un bucle. Es el lugar idóneo para cerrar conexiones de red o liberar memoria.",
+          "examples": [
+            {
+              "title": "Ejecución completa con try-except-else-finally",
+              "code": "def prueba(divisor):\n    try:\n        res = 20 / divisor\n    except ZeroDivisionError:\n        print(\"Excepcion atrapada\")\n    else:\n        print(\"Exito:\", res)\n    finally:\n        print(\"Bloque finally ejecutado\")\n\nprint(\"--- Caso 1 ---\")\nprueba(4)\nprint(\"--- Caso 2 ---\")\nprueba(0)",
+              "output": "--- Caso 1 ---\nExito: 5.0\nBloque finally ejecutado\n--- Caso 2 ---\nExcepcion atrapada\nBloque finally ejecutado",
+              "explanation": "En el Caso 1 corre try -> else -> finally. En el Caso 2 corre try -> except -> finally. En ambos, finally siempre corre."
+            }
+          ],
+          "common_errors": "Poner en el try código que no es riesgoso en lugar de delegarlo al bloque else.",
+          "mini_exercise": {
+            "starter_code": "try:\n    val = 10 + 5\nexcept TypeError:\n    print(\"Error\")\nelse:\n    print(\"Suma exitosa\")\nfinally:\n    print(\"Fin\")",
+            "instructions": "Observa el orden de ejecución cuando no ocurre ninguna excepción.",
+            "solution": "try:\n    val = 10 + 5\nexcept TypeError:\n    print(\"Error\")\nelse:\n    print(\"Suma exitosa\")\nfinally:\n    print(\"Fin\")"
+          },
+          "key_takeaways": [
+            "else se ejecuta exclusivamente si el bloque try se completó sin excepciones.",
+            "finally se ejecuta invariablemente en todos los escenarios posibles.",
+            "finally garantiza la liberación segura de recursos externos."
+          ],
+          "exercise": {
+            "id": "ex_py2_04_02",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿En qué circunstancias se ejecuta el bloque 'else' de una estructura try-except-else?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Únicamente cuando el bloque try finaliza exitosamente sin haber lanzado ninguna excepción"
+              },
+              {
+                "id": "b",
+                "text": "Siempre, al igual que el bloque finally"
+              },
+              {
+                "id": "c",
+                "text": "Solo cuando la excepción capturada es de tipo ValueError"
+              },
+              {
+                "id": "d",
+                "text": "Cuando el bloque except no pudo manejar el error"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El bloque else está diseñado para aislar el código que depende del éxito del bloque try, ejecutándose solo cuando no hubo error."
+          }
+        },
+        {
+          "id": "les_py2_04_03",
+          "code": "L03",
+          "title": "Lanzamiento con raise y Excepciones Personalizadas",
+          "slug": "raise-excepciones-personalizadas",
+          "position": 3,
+          "concept_id": "py2-raise-custom-exceptions",
+          "objective": "Lanzar errores intencionalmente usando raise y definir clases de error personalizadas heredando de Exception.",
+          "theory_markdown": "En la lógica de negocio a menudo se presentan condiciones que no son errores del lenguaje, pero sí violan las reglas de tu aplicación (por ejemplo: saldo insuficiente, edad negativa, usuario sin permisos).\n\n### Lanzamiento explícito con `raise`\n```python\ndef validar_edad(edad):\n    if edad < 0:\n        raise ValueError(\"La edad no puede ser un número negativo\")\n    return True\n```\n\n### Creación de Excepciones Propias\nPara que los consumidores de tus librerías puedan capturar errores específicos de tu dominio, puedes definir clases que hereden de la clase base `Exception`:\n\n```python\nclass SaldoInsuficienteError(Exception):\n    \"\"\"Excepción lanzada cuando una cuenta no tiene fondos suficientes.\"\"\"\n    pass\n\ndef retirar(saldo, monto):\n    if monto > saldo:\n        raise SaldoInsuficienteError(f\"Fondos insuficientes: saldo={saldo}, pedido={monto}\")\n    return saldo - monto\n```",
+          "examples": [
+            {
+              "title": "Definición y captura de una excepción personalizada",
+              "code": "class AutenticacionError(Exception):\n    pass\n\ndef iniciar_sesion(clave):\n    if clave != \"secreto123\":\n        raise AutenticacionError(\"Clave incorrecta\")\n    return \"Acceso concedido\"\n\ntry:\n    iniciar_sesion(\"incorrecta\")\nexcept AutenticacionError as e:\n    print(\"Fallo de seguridad:\", e)",
+              "output": "Fallo de seguridad: Clave incorrecta",
+              "explanation": "AutenticacionError es una excepción de primer nivel para nuestro módulo, capturada limpiamente sin ambigüedad."
+            }
+          ],
+          "common_errors": "Heredar de `BaseException` en lugar de `Exception`. Las excepciones de usuario deben heredar de `Exception` para respetar las convenciones de Python.",
+          "mini_exercise": {
+            "starter_code": "# Define una excepcion personalizada heredando de Exception\nclass DatosInvalidosError(...):\n    pass",
+            "instructions": "Escribe Exception entre parentesis.",
+            "solution": "class DatosInvalidosError(Exception):\n    pass"
+          },
+          "key_takeaways": [
+            "raise permite disparar excepciones de forma manual.",
+            "Las excepciones personalizadas heredan de la clase Exception.",
+            "Mejoran la semántica y claridad de las APIs de negocio."
+          ],
+          "exercise": {
+            "id": "ex_py2_04_03",
+            "type": "find_error",
+            "difficulty": "medium",
+            "prompt": "¿Qué instrucción provoca deliberadamente la interrupción y lanzamiento de un error en Python?",
+            "options": [
+              {
+                "id": "a",
+                "text": "raise"
+              },
+              {
+                "id": "b",
+                "text": "throw"
+              },
+              {
+                "id": "c",
+                "text": "catch"
+              },
+              {
+                "id": "d",
+                "text": "stop"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "En Python, la palabra reservada para lanzar una excepción es 'raise' (a diferencia de otros lenguajes como Java o JS que usan 'throw')."
+          }
+        },
+        {
+          "id": "les_py2_04_04",
+          "code": "L04",
+          "title": "Jerarquía de Excepciones y el Antipatrón Bare Except",
+          "slug": "jerarquia-antipatron-bare-except",
+          "position": 4,
+          "concept_id": "py2-exception-hierarchy",
+          "objective": "Comprender el árbol de herencia de excepciones y erradicar el peligroso antipatrón except: pass.",
+          "theory_markdown": "Todas las excepciones en Python forman un árbol de herencia unificado:\n\n```text\nBaseException\n ├── SystemExit\n ├── KeyboardInterrupt (Ctrl+C)\n └── Exception\n      ├── ArithmeticError -> ZeroDivisionError\n      ├── LookupError -> IndexError, KeyError\n      ├── ValueError\n      └── TypeError\n```\n\n### El peligro del \"Bare Except\" (`except: pass`)\nEscribir un bloque `except:` sin especificar la clase captura absolutamente todo, incluyendo `KeyboardInterrupt` (evitando que el usuario pueda detener el script con Ctrl+C) y `SystemExit`.\n\n```python\n# Antipatrón destructivo:\ntry:\n    ejecutar_tarea()\nexcept:  # ¡Captura TODO y lo silencia!\n    pass\n```\nSi tienes un error tipográfico (`NameError`), este código lo ignorará silenciosamente, haciendo casi imposible depurar el sistema.\n\n### Regla de oro PEP 8\nSi de verdad necesitas capturar cualquier error no fatal de aplicación, captura explícitamente `except Exception as e:` y registra siempre el error con un logger.",
+          "examples": [
+            {
+              "title": "Orden correcto de captura según la jerarquía",
+              "code": "# ZeroDivisionError hereda de ArithmeticError\ntry:\n    res = 5 / 0\nexcept ZeroDivisionError:\n    print(\"Captura especifica: division entre cero\")\nexcept ArithmeticError:\n    print(\"Captura general de aritmetica\")",
+              "output": "Captura especifica: division entre cero",
+              "explanation": "Las excepciones hijas más específicas deben ir siempre arriba de sus clases padre en los bloques except."
+            }
+          ],
+          "common_errors": "Poner `except Exception:` antes de `except ValueError:`. Como Exception es la clase padre, absorberá todas las excepciones hijas y las ramas inferiores nunca se ejecutarán.",
+          "mini_exercise": {
+            "starter_code": "# Captura de forma segura todos los errores de aplicacion usando Exception\ntry:\n    1 / 0\nexcept Exception as e:\n    print(\"Error capturado:\", type(e).__name__)",
+            "instructions": "Verifica cómo Exception captura el error sin silenciar KeyboardInterrupt.",
+            "solution": "try:\n    1 / 0\nexcept Exception as e:\n    print(\"Error capturado:\", type(e).__name__)"
+          },
+          "key_takeaways": [
+            "Todas las excepciones derivan de BaseException; las de aplicación heredan de Exception.",
+            "Bare except (except:) es un antipatrón porque atrapa Ctrl+C y errores de sintaxis/nombres.",
+            "Las excepciones más específicas deben posicionarse antes de las genéricas en el código."
+          ],
+          "exercise": {
+            "id": "ex_py2_04_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Por qué nunca se debe utilizar 'except: pass' en una aplicación?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque silencia silenciosamente todos los errores, incluyendo fallos tipográficos (NameError) y la interrupción manual por teclado del usuario (KeyboardInterrupt)"
+              },
+              {
+                "id": "b",
+                "text": "Porque Python no compila archivos con la palabra pass"
+              },
+              {
+                "id": "c",
+                "text": "Porque incrementa el consumo de memoria en 4 GB"
+              },
+              {
+                "id": "d",
+                "text": "Porque solo se permite en funciones lambda"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El bare except intercepta BaseException, silenciando tanto errores de programación como señales de terminación del sistema operativo."
           }
         }
       ]

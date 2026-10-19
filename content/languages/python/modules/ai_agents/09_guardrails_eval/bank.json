@@ -6,28 +6,158 @@
     {
       "id": "q_ia_09_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿En qué consiste el patrón de evaluación \"LLM-as-a-Judge\"?",
+      "difficulty": "easy",
+      "prompt": "Que vulnerabilidad de seguridad se explota cuando un atacante incluye instrucciones maliciosas dentro de un documento publico que sera leido por un agente de IA?",
       "options": [
         {
           "id": "a",
-          "text": "Utilizar un LLM potente con una rúbrica formal para calificar y auditar automáticamente las respuestas de otro modelo o agente"
+          "text": "Prompt Injection Indirecta"
         },
         {
           "id": "b",
-          "text": "Llevar a juicio a la empresa creadora del modelo"
+          "text": "Ataque de denegacion de servicio distribuido (DDoS)"
         },
         {
           "id": "c",
-          "text": "Un modelo que solo redacta leyes"
+          "text": "Inyeccion de dependencias en FastAPI"
         },
         {
           "id": "d",
-          "text": "Un compilador de código C"
+          "text": "Desbordamiento de buffer en C"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "LLM-as-a-Judge automatiza la evaluación de fidelidad, relevancia y coherencia a gran escala sin depender de etiquetadores humanos para cada prueba."
+      "explanation": "La inyeccion indirecta utiliza fuentes de datos externas no confiables para secuestrar el flujo de control del agente cuando este las lee."
+    },
+    {
+      "id": "q_ia_09_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "En que momento de la arquitectura de la aplicacion se ejecutan los Guardrails de Entrada?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Antes de enviar la peticion del usuario al modelo de lenguaje principal, auditando toxicidad, PII y patrones de jailbreak."
+        },
+        {
+          "id": "b",
+          "text": "Despues de que el usuario cerro la sesion en la pagina web."
+        },
+        {
+          "id": "c",
+          "text": "Durante la fase de compilacion del sistema operativo."
+        },
+        {
+          "id": "d",
+          "text": "Unicamente los fines de semana de forma automatica."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Los guardrails de entrada actuan como barrera perimetral previa para sanitizar y validar las entradas antes de gastar recursos de inferencia."
+    },
+    {
+      "id": "q_ia_09_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cual es la funcion de un mecanismo de redaccion de PII (Personally Identifiable Information) en los guardrails de salida?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Detectar y enmascarar datos personales sensibles (como tarjetas, emails o telefonos) antes de que la respuesta sea entregada al cliente."
+        },
+        {
+          "id": "b",
+          "text": "Traducir el texto al ingles britanico."
+        },
+        {
+          "id": "c",
+          "text": "Comprimir los datos en un archivo zip."
+        },
+        {
+          "id": "d",
+          "text": "Aumentar el tamano de letra del documento."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La redaccion de PII anonimiza informacion personal sensible protegiendo la privacidad de los usuarios y cumpliendo normativas como GDPR."
+    },
+    {
+      "id": "q_ia_09_04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Que ventaja ofrece el patron LLM-as-a-Judge en pipelines de CI/CD para desarrollo de agentes?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permite correr baterias de pruebas automatizadas sobre cientos de prompts dorados evaluando calidad semantica y detectando regresiones sin requerir evaluacion humana manual constante."
+        },
+        {
+          "id": "b",
+          "text": "Reemplaza a los servidores de base de datos relacionales."
+        },
+        {
+          "id": "c",
+          "text": "Evita tener que escribir pruebas unitarias con Pytest."
+        },
+        {
+          "id": "d",
+          "text": "Garantiza que el agente nunca cometa ningun error."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "LLM-as-a-Judge automatiza la evaluacion continua y escalable de respuestas complejas en lenguaje natural frente a estandares de aceptacion."
+    },
+    {
+      "id": "q_ia_09_05",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "Que ocurre si se le pide a un LLM juez evaluar una respuesta solicitando unicamente 'califica del 1 al 10' sin proporcionarle una rubrica estructurada?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Las puntuaciones seran inconsistentes, subjetivas y frecuentemente sesgadas a favor de respuestas mas largas independientemente de su calidad factual."
+        },
+        {
+          "id": "b",
+          "text": "El modelo se apaga de inmediato."
+        },
+        {
+          "id": "c",
+          "text": "La calificacion sera matematicamente perfecta al 100%."
+        },
+        {
+          "id": "d",
+          "text": "El modelo juez responde con codigo SQL."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Sin una rubrica objetiva, los jueces LLM son altamente vulnerables al sesgo de verbosidad (premiar respuestas largas aunque sean incorrectas)."
+    },
+    {
+      "id": "q_ia_09_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Que tipo de ataque representa un usuario que intenta persuadir al modelo de revelar las instrucciones secretas de su System Prompt?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Fuga de System Prompt (System Prompt Extraction / Leakage)"
+        },
+        {
+          "id": "b",
+          "text": "Ataque Man-in-the-Middle en TLS"
+        },
+        {
+          "id": "c",
+          "text": "Cross-Site Scripting (XSS)"
+        },
+        {
+          "id": "d",
+          "text": "Ataque de fuerza bruta en contraseñas"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La extraccion de prompt busca exponer la propiedad intelectual o secretos de configuracion contenidos en el mensaje system del agente."
     }
   ]
 }

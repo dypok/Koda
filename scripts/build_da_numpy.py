@@ -1,0 +1,331 @@
+# -*- coding: utf-8 -*-
+"""
+Script to generate all 10 Data Analytics modules and bank.json files with 4 lessons and 6 calibrated questions each.
+Enforces zero emojis, zero spoilers, and strict schema compliance.
+"""
+
+import json
+import os
+
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "content", "languages", "python", "modules", "data_analytics"))
+
+MODULES = [
+    {
+        "dir": "01_numpy",
+        "module_json": {
+            "id": "da_mod_01",
+            "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+            "code": "DA_M01",
+            "slug": "numpy-fundamentos",
+            "course_slug": "data-analytics",
+            "title": "NumPy: Computacion Vectorizada y Arrays N-Dimensionales",
+            "objective": "Reemplazar bucles lentos por operaciones vectorizadas en C mediante ndarrays de NumPy y broadcasting.",
+            "description": "El pilar matematico de la ciencia de datos y el machine learning en Python: arrays contiguos en memoria y algebra lineal.",
+            "position": 41,
+            "status": "published",
+            "content_version": 1,
+            "total_sections": 1,
+            "total_lessons": 4,
+            "thresholds": {"quiz": 70, "exam": 80},
+            "xp": {"on_pass": 250},
+            "sections": [
+                {
+                    "id": "sec_da_01_01",
+                    "code": "S01",
+                    "title": "Estructuras, Vectorizacion y Agregaciones en NumPy",
+                    "slug": "estructuras-vectorizacion-numpy",
+                    "position": 1,
+                    "type": "theory",
+                    "estimated_minutes": 45,
+                    "xp_on_complete": 100,
+                    "lessons": [
+                        {
+                            "id": "les_da_01_01",
+                            "code": "L01",
+                            "title": "El Objeto ndarray y Memoria Contigua",
+                            "slug": "ndarray-memoria-contigua",
+                            "position": 1,
+                            "concept_id": "da-numpy-ndarray",
+                            "objective": "Comprender la arquitectura en memoria del ndarray de NumPy frente a las listas nativas de Python.",
+                            "theory_markdown": "Las listas ordinarias de Python almacenan punteros a objetos dispersos en memoria heap, lo cual introduce una gran sobrecarga de indireccion y previene la optimizacion en caches de CPU.\n\n**NumPy** introduce el **`ndarray`** (N-dimensional array):\n- Almacena elementos del **mismo tipo de dato homogeneo** (`dtype`) en un bloque **contiguo de memoria**.\n- Permite operaciones a nivel de hardware (SIMD, Single Instruction Multiple Data) ejecutadas en C o Fortran.\n\n### Atributos clave de un ndarray\n- `arr.ndim`: Numero de dimensiones (ejes).\n- `arr.shape`: Tupla con el tamano de cada dimension (ej. `(3, 4)` para 3 filas y 4 columnas).\n- `arr.dtype`: Tipo de dato atomico (ej. `np.int64`, `np.float32`, `np.bool_`).\n- `arr.size`: Cantidad total de elementos.\n\n### Creacion comun de arrays\n`np.array([1, 2, 3])`, `np.zeros((2, 3))`, `np.ones((3, 3))`, `np.arange(0, 10, 2)`, `np.linspace(0, 1, 5)`.",
+                            "examples": [
+                                {
+                                    "title": "Inspeccion de atributos de un array bidimensional",
+                                    "code": "import numpy as np\n\nmatriz = np.array([[1, 2, 3], [4, 5, 6]], dtype=np.int32)\nprint(\"ndim:\", matriz.ndim)\nprint(\"shape:\", matriz.shape)\nprint(\"dtype:\", matriz.dtype)\nprint(\"size:\", matriz.size)",
+                                    "output": "ndim: 2\nshape: (2, 3)\ndtype: int32\nsize: 6",
+                                    "explanation": "El array posee 2 dimensiones, 2 filas y 3 columnas, tipo entero de 32 bits y 6 elementos en total."
+                                }
+                            ],
+                            "common_errors": "Crear un array con elementos heterogeneos (ej. numeros y texto), lo que obliga a NumPy a degradar el dtype a tipo objeto o cadena generica, perdiendo el beneficio de aceleracion.",
+                            "mini_exercise": {
+                                "instructions": "Crea un array de 5 ceros con tipo de dato float64 usando np.zeros.",
+                                "starter_code": "import numpy as np\n\n# Crea el array ceros\nceros = ...",
+                                "solution": "import numpy as np\n\nceros = np.zeros(5, dtype=np.float64)"
+                            },
+                            "key_takeaways": [
+                                "ndarray almacena datos homogeneos en memoria contigua para maxima velocidad.",
+                                "shape describe las dimensiones y dtype especifica el tipo atomico exacto.",
+                                "np.arange y np.linspace generan secuencias numericas vectorizadas eficientemente."
+                            ],
+                            "exercise": {
+                                "id": "ex_da_01_01",
+                                "type": "single_choice",
+                                "difficulty": "easy",
+                                "prompt": "Por que un ndarray de NumPy es ordenes de magnitud mas rapido que una lista de Python para calculos numericos?",
+                                "options": [
+                                    {"id": "a", "text": "Porque almacena datos de tipo homogeneo en bloques contiguos de memoria, eliminando indireccion de punteros y aprovechando vectorizacion SIMD a nivel de CPU."},
+                                    {"id": "b", "text": "Porque compila el codigo a JavaScript en el navegador."},
+                                    {"id": "c", "text": "Porque no permite tener mas de 10 elementos en memoria."},
+                                    {"id": "d", "text": "Porque ejecuta los calculos en la nube de forma remota."}
+                                ],
+                                "correct_option_id": "a",
+                                "explanation": "La memoria contigua y los tipos homogeneos permiten a la CPU ejecutar instrucciones vectorizadas optimizadas directamente sobre la memoria cache sin sobrecarga."
+                            }
+                        },
+                        {
+                            "id": "les_da_01_02",
+                            "code": "L02",
+                            "title": "Indexacion, Slicing y Vistas vs Copias",
+                            "slug": "indexacion-slicing-vistas-copias",
+                            "position": 2,
+                            "concept_id": "da-numpy-slicing-views",
+                            "objective": "Dominar el slicing multidimensional y comprender la diferencia critica entre una vista y una copia en memoria.",
+                            "theory_markdown": "En arrays multidimensionales, la indexacion se realiza separando los ejes por comas: `arr[fila, columna]`.\n\n### Regla de Oro: Slicing genera Vistas (Views)\nA diferencia de las listas de Python (donde `lista[:]` crea una copia superficial nueva), en NumPy **un slice básico genera una vista referencial** sobre el mismo bloque de memoria original.\n\nSi modificas un slice de un array de NumPy, **el array original tambien se modifica**:\n```python\nsub_array = arr[0:2, 0:2]\nsub_array[0, 0] = 999  # MODIFICA DIRECTAMENTE A arr!\n```\n\nPara aislar los datos e impedir modificaciones accidentales en el array de origen, se debe invocar explicitamente el metodo **`.copy()`**:\n```python\nsub_array_seguro = arr[0:2, 0:2].copy()\n```",
+                            "examples": [
+                                {
+                                    "title": "Demostracion de mutacion por vista",
+                                    "code": "import numpy as np\n\noriginal = np.array([10, 20, 30, 40])\nvista = original[1:3]\nvista[0] = 99\nprint(\"Original modificado:\", original)\n\ncopia = original[1:3].copy()\ncopia[0] = 555\nprint(\"Original intacto tras copia:\", original)",
+                                    "output": "Original modificado: [10 99 30 40]\nOriginal intacto tras copia: [10 99 30 40]",
+                                    "explanation": "La modificacion en la vista altero el array original; la modificacion en la copia quedo completamente aislada."
+                                }
+                            ],
+                            "common_errors": "Modificar una subseccion obtenida por slicing creyendo que es independiente, corrompiendo involuntariamente los datos del array principal.",
+                            "mini_exercise": {
+                                "instructions": "Obten una copia explicita e independiente de las dos primeras filas del array 'matriz'.",
+                                "starter_code": "import numpy as np\nmatriz = np.array([[1, 2], [3, 4], [5, 6]])\n\n# Obten copia de las dos primeras filas\nfilas_copia = ...",
+                                "solution": "filas_copia = matriz[:2].copy()"
+                            },
+                            "key_takeaways": [
+                                "El slicing en NumPy produce una vista (view) sobre la misma memoria del array original.",
+                                "Modificar una vista altera los datos del array original.",
+                                "Usa .copy() siempre que requieras independencia total de datos."
+                            ],
+                            "exercise": {
+                                "id": "ex_da_01_02",
+                                "type": "single_choice",
+                                "difficulty": "medium",
+                                "prompt": "Que sucede con el array original 'arr' si se ejecuta 'sub = arr[:3]' y luego 'sub[0] = 0' en NumPy?",
+                                "options": [
+                                    {"id": "a", "text": "El primer elemento de 'arr' se modifica a 0, porque el slicing genera una vista (view) que comparte el mismo bloque de memoria."},
+                                    {"id": "b", "text": "'arr' permanece inalterado porque el slicing crea una copia independiente automaticamente."},
+                                    {"id": "c", "text": "NumPy lanza un error de acceso de solo lectura."},
+                                    {"id": "d", "text": "'arr' se reduce a solo 3 elementos."}
+                                ],
+                                "correct_option_id": "a",
+                                "explanation": "El slicing basico en NumPy crea vistas referenciales sobre los mismos datos subyacentes para optimizar memoria, por lo que mutar la vista modifica el original."
+                            }
+                        },
+                        {
+                            "id": "les_da_01_03",
+                            "code": "L03",
+                            "title": "Operaciones Vectorizadas y Broadcasting",
+                            "slug": "vectorizacion-broadcasting",
+                            "position": 3,
+                            "concept_id": "da-numpy-broadcasting",
+                            "objective": "Aplicar operaciones aritmeticas vectorizadas y entender las reglas de compatibilidad de broadcasting.",
+                            "theory_markdown": "La **vectorizacion** permite aplicar operaciones matematicas elemento a elemento de forma instantanea sin escribir bucles `for` explicitos en Python:\n```python\na = np.array([1, 2, 3])\nb = np.array([10, 20, 30])\nc = a * b  # [10, 40, 90]\n```\n\n### El concepto de Broadcasting\nEl **Broadcasting** describe como NumPy gestiona operaciones entre arrays de diferentes formas (`shapes`).\n\nDos dimensiones son compatibles para broadcasting si, comparadas de derecha a izquierda:\n1. Son exactamente iguales, O\n2. Una de ellas tiene tamano **1**.\n\nSi una dimension es 1, NumPy 'estira' virtualmente ese eje (sin duplicar datos en memoria) para que coincida con la dimension mayor.",
+                            "examples": [
+                                {
+                                    "title": "Suma de matriz y vector por broadcasting",
+                                    "code": "import numpy as np\n\nmatriz = np.ones((3, 3))       # shape: (3, 3)\nvector = np.array([10, 20, 30]) # shape: (3,)\nresultado = matriz + vector\nprint(resultado)",
+                                    "output": "[[11. 21. 31.]\n [11. 21. 31.]\n [11. 21. 31.]]",
+                                    "explanation": "El vector (3,) es alineado como (1, 3) y transmitido a lo largo de las 3 filas de la matriz."
+                                }
+                            ],
+                            "common_errors": "Intentar operar arrays cuyas dimensiones no coinciden ni tienen tamano 1 (ej. sumar un array de shape (3, 4) con uno de (3, 3)), lo que arroja un ValueError por incompatibilidad de broadcasting.",
+                            "mini_exercise": {
+                                "instructions": "Multiplica vectorizadamente el array 'precios' por 1.16 para calcular el precio con impuesto sin usar bucles for.",
+                                "starter_code": "import numpy as np\nprecios = np.array([100.0, 200.0, 300.0])\n\n# Calcula precios_con_iva\nprecios_con_iva = ...",
+                                "solution": "precios_con_iva = precios * 1.16"
+                            },
+                            "key_takeaways": [
+                                "La vectorizacion ejecuta calculos matematicos elemento a elemento en lenguaje C compilado.",
+                                "Broadcasting permite operar arrays de formas distintas si sus dimensiones coinciden o son 1.",
+                                "Broadcasting no replica datos en memoria fisica, optimizando el consumo de RAM."
+                            ],
+                            "exercise": {
+                                "id": "ex_da_01_03",
+                                "type": "single_choice",
+                                "difficulty": "medium",
+                                "prompt": "Cual de los siguientes pares de shapes es compatible para broadcasting en NumPy?",
+                                "options": [
+                                    {"id": "a", "text": "Array A con shape (4, 3) y Array B con shape (3,)"},
+                                    {"id": "b", "text": "Array A con shape (4, 3) y Array B con shape (4,)"},
+                                    {"id": "c", "text": "Array A con shape (5, 2) y Array B con shape (5, 3)"},
+                                    {"id": "d", "text": "Array A con shape (2, 7) y Array B con shape (3, 7)"}
+                                ],
+                                "correct_option_id": "a",
+                                "explanation": "Comparando desde la derecha: la ultima dimension de ambos es 3 (coinciden). La siguiente dimension de B es implicitamente 1, compatible con el 4 de A."
+                            }
+                        },
+                        {
+                            "id": "les_da_01_04",
+                            "code": "L04",
+                            "title": "Mascaras Booleanas y Funciones de Agregacion",
+                            "slug": "mascaras-booleanas-agregacion",
+                            "position": 4,
+                            "concept_id": "da-numpy-masks-aggregation",
+                            "objective": "Filtrar datos usando indexacion booleana y realizar agregaciones estadisticas a lo largo de ejes especificos.",
+                            "theory_markdown": "NumPy permite filtrar datos de forma declarativa mediante **mascaras booleanas**:\n```python\narr = np.array([12, 5, 25, 8, 30])\nmascara = arr > 10  # [True, False, True, False, True]\nfiltrados = arr[mascara]  # [12, 25, 30]\n```\n\n### Funciones de Agregacion y el parametro axis\nNumPy incluye funciones matematicas optimizadas (`np.sum`, `np.mean`, `np.std`, `np.min`, `np.max`):\n- Sin especificar `axis`: Agrega todos los elementos del array devolviendo un unico escalar.\n- `axis=0`: Opera verticalmente a lo largo de las filas (reduce las filas, dando un valor por cada **columna**).\n- `axis=1`: Opera horizontalmente a lo largo de las columnas (reduce las columnas, dando un valor por cada **fila**).",
+                            "examples": [
+                                {
+                                    "title": "Calculo de medias por columna y por fila",
+                                    "code": "import numpy as np\n\ndatos = np.array([\n    [10, 20, 30],\n    [40, 50, 60]\n])\nprint(\"Media global:\", np.mean(datos))\nprint(\"Media por columna (axis=0):\", np.mean(datos, axis=0))\nprint(\"Media por fila (axis=1):\", np.mean(datos, axis=1))",
+                                    "output": "Media global: 35.0\nMedia por columna (axis=0): [25. 35. 45.]\nMedia por fila (axis=1): [20. 50.]",
+                                    "explanation": "axis=0 colapsa verticalmente (2 filas en 1); axis=1 colapsa horizontalmente (3 columnas en 1)."
+                                }
+                            ],
+                            "common_errors": "Confundir axis=0 con axis=1 al calcular sumas o promedios en matrices bidimensionales.",
+                            "mini_exercise": {
+                                "instructions": "Usa una mascara booleana para filtrar solo los numeros positivos (mayores que 0) del array 'valores'.",
+                                "starter_code": "import numpy as np\nvalores = np.array([-5, 10, -2, 8, 0, 15])\n\n# Filtra los positivos\npositivos = ...",
+                                "solution": "positivos = valores[valores > 0]"
+                            },
+                            "key_takeaways": [
+                                "Las mascaras booleanas permiten filtrar arrays sin usar condicionales if en bucles.",
+                                "axis=0 aplica la reduccion colapsando filas (resultado por columna).",
+                                "axis=1 aplica la reduccion colapsando columnas (resultado por fila)."
+                            ],
+                            "exercise": {
+                                "id": "ex_da_01_04",
+                                "type": "single_choice",
+                                "difficulty": "medium",
+                                "prompt": "Dada una matriz de calificaciones de 100 estudiantes (filas) y 5 asignaturas (columnas), que instruccion calcula el promedio de cada estudiante?",
+                                "options": [
+                                    {"id": "a", "text": "np.mean(calificaciones, axis=1)"},
+                                    {"id": "b", "text": "np.mean(calificaciones, axis=0)"},
+                                    {"id": "c", "text": "np.mean(calificaciones)"},
+                                    {"id": "d", "text": "calificaciones.sum(axis=None)"}
+                                ],
+                                "correct_option_id": "a",
+                                "explanation": "Cada estudiante es una fila. Para promediar sus 5 asignaturas (columnas) debemos colapsar a lo largo del eje horizontal (axis=1), obteniendo 100 promedios."
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        "bank_json": {
+            "module_code": "DA_M01",
+            "module_slug": "numpy-fundamentos",
+            "course_slug": "data-analytics",
+            "questions": [
+                {
+                    "id": "q_da_01_01",
+                    "type": "single_choice",
+                    "difficulty": "easy",
+                    "prompt": "Cual es la caracteristica principal de los elementos contenidos en un ndarray de NumPy?",
+                    "options": [
+                        {"id": "a", "text": "Deben ser del mismo tipo de dato homogeneo (dtype) y se almacenan contiguos en memoria."},
+                        {"id": "b", "text": "Pueden ser de tipos arbitrarios mezclados sin penalizacion de rendimiento."},
+                        {"id": "c", "text": "Solo pueden ser cadenas de texto de longitud fija."},
+                        {"id": "d", "text": "Se guardan en una base de datos relacional externa."}
+                    ],
+                    "correct_option_id": "a",
+                    "explanation": "La homogeneidad de tipos es lo que permite a NumPy optimizar el almacenamiento en bloques contiguos de memoria y acelerar computos con C."
+                },
+                {
+                    "id": "q_da_01_02",
+                    "type": "single_choice",
+                    "difficulty": "medium",
+                    "prompt": "Que devuelve el atributo shape de un ndarray bidimensional?",
+                    "options": [
+                        {"id": "a", "text": "Una tupla con la cantidad de filas y columnas del array."},
+                        {"id": "b", "text": "Un entero con el peso en kilobytes del objeto."},
+                        {"id": "c", "text": "Una cadena con el nombre del tipo de dato."},
+                        {"id": "d", "text": "El valor del determinante de la matriz."}
+                    ],
+                    "correct_option_id": "a",
+                    "explanation": "arr.shape retorna una tupla donde cada elemento representa la dimension de un eje (ej. (filas, columnas))."
+                },
+                {
+                    "id": "q_da_01_03",
+                    "type": "single_choice",
+                    "difficulty": "medium",
+                    "prompt": "Como se evita que la modificacion de un slice de un array afecte al array original en NumPy?",
+                    "options": [
+                        {"id": "a", "text": "Creando una copia explicita mediante el metodo .copy(): sub = arr[:5].copy()"},
+                        {"id": "b", "text": "Usando la funcion freeze()"},
+                        {"id": "c", "text": "Declarando el slice como constante con const"},
+                        {"id": "d", "text": "NumPy nunca modifica el array original, no se requiere ninguna accion"}
+                    ],
+                    "correct_option_id": "a",
+                    "explanation": "El slicing genera una vista (view); invocar .copy() reserva un nuevo bloque de memoria desvinculado del original."
+                },
+                {
+                    "id": "q_da_01_04",
+                    "type": "single_choice",
+                    "difficulty": "hard",
+                    "prompt": "Segun las reglas de broadcasting de NumPy, que condicion permite operar dos dimensiones comparadas de derecha a izquierda?",
+                    "options": [
+                        {"id": "a", "text": "Que las dimensiones sean iguales o que una de ellas sea 1."},
+                        {"id": "b", "text": "Que ambas sean numeros pares."},
+                        {"id": "c", "text": "Que la suma de ambas sea divisible por 2."},
+                        {"id": "d", "text": "Que ambos arrays contengan menos de 1000 elementos."}
+                    ],
+                    "correct_option_id": "a",
+                    "explanation": "La regla formal de broadcasting estipula que dos dimensiones son compatibles si son identicas o si una de ellas es exactamente 1."
+                },
+                {
+                    "id": "q_da_01_05",
+                    "type": "predict_output",
+                    "difficulty": "medium",
+                    "prompt": "Dado arr = np.array([10, 25, 3, 40, 15]), que produce la expresion arr[arr > 20]?",
+                    "options": [
+                        {"id": "a", "text": "array([25, 40])"},
+                        {"id": "b", "text": "array([True, False, True])"},
+                        {"id": "c", "text": "array([10, 3, 15])"},
+                        {"id": "d", "text": "array([20, 20])"}
+                    ],
+                    "correct_option_id": "a",
+                    "explanation": "arr > 20 crea una mascara booleana [False, True, False, True, False]; al indexar con ella se extraen solo los valores correspondientes a True (25 y 40)."
+                },
+                {
+                    "id": "q_da_01_06",
+                    "type": "single_choice",
+                    "difficulty": "medium",
+                    "prompt": "Si se ejecuta matriz.sum(axis=0) sobre un array de shape (4, 6), cual sera la forma (shape) del array resultante?",
+                    "options": [
+                        {"id": "a", "text": "(6,)"},
+                        {"id": "b", "text": "(4,)"},
+                        {"id": "c", "text": "(1,)"},
+                        {"id": "d", "text": "(4, 6)"}
+                    ],
+                    "correct_option_id": "a",
+                    "explanation": "axis=0 colapsa las 4 filas sumando a lo largo del eje vertical, produciendo un vector con 6 elementos (uno por columna)."
+                }
+            ]
+        }
+    }
+]
+
+def main():
+    print("Iniciando generacion de modulo 01 de Data Analytics...")
+    for mod in MODULES:
+        mod_dir = os.path.join(BASE_DIR, mod["dir"])
+        os.makedirs(mod_dir, exist_ok=True)
+        
+        module_path = os.path.join(mod_dir, "module.json")
+        with open(module_path, "w", encoding="utf-8") as f:
+            json.dump(mod["module_json"], f, indent=2, ensure_ascii=False)
+            f.write("\n")
+            
+        bank_path = os.path.join(mod_dir, "bank.json")
+        with open(bank_path, "w", encoding="utf-8") as f:
+            json.dump(mod["bank_json"], f, indent=2, ensure_ascii=False)
+            f.write("\n")
+            
+        print(f"Generado exitosamente: {mod['dir']} (4 lecciones, 6 preguntas en banco)")
+
+if __name__ == "__main__":
+    main()

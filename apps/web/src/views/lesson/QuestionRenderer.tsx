@@ -17,6 +17,7 @@ import {
 } from '@phosphor-icons/react';
 import { ContentExercise, shuffled } from '@/lib/content';
 import { cn } from '@/lib/utils';
+import { renderMarkdownInline } from '@/components/ui/markdown-content';
 
 interface QuestionRendererProps {
   exercise: ContentExercise;
@@ -85,6 +86,7 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
   const type = exercise.type || 'single_choice';
   const multi = type === 'multiple_choice';
   const options = exercise.answers ?? [];
+  const isLongOptions = options.some((o) => (o.body?.length ?? 0) > 70);
 
   const updateCustom = (val: string | string[]) => {
     if (disabled) return;
@@ -683,7 +685,7 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
               disabled={disabled}
               onClick={() => onToggle(opt.id)}
               className={cn(
-                'group relative flex w-full items-center justify-between gap-3 rounded-xl border px-4 py-3.5 text-left text-sm transition-all duration-200 min-h-[54px] select-none cursor-pointer',
+                'group relative flex w-full items-center justify-between gap-3 rounded-xl border px-3.5 py-2.5 text-left transition-all duration-200 min-h-[44px] select-none cursor-pointer',
                 isPressed
                   ? 'scale-[0.98] border-orange-500 bg-orange-500/25 text-white shadow-[0_0_20px_rgba(255,106,0,0.4)] ring-2 ring-orange-500/60 translate-x-1.5'
                   : active
@@ -696,7 +698,7 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'flex h-7 w-7 shrink-0 items-center justify-center border text-xs font-mono font-bold transition-all duration-200',
+                    'flex h-6 w-6 shrink-0 items-center justify-center border text-xs font-mono font-bold transition-all duration-200',
                     multi ? 'rounded-md' : 'rounded-lg',
                     isPressed || active
                       ? 'border-orange-500 bg-orange-500 text-slate-950 shadow-sm'
@@ -704,12 +706,11 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
                   )}
                 >
                   {multi && active ? (
-                    <Check className="w-4 h-4 stroke-[3]" />
+                    <Check className="w-3.5 h-3.5 stroke-[3]" />
                   ) : (
                     opt.label ?? shortcutChar
                   )}
                 </span>
-
                 {type === 'select_code' ? (
                   <div className="flex-1 min-w-0 rounded-lg border border-slate-800/90 bg-slate-950/90 px-3 py-2 font-mono text-xs sm:text-sm text-amber-200 overflow-x-auto">
                     <pre className="whitespace-pre-wrap break-words">
@@ -717,8 +718,13 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
                     </pre>
                   </div>
                 ) : (
-                  <span className="font-mono text-xs sm:text-sm leading-snug break-words group-hover:text-white transition-colors">
-                    {opt.body}
+                  <span
+                    className={cn(
+                      'font-mono leading-snug break-words group-hover:text-white transition-colors',
+                      isLongOptions ? 'text-xs sm:text-[13px]' : 'text-xs sm:text-sm'
+                    )}
+                  >
+                    {renderMarkdownInline(opt.body)}
                   </span>
                 )}
               </div>

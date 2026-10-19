@@ -6,28 +6,158 @@
     {
       "id": "q_dj_02_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Qué tipo de campo de Django ORM se utiliza para modelar una relación 1 a N (por ejemplo: Un Autor tiene muchos Libros)?",
+      "difficulty": "easy",
+      "prompt": "Que clase base deben heredar todos los modelos relacionales de datos en Django?",
       "options": [
         {
           "id": "a",
-          "text": "models.ForeignKey(..., on_delete=models.CASCADE)"
+          "text": "django.db.models.Model"
         },
         {
           "id": "b",
-          "text": "models.ManyToManyField()"
+          "text": "pydantic.BaseModel"
         },
         {
           "id": "c",
-          "text": "models.OneToOneField()"
+          "text": "django.views.View"
         },
         {
           "id": "d",
-          "text": "models.ArrayField()"
+          "text": "dataclasses.dataclass"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "ForeignKey crea una clave foránea en la tabla, estableciendo una relación 1 a muchos."
+      "explanation": "models.Model es la clase base provista por Django para registrar tablas y conectar el ORM con la base de datos."
+    },
+    {
+      "id": "q_dj_02_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cual es la funcion del comando python manage.py makemigrations?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Inspecciona los modelos en models.py y genera archivos de migracion en Python con la especificacion de cambios en el esquema."
+        },
+        {
+          "id": "b",
+          "text": "Ejecuta las instrucciones SQL en el servidor de base de datos de inmediato."
+        },
+        {
+          "id": "c",
+          "text": "Exporta todos los datos existentes a un archivo CSV."
+        },
+        {
+          "id": "d",
+          "text": "Elimina las tablas que contengan registros nulos."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "makemigrations detecta los cambios en los modelos y escribe los archivos de migracion que posteriormente ejecutara migrate."
+    },
+    {
+      "id": "q_dj_02_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que valor de on_delete en una ForeignKey elimina en cascada todos los registros hijos cuando se elimina el registro padre referenciado?",
+      "options": [
+        {
+          "id": "a",
+          "text": "models.CASCADE"
+        },
+        {
+          "id": "b",
+          "text": "models.PROTECT"
+        },
+        {
+          "id": "c",
+          "text": "models.SET_NULL"
+        },
+        {
+          "id": "d",
+          "text": "models.DO_NOTHING"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "models.CASCADE propaga el borrado eliminando automaticamente las entidades hijas dependientes."
+    },
+    {
+      "id": "q_dj_02_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que significa que los QuerySets de Django posean evaluacion perezosa (lazy evaluation)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que la consulta SQL no se envia a la base de datos hasta que el QuerySet sea efectivamente iterado o evaluado."
+        },
+        {
+          "id": "b",
+          "text": "Que las consultas tardan mas de 5 segundos de forma intencional."
+        },
+        {
+          "id": "c",
+          "text": "Que solo se pueden realizar consultas sobre tablas con menos de 100 registros."
+        },
+        {
+          "id": "d",
+          "text": "Que los datos se guardan en un archivo de texto temporal."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Lazy evaluation permite encadenar filtros sin sobrecarga de red; la sentencia SQL final se genera y envia solo en el momento de acceso real a los registros."
+    },
+    {
+      "id": "q_dj_02_05",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "Como se escribe en el ORM de Django un filtro para buscar productos cuyo precio sea mayor o igual a 100?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Producto.objects.filter(precio__gte=100)"
+        },
+        {
+          "id": "b",
+          "text": "Producto.objects.filter(precio >= 100)"
+        },
+        {
+          "id": "c",
+          "text": "Producto.objects.where('precio >= 100')"
+        },
+        {
+          "id": "d",
+          "text": "Producto.objects.get(precio_greater=100)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El doble guion bajo '__gte' (greater than or equal) es la sintaxis de lookup estandar del ORM de Django."
+    },
+    {
+      "id": "q_dj_02_06",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Cual es la diferencia en la ejecucion SQL entre select_related() y prefetch_related() en Django?",
+      "options": [
+        {
+          "id": "a",
+          "text": "select_related() hace un JOIN en una sola consulta SQL (1 a 1 o 1 a N); prefetch_related() hace consultas independientes agrupadas por lotes y las une en memoria en Python (N a M o relaciones inversas)."
+        },
+        {
+          "id": "b",
+          "text": "select_related() solo funciona con bases de datos NoSQL."
+        },
+        {
+          "id": "c",
+          "text": "prefetch_related() bloquea la base de datos contra escritura."
+        },
+        {
+          "id": "d",
+          "text": "No existe diferencia, son alias intercambiables."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "select_related se apoya en SQL JOIN (apto para relaciones de cardinalidad simple), mientras que prefetch_related usa consultas separadas con 'WHERE IN' para no multiplicar filas en relaciones de muchos a muchos."
     }
   ]
 }

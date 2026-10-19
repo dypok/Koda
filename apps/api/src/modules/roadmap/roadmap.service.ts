@@ -12,17 +12,17 @@ export class RoadmapService {
   /**
    * Obtiene el grafo de cursos (nodos + conexiones) de un lenguaje/track desde MongoDB.
    */
-  async getCoursesGraph(languageSlug: string): Promise<GraphDataset> {
-    this.logger.log(`Consultando grafo de cursos desde MongoDB para: ${languageSlug}`);
-    return this.getRoadmapGraphUseCase.getCoursesGraph(languageSlug);
+  async getCoursesGraph(languageSlug: string, userId?: string): Promise<GraphDataset> {
+    this.logger.log(`Consultando grafo de cursos para ${languageSlug} (Usuario: ${userId ?? 'anónimo'})`);
+    return this.getRoadmapGraphUseCase.getCoursesGraph(languageSlug, userId);
   }
 
   /**
-   * Obtiene el grafo de lecciones (nodos + conexiones) de un curso desde MongoDB.
+   * Obtiene el grafo de lecciones (nodos + conexiones) de un curso con progreso real fusionado.
    */
-  async getLessonsGraph(courseId: string): Promise<GraphDataset> {
-    this.logger.log(`Consultando grafo de lecciones desde MongoDB para curso: ${courseId}`);
-    return this.getRoadmapGraphUseCase.getLessonsGraph(courseId);
+  async getLessonsGraph(courseId: string, userId?: string): Promise<GraphDataset> {
+    this.logger.log(`Consultando grafo de lecciones para curso ${courseId} (Usuario: ${userId ?? 'anónimo'})`);
+    return this.getRoadmapGraphUseCase.getLessonsGraph(courseId, userId);
   }
 
   /**

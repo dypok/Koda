@@ -4,85 +4,250 @@
   "code": "DA_M04",
   "slug": "pandas-agrupaciones-merges",
   "course_slug": "data-analytics",
-  "title": "Agrupaciones (groupby), Tablas Dinámicas y Merges",
-  "objective": "Realizar análisis agregado con groupby y agg, crear tablas dinámicas con pivot_table y combinar fuentes de datos con merge y concat.",
-  "description": "Une y agrega información como en SQL: cruces relacionales (inner, left, right), agregaciones por categoría y transformaciones cruzadas.",
+  "title": "Agrupaciones (groupby), Tablas Dinamicas y Merges",
+  "objective": "Aplicar el patron Split-Apply-Combine con groupby, crear tablas dinamicas con pivot_table y combinar fuentes con merge y concat.",
+  "description": "El nucleo analitico de Pandas: segmentacion de metricas, agregaciones avanzadas, remodelado de datos y cruce de tablas relacionales.",
   "position": 44,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 320
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_da_04_01",
       "code": "S01",
-      "title": "groupby y Cruces con merge",
-      "slug": "groupby-y-merge",
+      "title": "Agregacion, Pivotado y Cruces de Datos",
+      "slug": "agregacion-pivotado-cruces",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 50,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_da_04_01",
           "code": "L01",
-          "title": "El Paradigma Split-Apply-Combine y Relaciones SQL con merge",
-          "slug": "groupby-merge-base",
+          "title": "El Patron Split-Apply-Combine con groupby",
+          "slug": "patron-split-apply-combine",
           "position": 1,
-          "concept_id": "da-groupby",
-          "objective": "Agrupar registros por categorías y combinar DataFrames mediante claves foráneas.",
-          "theory_markdown": "El patrón **Split-Apply-Combine** de `groupby`:\n1. **Split**: Divide los datos en grupos basados en los valores de una o más columnas (ej: por `pais` o `departamento`).\n2. **Apply**: Aplica una función a cada grupo (ej: `mean()`, `sum()`, `count()`).\n3. **Combine**: Une los resultados en un nuevo DataFrame.\n\nPara unir dos DataFrames como un `JOIN` de SQL usamos `pd.merge(df1, df2, on=\"id_clave\", how=\"inner\")` (`how` puede ser `\"inner\"`, `\"left\"`, `\"right\"` o `\"outer\"`).",
+          "concept_id": "da-pandas-groupby",
+          "objective": "Comprender las tres etapas del patron Split-Apply-Combine y aplicar funciones de agregacion directas.",
+          "theory_markdown": "El analisis de datos por categorias se rige por el patron **Split-Apply-Combine** conceptualizado por Hadley Wickham:\n\n1. **Split (Dividir):** Se separan los datos en grupos basados en los valores de una o mas variables categoricas (ej. dividir transacciones por `sucursal`).\n2. **Apply (Aplicar):** Se computa una funcion analitica sobre cada grupo de forma aislada (`sum()`, `mean()`, `count()`, `max()`).\n3. **Combine (Combinar):** Se unen los resultados individuales en un nuevo DataFrame unificado.\n\n### Sintaxis fundamental\n```python\n# Media de ventas agrupada por region:\ndf.groupby('region')['ventas'].mean()\n\n# Agrupacion por multiples columnas:\ndf.groupby(['region', 'categoria'])['ventas'].sum()\n```\nSi no deseas que las columnas agrupadoras se conviertan en el Indice de filas del resultado, se utiliza `as_index=False`: `df.groupby('region', as_index=False)['ventas'].sum()`.",
           "examples": [
             {
-              "title": "Métricas agregadas por departamento",
-              "code": "import pandas as pd\n\ndf = pd.DataFrame({\n    \"depto\": [\"Ventas\", \"Ventas\", \"IT\", \"IT\"],\n    \"empleado\": [\"Ana\", \"Carlos\", \"Elena\", \"Marcos\"],\n    \"sueldo\": [3000, 3500, 4200, 4800]\n})\nresumen = df.groupby(\"depto\")[\"sueldo\"].agg([\"count\", \"mean\", \"max\"])\nprint(resumen)",
-              "output": "        count    mean   max\ndepto                      \nIT          2  4500.0  4800\nVentas      2  3250.0  3500",
-              "explanation": "agg([\"count\", \"mean\", \"max\"]) calcula múltiples métricas en una sola pasada."
+              "title": "Suma y conteo por categoria",
+              "code": "import pandas as pd\n\ndf = pd.DataFrame({\n    \"categoria\": [\"A\", \"B\", \"A\", \"B\", \"A\"],\n    \"monto\": [100, 200, 150, 300, 50]\n})\nresumen = df.groupby(\"categoria\")[\"monto\"].sum()\nprint(resumen)",
+              "output": "categoria\nA    300\nB    500\nName: monto, dtype: int64",
+              "explanation": "Los 3 registros de A totalizan 300 y los 2 de B totalizan 500."
             }
           ],
-          "common_errors": "Olvidar el parámetro `how=\"left\"` al hacer merge, provocando que por defecto se use `inner` y se descarten filas que no tengan correspondencia en la tabla secundaria.",
+          "common_errors": "Omitir los corchetes de seleccion de columna despues del groupby, intentando aplicar funciones matematicas a todas las columnas del DataFrame incluso si contienen nombres o texto.",
           "mini_exercise": {
-            "starter_code": "import pandas as pd\ndf = pd.DataFrame({\"ciudad\": [\"CDMX\", \"CDMX\", \"MVD\"], \"temp\": [22, 24, 18]})\n# Agrupa por ciudad y calcula el promedio de temp\nprom = df.groupby(\"ciudad\")[\"temp\"].mean()\nprint(prom[\"CDMX\"])",
-            "instructions": "Calcula el promedio y verifica que en CDMX sea 23.0.",
-            "solution": "import pandas as pd\ndf = pd.DataFrame({\"ciudad\": [\"CDMX\", \"CDMX\", \"MVD\"], \"temp\": [22, 24, 18]})\nprom = df.groupby(\"ciudad\")[\"temp\"].mean()\nprint(prom[\"CDMX\"])"
+            "instructions": "Calcula el promedio de 'salario' agrupado por 'departamento' usando groupby.",
+            "starter_code": "import pandas as pd\ndf = pd.DataFrame({\"departamento\": [\"IT\", \"HR\", \"IT\"], \"salario\": [3000, 2500, 3500]})\n\n# Agrupa y promedia\npromedio_salarios = ...",
+            "solution": "promedio_salarios = df.groupby(\"departamento\")[\"salario\"].mean()"
           },
           "key_takeaways": [
-            "groupby divide el dataset por categorías para calcular métricas.",
-            ".agg() permite calcular sum, mean, std simultáneamente.",
-            "pd.merge() equivale a un JOIN relacional de SQL."
+            "Split-Apply-Combine divide los datos, ejecuta metricas en cada grupo y une los resultados.",
+            "groupby(['col1', 'col2']) soporta segmentaciones jerarquicas compuestas.",
+            "as_index=False mantiene las columnas agrupadoras como columnas regulares."
           ],
           "exercise": {
             "id": "ex_da_04_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Qué tipo de unión (how) en pd.merge conserva todas las filas del DataFrame izquierdo, rellenando con NaN si no hay coincidencia en el derecho?",
+            "prompt": "Cuales son las tres fases del patron Split-Apply-Combine implementado por el metodo groupby de Pandas?",
             "options": [
               {
                 "id": "a",
-                "text": "how=\"left\""
+                "text": "Dividir los datos en grupos, aplicar una funcion de calculo a cada subconjunto y combinar los resultados en una nueva estructura."
               },
               {
                 "id": "b",
-                "text": "how=\"inner\""
+                "text": "Separar el texto, compilar el codigo y guardarlo en binario."
               },
               {
                 "id": "c",
-                "text": "how=\"right\""
+                "text": "Ordenar la tabla, eliminar los duplicados y exportar a CSV."
               },
               {
                 "id": "d",
-                "text": "how=\"cross\""
+                "text": "Crear una base de datos, insertar datos y cerrar la conexion."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Un LEFT JOIN (how=\"left\") preserva la totalidad de los registros de la tabla izquierda sin pérdidas."
+            "explanation": "El patron consiste en particionar los datos por categorias (Split), computar metricas independientes (Apply) y reagrupar las respuestas (Combine)."
+          }
+        },
+        {
+          "id": "les_da_04_02",
+          "code": "L02",
+          "title": "Agregaciones Multiples con .agg() y Transformaciones",
+          "slug": "agregaciones-multiples-agg-transform",
+          "position": 2,
+          "concept_id": "da-pandas-agg-transform",
+          "objective": "Calcular multiples metricas por grupo mediante .agg() y contrastarlo con .transform() que conserva la dimension original.",
+          "theory_markdown": "### Agregacion avanzada con `.agg()`\nPara computar diferentes metricas estadisticas sobre distintas columnas en una sola linea, se pasa un diccionario a `.agg()`:\n```python\ndf.groupby('categoria').agg({\n    'precio': ['mean', 'min', 'max'],\n    'unidades': 'sum',\n    'cliente_id': 'nunique'  # Clientes unicos\n})\n```\n\n### La diferencia fundamental con `.transform()`\n- `.agg()` **reduce** el numero de filas: devuelve 1 fila por cada grupo unico.\n- `.transform()` computa la metrica pero **mantiene intacto el numero original de filas**, alineando el resultado del grupo con cada fila individual del DataFrame.\n\nEjemplo: Calcular el porcentaje que aporta cada venta individual sobre el total de su respectiva categoria.",
+          "examples": [
+            {
+              "title": "Uso de .transform() para normalizar por grupo",
+              "code": "import pandas as pd\n\ndf = pd.DataFrame({\n    \"tienda\": [\"Norte\", \"Norte\", \"Sur\", \"Sur\"],\n    \"venta\": [100, 300, 200, 200]\n})\n# Total de ventas de la tienda correspondiente a cada fila:\ndf[\"total_tienda\"] = df.groupby(\"tienda\")[\"venta\"].transform(\"sum\")\ndf[\"pct_tienda\"] = df[\"venta\"] / df[\"total_tienda\"]\nprint(df)",
+              "output": "   tienda  venta  total_tienda  pct_tienda\n0   Norte    100           400        0.25\n1   Norte    300           400        0.75\n2     Sur    200           400        0.50\n3     Sur    200           400        0.50",
+              "explanation": "transform('sum') no redujo la tabla a 2 filas, sino que devolvio una Serie de 4 elementos para operar fila a fila."
+            }
+          ],
+          "common_errors": "Intentar asignar el resultado de un groupby().agg() directo a una nueva columna del DataFrame original sin usar transform, provocando un ValueError de desajuste de dimensiones.",
+          "mini_exercise": {
+            "instructions": "Usa .agg() para calcular la media ('mean') y el maximo ('max') de la columna 'valor' agrupada por 'tipo'.",
+            "starter_code": "import pandas as pd\ndf = pd.DataFrame({\"tipo\": [\"A\", \"A\", \"B\"], \"valor\": [10, 20, 30]})\n\n# Agrupa con .agg\nmetricas = ...",
+            "solution": "metricas = df.groupby(\"tipo\")[\"valor\"].agg([\"mean\", \"max\"])"
+          },
+          "key_takeaways": [
+            ".agg() permite especificar multiples funciones de reduccion por columna.",
+            ".transform() devuelve una Serie con el mismo tamano del DataFrame original.",
+            ".transform() es ideal para calculos de porcentajes o estandarizacion dentro de grupos."
+          ],
+          "exercise": {
+            "id": "ex_da_04_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es la diferencia en la dimension del resultado entre invocar .agg('mean') y .transform('mean') sobre un groupby?",
+            "options": [
+              {
+                "id": "a",
+                "text": ".agg('mean') reduce las filas retornando unicamente una por grupo; .transform('mean') retorna una Serie con el mismo numero de filas que el DataFrame original."
+              },
+              {
+                "id": "b",
+                "text": ".transform('mean') solo funciona con numeros enteros."
+              },
+              {
+                "id": "c",
+                "text": ".agg('mean') no soporta funciones matematicas de reduccion."
+              },
+              {
+                "id": "d",
+                "text": "Ambos retornan siempre un escalar unico."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "transform difunde el valor calculado del grupo de regreso a cada fila original, manteniendo la cardinalidad de la tabla intacta."
+          }
+        },
+        {
+          "id": "les_da_04_03",
+          "code": "L03",
+          "title": "Tablas Dinamicas con pivot_table y Des-pivotado con melt",
+          "slug": "tablas-dinamicas-pivot-melt",
+          "position": 3,
+          "concept_id": "da-pandas-pivot-melt",
+          "objective": "Remodelar la forma de un DataFrame pasando de formato largo a ancho con pivot_table y viceversa con melt.",
+          "theory_markdown": "### Tablas Dinamicas con `pivot_table`\n`pivot_table` genera matrices bidimensionales cruzando dos variables categoricas con una funcion agregadora:\n```python\nmatriz = df.pivot_table(\n    index='anio',          # Filas\n    columns='trimestre',   # Columnas\n    values='ventas',       # Celda\n    aggfunc='sum',         # Agregacion (mean por defecto)\n    fill_value=0           # Reemplazo de celdas vacias\n)\n```\n\n### Des-pivotar con `melt` (Formato Ancho a Formato Largo)\nMuchos datasets vienen en formato ancho (ej. columnas `Ene`, `Feb`, `Mar`). Las herramientas de visualizacion y machine learning requieren **formato largo (tidy data)**:\n```python\ndf_largo = df.melt(\n    id_vars=['pais', 'indicador'],  # Columnas que se mantienen fijas\n    value_vars=['2021', '2022'],    # Columnas que se des-pivotan\n    var_name='anio',                # Nombre de la nueva columna de etiquetas\n    value_name='valor'              # Nombre de la nueva columna de datos\n)\n```",
+          "examples": [
+            {
+              "title": "De formato ancho a formato largo con melt",
+              "code": "import pandas as pd\n\ndf_ancho = pd.DataFrame({\n    \"pais\": [\"Colombia\", \"Chile\"],\n    \"2020\": [100, 150],\n    \"2021\": [120, 180]\n})\ndf_tidy = df_ancho.melt(id_vars=[\"pais\"], var_name=\"anio\", value_name=\"pib\")\nprint(df_tidy)",
+              "output": "       pais  anio  pib\n0  Colombia  2020  100\n1     Chile  2020  150\n2  Colombia  2021  120\n3     Chile  2021  180",
+              "explanation": "Las columnas de anos se convirtieron en filas de una sola variable categorica 'anio'."
+            }
+          ],
+          "common_errors": "Confundir pivot() con pivot_table(). pivot() falla con un ValueError si existen claves duplicadas en la combinacion index/columns; pivot_table() aplica una funcion agregadora resolviendo duplicados.",
+          "mini_exercise": {
+            "instructions": "Crea una tabla dinamica con index='region', columns='mes', values='ventas' y aggfunc='sum'.",
+            "starter_code": "import pandas as pd\ndf = pd.DataFrame({\"region\": [\"Norte\"], \"mes\": [\"Ene\"], \"ventas\": [500]})\n\n# Crea la tabla dinamica\ntabla = ...",
+            "solution": "tabla = df.pivot_table(index=\"region\", columns=\"mes\", values=\"ventas\", aggfunc=\"sum\")"
+          },
+          "key_takeaways": [
+            "pivot_table cruza dos categorias en una matriz 2D agregando los valores numéricos.",
+            "fill_value=0 previene que combinaciones sin datos queden como NaN.",
+            "melt transforma estructuras anchas a formato largo (tidy data), optimo para graficos."
+          ],
+          "exercise": {
+            "id": "ex_da_04_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual metodo de Pandas se utiliza para convertir un DataFrame de formato ancho (con columnas como '2020', '2021', '2022') a formato largo (con una columna 'anio' y otra 'valor')?",
+            "options": [
+              {
+                "id": "a",
+                "text": "df.melt()"
+              },
+              {
+                "id": "b",
+                "text": "df.unstack()"
+              },
+              {
+                "id": "c",
+                "text": "df.pivot()"
+              },
+              {
+                "id": "d",
+                "text": "df.flatten()"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "melt() des-pivota las columnas de medicion convirtiendolas en tuplas de variables y valores en formato largo (tidy)."
+          }
+        },
+        {
+          "id": "les_da_04_04",
+          "code": "L04",
+          "title": "Uniones y Combinaciones con merge y concat",
+          "slug": "uniones-combinaciones-merge-concat",
+          "position": 4,
+          "concept_id": "da-pandas-merge-concat",
+          "objective": "Unir DataFrames mediante claves compartidas con pd.merge() y concatenar tablas vertical u horizontalmente con pd.concat().",
+          "theory_markdown": "### Uniones relacionales con `pd.merge()`\n`pd.merge()` emula las operaciones `JOIN` de SQL:\n```python\nresultado = pd.merge(df_usuarios, df_pedidos, on='usuario_id', how='inner')\n```\nTipos de join (`how`):\n- `'inner'` (defecto): Solo conserva filas cuyas claves coinciden en ambas tablas.\n- `'left'`: Conserva todas las filas del DataFrame izquierdo, rellenando con `NaN` los datos no coincidentes de la derecha.\n- `'right'`: Conserva todas las filas de la derecha.\n- `'outer'`: Union completa (Full Outer Join) que retiene todas las filas de ambos lados.\n\n### Concatenacion con `pd.concat()`\nApila DataFrames que comparten la misma estructura:\n- `axis=0` (defecto): Apila verticalmente (anadiendo nuevas **filas**).\n- `axis=1`: Apila horizontalmente (anadiendo nuevas **columnas**).",
+          "examples": [
+            {
+              "title": "Left Join entre clientes y pedidos",
+              "code": "import pandas as pd\n\nclientes = pd.DataFrame({\"id\": [1, 2, 3], \"nombre\": [\"Ana\", \"Luis\", \"Sara\"]})\npedidos = pd.DataFrame({\"id\": [1, 1], \"monto\": [100, 250]})\n\n# Left Join asegurando que todos los clientes aparezcan\ncruce = pd.merge(clientes, pedidos, on=\"id\", how=\"left\")\nprint(cruce)",
+              "output": "   id nombre  monto\n0   1    Ana  100.0\n1   1    Ana  250.0\n2   2   Luis    NaN\n3   3   Sara    NaN",
+              "explanation": "Luis y Sara no tienen pedidos registrados, por lo que su monto se completa con NaN."
+            }
+          ],
+          "common_errors": "Hacer un merge sin especificar el parametro on ni left_on/right_on cuando ambas tablas tienen nombres de columnas diferentes, produciendo un cruce erroneo o vacio.",
+          "mini_exercise": {
+            "instructions": "Usa pd.concat para apilar verticalmente (axis=0) la lista de DataFrames [df1, df2] ignorando el indice previo.",
+            "starter_code": "import pandas as pd\ndf1 = pd.DataFrame({\"a\": [1]})\ndf2 = pd.DataFrame({\"a\": [2]})\n\n# Concatena verticalmente\nunificado = ...",
+            "solution": "unificado = pd.concat([df1, df2], axis=0, ignore_index=True)"
+          },
+          "key_takeaways": [
+            "pd.merge() cruza tablas relacionales mediante claves (inner, left, right, outer).",
+            "pd.concat(axis=0) apila tablas verticalmente agregando filas.",
+            "ignore_index=True en concat regenera un indice secuencial limpio de 0 a N-1."
+          ],
+          "exercise": {
+            "id": "ex_da_04_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Que tipo de join en pd.merge() garantiza que no se pierda ningun registro del primer DataFrame (izquierdo), asignando NaN si no hay coincidencia en el segundo?",
+            "options": [
+              {
+                "id": "a",
+                "text": "how='left'"
+              },
+              {
+                "id": "b",
+                "text": "how='inner'"
+              },
+              {
+                "id": "c",
+                "text": "how='cross'"
+              },
+              {
+                "id": "d",
+                "text": "how='right'"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Un Left Outer Join (how='left') preserva todas las filas del DataFrame izquierdo independientemente de si existen coincidencias en la tabla derecha."
           }
         }
       ]

@@ -5,64 +5,65 @@
   "slug": "comprensiones",
   "course_slug": "python-2",
   "title": "Comprensiones de Listas, Diccionarios y Sets",
-  "objective": "Transformar y filtrar colecciones en una sola línea concisa mediante list, dict y set comprehensions.",
-  "description": "Escribe código elegante y veloz sustituyendo bucles for acumulativos por comprensiones funcionales legibles.",
-  "position": 11,
+  "objective": "Transformar y filtrar colecciones en una sola línea concisa mediante list, dict y set comprehensions, dominando expresiones condicionales.",
+  "description": "Escribe código elegante y veloz sustituyendo bucles for acumulativos por comprensiones funcionales legibles y optimizadas en CPython.",
+  "position": 1,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 220
+    "on_pass": 240
   },
   "sections": [
     {
       "id": "sec_py2_01_01",
       "code": "S01",
-      "title": "List Comprehensions y Filtrado",
-      "slug": "list-comprehensions",
+      "title": "Comprensiones en Python",
+      "slug": "comprensiones-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 15,
-      "xp_on_complete": 40,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py2_01_01",
           "code": "L01",
-          "title": "Sintaxis de List Comprehensions",
-          "slug": "sintaxis-list-comprehensions",
+          "title": "List Comprehensions Básicas y Mapeo",
+          "slug": "list-comprehensions-mapeo",
           "position": 1,
-          "concept_id": "py2-list-comp",
-          "objective": "Dominar la fórmula [expresion for item in iterable if condicion].",
-          "theory_markdown": "En lugar de crear una lista vacía, iterar con un for y hacer .append(), una **list comprehension** condensa esa transformación en una sola expresión idiomática:\n\n`[expresion for elemento in secuencia if condicion]`\n\nNo solo es más limpio de leer; el intérprete de Python lo ejecuta a nivel de bytecode C, haciéndolo sensiblemente más rápido que un bucle for manual.",
+          "concept_id": "py2-list-comp-basics",
+          "objective": "Comprender la sintaxis [expresion for item in iterable] y su ventaja sobre for y .append().",
+          "theory_markdown": "Una **list comprehension** es una construcción sintáctica que permite construir una nueva lista aplicando una expresión a cada elemento de una secuencia iterable.\n\n### Comparación directa\nForma imperativa tradicional:\n```python\ncuadrados = []\nfor x in [1, 2, 3, 4]:\n    cuadrados.append(x ** 2)\n```\nForma declarativa con list comprehension:\n```python\ncuadrados = [x ** 2 for x in [1, 2, 3, 4]]\n# Resultado: [1, 4, 9, 16]\n```\n\n### Ventaja técnica en CPython\nLas comprensiones se ejecutan directamente a nivel de bytecode especializado (`LIST_APPEND` en la máquina virtual de CPython), evitando la sobrecarga de buscar y llamar al método `.append()` en cada iteración. Esto las hace entre un 20% y 30% más veloces que un bucle tradicional.",
           "examples": [
             {
-              "title": "Transformación y filtro simultáneo",
-              "code": "numeros = [1, 2, 3, 4, 5, 6]\ncuadrados_pares = [n ** 2 for n in numeros if n % 2 == 0]\nprint(\"Pares al cuadrado:\", cuadrados_pares)",
-              "output": "Pares al cuadrado: [4, 16, 36]",
-              "explanation": "Filtra solo los pares (2, 4, 6) y los eleva al cuadrado (4, 16, 36)."
+              "title": "Transformación de texto con métodos de cadena",
+              "code": "nombres = [\"ana\", \"carlos\", \"elena\"]\nmayusculas = [nombre.upper() for nombre in nombres]\nprint(mayusculas)",
+              "output": "['ANA', 'CARLOS', 'ELENA']",
+              "explanation": "Cada elemento nombre de la lista nombres pasa por el método upper() y se colecciona en una nueva lista."
             }
           ],
-          "common_errors": "Hacer comprensiones de 3 o 4 líneas anidadas. Si la comprensión requiere lógica compleja o más de un if, es preferible un bucle for tradicional.",
+          "common_errors": "Creer que la list comprehension modifica la lista original. Siempre crea una lista nueva en memoria.",
           "mini_exercise": {
-            "starter_code": "palabras = [\"koda\", \"python\", \"ai\"]\n# Genera una lista con las palabras en mayúscula\nmayus = ...\nprint(mayus)",
-            "instructions": "Usa [p.upper() for p in palabras].",
-            "solution": "palabras = [\"koda\", \"python\", \"ai\"]\nmayus = [p.upper() for p in palabras]\nprint(mayus)"
+            "starter_code": "numeros = [10, 20, 30]\n# Genera una lista donde cada numero se divida entre 10\ndivididos = [... for n in numeros]\nprint(divididos)",
+            "instructions": "Usa n // 10 para obtener la división entera.",
+            "solution": "numeros = [10, 20, 30]\ndivididos = [n // 10 for n in numeros]\nprint(divididos)"
           },
           "key_takeaways": [
-            "[exp for x in lista] crea una lista transformada.",
-            "Se pueden agregar filtros finales con if condicion.",
-            "Es más rápido y conciso que for + append."
+            "[expresion for x in iterable] construye una nueva lista transformada.",
+            "Evita declarar listas vacías y llamadas continuas a .append().",
+            "Es más veloz por optimización interna de bytecode en CPython."
           ],
           "exercise": {
             "id": "ex_py2_01_01",
             "type": "predict_output",
             "difficulty": "easy",
-            "prompt": "¿Qué genera [x * 2 for x in [1, 2, 3]]?",
+            "prompt": "¿Qué salida genera la siguiente list comprehension?",
+            "prompt_code": "dobles = [x * 2 for x in [1, 2, 3]]\nprint(dobles)",
             "options": [
               {
                 "id": "a",
@@ -78,11 +79,178 @@
               },
               {
                 "id": "d",
-                "text": "Error"
+                "text": "[x * 2, x * 2, x * 2]"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Multiplica cada elemento x individual por 2, produciendo [2, 4, 6]."
+            "explanation": "Multiplica individualmente cada elemento [1, 2, 3] por 2, produciendo [2, 4, 6]."
+          }
+        },
+        {
+          "id": "les_py2_01_02",
+          "code": "L02",
+          "title": "Filtrado de Elementos con la Cláusula if",
+          "slug": "filtrado-clausula-if",
+          "position": 2,
+          "concept_id": "py2-list-comp-filter",
+          "objective": "Filtrar elementos no deseados agregando una condición booleana al final de la comprensión.",
+          "theory_markdown": "Para seleccionar únicamente los elementos que cumplan una condición específica, se añade una cláusula `if` al final de la comprensión:\n\n```python\n[expresion for item in iterable if condicion]\n```\n\n### Flujo de evaluación\n1. Para cada `item` en `iterable`, se evalúa `condicion`.\n2. Si la condición resulta verdadera (`True`), se evalúa `expresion` y se incorpora al resultado.\n3. Si resulta falsa (`False`), el elemento se descarta en silencio sin ocupar espacio en la nueva lista.",
+          "examples": [
+            {
+              "title": "Filtrar números pares",
+              "code": "valores = [1, 2, 3, 4, 5, 6, 7, 8]\npares = [n for n in valores if n % 2 == 0]\nprint(pares)",
+              "output": "[2, 4, 6, 8]",
+              "explanation": "Solo los números donde n % 2 == 0 pasan el filtro; los impares son omitidos."
+            }
+          ],
+          "common_errors": "Poner un else al final: `[x for x in l if x > 2 else 0]`. La cláusula de filtro al final solo admite `if`. Para usar else debe colocarse antes del for como expresión condicional.",
+          "mini_exercise": {
+            "starter_code": "edades = [12, 19, 25, 14, 30]\n# Filtra solo los mayores o iguales a 18\nmayores = [e for e in edades if ...]\nprint(mayores)",
+            "instructions": "Usa la condición e >= 18 para filtrar a los mayores de edad.",
+            "solution": "edades = [12, 19, 25, 14, 30]\nmayores = [e for e in edades if e >= 18]\nprint(mayores)"
+          },
+          "key_takeaways": [
+            "La cláusula if al final de la comprensión actúa como filtro selector.",
+            "Los elementos que no cumplen la condición se descartan.",
+            "El filtro no requiere ni admite 'else' en esta posición."
+          ],
+          "exercise": {
+            "id": "ex_py2_01_02",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué produce la siguiente comprensión filtrada?",
+            "prompt_code": "datos = [10, 15, 20, 25, 30]\nfiltrados = [x for x in datos if x > 20]\nprint(filtrados)",
+            "options": [
+              {
+                "id": "a",
+                "text": "[25, 30]"
+              },
+              {
+                "id": "b",
+                "text": "[20, 25, 30]"
+              },
+              {
+                "id": "c",
+                "text": "[10, 15]"
+              },
+              {
+                "id": "d",
+                "text": "[]"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La condición x > 20 es estricta: 20 no califica, por lo que únicamente 25 y 30 forman parte de la lista resultante."
+          }
+        },
+        {
+          "id": "les_py2_01_03",
+          "code": "L03",
+          "title": "Expresiones Condicionales (Ternarios) en Comprensiones",
+          "slug": "ternarios-en-comprensiones",
+          "position": 3,
+          "concept_id": "py2-list-comp-ternary",
+          "objective": "Transformar valores condicionalmente usando la sintaxis [valor_si if condicion else valor_no for item in iterable].",
+          "theory_markdown": "Cuando no deseas descartar elementos, sino **transformarlos según una condición**, debes emplear una **expresión condicional ternaria** antes del `for`:\n\n```python\n[valor_si if condicion else valor_no for item in iterable]\n```\n\n### Diferencia crucial de posición\n- **Al final (`for x in l if cond`)**: Es un **filtro**. El tamaño de la lista resultante puede ser menor.\n- **Al principio (`[a if cond else b for x in l]`)**: Es una **transformación**. La lista resultante tiene exactamente la misma longitud que la original, pero con valores condicionados.",
+          "examples": [
+            {
+              "title": "Clasificación de paridad con ternario",
+              "code": "numeros = [1, 2, 3, 4]\netiquetas = [\"PAR\" if n % 2 == 0 else \"IMPAR\" for n in numeros]\nprint(etiquetas)",
+              "output": "['IMPAR', 'PAR', 'IMPAR', 'PAR']",
+              "explanation": "Cada número se reemplaza por 'PAR' o 'IMPAR' según su residuo, manteniendo los 4 elementos."
+            }
+          ],
+          "common_errors": "Olvidar la cláusula else al colocar el if antes del for. Una expresión ternaria exige obligatoriamente ambas ramas: `a if cond else b`.",
+          "mini_exercise": {
+            "starter_code": "calificaciones = [85, 40, 92]\n# Reemplaza notas >= 60 con \"APROBADO\", de lo contrario \"REPROBADO\"\nestados = [\"APROBADO\" if c >= 60 else \"REPROBADO\" for c in calificaciones]\nprint(estados)",
+            "instructions": "Verifica que el resultado clasifique las 3 notas adecuadamente.",
+            "solution": "calificaciones = [85, 40, 92]\nestados = [\"APROBADO\" if c >= 60 else \"REPROBADO\" for c in calificaciones]\nprint(estados)"
+          },
+          "key_takeaways": [
+            "La expresión ternaria antes del for transforma cada elemento sin reducir el tamaño de la lista.",
+            "Exige obligatoriamente la presencia de 'else'.",
+            "Difiere conceptualmente del if de filtro ubicado al final."
+          ],
+          "exercise": {
+            "id": "ex_py2_01_03",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué imprime este código?",
+            "prompt_code": "valores = [0, 5, 0, 8]\nresultado = [\"CERO\" if v == 0 else \"POSITIVO\" for v in valores]\nprint(resultado)",
+            "options": [
+              {
+                "id": "a",
+                "text": "['CERO', 'POSITIVO', 'CERO', 'POSITIVO']"
+              },
+              {
+                "id": "b",
+                "text": "['CERO', 'CERO']"
+              },
+              {
+                "id": "c",
+                "text": "['POSITIVO', 'POSITIVO']"
+              },
+              {
+                "id": "d",
+                "text": "SyntaxError"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El ternario evalúa cada elemento conservando el tamaño de 4: 0 -> 'CERO', 5 -> 'POSITIVO', 0 -> 'CERO', 8 -> 'POSITIVO'."
+          }
+        },
+        {
+          "id": "les_py2_01_04",
+          "code": "L04",
+          "title": "Dict Comprehensions y Set Comprehensions",
+          "slug": "dict-set-comprehensions",
+          "position": 4,
+          "concept_id": "py2-dict-set-comp",
+          "objective": "Construir diccionarios y conjuntos en una sola línea aplicando comprensiones con llaves {}.",
+          "theory_markdown": "El poder de las comprensiones no se limita a listas. Python permite construir diccionarios y conjuntos usando llaves `{}`.\n\n### Dict Comprehension\nPermite transformar secuencias en pares `clave: valor` al instante:\n```python\ncuadrados = {x: x ** 2 for x in [1, 2, 3]}\n# Resultado: {1: 1, 2: 4, 3: 9}\n```\nTambién puedes invertir claves y valores de un diccionario existente:\n```python\ncapitales = {\"España\": \"Madrid\", \"Francia\": \"París\"}\ninvertido = {ciudad: pais for pais, ciudad in capitales.items()}\n```\n\n### Set Comprehension\nGenera un conjunto con elementos únicos eliminando duplicados calculados al vuelo:\n```python\nrestos = {x % 3 for x in [1, 2, 3, 4, 5, 6]}\n# Resultado: {0, 1, 2}\n```",
+          "examples": [
+            {
+              "title": "Construcción de diccionario de longitudes",
+              "code": "frutas = [\"manzana\", \"pera\", \"platano\"]\nlongitudes = {f: len(f) for f in frutas}\nprint(longitudes)",
+              "output": "{'manzana': 7, 'pera': 4, 'platano': 7}",
+              "explanation": "Se crea un diccionario donde cada fruta es la clave y su len(f) es el valor."
+            }
+          ],
+          "common_errors": "Olvidar los dos puntos `:` en dict comprehensions. Si escribes `{x for x in l}` creas un set, mientras que `{x: y for x in l}` crea un dict.",
+          "mini_exercise": {
+            "starter_code": "usuarios = [\"ana\", \"pedro\"]\n# Crea un diccionario asociando cada usuario con su version en mayusculas\nmapa = {u: u.upper() for u in usuarios}\nprint(mapa)",
+            "instructions": "Verifica que genere {'ana': 'ANA', 'pedro': 'PEDRO'}.",
+            "solution": "usuarios = [\"ana\", \"pedro\"]\nmapa = {u: u.upper() for u in usuarios}\nprint(mapa)"
+          },
+          "key_takeaways": [
+            "{clave: valor for x in secuencia} crea un diccionario por comprensión.",
+            "{expresion for x in secuencia} crea un conjunto (set) eliminando duplicados.",
+            "Permiten invertir diccionarios y calcular métricas derivadas de forma muy compacta."
+          ],
+          "exercise": {
+            "id": "ex_py2_01_04",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué estructura y contenido genera {n: n * 10 for n in [1, 2]}?",
+            "options": [
+              {
+                "id": "a",
+                "text": "{1: 10, 2: 20}"
+              },
+              {
+                "id": "b",
+                "text": "[10, 20]"
+              },
+              {
+                "id": "c",
+                "text": "{(1, 10), (2, 20)}"
+              },
+              {
+                "id": "d",
+                "text": "{10, 20}"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La presencia de clave: valor dentro de llaves define una dict comprehension, generando el diccionario {1: 10, 2: 20}."
           }
         }
       ]

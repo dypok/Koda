@@ -2,87 +2,252 @@
   "id": "fa_mod_03",
   "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
   "code": "FA_M03",
-  "slug": "fastapi-sqlalchemy-alembic",
+  "slug": "fastapi-sqlalchemy",
   "course_slug": "fastapi-async",
-  "title": "Bases de Datos con SQLAlchemy 2.0 y Migraciones con Alembic",
-  "objective": "Diseñar modelos relacionales con SQLAlchemy 2.0 async, gestionar sesiones con Depends y versionar el esquema con Alembic.",
-  "description": "Persistencia profesional en bases de datos PostgreSQL o SQLite mediante el ORM más potente de Python.",
+  "title": "Bases de Datos con SQLAlchemy 2.0 e Inyeccion de Dependencias",
+  "objective": "Integrar SQLAlchemy 2.0 asincrono con FastAPI utilizando inyeccion de dependencias y el patron repositorio.",
+  "description": "Acceso a datos persistentes relacionales con AsyncSession, mapeo declarativo Mapped y Depends para gestion del ciclo de vida.",
   "position": 33,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 300
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_fa_03_01",
       "code": "S01",
-      "title": "Modelos Declarativos y Sesiones Asíncronas",
-      "slug": "sqlalchemy-sesiones",
+      "title": "ORM Asincrono, Dependencias y Operaciones CRUD",
+      "slug": "orm-dependencias-crud",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 50,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_fa_03_01",
           "code": "L01",
-          "title": "SQLAlchemy 2.0 DeclarativeBase y Sesión de Base de Datos",
-          "slug": "sqlalchemy-base",
+          "title": "Configuracion del Motor Asincrono con SQLAlchemy 2.0",
+          "slug": "motor-asincrono-sqlalchemy-2",
           "position": 1,
-          "concept_id": "fa-orm",
-          "objective": "Crear tablas mapeadas con Mapped y mapped_column, y gestionar el ciclo de vida de la sesión con generadores.",
-          "theory_markdown": "**SQLAlchemy 2.0** unifica el tipado moderno de Python con consultas SQL declarativas seguras contra inyección SQL.\n\n- `DeclarativeBase`: Clase base de la que heredan todos tus modelos.\n- `Mapped[int]` y `mapped_column(primary_key=True)`: Declaran columnas tipadas.\n- Para versionar cambios en las tablas (agregar columnas, crear índices) sin borrar los datos existentes, usamos **Alembic** (`alembic revision --autogenerate -m \"crear tabla usuarios\"` y `alembic upgrade head`).",
+          "concept_id": "fa-sqlalchemy-engine",
+          "objective": "Configurar un motor y un creador de sesiones asincronas con create_async_engine y async_sessionmaker.",
+          "theory_markdown": "**SQLAlchemy 2.0** introduce soporte de primera clase para arquitecturas asincronas (ASGI) en Python.\n\nPara trabajar de forma asincrona:\n1. Se utiliza un driver compatible con `asyncio` (por ejemplo `sqlite+aiosqlite` para SQLite o `postgresql+asyncpg` para PostgreSQL).\n2. Se crea el motor mediante `create_async_engine`.\n3. Se configura una fabrica de sesiones con `async_sessionmaker(engine, expire_on_commit=False)`.\n\n`expire_on_commit=False` es fundamental en entornos asincronos para que los atributos de las entidades sigan siendo accesibles despues de hacer `commit()` sin provocar cargas diferidas (lazy loading) sincronicas que fallarian en el Event Loop.",
           "examples": [
             {
-              "title": "Modelo de usuario con SQLAlchemy 2.0",
-              "code": "from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column\nfrom sqlalchemy import String\n\nclass Base(DeclarativeBase):\n    pass\n\nclass UsuarioDB(Base):\n    __tablename__ = \"usuarios\"\n    \n    id: Mapped[int] = mapped_column(primary_key=True, index=True)\n    email: Mapped[str] = mapped_column(String(120), unique=True, index=True)\n    activo: Mapped[bool] = mapped_column(default=True)",
-              "output": "Modelo UsuarioDB listo para Alembic",
-              "explanation": "Mapped y mapped_column integran el tipado de Python con las restricciones de la base de datos."
+              "title": "Inicializacion de motor y fabrica de sesiones asincronas",
+              "code": "from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession\nfrom sqlalchemy.orm import DeclarativeBase\n\nDATABASE_URL = \"sqlite+aiosqlite:///./test.db\"\n\nengine = create_async_engine(DATABASE_URL, echo=False)\nAsyncSessionLocal = async_sessionmaker(bind=engine, class_=AsyncSession, expire_on_commit=False)\n\nclass Base(DeclarativeBase):\n    pass",
+              "output": "Motor y fabrica listos para despachar sesiones asincronas sin bloqueos.",
+              "explanation": "DeclarativeBase es la clase base moderna de SQLAlchemy 2.0 para registrar modelos relacionales."
             }
           ],
-          "common_errors": "No cerrar las sesiones de base de datos después de procesar una petición HTTP, provocando saturación del pool de conexiones (connection leak).",
+          "common_errors": "Usar una URL de conexion estandar como 'sqlite:///./test.db' sin el driver asincrono '+aiosqlite', provocando un error de inicializacion al llamar a create_async_engine.",
           "mini_exercise": {
-            "starter_code": "# Inyección de sesión típica en FastAPI\n# def get_db():\n#     db = SessionLocal()\n#     try:\n#         yield db\n#     finally:\n#         db.close()",
-            "instructions": "Observa cómo el bloque try/finally garantiza el cierre de la conexión.",
-            "solution": "# try/finally garantiza db.close()"
+            "instructions": "Escribe la definicion de una clase Base declarativa usando DeclarativeBase de SQLAlchemy 2.0.",
+            "starter_code": "from sqlalchemy.orm import DeclarativeBase\n\n# Define la clase Base\n",
+            "solution": "from sqlalchemy.orm import DeclarativeBase\n\nclass Base(DeclarativeBase):\n    pass"
           },
           "key_takeaways": [
-            "SQLAlchemy 2.0 usa Mapped[...] para tipado estricto.",
-            "Alembic rastrea y aplica migraciones de esquema en la base de datos.",
-            "Las sesiones deben cerrarse siempre al finalizar la petición."
+            "SQLAlchemy 2.0 requiere drivers asincronos como aiosqlite o asyncpg.",
+            "create_async_engine y async_sessionmaker crean conexiones no bloqueantes.",
+            "expire_on_commit=False previene errores por lazy loading fuera de la sesion."
           ],
           "exercise": {
             "id": "ex_fa_03_01",
             "type": "single_choice",
-            "difficulty": "easy",
-            "prompt": "¿Cuál es la función principal de Alembic en un proyecto FastAPI con SQLAlchemy?",
+            "difficulty": "medium",
+            "prompt": "Por que es altamente recomendable configurar expire_on_commit=False en async_sessionmaker al trabajar con FastAPI?",
             "options": [
               {
                 "id": "a",
-                "text": "Gestionar migraciones y versionar los cambios estructurales de la base de datos"
+                "text": "Porque evita que los objetos de base de datos queden expirados tras un commit, previniendo operaciones I/O sincronas bloqueantes al acceder a sus atributos."
               },
               {
                 "id": "b",
-                "text": "Comprimir imágenes"
+                "text": "Porque hace que los commits sean un 100% mas rapidos en disco."
               },
               {
                 "id": "c",
-                "text": "Servir archivos HTML"
+                "text": "Porque impide que otros usuarios lean los datos de la base de datos."
               },
               {
                 "id": "d",
-                "text": "Autenticar usuarios con Google"
+                "text": "Porque elimina la necesidad de definir claves primarias."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Alembic es la herramienta oficial de migraciones de SQLAlchemy, permitiendo evolucionar esquemas de BD sin pérdida de información."
+            "explanation": "Por defecto SQLAlchemy expira los atributos en commit; acceder a ellos requeriria un lazy load sincrono que rompe en async si no se deshabilita expire_on_commit."
+          }
+        },
+        {
+          "id": "les_fa_03_02",
+          "code": "L02",
+          "title": "Modelos Tipados con Mapped y mapped_column",
+          "slug": "modelos-mapped-column",
+          "position": 2,
+          "concept_id": "fa-sqlalchemy-models",
+          "objective": "Declarar tablas de base de datos utilizando la sintaxis tipada Mapped y mapped_column de SQLAlchemy 2.0.",
+          "theory_markdown": "En versiones previas de SQLAlchemy, las columnas se declaraban con `Column(Integer, primary_key=True)`. SQLAlchemy 2.0 moderniza esta sintaxis aprovechando el sistema de tipos de Python con **`Mapped`** y **`mapped_column`**:\n\n```python\nclass Usuario(Base):\n    __tablename__ = \"usuarios\"\n\n    id: Mapped[int] = mapped_column(primary_key=True, index=True)\n    email: Mapped[str] = mapped_column(unique=True, index=True)\n    activo: Mapped[bool] = mapped_column(default=True)\n    descripcion: Mapped[str | None] = mapped_column(default=None)\n```\n\nVentajas de `Mapped`:\n1. Las herramientas de analisis estatico como Mypy y los editores reconocen inmediatamente el tipo de dato (`int`, `str`, `bool`).\n2. Mapeo transparente de columnas anulables (`str | None` genera columnas `NULL` en SQL; `str` genera columnas `NOT NULL`).",
+          "examples": [
+            {
+              "title": "Modelo de Articulo con Mapped y mapped_column",
+              "code": "from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column\n\nclass Base(DeclarativeBase):\n    pass\n\nclass Articulo(Base):\n    __tablename__ = \"articulos\"\n\n    id: Mapped[int] = mapped_column(primary_key=True)\n    titulo: Mapped[str] = mapped_column(index=True)\n    precio: Mapped[float] = mapped_column()\n    publicado: Mapped[bool] = mapped_column(default=False)",
+              "output": "Articulo(id=1, titulo='Laptop', precio=899.99, publicado=True)",
+              "explanation": "El modelo define tipos estaticos legibles y genera el esquema SQL con llaves primarias e indices."
+            }
+          ],
+          "common_errors": "Confundir los modelos ORM de SQLAlchemy con los esquemas BaseModel de Pydantic. Los modelos ORM representan tablas de base de datos; los esquemas Pydantic validan y transfieren datos en la API.",
+          "mini_exercise": {
+            "instructions": "Declara una columna id como clave primaria entera usando Mapped e mapped_column.",
+            "starter_code": "from sqlalchemy.orm import Mapped, mapped_column\n\n# Declara id\nid: ... = ...",
+            "solution": "from sqlalchemy.orm import Mapped, mapped_column\n\nid: Mapped[int] = mapped_column(primary_key=True)"
+          },
+          "key_takeaways": [
+            "Mapped[tipo] conecta el tipado estatico de Python con la definicion relacional.",
+            "mapped_column define restricciones como primary_key, unique, index y default.",
+            "str | None genera automaticamente una columna que admite valores nulos en SQL."
+          ],
+          "exercise": {
+            "id": "ex_fa_03_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es la forma estandar en SQLAlchemy 2.0 de definir una columna de texto obligatoria (NOT NULL) llamada 'nombre'?",
+            "options": [
+              {
+                "id": "a",
+                "text": "nombre: Mapped[str] = mapped_column()"
+              },
+              {
+                "id": "b",
+                "text": "nombre = Column(String, nullable=True)"
+              },
+              {
+                "id": "c",
+                "text": "nombre: Mapped[str | None] = mapped_column()"
+              },
+              {
+                "id": "d",
+                "text": "nombre: str = Field()"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Al usar Mapped[str], SQLAlchemy infiere que la columna no admite valores nulos (NOT NULL). Para permitir nulos se utiliza Mapped[str | None]."
+          }
+        },
+        {
+          "id": "les_fa_03_03",
+          "code": "L03",
+          "title": "Inyeccion de Dependencias con Depends y Sesion",
+          "slug": "inyeccion-dependencias-sesion",
+          "position": 3,
+          "concept_id": "fa-fastapi-depends-db",
+          "objective": "Implementar un generador asincrono con yield para entregar y cerrar automaticamente sesiones de base de datos mediante Depends.",
+          "theory_markdown": "El sistema de **Inyeccion de Dependencias** de FastAPI permite desacoplar componentes y gestionar recursos compartidos de manera limpia y reusable a traves de `fastapi.Depends`.\n\nPara administrar el ciclo de vida de una sesion de base de datos relacional:\n1. Se crea una funcion generadora asincrona `get_db()` que abre la sesion.\n2. La sesion se entrega al endpoint mediante la instruccion `yield`.\n3. El bloque `finally` garantiza que la sesion se cierre siempre (`await session.close()`), incluso si ocurre una excepcion dentro del endpoint.\n\nEn la ruta, se inyecta declarando: `db: AsyncSession = Depends(get_db)`.",
+          "examples": [
+            {
+              "title": "Generador de sesion e inyeccion con Depends",
+              "code": "from typing import AsyncGenerator\nfrom fastapi import FastAPI, Depends\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\n# Asumiendo AsyncSessionLocal configurada\nasync def get_db() -> AsyncGenerator[AsyncSession, None]:\n    async with AsyncSessionLocal() as session:\n        try:\n            yield session\n        finally:\n            await session.close()\n\napp = FastAPI()\n\n@app.get(\"/estado-db\")\nasync def check_db(db: AsyncSession = Depends(get_db)):\n    return {\"db_conectada\": True}",
+              "output": "GET /estado-db -> {\"db_conectada\": true}",
+              "explanation": "FastAPI abre la sesion antes de invocar check_db y asegura el cierre tras completar la respuesta."
+            }
+          ],
+          "common_errors": "Crear instancias manuales de la sesion dentro de cada funcion sin cerrarlas, provocando un agotamiento rapido del pool de conexiones del servidor de base de datos.",
+          "mini_exercise": {
+            "instructions": "Escribe la firma de una funcion de endpoint que inyecte una sesion de base de datos llamada 'db' usando Depends(get_db).",
+            "starter_code": "from fastapi import Depends\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\n# Completa los parametros de la funcion\nasync def listar_usuarios(db: ...):\n    pass",
+            "solution": "from fastapi import Depends\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\nasync def listar_usuarios(db: AsyncSession = Depends(get_db)):\n    pass"
+          },
+          "key_takeaways": [
+            "Depends permite inyectar dependencias reutilizables en cualquier funcion de ruta.",
+            "El patron yield en get_db asegura la apertura y cierre controlado de la sesion por peticion.",
+            "Aislar la sesion previene fugas de conexion y mezcla de transacciones entre peticiones concurrentes."
+          ],
+          "exercise": {
+            "id": "ex_fa_03_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es la funcion de la instruccion yield dentro de la funcion de dependencia get_db() en FastAPI?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Pausa la ejecucion de la dependencia para entregar la sesion al endpoint, reanudandose al finalizar la peticion para cerrar la sesion."
+              },
+              {
+                "id": "b",
+                "text": "Convierte la sesion en un proceso asincrono independiente del sistema operativo."
+              },
+              {
+                "id": "c",
+                "text": "Realiza un rollback automatico de toda la base de datos."
+              },
+              {
+                "id": "d",
+                "text": "Elimina todas las tablas creadas por SQLAlchemy."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "yield entrega el recurso a la ruta y retiene el contexto hasta que la peticion concluye, momento en el cual ejecuta el codigo posterior (cierre de sesion)."
+          }
+        },
+        {
+          "id": "les_fa_03_04",
+          "code": "L04",
+          "title": "Operaciones CRUD Asincronas con Select",
+          "slug": "operaciones-crud-select",
+          "position": 4,
+          "concept_id": "fa-sqlalchemy-crud",
+          "objective": "Ejecutar consultas de seleccion, insercion y actualizacion asincronas con select, scalars, db.add y commit.",
+          "theory_markdown": "En SQLAlchemy 2.0, las consultas se construyen utilizando la funcion `select()` de alto nivel y se ejecutan sobre la sesion con `await db.execute()`:\n\n- **Consultar todos los registros:**\n  ```python\n  result = await db.execute(select(Articulo))\n  articulos = result.scalars().all()\n  ```\n- **Consultar un unico registro o nulo:**\n  ```python\n  result = await db.execute(select(Articulo).where(Articulo.id == item_id))\n  articulo = result.scalar_one_or_none()\n  if not articulo:\n      raise HTTPException(status_code=404, detail=\"No encontrado\")\n  ```\n- **Crear un registro:**\n  ```python\n  nuevo = Articulo(titulo=datos.titulo, precio=datos.precio)\n  db.add(nuevo)\n  await db.commit()\n  await db.refresh(nuevo)  # Recupera el id generado por la base de datos\n  ```",
+          "examples": [
+            {
+              "title": "Endpoint CRUD completo: Creacion y lectura",
+              "code": "from fastapi import FastAPI, Depends, HTTPException, status\nfrom sqlalchemy import select\nfrom sqlalchemy.ext.asyncio import AsyncSession\n\napp = FastAPI()\n\n@app.get(\"/articulos/{item_id}\")\nasync def obtener_articulo(item_id: int, db: AsyncSession = Depends(get_db)):\n    query = select(Articulo).where(Articulo.id == item_id)\n    result = await db.execute(query)\n    item = result.scalar_one_or_none()\n    if not item:\n        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"Articulo no existe\")\n    return item",
+              "output": "GET /articulos/1 -> {\"id\": 1, \"titulo\": \"Monitor\", \"precio\": 250.0}",
+              "explanation": "scalar_one_or_none retorna la entidad si coincide con la condicion o None si no existe, permitiendo manejar el error 404 limpiamente."
+            }
+          ],
+          "common_errors": "Olvidar invocar await db.refresh(instancia) despues de await db.commit() cuando se necesita retornar el id autoincremental generado.",
+          "mini_exercise": {
+            "instructions": "Escribe una consulta con select(Usuario) filtrando donde Usuario.email == 'test@koda.com'.",
+            "starter_code": "from sqlalchemy import select\n\n# Construye la consulta query\nquery = ...",
+            "solution": "from sqlalchemy import select\n\nquery = select(Usuario).where(Usuario.email == \"test@koda.com\")"
+          },
+          "key_takeaways": [
+            "select() construye sentencias SQL declarativas tipadas en SQLAlchemy 2.0.",
+            "scalar_one_or_none() devuelve una unica entidad o None de forma segura.",
+            "db.add(), await db.commit() y await db.refresh() forman el ciclo estandar de persistencia."
+          ],
+          "exercise": {
+            "id": "ex_fa_03_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual metodo del resultado de una consulta asincrona se debe utilizar para obtener exactamente una entidad o None si no hubo coincidencias?",
+            "options": [
+              {
+                "id": "a",
+                "text": "result.scalar_one_or_none()"
+              },
+              {
+                "id": "b",
+                "text": "result.first_or_fail()"
+              },
+              {
+                "id": "c",
+                "text": "result.get_one()"
+              },
+              {
+                "id": "d",
+                "text": "result.fetch_maybe()"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "scalar_one_or_none() es el metodo oficial de SQLAlchemy 2.0 que devuelve el objeto escalar coincidente o None si la consulta no produjo filas."
           }
         }
       ]

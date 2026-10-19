@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 
 interface StepLayoutProps {
   title: string;
@@ -20,14 +20,10 @@ export const StepLayout: React.FC<StepLayoutProps> = ({ title, subtitle, groupLa
     <div className="w-full max-w-2xl mx-auto px-4 py-6 sm:py-8 space-y-6">
       <div className="flex items-center gap-4 text-left">
         <div className="relative shrink-0 flex flex-col items-center">
-          <div className="relative h-14 w-14 sm:h-16 sm:w-16">
-            <Image
-              src="/brand/koda-mascot-cartoon-2d.svg"
-              alt="Koda, tu guía de registro"
-              width={64}
-              height={64}
-              className="object-contain"
-              style={{ width: 'auto', height: 'auto' }}
+          <div className="relative flex items-center justify-center">
+            <KodaMascot
+              state="idle"
+              size={64}
               priority
             />
           </div>

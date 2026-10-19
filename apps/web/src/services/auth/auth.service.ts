@@ -41,6 +41,8 @@ export interface BackendUserSession {
   learningStyle: string;
   dailyGoalId: string;
   dailyGoalMinutes: number;
+  lastStudyDate?: string | null;
+  isActiveToday?: boolean;
   createdAt?: string;
 }
 

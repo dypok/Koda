@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 
 const CAPTIONS: { caption: string; ids: string[] }[] = [
   { caption: '> empieza_aqui', ids: ['inicio'] },
@@ -63,12 +63,11 @@ export const KodaGuide: React.FC = () => {
           <span className="rounded-[6px] border border-amber-400/40 border-l-2 border-l-amber-400 bg-slate-950/90 backdrop-blur px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-amber-200 whitespace-nowrap">
             {caption}
           </span>
-          <Image
-            src="/brand/koda-mascot-cartoon-2d-transparent.png"
-            alt=""
-            width={56}
-            height={56}
-            className="object-contain animate-float drop-shadow-[0_8px_20px_rgba(249,115,22,0.3)]"
+          <KodaMascot
+            state="idle"
+            size={56}
+            animate="float"
+            glow
           />
         </motion.div>
       )}

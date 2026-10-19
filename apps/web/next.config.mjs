@@ -41,6 +41,30 @@ const nextConfig = {
         source: '/api/v1/:path*',
         destination: `${apiTarget}/api/v1/:path*`,
       },
+      {
+        source: '/curso/:course/seccion/:section',
+        destination: '/app/curso/:course/seccion/:section',
+      },
+      {
+        source: '/curso/:course',
+        destination: '/app/curso/:course',
+      },
+      {
+        source: '/modulo/:section',
+        destination: '/app/curso/python-1/seccion/:section',
+      },
+      {
+        source: '/modulos/:section',
+        destination: '/app/curso/python-1/seccion/:section',
+      },
+      {
+        source: '/app/modulo/:section',
+        destination: '/app/curso/python-1/seccion/:section',
+      },
+      {
+        source: '/app/modulos/:section',
+        destination: '/app/curso/python-1/seccion/:section',
+      },
     ];
   },
 };

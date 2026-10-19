@@ -2,10 +2,16 @@ import { create } from 'zustand';
 import { GraphViewMode, GraphDataset, NodeVariant, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { PYTHON_BASIC_LESSONS_DATASET } from '@/models/roadmap/python-lessons-graph.mock';
 import { CareerBranchId, CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
-import { PYTHON_COURSES_DATASET } from '@/models/roadmap/tracks/python-track.mock';
 import { RoadmapService } from '@/services/roadmap/roadmap.service';
 
 const PROGRESS_KEY = 'koda_roadmap_progress';
+
+const INITIAL_COURSES_DATASET: GraphDataset = {
+  sectorTitle: 'PYTHON SPECIALIST: DE FUNDAMENTOS A AGENTES AUTÓNOMOS',
+  progressPercent: 0,
+  nodes: [],
+  connections: [],
+};
 
 function persistProgress(dataset: GraphDataset) {
   try {
@@ -60,10 +66,10 @@ interface RoadmapStoreState {
   openCourseLessons: (courseId: string) => Promise<void>;
   returnToCourses: () => void;
   setActiveNode: (id: string | null) => void;
-  setBranch: (branchId: CareerBranchId) => void;
+  setBranch: (branchId: CareerBranchId) => Promise<void> | void;
   setPanOffset: (pan: { x: number; y: number }) => void;
   setZoomLevel: (zoom: number | ((prev: number) => number)) => void;
-  hydrateProgress: () => void;
+  hydrateProgress: () => Promise<void> | void;
   completeSectionNode: (nodeId: string, stars: number) => void;
   zoomIn: () => void;
   zoomOut: () => void;
@@ -75,11 +81,11 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   viewMode: 'courses',
   activeBranchId: 'python',
   selectedCourseId: 'python-1',
-  activeNodeId: 'py-level-1',
+  activeNodeId: 'python-1',
   zoomLevel: 100,
   panOffset: { x: 0, y: 0 },
   isLoading: false,
-  coursesDataset: PYTHON_COURSES_DATASET,
+  coursesDataset: INITIAL_COURSES_DATASET,
   lessonsDataset: PYTHON_BASIC_LESSONS_DATASET,
   retreatTrigger: 0,
   triggerRetreatToCourses: () => set((s) => ({ retreatTrigger: s.retreatTrigger + 1 })),
@@ -317,21 +323,61 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     });
   },
   setActiveNode: (id) => set({ activeNodeId: id }),
-  setBranch: (branchId) => {
+  setBranch: async (branchId) => {
     const branch = CAREER_BRANCHES.find((b) => b.id === branchId) || CAREER_BRANCHES[0];
     set({
       activeBranchId: branchId,
-      coursesDataset: branch.dataset,
       viewMode: 'courses',
       panOffset: { x: 0, y: 0 },
-      selectedCourseId: branch.dataset.nodes[0]?.targetCourseId || branch.dataset.nodes[0]?.id || '',
-      activeNodeId: branch.dataset.nodes[0]?.id || null,
+      isLoading: true,
     });
+    try {
+      const coursesData = await RoadmapService.getCoursesGraph(branchId);
+      const firstNode = coursesData.nodes.find((n) => n.variant === 'active' || n.isUnlocked) || coursesData.nodes[0];
+      set({
+        coursesDataset: coursesData,
+        selectedCourseId: firstNode?.targetCourseId || firstNode?.id || 'python-1',
+        activeNodeId: firstNode?.id || null,
+        isLoading: false,
+      });
+      persistProgress(coursesData);
+    } catch {
+      set({
+        coursesDataset: branch.dataset,
+        selectedCourseId: 'python-1',
+        activeNodeId: 'python-1',
+        isLoading: false,
+      });
+    }
   },
   setPanOffset: (pan) => set({ panOffset: pan }),
-  hydrateProgress: () => {
+  hydrateProgress: async () => {
     if (typeof window === 'undefined') return;
     set({ coursesDataset: restoreProgress(get().coursesDataset) });
+    try {
+      const branchId = get().activeBranchId || 'python';
+      const courseId = get().selectedCourseId || 'python-1';
+      const [coursesData, lessonsData] = await Promise.all([
+        RoadmapService.getCoursesGraph(branchId),
+        RoadmapService.getCourseLessonsGraph(courseId),
+      ]);
+      if (coursesData && coursesData.nodes && coursesData.nodes.length > 0) {
+        const activeCourse =
+          coursesData.nodes.find((n) => n.id === get().activeNodeId || n.targetCourseId === get().selectedCourseId) ||
+          coursesData.nodes.find((n) => n.variant === 'active' || n.isUnlocked) ||
+          coursesData.nodes[0];
+        set({
+          coursesDataset: coursesData,
+          activeNodeId: activeCourse ? activeCourse.id : get().activeNodeId,
+        });
+        persistProgress(coursesData);
+      }
+      if (lessonsData && lessonsData.nodes && lessonsData.nodes.length > 0) {
+        set({ lessonsDataset: lessonsData });
+      }
+    } catch {
+      // Silencioso en caso de falla de red o modo offline
+    }
   },
   completeSectionNode: (nodeId: string, stars: number) => {
     const dataset = get().lessonsDataset;
@@ -344,21 +390,87 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
 
     const nodes = dataset.nodes.map((n, i) => {
       if (i === idx) {
-        return { ...n, variant: 'completed' as const, stars: Math.max(n.stars ?? 0, stars), statusText: 'COMPLETADA' };
+        return { ...n, variant: 'completed' as const, stars: Math.max(n.stars ?? 0, stars), statusText: 'COMPLETADO' };
       }
       if (i === idx + 1 && !n.isUnlocked) {
         return {
           ...n,
           isUnlocked: true,
-          variant: (n.variant === 'boss' ? 'boss' : 'unlocked') as NodeVariant,
-          iconType: n.iconType === 'lock' ? 'code' : n.iconType,
-          statusText: 'DISPONIBLE',
+          variant: (n.variant === 'boss' ? 'boss' : 'active') as NodeVariant,
+          iconType: n.iconType === 'lock' ? 'brackets' : n.iconType,
+          statusText: `DISPONIBLE • +${n.xp ?? 120} XP`,
         };
       }
       return n;
     });
 
-    set({ lessonsDataset: { ...dataset, nodes } });
+    const connections = dataset.connections.map((c) => {
+      if (c.fromId === nodeId || norm(c.fromId) === targetNorm) {
+        return { ...c, isDashed: false };
+      }
+      return c;
+    });
+
+    const completedCount = nodes.filter((n) => n.variant === 'completed').length;
+    const progressPercent = Math.round((completedCount / Math.max(1, nodes.length)) * 100);
+
+    set({ lessonsDataset: { ...dataset, progressPercent, nodes, connections } });
+
+    // Si se completó el examen final (Apex o Boss), desbloquear el siguiente curso en coursesDataset
+    const isApexOrFinal = idx === dataset.nodes.length - 1 || targetNorm.includes('apex') || targetNorm.includes('boss');
+    if (isApexOrFinal) {
+      const currentCourseId = get().selectedCourseId || 'python-1';
+      const coursesDataset = get().coursesDataset;
+
+      const updatedCourseNodes = coursesDataset.nodes.map((cn) => {
+        if (cn.id === currentCourseId || cn.targetCourseId === currentCourseId) {
+          return {
+            ...cn,
+            variant: 'completed' as const,
+            stars: cn.maxStars ?? 3,
+            statusText: 'DOMINADO • 100%',
+          };
+        }
+        return cn;
+      });
+
+      const outgoingConns = coursesDataset.connections.filter(
+        (c) => c.fromId === currentCourseId || c.fromId.includes(currentCourseId),
+      );
+      const targetCourseIds = new Set(outgoingConns.map((c) => c.toId));
+
+      const finalCourseNodes = updatedCourseNodes.map((cn) => {
+        if (targetCourseIds.has(cn.id) || (cn.targetCourseId && targetCourseIds.has(cn.targetCourseId))) {
+          return {
+            ...cn,
+            isUnlocked: true,
+            variant: (cn.variant === 'locked' ? 'active' : cn.variant) as NodeVariant,
+            statusText: 'DISPONIBLE • EN PROGRESO',
+          };
+        }
+        return cn;
+      });
+
+      const updatedCourseConns = coursesDataset.connections.map((c) => {
+        if (c.fromId === currentCourseId || c.fromId.includes(currentCourseId)) {
+          return { ...c, isDashed: false };
+        }
+        return c;
+      });
+
+      const completedCourses = finalCourseNodes.filter((cn) => cn.variant === 'completed').length;
+      const coursesPercent = Math.round((completedCourses / Math.max(1, finalCourseNodes.length)) * 100);
+
+      const nextCoursesDataset = {
+        ...coursesDataset,
+        progressPercent: coursesPercent,
+        nodes: finalCourseNodes,
+        connections: updatedCourseConns,
+      };
+
+      set({ coursesDataset: nextCoursesDataset });
+      persistProgress(nextCoursesDataset);
+    }
   },
   setZoomLevel: (zoom) =>
     set((s) => ({

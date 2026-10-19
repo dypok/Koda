@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 import { useRouter } from 'next/navigation';
 import {
   Terminal,
@@ -670,12 +670,12 @@ export default function OnboardingPage() {
           <main className="my-8 sm:my-12 space-y-8 text-center max-w-2xl mx-auto">
             {/* Mascota y Felicitación */}
             <div className="space-y-4">
-              <div className="relative w-28 h-28 mx-auto">
-                <Image
-                  src="/brand/koda-mascot-cartoon-2d.svg"
-                  alt="Mascota Koda"
-                  fill
-                  className="object-contain animate-bounce duration-1000"
+              <div className="relative flex items-center justify-center mx-auto">
+                <KodaMascot
+                  state={diagnosticResult.recommendedModuleOrder > 1 ? 'streak_active' : 'idle'}
+                  size={112}
+                  animate="bounce"
+                  glow
                 />
               </div>
 

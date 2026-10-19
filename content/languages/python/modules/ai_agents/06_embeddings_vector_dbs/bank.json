@@ -6,28 +6,158 @@
     {
       "id": "q_ia_06_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Cuál métrica matemática mide el coseno del ángulo entre dos vectores para determinar su cercanía semántica?",
+      "difficulty": "easy",
+      "prompt": "Que es un embedding semantico en el ambito del procesamiento de lenguaje natural y la inteligencia artificial?",
       "options": [
         {
           "id": "a",
-          "text": "Similitud Coseno (Cosine Similarity)"
+          "text": "Una representacion matematica de un texto como un vector denso continuo de punto flotante en un espacio multidimensional donde la distancia refleja afinidad de significado."
         },
         {
           "id": "b",
-          "text": "Desviación estándar"
+          "text": "Una contrasena de acceso encriptada para una base de datos."
         },
         {
           "id": "c",
-          "text": "Regla de Bayes"
+          "text": "Un tipo de letra especial para diseno web."
         },
         {
           "id": "d",
-          "text": "Varianza de Poisson"
+          "text": "Un compilador de codigo binario."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Cosine Similarity calcula dot(A, B) / (||A|| * ||B||), siendo el estándar universal para comparar embeddings de texto."
+      "explanation": "Los embeddings proyectan conceptos en coordenadas geometricas multidimensionales donde la cercania espacial denota cercania semantica."
+    },
+    {
+      "id": "q_ia_06_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Por que la similitud coseno es la metrica predominante para comparar la cercania entre dos embeddings de texto?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque evalua el angulo entre ambos vectores independientemente de su magnitud o longitud del texto original."
+        },
+        {
+          "id": "b",
+          "text": "Porque requiere menos de 1 byte de memoria RAM."
+        },
+        {
+          "id": "c",
+          "text": "Porque solo funciona con numeros negativos."
+        },
+        {
+          "id": "d",
+          "text": "Porque no admite operaciones vectorizadas."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El coseno del angulo captura la coincidencia de orientacion conceptual aislando el efecto de la extension o cantidad de palabras del pasaje."
+    },
+    {
+      "id": "q_ia_06_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cual es el riesgo principal de omitir el solapamiento (chunk_overlap=0) al dividir documentos largos para indexacion vectorial?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que proposiciones, frases o datos clave se fracturen justo en el limite de corte, perdiendo su contexto y arruinando su recuperacion."
+        },
+        {
+          "id": "b",
+          "text": "Que la base de datos vectorial se bloquee permanentemente."
+        },
+        {
+          "id": "c",
+          "text": "Que los embeddings se vuelvan vectores unidimensionales."
+        },
+        {
+          "id": "d",
+          "text": "Que el modelo de chat responda en otro idioma."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Sin overlap, cualquier informacion que caiga en la frontera de division queda mutilada, impidiendo que el vector capture la idea completa."
+    },
+    {
+      "id": "q_ia_06_04",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "En ChromaDB, que metodo se invoca sobre una coleccion para buscar los k fragmentos semantica y geometricamente mas cercanos a una consulta de texto?",
+      "options": [
+        {
+          "id": "a",
+          "text": "collection.query(query_texts=['...'], n_results=k)"
+        },
+        {
+          "id": "b",
+          "text": "collection.find_similar('...')"
+        },
+        {
+          "id": "c",
+          "text": "collection.search_exact('...')"
+        },
+        {
+          "id": "d",
+          "text": "collection.get_all()"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "query() es el metodo de busqueda ANN de ChromaDB que compara el vector de la consulta contra todos los embeddings indexados."
+    },
+    {
+      "id": "q_ia_06_05",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Que permite el almacenamiento de metadatos (metadatas=[{...}]) asociados a cada vector en una base de datos vectorial como ChromaDB o Qdrant?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Aplicar filtros estructurados previos o posteriores (metadata filtering), restringiendo la busqueda a ciertas categorias, autores, fechas o IDs de usuario."
+        },
+        {
+          "id": "b",
+          "text": "Comprimir la base de datos a formato MP3."
+        },
+        {
+          "id": "c",
+          "text": "Eliminar la necesidad de calcular la similitud coseno."
+        },
+        {
+          "id": "d",
+          "text": "Ejecutar programas en segundo plano en el sistema operativo."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El filtrado hibrido combina similitud semantica vectorial con filtros relacionales exactos sobre atributos de metadatos (ej. categoria='legal')."
+    },
+    {
+      "id": "q_ia_06_06",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cual es la diferencia en el almacenamiento entre ChromaDB en modo EphemeralClient vs PersistentClient?",
+      "options": [
+        {
+          "id": "a",
+          "text": "EphemeralClient reside unicamente en la memoria RAM volatil y se pierde al terminar el script; PersistentClient persiste los datos e indices en disco en una ruta local indicada."
+        },
+        {
+          "id": "b",
+          "text": "PersistentClient solo funciona con suscripcion de pago."
+        },
+        {
+          "id": "c",
+          "text": "EphemeralClient solo admite archivos de Excel."
+        },
+        {
+          "id": "d",
+          "text": "Son sinonimos exactos."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "PersistentClient asegura la persistencia en disco de las colecciones, mientras que EphemeralClient es volatil para pruebas y tests unitarios."
     }
   ]
 }

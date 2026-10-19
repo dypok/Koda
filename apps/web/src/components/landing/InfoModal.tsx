@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 import { X } from '@phosphor-icons/react';
 import { InfoModalTab } from '@/models/landing/info-modal.model';
 import { useInfoModalController } from '@/controllers/landing/useInfoModalController';
@@ -88,12 +88,9 @@ export const InfoModal: React.FC<InfoModalProps> = ({
           <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800/80 bg-slate-950/60 backdrop-blur-md relative z-10">
             <div className="flex items-center gap-3">
               <div className="relative flex h-8 w-8 items-center justify-center rounded-xl bg-[#182030] border border-slate-800 p-0.5 overflow-hidden shadow-sm">
-                <Image
-                  src="/brand/koda-mascot-cartoon-2d.svg"
-                  alt="KodaAcademy Logo"
-                  width={28}
-                  height={28}
-                  className="object-contain"
+                <KodaMascot
+                  state="idle"
+                  size={28}
                 />
               </div>
               <h3 id="info-title" className="font-display text-lg font-bold text-white tracking-tight flex items-center gap-2">

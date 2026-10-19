@@ -5,13 +5,13 @@
   "slug": "logging-y-empaquetado",
   "course_slug": "python-3",
   "title": "Logging Profesional y Empaquetado PyProject",
-  "objective": "Reemplazar print() por el módulo logging con niveles (DEBUG, INFO, ERROR), handlers estructurados y empaquetar librerías con pyproject.toml.",
-  "description": "Deja de usar print para depurar en producción: implementa auditoría profesional de logs y empaqueta tus herramientas para compartirlas.",
-  "position": 28,
+  "objective": "Reemplazar print() por el framework de logging profesional, configurar handlers/formatters, capturar tracebacks con logger.exception() y empaquetar librerías con pyproject.toml.",
+  "description": "Deja de usar print para depurar en producción: implementa auditoría profesional de logs, rotación de archivos y empaqueta tus herramientas según los estándares PEP 621.",
+  "position": 8,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,231 @@
     {
       "id": "sec_py3_08_01",
       "code": "S01",
-      "title": "Módulo logging y Configuración de Handlers",
-      "slug": "logging-handlers",
+      "title": "Logging y Empaquetado en Python",
+      "slug": "logging-empaquetado-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 18,
-      "xp_on_complete": 45,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py3_08_01",
           "code": "L01",
-          "title": "Jerarquía de Logs: DEBUG, INFO, WARNING, ERROR, CRITICAL",
-          "slug": "logging-niveles",
+          "title": "Arquitectura de Logging y Niveles de Severidad",
+          "slug": "arquitectura-logging-niveles",
           "position": 1,
-          "concept_id": "py3-logging",
-          "objective": "Configurar un logger con formato, niveles de severidad y destinos múltiples (consola y archivo).",
-          "theory_markdown": "En servidores de producción, los `print()` se pierden y no registran fecha ni nivel de gravedad. El módulo estándar `logging` resuelve esto:\n\n1. `DEBUG`: Información detallada para diagnóstico en desarrollo.\n2. `INFO`: Confirmación de eventos esperados en el flujo normal.\n3. `WARNING`: Alerta de algo imprevisto pero que permite continuar.\n4. `ERROR`: Falla en una función o petición concreta.\n5. `CRITICAL`: Error fatal que detiene el servicio.",
+          "concept_id": "py3-logging-levels",
+          "objective": "Clasificar eventos del sistema en los 5 niveles estándar de severidad y filtrar mensajes mediante umbrales.",
+          "theory_markdown": "En servidores y aplicaciones en producción, usar `print()` es inaceptable: no añade marcas de tiempo, no clasifica la gravedad y no permite silenciar mensajes de depuración sin borrar código.\n\nEl módulo nativo `logging` estructura el registro de eventos en **5 niveles numéricos de severidad**:\n1. **`DEBUG` (10)**: Diagnóstico minucioso para desarrolladores durante la fase de depuración.\n2. **`INFO` (20)**: Confirmación de eventos ordinarios esperados (ej: 'Servidor iniciado en puerto 8000').\n3. **`WARNING` (30)**: Advertencia de un suceso inesperado o degradación de rendimiento que no impide que el sistema continúe.\n4. **`ERROR` (40)**: Falla grave en una operación o petición específica (ej: 'Fallo al procesar pago').\n5. **`CRITICAL` (50)**: Error catastrófico que detiene el servicio o corrompe datos.\n\n### Umbral de filtrado\nSi configuras el nivel en `INFO`, el logger mostrará `INFO`, `WARNING`, `ERROR` y `CRITICAL`, descartando automáticamente todos los mensajes `DEBUG` sin necesidad de modificar el código.",
           "examples": [
             {
-              "title": "Logger con formato profesional",
-              "code": "import logging\n\nlogger = logging.getLogger(\"koda_app\")\nlogging.basicConfig(\n    level=logging.INFO,\n    format=\"%(asctime)s [%(levelname)s] %(name)s: %(message)s\",\n    datefmt=\"%H:%M:%S\"\n)\n\nlogger.info(\"Servidor iniciado en puerto 8000\")\nlogger.warning(\"Uso de memoria al 82%\")\nlogger.error(\"No se pudo conectar a la base de datos\")",
-              "output": "12:00:00 [INFO] koda_app: Servidor iniciado en puerto 8000\n12:00:00 [WARNING] koda_app: Uso de memoria al 82%\n12:00:00 [ERROR] koda_app: No se pudo conectar a la base de datos",
-              "explanation": "El log incluye timestamp, nivel y nombre del módulo emisor automáticamente."
+              "title": "Configuración básica de nivel y salida",
+              "code": "import logging\n\nlogging.basicConfig(level=logging.WARNING)\n\nlogging.info(\"Este mensaje sera descartado silenciosamente\")\nlogging.warning(\"Alerta: espacio en disco por debajo del 15%\")\nlogging.error(\"Error: conexion rechazada por el servidor\")",
+              "output": "WARNING:root:Alerta: espacio en disco por debajo del 15%\nERROR:root:Error: conexion rechazada por el servidor",
+              "explanation": "El nivel configurado (WARNING) filtra todos los eventos con severidad menor (INFO y DEBUG)."
             }
           ],
-          "common_errors": "Llamar a `logging.basicConfig()` múltiples veces; solo la primera invocación tiene efecto.",
+          "common_errors": "Usar `logging.basicConfig()` múltiples veces en el mismo script. Solo la primera invocación configura el root logger; las siguientes son ignoradas a menos que se use `force=True`.",
           "mini_exercise": {
-            "starter_code": "import logging\n# Registra un mensaje de advertencia con logging.warning\nlogging.warning(\"...\")",
-            "instructions": "Usa logging.warning(\"Espacio en disco bajo\").",
-            "solution": "import logging\nlogging.warning(\"Espacio en disco bajo\")"
+            "starter_code": "import logging\n# Registra un mensaje de nivel ERROR usando logging.error\nlogging.error(\"Base de datos no responde\")",
+            "instructions": "Ejecuta logging.error para registrar una falla grave.",
+            "solution": "import logging\nlogging.error(\"Base de datos no responde\")"
           },
           "key_takeaways": [
-            "logging sustituye a print() en aplicaciones reales.",
-            "Permite filtrar qué mensajes mostrar cambiando el nivel mínimo.",
-            "Los logs pueden enviarse a archivos, consola o servicios en la nube."
+            "La jerarquía es: DEBUG < INFO < WARNING < ERROR < CRITICAL.",
+            "Configurar un nivel filtra automáticamente los mensajes de menor severidad.",
+            "El logging permite cambiar el nivel de verbosidad sin tocar una sola línea de lógica."
           ],
           "exercise": {
             "id": "ex_py3_08_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "Si un logger tiene configurado el nivel INFO, ¿cuál de los siguientes mensajes NO se mostrará?",
+            "prompt": "Si configuras tu logger con nivel WARNING, ¿cuáles de los siguientes mensajes serán registrados y cuáles serán descartados?",
             "options": [
               {
                 "id": "a",
-                "text": "logger.debug(\"Detalle interno\")"
+                "text": "Se mostrarán WARNING, ERROR y CRITICAL; se descartarán DEBUG e INFO"
               },
               {
                 "id": "b",
-                "text": "logger.info(\"Operación exitosa\")"
+                "text": "Se mostrarán únicamente los mensajes WARNING"
               },
               {
                 "id": "c",
-                "text": "logger.warning(\"Memoria alta\")"
+                "text": "Se mostrarán todos los mensajes sin excepción"
               },
               {
                 "id": "d",
-                "text": "logger.error(\"Fallo de conexión\")"
+                "text": "Se descartarán todos los mensajes"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "DEBUG tiene un nivel de severidad inferior a INFO, por lo que es filtrado y omitido."
+            "explanation": "El umbral de logging es inclusivo hacia arriba: se registran el nivel configurado y todos los niveles de severidad superior."
+          }
+        },
+        {
+          "id": "les_py3_08_02",
+          "code": "L02",
+          "title": "Handlers, Formatters y Salida a Archivos",
+          "slug": "handlers-formatters-archivos",
+          "position": 2,
+          "concept_id": "py3-logging-handlers-formatters",
+          "objective": "Separar el origen del log de su destino mediante Handlers y personalizar la estructura de fecha y metadatos con Formatters.",
+          "theory_markdown": "El framework de `logging` desacopla el emisor del mensaje de su presentación física mediante tres componentes:\n\n1. **`Logger`**: La interfaz con la que interactúa el desarrollador (`logger = logging.getLogger(__name__)`).\n2. **`Handler`**: El destino donde se envía el mensaje:\n   - `StreamHandler`: Escribe en la consola (`sys.stderr` o `sys.stdout`).\n   - `FileHandler`: Guarda los logs en un archivo en disco.\n   - `RotatingFileHandler`: Rota los archivos cuando alcanzan un tamaño en megabytes para no saturar el disco.\n3. **`Formatter`**: La plantilla de texto con las variables de contexto:\n   - `%(asctime)s`: Marca temporal precisa.\n   - `%(levelname)s`: Nombre del nivel (INFO, ERROR).\n   - `%(name)s`: Nombre del módulo emisor.\n   - `%(message)s`: El texto del mensaje.",
+          "examples": [
+            {
+              "title": "Configuración de logger con Formatter",
+              "code": "import logging\n\nlogger = logging.getLogger(\"app_ventas\")\nhandler = logging.StreamHandler()\nformato = logging.Formatter(\"%(asctime)s [%(levelname)s] %(name)s: %(message)s\", datefmt=\"%H:%M:%S\")\nhandler.setFormatter(formato)\nlogger.addHandler(handler)\nlogger.setLevel(logging.INFO)\n\nlogger.info(\"Proceso iniciado\")",
+              "output": "12:00:00 [INFO] app_ventas: Proceso iniciado",
+              "explanation": "El Formatter inyecta fecha, nivel y nombre del logger antes del mensaje del desarrollador."
+            }
+          ],
+          "common_errors": "No usar `RotatingFileHandler` en servidores de producción con alto tráfico; los archivos de log infinitos pueden llenar el disco duro y congelar el servidor.",
+          "mini_exercise": {
+            "starter_code": "import logging\n# Crea un logger con el nombre del modulo actual usando __name__\nlogger = logging.getLogger(...)\nprint(logger.name)",
+            "instructions": "Escribe __name__ dentro de getLogger().",
+            "solution": "import logging\nlogger = logging.getLogger(__name__)\nprint(logger.name)"
+          },
+          "key_takeaways": [
+            "logging.getLogger(__name__) crea loggers jerárquicos vinculados a cada módulo.",
+            "Los Handlers dirigen los eventos a consola, archivos o red de forma independiente.",
+            "Los Formatters homogeneizan la auditoría con timestamps y metadatos."
+          ],
+          "exercise": {
+            "id": "ex_py3_08_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Qué clase de Handler se debe utilizar para evitar que un archivo de registro de logs crezca indefinidamente y llene el disco duro?",
+            "options": [
+              {
+                "id": "a",
+                "text": "RotatingFileHandler (de logging.handlers)"
+              },
+              {
+                "id": "b",
+                "text": "StreamHandler"
+              },
+              {
+                "id": "c",
+                "text": "NullHandler"
+              },
+              {
+                "id": "d",
+                "text": "FileMemoryHandler"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "RotatingFileHandler segmenta los logs limitando el tamaño máximo por archivo y conservando un número fijo de respaldos rotativos."
+          }
+        },
+        {
+          "id": "les_py3_08_03",
+          "code": "L03",
+          "title": "Captura de Excepciones con logger.exception()",
+          "slug": "captura-excepciones-logger-exception",
+          "position": 3,
+          "concept_id": "py3-logger-exception-traceback",
+          "objective": "Registrar fallos de ejecución en bloques except adjuntando automáticamente el Traceback completo mediante logger.exception().",
+          "theory_markdown": "Cuando capturas un error en un bloque `except`, escribir `logger.error(str(e))` suele ser insuficiente: pierdes el número de línea, el archivo y la cadena de llamadas que causaron el problema.\n\n### El método `logger.exception()`\nEl método `logger.exception(\"Mensaje descriptivo\")`:\n1. Registra el mensaje con nivel de severidad `ERROR`.\n2. **Inspecciona la pila activa del intérprete y añade automáticamente el Traceback completo al registro de log**.\n\n```python\ntry:\n    res = 10 / 0\nexcept ZeroDivisionError:\n    # Captura automatica del traceback completo sin configuraciones complejas\n    logger.exception(\"Ocurrio un fallo critico en el calculo de division\")\n```",
+          "examples": [
+            {
+              "title": "Registro de excepción con traza en bloque except",
+              "code": "import logging\n\nlogger = logging.getLogger(\"demo\")\ntry:\n    resultado = int(\"invalido\")\nexcept ValueError:\n    logger.exception(\"Error al parsear el entero recibido\")",
+              "output": "ERROR:demo:Error al parsear el entero recibido\nTraceback (most recent call last):\n  ...\nValueError: invalid literal for int() with base 10: 'invalido'",
+              "explanation": "logger.exception() ahorra horas de depuración en producción al almacenar la traza completa del fallo."
+            }
+          ],
+          "common_errors": "Llamar a `logger.exception()` fuera de un bloque `except`. Si no hay una excepción activa en el contexto, registrará un error vacío confuso.",
+          "mini_exercise": {
+            "starter_code": "import logging\ntry:\n    1 / 0\nexcept ZeroDivisionError:\n    # Usa logger.exception para guardar el fallo con traceback\n    logging....(\"Division fallida\")",
+            "instructions": "Escribe exception tras logging.",
+            "solution": "import logging\ntry:\n    1 / 0\nexcept ZeroDivisionError:\n    logging.exception(\"Division fallida\")"
+          },
+          "key_takeaways": [
+            "logger.exception() debe usarse exclusivamente dentro de bloques except.",
+            "Registra con nivel ERROR y anexa el Traceback completo de forma automática.",
+            "Permite diagnosticar la línea y causa exacta del fallo en servidores remotos."
+          ],
+          "exercise": {
+            "id": "ex_py3_08_03",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Qué ventaja clave aporta llamar a 'logger.exception(\"Mensaje\")' frente a 'logger.error(\"Mensaje\")' dentro de un bloque except?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Adjunta automáticamente el Traceback completo de la excepción activa al registro de log"
+              },
+              {
+                "id": "b",
+                "text": "Envía un correo electrónico al administrador"
+              },
+              {
+                "id": "c",
+                "text": "Reinicia el proceso automáticamente"
+              },
+              {
+                "id": "d",
+                "text": "Borra el error de la memoria para que nadie lo vea"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "logger.exception() incluye sys.exc_info(), agregando la traza de llamadas y la línea exacta del fallo sin esfuerzo manual."
+          }
+        },
+        {
+          "id": "les_py3_08_04",
+          "code": "L04",
+          "title": "Empaquetado Moderno con pyproject.toml (PEP 621)",
+          "slug": "empaquetado-moderno-pyproject-toml",
+          "position": 4,
+          "concept_id": "py3-pyproject-pep621",
+          "objective": "Declarar metadatos y dependencias de librerías Python siguiendo el estándar unificado PEP 621 en pyproject.toml.",
+          "theory_markdown": "Históricamente, empaquetar una librería de Python requería múltiples archivos fragmentados: `setup.py`, `setup.cfg`, `MANIFEST.in`, `requirements.txt`.\n\nHoy en día, **`pyproject.toml`** (estandarizado en **PEP 517** y **PEP 621**) centraliza toda la configuración del proyecto en un único formato TOML declarativo.\n\n### Estructura canónica de un `pyproject.toml`\n```toml\n[build-system]\nrequires = [\"hatchling\"]\nbuild-backend = \"hatchling.build\"\n\n[project]\nname = \"koda-core\"\nversion = \"1.0.0\"\ndescription = \"Libreria para procesamiento de alto rendimiento\"\nreadme = \"README.md\"\nrequires-python = \">=3.10\"\ndependencies = [\n    \"pydantic>=2.0\",\n    \"httpx>=0.25\"\n]\n```\nPara construir la distribución (archivo wheel `.whl` y tarball `.tar.gz`) lista para PyPI, se ejecuta el comando estándar: `python -m build`.",
+          "examples": [
+            {
+              "title": "Inspección de metadatos PEP 621",
+              "code": "# Fragmento representativo de pyproject.toml\nmetadata = {\n    \"name\": \"mi-paquete\",\n    \"version\": \"0.1.0\",\n    \"build-backend\": \"hatchling.build\"\n}\nprint(f\"Construyendo {metadata['name']} v{metadata['version']}\")",
+              "output": "Construyendo mi-paquete v0.1.0",
+              "explanation": "pyproject.toml elimina los scripts ejecutables en setup.py reemplazándolos por configuración estática segura."
+            }
+          ],
+          "common_errors": "Crear nuevos proyectos usando `setup.py` heredado. Toda la comunidad de Python moderno (Pip, Hatch, Poetry, Flit) opera sobre `pyproject.toml`.",
+          "mini_exercise": {
+            "starter_code": "# Cual es el archivo estandar para empaquetar librerias en Python moderno?\n# Archivo: pyproject....",
+            "instructions": "Escribe toml para completar la extensión del archivo.",
+            "solution": "# Archivo: pyproject.toml"
+          },
+          "key_takeaways": [
+            "pyproject.toml es el estándar unificado de configuración y empaquetado (PEP 621).",
+            "Reemplaza a los antiguos archivos setup.py y setup.cfg.",
+            "Define dependencias, versión del proyecto y herramientas de build como Hatchling o Flit."
+          ],
+          "exercise": {
+            "id": "ex_py3_08_04",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Cuál es el archivo de configuración unificado y estándar oficial de Python moderno para empaquetar y definir metadatos de proyectos?",
+            "options": [
+              {
+                "id": "a",
+                "text": "pyproject.toml"
+              },
+              {
+                "id": "b",
+                "text": "package.json"
+              },
+              {
+                "id": "c",
+                "text": "setup.exe"
+              },
+              {
+                "id": "d",
+                "text": "config.xml"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "pyproject.toml es el estándar definido por las especificaciones PEP 517/518/621 para la configuración de proyectos y empaquetado en Python."
           }
         }
       ]

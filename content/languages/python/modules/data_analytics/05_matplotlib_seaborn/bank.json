@@ -6,28 +6,158 @@
     {
       "id": "q_da_05_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Qué información revela visualmente un diagrama de caja y bigotes (boxplot)?",
+      "difficulty": "easy",
+      "prompt": "Cual instruccion de Matplotlib crea de forma desacoplada la figura y el eje en la interfaz orientada a objetos?",
       "options": [
         {
           "id": "a",
-          "text": "La mediana, los cuartiles Q1 y Q3, el rango intercuartílico y posibles valores atípicos (outliers)"
+          "text": "fig, ax = plt.subplots()"
         },
         {
           "id": "b",
-          "text": "La velocidad de la red"
+          "text": "fig = plt.create_plot()"
         },
         {
           "id": "c",
-          "text": "El porcentaje de memoria libre en la GPU"
+          "text": "ax = plt.init()"
         },
         {
           "id": "d",
-          "text": "Únicamente el valor máximo del dataset"
+          "text": "fig, ax = plt.draw()"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "El boxplot sintetiza la distribución estadística de 5 números y señala los puntos fuera de 1.5 * IQR como outliers."
+      "explanation": "plt.subplots() es la funcion factory oficial para instanciar la pareja Figure (fig) y Axes (ax)."
+    },
+    {
+      "id": "q_da_05_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que tipo de grafico es el mas indicado para visualizar la frecuencia y forma de la distribucion probabilistica de una variable numerica continua?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Histograma (ax.hist o sns.histplot)"
+        },
+        {
+          "id": "b",
+          "text": "Grafico de sectores circulares (pie chart)"
+        },
+        {
+          "id": "c",
+          "text": "Grafico de barras horizontales"
+        },
+        {
+          "id": "d",
+          "text": "Diagrama de Gantt"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Los histogramas discretizan la variable continua en intervalos (bins) permitiendo observar sesgos, multimodalidad y concentracion de frecuencias."
+    },
+    {
+      "id": "q_da_05_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Como se activa la curva continua de estimacion de densidad de kernel (KDE) sobre un histograma en Seaborn?",
+      "options": [
+        {
+          "id": "a",
+          "text": "sns.histplot(data=df, x='columna', kde=True)"
+        },
+        {
+          "id": "b",
+          "text": "sns.histplot(data=df, x='columna', line='density')"
+        },
+        {
+          "id": "c",
+          "text": "sns.histplot(data=df, x='columna', curve=True)"
+        },
+        {
+          "id": "d",
+          "text": "sns.kde_overlay()"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El parametro kde=True superpone la curva de estimacion no parametrica de densidad de kernel sobre las barras del histograma."
+    },
+    {
+      "id": "q_da_05_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que elementos estadisticos representa la linea central y los bordes de la caja en un diagrama de caja (boxplot)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La linea central es la mediana (percentil 50); los bordes de la caja representan el primer cuartil (Q1) y el tercer cuartil (Q3)."
+        },
+        {
+          "id": "b",
+          "text": "La linea central es el valor maximo y los bordes son los valores minimos."
+        },
+        {
+          "id": "c",
+          "text": "La linea central es la media aritmetica y los bordes la desviacion estandar."
+        },
+        {
+          "id": "d",
+          "text": "La caja delimita exclusivamente los valores atipicos (outliers)."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La caja de un boxplot delimita el Rango Intercuartilico (IQR = Q3 - Q1) que contiene el 50% central de los datos, con la mediana bisecando la caja."
+    },
+    {
+      "id": "q_da_05_05",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "En una matriz de correlacion graficada con sns.heatmap, que valor numérico tienen siempre los elementos ubicados en la diagonal principal?",
+      "options": [
+        {
+          "id": "a",
+          "text": "1.0 (porque la correlacion de cualquier variable consigo misma es perfecta)"
+        },
+        {
+          "id": "b",
+          "text": "0.0"
+        },
+        {
+          "id": "c",
+          "text": "-1.0"
+        },
+        {
+          "id": "d",
+          "text": "El promedio de la columna"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La correlacion entre una variable X y la misma variable X es siempre exactamente 1.0 (correlacion lineal positiva perfecta)."
+    },
+    {
+      "id": "q_da_05_06",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Cual funcion de Seaborn crea automaticamente una grilla completa comparando todas las combinaciones bivariadas entre columnas numericas de un DataFrame?",
+      "options": [
+        {
+          "id": "a",
+          "text": "sns.pairplot(df)"
+        },
+        {
+          "id": "b",
+          "text": "sns.multigrid(df)"
+        },
+        {
+          "id": "c",
+          "text": "sns.grid_compare(df)"
+        },
+        {
+          "id": "d",
+          "text": "sns.all_plots(df)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "pairplot genera una matriz de subplots cruzando cada par de variables numericas con graficos de dispersion y sus distribuciones en la diagonal."
     }
   ]
 }

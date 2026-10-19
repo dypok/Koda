@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { WipeButton } from '@/components/ui/wipe-button';
 import { DiagnosticResultResponse } from '@/services/learning/diagnostic.service';
+import { KodaMascot } from '@/components/brand/KodaMascot';
+import { Star } from '@phosphor-icons/react';
 
 interface DiagnosticResultModalProps {
   result: DiagnosticResultResponse;
@@ -27,12 +28,12 @@ export function DiagnosticResultModal({
 
         {/* Header con Mascota */}
         <div className="relative z-10 text-center space-y-3">
-          <div className="relative w-20 h-20 mx-auto">
-            <Image
-              src="/brand/koda-mascot-cartoon-2d.svg"
-              alt="Mascota Koda"
-              fill
-              className="object-contain animate-bounce duration-1000"
+          <div className="relative flex items-center justify-center mx-auto">
+            <KodaMascot
+              state={isAdvanced ? 'streak_active' : 'idle'}
+              size={80}
+              animate="bounce"
+              glow
             />
           </div>
 
@@ -109,7 +110,11 @@ export function DiagnosticResultModal({
           {/* Módulos exonerados con 3 estrellas */}
           {result.unlockedModules.length > 0 && (
             <div className="pt-2 border-t border-slate-800/60 flex items-center gap-2 text-xs text-amber-300/90">
-              <span className="text-base">⭐⭐⭐</span>
+              <div className="flex items-center text-amber-400 gap-0.5" aria-label="3 estrellas">
+                <Star weight="fill" className="w-4 h-4" />
+                <Star weight="fill" className="w-4 h-4" />
+                <Star weight="fill" className="w-4 h-4" />
+              </div>
               <span>
                 Módulos acreditados ({result.unlockedModules.join(', ')}) con 3 estrellas de maestría.
               </span>

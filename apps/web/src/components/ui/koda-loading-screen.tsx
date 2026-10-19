@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 
 interface KodaLoadingScreenProps {
   title?: string;
@@ -52,21 +52,20 @@ export const KodaLoadingScreen: React.FC<KodaLoadingScreenProps> = ({
             repeat: Infinity,
             ease: 'easeInOut',
           }}
-          className="relative z-10 w-28 h-28 sm:w-32 sm:h-32"
+          className="relative z-10 w-28 h-28 sm:w-32 sm:h-32 flex items-center justify-center"
         >
-          <Image
-            src="/brand/koda-mascot-cartoon-2d.svg"
-            alt="Koda preparando tu experiencia"
-            width={128}
-            height={128}
+          <KodaMascot
+            state="idle"
+            size={112}
             priority
-            className="w-full h-full object-contain filter drop-shadow-[0_8px_24px_rgba(245,158,11,0.35)]"
+            glow
+            className="max-h-full max-w-full object-contain"
           />
         </motion.div>
       </div>
 
       {/* Textos informativos */}
-      <div className="space-y-2">
+      <div className="space-y-2 pt-3">
         <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
           {title}
         </h2>

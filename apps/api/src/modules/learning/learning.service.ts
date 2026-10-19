@@ -262,7 +262,23 @@ export class LearningService {
           : (lesson.item2Quiz.options.find((o) => submission.selected_option_ids.includes(o.id))?.feedback ||
              'Respuesta incorrecta. Revisa la teoría y vuelve a intentarlo.');
 
-        const xpEarned = isCorrect ? lesson.xpReward : 0;
+        let isSectionAlreadyPassed = false;
+        try {
+          if (userId && this.progressRepository) {
+            const star = await this.progressRepository.findSectionStars(userId, lesson.sectionSlug);
+            if (star && star.isPassed) {
+              isSectionAlreadyPassed = true;
+            }
+          }
+        } catch {
+          // Continuar con evaluacion normal si falla la consulta
+        }
+
+        const xpEarned = isCorrect && !isSectionAlreadyPassed
+          ? (typeof submission.xp_earned === 'number' && submission.xp_earned > 0
+              ? submission.xp_earned
+              : lesson.xpReward)
+          : 0;
 
         // Desacoplamiento hexagonal: emitir evento de dominio asíncrono
         if (this.eventEmitter) {
@@ -302,6 +318,12 @@ export class LearningService {
 
     if (this.contentLoaderService) {
       const fallbackFeedback = this.contentLoaderService.evaluateAnswer(submission);
+      const finalFallbackXp = fallbackFeedback.is_correct
+        ? (typeof submission.xp_earned === 'number' && submission.xp_earned > 0
+            ? submission.xp_earned
+            : fallbackFeedback.xp_earned)
+        : 0;
+
       if (this.eventEmitter) {
         this.eventEmitter.emit(
           'lesson.answered',
@@ -316,13 +338,16 @@ export class LearningService {
             selectedOptionIds: submission.selected_option_ids,
             correctOptionId: fallbackFeedback.correct_option_ids?.[0],
             isCorrect: fallbackFeedback.is_correct,
-            xpEarned: fallbackFeedback.xp_earned,
+            xpEarned: finalFallbackXp,
             timeSpentSeconds: submission.time_spent_seconds ?? 0,
             feedbackText: fallbackFeedback.feedback_message,
           }),
         );
       }
-      return fallbackFeedback;
+      return {
+        ...fallbackFeedback,
+        xp_earned: finalFallbackXp,
+      };
     }
 
     throw new NotFoundException(`Lección '${submission.lesson_id}' no encontrada.`);

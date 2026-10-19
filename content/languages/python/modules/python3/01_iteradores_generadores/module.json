@@ -5,13 +5,13 @@
   "slug": "iteradores-y-generadores",
   "course_slug": "python-3",
   "title": "Iteradores, Generadores y el Protocolo de Iteración",
-  "objective": "Implementar el protocolo __iter__ y __next__, y crear funciones generadoras con yield para procesar flujos masivos con memoria O(1).",
-  "description": "Procesa millones de registros sin saturar la RAM: aprende la evaluación perezosa (lazy evaluation) y la potencia de yield.",
-  "position": 21,
+  "objective": "Implementar el protocolo de iteración (__iter__ y __next__), dominar funciones generadoras con yield, generator expressions y pipelines con yield from con memoria O(1).",
+  "description": "Procesa flujos masivos de datos sin saturar la memoria RAM: domina la evaluación perezosa (lazy evaluation) y la suspensión de hilos con yield.",
+  "position": 1,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,47 +23,157 @@
     {
       "id": "sec_py3_01_01",
       "code": "S01",
-      "title": "Generadores con yield y Memoria Constante",
-      "slug": "generadores-yield",
+      "title": "Protocolo de Iteración y Generadores",
+      "slug": "iteracion-generadores-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py3_01_01",
           "code": "L01",
-          "title": "Funciones Generadoras con yield vs Listas en Memoria",
-          "slug": "generadores-yield-base",
+          "title": "El Protocolo de Iteración: Iterable vs Iterador",
+          "slug": "protocolo-iteracion-fundamentos",
           "position": 1,
-          "concept_id": "py3-generators",
-          "objective": "Dominar yield para suspender y reanudar funciones sin calcular toda la colección de antemano.",
-          "theory_markdown": "Si creas una lista de 10 millones de números con `[x for x in range(10_000_000)]`, tu servidor consumirá gigabytes de memoria RAM al instante.\n\nUn **generador** utiliza la palabra clave `yield` en lugar de `return`. Cuando Python encuentra un `yield`, produce el valor actual, **pausa la ejecución de la función congelando sus variables locales**, y espera a que el consumidor pida el siguiente valor con `next()` o en un bucle `for`.\n\nMemoria consumida: **O(1) (constante)**, sin importar si procesas 10 o 10 billones de elementos.",
+          "concept_id": "py3-iteration-protocol",
+          "objective": "Comprender la diferencia formal entre un iterable y un iterador, dominando __iter__(), __next__() y la excepción StopIteration.",
+          "theory_markdown": "Todo bucle `for` en Python funciona bajo el **Protocolo de Iteración**, sustentado en dos conceptos complementarios:\n\n1. **Iterable**: Cualquier objeto capaz de retornar sus elementos uno a uno. Implementa el método especial `__iter__()`. Ejemplos: listas, tuplas, diccionarios, strings.\n2. **Iterador**: El cursor dinámico que produce el siguiente valor en memoria. Implementa `__next__()` (y también `__iter__()` retornándose a sí mismo).\n\n### Cómo funciona un bucle for tras bambalinas\nCuando escribes `for x in coleccion:`, Python realiza internamente:\n```python\ncursor = iter(coleccion)  # Invoca coleccion.__iter__()\nwhile True:\n    try:\n        x = next(cursor)   # Invoca cursor.__next__()\n        # Cuerpo del bucle\n    except StopIteration:\n        break              # Señal formal de fin de datos\n```",
           "examples": [
             {
-              "title": "Generador infinito de números de Fibonacci",
-              "code": "def fibonacci():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n\ngen = fibonacci()\nprimeros = [next(gen) for _ in range(7)]\nprint(\"Primeros 7 de Fibonacci:\", primeros)",
-              "output": "Primeros 7 de Fibonacci: [0, 1, 1, 2, 3, 5, 8]",
-              "explanation": "La función nunca termina gracias al bucle infinito, pero solo calcula el siguiente número cuando se invoca next(gen)."
+              "title": "Avance manual con iter() y next()",
+              "code": "frutas = [\"manzana\", \"pera\"]\ncursor = iter(frutas)\n\nprint(next(cursor))\nprint(next(cursor))\n# La tercera llamada lanzaría StopIteration al agotarse",
+              "output": "manzana\npera",
+              "explanation": "next() avanza el cursor un elemento a la vez. Cuando ya no quedan elementos, el iterador dispara la excepción StopIteration."
             }
           ],
-          "common_errors": "Intentar acceder por índice numérico a un generador (`gen[0]`). Los generadores no admiten indexación directa; solo avance secuencial con next() o iteración for.",
+          "common_errors": "Creer que una lista es un iterador. Una lista es un iterable; para convertirla en iterador se debe pasar por iter(lista).",
           "mini_exercise": {
-            "starter_code": "# Crea un generador que produzca el doble de los números del 1 al 3\ndef duplicador():\n    for i in range(1, 4):\n        yield ...\n\nprint(list(duplicador()))  # [2, 4, 6]",
-            "instructions": "Usa yield i * 2.",
-            "solution": "def duplicador():\n    for i in range(1, 4):\n        yield i * 2\n\nprint(list(duplicador()))"
+            "starter_code": "numeros = [10, 20]\nit = iter(numeros)\n# Extrae el primer valor usando next()\nprimero = next(...)\nprint(primero)",
+            "instructions": "Escribe it dentro de next().",
+            "solution": "numeros = [10, 20]\nit = iter(numeros)\nprimero = next(it)\nprint(primero)"
           },
           "key_takeaways": [
-            "yield pausa la función y conserva su estado de ejecución.",
-            "Los generadores producen valores bajo demanda (evaluación perezosa).",
-            "Ahorran gigabytes de memoria en flujos de datos grandes."
+            "iter(objeto) obtiene el iterador invocando __iter__().",
+            "next(iterador) obtiene el valor sucesivo invocando __next__().",
+            "StopIteration es la señal estándar de finalización de una secuencia."
           ],
           "exercise": {
             "id": "ex_py3_01_01",
-            "type": "predict_output",
+            "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Qué devuelve una llamada directa a una función que contiene la palabra yield?",
-            "prompt_code": "def mi_gen():\n    yield 1\n\ng = mi_gen()\nprint(type(g))",
+            "prompt": "¿Qué excepción lanza un iterador al llamar a next() una vez que se han consumido todos sus elementos?",
+            "options": [
+              {
+                "id": "a",
+                "text": "StopIteration"
+              },
+              {
+                "id": "b",
+                "text": "IndexError"
+              },
+              {
+                "id": "c",
+                "text": "KeyError"
+              },
+              {
+                "id": "d",
+                "text": "EndOfSequenceError"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "StopIteration es la excepción estándar que señala a los bucles for y consumidores que la secuencia ha finalizado."
+          }
+        },
+        {
+          "id": "les_py3_01_02",
+          "code": "L02",
+          "title": "Funciones Generadoras con yield y Evaluación Perezosa",
+          "slug": "generadores-yield-evaluacion-perezosa",
+          "position": 2,
+          "concept_id": "py3-generator-functions-yield",
+          "objective": "Suspender y reanudar funciones mediante yield para procesar secuencias con consumo de memoria O(1).",
+          "theory_markdown": "Una **función generadora** es una función que contiene una o más instrucciones `yield` en lugar de (o además de) `return`.\n\n### El superpoder de `yield`\n- Al invocar la función generadora, **no se ejecuta su código de inmediato**: devuelve un objeto de tipo `generator`.\n- Cada vez que el consumidor llama a `next(gen)`, el código corre hasta toparse con un `yield`.\n- En ese punto, Python entrega el valor, **congela el frame de ejecución y preserva el estado exacto de todas las variables locales**.\n- En la siguiente llamada a `next()`, la función se reanuda exactamente en la línea siguiente al `yield`.\n\n### Memoria Constante O(1)\nUna lista de 10 millones de enteros ocupa cerca de 800 MB de RAM. Un generador que produce esos mismos 10 millones bajo demanda ocupa apenas unos pocos bytes de memoria.",
+          "examples": [
+            {
+              "title": "Generador con estado persistente",
+              "code": "def contador_seguro(limite):\n    n = 1\n    while n <= limite:\n        yield n\n        n += 1\n\ngen = contador_seguro(3)\nprint(next(gen))\nprint(next(gen))\nprint(next(gen))",
+              "output": "1\n2\n3",
+              "explanation": "La variable local 'n' no se reinicia entre llamadas; Python la congela en memoria hasta la próxima invocación."
+            }
+          ],
+          "common_errors": "Intentar indexar un generador (`gen[0]`). Los generadores no guardan elementos en un array accesible por índice; solo avanzan secuencialmente hacia adelante.",
+          "mini_exercise": {
+            "starter_code": "def gen_dobles():\n    yield 2\n    yield 4\n\ng = gen_dobles()\n# Consume el primer elemento con next\nprint(next(...))",
+            "instructions": "Escribe g dentro de next().",
+            "solution": "def gen_dobles():\n    yield 2\n    yield 4\n\ng = gen_dobles()\nprint(next(g))"
+          },
+          "key_takeaways": [
+            "yield suspende la función y preserva su estado local.",
+            "Llamar a una función con yield devuelve un objeto generador iterador.",
+            "Produce elementos de forma perezosa con memoria constante O(1)."
+          ],
+          "exercise": {
+            "id": "ex_py3_01_02",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué imprime este código al instanciar y consumir parcialmente un generador?",
+            "prompt_code": "def secuencia():\n    yield \"A\"\n    yield \"B\"\n    yield \"C\"\n\ng = secuencia()\nval1 = next(g)\nval2 = next(g)\nprint(f\"{val1}-{val2}\")",
+            "options": [
+              {
+                "id": "a",
+                "text": "A-B"
+              },
+              {
+                "id": "b",
+                "text": "A-A"
+              },
+              {
+                "id": "c",
+                "text": "B-C"
+              },
+              {
+                "id": "d",
+                "text": "TypeError"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La primera llamada a next extrae 'A' y suspende. La segunda reanuda y extrae 'B', resultando en 'A-B'."
+          }
+        },
+        {
+          "id": "les_py3_01_03",
+          "code": "L03",
+          "title": "Expresiones Generadoras (Generator Expressions)",
+          "slug": "expresiones-generadoras",
+          "position": 3,
+          "concept_id": "py3-generator-expressions",
+          "objective": "Escribir comprensiones perezosas con paréntesis (exp for x in l) para optimizar memoria en funciones agregadoras como sum, min y max.",
+          "theory_markdown": "Así como las list comprehensions usan corchetes `[ ]`, las **generator expressions** utilizan paréntesis `( )` para crear un generador anónimo en una sola línea:\n\n```python\n# List comprehension: almacena TODOS los elementos en RAM de inmediato\nlista = [x ** 2 for x in range(1_000_000)]\n\n# Generator expression: genera elementos uno a uno bajo demanda\ngenerador = (x ** 2 for x in range(1_000_000))\n```\n\n### Uso óptimo con funciones de agregación\nCuando pasas una generator expression directamente como único argumento a funciones como `sum()`, `any()`, `all()`, `min()` o `max()`, puedes omitir el doble paréntesis:\n```python\ntotal = sum(x * 10 for x in range(5))\n# Calcula 0 + 10 + 20 + 30 + 40 = 100 sin crear ninguna lista intermedia en memoria\n```",
+          "examples": [
+            {
+              "title": "Agregación sin almacenamiento intermedio",
+              "code": "datos = [10, 20, 30, 40]\n# Generator expression directa en sum()\ntotal_duplicado = sum(x * 2 for x in datos)\nprint(\"Suma total:\", total_duplicado)",
+              "output": "Suma total: 200",
+              "explanation": "sum() consume el generador perezosamente término a término sin asignar un array temporal."
+            }
+          ],
+          "common_errors": "Creer que `(x for x in l)` crea una tupla por usar paréntesis. Para crear una tupla debes escribir explícitamente `tuple(x for x in l)`.",
+          "mini_exercise": {
+            "starter_code": "# Calcula la suma de los cuadrados del 1 al 4 usando una generator expression\ntotal = sum(x ** 2 for x in [1, 2, 3, 4])\nprint(total)",
+            "instructions": "Verifica que el resultado sea 1 + 4 + 9 + 16 = 30.",
+            "solution": "total = sum(x ** 2 for x in [1, 2, 3, 4])\nprint(total)"
+          },
+          "key_takeaways": [
+            "(exp for x in secuencia) crea una generator expression liviana.",
+            "Evita asignar memoria innecesaria en operaciones de reducción y suma.",
+            "No crea una tupla; para tuplas se requiere el constructor tuple()."
+          ],
+          "exercise": {
+            "id": "ex_py3_01_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Qué tipo de objeto produce la sintaxis gen = (x * 2 for x in [1, 2, 3])?",
             "options": [
               {
                 "id": "a",
@@ -71,7 +181,7 @@
               },
               {
                 "id": "b",
-                "text": "<class 'int'>"
+                "text": "<class 'tuple'>"
               },
               {
                 "id": "c",
@@ -79,11 +189,67 @@
               },
               {
                 "id": "d",
-                "text": "1"
+                "text": "<class 'set'>"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Llamar a la función no ejecuta su código de inmediato, sino que retorna un objeto generador iterador."
+            "explanation": "La expresión entre paréntesis define una generator expression, cuyo tipo de dato es 'generator'."
+          }
+        },
+        {
+          "id": "les_py3_01_04",
+          "code": "L04",
+          "title": "Generadores Avanzados: yield from y Pipelines de Datos",
+          "slug": "yield-from-pipelines-datos",
+          "position": 4,
+          "concept_id": "py3-yield-from-pipelines",
+          "objective": "Delegar iteraciones a subgeneradores con yield from y encadenar etapas de procesamiento en pipelines desacoplados.",
+          "theory_markdown": "### La instrucción `yield from`\nEn lugar de escribir un bucle for manual para delegar la producción de valores a otro iterable:\n```python\n# Forma tradicional verbosa:\nfor item in subcoleccion:\n    yield item\n\n# Forma idiomática y rápida con yield from:\nyield from subcoleccion\n```\n`yield from` establece un canal bidireccional transparente entre el llamador externo y el subgenerador.\n\n### Arquitectura de Pipelines de Datos\nPuedes conectar generadores en cadena para construir tuberías de procesamiento donde cada etapa transforma el flujo sin buffers intermedios:\n```python\n# Etapa 1: Generador de lectura\nlineas = (l.strip() for l in archivo)\n# Etapa 2: Generador de filtro\nerrores = (l for l in lineas if \"ERROR\" in l)\n# Etapa 3: Generador de extraccion\ncodigos = (l.split()[-1] for l in errores)\n```",
+          "examples": [
+            {
+              "title": "Delegación limpia con yield from",
+              "code": "def letras():\n    yield from [\"A\", \"B\"]\n    yield from (\"C\", \"D\")\n\nprint(list(letras()))",
+              "output": "['A', 'B', 'C', 'D']",
+              "explanation": "yield from agota cada secuencia secundaria entregando sus elementos directamente al consumidor."
+            }
+          ],
+          "common_errors": "Usar `yield subcoleccion` en vez de `yield from subcoleccion`. Un simple yield entregará la lista entera como un solo elemento en vez de sus ítems individuales.",
+          "mini_exercise": {
+            "starter_code": "def concatenar(a, b):\n    # Delega la emision de elementos a cada lista con yield from\n    yield from a\n    ... from b\n\nprint(list(concatenar([1, 2], [3, 4])))",
+            "instructions": "Escribe yield para completar yield from b.",
+            "solution": "def concatenar(a, b):\n    yield from a\n    yield from b\n\nprint(list(concatenar([1, 2], [3, 4])))"
+          },
+          "key_takeaways": [
+            "yield from delega la generación de elementos a un subgenerador o iterable.",
+            "Permite aplanar colecciones jerárquicas con sintaxis concisa.",
+            "Los pipelines de generadores procesan grandes volúmenes con streaming de datos eficiente."
+          ],
+          "exercise": {
+            "id": "ex_py3_01_04",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué produce list(comb()) en este código?",
+            "prompt_code": "def comb():\n    yield from [1, 2]\n    yield from [3, 4]\n\nprint(list(comb()))",
+            "options": [
+              {
+                "id": "a",
+                "text": "[1, 2, 3, 4]"
+              },
+              {
+                "id": "b",
+                "text": "[[1, 2], [3, 4]]"
+              },
+              {
+                "id": "c",
+                "text": "[10]"
+              },
+              {
+                "id": "d",
+                "text": "TypeError"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "yield from desempaqueta secuencialmente cada elemento de ambas listas produciendo la secuencia continua [1, 2, 3, 4]."
           }
         }
       ]
