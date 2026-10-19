@@ -1,0 +1,1297 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://koda.dev/schemas/question.schema.json",
+  "title": "Koda Content — Question / Bank / Module",
+  "description": "Contrato canónico del contenido declarativo de Koda. Valida una pregunta (por tipo), un banco (array o {module_code, questions}), un módulo completo o un bloque de coordenadas graph. El dialecto legacy (options/correct_option_id/hint) sigue siendo aceptado via $defs.legacyQuestion; migrar a answers/correct_answer_ids. Ver documentation/03-pedagogia-contenido/29_QUESTION_JSON_CONTRACT.md y 30_ROADMAP_STRUCTURE_AND_COORDINATES.md.",
+  "$defs": {
+    "position": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Orden canónico. Si se declara en un array debe ser 1..N sin huecos ni duplicados (validación semántica, no expresable en JSON Schema)."
+    },
+    "answer": {
+      "type": "object",
+      "required": [
+        "body",
+        "is_correct"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "label": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[A-F]$"
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "is_correct": {
+          "type": "boolean"
+        },
+        "position": {
+          "$ref": "#/$defs/position"
+        },
+        "explanation": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1000
+        },
+        "language": {
+          "type": "string",
+          "description": "Solo para select_code: lenguaje del snippet en body."
+        }
+      }
+    },
+    "block": {
+      "type": "object",
+      "required": [
+        "id",
+        "body"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "body": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "position": {
+          "$ref": "#/$defs/position"
+        }
+      }
+    },
+    "pair": {
+      "type": "object",
+      "required": [
+        "left",
+        "right"
+      ],
+      "properties": {
+        "left": {
+          "type": "object",
+          "required": [
+            "id",
+            "body"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "body": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            }
+          }
+        },
+        "right": {
+          "type": "object",
+          "required": [
+            "id",
+            "body"
+          ],
+          "properties": {
+            "id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "body": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2000
+            }
+          }
+        }
+      }
+    },
+    "questionType": {
+      "enum": [
+        "single_choice",
+        "multiple_choice",
+        "true_false",
+        "predict_output",
+        "fill_blank",
+        "find_error",
+        "select_code",
+        "order_lines",
+        "matching",
+        "small_problem",
+        "write_code"
+      ],
+      "description": "Catálogo vigente. Alias legacy: 'select_correct_code' -> 'select_code', 'code_output' -> 'predict_output', 'bug_hunt' -> 'find_error'."
+    },
+    "question": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "prompt",
+        "explanation"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "$ref": "#/$defs/questionType"
+        },
+        "difficulty": {
+          "enum": [
+            "easy",
+            "medium",
+            "hard"
+          ]
+        },
+        "category": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-z0-9_-]{2,50}$"
+        },
+        "concept_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]{3,80}$"
+          }
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 2000
+        },
+        "prompt_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 2000
+        },
+        "answers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/answer"
+          }
+        },
+        "correct_answer_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 2000
+        },
+        "hints": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "maxLength": 500
+          }
+        },
+        "score": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 10
+        },
+        "time_estimated_seconds": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 10,
+          "maximum": 600
+        },
+        "is_diagnostic": {
+          "type": "boolean",
+          "default": false
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "published",
+            "archived"
+          ],
+          "default": "published"
+        },
+        "content_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "position": {
+          "$ref": "#/$defs/position"
+        },
+        "accepted_answers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "predict_output / fill_blank / small_problem evaluados como texto."
+        },
+        "aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "fill_blank / write_code: variantes normalizables."
+        },
+        "case_sensitive": {
+          "type": "boolean",
+          "default": false,
+          "description": "fill_blank / write_code."
+        },
+        "line_number": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "find_error: línea del error (1-based)."
+        },
+        "blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/block"
+          },
+          "description": "order_lines: bloques desordenados."
+        },
+        "correct_order": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "order_lines: única secuencia válida de ids de blocks."
+        },
+        "pairs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/pair"
+          },
+          "description": "matching: 3-5 pares termino-definicion."
+        },
+        "epsilon": {
+          "type": "number",
+          "minimum": 0,
+          "description": "small_problem: tolerancia para flotantes."
+        },
+        "starter_code": {
+          "type": "string",
+          "description": "write_code: código inicial."
+        },
+        "accepted_tokens": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "write_code: tokens válidos (sin runner)."
+        },
+        "options": {
+          "type": "array",
+          "description": "DEPRECADO (legacy). Usar answers[].",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "correct_option_id": {
+          "type": "string",
+          "description": "DEPRECADO (legacy). Usar correct_answer_ids: [id]."
+        },
+        "hint": {
+          "type": "string",
+          "description": "DEPRECADO (legacy). Usar hints[]."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "single_choice"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "answers"
+            ],
+            "properties": {
+              "answers": {
+                "minItems": 2,
+                "maxItems": 6
+              },
+              "correct_answer_ids": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "anyOf": [
+              {
+                "required": [
+                  "correct_answer_ids"
+                ]
+              },
+              {
+                "properties": {
+                  "answers": {
+                    "contains": {
+                      "properties": {
+                        "is_correct": {
+                          "const": true
+                        }
+                      },
+                      "required": [
+                        "is_correct"
+                      ]
+                    },
+                    "minContains": 1,
+                    "maxContains": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "multiple_choice"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "answers"
+            ],
+            "properties": {
+              "answers": {
+                "minItems": 4,
+                "maxItems": 5
+              },
+              "correct_answer_ids": {
+                "type": "array",
+                "minItems": 2,
+                "maxItems": 3,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "anyOf": [
+              {
+                "required": [
+                  "correct_answer_ids"
+                ]
+              },
+              {
+                "properties": {
+                  "answers": {
+                    "contains": {
+                      "properties": {
+                        "is_correct": {
+                          "const": true
+                        }
+                      },
+                      "required": [
+                        "is_correct"
+                      ]
+                    },
+                    "minContains": 2,
+                    "maxContains": 3
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "true_false"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "answers"
+            ],
+            "properties": {
+              "answers": {
+                "minItems": 2,
+                "maxItems": 2
+              },
+              "correct_answer_ids": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "anyOf": [
+              {
+                "required": [
+                  "correct_answer_ids"
+                ]
+              },
+              {
+                "properties": {
+                  "answers": {
+                    "contains": {
+                      "properties": {
+                        "is_correct": {
+                          "const": true
+                        }
+                      },
+                      "required": [
+                        "is_correct"
+                      ]
+                    },
+                    "minContains": 1,
+                    "maxContains": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "predict_output"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "prompt_code"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "correct_answer_ids"
+                ]
+              },
+              {
+                "properties": {
+                  "answers": {
+                    "contains": {
+                      "properties": {
+                        "is_correct": {
+                          "const": true
+                        }
+                      },
+                      "required": [
+                        "is_correct"
+                      ]
+                    },
+                    "minContains": 1,
+                    "maxContains": 1
+                  }
+                }
+              },
+              {
+                "required": [
+                  "accepted_answers"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "fill_blank"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "prompt_code"
+            ],
+            "anyOf": [
+              {
+                "required": [
+                  "accepted_answers"
+                ]
+              },
+              {
+                "required": [
+                  "correct_answer_ids"
+                ]
+              },
+              {
+                "properties": {
+                  "answers": {
+                    "contains": {
+                      "properties": {
+                        "is_correct": {
+                          "const": true
+                        }
+                      },
+                      "required": [
+                        "is_correct"
+                      ]
+                    },
+                    "minContains": 1,
+                    "maxContains": 1
+                  }
+                }
+              },
+              {
+                "required": [
+                  "options",
+                  "correct_option_id"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "find_error"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "prompt_code",
+              "answers"
+            ],
+            "properties": {
+              "answers": {
+                "minItems": 3,
+                "maxItems": 4
+              },
+              "correct_answer_ids": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "anyOf": [
+              {
+                "required": [
+                  "correct_answer_ids"
+                ]
+              },
+              {
+                "properties": {
+                  "answers": {
+                    "contains": {
+                      "properties": {
+                        "is_correct": {
+                          "const": true
+                        }
+                      },
+                      "required": [
+                        "is_correct"
+                      ]
+                    },
+                    "minContains": 1,
+                    "maxContains": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "select_code"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "answers"
+            ],
+            "properties": {
+              "answers": {
+                "minItems": 3,
+                "maxItems": 4
+              },
+              "correct_answer_ids": {
+                "type": "array",
+                "minItems": 1,
+                "maxItems": 1,
+                "items": {
+                  "type": "string"
+                }
+              }
+            },
+            "anyOf": [
+              {
+                "required": [
+                  "correct_answer_ids"
+                ]
+              },
+              {
+                "properties": {
+                  "answers": {
+                    "contains": {
+                      "properties": {
+                        "is_correct": {
+                          "const": true
+                        }
+                      },
+                      "required": [
+                        "is_correct"
+                      ]
+                    },
+                    "minContains": 1,
+                    "maxContains": 1
+                  }
+                }
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "order_lines"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "blocks",
+              "correct_order"
+            ],
+            "properties": {
+              "blocks": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 6
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "matching"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "pairs"
+            ],
+            "properties": {
+              "pairs": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 5
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "small_problem"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "anyOf": [
+              {
+                "required": [
+                  "correct_answer_ids"
+                ]
+              },
+              {
+                "properties": {
+                  "answers": {
+                    "contains": {
+                      "properties": {
+                        "is_correct": {
+                          "const": true
+                        }
+                      },
+                      "required": [
+                        "is_correct"
+                      ]
+                    },
+                    "minContains": 1,
+                    "maxContains": 1
+                  }
+                }
+              },
+              {
+                "required": [
+                  "accepted_answers"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "write_code"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "required": [
+              "starter_code",
+              "accepted_tokens"
+            ]
+          }
+        }
+      ]
+    },
+    "legacyQuestion": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "prompt",
+        "options",
+        "correct_option_id"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "$ref": "#/$defs/questionType"
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 2000
+        },
+        "prompt_code": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "hint": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "text"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 2000
+              }
+            }
+          }
+        },
+        "correct_option_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "difficulty": {
+          "enum": [
+            "easy",
+            "medium",
+            "hard"
+          ]
+        },
+        "score": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      },
+      "description": "DEPRECADO: dialecto shorthand de 03_operadores (options/correct_option_id/hint). Aceptado por compatibilidad; migrar a answers/correct_answer_ids. No exige difficulty ni las cuotas por tipo."
+    },
+    "questionLike": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/question"
+        },
+        {
+          "$ref": "#/$defs/legacyQuestion"
+        }
+      ],
+      "description": "Pregunta canónica o legacy (deprecada)."
+    },
+    "bankArray": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/questionLike"
+      },
+      "description": "Forma actual de bank.json: array plano. El orden del array es el orden canónico."
+    },
+    "bank": {
+      "type": "object",
+      "required": [
+        "questions"
+      ],
+      "properties": {
+        "module_code": {
+          "type": "string"
+        },
+        "questions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/questionLike"
+          }
+        }
+      },
+      "description": "Forma v2 recomendada: { module_code, questions[] }. Alinea con evaluation.service.ts."
+    },
+    "graph": {
+      "type": "object",
+      "properties": {
+        "tier": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Profundidad (eje X)."
+        },
+        "lane": {
+          "type": "integer",
+          "description": "Carril (eje Y). Negativo = arriba."
+        },
+        "x": {
+          "type": "number",
+          "description": "Coordenada absoluta en el viewBox 1150x620."
+        },
+        "y": {
+          "type": "number"
+        },
+        "route": {
+          "enum": [
+            "trunk",
+            "flow",
+            "data"
+          ]
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "x",
+            "y"
+          ]
+        },
+        {
+          "required": [
+            "tier",
+            "lane"
+          ]
+        }
+      ],
+      "description": "Resolución: x/y absolutas > tier/lane derivadas > position-1."
+    },
+    "example": {
+      "type": "object",
+      "required": [
+        "code"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "maxLength": 100
+        },
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 2000
+        },
+        "language": {
+          "type": "string"
+        },
+        "output": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 1000
+        },
+        "explanation": {
+          "type": "string",
+          "maxLength": 1000
+        },
+        "position": {
+          "$ref": "#/$defs/position"
+        }
+      }
+    },
+    "lesson": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "position"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 150
+        },
+        "slug": {
+          "type": "string"
+        },
+        "position": {
+          "$ref": "#/$defs/position"
+        },
+        "concept_id": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]{3,80}$"
+        },
+        "explanation": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 5000
+        },
+        "theory_markdown": {
+          "type": "string",
+          "description": "DEPRECADO (legacy). Usar explanation."
+        },
+        "code_example": {
+          "type": "string",
+          "description": "DEPRECADO (legacy). Usar examples[]."
+        },
+        "expected_output": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "DEPRECADO (legacy)."
+        },
+        "tip_markdown": {
+          "type": "string",
+          "description": "DEPRECADO (legacy)."
+        },
+        "is_required": {
+          "type": "boolean",
+          "default": true
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "coming_soon",
+            "published",
+            "archived"
+          ],
+          "default": "published"
+        },
+        "content_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "examples": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/$defs/example"
+          }
+        },
+        "exercise": {
+          "$ref": "#/$defs/questionLike"
+        },
+        "exercises": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/questionLike"
+          }
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "exercises"
+          ]
+        },
+        {
+          "required": [
+            "exercise"
+          ]
+        }
+      ]
+    },
+    "section": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "position",
+        "lessons"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 150
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]{2,100}$"
+        },
+        "position": {
+          "$ref": "#/$defs/position"
+        },
+        "type": {
+          "enum": [
+            "theory",
+            "example",
+            "exercise",
+            "quiz",
+            "review"
+          ]
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "coming_soon",
+            "published",
+            "archived"
+          ],
+          "default": "published"
+        },
+        "content_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "estimated_minutes": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1,
+          "maximum": 120
+        },
+        "xp_on_complete": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "graph": {
+          "$ref": "#/$defs/graph"
+        },
+        "lessons": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/lesson"
+          }
+        }
+      }
+    },
+    "module": {
+      "type": "object",
+      "required": [
+        "id",
+        "code",
+        "slug",
+        "title",
+        "position",
+        "sections"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "language_id": {
+          "type": "string"
+        },
+        "course_id": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string",
+          "pattern": "^[A-Z0-9_]+$"
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9-]{2,100}$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "maxLength": 150
+        },
+        "objective": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2000
+        },
+        "position": {
+          "$ref": "#/$defs/position"
+        },
+        "status": {
+          "enum": [
+            "draft",
+            "review",
+            "coming_soon",
+            "published",
+            "archived"
+          ],
+          "default": "published"
+        },
+        "content_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "prerequisite_module_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "thresholds": {
+          "type": "object",
+          "properties": {
+            "quiz": {
+              "type": "integer",
+              "minimum": 50,
+              "maximum": 90
+            },
+            "exam": {
+              "type": "integer",
+              "minimum": 60,
+              "maximum": 95
+            }
+          }
+        },
+        "xp": {
+          "type": "object",
+          "properties": {
+            "on_pass": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        },
+        "graph": {
+          "$ref": "#/$defs/graph"
+        },
+        "sections": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/section"
+          }
+        }
+      }
+    }
+  },
+  "$ref": "#/$defs/question"
+}

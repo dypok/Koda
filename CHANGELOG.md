@@ -10,6 +10,12 @@ Zona horaria: America/Bogota (UTC-5)
 ## [Unreleased]
 
 ### Added
+- [2026-10-15 21:39] [Added] **Contrato JSON de preguntas + estructura de roadmap y coordenadas:**
+  - `documentation/03-pedagogia-contenido/29_QUESTION_JSON_CONTRACT.md`: anatomía de una pregunta (sobre común, 11 tipos con payload, orden, composición quiz/examen, B_min y normalización de los 3 dialectos).
+  - `documentation/03-pedagogia-contenido/30_ROADMAP_STRUCTURE_AND_COORDINATES.md`: orden pedagógico, barajado determinista, las 3 capas de coordenadas (`topology` → fórmula → curada) y propuesta del bloque `graph` en `module.json`.
+  - `content/schemas/question.schema.json`: JSON Schema (draft 2020-12) con `$defs` para pregunta, 11 tipos, respuesta, orden, `graph`, banco y módulo.
+  - Validado con `ajv`: **32/32** `bank.json` y **34/34** `module.json` del repo pasan; pruebas negativas (sin `answers`, tipo desconocido, 2 correctas en `single_choice`, etc.) rechazadas correctamente.
+  - Notas de alineación en `23` y `24`; registro en los `README` de `documentation/03-pedagogia-contenido/` y `content/`.
 - [2026-09-17 12:22] [Added] **Laboratorio interactivo de 100 propuestas de navbars minimalistas (`/preview-workspace`):**
   - Catálogo exhaustivo de 100 variantes distribuidas en 10 familias: Píldoras Flotantes, Hairline Minimal, Terminal Statusline, Micro-Notch & Island, Stepper-First, Breadcrumbs Claros, Insignias en Esquinas, Cyber & Sci-Fi, Zero-UI Zen y Fusiones Maestras (`navbar-catalog-data.ts`).
   - Renderizador reactivo `DynamicNavbarRenderer` con soporte para preview en vivo y montaje en ejercicio real.

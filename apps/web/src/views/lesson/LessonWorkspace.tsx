@@ -2,11 +2,28 @@
 
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key, Code, Shield, Lightbulb, Target, WarningCircle } from '@phosphor-icons/react';
+import {
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  ArrowCounterClockwise,
+  Trophy,
+  Key,
+  Code,
+  BookOpen,
+  Lightning,
+  ArrowsClockwise,
+  Shield,
+  Lightbulb,
+  Target,
+  WarningCircle,
+} from '@phosphor-icons/react';
 import { ContentExercise, ContentLesson, ContentModule, isModuleAvailable, loadBank, loadModule, shuffled } from '@/lib/content';
-import { QuestionRenderer } from './QuestionRenderer';
+import { QuestionRenderer, getExerciseTypeLabel } from './QuestionRenderer';
 import { useLessonEngine } from './useLessonEngine';
 import { useLessonKeyboardShortcuts } from '@/hooks/useLessonKeyboardShortcuts';
+import { InteractiveCodeConsole } from '@/components/lesson/InteractiveCodeConsole';
+import { StarRatingDisplay, calculateStarsFromAccuracy } from '@/components/lesson/StarRatingDisplay';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { cn } from '@/lib/utils';
 import { getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
@@ -193,27 +210,45 @@ function parseCourse(courseId: string, sectionRef: string): { lang: string; modu
 }
 
 const QUIZ_COMPOSITION: Record<string, number> = {
-  single_choice: 3,
-  true_false: 2,
-  predict_output: 2,
+  single_choice: 2,
+  multiple_choice: 1,
+  true_false: 1,
+  predict_output: 1,
   fill_blank: 1,
   find_error: 1,
   select_code: 1,
+  order_lines: 1,
+  matching: 1,
 };
 
 function sampleQuiz(bank: ContentExercise[], seed: number): ContentExercise[] {
   if (bank.length === 0) return [];
-  // Si el banco trae preguntas de cualquier tipo, asegurar al menos una selección variada
+  // Si el banco trae <= 10 preguntas, barajarlas todas
   if (bank.length <= 10) return shuffled(bank, seed);
   const picked: ContentExercise[] = [];
+  const pickedIds = new Set<string>();
+
   Object.entries(QUIZ_COMPOSITION).forEach(([type, n], ti) => {
     const pool = shuffled(
       bank.filter((q) => q.type === type),
       seed + ti
     );
-    picked.push(...pool.slice(0, n));
+    for (const q of pool.slice(0, n)) {
+      if (!pickedIds.has(q.id)) {
+        picked.push(q);
+        pickedIds.add(q.id);
+      }
+    }
   });
-  if (picked.length === 0) return shuffled(bank, seed).slice(0, 5);
+
+  if (picked.length < 10) {
+    const remaining = shuffled(
+      bank.filter((q) => !pickedIds.has(q.id)),
+      seed + 55
+    );
+    picked.push(...remaining.slice(0, 10 - picked.length));
+  }
+
   return shuffled(picked, seed + 99);
 }
 
@@ -267,8 +302,9 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   const [bank, setBank] = useState<ContentExercise[]>([]);
   const [loading, setLoading] = useState(true);
   const [lessonIdx, setLessonIdx] = useState(0);
-  const [mode, setMode] = useState<'lesson' | 'quiz' | 'done'>('lesson');
+  const [mode, setMode] = useState<'lesson' | 'review' | 'quiz' | 'done'>('lesson');
   const [quizScore, setQuizScore] = useState<{ ok: number; total: number } | null>(null);
+  const [failedExercises, setFailedExercises] = useState<ContentExercise[]>([]);
   const completeSectionNode = useRoadmapStore((s) => s.completeSectionNode);
 
   const lessonsDataset = useRoadmapStore((s) => s.lessonsDataset);
@@ -318,7 +354,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     (lessonId: string) => {
       if (!lessonId) return;
 
-      // Si la leccion ya fue registrada como completada, evitar re-renders en bucle
+      // Si la lección ya fue registrada como completada, evitar re-renders en bucle
       if (completedLessonsRef.current.has(lessonId)) return;
 
       setCompletedLessons((prev) => {
@@ -329,6 +365,21 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         } catch {}
         return next;
       });
+
+      // Notificar al roadmap store para encender el nodo actual
+      completeSectionNode(sectionRef, 3);
+
+      // Sincronizar completitud de la sección en PostgreSQL
+      if (parsed) {
+        EvaluationService.completeSection(sectionRef, {
+          moduleId: parsed.moduleSlug,
+          courseId,
+          accuracyPercentage: 100,
+        }).catch((err) => {
+          // Fallback silencioso si el usuario está offline o sin sesión activa
+          console.warn('Sync section completion offline fallback:', err?.message);
+        });
+      }
 
       // Asegurar que el usuario tenga racha e isActiveToday activos localmente de forma inmediata
       const currentUser = useAuthStore.getState().user;
@@ -345,8 +396,12 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         });
       }
     },
-    []
+    [completeSectionNode, sectionRef, parsed, courseId]
   );
+
+  const handleExerciseFailed = (ex: ContentExercise) => {
+    setFailedExercises((prev) => (prev.some((item) => item.id === ex.id) ? prev : [...prev, ex]));
+  };
 
   useEffect(() => {
     let alive = true;
@@ -363,6 +418,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       if (alive) {
         setModule(mod);
         setBank(questions);
+        setFailedExercises([]);
         setMode(parsed.initialMode);
         setLoading(false);
       }
@@ -389,7 +445,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       setMode('done');
       const accuracy = total > 0 ? Math.round((ok / total) * 100) : 100;
       if (accuracy >= 70) {
-        completeSectionNode(sectionRef, ok === total ? 3 : 2);
+        completeSectionNode(sectionRef, calculateStarsFromAccuracy(ok, total));
         const completionReward = isAlreadyCompleted ? 0 : Math.max(30, nodeTargetXp - sessionExerciseXpRef.current);
         if (parsed) {
           EvaluationService.completeSection(sectionRef, {
@@ -459,10 +515,12 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     }
     if (section && lessonIdx + 1 < section.lessons.length) {
       setLessonIdx((idx) => idx + 1);
+    } else if (failedExercises.length > 0) {
+      setMode('review');
     } else {
       setMode('quiz');
     }
-  }, [lesson?.id, handleLessonCompleted, section, lessonIdx]);
+  }, [lesson?.id, handleLessonCompleted, section, lessonIdx, failedExercises]);
 
   const handlePrev = useCallback(() => {
     setLessonIdx((idx) => (idx > 0 ? idx - 1 : 0));
@@ -505,6 +563,20 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     );
   }
 
+  if (mode === 'review') {
+    return (
+      <ReviewMode
+        exercises={failedExercises}
+        sectionTitle={section.title}
+        courseTitle={module.title}
+        onFinishReview={() => {
+          setFailedExercises([]);
+          setMode('quiz');
+        }}
+      />
+    );
+  }
+
   if (mode === 'quiz') {
     const isMiniBoss = sectionRef === 'les-miniboss' || sectionRef === 'py-boss-logic';
     return (
@@ -544,6 +616,14 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
               : ' · necesitas 70% de aciertos para avanzar'}
           </p>
         </div>
+
+        {/* Visualización de Estrellas (1⭐ a 3⭐) — EPIC-4 LEARN-04 */}
+        <StarRatingDisplay
+          correctCount={quizScore.ok}
+          totalCount={quizScore.total}
+          xpEarned={passed ? 10 : 0}
+        />
+
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           {!passed ? (
             <button
@@ -637,10 +717,12 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
           <LessonView
             key={lesson.id}
             lesson={lesson}
+            language={parsed.lang}
             isCompleted={completedLessons.has(lesson.id)}
             isAlreadyCompleted={isAlreadyCompleted}
             onComplete={handleCompleteCurrent}
             onExerciseCorrect={handleExerciseCorrect}
+            onExerciseFailed={handleExerciseFailed}
             onNext={handleNext}
             onPrev={handlePrev}
             onJumpTo={handleJumpTo}
@@ -668,9 +750,11 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
 
 function LessonView({
   lesson,
+  language = 'python',
   isCompleted,
   isAlreadyCompleted = false,
   onComplete,
+  onExerciseFailed,
   onExerciseCorrect,
   onNext,
   onPrev,
@@ -681,9 +765,11 @@ function LessonView({
   nodeTargetXp = 120,
 }: {
   lesson: ContentLesson;
+  language?: string;
   isCompleted?: boolean;
   isAlreadyCompleted?: boolean;
   onComplete?: () => void;
+  onExerciseFailed?: (exercise: ContentExercise) => void;
   onExerciseCorrect?: (xp: number) => void;
   onNext: () => void;
   onPrev: () => void;
@@ -700,11 +786,17 @@ function LessonView({
 
   const exercise = lesson.exercises[0] ?? null;
   const engine = useLessonEngine(exercise ? [exercise] : [], lesson.position, questionXp);
+  const [mobileTab, setMobileTab] = useState<'concept' | 'practice'>('concept');
 
   const onCompleteRef = useRef(onComplete);
   useEffect(() => {
     onCompleteRef.current = onComplete;
   }, [onComplete]);
+
+  const onExerciseFailedRef = useRef(onExerciseFailed);
+  useEffect(() => {
+    onExerciseFailedRef.current = onExerciseFailed;
+  }, [onExerciseFailed]);
 
   // Guardia con ref para disparar completitud exactamente UNA vez por lección
   const hasNotifiedRef = useRef(false);
@@ -716,8 +808,11 @@ function LessonView({
     if (engine.result?.correct && !hasNotifiedRef.current) {
       hasNotifiedRef.current = true;
       onCompleteRef.current?.();
+    } else if (engine.result && !engine.result.correct && exercise) {
+      // Ronda de Repaso Final (LESS-04): registrar el ejercicio fallado
+      onExerciseFailedRef.current?.(exercise);
     }
-  }, [engine.result?.correct]);
+  }, [engine.result, exercise]);
 
   // Hook de atajos ergonómicos por teclado
   const { pressedIndex, pressedAction } = useLessonKeyboardShortcuts({
@@ -780,121 +875,119 @@ function LessonView({
   const isLongExplanation = (lesson.explanation?.length ?? 0) > 650;
 
   return (
-    <div className="w-full h-full min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
-      {/* Columna Izquierda: Teoría & Terminal */}
-      <section aria-label="Teoría" className="h-full min-h-0 flex flex-col rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-3.5 sm:p-5 lg:p-6 shadow-2xl overflow-hidden">
-        {/* Cabecera fija de la teoría */}
-        <div className="shrink-0 space-y-2 pb-3 border-b border-slate-800/80">
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-orange-500/10 border border-orange-500/20 text-[10px] font-mono font-bold text-orange-300 uppercase tracking-wider">
-              <span>Lección 0{lesson.position ?? 1}</span>
-            </div>
-            {isCompleted ? (
-              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
-                <Check className="w-3 h-3 text-emerald-400" />
-                <span>Completada</span>
-              </div>
-            ) : null}
-            {lesson.objective ? (
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-mono font-medium text-cyan-300 truncate max-w-full">
-                <Target className="w-3 h-3 text-cyan-400 shrink-0" aria-hidden="true" />
-                <span className="truncate">{lesson.objective}</span>
-              </div>
-            ) : null}
-          </div>
-          <h1 className={cn(
-            'font-display font-black text-white tracking-tight leading-snug',
-            isLongTitle ? 'text-lg sm:text-xl lg:text-2xl' : 'text-xl sm:text-2xl lg:text-3xl'
-          )}>
-            {lesson.title}
-          </h1>
-        </div>
+    <div className="w-full max-w-6xl mx-auto space-y-4">
+      {/* Tabs responsivos en móvil (< lg) para alternar entre Concepto y Práctica — LESS-01 */}
+      <div
+        role="tablist"
+        aria-label="Secciones de la lección en móvil"
+        className="grid grid-cols-2 gap-2 rounded-xl border border-slate-800 bg-slate-900/80 p-1.5 lg:hidden"
+      >
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mobileTab === 'concept'}
+          onClick={() => setMobileTab('concept')}
+          className={cn(
+            'inline-flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-mono font-bold transition-all cursor-pointer',
+            mobileTab === 'concept'
+              ? 'bg-orange-500 text-slate-950 shadow-[0_0_12px_rgba(255,106,0,0.4)]'
+              : 'text-slate-400 hover:text-white'
+          )}
+        >
+          <BookOpen className="w-4 h-4" />
+          <span>Concepto</span>
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mobileTab === 'practice'}
+          onClick={() => setMobileTab('practice')}
+          className={cn(
+            'inline-flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-mono font-bold transition-all cursor-pointer',
+            mobileTab === 'practice'
+              ? 'bg-orange-500 text-slate-950 shadow-[0_0_12px_rgba(255,106,0,0.4)]'
+              : 'text-slate-400 hover:text-white'
+          )}
+        >
+          <Lightning className="w-4 h-4" />
+          <span>Práctica</span>
+        </button>
+      </div>
 
-        {/* Cuerpo scrolleable con teoría, errores comunes y ejemplos */}
-        <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 sm:space-y-4 pr-1 sm:pr-2 pt-3">
-          <div className={cn(
-            'leading-relaxed text-slate-200',
-            isLongExplanation ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
-          )}>
-            <MarkdownContent content={lesson.explanation} />
-          </div>
-
-          {lesson.common_errors ? (
-            <div className="rounded-xl border border-rose-500/30 bg-rose-950/20 p-3 space-y-1.5 text-xs text-rose-200">
-              <div className="flex items-center gap-1.5 font-bold font-mono text-rose-300 uppercase tracking-wider text-[10px]">
-                <WarningCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" aria-hidden="true" />
-                <span>Cuidado habitual</span>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Columna Izquierda: Teoría & Consola Interactiva Pyodide (LESS-01, LESS-06) */}
+        <section
+          role="tabpanel"
+          aria-label="Teoría"
+          className={cn(
+            mobileTab === 'concept' ? 'flex' : 'hidden lg:flex',
+            'rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 flex-col justify-between gap-6 shadow-2xl'
+          )}
+        >
+          <div className="space-y-4">
+            <div className="flex items-center gap-2">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-orange-500/10 border border-orange-500/20 text-[10px] font-mono font-bold text-orange-300 uppercase tracking-wider">
+                <span>Lección 0{lesson.position ?? 1}</span>
               </div>
-              <p className="leading-relaxed text-slate-300">
-                {lesson.common_errors}
-              </p>
-            </div>
-          ) : null}
-
-          {/* Terminal interactiva y ejemplos de código */}
-          {lesson.examples.length > 0 ? (
-            <div className="space-y-3">
-              {lesson.examples.map((ex, i) => (
-                <div key={i} className="rounded-xl border border-slate-800 bg-slate-950/90 overflow-hidden shadow-inner">
-                  <div className="flex items-center justify-between px-3 py-1.5 border-b border-slate-800/80 bg-slate-900/60">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
-                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
-                    </div>
-                    <span className="text-[10px] font-mono text-slate-400 select-none">
-                      {ex.title || '# Ejemplo interactivo'}
-                    </span>
-                  </div>
-                  <div className="p-3 font-mono text-xs sm:text-sm leading-relaxed text-slate-200">
-                    <div className="text-amber-300">
-                      <code>{ex.code}</code>
-                    </div>
-                  </div>
-                  {ex.output ? (
-                    <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-950/30 border-t border-slate-800/80 text-xs font-mono text-emerald-300">
-                      <span className="text-emerald-500 font-bold">$</span>
-                      <span>{ex.output}</span>
-                    </div>
-                  ) : null}
-                  {ex.explanation ? (
-                    <div className="px-3 py-1.5 border-t border-slate-800/60 bg-slate-900/30 text-[11px] text-slate-400 leading-normal">
-                      <MarkdownContent content={ex.explanation} inline />
-                    </div>
-                  ) : null}
+              {isCompleted ? (
+                <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
+                  <Check className="w-3 h-3 text-emerald-400" />
+                  <span>Completada</span>
                 </div>
-              ))}
+              ) : null}
             </div>
-          ) : null}
+            <h1 className="font-display text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">
+              {lesson.title}
+            </h1>
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+              {lesson.explanation}
+            </p>
+          </div>
 
-          {lesson.key_takeaways && lesson.key_takeaways.length > 0 ? (
-            <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 space-y-1.5">
-              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300">
-                Puntos Clave
-              </span>
-              <ul className="list-disc list-inside space-y-1 text-xs text-slate-300 leading-relaxed">
-                {lesson.key_takeaways.map((point, idx) => (
-                  <li key={idx}>{point}</li>
-                ))}
-              </ul>
-            </div>
-          ) : null}
-        </div>
-      </section>
+          {/* Consola Interactiva Pyodide / Sandbox en vivo */}
+          <div className="space-y-4">
+            {lesson.examples.map((ex, i) => (
+              <InteractiveCodeConsole
+                key={`${lesson.id}-${i}`}
+                initialCode={ex.code}
+                expectedOutput={ex.output}
+                explanation={ex.explanation}
+                title={ex.title}
+                language={ex.language || language}
+              />
+            ))}
 
-      {/* Columna Derecha: Práctica & Desafío de Comprensión */}
-      <section aria-label="Práctica" className="h-full min-h-0 flex flex-col justify-between rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-3.5 sm:p-5 lg:p-6 shadow-2xl overflow-hidden">
-        {!exercise ? (
-          <div className="space-y-4 flex flex-col justify-between h-full">
-            <div className="space-y-3">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-500/10 border border-amber-500/20 text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider">
-                <span>Lectura Conceptual</span>
+            {/* Botón de acceso rápido a Práctica sólo en pantallas móviles */}
+            <button
+              type="button"
+              onClick={() => setMobileTab('practice')}
+              className="lg:hidden inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl border border-orange-500/40 bg-orange-500/10 px-4 font-mono text-xs font-bold text-orange-300 hover:bg-orange-500/20 transition-colors cursor-pointer"
+            >
+              <span>Ir al Desafío Práctico</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </section>
+
+        {/* Columna Derecha: Práctica & Desafío de Comprensión */}
+        <section
+          role="tabpanel"
+          aria-label="Práctica"
+          className={cn(
+            mobileTab === 'practice' ? 'flex' : 'hidden lg:flex',
+            'rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 flex-col justify-between gap-6 shadow-2xl'
+          )}
+        >
+          {!exercise ? (
+            <div className="space-y-6 flex flex-col justify-between h-full">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-500/10 border border-amber-500/20 text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider">
+                  <span>Lectura Conceptual</span>
+                </div>
+                <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
+                  Has completado los conceptos y ejemplos de esta lección. Cuando estés listo, presiona continuar para avanzar.
+                </p>
               </div>
-              <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-                Has completado los conceptos y ejemplos de esta lección. Cuando estés listo, presiona continuar para avanzar.
-              </p>
-            </div>
-            <div className="space-y-3 pt-2">
               <button
                 type="button"
                 onClick={() => {
@@ -902,7 +995,7 @@ function LessonView({
                   onNext();
                 }}
                 className={cn(
-                  'group relative inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.18em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none select-none',
+                  'group relative inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.18em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none select-none',
                   pressedAction === 'next' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-amber-400'
                 )}
               >
@@ -912,7 +1005,112 @@ function LessonView({
                   Enter ↵
                 </kbd>
               </button>
+            </div>
+          ) : (
+            <div className="space-y-5 flex flex-col justify-between h-full">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+                    Desafío de Comprensión
+                  </span>
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-300 border border-orange-500/30">
+                    {getExerciseTypeLabel(exercise.type)}
+                  </span>
+                </div>
 
+                <p className="text-base sm:text-lg font-bold text-white leading-snug">
+                  {exercise.prompt}
+                </p>
+
+                <div className="pt-2">
+                  <QuestionRenderer
+                    exercise={exercise}
+                    selectedIds={engine.selected}
+                    onToggle={engine.toggle}
+                    onCustomChange={engine.setCustomAnswer}
+                    disabled={Boolean(engine.result)}
+                    pressedIndex={pressedIndex}
+                  />
+                </div>
+              </div>
+
+              {/* Acciones de Evaluación */}
+              <div className="pt-3">
+                {!engine.result ? (
+                  <button
+                    type="button"
+                    onClick={() => engine.check()}
+                    disabled={engine.selected.length === 0}
+                    className={cn(
+                      'group relative inline-flex min-h-[50px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.25em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
+                      pressedAction === 'submit' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-amber-400'
+                    )}
+                  >
+                    <Code aria-hidden="true" className="w-4 h-4" />
+                    <span>C O M P R O B A R</span>
+                    <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-mono font-bold text-slate-950 group-disabled:opacity-40">
+                      Enter ↵
+                    </kbd>
+                  </button>
+                ) : (
+                  <div
+                    role={engine.result.correct ? 'status' : 'alert'}
+                    className={cn(
+                      'rounded-xl border p-4 space-y-3 transition-all duration-300',
+                      engine.result.correct
+                        ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.15)]'
+                        : 'border-rose-500/40 bg-rose-500/10 text-rose-100'
+                    )}
+                  >
+                    <div className="flex items-center justify-between">
+                      <p className="text-sm font-bold flex items-center gap-2">
+                        {engine.result.correct ? <Check aria-hidden="true" className="w-5 h-5 text-emerald-400" /> : null}
+                        {engine.result.correct ? `¡Excelente! +${engine.result.xp} XP` : 'Respuesta incorrecta'}
+                      </p>
+                    </div>
+                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                      {engine.result.feedback}
+                    </p>
+                    {engine.result.hint ? (
+                      <p className="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg">
+                        💡 <strong>Pista:</strong> {engine.result.hint}
+                      </p>
+                    ) : null}
+                    <div className="flex gap-2.5 pt-1">
+                      {!engine.result.correct ? (
+                        <button
+                          type="button"
+                          onClick={engine.resetSelection}
+                          className="group inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl border-t border-slate-600 border-b-4 border-slate-950 bg-slate-800 px-4 text-xs font-mono font-bold text-slate-200 shadow-[0_4px_0_#020617] hover:border-slate-500 hover:bg-slate-750 hover:text-white active:border-b-0 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
+                        >
+                          <ArrowCounterClockwise aria-hidden="true" className="w-4 h-4" />
+                          <span>REINTENTAR</span>
+                          <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-700 bg-slate-900 text-[10px] font-mono text-slate-400">
+                            Enter ↵
+                          </kbd>
+                        </button>
+                      ) : null}
+                      <button
+                        type="button"
+                        onClick={engine.result.correct ? onNext : () => {}}
+                        disabled={!engine.result.correct}
+                        className={cn(
+                          'group relative inline-flex min-h-[46px] flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-emerald-200 border-b-4 border-emerald-800 shadow-[0_4px_0_#065f46,0_8px_20px_rgba(16,185,129,0.45)] transition-all duration-200 cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
+                          pressedAction === 'next' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-emerald-400'
+                        )}
+                      >
+                        <span>{isLast ? 'IR AL QUIZ' : 'SIGUIENTE LECCIÓN'}</span>
+                        <ArrowRight aria-hidden="true" className="w-4 h-4" />
+                        <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-mono font-bold text-slate-950">
+                          Enter ↵
+                        </kbd>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Pie de navegación libre entre lecciones independientes */}
               <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-xs font-mono text-slate-400">
                 <button
                   type="button"
@@ -934,83 +1132,147 @@ function LessonView({
                 </button>
               </div>
             </div>
+          )}
+        </section>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Ronda de Repaso Final de Sección (EPIC-5 LESS-04):
+ * Presenta las preguntas falladas durante la sección con sus opciones barajadas,
+ * otorgando +2 XP de recuperación antes de pasar al Quiz de cierre.
+ */
+function ReviewMode({
+  exercises,
+  sectionTitle,
+  courseTitle,
+  onFinishReview,
+}: {
+  exercises: ContentExercise[];
+  sectionTitle: string;
+  courseTitle?: string;
+  onFinishReview: () => void;
+}) {
+  const shuffledReviewExercises = useMemo(
+    () =>
+      exercises.map((ex, idx) => ({
+        ...ex,
+        answers: ex.answers ? shuffled(ex.answers, idx * 13 + 19) : [],
+      })),
+    [exercises]
+  );
+
+  const engine = useLessonEngine(shuffledReviewExercises, 99);
+  const answered = engine.index;
+  const total = engine.total;
+
+  useEffect(() => {
+    if (engine.done) {
+      onFinishReview();
+    }
+  }, [engine.done, onFinishReview]);
+
+  const { pressedIndex, pressedAction } = useLessonKeyboardShortcuts({
+    optionsCount: engine.current?.answers?.length ?? 0,
+    onSelectOption: (idx) => {
+      const opt = engine.current?.answers[idx];
+      if (opt && !engine.result) engine.toggle(opt.id);
+    },
+    onSubmit: () => {
+      if (!engine.result && engine.selected.length > 0) engine.check();
+    },
+    onNext: () => {
+      if (engine.result) {
+        if (engine.result.correct) {
+          engine.next();
+        } else {
+          engine.resetSelection();
+        }
+      }
+    },
+    isSubmitted: Boolean(engine.result),
+    canSubmit: Boolean(!engine.result && engine.selected.length > 0),
+  });
+
+  return (
+    <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
+      <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
+
+      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
+        <div className="mx-auto max-w-4xl space-y-2.5">
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 font-mono text-xs">
+              <span className="text-slate-400">{courseTitle ?? 'Curso'}</span>
+              <span className="text-slate-600">›</span>
+              <span className="text-amber-400 font-bold uppercase tracking-wider">
+                Ronda de Repaso · {sectionTitle}
+              </span>
+            </div>
+            <span className="font-mono text-xs font-bold text-amber-300 tabular-nums bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
+              0{Math.min(answered + 1, total)}/0{total}
+            </span>
           </div>
-        ) : (
-          <div className="flex flex-col justify-between h-full min-h-0">
-            {/* Cabecera fija de la pregunta */}
-            <div className="shrink-0 flex items-center justify-between pb-2.5 border-b border-slate-800/80">
+          <div className="h-1.5 rounded-full bg-slate-800/80 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-amber-500 to-orange-400 rounded-full transition-all duration-300"
+              style={{ width: `${(answered / Math.max(1, total)) * 100}%` }}
+            />
+          </div>
+        </div>
+      </header>
+
+      <main className="flex-1 flex items-center justify-center p-4 md:p-6 lg:p-8">
+        {engine.current ? (
+          <div className="w-full max-w-3xl rounded-2xl border border-amber-500/30 bg-slate-900/50 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-2xl">
+            <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 p-3.5 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2.5 text-xs sm:text-sm font-mono text-amber-200 font-semibold">
+                <ArrowsClockwise className="w-5 h-5 text-amber-400 shrink-0" />
+                <span>¡Casi listo! Vamos a repasar los conceptos que te desafiaron</span>
+              </div>
+              <span className="shrink-0 text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-400/20 text-amber-300">
+                +2 XP recuperación
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                Desafío de Comprensión
+                Repaso Focalizado
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-300 border border-orange-500/30">
-                {exercise.type === 'multiple_choice' ? 'Opción múltiple' : 'Opción única'}
+                {getExerciseTypeLabel(engine.current.type)}
               </span>
             </div>
 
-            {/* Area de pregunta y opciones scrolleable */}
-            <div className="flex-1 min-h-0 overflow-y-auto space-y-3 py-3 pr-1 sm:pr-2">
-              <div className={cn(
-                'font-bold text-white leading-snug',
-                exercise.prompt.length > 180 ? 'text-sm sm:text-base' : 'text-base sm:text-lg'
-              )}>
-                <MarkdownContent content={exercise.prompt} inline />
-              </div>
+            <p className="text-lg sm:text-xl font-bold text-white leading-snug">
+              {engine.current.prompt}
+            </p>
 
-              <div className="pt-1">
-                <QuestionRenderer
-                  exercise={exercise}
-                  selectedIds={engine.selected}
-                  onToggle={engine.toggle}
-                  disabled={Boolean(engine.result)}
-                  pressedIndex={pressedIndex}
-                />
-              </div>
-            </div>
+            <QuestionRenderer
+              exercise={engine.current}
+              selectedIds={engine.selected}
+              onToggle={engine.toggle}
+              onCustomChange={engine.setCustomAnswer}
+              disabled={Boolean(engine.result)}
+              pressedIndex={pressedIndex}
+            />
 
-            {/* Acciones fijas en la parte inferior */}
-            <div className="shrink-0 pt-2.5 border-t border-slate-800/80 space-y-2.5">
+            <div className="pt-2">
               {!engine.result ? (
                 <button
                   type="button"
                   onClick={() => {
-                    const checkRes = engine.check();
-                    if (checkRes?.correct && checkRes.xp > 0) {
-                      onExerciseCorrect?.(checkRes.xp);
-                      const curUser = useAuthStore.getState().user;
-                      if (curUser) {
-                        const todayStr = new Date().toLocaleDateString('en-CA');
-                        const lastStudyStr = curUser.lastStudyDate ? curUser.lastStudyDate.slice(0, 10) : null;
-                        const isSameDay = lastStudyStr === todayStr;
-                        const curStreak = isSameDay ? Math.max(1, curUser.streak) : (curUser.streak > 0 ? curUser.streak : 1);
-                        useAuthStore.getState().updateUserProfile({
-                          totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
-                          streak: curStreak,
-                          longestStreak: Math.max(curUser.longestStreak ?? 1, curStreak),
-                          isActiveToday: true,
-                          lastStudyDate: new Date().toISOString(),
-                        });
-                      }
-                    }
-                    if (lesson?.id) {
-                      EvaluationService.evaluateLessonAnswer(lesson.id, {
-                        selected_option_ids: engine.selected,
-                        xp_earned: checkRes?.xp,
-                      }).catch((err) => {
-                        console.warn('Backend lesson answer sync fallback:', err?.message);
-                      });
-                    }
+                    engine.check();
                   }}
                   disabled={engine.selected.length === 0}
                   className={cn(
-                    'group relative inline-flex min-h-[48px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.25em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
+                    'group relative inline-flex min-h-[50px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:brightness-110 disabled:opacity-40 disabled:cursor-not-allowed select-none',
                     pressedAction === 'submit' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-amber-400'
                   )}
                 >
                   <Code aria-hidden="true" className="w-4 h-4" />
                   <span>C O M P R O B A R</span>
-                  <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-mono font-bold text-slate-950 group-disabled:opacity-40">
-                    Enter ↵
-                  </kbd>
                 </button>
               ) : (
                 <div
@@ -1018,23 +1280,16 @@ function LessonView({
                   className={cn(
                     'rounded-xl border p-3.5 space-y-2.5 transition-all duration-300',
                     engine.result.correct
-                      ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.15)]'
+                      ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-100'
                       : 'border-rose-500/40 bg-rose-500/10 text-rose-100'
                   )}
                 >
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm font-bold flex items-center gap-2">
-                      {engine.result.correct ? <Check aria-hidden="true" className="w-5 h-5 text-emerald-400" /> : null}
-                      {engine.result.correct
-                        ? isAlreadyCompleted
-                          ? '¡Excelente! +0 XP (Repaso)'
-                          : `¡Excelente! +${engine.result.xp} XP`
-                        : 'Respuesta incorrecta'}
-                    </p>
-                  </div>
-                  <div className="text-xs sm:text-sm text-slate-300 leading-relaxed max-h-24 overflow-y-auto pr-1">
-                    <MarkdownContent content={engine.result.feedback} />
-                  </div>
+                  <p className="text-sm font-bold flex items-center gap-2">
+                    {engine.result.correct ? <Check aria-hidden="true" className="w-5 h-5 text-emerald-400" /> : null}
+                    {engine.result.correct
+                      ? '¡Concepto dominado! +2 XP de recuperación'
+                      : 'Todavía no. Revisa la pista e inténtalo de nuevo.'}
+                  </p>
                   {engine.result.hint ? (
                     <div className="text-xs text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2 rounded-lg flex items-start gap-2">
                       <Lightbulb className="w-3.5 h-3.5 text-amber-300 shrink-0 mt-0.5" aria-hidden="true" />
@@ -1044,64 +1299,31 @@ function LessonView({
                       </div>
                     </div>
                   ) : null}
-                  <div className="flex gap-2.5 pt-1">
-                    {!engine.result.correct ? (
-                      <button
-                        type="button"
-                        onClick={engine.resetSelection}
-                        className="group inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border-t border-slate-600 border-b-4 border-slate-950 bg-slate-800 px-4 text-xs font-mono font-bold text-slate-200 shadow-[0_4px_0_#020617] hover:border-slate-500 hover:bg-slate-750 hover:text-white active:border-b-0 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
-                      >
-                        <ArrowCounterClockwise aria-hidden="true" className="w-4 h-4" />
-                        <span>REINTENTAR</span>
-                        <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-700 bg-slate-900 text-[10px] font-mono text-slate-400">
-                          Enter ↵
-                        </kbd>
-                      </button>
-                    ) : null}
+                  {engine.result.correct ? (
                     <button
                       type="button"
-                      onClick={engine.result.correct ? onNext : () => {}}
-                      disabled={!engine.result.correct}
-                      className={cn(
-                        'group relative inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-emerald-200 border-b-4 border-emerald-800 shadow-[0_4px_0_#065f46,0_8px_20px_rgba(16,185,129,0.45)] transition-all duration-200 cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
-                        pressedAction === 'next' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-emerald-400'
-                      )}
+                      onClick={() => engine.next()}
+                      className="inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-emerald-200 border-b-4 border-emerald-800 hover:brightness-110 transition-all cursor-pointer"
                     >
-                      <span>{isLast ? 'IR AL QUIZ' : 'SIGUIENTE LECCIÓN'}</span>
+                      <span>CONTINUAR</span>
                       <ArrowRight aria-hidden="true" className="w-4 h-4" />
-                      <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-mono font-bold text-slate-950">
-                        Enter ↵
-                      </kbd>
                     </button>
-                  </div>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={engine.resetSelection}
+                      className="inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-xl border border-slate-600 bg-slate-800 px-4 font-mono text-xs font-bold text-slate-200 hover:bg-slate-700 transition-all cursor-pointer"
+                    >
+                      <ArrowCounterClockwise aria-hidden="true" className="w-4 h-4" />
+                      <span>REINTENTAR</span>
+                    </button>
+                  )}
                 </div>
               )}
-
-              {/* Pie de navegación libre entre lecciones independientes */}
-              <div className="flex items-center justify-between pt-1 text-xs font-mono text-slate-400">
-                <button
-                  type="button"
-                  onClick={onPrev}
-                  disabled={currentIndex === 0}
-                  className="hover:text-slate-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-                >
-                  ← Lección anterior
-                </button>
-                <span className="text-[11px] text-slate-500">
-                  0{currentIndex + 1} / 0{totalCount}
-                </span>
-                <button
-                  type="button"
-                  onClick={onNext}
-                  className="hover:text-orange-400 transition-colors cursor-pointer"
-                >
-                  {isLast ? 'Ir al Quiz →' : 'Saltar / Siguiente →'}
-                </button>
-              </div>
             </div>
           </div>
-        )}
-      </section>
+        ) : null}
+      </main>
     </div>
   );
 }
@@ -1221,7 +1443,7 @@ function QuizMode({
           <div className="w-full max-w-4xl h-full max-h-[86vh] rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-4 sm:p-6 lg:p-8 flex flex-col justify-between shadow-2xl overflow-hidden">
             <div className="shrink-0 flex items-center justify-between pb-2.5 border-b border-slate-800/80">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                Pregunta del Quiz
+                Pregunta del Quiz · {getExerciseTypeLabel(engine.current.type)}
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-300 border border-orange-500/30">
                 Progreso {answered + 1} de {total}
@@ -1237,6 +1459,7 @@ function QuizMode({
                 exercise={engine.current}
                 selectedIds={engine.selected}
                 onToggle={engine.toggle}
+                onCustomChange={engine.setCustomAnswer}
                 disabled={Boolean(engine.result)}
                 pressedIndex={pressedIndex}
               />
@@ -1306,4 +1529,5 @@ function QuizMode({
 }
 
 export default LessonWorkspace;
+
 

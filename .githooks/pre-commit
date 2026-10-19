@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+# Koda — Pre-commit hook para validar el contrato de contenido declarativo (JSON Schema + V-Q06)
+set -e
+
+echo "🔍 [pre-commit] Ejecutando validación de contenido Koda..."
+node scripts/validate-content.js

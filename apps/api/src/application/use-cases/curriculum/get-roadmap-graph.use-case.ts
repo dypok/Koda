@@ -350,6 +350,81 @@ export class GetRoadmapGraphUseCase {
     };
   }
 
+  private loadDeclarativeLanguageGraph(langSlug: string): GraphDataset | null {
+    const possibleRoots = [
+      path.resolve(process.cwd(), 'content/languages', langSlug),
+      path.resolve(process.cwd(), '../../content/languages', langSlug),
+      path.resolve(__dirname, '../../../../../../../content/languages', langSlug),
+      path.resolve(__dirname, '../../../../../../content/languages', langSlug),
+    ];
+    const langDir = possibleRoots.find((p) => fs.existsSync(path.join(p, 'manifest.json')));
+    if (!langDir) return null;
+
+    try {
+      const manifest = JSON.parse(fs.readFileSync(path.join(langDir, 'manifest.json'), 'utf8'));
+      const rawModules: any[] = Array.isArray(manifest.modules) ? manifest.modules : [];
+      if (rawModules.length === 0) return null;
+
+      const nodes: GraphNode[] = rawModules.map((modRef: any, idx: number) => {
+        let modJson: any = null;
+        if (modRef.path) {
+          const modPath = path.join(langDir, modRef.path, 'module.json');
+          if (fs.existsSync(modPath)) {
+            try {
+              modJson = JSON.parse(fs.readFileSync(modPath, 'utf8'));
+            } catch {
+              modJson = null;
+            }
+          }
+        }
+
+        const graphMeta = modJson?.graph || modRef?.graph || {};
+        const x = typeof graphMeta.x === 'number' ? graphMeta.x : 140 + idx * 180;
+        const y = typeof graphMeta.y === 'number' ? graphMeta.y : idx % 2 === 0 ? 320 : 240;
+        const isFirst = idx === 0 || modRef.position === 1;
+
+        return {
+          id: modRef.id || modRef.slug,
+          code: String(modRef.position ?? idx + 1).padStart(2, '0'),
+          label: String(modRef.title || modJson?.title || modRef.slug).toUpperCase(),
+          subtitle: String(modRef.description || modJson?.description || '').toUpperCase().slice(0, 48),
+          x,
+          y,
+          variant: isFirst ? 'active' : 'locked',
+          iconType: isFirst ? 'brackets' : 'lock',
+          stars: isFirst ? 1 : 0,
+          maxStars: 3,
+          xp: graphMeta.xp || 200,
+          isUnlocked: isFirst,
+          statusText: isFirst ? 'ACTIVO' : 'BLOQUEADO',
+        };
+      });
+
+      const connections: GraphConnection[] = [];
+      for (let i = 0; i < nodes.length - 1; i++) {
+        const from = nodes[i];
+        const to = nodes[i + 1];
+        connections.push({
+          id: `c-${from.id}-${to.id}`,
+          fromId: from.id,
+          toId: to.id,
+          color: '#8FA8FF',
+          path: this.generateSvgPath(from.x, from.y, to.x, to.y),
+          isDashed: i > 0,
+        });
+      }
+
+      return {
+        sectorTitle: `${String(manifest.name || langSlug).toUpperCase()}: RUTA CURRICULAR`,
+        progressPercent: 15,
+        nodes,
+        connections,
+      };
+    } catch {
+      return null;
+    }
+  }
+
   async getLessonsGraph(courseSlug: string, userId?: string): Promise<GraphDataset> {
     let normalizedSlug = courseSlug.toLowerCase();
     if (normalizedSlug === 'py-basic' || normalizedSlug === 'python-basico' || normalizedSlug === 'python-core') {
@@ -358,6 +433,12 @@ export class GetRoadmapGraphUseCase {
       normalizedSlug = 'python-2';
     } else if (normalizedSlug === 'py-advanced') {
       normalizedSlug = 'python-3';
+    }
+
+    // Soporte declarativo para Lua (L-02)
+    if (normalizedSlug === 'lua' || normalizedSlug.startsWith('lua-')) {
+      const luaGraph = this.loadDeclarativeLanguageGraph('lua');
+      if (luaGraph) return luaGraph;
     }
 
     let dataset: GraphDataset;

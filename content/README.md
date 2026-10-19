@@ -11,6 +11,8 @@ content/
 ├── tracks.json                          # Catálogo de pistas profesionales (python, frontend, backend, devops)
 ├── visual-effects.json                  # Catálogo de presets de aristas GPU (laser_flow_fast, etc.)
 ├── courses.json                         # Nodos del grafo DAG con topología tier/lane
+├── schemas/
+│   └── question.schema.json             # JSON Schema (draft 2020-12) del contrato de pregunta
 ├── courses/                             # Estructura modular por curso
 │   └── python-core/
 │       ├── modules.json                 # 12 módulos de Python 3.12
@@ -66,4 +68,6 @@ Toda lección y ejercicio añadido a este directorio debe apegarse estrictamente
    - **Longitud de lección:** 40 a 70 palabras en segunda persona (*"tú"*).
    - **Un concepto por lección:** Introducido con analogías cotidianas y evaluado inmediatamente.
    - **Feedback sin spoilers:** La pista inteligente orienta, pero jamás revela la respuesta correcta.
+3. [`documentation/03-pedagogia-contenido/29_QUESTION_JSON_CONTRACT.md`](../documentation/03-pedagogia-contenido/29_QUESTION_JSON_CONTRACT.md) + [`content/schemas/question.schema.json`](schemas/question.schema.json): **contrato de pregunta** (11 tipos, orden, composición quiz/examen y dialectos).
+4. [`documentation/03-pedagogia-contenido/30_ROADMAP_STRUCTURE_AND_COORDINATES.md`](../documentation/03-pedagogia-contenido/30_ROADMAP_STRUCTURE_AND_COORDINATES.md): orden pedagógico y coordenadas del roadmap (bloque `graph`).
 

@@ -1,0 +1,64 @@
+# 📋 TODO — Koda 🦊
+
+> Backlog corto de tareas pendientes **detectadas y verificadas en el repositorio**.
+> Los ítems de producto viven en Jira (proyecto `KA`); este archivo lista lo accionable sobre el repo.
+>
+> **Última actualización:** 2026-10-15 (America/Bogota)
+> **Fuentes:** sesión de trabajo + Jira `KA` + `documentation/`.
+
+**Leyenda:** `[ ]` pendiente · `[x]` hecho · **P1** alto · **P2** medio · **P3** bajo
+
+---
+
+## 🗂️ P1 — Gobernanza y Jira
+
+- [ ] **Transicionar `KA-89` (EPIC-3) a `Done`** (ID de transición `4`) tras verificar compilación, tests y entrega funcional del flujo de autenticación. En Jira figura `En curso` pese a tener **4/4** hijas `Done` (AUTH-01…AUTH-04).
+- [ ] **Abrir Pull Request** de la rama `docs/content-question-json-contract` (docs `29`/`30` + `content/schemas/question.schema.json`). Vincular los `KA-XXX` aplicables.
+- [ ] **Revisar pendientes de `KA-115` (EPIC-4):** LEARN-03 (desbloqueo progresivo con candados), LEARN-04 (estrellas 1–3), LEARN-05 (persistencia híbrida poliglota y rejilla tier/lane).
+- [ ] **Revisar pendientes de `KA-145` (EPIC-5):** LESS-03 (tríada evaluativa de 3 ítems), LESS-04 (ronda de repaso final), LESS-05 (tipos de desafío polimórficos en MongoDB), LESS-06 (motor de ejecución `ICodeRunner`: Pyodide + Docker).
+
+---
+
+## 🧩 P1 — Contrato de contenido (docs `29`/`30` + schema)
+
+- [ ] **Validador de contenido en CI** contra `content/schemas/question.schema.json` (script `scripts/validate-content` + hook de pre-commit o job de CI). Hoy la validación se hizo manual con `ajv`: **32/32** bancos y **34/34** módulos válidos.
+- [ ] **Implementar el bloque `graph` en `module.json`** y un generador que materialice `lua-track.mock.ts` / `lua-lessons-graph.mock.ts` (doc `30` §4; resuelve **L-02** y **L-03**).
+- [ ] **Reconvertir `documentation/03-pedagogia-contenido/28_LUA_CURRICULUM.md`** a UTF-8 (hoy no es legible: encoding binario/no-UTF8).
+- [ ] **Alinear `23_CONTENT_SPECIFICATION.md`** al formato vigente (IDs en UUID y `EASY/MEDIUM/HARD` son aspiracionales; ya hay nota de cabecera, falta converger el cuerpo).
+
+---
+
+## 📚 P2 — Contenido (bancos y dialectos)
+
+- [ ] **Migrar el dialecto shorthand → canónico** en `content/languages/lua/modules/03_operadores/bank.json` y en los bancos de `python` (`options`/`correct_option_id`/`hint` → `answers`/`correct_answer_ids`/`hints`).
+- [ ] **Completar `correct_answer_ids` y `difficulty`** en las **20** preguntas de `content/languages/lua/modules/02_variables/bank.json` (hoy dependen solo de `answers[].is_correct`; válido, pero incompleto).
+- [ ] **Completar `id` en respuestas** donde falta (p. ej. `02_variables/bank.json`, pregunta índice `5`, respuestas 1–3).
+- [ ] **Ampliar bancos de Lua para cumplir B_min** (quiz ≥30, examen ≥80; por tipo ≥2× cuota). Estado actual: `01_fundamentos`=15, `02_variables`=20, `03_operadores`=2.
+- [ ] **Visores de los tipos sin UI** (`select_code`, `order_lines`, `matching`, `small_problem`, `multiple_choice`, `write_code`): documentados en `29` §4 pero aún sin datos ni render.
+
+---
+
+## ⚙️ P1 — Motor / Backend
+
+- [ ] **Corregir bancos en array en `evaluation.service.ts`.** Lee `bankData.questions`, pero los `bank.json` de Lua son **array plano** → quizzes/exámenes quedan vacíos. Soportar ambas formas (`array` y `{ module_code, questions }`). Archivo: `apps/api/src/modules/evaluation/evaluation.service.ts:69`.
+- [ ] **Soportar el dialecto canónico en la calificación.** `evaluation.service.ts` califica con `correct_option_id` (líneas `128`, `165`, `172`, `275`); no entiende `answers[].is_correct` ni `correct_answer_ids`.
+- [ ] **Incluir los módulos de Lua en el roadmap del API.** `content-loader.service.ts:281` filtra por prefijo `py_`/`js_`/`ts_`; Lua usa `lua_mod_*` → no aparece (doc `30`, **L-01**).
+- [ ] **Watcher de contenido.** `content-loader.service.ts:87` carga en `onModuleInit` sin recarga; añadir `fs.watch` sobre `content/` (doc `30`, **L-04**).
+- [ ] **Implementar subida de avatares (backend)**: `POST /api/v1/users/me/avatar` (`multipart/form-data`, bucket `avatars`). Ver `documentation/done/backend/PENDIENTE-backend-avatar-upload.md`.
+
+---
+
+## 🎨 P2 — Frontend
+
+- [ ] **Pyodide en frontend + layout interactivo** (deriva de LESS-03…06 / EPIC-5).
+
+---
+
+## ✅ Hecho (referencia)
+
+- [x] Docs `29_QUESTION_JSON_CONTRACT.md` y `30_ROADMAP_STRUCTURE_AND_COORDINATES.md` + `content/schemas/question.schema.json` (rama `docs/content-question-json-contract`, commit `36edcdd`).
+- [x] `GEMINI.md`: visión multilingüe, superficie REST real, §6 Contrato de Contenido y §4 sincronizada con Jira.
+
+---
+
+> **Mantenimiento:** marcar los `[x]` al cerrar; mantener sincronizado con Jira y con `CHANGELOG.md`. Los entregables cerrados se archivan en `documentation/done/`.

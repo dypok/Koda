@@ -26,8 +26,8 @@
       "title": "Fases del Proyecto Integrador Apex",
       "slug": "fases-proyecto-apex",
       "position": 1,
-      "type": "project",
-      "estimated_minutes": 270,
+      "type": "exercise",
+      "estimated_minutes": 120,
       "xp_on_complete": 1000,
       "lessons": [
         {
@@ -36,7 +36,7 @@
           "title": "Fase 1: Arquitectura Limpia y Contratos de Dominio",
           "slug": "fase-1-arquitectura-contratos",
           "position": 1,
-          "concept_id": "apex_clean_architecture",
+          "concept_id": "apex-clean-architecture",
           "objective": "Estructurar una solucion desacoplando la logica de negocio de la infraestructura mediante arquitectura limpia y tipado estricto con Protocol.",
           "theory_markdown": "El Apex Master Gate simula un encargo del mundo real: disenar una plataforma empresarial escalable, mantenible y lista para produccion.\n\n### 1. Principio de Inversion de Dependencias (DIP)\nEl nucleo de dominio no debe importar frameworks externos (ni FastAPI, ni Django, ni drivers SQL, ni ChromaDB). Las interfaces y entidades de negocio se definen en Python puro utilizando `dataclasses` inmutables y `typing.Protocol`.\n\n```text\n+---------------------------------------------+\n|               Entidades / Dominio           |\n|  (Modelos inmutables, reglas de negocio)    |\n+----------------------+----------------------+\n                       ^\n+----------------------+----------------------+\n|           Casos de Uso / Servicios         |\n|  (Orquestacion, protocolos de repositorios) |\n+----------------------+----------------------+\n                       ^\n+----------------------+----------------------+\n|          Adaptadores / Infraestructura      |\n|  (FastAPI routers, SQLite/Postgres, LLMs)   |\n+---------------------------------------------+\n```\n\n### 2. Estructura de Paquetes\nOrganiza el proyecto con separacion de responsabilidades:\n```text\nsrc/\n├── domain/\n│   ├── models.py\n│   └── ports.py\n├── application/\n│   └── use_cases.py\n└── infrastructure/\n    ├── api/\n    └── storage/\n```",
           "examples": [
@@ -89,7 +89,7 @@
           "title": "Fase 2: Orquestacion Asincrona, Resiliencia y Fallbacks",
           "slug": "fase-2-orquestacion-resiliencia",
           "position": 2,
-          "concept_id": "apex_async_orchestration",
+          "concept_id": "apex-async-orchestration",
           "objective": "Implementar el motor asincrono combinando concurrencia no bloqueante con manejo de timeouts, circuit breakers y recoleccion segura de excepciones.",
           "theory_markdown": "En la Fase 2, se conectan los adaptadores asincronos para garantizar alto rendimiento y tolerancia a fallos.\n\n### 1. Concurrencia Robusta con AsyncIO\nAl invocar multiples servicios concurrentemente con `asyncio.gather`, se debe utilizar `return_exceptions=True` para que una falla puntual en una fuente de datos no cancele abruptamente la ejecucion de las demas tareas.\n\n### 2. Timeouts y Proteccion de Red\nNinguna llamada I/O de red debe ejecutarse sin limite de tiempo:\n```python\nawait asyncio.wait_for(client.get(url), timeout=3.0)\n```\nSi se supera el tiempo maximo, se captura `asyncio.TimeoutError` y se activa una estrategia de fallback (degradacion elegante).",
           "examples": [
@@ -142,7 +142,7 @@
           "title": "Fase 3: Pruebas Automatizadas y Fixtures Asincronas con Pytest",
           "slug": "fase-3-testing-pytest-asyncio",
           "position": 3,
-          "concept_id": "apex_testing_asyncio",
+          "concept_id": "apex-testing-asyncio",
           "objective": "Disenar una suite integral de pruebas unitarias y de integracion usando Pytest, fixtures asincronas y simulacion de contratos HTTP con AsyncClient.",
           "theory_markdown": "Una aplicacion empresarial en Python requiere validacion rigurosa en su piramide de pruebas.\n\n### 1. Fixtures Asincronas con pytest-asyncio\nPara probar componentes que operan sobre el event loop o clientes HTTP asincronos, se decora la fixture con `@pytest_asyncio.fixture`:\n```python\nimport pytest_asyncio\nfrom httpx import AsyncClient, ASGITransport\n\n@pytest_asyncio.fixture\nasync def async_client():\n    transport = ASGITransport(app=app)\n    async with AsyncClient(transport=transport, base_url=\"http://test\") as client:\n        yield client\n```\n\n### 2. Pruebas de Limites y Mocks\n- **Unitarias:** Verifican los casos de uso inyectando falsos repositorios (fakes basados en diccionarios en memoria).\n- **Integracion:** Validan los endpoints ASGI con `AsyncClient`, comprobando codigos de estado HTTP y esquemas de respuesta.",
           "examples": [
@@ -195,7 +195,7 @@
           "title": "Fase 4: Dockerfile Multi-Stage, Seguridad y Despliegue en Produccion",
           "slug": "fase-4-docker-seguridad-produccion",
           "position": 4,
-          "concept_id": "apex_docker_deployment",
+          "concept_id": "apex-docker-deployment",
           "objective": "Empaquetar la plataforma completa mediante un Dockerfile multi-stage, usuario sin privilegios y verificacion de salud (healthcheck).",
           "theory_markdown": "La certificacion Apex exige que la solucion este preparada para entornos productivos reales.\n\n### 1. Construccion Multi-Stage\nEl patron multi-stage compila dependencias y ruedas en una primera etapa (builder) y copia unicamente los binarios requeridos a la imagen final (runner). Esto reduce el peso de la imagen de gigabytes a apenas megabytes y elimina compiladores como `gcc` de produccion.\n\n```dockerfile\n# Etapa 1: Compilacion y resolucion de dependencias\nFROM python:3.12-slim AS builder\nWORKDIR /app\nRUN pip install --no-cache-dir poetry\nCOPY pyproject.toml poetry.lock ./\nRUN poetry export -f requirements.txt --output requirements.txt --without-hashes\n\n# Etapa 2: Imagen final para ejecucion\nFROM python:3.12-slim AS runner\nWORKDIR /app\nRUN useradd -u 1001 -m appuser\nCOPY --from=builder /app/requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY src/ ./src/\nUSER appuser\nEXPOSE 8000\nHEALTHCHECK --interval=30s --timeout=5s CMD python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\" || exit 1\nCMD [\"uvicorn\", \"src.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n```\n\n### 2. Principios de Hardening y Seguridad\n- **No root:** El contenedor jamas debe ejecutarse como usuario root (`USER appuser`).\n- **Zero secrets in build:** Secretos de API y llaves criptograficas deben inyectarse en runtime via variables de entorno o gestores de secretos, jamas quemados en la imagen Docker.",
           "examples": [
