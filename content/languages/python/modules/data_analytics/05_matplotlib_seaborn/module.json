@@ -4,85 +4,250 @@
   "code": "DA_M05",
   "slug": "matplotlib-seaborn",
   "course_slug": "data-analytics",
-  "title": "Visualización Estática con Matplotlib y Seaborn",
-  "objective": "Graficar distribuciones, correlaciones y tendencias con Matplotlib (fig, ax) y gráficos estadísticos de alto nivel con Seaborn.",
-  "description": "Transforma tablas de números en revelaciones visuales impactantes: heatmaps, histogramas con KDE, boxplots y personalización estética.",
+  "title": "Visualizacion Estatica con Matplotlib y Seaborn",
+  "objective": "Construir visualizaciones publicables usando la interfaz orientada a objetos de Matplotlib y graficos estadisticos avanzados con Seaborn.",
+  "description": "Comunica insights con claridad: control pixel-perfect de figuras, paletas accesibles, distribuciones y matrices de correlacion.",
   "position": 45,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 320
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_da_05_01",
       "code": "S01",
-      "title": "La Interfaz Orientada a Objetos de Matplotlib y Seaborn",
-      "slug": "matplotlib-y-seaborn",
+      "title": "Visualizacion Orientada a Objetos y Estadistica",
+      "slug": "visualizacion-oo-estadistica",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 50,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_da_05_01",
           "code": "L01",
-          "title": "Interfaz fig, ax en Matplotlib y Gráficos Estadísticos con Seaborn",
-          "slug": "fig-ax-seaborn-base",
+          "title": "Arquitectura Orientada a Objetos de Matplotlib",
+          "slug": "arquitectura-oo-matplotlib",
           "position": 1,
-          "concept_id": "da-visualization",
-          "objective": "Dominar la creación de figuras profesionales con la arquitectura de subplots y paletas de Seaborn.",
-          "theory_markdown": "En lugar de usar el estilo procedural antiguo de pyplot (`plt.plot()`), los profesionales usan la **interfaz orientada a objetos**:\n```python\nfig, ax = plt.subplots(figsize=(8, 5))\nax.plot(x, y, label=\"Tendencia\")\nax.set_title(\"Ventas Trimestrales\")\n```\n\n**Seaborn** se construye encima de Matplotlib pero automatiza agregaciones estadísticas:\n- `sns.histplot(df[\"edad\"], kde=True)`: Histograma con curva de densidad.\n- `sns.boxplot(x=\"categoria\", y=\"precio\", data=df)`: Detección visual de cuartiles y outliers.\n- `sns.heatmap(df.corr(), annot=True, cmap=\"coolwarm\")`: Matriz de correlación visual.",
+          "concept_id": "da-matplotlib-oo-architecture",
+          "objective": "Construir lienzos y ejes desacoplados con subplots() y dominar la jerarquia Figure y Axes.",
+          "theory_markdown": "Matplotlib posee dos interfaces de programacion:\n1. **Interfaz pyplot de estado (estilo MATLAB):** `plt.plot()`, `plt.title()`. Opera sobre una figura global implicita; propensa a errores cuando se generan multiples graficos.\n2. **Interfaz Orientada a Objetos (OO - Recomendada):**\n   Crea explicitamente los objetos contenedores:\n   ```python\n   import matplotlib.pyplot as plt\n\n   fig, ax = plt.subplots(figsize=(8, 5))\n   ```\n   - **`Figure` (`fig`):** El lienzo o ventana completa que puede contener uno o varios graficos.\n   - **`Axes` (`ax`):** El grafico individual con su propio sistema de coordenadas X/Y, titulo, etiquetas y limites.\n\n### Metodos esenciales sobre ax\n- `ax.set_title(\"Titulo del Grafico\")`\n- `ax.set_xlabel(\"Eje X\")` y `ax.set_ylabel(\"Eje Y\")`\n- `ax.grid(True, linestyle='--', alpha=0.6)`",
           "examples": [
             {
-              "title": "Matriz de correlación con Seaborn",
-              "code": "import pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\ndf = pd.DataFrame({\n    \"horas_estudio\": [2, 4, 6, 8, 10],\n    \"calificacion\": [60, 70, 80, 92, 98]\n})\ncorrelacion = df.corr()\nprint(correlacion)",
-              "output": "               horas_estudio  calificacion\nhoras_estudio       1.000000      0.993414\ncalificacion        0.993414      1.000000",
-              "explanation": "Una correlación de ~0.99 indica una relación lineal fuertemente positiva entre horas y nota."
+              "title": "Creacion de grafico con interfaz orientada a objetos",
+              "code": "import matplotlib.pyplot as plt\n\nx = [1, 2, 3, 4]\ny = [10, 25, 20, 35]\n\nfig, ax = plt.subplots(figsize=(6, 4))\nax.plot(x, y, color=\"#2b5c8f\", marker=\"o\", linewidth=2)\nax.set_title(\"Evolucion de Metricas\")\nax.set_xlabel(\"Periodo\")\nax.set_ylabel(\"Valor\")\nax.grid(True, alpha=0.3)\nplt.close(fig)",
+              "output": "Figura generada con control explicito de propiedades sobre el objeto ax.",
+              "explanation": "El enfoque orientado a objetos permite componer layouts complejos sin efectos colaterales de estado global."
             }
           ],
-          "common_errors": "No cerrar las figuras con `plt.close()` en scripts por lotes o servidores web, provocando consumo acumulativo de memoria RAM.",
+          "common_errors": "Mezclar llamadas de estado global como plt.title() con el objeto ax, lo que puede aplicar los titulos a la figura equivocada en layouts con multiples subplots.",
           "mini_exercise": {
-            "starter_code": "# Comando para mostrar la gráfica en pantalla\n# plt.show()",
-            "instructions": "Recuerda que plt.show() abre la ventana interactiva.",
-            "solution": "# plt.show()"
+            "instructions": "Usa plt.subplots para instanciar una figura 'fig' y un eje 'ax' con tamano figsize=(10, 6).",
+            "starter_code": "import matplotlib.pyplot as plt\n\n# Crea fig y ax\nfig, ax = ...",
+            "solution": "fig, ax = plt.subplots(figsize=(10, 6))"
           },
           "key_takeaways": [
-            "fig, ax = plt.subplots() es la arquitectura recomendada de Matplotlib.",
-            "Seaborn agrega estética y soporte estadístico nativo a DataFrames.",
-            "Los boxplots y heatmaps son herramientas fundamentales de diagnóstico."
+            "La interfaz Orientada a Objetos (fig, ax = plt.subplots()) es el estandar profesional.",
+            "Figure representa el lienzo global; Axes representa el grafico individual.",
+            "Personaliza ejes con ax.set_title(), ax.set_xlabel() y ax.grid()."
           ],
           "exercise": {
             "id": "ex_da_05_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Qué tipo de gráfica de Seaborn es la más adecuada para visualizar la matriz de correlación entre múltiples variables numéricas?",
+            "prompt": "Cual es la diferencia entre el objeto Figure y el objeto Axes en la arquitectura orientada a objetos de Matplotlib?",
             "options": [
               {
                 "id": "a",
-                "text": "sns.heatmap()"
+                "text": "Figure es el lienzo contenedor completo de la imagen; Axes es el grafico individual que contiene los datos, ejes y escalas."
               },
               {
                 "id": "b",
-                "text": "sns.lineplot()"
+                "text": "Figure es solo para graficos en 3D y Axes para 2D."
               },
               {
                 "id": "c",
-                "text": "sns.barplot()"
+                "text": "Axes representa el eje X y Figure representa el eje Y."
               },
               {
                 "id": "d",
-                "text": "sns.piechart()"
+                "text": "No hay diferencia, son terminos sinonimos."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Un mapa de calor (heatmap) codifica los coeficientes de correlación en una cuadrícula con gradiente de color."
+            "explanation": "Una Figure puede alojar multiples objetos Axes (por ejemplo en una grilla de 2x2 subplots), donde cada Axes es un grafico independiente."
+          }
+        },
+        {
+          "id": "les_da_05_02",
+          "code": "L02",
+          "title": "Graficos Fundamentales en Matplotlib",
+          "slug": "graficos-fundamentales-matplotlib",
+          "position": 2,
+          "concept_id": "da-matplotlib-basic-charts",
+          "objective": "Construir graficos de lineas, barras, dispersion e histogramas, y exportarlos en alta resolucion con savefig().",
+          "theory_markdown": "Matplotlib implementa los tipos graficos basicos mediante metodos directos sobre el objeto `Axes`:\n\n1. **Lineas (`ax.plot(x, y)`):** Para series temporales y tendencias continuas.\n2. **Barras (`ax.bar(categorias, valores)` o `ax.barh()` horizontal):** Para comparar magnitudes entre categorias discretas.\n3. **Dispersion (`ax.scatter(x, y, s=tamano, c=color)`):** Para analizar correlaciones y relaciones entre dos variables continuas.\n4. **Histograma (`ax.hist(datos, bins=20, edgecolor='black')`):** Para estimar la distribucion de probabilidad y frecuencia de una variable numerica.\n\n### Exportacion en alta resolucion\nPara reportes o publicaciones academicas:\n```python\nfig.savefig('reporte.png', dpi=300, bbox_inches='tight')\n```\n`dpi=300` produce calidad de imprenta y `bbox_inches='tight'` elimina margenes blancos sobrantes.",
+          "examples": [
+            {
+              "title": "Construccion y guardado de un histograma",
+              "code": "import matplotlib.pyplot as plt\nimport numpy as np\n\ndatos = np.random.normal(loc=100, scale=15, size=500)\nfig, ax = plt.subplots(figsize=(6, 4))\nax.hist(datos, bins=25, color=\"#4a90e2\", edgecolor=\"black\", alpha=0.7)\nax.set_title(\"Distribucion de Puntuaciones\")\nfig.savefig(\"distribucion.png\", dpi=150, bbox_inches=\"tight\")\nplt.close(fig)",
+              "output": "Archivo distribucion.png guardado con 25 intervalos y bordes limpios.",
+              "explanation": "bins controla la granularidad de la discretizacion de la variable continua."
+            }
+          ],
+          "common_errors": "Guardar la figura con plt.savefig() despues de haber ejecutado plt.show(), lo que genera una imagen en blanco porque la ventana grafica de estado ya libero la memoria.",
+          "mini_exercise": {
+            "instructions": "Usa ax.bar para crear un grafico de barras con categorias=['A', 'B'] y valores=[10, 25].",
+            "starter_code": "import matplotlib.pyplot as plt\nfig, ax = plt.subplots()\n\n# Dibuja las barras\n",
+            "solution": "ax.bar([\"A\", \"B\"], [10, 25])"
+          },
+          "key_takeaways": [
+            "plot para tendencias, bar para categorias, scatter para relaciones y hist para distribuciones.",
+            "bins en ax.hist define el numero de intervalos de agrupacion de frecuencias.",
+            "fig.savefig con dpi=300 y bbox_inches='tight' garantiza exportaciones profesionales."
+          ],
+          "exercise": {
+            "id": "ex_da_05_02",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "Cual parametro de fig.savefig() se utiliza para recortar los espacios en blanco innecesarios alrededor del grafico?",
+            "options": [
+              {
+                "id": "a",
+                "text": "bbox_inches='tight'"
+              },
+              {
+                "id": "b",
+                "text": "crop=True"
+              },
+              {
+                "id": "c",
+                "text": "trim=True"
+              },
+              {
+                "id": "d",
+                "text": "fit_screen=True"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "bbox_inches='tight' calcula automaticamente la caja delimitadora de todos los elementos graficos y elimina los margenes vacios exteriores."
+          }
+        },
+        {
+          "id": "les_da_05_03",
+          "code": "L03",
+          "title": "Visualizacion Estadistica con Seaborn",
+          "slug": "visualizacion-estadistica-seaborn",
+          "position": 3,
+          "concept_id": "da-seaborn-statistical-plots",
+          "objective": "Utilizar Seaborn para graficar directamente DataFrames de Pandas aplicando segmentaciones categoricas con hue.",
+          "theory_markdown": "**Seaborn** es una biblioteca construida sobre Matplotlib con integracion nativa con DataFrames de Pandas, paletas de colores esteticas y funciones estadisticas avanzadas.\n\n### Ventajas de Seaborn\n- Recibe directamente el DataFrame mediante `data=df` y los nombres de columnas como cadenas (`x='columna_x'`, `y='columna_y'`).\n- Incorpora calculos automaticos de intervalos de confianza e incertidumbre.\n\n### El superpoder del parametro `hue`\nEl parametro `hue` segmenta el grafico anadiendo una tercera dimension categorica mediante codificacion de color y generando la leyenda automaticamente:\n```python\nimport seaborn as sns\n\nsns.barplot(data=df, x='categoria', y='ventas', hue='region', palette='muted')\n```\n\n### Tipos de graficos estadisticos\n- `sns.histplot(df['col'], kde=True)`: Histograma con curva de densidad de kernel (KDE).\n- `sns.boxplot(data=df, x='grupo', y='valor')`: Diagrama de cajas para visualizar mediana, rango intercuartilico y outliers.",
+          "examples": [
+            {
+              "title": "Diagrama de caja segmentado por categoria con Seaborn",
+              "code": "import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"nivel\": [\"Junior\", \"Junior\", \"Senior\", \"Senior\"],\n    \"salario\": [3000, 3500, 7000, 8500],\n    \"genero\": [\"F\", \"M\", \"F\", \"M\"]\n})\n\nfig, ax = plt.subplots(figsize=(6, 4))\nsns.boxplot(data=df, x=\"nivel\", y=\"salario\", hue=\"genero\", ax=ax)\nax.set_title(\"Salarios por Nivel y Genero\")\nplt.close(fig)",
+              "output": "Boxplot con cajas coloreadas segun el genero y separadas por nivel laboral.",
+              "explanation": "hue divide cada categoria de X en subgrupos coloreados con su propia leyenda."
+            }
+          ],
+          "common_errors": "Intentar pasar listas separadas x=df['a'].tolist() cuando Seaborn acepta directamente data=df, x='a', y='b', aprovechando la metadata de nombres.",
+          "mini_exercise": {
+            "instructions": "Usa sns.histplot para trazar la distribucion de 'edades' en el DataFrame 'df' activando kde=True.",
+            "starter_code": "import seaborn as sns\nimport pandas as pd\ndf = pd.DataFrame({\"edades\": [20, 25, 30, 35, 40]})\n\n# Crea el histplot con kde\n",
+            "solution": "sns.histplot(data=df, x=\"edades\", kde=True)"
+          },
+          "key_takeaways": [
+            "Seaborn opera de forma nativa con DataFrames de Pandas pasados a data=df.",
+            "hue codifica por color una dimension categorica adicional y genera la leyenda.",
+            "boxplot e histplot(kde=True) revelan dispersion, sesgo y distribuciones probabilisticas."
+          ],
+          "exercise": {
+            "id": "ex_da_05_03",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "Que funcion cumple el argumento hue='...' en las funciones de visualizacion de Seaborn?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Segmentar los datos por una variable categorica adicional asignando diferentes colores a cada nivel y creando la leyenda automaticamente."
+              },
+              {
+                "id": "b",
+                "text": "Cambiar el brillo de la pantalla del usuario."
+              },
+              {
+                "id": "c",
+                "text": "Filtra las filas que contengan valores negativos."
+              },
+              {
+                "id": "d",
+                "text": "Convierte los datos a una escala logaritmica."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "hue mapea los valores unicos de una columna categorica a una paleta de colores, descomponiendo la grafica en subgrupos comparables."
+          }
+        },
+        {
+          "id": "les_da_05_04",
+          "code": "L04",
+          "title": "Matrices de Correlacion y Graficos Multivariados",
+          "slug": "matrices-correlacion-pairplot",
+          "position": 4,
+          "concept_id": "da-seaborn-heatmap-pairplot",
+          "objective": "Visualizar correlaciones entre multiples variables continuas con mapas de calor (heatmap) y pares con pairplot.",
+          "theory_markdown": "En la etapa exploratoria es critico detectar asociaciones lineales o redundancias entre multiples variables continuas:\n\n### 1. Mapa de Calor de Correlaciones (`sns.heatmap`)\nCalcula primero la matriz de correlacion de Pearson con `df.corr()` y la proyecta en una grilla termica:\n```python\nmatriz_corr = df.corr(numeric_only=True)\nsns.heatmap(\n    matriz_corr,\n    annot=True,        # Escribe los valores numericos en cada celda\n    cmap='coolwarm',   # Paleta divergente (azul=negativa, rojo=positiva)\n    fmt='.2f',         # Formato con 2 decimales\n    vmin=-1, vmax=1    # Escala fija de correlacion\n)\n```\n\n### 2. Matriz de Dispersion por Pares (`sns.pairplot`)\nGenera una cuadricula de subplots donde:\n- Las celdas diagonales muestran la distribucion univariada de cada variable (KDE o histograma).\n- Las celdas fuera de la diagonal muestran graficos de dispersion cruzados entre cada par de variables.",
+          "examples": [
+            {
+              "title": "Generacion de mapa de calor de correlacion",
+              "code": "import seaborn as sns\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"horas_estudio\": [2, 5, 8, 10],\n    \"nota\": [50, 70, 85, 95],\n    \"ausencias\": [6, 3, 1, 0]\n})\nfig, ax = plt.subplots(figsize=(5, 4))\nsns.heatmap(df.corr(), annot=True, cmap=\"vlag\", vmin=-1, vmax=1, ax=ax)\nplt.close(fig)",
+              "output": "Matriz con correlacion positiva entre horas y nota (0.99) y negativa con ausencias (-0.98).",
+              "explanation": "heatmap permite diagnosticar multicolinealidad y seleccionar variables para modelos predictivos."
+            }
+          ],
+          "common_errors": "No fijar vmin=-1 y vmax=1 en el heatmap de correlacion, provocando que la escala de color se ajuste arbitrariamente y distorsione la percepcion visual de las relaciones.",
+          "mini_exercise": {
+            "instructions": "Genera un heatmap de la matriz 'matriz_corr' activando la anotacion numerica annot=True.",
+            "starter_code": "import seaborn as sns\nimport pandas as pd\nmatriz_corr = pd.DataFrame({\"a\": [1.0, 0.5], \"b\": [0.5, 1.0]})\n\n# Dibuja el heatmap con anotaciones\n",
+            "solution": "sns.heatmap(matriz_corr, annot=True)"
+          },
+          "key_takeaways": [
+            "df.corr() calcula las correlaciones lineales bivariadas entre columnas numericas.",
+            "sns.heatmap con annot=True y cmap divergente destaca relaciones positivas y negativas.",
+            "sns.pairplot visualiza distribuciones y dispersiones de todas las variables continuas en una grilla."
+          ],
+          "exercise": {
+            "id": "ex_da_05_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Por que es importante definir vmin=-1 y vmax=1 al trazar un mapa de calor (heatmap) de una matriz de correlacion de Pearson?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque el coeficiente de correlacion de Pearson esta acotado matematicamente entre -1 y +1, asegurando que el centro neutro (0) coincida con el color medio de la paleta."
+              },
+              {
+                "id": "b",
+                "text": "Porque Seaborn arroja una excepcion si no se especifican esos valores exactos."
+              },
+              {
+                "id": "c",
+                "text": "Para redondear los valores a numeros enteros."
+              },
+              {
+                "id": "d",
+                "text": "Para invertir los ejes vertical y horizontal."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Fijar los limites en -1 y +1 ancla la escala divergente (ej. coolwarm), garantizando que el color neutro represente ausencia de correlacion (0) y no un valor arbitrario."
           }
         }
       ]

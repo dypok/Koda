@@ -5,84 +5,249 @@
   "slug": "django-rest-framework",
   "course_slug": "django-enterprise",
   "title": "Django REST Framework (DRF): Serializadores y ViewSets",
-  "objective": "Transformar Django en una fábrica de APIs REST de nivel empresarial con ModelSerializer, ViewSets y DefaultRouter.",
-  "description": "Construye APIs REST escalables sobre tus modelos de Django con paginación, filtros y documentación OpenAPI.",
+  "objective": "Transformar Django en una fabrica de APIs REST de nivel empresarial con ModelSerializer, ViewSets y DefaultRouter.",
+  "description": "Construye APIs REST escalables sobre tus modelos de Django con paginacion, filtros y documentacion OpenAPI.",
   "position": 39,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 350
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_dj_04_01",
       "code": "S01",
-      "title": "ModelSerializers y ViewSets en DRF",
-      "slug": "drf-viewsets",
+      "title": "APIs Empresariales con Django REST Framework",
+      "slug": "apis-drf-viewsets",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 55,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_dj_04_01",
           "code": "L01",
-          "title": "Arquitectura de DRF: Serializers, ViewSets y Routers",
-          "slug": "drf-base",
+          "title": "Introduccion a DRF y ModelSerializer",
+          "slug": "drf-modelserializer",
           "position": 1,
-          "concept_id": "dj-drf",
-          "objective": "Generar endpoints CRUD completos en menos de 20 líneas de código.",
-          "theory_markdown": "**Django REST Framework (DRF)** es la librería estándar para crear APIs con Django:\n1. `ModelSerializer`: Convierte instancias complejas de modelos ORM en diccionarios serializables a JSON y viceversa.\n2. `ModelViewSet`: Implementa automáticamente las acciones `list`, `create`, `retrieve`, `update` y `destroy`.\n3. `DefaultRouter`: Genera todas las rutas URL REST automáticamente (`GET /api/cursos/`, `POST /api/cursos/`, `GET /api/cursos/1/`, etc.).",
+          "concept_id": "dj-drf-serializer",
+          "objective": "Comprender el rol de los serializadores y construir ModelSerializer para transformar instancias de modelos a JSON y viceversa.",
+          "theory_markdown": "**Django REST Framework (DRF)** es el estandar de la industria para desarrollar APIs web robustas sobre Django.\n\n### El Rol del Serializer\nLos **Serializers** de DRF cumplen una doble funcion:\n1. **Serializacion:** Convierten estructuras complejas como QuerySets e instancias de modelos en tipos nativos de Python (diccionarios) que pueden renderizarse facilmente en JSON.\n2. **Deserializacion y Validacion:** Convierten datos entrantes JSON en objetos validados de Python para actualizar o crear instancias en la base de datos.\n\n`ModelSerializer` automatiza este proceso inspeccionando los campos del modelo relacional:\n```python\nfrom rest_framework import serializers\nfrom .models import Articulo\n\nclass ArticuloSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Articulo\n        fields = [\"id\", \"titulo\", \"contenido\", \"publicado\", \"creado_el\"]\n        read_only_fields = [\"id\", \"creado_el\"]\n```",
           "examples": [
             {
-              "title": "API CRUD completa con DRF",
-              "code": "from rest_framework import serializers, viewsets, routers\nfrom .models import Curso\n\nclass CursoSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Curso\n        fields = \"__all__\"\n\nclass CursoViewSet(viewsets.ModelViewSet):\n    queryset = Curso.objects.all()\n    serializer_class = CursoSerializer\n\n# En urls.py:\nrouter = routers.DefaultRouter()\nrouter.register(r\"cursos\", CursoViewSet)",
-              "output": "Endpoints REST generados: GET, POST, PUT, PATCH, DELETE en /api/cursos/",
-              "explanation": "DRF resuelve toda la infraestructura CRUD estándar con máxima consistencia."
+              "title": "Serializacion de una instancia a diccionario",
+              "code": "articulo = Articulo(id=1, titulo=\"Introduccion a DRF\", publicado=True)\nserializer = ArticuloSerializer(articulo)\nprint(serializer.data)",
+              "output": "{'id': 1, 'titulo': 'Introduccion a DRF', 'publicado': True, 'creado_el': None}",
+              "explanation": "serializer.data devuelve el diccionario primitivo listo para ser renderizado a JSON."
             }
           ],
-          "common_errors": "Olvidar agregar `\"rest_framework\"` en la lista `INSTALLED_APPS` de `settings.py`.",
+          "common_errors": "Intentar guardar un serializador con serializer.save() sin haber ejecutado previamente serializer.is_valid(), lo que provoca un AssertionError.",
           "mini_exercise": {
-            "starter_code": "# Crea un ModelSerializer para el modelo Perfil\n# class PerfilSerializer(serializers.ModelSerializer):\n#     class Meta:\n#         model = Perfil\n#         fields = [\"id\", \"bio\"]",
-            "instructions": "Revisa la sintaxis canónica de un ModelSerializer.",
-            "solution": "# Serializer listo"
+            "instructions": "Declara una clase CursoSerializer que herede de serializers.ModelSerializer para el modelo Curso con fields='__all__'.",
+            "starter_code": "from rest_framework import serializers\nfrom .models import Curso\n\n# Define CursoSerializer\n",
+            "solution": "from rest_framework import serializers\nfrom .models import Curso\n\nclass CursoSerializer(serializers.ModelSerializer):\n    class Meta:\n        model = Curso\n        fields = \"__all__\""
           },
           "key_takeaways": [
-            "ModelSerializer traduce modelos ORM a JSON bidireccionalmente.",
-            "ModelViewSet genera las 5 operaciones CRUD en una sola clase.",
-            "DefaultRouter mapea las URLs estándar automáticamente."
+            "DRF es el ecosistema estandar para crear APIs REST en Django.",
+            "ModelSerializer mapea modelos Django a contratos JSON de entrada y salida.",
+            "is_valid(raise_exception=True) valida y lanza un HTTP 400 automatico si hay errores."
           ],
           "exercise": {
             "id": "ex_dj_04_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Qué componente de DRF genera automáticamente el mapa de URLs para un ViewSet?",
+            "prompt": "Cual es la responsabilidad principal de un ModelSerializer en Django REST Framework?",
             "options": [
               {
                 "id": "a",
-                "text": "DefaultRouter"
+                "text": "Convertir instancias de modelos de Django en formatos serializados como JSON y validar datos de peticiones entrantes para su persistencia."
               },
               {
                 "id": "b",
-                "text": "UrlDispatcher"
+                "text": "Configurar los servidores proxy de produccion."
               },
               {
                 "id": "c",
-                "text": "ModelBuilder"
+                "text": "Crear copias de seguridad de la base de datos en archivos comprimidos."
               },
               {
                 "id": "d",
-                "text": "ApiGateway"
+                "text": "Reemplazar al archivo settings.py."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "DefaultRouter registra ViewSets y crea las rutas REST correspondientes con soporte de formato extensible."
+            "explanation": "Los serializadores gestionan la conversion bidireccional entre datos JSON de la API y objetos Python/ORM validados."
+          }
+        },
+        {
+          "id": "les_dj_04_02",
+          "code": "L02",
+          "title": "Vistas de API: @api_view y APIView",
+          "slug": "vistas-api-view",
+          "position": 2,
+          "concept_id": "dj-drf-apiview",
+          "objective": "Desarrollar endpoints controlados con el decorador @api_view y la clase base APIView utilizando la clase Response.",
+          "theory_markdown": "DRF sustituye las vistas convencionales de Django por vistas conscientes de APIs REST:\n\n1. **Vistas funcionales con `@api_view`:**\n   Decorador que restringe metodos HTTP (`@api_view(['GET', 'POST'])`), parsea la peticion entrante en `request.data` (independiente de si es JSON o multipart) y retorna un objeto `rest_framework.response.Response`.\n\n2. **Vistas de clase con `APIView`:**\n   Hereda de `django.views.View` pero con superpoderes de DRF:\n   - Implementa metodos homonimos a los verbos HTTP (`get`, `post`, `put`, `delete`).\n   - Maneja automaticamente autenticacion, permisos y negociacion de contenido (permite renderizar JSON o la interfaz web interactiva Browsable API de DRF).",
+          "examples": [
+            {
+              "title": "Endpoint con APIView y Response",
+              "code": "from rest_framework.views import APIView\nfrom rest_framework.response import Response\nfrom rest_framework import status\nfrom .models import Articulo\nfrom .serializers import ArticuloSerializer\n\nclass ArticuloListAPIView(APIView):\n    def get(self, request):\n        articulos = Articulo.objects.all()\n        serializer = ArticuloSerializer(articulos, many=True)\n        return Response(serializer.data, status=status.HTTP_200_OK)\n\n    def post(self, request):\n        serializer = ArticuloSerializer(data=request.data)\n        if serializer.is_valid():\n            serializer.save()\n            return Response(serializer.data, status=status.HTTP_201_CREATED)\n        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)",
+              "output": "API REST completa con navegabilidad interactiva desde el navegador.",
+              "explanation": "many=True le indica al serializador que debe procesar una lista de instancias en vez de un unico objeto."
+            }
+          ],
+          "common_errors": "Retornar un HttpResponse de Django ordinario en lugar de la clase Response de DRF, perdiendo la negociacion de contenido y la navegacion en Browsable API.",
+          "mini_exercise": {
+            "instructions": "Escribe una vista con @api_view(['GET']) que retorne Response({'status': 'ok'}).",
+            "starter_code": "from rest_framework.decorators import api_view\nfrom rest_framework.response import Response\n\n# Define la vista\n",
+            "solution": "from rest_framework.decorators import api_view\nfrom rest_framework.response import Response\n\n@api_view([\"GET\"])\ndef estado(request):\n    return Response({\"status\": \"ok\"})"
+          },
+          "key_takeaways": [
+            "@api_view habilita la funcionalidad de DRF en vistas funcionales.",
+            "APIView organiza los metodos HTTP en funciones get(), post(), put(), delete().",
+            "request.data unifica el acceso al cuerpo JSON sin importar el Content-Type."
+          ],
+          "exercise": {
+            "id": "ex_dj_04_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es la ventaja de usar request.data en DRF en comparacion con request.POST de Django tradicional?",
+            "options": [
+              {
+                "id": "a",
+                "text": "request.data procesa de forma transparente tanto payloads JSON como formularios codificados, y soporta metodos PUT y PATCH."
+              },
+              {
+                "id": "b",
+                "text": "request.data guarda la informacion directamente en el disco duro del cliente."
+              },
+              {
+                "id": "c",
+                "text": "request.data solo funciona cuando no hay conexion a internet."
+              },
+              {
+                "id": "d",
+                "text": "request.data borra los datos de la peticion una vez leidos."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "request.data analiza de forma polimorfica JSON, multipart y form-urlencoded, soportando todos los verbos HTTP modernos."
+          }
+        },
+        {
+          "id": "les_dj_04_03",
+          "code": "L03",
+          "title": "ModelViewSet y Enrutamiento con DefaultRouter",
+          "slug": "modelviewset-defaultrouter",
+          "position": 3,
+          "concept_id": "dj-drf-viewsets-router",
+          "objective": "Generar APIs CRUD completas combinando ModelViewSet con DefaultRouter en dos lineas de codigo.",
+          "theory_markdown": "Escribir manualmente vistas para list, retrieve, create, update y destroy en cada recurso se vuelve repetitivo. DRF introduce el patron **`ModelViewSet`**.\n\nUn `ModelViewSet` agrupa toda la logica CRUD estandar sobre un modelo:\n```python\nfrom rest_framework import viewsets\nfrom .models import Articulo\nfrom .serializers import ArticuloSerializer\n\nclass ArticuloViewSet(viewsets.ModelViewSet):\n    queryset = Articulo.objects.all()\n    serializer_class = ArticuloSerializer\n```\n\n### Enrutamiento automatico con DefaultRouter\nEl **`DefaultRouter`** analiza las acciones del ViewSet y genera automaticamente el mapa completo de URLs RESTful:\n```python\nfrom django.urls import path, include\nfrom rest_framework.routers import DefaultRouter\n\nrouter = DefaultRouter()\nrouter.register(r'articulos', ArticuloViewSet, basename='articulo')\n\nurlpatterns = [\n    path('api/v1/', include(router.urls)),\n]\n```\nRutas generadas:\n- `GET /api/v1/articulos/` (list)\n- `POST /api/v1/articulos/` (create)\n- `GET /api/v1/articulos/{id}/` (retrieve)\n- `PUT /api/v1/articulos/{id}/` (update)\n- `PATCH /api/v1/articulos/{id}/` (partial_update)\n- `DELETE /api/v1/articulos/{id}/` (destroy)",
+          "examples": [
+            {
+              "title": "Configuracion completa de un recurso con DefaultRouter",
+              "code": "# En urls.py:\nfrom rest_framework.routers import DefaultRouter\nfrom .views import ArticuloViewSet\n\nrouter = DefaultRouter()\nrouter.register(r\"articulos\", ArticuloViewSet)\n# router.urls contiene las 6 rutas REST estandar",
+              "output": "Rutas CRUD generadas de forma consistente con nombres estandarizados.",
+              "explanation": "DefaultRouter ahorra la escritura manual de patrones de URL para cada verbo HTTP."
+            }
+          ],
+          "common_errors": "Olvidar especificar el argumento queryset en el ModelViewSet o no definir basename cuando el queryset es dinamico.",
+          "mini_exercise": {
+            "instructions": "Crea una instancia de DefaultRouter, registra la ruta 'productos' con ProductoViewSet y asigna sus urls a urlpatterns.",
+            "starter_code": "from rest_framework.routers import DefaultRouter\n\n# Registra productos en el router\nrouter = ...",
+            "solution": "from rest_framework.routers import DefaultRouter\n\nrouter = DefaultRouter()\nrouter.register(r\"productos\", ProductoViewSet)"
+          },
+          "key_takeaways": [
+            "ModelViewSet consolida las 6 operaciones CRUD clasicas en una sola clase.",
+            "DefaultRouter genera y nombra automaticamente las rutas RESTful estandar.",
+            "Permite anadir acciones personalizadas con el decorador @action."
+          ],
+          "exercise": {
+            "id": "ex_dj_04_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cuales metodos HTTP y rutas genera automaticamente DefaultRouter al registrar un ModelViewSet en 'usuarios'?",
+            "options": [
+              {
+                "id": "a",
+                "text": "GET y POST en /usuarios/, y GET, PUT, PATCH, DELETE en /usuarios/{id}/"
+              },
+              {
+                "id": "b",
+                "text": "Unicamente peticiones POST en /usuarios/login/"
+              },
+              {
+                "id": "c",
+                "text": "Solo consultas GET de solo lectura."
+              },
+              {
+                "id": "d",
+                "text": "Genera unicamente archivos de documentacion estatica."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "ModelViewSet combinado con DefaultRouter genera la arquitectura CRUD completa para listas y elementos individuales."
+          }
+        },
+        {
+          "id": "les_dj_04_04",
+          "code": "L04",
+          "title": "Paginacion, Filtros y Permisos en DRF",
+          "slug": "paginacion-filtros-permisos",
+          "position": 4,
+          "concept_id": "dj-drf-pagination-permissions",
+          "objective": "Proteger endpoints mediante permission_classes y configurar paginacion para optimizar el consumo de red.",
+          "theory_markdown": "Una API de produccion no puede retornar listas ilimitadas de registros ni permitir operaciones no autorizadas.\n\n### Permisos con permission_classes\nDRF incluye clases de permisos listas para usar:\n- `AllowAny`: Acceso publico irrestricto.\n- `IsAuthenticated`: Requiere usuario autenticado (retorna 401 si no hay credenciales).\n- `IsAdminUser`: Requiere que `user.is_staff` sea `True`.\n- `IsAuthenticatedOrReadOnly`: Permite lecturas (GET) a cualquiera, pero restringe escrituras (POST, PUT, DELETE) a usuarios autenticados.\n\nSe pueden configurar a nivel global en `REST_FRAMEWORK` dentro de `settings.py` o directamente en el ViewSet:\n```python\nfrom rest_framework.permissions import IsAuthenticated\n\nclass ArticuloViewSet(viewsets.ModelViewSet):\n    permission_classes = [IsAuthenticated]\n```\n\n### Paginacion con PageNumberPagination\nPermite paginar resultados dividiendolos en paginas controladas (`/api/v1/articulos/?page=2&page_size=20`), retornando metadata con el conteo total y enlaces a la pagina previa y siguiente.",
+          "examples": [
+            {
+              "title": "ViewSet con permisos restringidos y paginacion",
+              "code": "from rest_framework import viewsets\nfrom rest_framework.permissions import IsAuthenticatedOrReadOnly\nfrom rest_framework.pagination import PageNumberPagination\n\nclass PaginacionEstandar(PageNumberPagination):\n    page_size = 10\n    page_size_query_param = \"page_size\"\n    max_page_size = 100\n\nclass ArticuloViewSet(viewsets.ModelViewSet):\n    queryset = Articulo.objects.all()\n    serializer_class = ArticuloSerializer\n    permission_classes = [IsAuthenticatedOrReadOnly]\n    pagination_class = PaginacionEstandar",
+              "output": "{\"count\": 52, \"next\": \".../?page=2\", \"previous\": null, \"results\": [...]}",
+              "explanation": "Los clientes anonimos pueden consultar los articulos, pero solo los usuarios autenticados pueden crear o modificarlos."
+            }
+          ],
+          "common_errors": "Olvidar configurar paginacion en endpoints con millones de registros, provocando caidas del servidor por saturacion de memoria al responder un GET sin limites.",
+          "mini_exercise": {
+            "instructions": "Configura un ViewSet para que requiera autenticacion obligatoria usando permission_classes = [IsAuthenticated].",
+            "starter_code": "from rest_framework import viewsets\nfrom rest_framework.permissions import IsAuthenticated\n\nclass SeguroViewSet(viewsets.ModelViewSet):\n    # Configura permission_classes\n    pass",
+            "solution": "from rest_framework import viewsets\nfrom rest_framework.permissions import IsAuthenticated\n\nclass SeguroViewSet(viewsets.ModelViewSet):\n    permission_classes = [IsAuthenticated]"
+          },
+          "key_takeaways": [
+            "permission_classes controla el acceso a nivel de endpoint o accion.",
+            "IsAuthenticatedOrReadOnly balancea lectura publica y escritura segura.",
+            "PageNumberPagination fragmenta las colecciones grandes previniendo saturacion de memoria."
+          ],
+          "exercise": {
+            "id": "ex_dj_04_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Que permiso de DRF permite que cualquier persona lea datos (GET) pero exige usuario autenticado para crear o modificar (POST, PUT, DELETE)?",
+            "options": [
+              {
+                "id": "a",
+                "text": "IsAuthenticatedOrReadOnly"
+              },
+              {
+                "id": "b",
+                "text": "IsAuthenticated"
+              },
+              {
+                "id": "c",
+                "text": "AllowAny"
+              },
+              {
+                "id": "d",
+                "text": "IsStaffUser"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "IsAuthenticatedOrReadOnly evalua el metodo HTTP: para metodos seguros (GET, HEAD, OPTIONS) concede acceso a todos; para metodos de mutacion exige autenticacion."
           }
         }
       ]

@@ -6,28 +6,158 @@
     {
       "id": "q_ia_10_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Cuáles son los componentes esenciales de un sistema de agente autónomo moderno de grado de producción?",
+      "difficulty": "easy",
+      "prompt": "Cuales son los tres pilares esenciales en la arquitectura de un Agente Autonomo de nivel empresarial?",
       "options": [
         {
           "id": "a",
-          "text": "Modelo de Lenguaje (razonador) + Herramientas/APIs (acción) + Memoria/Contexto + Guardrails de seguridad"
+          "text": "Cerebro cognitivo (LLM con ReAct), Catalogo de herramientas validadas (Tools/APIs/RAG) y Capa de memoria contextual persistente."
         },
         {
           "id": "b",
-          "text": "Solo un archivo HTML estático"
+          "text": "Unicamente un archivo de texto con un prompt de diez mil lineas."
         },
         {
           "id": "c",
-          "text": "Un compilador de Java sin conexión a Internet"
+          "text": "Una pagina web estatica con HTML sin backend."
         },
         {
           "id": "d",
-          "text": "Una hoja de cálculo de Excel"
+          "text": "Un script sincrono que solo admite bucles for."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Esta arquitectura cuádruple (LLM + Tools + Memory + Guardrails) define el estado del arte de los agentes autónomos de software."
+      "explanation": "El agente integra el motor de razonamiento (LLM), capacidades de accion externa (herramientas validadas) y continuidad en el tiempo (memoria persistente)."
+    },
+    {
+      "id": "q_ia_10_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Como se previene que una herramienta que falla internamente (ej. Timeout en base de datos) interrumpa todo el flujo del agente?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Capturando la excepcion en el backend y retornando el mensaje de error con rol 'tool' para que el agente intente una estrategia alternativa en su siguiente Thought."
+        },
+        {
+          "id": "b",
+          "text": "Desconectando la base de datos de forma permanente."
+        },
+        {
+          "id": "c",
+          "text": "Reiniciando el servidor en cada error."
+        },
+        {
+          "id": "d",
+          "text": "Ocultando el error y devolviendo None silenciosamente."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Transformar las excepciones en observaciones de rol tool permite al agente percibir el fallo y razonar autonomamente una accion correctiva."
+    },
+    {
+      "id": "q_ia_10_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que informacion critica debe incluirse en los logs estructurados de cada paso del agente para garantizar su observabilidad en produccion?",
+      "options": [
+        {
+          "id": "a",
+          "text": "trace_id, paso actual, razonamiento Thought, herramienta Action invocada, latencia de ejecucion y consumo de tokens."
+        },
+        {
+          "id": "b",
+          "text": "La direccion MAC del router del usuario."
+        },
+        {
+          "id": "c",
+          "text": "La contrasena en texto plano del usuario."
+        },
+        {
+          "id": "d",
+          "text": "Unicamente la fecha sin ninguna descripcion adicional."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Estos campos proporcionan la trazabilidad completa necesaria para auditar la logica de decisiones, detectar cuellos de botella y vigilar costes."
+    },
+    {
+      "id": "q_ia_10_04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Como se expone un agente asincrono de forma optima para que un frontend web pueda interactuar con el en produccion?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Mediante una API REST asincrona con FastAPI, validando entradas y salidas con esquemas Pydantic y gestionando sesiones por session_id."
+        },
+        {
+          "id": "b",
+          "text": "Abriendo una conexion Telnet sin encriptacion."
+        },
+        {
+          "id": "c",
+          "text": "Escribiendo archivos de texto en un directorio compartido por FTP."
+        },
+        {
+          "id": "d",
+          "text": "Enviando correos electronicos manuales."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "FastAPI proporciona el rendimiento ASGI no bloqueante, tipado estricto y documentacion OpenAPI ideales para servir orquestadores de agentes."
+    },
+    {
+      "id": "q_ia_10_05",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "Cual es la metrica fundamental evaluada en pruebas E2E para determinar el exito funcional global de un agente autonomo?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Task Success Rate (Tasa de Exito en la Resolucion de Tareas)"
+        },
+        {
+          "id": "b",
+          "text": "Numero de lineas de codigo escritas por el desarrollador"
+        },
+        {
+          "id": "c",
+          "text": "Cantidad de archivos en la carpeta de descargas"
+        },
+        {
+          "id": "d",
+          "text": "Temperatura fisica de la placa base"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Task Success Rate mide el porcentaje de casos de prueba del dataset donde el agente logro el objetivo propuesto cumpliendo todas las restricciones."
+    },
+    {
+      "id": "q_ia_10_06",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que papel juegan los esquemas de Pydantic v2 en las herramientas integradas en un agente autonomo empresarial?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Definen y validan los contratos tipados de entrada de cada herramienta, asegurando que los argumentos emitidos por el LLM cumplan los formatos requeridos antes de ejecutarse."
+        },
+        {
+          "id": "b",
+          "text": "Compilan los scripts de Python a formato WebAssembly."
+        },
+        {
+          "id": "c",
+          "text": "Sustituyen la necesidad de utilizar modelos de lenguaje."
+        },
+        {
+          "id": "d",
+          "text": "Eliminan la necesidad de realizar pruebas unitarias."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Pydantic actua como cortafuegos tipado que valida que los argumentos estructurados generados por el LLM satisfagan los contratos de la funcion."
     }
   ]
 }

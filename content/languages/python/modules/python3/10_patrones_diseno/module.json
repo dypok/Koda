@@ -4,14 +4,14 @@
   "code": "PY3_M10",
   "slug": "patrones-de-diseno",
   "course_slug": "python-3",
-  "title": "Patrones de Diseño en Python: Factory, Singleton y Strategy",
-  "objective": "Implementar patrones de diseño clásicos aprovechando las características dinámicas y funciones de primer orden de Python.",
-  "description": "Arquitectura de software madura: desacopla dependencias con Factory, maneja configuraciones con Singleton y aplica Strategy mediante funciones puras.",
-  "position": 30,
+  "title": "Patrones de Diseño en Python: Factory, Strategy, Singleton y Observer",
+  "objective": "Implementar patrones de diseño clásicos aprovechando las características idiomáticas y dinámicas de Python (Factory, Strategy funcional, Singleton con __new__ y Observer dirigido por eventos).",
+  "description": "El clímax de Python Avanzado: arquitectura de software profesional, bajo acoplamiento, alta cohesión y diseño orientado a componentes desacoplados.",
+  "position": 10,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -21,68 +21,233 @@
   },
   "sections": [
     {
-      "id": "sec_py3_09_01",
+      "id": "sec_py3_10_01",
       "code": "S01",
-      "title": "Patrones Idiomáticos en Python",
-      "slug": "patrones-idiomaticos",
+      "title": "Patrones de Diseño Idiomáticos en Python",
+      "slug": "patrones-diseno-idiomaticos",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py3_10_01",
           "code": "L01",
-          "title": "Factory y Strategy de Forma Pythónica",
-          "slug": "factory-strategy",
+          "title": "El Patrón Factory y Creación Dinámica",
+          "slug": "patron-factory-creacion-dinamica",
           "position": 1,
-          "concept_id": "py3-design-patterns",
-          "objective": "Implementar patrones de diseño sin la sobreingeniería típica de lenguajes como Java o C++.",
-          "theory_markdown": "En lenguajes estrictos, implementar el patrón **Strategy** requiere crear interfaces formales y clases envoltorias. En Python, al ser las **funciones ciudadanos de primer orden**, el patrón Strategy se resuelve simplemente pasando una función como argumento.\n\nEl patrón **Factory** desacopla al consumidor de la clase concreta que se instancia, permitiendo crear objetos basados en parámetros o configuraciones.",
+          "concept_id": "py3-factory-pattern",
+          "objective": "Desacoplar al cliente de las clases concretas utilizando funciones de factoría y tablas de registro.",
+          "theory_markdown": "El patrón de diseño creacional **Factory (Factoría)** centraliza la lógica de instanciación de objetos. En lugar de que el cliente llame directamente a `ClaseA()` o `ClaseB()`, delega la decisión en una función factoría.\n\n### Implementación Pythónica con Diccionario de Clases\nA diferencia de otros lenguajes con jerarquías complejas, en Python las clases son objetos de primer orden, lo que permite mapearlas en un diccionario:\n\n```python\nclass ExportadorCSV:\n    def exportar(self, datos): return \"CSV_DATA\"\n\nclass ExportadorJSON:\n    def exportar(self, datos): return \"JSON_DATA\"\n\ndef crear_exportador(formato: str):\n    registro = {\n        \"csv\": ExportadorCSV,\n        \"json\": ExportadorJSON\n    }\n    clase = registro.get(formato.lower())\n    if not clase:\n        raise ValueError(f\"Formato de exportacion desconocido: {formato}\")\n    return clase()\n```",
           "examples": [
             {
-              "title": "Patrón Factory desacoplado",
-              "code": "class NotificadorEmail:\n    def enviar(self, msg): return f\"Email: {msg}\"\n\nclass NotificadorSMS:\n    def enviar(self, msg): return f\"SMS: {msg}\"\n\ndef obtener_notificador(canal: str):\n    canales = {\"email\": NotificadorEmail, \"sms\": NotificadorSMS}\n    clase = canales.get(canal.lower())\n    if not clase:\n        raise ValueError(f\"Canal desconocido: {canal}\")\n    return clase()\n\nservicio = obtener_notificador(\"email\")\nprint(servicio.enviar(\"¡Bienvenido al nivel avanzado!\"))",
-              "output": "Email: ¡Bienvenido al nivel avanzado!",
-              "explanation": "La función Factory usa un diccionario de clases para instanciar dinámicamente sin un if/elif gigante."
+              "title": "Uso del exportador creado por Factory",
+              "code": "# Cliente que no conoce las clases internas\nexportador = crear_exportador(\"json\")\nprint(\"Resultado:\", exportador.exportar([1, 2, 3]))",
+              "output": "Resultado: JSON_DATA",
+              "explanation": "El cliente solo especifica la cadena 'json'; la factoría resuelve e inicializa el objeto concreto."
             }
           ],
-          "common_errors": "Forzar patrones de diseño innecesarios para problemas simples (sobreingeniería). Los patrones resuelven problemas reales de acoplamiento y mantenimiento.",
+          "common_errors": "Crear factories con extensas cadenas if/elif/else que requieren modificar la función cada vez que se agrega una clase. El patrón de diccionario de registro es mucho más escalable y extensible.",
           "mini_exercise": {
-            "starter_code": "# Agrega soporte para el canal \"slack\" en el Factory\n# class NotificadorSlack: def enviar(self, m): return f\"Slack: {m}\"",
-            "instructions": "Observa cómo extender el factory solo requiere registrar la nueva clase.",
-            "solution": "class NotificadorSlack:\n    def enviar(self, m): return f\"Slack: {m}\""
+            "starter_code": "# Agrega 'xml' al registro del factory retornando una clase ficticia\ndef factory(tipo):\n    registro = {\"txt\": lambda: \"Texto\", \"xml\": lambda: \"XML\"}\n    return registro[tipo]()\n\nprint(factory(\"xml\"))",
+            "instructions": "Verifica que el factory devuelva XML.",
+            "solution": "def factory(tipo):\n    registro = {\"txt\": lambda: \"Texto\", \"xml\": lambda: \"XML\"}\n    return registro[tipo]()\n\nprint(factory(\"xml\"))"
           },
           "key_takeaways": [
-            "En Python, las funciones como objetos de primer orden simplifican Strategy.",
-            "Factory centraliza la creación de objetos desacoplando clientes.",
-            "Un módulo de Python es naturalmente un Singleton."
+            "Factory encapsula la creación de instancias complejas o condicionales.",
+            "Las clases como objetos de primer orden permiten usar diccionarios como despachadores limpios.",
+            "Desacopla el código cliente de las implementaciones concretas."
           ],
           "exercise": {
             "id": "ex_py3_10_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Por qué en Python el patrón de diseño Singleton a menudo se resuelve simplemente creando un módulo (.py)?",
+            "prompt": "¿Cuál es el propósito central del patrón de diseño Factory?",
             "options": [
               {
                 "id": "a",
-                "text": "Porque Python cachea los módulos en sys.modules y nunca los re-ejecuta al volver a importarlos"
+                "text": "Centralizar y desacoplar la creación de objetos, permitiendo al cliente obtener instancias sin conocer sus clases concretas directas"
               },
               {
                 "id": "b",
-                "text": "Porque los módulos no pueden contener clases"
+                "text": "Destruir objetos de la memoria RAM automáticamente"
               },
               {
                 "id": "c",
-                "text": "Porque los módulos se ejecutan en memoria GPU"
+                "text": "Impedir que se creen subclases de una clase base"
               },
               {
                 "id": "d",
-                "text": "Porque el Singleton está prohibido en Python"
+                "text": "Obligar a que todas las funciones sean síncronas"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Un módulo importado se carga una sola vez en memoria y se comparte en toda la aplicación, funcionando como un Singleton natural."
+            "explanation": "Factory aísla la selección e instanciación de clases, facilitando la adición de nuevas variantes sin modificar el código consumidor."
+          }
+        },
+        {
+          "id": "les_py3_10_02",
+          "code": "L02",
+          "title": "El Patrón Strategy y Funciones de Primer Orden",
+          "slug": "patron-strategy-funciones-primer-orden",
+          "position": 2,
+          "concept_id": "py3-strategy-pattern-functional",
+          "objective": "Intercambiar algoritmos dinámicamente pasando funciones como estrategias sin recurrir a sobreingeniería de clases.",
+          "theory_markdown": "El patrón **Strategy** define una familia de algoritmos intercambiables para resolver una tarea (por ejemplo: diferentes fórmulas de cálculo de descuento o algoritmos de ordenamiento).\n\n### La simplificación en Python\nEn lenguajes orientados a objetos tradicionales debes crear una interfaz abstracta `Strategy` y múltiples clases envolventes. En Python, **cualquier función es una estrategia legítima**:\n\n```python\n# 1. Definimos las estrategias como funciones puras simples\ndef descuento_ninguno(monto: float) -> float:\n    return monto\n\ndef descuento_vip(monto: float) -> float:\n    return monto * 0.80\n\n# 2. La clase contexto recibe la estrategia como un argumento invocable\nclass CarritoCompra:\n    def __init__(self, estrategia_descuento=descuento_ninguno):\n        self.estrategia = estrategia_descuento\n\n    def liquidar(self, total: float) -> float:\n        return self.estrategia(total)\n```",
+          "examples": [
+            {
+              "title": "Intercambio de estrategia de descuento en tiempo de ejecución",
+              "code": "carrito = CarritoCompra(descuento_vip)\nprint(\"Total VIP:\", carrito.liquidar(100.0))\n\n# Cambiamos la estrategia sobre la marcha usando una lambda\ncarrito.estrategia = lambda monto: monto * 0.50\nprint(\"Total Promocion 50%:\", carrito.liquidar(100.0))",
+              "output": "Total VIP: 80.0\nTotal Promocion 50%: 50.0",
+              "explanation": "La estrategia se puede sustituir en runtime sin reconstruir el objeto carrito ni instanciar clases pesadas."
+            }
+          ],
+          "common_errors": "Crear clases vacías con un solo método `def execute(self)` solo para satisfacer un diseño formal heredado de otros lenguajes, cuando una función pura resuelve el problema de forma más limpia.",
+          "mini_exercise": {
+            "starter_code": "# Define una estrategia de descuento del 10%\ndef descuento_diez(monto):\n    return monto * ...\n\nprint(descuento_diez(100))  # Debe dar 90.0",
+            "instructions": "Escribe 0.90 para aplicar el 10% de rebaja.",
+            "solution": "def descuento_diez(monto):\n    return monto * 0.90\n\nprint(descuento_diez(100))"
+          },
+          "key_takeaways": [
+            "Strategy permite alternar algoritmos sin modificar la clase contexto.",
+            "En Python las funciones puras son la implementación más idiomática de Strategy.",
+            "Permite inyectar lambdas o funciones arbitrarias en runtime."
+          ],
+          "exercise": {
+            "id": "ex_py3_10_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Por qué el patrón Strategy es mucho más conciso en Python que en lenguajes como Java o C++?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque las funciones son objetos de primer orden, permitiendo pasar funciones directamente como estrategias sin necesidad de crear clases ni interfaces formales"
+              },
+              {
+                "id": "b",
+                "text": "Porque Python no permite la creación de clases abstractas"
+              },
+              {
+                "id": "c",
+                "text": "Porque los bucles for ejecutan Strategy automáticamente"
+              },
+              {
+                "id": "d",
+                "text": "Porque el intérprete traduce las funciones a expresiones regulares"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La capacidad de tratar a funciones ordinarias como valores de primer orden hace innecesaria la jerarquía de interfaces típica de Strategy."
+          }
+        },
+        {
+          "id": "les_py3_10_03",
+          "code": "L03",
+          "title": "El Patrón Singleton: Módulos vs __new__",
+          "slug": "patron-singleton-modulos-new",
+          "position": 3,
+          "concept_id": "py3-singleton-pattern",
+          "objective": "Asegurar la existencia de una única instancia global mediante el mecanismo de caché de módulos o la sobreescritura de __new__.",
+          "theory_markdown": "El patrón **Singleton** restringe la instanciación de una clase para garantizar que exista **una única instancia compartida** en todo el ciclo de vida del proceso (ej: pool de conexiones, configuración global).\n\n### Enfoque 1: El Singleton Pythónico por Excelencia (Módulos)\nEn Python, cualquier módulo `.py` es un Singleton natural: cuando se importa por primera vez, el intérprete ejecuta su código y almacena el objeto módulo en `sys.modules`. Todas las importaciones subsiguientes reutilizan esa misma instancia exacta.\n\n### Enfoque 2: Singleton en Clases mediante `__new__`\nEl método dunder `__new__` es el verdadero constructor responsable de asignar memoria antes de que se ejecute `__init__`:\n\n```python\nclass SingletonDB:\n    _instancia = None\n\n    def __new__(cls, *args, **kwargs):\n        if cls._instancia is None:\n            # Crea la unica instancia y la almacena en el atributo de clase\n            cls._instancia = super().__new__(cls)\n        return cls._instancia\n```",
+          "examples": [
+            {
+              "title": "Verificación de unicidad con Singleton",
+              "code": "s1 = SingletonDB()\ns2 = SingletonDB()\nprint(\"Misma instancia en memoria:\", s1 is s2)",
+              "output": "Misma instancia en memoria: True",
+              "explanation": "s1 is s2 es True porque ambas variables apuntan a la misma dirección física de memoria RAM."
+            }
+          ],
+          "common_errors": "Confundir `__new__` (que crea y retorna el objeto) con `__init__` (que solo inicializa los atributos). Si intentas retornar un valor en `__init__`, Python lanzará TypeError.",
+          "mini_exercise": {
+            "starter_code": "class RegistroGlobal:\n    _instancia = None\n    def __new__(cls):\n        if cls._instancia is None:\n            cls._instancia = super().__(cls)\n        return cls._instancia",
+            "instructions": "Escribe new__ para completar super().__new__(cls).",
+            "solution": "class RegistroGlobal:\n    _instancia = None\n    def __new__(cls):\n        if cls._instancia is None:\n            cls._instancia = super().__new__(cls)\n        return cls._instancia"
+          },
+          "key_takeaways": [
+            "Los módulos de Python son el Singleton más idiomático y seguro frente a hilos.",
+            "__new__(cls) controla la creación física de la instancia en memoria.",
+            "is permite verificar que dos referencias apunten al mismo objeto Singleton."
+          ],
+          "exercise": {
+            "id": "ex_py3_10_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Cuál es la diferencia fundamental entre los métodos especiales __new__ e __init__ en la creación de objetos en Python?",
+            "options": [
+              {
+                "id": "a",
+                "text": "__new__ es el constructor que reserva memoria y retorna la nueva instancia, mientras que __init__ es el inicializador que configura sus atributos"
+              },
+              {
+                "id": "b",
+                "text": "__new__ se usa solo para excepciones y __init__ para clases normales"
+              },
+              {
+                "id": "c",
+                "text": "__init__ se ejecuta antes que __new__"
+              },
+              {
+                "id": "d",
+                "text": "Son sinónimos intercambiables"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "__new__ crea y devuelve el objeto en memoria RAM; posteriormente, Python pasa esa instancia como 'self' a __init__ para configurarla."
+          }
+        },
+        {
+          "id": "les_py3_10_04",
+          "code": "L04",
+          "title": "El Patrón Observer y Arquitecturas Dirigidas por Eventos",
+          "slug": "patron-observer-arquitecturas-eventos",
+          "position": 4,
+          "concept_id": "py3-observer-event-bus",
+          "objective": "Desacoplar componentes del sistema implementando un despachador de eventos (Event Bus) con el patrón Observer.",
+          "theory_markdown": "El patrón **Observer (Observador)** define una relación de uno a muchos: cuando un objeto principal (**Sujeto / Emisor**) cambia de estado o genera un evento, notifica automáticamente a todos los **Observadores / Suscriptores** registrados.\n\n### Diseño de un Event Bus genérico\n```python\nclass EventBus:\n    def __init__(self):\n        self._subscriptores = {}\n\n    def suscribir(self, evento: str, callback):\n        if evento not in self._subscriptores:\n            self._subscriptores[evento] = []\n        self._subscriptores[evento].append(callback)\n\n    def emitir(self, evento: str, **datos):\n        for callback in self._subscriptores.get(evento, []):\n            callback(**datos)\n```\n\n### Ventaja arquitectónica\nEl emisor (por ejemplo: la pasarela de pagos) no necesita importar ni conocer las clases de facturación, envío de correos o análisis de métricas. Simplemente emite el evento `\"pago_confirmado\"` y cada suscriptor reacciona de forma independiente.",
+          "examples": [
+            {
+              "title": "Publicación y suscripción desacoplada",
+              "code": "bus = EventBus()\n\ndef enviar_recibo(usuario, total):\n    print(f\"[Email] Recibo por ${total} enviado a {usuario}\")\n\ndef notificar_almacen(usuario, total):\n    print(f\"[Almacen] Preparando pedido para {usuario}\")\n\nbus.suscribir(\"orden_pagada\", enviar_recibo)\nbus.suscribir(\"orden_pagada\", notificar_almacen)\n\n# Emision del evento\nbus.emitir(\"orden_pagada\", usuario=\"Carlos\", total=150)",
+              "output": "[Email] Recibo por $150 enviado a Carlos\n[Almacen] Preparando pedido para Carlos",
+              "explanation": "El emisor dispara el evento y todos los observadores registrados reciben los datos de forma totalmente desacoplada."
+            }
+          ],
+          "common_errors": "Guardar referencias fuertes a objetos observadores que impiden que el recolector de basura los libere (Memory Leaks). En sistemas complejos se usan `weakref` para observadores débiles.",
+          "mini_exercise": {
+            "starter_code": "bus = EventBus()\n# Registra una funcion lambda que imprima 'Alerta!' al evento 'peligro'\nbus.suscribir(\"peligro\", lambda: print(\"Alerta!\"))\nbus.emitir(\"peligro\")",
+            "instructions": "Ejecuta y verifica la reacción del suscriptor.",
+            "solution": "bus = EventBus()\nbus.suscribir(\"peligro\", lambda: print(\"Alerta!\"))\nbus.emitir(\"peligro\")"
+          },
+          "key_takeaways": [
+            "Observer desacopla los emisores de eventos de los receptores que reaccionan a ellos.",
+            "Es el fundamento de interfaces gráficas, colas de mensajería y microservicios.",
+            "Permite añadir nuevos comportamientos al sistema sin tocar el código emisor original."
+          ],
+          "exercise": {
+            "id": "ex_py3_10_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Cuál es la principal ventaja arquitectónica de utilizar el patrón Observer (Event Bus)?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Permite que múltiples componentes reaccionen a un cambio de estado sin que el emisor del evento deba conocer la existencia o implementación de los receptores (bajo acoplamiento)"
+              },
+              {
+                "id": "b",
+                "text": "Reduce la velocidad del código a la mitad"
+              },
+              {
+                "id": "c",
+                "text": "Obliga a que todos los eventos se sincronicen en un archivo .csv"
+              },
+              {
+                "id": "d",
+                "text": "Reemplaza al recolector de basura de Python"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El patrón Observer implementa el principio de bajo acoplamiento: el emisor publica el evento y los suscriptores reaccionan de manera autónoma."
           }
         }
       ]

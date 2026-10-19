@@ -15,19 +15,152 @@
         },
         {
           "id": "b",
-          "text": "Cuando queremos iterar sobre una lista fija de 10 elementos"
+          "text": "Cuando queremos recorrer exactamente una secuencia fija de 10 números"
         },
         {
           "id": "c",
-          "text": "Cuando el código solo se debe ejecutar una única vez"
+          "text": "Cuando el código solo se debe ejecutar una única vez sin repetirse"
         },
         {
           "id": "d",
-          "text": "Nunca, while está obsoleto en Python 3"
+          "text": "Nunca, while es una estructura en desuso"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "while es ideal cuando la cantidad de repeticiones depende de un evento dinámico (como la respuesta del usuario)."
+      "explanation": "while es ideal para repeticiones dinámicas cuyo número de ciclos depende de una condición cambiante y no de un rango fijo."
+    },
+    {
+      "id": "q_py1_07_02",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Cuántas líneas de texto imprimirá la ejecución del siguiente código?",
+      "prompt_code": "i = 0\nwhile i < 3:\n    print(\"Koda\")\n    i += 1",
+      "options": [
+        {
+          "id": "a",
+          "text": "3 líneas con \"Koda\""
+        },
+        {
+          "id": "b",
+          "text": "4 líneas con \"Koda\""
+        },
+        {
+          "id": "c",
+          "text": "Infinitas líneas"
+        },
+        {
+          "id": "d",
+          "text": "Ninguna"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "i toma los valores 0, 1 y 2 (exactamente 3 iteraciones). Al llegar a 3, la condición 3 < 3 es False y el bucle finaliza."
+    },
+    {
+      "id": "q_py1_07_03",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es la causa principal de que un bucle while se convierta en un bucle infinito no deseado?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que la condición de control nunca cambie a False dentro del cuerpo del bucle"
+        },
+        {
+          "id": "b",
+          "text": "Haber usado 4 espacios de sangría"
+        },
+        {
+          "id": "c",
+          "text": "Haber terminado la línea del while con dos puntos (:)"
+        },
+        {
+          "id": "d",
+          "text": "Tener más de 3 líneas de código dentro del bucle"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Un bucle while se ejecuta infinitamente si las instrucciones en su interior nunca modifican la variable de control para que la condición se vuelva False."
+    },
+    {
+      "id": "q_py1_07_04",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué números se mostrarán en pantalla tras ejecutar esta cuenta regresiva?",
+      "prompt_code": "n = 3\nwhile n > 0:\n    print(n)\n    n -= 1",
+      "options": [
+        {
+          "id": "a",
+          "text": "3, 2, 1"
+        },
+        {
+          "id": "b",
+          "text": "3, 2, 1, 0"
+        },
+        {
+          "id": "c",
+          "text": "2, 1, 0"
+        },
+        {
+          "id": "d",
+          "text": "Infinitos números 3"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El bucle muestra 3, luego 2, luego 1. Al decrementar a 0, 0 > 0 es False y el bucle se detiene sin imprimir el 0."
+    },
+    {
+      "id": "q_py1_07_05",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "En programación con Python, ¿qué es y para qué sirve una \"bandera\" (flag)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Una variable booleana (True/False) que actúa como interruptor para controlar el bucle"
+        },
+        {
+          "id": "b",
+          "text": "Una función para medir el tiempo de ejecución en milisegundos"
+        },
+        {
+          "id": "c",
+          "text": "Un tipo de comentario especial para marcar errores"
+        },
+        {
+          "id": "d",
+          "text": "Un comando para reiniciar la computadora"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Una bandera es una variable booleana que refleja el estado de un proceso (ej: jugando = True) y al asignarle False apaga el bucle ordenadamente."
+    },
+    {
+      "id": "q_py1_07_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué valor final imprimirá este bucle controlado con while True y break?",
+      "prompt_code": "i = 1\nwhile True:\n    if i == 3:\n        break\n    i += 1\nprint(i)",
+      "options": [
+        {
+          "id": "a",
+          "text": "3"
+        },
+        {
+          "id": "b",
+          "text": "2"
+        },
+        {
+          "id": "c",
+          "text": "4"
+        },
+        {
+          "id": "d",
+          "text": "Bucle infinito"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "i se incrementa progresivamente. Cuando i alcanza el valor 3, la condición del if se cumple y ejecuta break, saliendo del bucle. print(i) muestra 3."
     }
   ]
 }

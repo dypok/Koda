@@ -7,27 +7,157 @@
       "id": "q_py2_09_01",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "¿Qué comando de pip genera la lista de paquetes instalados con sus versiones exactas?",
+      "prompt": "¿Por qué nunca se debe subir la carpeta '.venv' a un repositorio Git?",
       "options": [
         {
           "id": "a",
-          "text": "pip freeze"
+          "text": "Porque contiene ejecutables y binarios atados al sistema operativo local, y puede reproducirse de forma ligera mediante requirements.txt"
         },
         {
           "id": "b",
-          "text": "pip export"
+          "text": "Porque Git borra automáticamente cualquier carpeta que empiece por punto"
         },
         {
           "id": "c",
-          "text": "pip list --save"
+          "text": "Porque los archivos de Python no pueden guardarse en GitHub"
         },
         {
           "id": "d",
-          "text": "pip lock"
+          "text": "Porque desactiva la compresión de ramas en el servidor remoto"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "pip freeze produce la salida en formato paquete==version lista para redirigir a requirements.txt."
+      "explanation": "Los entornos virtuales son locales y pesados. Subirlos contamina el historial y causa errores entre sistemas operativos diferentes."
+    },
+    {
+      "id": "q_py2_09_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué comando se utiliza para instalar un conjunto de dependencias congeladas en un archivo requirements.txt?",
+      "options": [
+        {
+          "id": "a",
+          "text": "pip install -r requirements.txt"
+        },
+        {
+          "id": "b",
+          "text": "pip read requirements.txt"
+        },
+        {
+          "id": "c",
+          "text": "python requirements.txt"
+        },
+        {
+          "id": "d",
+          "text": "pip clone requirements.txt"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El indicador -r indica a pip que debe leer e instalar la lista de paquetes descrita en el archivo especificado."
+    },
+    {
+      "id": "q_py2_09_03",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es el comando estándar para generar un archivo requirements.txt con las versiones exactas del entorno actual?",
+      "options": [
+        {
+          "id": "a",
+          "text": "pip freeze > requirements.txt"
+        },
+        {
+          "id": "b",
+          "text": "pip export requirements.txt"
+        },
+        {
+          "id": "c",
+          "text": "pip save requirements.txt"
+        },
+        {
+          "id": "d",
+          "text": "git commit requirements.txt"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "pip freeze genera la lista de dependencias y versiones activas, y el operador '>' redirige esa salida hacia el archivo requirements.txt."
+    },
+    {
+      "id": "q_py2_09_04",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es el comando estándar de Python para inicializar un entorno virtual en la carpeta local .venv?",
+      "options": [
+        {
+          "id": "a",
+          "text": "python -m venv .venv"
+        },
+        {
+          "id": "b",
+          "text": "pip init .venv"
+        },
+        {
+          "id": "c",
+          "text": "python make venv"
+        },
+        {
+          "id": "d",
+          "text": "venv create .venv"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La sintaxis oficial 'python -m venv <ruta>' utiliza el módulo venv de la biblioteca estándar para crear el entorno virtual."
+    },
+    {
+      "id": "q_py2_09_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué acción realiza el comando 'git add .' en el flujo de trabajo de Git?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Mueve todos los cambios y archivos nuevos al Staging Area (área de preparación) listos para el commit"
+        },
+        {
+          "id": "b",
+          "text": "Guarda los cambios permanentemente en el servidor remoto"
+        },
+        {
+          "id": "c",
+          "text": "Borra los cambios no deseados del disco"
+        },
+        {
+          "id": "d",
+          "text": "Descarga la última versión de la rama principal"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "git add añade las modificaciones del directorio de trabajo al índice o Staging Area antes de crear el commit."
+    },
+    {
+      "id": "q_py2_09_06",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué archivo permite evitar que Git rastree credenciales (.env) y carpetas de caché compilada (__pycache__)?",
+      "options": [
+        {
+          "id": "a",
+          "text": ".gitignore"
+        },
+        {
+          "id": "b",
+          "text": ".gitconfig"
+        },
+        {
+          "id": "c",
+          "text": "requirements.txt"
+        },
+        {
+          "id": "d",
+          "text": "README.md"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": ".gitignore es el archivo de configuración donde se listan los patrones de archivos y carpetas que Git debe ignorar sistemáticamente."
     }
   ]
 }

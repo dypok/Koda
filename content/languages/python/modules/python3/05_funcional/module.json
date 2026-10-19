@@ -5,13 +5,13 @@
   "slug": "programacion-funcional",
   "course_slug": "python-3",
   "title": "Programación Funcional: itertools y functools",
-  "objective": "Aplicar patrones funcionales puros, memorización de caché con @lru_cache y herramientas de combinación con itertools.",
-  "description": "Acelera funciones matemáticas 100x con caché automático y combina secuencias infinitas con las utilidades de itertools.",
-  "position": 25,
+  "objective": "Aplicar principios de diseño funcional, dominar la memorización con @lru_cache, crear funciones especializadas con partial y procesar combinatoria con itertools.",
+  "description": "Acelera algoritmos recursivos 100x con caché automático, congela argumentos de funciones con partial y manipula secuencias infinitas con itertools.",
+  "position": 5,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,233 @@
     {
       "id": "sec_py3_05_01",
       "code": "S01",
-      "title": "Caché con @lru_cache e Itertools",
-      "slug": "lru-cache-itertools",
+      "title": "Programación Funcional en Python",
+      "slug": "programacion-funcional-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 18,
-      "xp_on_complete": 45,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py3_05_01",
           "code": "L01",
-          "title": "Memorización Automática con @functools.lru_cache",
-          "slug": "lru-cache-base",
+          "title": "Funciones Puras y Reducción con functools.reduce",
+          "slug": "funciones-puras-reduce",
           "position": 1,
-          "concept_id": "py3-functional",
-          "objective": "Optimizar algoritmos recursivos de tiempo exponencial O(2^n) a tiempo lineal O(n).",
-          "theory_markdown": "El decorador `@functools.lru_cache` (Least Recently Used Cache) almacena en memoria los resultados de llamadas previas con los mismos argumentos.\n\nSi calculas `fibonacci(35)` de forma recursiva ingenua, se realizan más de 20 millones de llamadas repetitivas. Agregando una sola línea con `@lru_cache(maxsize=128)`, el cálculo pasa de tardar 5 segundos a tardar **0.00001 segundos**.",
+          "concept_id": "py3-pure-functions-reduce",
+          "objective": "Diferenciar funciones puras de efectos secundarios y acumular secuencias completas usando functools.reduce.",
+          "theory_markdown": "El paradigma de la **Programación Funcional (PF)** estructura el software evaluando expresiones matemáticas en lugar de mutar estados globales.\n\n### Propiedades de una Función Pura\n1. **Determinismo**: Ante los mismos argumentos de entrada, produce siempre exactamente el mismo valor de salida.\n2. **Cero Efectos Secundarios (No Side-effects)**: No altera variables globales, no modifica listas pasadas por referencia ni realiza operaciones de I/O externas.\n\n### Reducción funcional con `functools.reduce`\nAplica una función binaria acumulativa a los elementos de una secuencia de izquierda a derecha, reduciéndola a un único valor final:\n```python\nfrom functools import reduce\n\nnumeros = [1, 2, 3, 4]\n# Multiplica acumulativamente: ((1 * 2) * 3) * 4 = 24\nproducto = reduce(lambda acumulado, x: acumulado * x, numeros)\n```",
           "examples": [
             {
-              "title": "Fibonacci ultra-optimizado con lru_cache",
-              "code": "from functools import lru_cache\n\n@lru_cache(maxsize=None)\ndef fib(n: int) -> int:\n    if n < 2:\n        return n\n    return fib(n - 1) + fib(n - 2)\n\nprint(\"Fib(50):\", fib(50))",
-              "output": "Fib(50): 12586269025",
-              "explanation": "Calcula el número 50 de Fibonacci en microsegundos gracias al almacenamiento en caché."
+              "title": "Cálculo de suma acumulada con reduce",
+              "code": "from functools import reduce\n\nvalores = [10, 20, 30, 40]\ntotal = reduce(lambda acc, item: acc + item, valores, 0)\nprint(\"Resultado acumulado:\", total)",
+              "output": "Resultado acumulado: 100",
+              "explanation": "reduce procesa elemento por elemento manteniendo el acumulador actualizado."
             }
           ],
-          "common_errors": "Usar lru_cache en funciones con argumentos mutables (como listas o diccionarios). Como la clave del caché se calcula con hash(args), los argumentos deben ser inmutables.",
+          "common_errors": "Modificar una lista externa dentro de una función supuestamente pura. Rompe la pureza y ocasiona errores de concurrencia difíciles de rastrear.",
           "mini_exercise": {
-            "starter_code": "from functools import lru_cache\n@lru_cache(maxsize=32)\ndef multiplicar(a, b):\n    return a * b\n\nprint(multiplicar(10, 5))",
-            "instructions": "Prueba la función memorizada.",
-            "solution": "from functools import lru_cache\n@lru_cache(maxsize=32)\ndef multiplicar(a, b):\n    return a * b\n\nprint(multiplicar(10, 5))"
+            "starter_code": "from functools import reduce\n# Calcula el producto de [2, 3, 4] usando reduce y multiplicacion\nnums = [2, 3, 4]\nresultado = reduce(lambda a, b: a * b, nums)\nprint(resultado)  # Debe dar 24",
+            "instructions": "Ejecuta reduce para multiplicar la lista.",
+            "solution": "from functools import reduce\nnums = [2, 3, 4]\nresultado = reduce(lambda a, b: a * b, nums)\nprint(resultado)"
           },
           "key_takeaways": [
-            "@lru_cache memoriza resultados previos para evitar recalcular.",
-            "Los argumentos deben ser inmutables (hashables).",
-            "Reduce la complejidad temporal drásticamente."
+            "Las funciones puras son deterministas y carecen de efectos secundarios.",
+            "Facilitan el testing unitario y la concurrencia al no compartir estado mutable.",
+            "functools.reduce colapsa una lista a un solo valor aplicando una operación acumulativa."
           ],
           "exercise": {
             "id": "ex_py3_05_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Qué significa la sigla LRU en el decorador lru_cache?",
+            "prompt": "¿Cuál de las siguientes es una característica fundamental de una función pura?",
             "options": [
               {
                 "id": "a",
-                "text": "Least Recently Used (desalojo del elemento usado hace más tiempo)"
+                "text": "Siempre devuelve el mismo resultado para los mismos argumentos y no modifica ningún estado externo fuera de su ámbito local"
               },
               {
                 "id": "b",
-                "text": "Linear Recursive Unit"
+                "text": "Debe estar escrita en una sola línea de código"
               },
               {
                 "id": "c",
-                "text": "Loop Return Unifier"
+                "text": "Solo puede procesar números flotantes"
               },
               {
                 "id": "d",
-                "text": "Local Resource Utility"
+                "text": "Guarda sus resultados automáticamente en una base de datos"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "LRU mantiene en caché los elementos más recientes y descarta los menos consultados cuando se alcanza el límite maxsize."
+            "explanation": "La pureza funcional se define por el determinismo y la ausencia total de efectos secundarios sobre el entorno externo."
+          }
+        },
+        {
+          "id": "les_py3_05_02",
+          "code": "L02",
+          "title": "Memorización de Alto Rendimiento con @lru_cache y @cache",
+          "slug": "memorizacion-lru-cache",
+          "position": 2,
+          "concept_id": "py3-lru-cache-optimization",
+          "objective": "Acelerar algoritmos exponenciales mediante memorización en RAM con @functools.lru_cache y comprender la exigencia de hashabilidad.",
+          "theory_markdown": "La **memorización** es una técnica de optimización que almacena los resultados de funciones costosas en una tabla hash en memoria. Si la función se invoca nuevamente con los mismos argumentos, entrega el resultado memorizado instantáneamente en tiempo O(1).\n\n### El decorador `@functools.lru_cache`\n- **LRU (Least Recently Used)**: Cuando el caché alcanza el tamaño límite `maxsize`, descarta los valores consultados hace más tiempo para no desbordar la memoria.\n- Desde Python 3.9+, existe `@cache` como alias directo para caché infinito sin límite (`maxsize=None`).\n\n```python\nfrom functools import lru_cache\n\n@lru_cache(maxsize=128)\ndef fibonacci(n: int) -> int:\n    if n < 2:\n        return n\n    return fibonacci(n - 1) + fibonacci(n - 2)\n```\n\n### Regla estricta: Argumentos Hashables\nComo los argumentos de la función actúan como claves del diccionario de caché interno, **deben ser inmutables (hashables)**. Pasar listas o diccionarios mutables produce inmediatamente un `TypeError: unhashable type: 'list'`.",
+          "examples": [
+            {
+              "title": "Uso de lru_cache y limpieza con cache_clear()",
+              "code": "from functools import lru_cache\n\n@lru_cache(maxsize=16)\ndef consulta_pesada(param):\n    return f\"Resultado_{param}\"\n\nprint(consulta_pesada(1))\nprint(consulta_pesada.cache_info())\nconsulta_pesada.cache_clear()  # Vacia el cache manualmente",
+              "output": "Resultado_1\nCacheInfo(hits=0, misses=1, maxsize=16, currsize=1)",
+              "explanation": ".cache_info() permite auditar cuántas veces se ahorró trabajo (hits) y cuántas se calculó de cero (misses)."
+            }
+          ],
+          "common_errors": "Intentar memorizar funciones cuyos argumentos sean colecciones mutables (listas o dicts), lo que detona un TypeError de tipo no hashable.",
+          "mini_exercise": {
+            "starter_code": "from functools import lru_cache\n# Decora la funcion potencia con lru_cache(maxsize=64)\n@lru_cache(maxsize=64)\ndef potencia(base, exp):\n    return base ** exp\n\nprint(potencia(2, 8))",
+            "instructions": "Verifica que el decorador memorice la llamada.",
+            "solution": "from functools import lru_cache\n@lru_cache(maxsize=64)\ndef potencia(base, exp):\n    return base ** exp\n\nprint(potencia(2, 8))"
+          },
+          "key_takeaways": [
+            "@lru_cache memoriza resultados previos transformando cálculos O(2^n) en O(n).",
+            "LRU descarta las entradas menos consultadas cuando se alcanza maxsize.",
+            "Todos los argumentos pasados a la función deben ser inmutables y hashables."
+          ],
+          "exercise": {
+            "id": "ex_py3_05_02",
+            "type": "find_error",
+            "difficulty": "medium",
+            "prompt": "¿Por qué fallará la llamada 'filtrar([1, 2, 3])' sobre una función decorada con @lru_cache?",
+            "prompt_code": "from functools import lru_cache\n\n@lru_cache\ndef filtrar(elementos):\n    return sum(elementos)\n\nfiltrar([1, 2, 3])",
+            "options": [
+              {
+                "id": "a",
+                "text": "TypeError: unhashable type: 'list' (las listas son mutables y no pueden usarse como claves en la tabla hash interna del caché)"
+              },
+              {
+                "id": "b",
+                "text": "ValueError: maxsize no puede ser negativo"
+              },
+              {
+                "id": "c",
+                "text": "ZeroDivisionError: sum no acepta listas"
+              },
+              {
+                "id": "d",
+                "text": "NameError: filtrar no existe"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El caché de lru_cache indexa los resultados por los argumentos pasados; al ser la lista mutable, carece de hash y lanza TypeError."
+          }
+        },
+        {
+          "id": "les_py3_05_03",
+          "code": "L03",
+          "title": "Aplicación Parcial con functools.partial",
+          "slug": "aplicacion-parcial-functools-partial",
+          "position": 3,
+          "concept_id": "py3-functools-partial",
+          "objective": "Fijar argumentos de funciones existentes para crear nuevas funciones especializadas usando functools.partial.",
+          "theory_markdown": "La **aplicación parcial** consiste en tomar una función existente que recibe múltiples argumentos y generar una nueva función que tiene congelados de antemano algunos de esos argumentos.\n\n### Sintaxis con `functools.partial`\n```python\nfrom functools import partial\n\n# La funcion original int(x, base=10) convierte strings a enteros\n# Creamos una version especializada fija para binario (base 2)\nparsear_binario = partial(int, base=2)\n\nprint(parsear_binario(\"1010\"))  # 10\nprint(parsear_binario(\"1111\"))  # 15\n```\n\n### ¿Cuándo usar partial?\n- Al conectar funciones existentes con callbacks que exigen firmas con menos argumentos.\n- Al configurar funciones de conexión (fijando `host` y `puerto`) sin escribir funciones wrapper manuales.",
+          "examples": [
+            {
+              "title": "Especialización de multiplicador con partial",
+              "code": "from functools import partial\n\ndef multiplicar(a, b):\n    return a * b\n\ndoble = partial(multiplicar, 2)\ntriple = partial(multiplicar, 3)\n\nprint(\"Doble de 8:\", doble(8))\nprint(\"Triple de 8:\", triple(8))",
+              "output": "Doble de 8: 16\nTriple de 8: 24",
+              "explanation": "partial congela el primer argumento posicional 'a' con 2 y 3 respectivamente."
+            }
+          ],
+          "common_errors": "Creer que partial ejecuta la función inmediatamente. partial solo retorna una nueva función callable lista para ser ejecutada más tarde.",
+          "mini_exercise": {
+            "starter_code": "from functools import partial\ndef potencia(base, exp):\n    return base ** exp\n\n# Crea una funcion al_cuadrado fijando exp=2\nal_cuadrado = partial(potencia, exp=2)\nprint(al_cuadrado(5))  # Debe dar 25",
+            "instructions": "Verifica que al_cuadrado calcule 5 elevado al cuadrado.",
+            "solution": "from functools import partial\ndef potencia(base, exp):\n    return base ** exp\n\nal_cuadrado = partial(potencia, exp=2)\nprint(al_cuadrado(5))"
+          },
+          "key_takeaways": [
+            "functools.partial crea una nueva función con argumentos predefinidos.",
+            "Evita escribir funciones wrapper auxiliares repetitivas.",
+            "Es ideal para adaptar firmas de funciones a interfaces de callbacks o eventos."
+          ],
+          "exercise": {
+            "id": "ex_py3_05_03",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué imprime este código al usar functools.partial?",
+            "prompt_code": "from functools import partial\n\ndef saludar(prefijo, nombre):\n    return f\"{prefijo} {nombre}\"\n\nhola = partial(saludar, \"Hola\")\nprint(hola(\"Mundo\"))",
+            "options": [
+              {
+                "id": "a",
+                "text": "Hola Mundo"
+              },
+              {
+                "id": "b",
+                "text": "saludar Hola Mundo"
+              },
+              {
+                "id": "c",
+                "text": "None"
+              },
+              {
+                "id": "d",
+                "text": "TypeError"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "partial fija el argumento 'prefijo' con 'Hola', por lo que llamar a hola('Mundo') completa la llamada como saludar('Hola', 'Mundo')."
+          }
+        },
+        {
+          "id": "les_py3_05_04",
+          "code": "L04",
+          "title": "Combinatoria y Secuencias Eficientes con itertools",
+          "slug": "combinatoria-itertools",
+          "position": 4,
+          "concept_id": "py3-itertools-library",
+          "objective": "Encadenar iteradores y calcular combinaciones y permutaciones sin duplicar estructuras en memoria mediante itertools.",
+          "theory_markdown": "El módulo nativo **`itertools`** es la navaja suiza de Python para operaciones iterables de alto rendimiento escritas en C.\n\n### Funciones imprescindibles\n1. **`itertools.chain(*iterables)`**: Concatena múltiples secuencias en un solo flujo continuo sin crear listas intermedias:\n   ```python\n   combinado = itertools.chain([1, 2], [3, 4])  # 1, 2, 3, 4\n   ```\n2. **`itertools.combinations(iterable, r)`**: Genera todas las subselecciones de longitud `r` donde **el orden NO importa** (no hay repeticiones):\n   ```python\n   itertools.combinations([\"A\", \"B\", \"C\"], 2)  # ('A', 'B'), ('A', 'C'), ('B', 'C')\n   ```\n3. **`itertools.permutations(iterable, r)`**: Genera todas las ordenaciones posibles donde **el orden SÍ importa**:\n   ```python\n   itertools.permutations([1, 2], 2)  # (1, 2) y (2, 1)\n   ```",
+          "examples": [
+            {
+              "title": "Generación de combinaciones de elementos",
+              "code": "import itertools\n\nletras = [\"X\", \"Y\", \"Z\"]\ncombs = list(itertools.combinations(letras, 2))\nprint(\"Combinaciones de 2 elementos:\", combs)",
+              "output": "Combinaciones de 2 elementos: [('X', 'Y'), ('X', 'Z'), ('Y', 'Z')]",
+              "explanation": "combinations calcula exactamente las 3 tuplas únicas posibles sin considerar permutaciones invertidas."
+            }
+          ],
+          "common_errors": "Confundir combinations (orden irrelevante) con permutations (orden relevante). En combinations ('A', 'B') es idéntico a ('B', 'A') y solo se genera una vez.",
+          "mini_exercise": {
+            "starter_code": "import itertools\n# Encadena dos listas usando itertools.chain\nunidos = list(itertools.chain([1, 2], [3, 4]))\nprint(unidos)",
+            "instructions": "Verifica que el resultado sea [1, 2, 3, 4].",
+            "solution": "import itertools\nunidos = list(itertools.chain([1, 2], [3, 4]))\nprint(unidos)"
+          },
+          "key_takeaways": [
+            "itertools.chain une secuencias de forma perezosa en memoria O(1).",
+            "itertools.combinations genera subconjuntos donde el orden no importa.",
+            "itertools.permutations genera todas las ordenaciones posibles donde el orden sí importa."
+          ],
+          "exercise": {
+            "id": "ex_py3_05_04",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Cuántas tuplas generará list(itertools.permutations([1, 2], 2))?",
+            "options": [
+              {
+                "id": "a",
+                "text": "2 tuplas: (1, 2) y (2, 1)"
+              },
+              {
+                "id": "b",
+                "text": "1 tupla: (1, 2)"
+              },
+              {
+                "id": "c",
+                "text": "4 tuplas"
+              },
+              {
+                "id": "d",
+                "text": "0"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "En las permutaciones el orden sí importa, generando las 2 combinaciones ordenadas: (1, 2) y (2, 1)."
           }
         }
       ]

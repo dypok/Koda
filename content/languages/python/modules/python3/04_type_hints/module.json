@@ -4,14 +4,14 @@
   "code": "PY3_M04",
   "slug": "type-hints-y-dataclasses",
   "course_slug": "python-3",
-  "title": "Type Hints Estáticos y Data Classes",
-  "objective": "Anotar tipos profesionales con typing (Union, Optional, Callable) y modelar estructuras inmutables con @dataclass.",
-  "description": "Construye código autoevaluado y robusto: aprovecha la verificación estática con Mypy y simplifica clases con @dataclass.",
-  "position": 24,
+  "title": "Type Hints Modernos y Data Classes",
+  "objective": "Anotar tipos profesionales con sintaxis moderna (uniones con |, colecciones genéricas, Callable) y modelar estructuras de datos robustas e inmutables con @dataclass.",
+  "description": "Construye código autoevaluado y mantenible: aprovecha el análisis estático con Mypy, elimina código repetitivo y diseña modelos inmutables con dataclasses.",
+  "position": 4,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,233 @@
     {
       "id": "sec_py3_04_01",
       "code": "S01",
-      "title": "Anotaciones de Tipo y @dataclass",
-      "slug": "typing-dataclasses",
+      "title": "Tipado Estático y Modelado con Dataclasses",
+      "slug": "tipado-dataclasses-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 18,
-      "xp_on_complete": 45,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py3_04_01",
           "code": "L01",
-          "title": "Modern Type Hints y @dataclass(frozen=True)",
-          "slug": "dataclass-base",
+          "title": "Type Hints Modernos y el Operador de Unión |",
+          "slug": "type-hints-operador-union",
           "position": 1,
-          "concept_id": "py3-dataclasses",
-          "objective": "Eliminar el boilerplate de clases creando objetos inmutables con validación de tipos.",
-          "theory_markdown": "En Python 3 moderno, los **type hints** permiten que tu editor (VS Code) y analizadores estáticos (como `mypy` o `ruff`) detecten bugs antes de ejecutar el código:\n\n```python\ndef buscar_usuario(id: int) -> str | None:\n    ...\n```\n\nEl decorador `@dataclass` genera automáticamente `__init__`, `__repr__`, y comparadores de igualdad `__eq__` sin que tengas que escribir código repetitivo. Con `frozen=True`, la clase se vuelve inmutable y protegida contra modificaciones accidentales.",
+          "concept_id": "py3-type-hints-basics",
+          "objective": "Anotar parámetros y valores de retorno con tipos primitivos y el operador de unión moderno (A | B) sin requerir el módulo typing.",
+          "theory_markdown": "Python sigue siendo un lenguaje de tipado dinámico, pero desde Python 3.5 incorporó **Type Hints (pistas de tipo)** para permitir que herramientas estáticas (como `mypy`, linters y el autocompletado del IDE) detecten inconsistencias antes de ejecutar el código.\n\n### Sintaxis básica de anotación\n```python\ndef calcular_total(precio: float, impuesto: float = 0.16) -> float:\n    return precio * (1 + impuesto)\n```\n\n### El operador de unión moderno (`|`)\nEn versiones modernas de Python (3.10+), ya no es necesario importar `Union` u `Optional` de la librería `typing`. Se utiliza el operador de barra vertical (`|`):\n- `int | float`: Admite enteros o decimales (reemplaza a `Union[int, float]`).\n- `str | None`: Admite texto o el valor `None` (reemplaza a `Optional[str]`).\n\n### Naturaleza en tiempo de ejecución\nEl intérprete de CPython **ignora** los type hints en runtime: pasar un string a `x: int` no produce error por sí solo. Su valor radica en el análisis estático y la documentación de arquitectura.",
           "examples": [
             {
-              "title": "Modelo de datos inmutable con dataclass",
-              "code": "from dataclasses import dataclass\n\n@dataclass(frozen=True)\nclass Usuario:\n    id: int\n    username: str\n    email: str\n    activo: bool = True\n\nu1 = Usuario(id=1, username=\"koda_dev\", email=\"dev@koda.com\")\nprint(u1)\n# u1.email = \"otro@koda.com\"  # Lanza FrozenInstanceError si se intenta mutar",
-              "output": "Usuario(id=1, username='koda_dev', email='dev@koda.com', activo=True)",
-              "explanation": "@dataclass genera un constructor con tipos y un __repr__ legible automáticamente."
+              "title": "Función con unión y retorno nulo documentado",
+              "code": "def buscar_usuario(id: int) -> str | None:\n    usuarios = {1: \"Koda\", 2: \"Alex\"}\n    return usuarios.get(id, None)\n\nprint(buscar_usuario(1))\nprint(buscar_usuario(99))",
+              "output": "Koda\nNone",
+              "explanation": "La firma str | None avisa al desarrollador que debe gestionar el caso en que la función retorne None."
             }
           ],
-          "common_errors": "Crear valores por defecto mutables en dataclasses: `lista: list = []` causa ValueError. Debe usarse `field(default_factory=list)`.",
+          "common_errors": "Creer que los type hints convierten o validan tipos automáticamente en runtime. Para validación estricta en tiempo de ejecución se usan librerías como Pydantic.",
           "mini_exercise": {
-            "starter_code": "from dataclasses import dataclass\n# Crea una dataclass Punto con x: float e y: float\n@dataclass\nclass Punto:\n    x: float\n    y: float\n\np = Punto(1.5, 2.5)\nprint(p.x, p.y)",
-            "instructions": "Instancia Punto y verifica sus coordenadas.",
-            "solution": "from dataclasses import dataclass\n@dataclass\nclass Punto:\n    x: float\n    y: float\n\np = Punto(1.5, 2.5)\nprint(p.x, p.y)"
+            "starter_code": "# Anota la funcion para que reciba un int o float y retorne un float\ndef duplicar(x: int | float) -> ...:\n    return float(x * 2)\n\nprint(duplicar(5))",
+            "instructions": "Escribe float como tipo de retorno tras la flecha ->.",
+            "solution": "def duplicar(x: int | float) -> float:\n    return float(x * 2)\n\nprint(duplicar(5))"
           },
           "key_takeaways": [
-            "Type hints documentan y permiten análisis estático con Mypy.",
-            "@dataclass elimina la necesidad de escribir __init__ y __repr__ manualmente.",
-            "frozen=True convierte a las instancias en inmutables (hashables)."
+            "param: tipo -> retorno documenta explícitamente el contrato de la función.",
+            "A | B expresa tipos alternativos de forma nativa sin importar Union.",
+            "str | None es el estándar moderno para valores opcionales.",
+            "El intérprete de Python no frena la ejecución por discrepancias de tipo en runtime."
           ],
           "exercise": {
             "id": "ex_py3_04_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Qué ocurre en tiempo de ejecución si pasas un string a una función anotada con `def f(x: int):` en Python estándar?",
+            "prompt": "¿Qué sucede en tiempo de ejecución si ejecutas 'sumar(\"10\", \"20\")' sobre una función definida como 'def sumar(a: int, b: int) -> int: return a + b'?",
             "options": [
               {
                 "id": "a",
-                "text": "Se ejecuta normalmente, porque los type hints no son validados por el intérprete en tiempo de ejecución"
+                "text": "Se ejecuta normalmente concatenando los strings ('1020'), porque el intérprete de Python no valida los type hints en runtime"
               },
               {
                 "id": "b",
-                "text": "Lanza TypeError inmediatamente"
+                "text": "Python lanza un TypeError antes de entrar a la función"
               },
               {
                 "id": "c",
-                "text": "Se convierte automáticamente a int"
+                "text": "Los argumentos se convierten automáticamente a enteros dando 30"
               },
               {
                 "id": "d",
-                "text": "El programa no compila"
+                "text": "El archivo se niega a ejecutarse con SyntaxError"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Python estándar no impone los tipos en runtime; los type hints están diseñados para linters, IDEs y herramientas estáticas."
+            "explanation": "Los type hints son metadatos pasivos en runtime. Son herramientas de análisis estático (mypy/IDEs) las que alertan sobre discrepancias de tipos."
+          }
+        },
+        {
+          "id": "les_py3_04_02",
+          "code": "L02",
+          "title": "Colecciones Genéricas y Tipos Avanzados de typing",
+          "slug": "colecciones-genericas-typing",
+          "position": 2,
+          "concept_id": "py3-generic-types-callable",
+          "objective": "Anotar listas, diccionarios, tuplas y callbacks funcionales mediante tipos genéricos y Callable.",
+          "theory_markdown": "Desde Python 3.9+, las colecciones nativas admiten anotaciones genéricas directas sin importar versiones en mayúscula (`List`, `Dict`):\n\n### Colecciones genéricas nativas\n- `list[str]`: Una lista que contiene exclusivamente cadenas de texto.\n- `dict[str, int]`: Un diccionario con claves de tipo texto y valores enteros.\n- `tuple[int, str]`: Una tupla de exactamente 2 elementos: un entero seguido de un string.\n- `tuple[int, ...]`: Una tupla homogénea de longitud arbitraria con números enteros.\n\n### Tipos funcionales con `Callable`\nCuando pasas una función como argumento a otra función, se anota usando `Callable[[tipos_argumentos], tipo_retorno]` importado de `typing`:\n```python\nfrom collections.abc import Callable\n\ndef aplicar(func: Callable[[int, int], int], a: int, b: int) -> int:\n    return func(a, b)\n```",
+          "examples": [
+            {
+              "title": "Anotación de estructura de datos compleja",
+              "code": "def calcular_promedios(notas_alumnos: dict[str, list[float]]) -> dict[str, float]:\n    promedios = {}\n    for alumno, notas in notas_alumnos.items():\n        promedios[alumno] = sum(notas) / len(notas)\n    return promedios\n\nregistro = {\"Ana\": [90.0, 95.0], \"Carlos\": [80.0, 85.0]}\nprint(calcular_promedios(registro))",
+              "output": "{'Ana': 92.5, 'Carlos': 82.5}",
+              "explanation": "dict[str, list[float]] declara con absoluta precisión qué forma debe tener el mapa de entrada."
+            }
+          ],
+          "common_errors": "Importar `List` o `Dict` de `typing` en Python moderno. Las clases nativas en minúscula (`list`, `dict`, `set`, `tuple`) ya soportan corchetes genéricos.",
+          "mini_exercise": {
+            "starter_code": "# Anota el parametro para indicar una lista de enteros\ndef sumar_elementos(items: list[...]) -> int:\n    return sum(items)\n\nprint(sumar_elementos([1, 2, 3]))",
+            "instructions": "Escribe int dentro de list[].",
+            "solution": "def sumar_elementos(items: list[int]) -> int:\n    return sum(items)\n\nprint(sumar_elementos([1, 2, 3]))"
+          },
+          "key_takeaways": [
+            "list[T], dict[K, V] y tuple[T, ...] tipan colecciones sin librerías externas.",
+            "Callable[[args], retorno] modela funciones de orden superior y callbacks.",
+            "Aumenta drásticamente la asistencia del editor con autocompletado inteligente."
+          ],
+          "exercise": {
+            "id": "ex_py3_04_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Qué representa la anotación 'Callable[[int, int], bool]' en una firma de función?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Una función que recibe dos argumentos enteros y retorna un valor booleano"
+              },
+              {
+                "id": "b",
+                "text": "Una lista de dos enteros y un booleano"
+              },
+              {
+                "id": "c",
+                "text": "Un diccionario con claves enteras y valor booleano"
+              },
+              {
+                "id": "d",
+                "text": "Un bucle que se repite dos veces"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Callable[[tipos], retorno] describe la signatura esperada para cualquier función o método pasado como parámetro."
+          }
+        },
+        {
+          "id": "les_py3_04_03",
+          "code": "L03",
+          "title": "Modelado de Datos Limpio con @dataclass",
+          "slug": "modelado-limpio-dataclass",
+          "position": 3,
+          "concept_id": "py3-dataclasses-basics",
+          "objective": "Eliminar el código repetitivo de clases declarando modelos estructurados con el decorador @dataclass.",
+          "theory_markdown": "Escribir clases que solo transportan datos usualmente requiere escribir a mano `__init__`, `__repr__`, `__eq__` y asignaciones repetitivas como `self.nombre = nombre`.\n\nEl decorador **`@dataclass`** (del módulo estándar `dataclasses`) inspecciona las anotaciones de tipo de la clase y genera todos esos métodos automáticamente:\n\n```python\nfrom dataclasses import dataclass\n\n@dataclass\nclass Producto:\n    sku: str\n    precio: float\n    stock: int = 0  # Valor por defecto\n```\n\n### Beneficios inmediatos\n1. **Constructor automático**: `p = Producto(\"A1\", 49.99, stock=10)`.\n2. **`__repr__` legible**: `print(p)` muestra `Producto(sku='A1', precio=49.99, stock=10)`.\n3. **Comparación por valor (`__eq__`)**: `Producto(\"A\", 10) == Producto(\"A\", 10)` devuelve `True` comparando sus atributos (a diferencia de las clases normales que comparan punteros de memoria).",
+          "examples": [
+            {
+              "title": "Comparación por valor automática en dataclasses",
+              "code": "from dataclasses import dataclass\n\n@dataclass\nclass Punto:\n    x: int\n    y: int\n\np1 = Punto(10, 20)\np2 = Punto(10, 20)\n\nprint(\"Iguales en valor:\", p1 == p2)\nprint(\"Misma memoria:\", p1 is p2)",
+              "output": "Iguales en valor: True\nMisma memoria: False",
+              "explanation": "p1 == p2 compara atributo por atributo gracias al método __eq__ autogenerado por @dataclass."
+            }
+          ],
+          "common_errors": "Declarar un atributo en una dataclass sin anotación de tipo. @dataclass ignora silenciosamente cualquier variable que no tenga un type hint.",
+          "mini_exercise": {
+            "starter_code": "from dataclasses import dataclass\n# Define la dataclass Usuario con id: int y username: str\n@dataclass\nclass Usuario:\n    id: int\n    username: str\n\nu = Usuario(1, \"koda\")\nprint(u.username)",
+            "instructions": "Verifica que u sea una instancia válida de la dataclass.",
+            "solution": "from dataclasses import dataclass\n@dataclass\nclass Usuario:\n    id: int\n    username: str\n\nu = Usuario(1, \"koda\")\nprint(u.username)"
+          },
+          "key_takeaways": [
+            "@dataclass autogenera __init__, __repr__ y __eq__ a partir de type hints.",
+            "Dos instancias de dataclass con los mismos valores son consideradas iguales (==).",
+            "Ahorra cientos de líneas de código repetitivo en arquitecturas de backend y datos."
+          ],
+          "exercise": {
+            "id": "ex_py3_04_03",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Cuáles métodos especiales genera automáticamente el decorador @dataclass si no los defines explícitamente?",
+            "options": [
+              {
+                "id": "a",
+                "text": "__init__, __repr__ y __eq__"
+              },
+              {
+                "id": "b",
+                "text": "__iter__, __next__ y __len__"
+              },
+              {
+                "id": "c",
+                "text": "__enter__ y __exit__"
+              },
+              {
+                "id": "d",
+                "text": "__getitem__ y __setitem__"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "@dataclass provee de fábrica el inicializador, la representación textual informativa y el operador de igualdad estructural."
+          }
+        },
+        {
+          "id": "les_py3_04_04",
+          "code": "L04",
+          "title": "Dataclasses Avanzadas: frozen=True y field(default_factory=...)",
+          "slug": "dataclasses-avanzadas-frozen-field",
+          "position": 4,
+          "concept_id": "py3-dataclasses-frozen-factory",
+          "objective": "Crear objetos inmutables hashables con frozen=True y evitar el peligro de valores mutables por defecto usando field(default_factory=...).",
+          "theory_markdown": "### Inmutabilidad con `frozen=True`\nSi deseas que las instancias de tu dataclass sean de **solo lectura** (inmutables):\n```python\n@dataclass(frozen=True)\nclass Configuracion:\n    host: str\n    puerto: int\n\ncfg = Configuracion(\"localhost\", 8000)\n# cfg.puerto = 9000  # Lanza FrozenInstanceError inmediatamente\n```\nAl ser inmutables, las dataclasses congeladas generan automáticamente un método `__hash__`, permitiendo usarlas como **claves en diccionarios** o almacenarlas en conjuntos (`set`).\n\n### El peligro del default mutable y `default_factory`\nEn Python, escribir `tags: list = []` causa un error fatal de valor por defecto compartido. Para colecciones mutables se debe usar `field(default_factory=...)`:\n```python\nfrom dataclasses import dataclass, field\n\n@dataclass\nclass Proyecto:\n    nombre: str\n    etiquetas: list[str] = field(default_factory=list)  # Lista fresca por cada objeto\n```",
+          "examples": [
+            {
+              "title": "Dataclass congelada utilizada como clave de diccionario",
+              "code": "from dataclasses import dataclass\n\n@dataclass(frozen=True)\nclass ClaveCoordenada:\n    x: int\n    y: int\n\nmapa_juego = {}\np = ClaveCoordenada(5, 8)\nmapa_juego[p] = \"Tesoro oculto\"\nprint(\"Contenido en celda:\", mapa_juego[p])",
+              "output": "Contenido en celda: Tesoro oculto",
+              "explanation": "frozen=True hace a la instancia hashable, permitiendo usarla directamente como clave de dict."
+            }
+          ],
+          "common_errors": "Escribir `elementos: list = []` en una dataclass. Python arrojará: `ValueError: mutable default <class 'list'> for field is not allowed: use default_factory`.",
+          "mini_exercise": {
+            "starter_code": "from dataclasses import dataclass, field\n@dataclass\nclass Carrito:\n    # Usa default_factory=list para inicializar la lista vacia\n    items: list[str] = field(default_factory=...)\n\nc = Carrito()\nprint(c.items)",
+            "instructions": "Escribe list como argumento de default_factory.",
+            "solution": "from dataclasses import dataclass, field\n@dataclass\nclass Carrito:\n    items: list[str] = field(default_factory=list)\n\nc = Carrito()\nprint(c.items)"
+          },
+          "key_takeaways": [
+            "@dataclass(frozen=True) crea objetos inmutables que previenen mutaciones accidentales.",
+            "Las dataclasses congeladas son hashables y pueden usarse en sets y como claves de dict.",
+            "field(default_factory=list) es indispensable para listas o dicts por defecto."
+          ],
+          "exercise": {
+            "id": "ex_py3_04_04",
+            "type": "find_error",
+            "difficulty": "medium",
+            "prompt": "¿Qué excepción se dispara si intentas reasignar un atributo en una dataclass configurada con frozen=True?",
+            "prompt_code": "from dataclasses import dataclass\n\n@dataclass(frozen=True)\nclass Constante:\n    pi: float = 3.14159\n\nc = Constante()\nc.pi = 3.0",
+            "options": [
+              {
+                "id": "a",
+                "text": "FrozenInstanceError: cannot assign to field 'pi'"
+              },
+              {
+                "id": "b",
+                "text": "TypeError: constant variable is immutable"
+              },
+              {
+                "id": "c",
+                "text": "AttributeError: read only"
+              },
+              {
+                "id": "d",
+                "text": "ValueError: invalid float"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Las dataclasses con frozen=True interceptan cualquier intento de __setattr__ y disparan la excepción específica FrozenInstanceError."
           }
         }
       ]

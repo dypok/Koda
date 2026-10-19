@@ -5,13 +5,13 @@
   "slug": "datetime-y-regex",
   "course_slug": "python-2",
   "title": "Fechas, Tiempos y Expresiones Regulares (regex)",
-  "objective": "Gestionar marcas de tiempo, diferencias de fecha con timedelta y validar patrones complejos de texto con el módulo re.",
-  "description": "Domina el tiempo y los patrones de texto: zonas horarias, cálculo de plazos y extracción de correos o teléfonos con regex.",
-  "position": 18,
+  "objective": "Gestionar marcas de tiempo, realizar aritmética de fechas con timedelta, formatear/parsear cadenas temporales y validar patrones de texto complejos con el módulo re.",
+  "description": "Domina el tiempo y los patrones de texto: zonas horarias, cálculo de plazos de expiración, formateo ISO y extracción o validación de cadenas con regex.",
+  "position": 8,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,235 @@
     {
       "id": "sec_py2_08_01",
       "code": "S01",
-      "title": "Módulo datetime y el Módulo re",
-      "slug": "datetime-y-re",
+      "title": "Fechas y Expresiones Regulares en Python",
+      "slug": "datetime-regex-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 18,
-      "xp_on_complete": 45,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py2_08_01",
           "code": "L01",
-          "title": "Fechas con datetime y Patrones con re.search()",
-          "slug": "datetime-re-base",
+          "title": "Manejo de Fechas y Horas con el Módulo datetime",
+          "slug": "modulo-datetime-fundamentos",
           "position": 1,
-          "concept_id": "py2-datetime-regex",
-          "objective": "Operar con fechas (timedelta) y buscar patrones usando expresiones regulares.",
-          "theory_markdown": "Dos módulos estándar imprescindibles en Python profesional:\n\n1. `datetime`:\n   - `datetime.now()`: Fecha y hora actual.\n   - `timedelta(days=7)`: Representa una duración o lapso temporal para sumar o restar a fechas.\n   - `dt.strftime(\"%Y-%m-%d\")`: Formatea fecha a string.\n\n2. `re` (Expresiones Regulares):\n   - `re.search(patron, texto)`: Busca la primera coincidencia del patrón.\n   - `re.findall(patron, texto)`: Devuelve todas las coincidencias encontradas.\n   - Patrones clave: `\\d+` (uno o más dígitos), `[a-zA-Z]+` (letras).",
+          "concept_id": "py2-datetime-basics",
+          "objective": "Instanciar fechas y marcas de tiempo exactas mediante datetime.now() y datetime(año, mes, día, hora).",
+          "theory_markdown": "El módulo nativo `datetime` es la herramienta estándar para gestionar tiempo cronológico en Python.\n\n### Clases principales\n- **`datetime.date(año, mes, día)`**: Representa una fecha de calendario pura (ej. `2026-10-18`).\n- **`datetime.time(hora, minuto, segundo)`**: Representa una hora del día independiente de la fecha.\n- **`datetime.datetime(año, mes, día, hora, minuto, segundo)`**: Combina fecha y hora en un solo objeto.\n\n### Obtención del tiempo actual\n```python\nfrom datetime import datetime\n\nahora = datetime.now()\nprint(\"Año:\", ahora.year)\nprint(\"Mes:\", ahora.month)\nprint(\"Día:\", ahora.day)\n```\nLos objetos `datetime` son inmutables y proporcionan comparación cronológica directa con operadores `<, >, ==`.",
           "examples": [
             {
-              "title": "Cálculo de vencimiento y extracción de números con regex",
-              "code": "from datetime import datetime, timedelta\nimport re\n\n# Sumar 30 días\nhoy = datetime(2026, 1, 1)\nvencimiento = hoy + timedelta(days=30)\nprint(\"Vence el:\", vencimiento.strftime(\"%d/%m/%Y\"))\n\n# Buscar números en texto\nlog = \"Error en puerto 8080 con código 404\"\nnumeros = re.findall(r\"\\d+\", log)\nprint(\"Números detectados:\", numeros)",
-              "output": "Vence el: 31/01/2026\nNúmeros detectados: ['8080', '404']",
-              "explanation": "timedelta suma periodos exactos y r\"\\d+\" extrae todas las secuencias numéricas."
+              "title": "Creación y comparación de fechas",
+              "code": "from datetime import datetime\n\nfecha_inicio = datetime(2026, 1, 15, 9, 30)\nfecha_cierre = datetime(2026, 6, 30, 18, 0)\n\nprint(\"Inicio anterior al cierre:\", fecha_inicio < fecha_cierre)",
+              "output": "Inicio anterior al cierre: True",
+              "explanation": "Los objetos datetime permiten comparaciones temporales exactas mediante operadores estándar."
             }
           ],
-          "common_errors": "Olvidar el prefijo r en strings de regex: `r\"\\d+\"` evita que Python interprete las barras invertidas como escapes de texto.",
+          "common_errors": "Confundir el módulo `datetime` con la clase `datetime` dentro del módulo. Es preferible importar `from datetime import datetime` para evitar escribir `datetime.datetime.now()`.",
           "mini_exercise": {
-            "starter_code": "import re\ntexto = \"Usuario: koda_fox123\"\n# Extrae los dígitos con re.findall(r\"\\d+\", texto)\ndigitos = ...\nprint(digitos)",
-            "instructions": "Usa re.findall(r\"\\d+\", texto).",
-            "solution": "import re\ntexto = \"Usuario: koda_fox123\"\ndigitos = re.findall(r\"\\d+\", texto)\nprint(digitos)"
+            "starter_code": "from datetime import datetime\n# Crea una fecha para el 25 de diciembre de 2026\nnavidad = datetime(..., 12, 25)\nprint(navidad.year)",
+            "instructions": "Escribe 2026 como primer argumento de año.",
+            "solution": "from datetime import datetime\nnavidad = datetime(2026, 12, 25)\nprint(navidad.year)"
           },
           "key_takeaways": [
-            "timedelta representa duraciones para cálculos de fechas.",
-            "strftime convierte fechas a texto; strptime parsea texto a fechas.",
-            "Usa siempre raw strings r\"...\" para patrones de regex."
+            "datetime combina información de calendario y reloj.",
+            "Permite acceder individualmente a .year, .month, .day, .hour, .minute.",
+            "Admite comparaciones cronológicas naturales con operadores relacionales."
           ],
           "exercise": {
             "id": "ex_py2_08_01",
             "type": "predict_output",
             "difficulty": "easy",
-            "prompt": "¿Qué devolverá re.findall(r\"\\d+\", \"Tengo 2 perros y 10 peces\")?",
+            "prompt": "¿Qué imprime este código al consultar el mes?",
+            "prompt_code": "from datetime import datetime\nd = datetime(2026, 5, 20)\nprint(d.month)",
             "options": [
               {
                 "id": "a",
-                "text": "['2', '10']"
+                "text": "5"
               },
               {
                 "id": "b",
-                "text": "['2']"
+                "text": "20"
               },
               {
                 "id": "c",
-                "text": "[2, 10]"
+                "text": "2026"
               },
               {
                 "id": "d",
-                "text": "12"
+                "text": "May"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "re.findall extrae todas las coincidencias como una lista de strings: [\"2\", \"10\"]."
+            "explanation": "El segundo argumento de datetime es el mes, que en este caso es 5 (mayo)."
+          }
+        },
+        {
+          "id": "les_py2_08_02",
+          "code": "L02",
+          "title": "Aritmética Temporal con timedelta",
+          "slug": "aritmetica-temporal-timedelta",
+          "position": 2,
+          "concept_id": "py2-timedelta-operations",
+          "objective": "Calcular plazos, vencimientos y diferencias entre fechas usando la clase timedelta.",
+          "theory_markdown": "Un objeto **`timedelta`** representa una **duración o intervalo de tiempo** (días, segundos, microsegundos) en lugar de una fecha fija en el calendario.\n\n### Sumar y restar tiempo\nPuedes sumar o restar un `timedelta` a un objeto `datetime` para calcular vencimientos o fechas pasadas:\n```python\nfrom datetime import datetime, timedelta\n\nhoy = datetime(2026, 1, 1)\nlimite = hoy + timedelta(days=15)         # 2026-01-16\nhace_tres_dias = hoy - timedelta(days=3)  # 2025-12-29\n```\n\n### Diferencia entre dos fechas\nRestar dos objetos `datetime` produce automáticamente un `timedelta`:\n```python\ndiferencia = limite - hoy\nprint(diferencia.days)  # 15\n```",
+          "examples": [
+            {
+              "title": "Cálculo de días restantes para un evento",
+              "code": "from datetime import date, timedelta\n\nf1 = date(2026, 3, 1)\nf2 = date(2026, 3, 11)\nlapso = f2 - f1\nprint(\"Días transcurridos:\", lapso.days)",
+              "output": "Días transcurridos: 10",
+              "explanation": "La resta directa entre dos fechas entrega un objeto timedelta cuyo atributo .days reporta 10."
+            }
+          ],
+          "common_errors": "Intentar sumar dos objetos datetime directamente (`d1 + d2`). Sumar dos fechas no tiene sentido físico y produce TypeError; solo se puede sumar una fecha más una duración (timedelta).",
+          "mini_exercise": {
+            "starter_code": "from datetime import datetime, timedelta\ninicio = datetime(2026, 1, 1)\n# Suma 7 dias usando timedelta\nvence = inicio + timedelta(days=...)\nprint(vence.day)",
+            "instructions": "Escribe 7 dentro de days.",
+            "solution": "from datetime import datetime, timedelta\ninicio = datetime(2026, 1, 1)\nvence = inicio + timedelta(days=7)\nprint(vence.day)"
+          },
+          "key_takeaways": [
+            "timedelta modela intervalos de tiempo (días, horas, minutos).",
+            "fecha + timedelta = nueva fecha en el futuro.",
+            "fecha2 - fecha1 = timedelta con la duración transcurrida."
+          ],
+          "exercise": {
+            "id": "ex_py2_08_02",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué resultado imprime este cálculo de timedelta?",
+            "prompt_code": "from datetime import datetime, timedelta\nfecha = datetime(2026, 10, 1)\nnueva = fecha + timedelta(days=5)\nprint(nueva.day)",
+            "options": [
+              {
+                "id": "a",
+                "text": "6"
+              },
+              {
+                "id": "b",
+                "text": "5"
+              },
+              {
+                "id": "c",
+                "text": "1"
+              },
+              {
+                "id": "d",
+                "text": "TypeError"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El día inicial 1 más 5 días de duración da el día 6 de octubre."
+          }
+        },
+        {
+          "id": "les_py2_08_03",
+          "code": "L03",
+          "title": "Formateo y Parseo: strftime vs strptime",
+          "slug": "strftime-vs-strptime",
+          "position": 3,
+          "concept_id": "py2-strftime-strptime",
+          "objective": "Convertir objetos datetime a strings con strftime y parsear strings de texto a datetime con strptime.",
+          "theory_markdown": "Para mover información temporal entre objetos de Python y cadenas legibles o APIs web, se utilizan dos métodos complementarios:\n\n### Regla mnemotécnica\n- **`strftime` (String Format Time)**: De `datetime` a **string**.\n- **`strptime` (String Parse Time)**: De **string** a `datetime`.\n\n### Directivas de formato más utilizadas\n- `%Y`: Año con 4 dígitos (ej: `2026`).\n- `%m`: Mes con 2 dígitos (`01` a `12`).\n- `%d`: Día del mes con 2 dígitos (`01` a `31`).\n- `%H`: Hora en formato 24h (`00` a `23`).\n- `%M`: Minutos (`00` a `59`).\n- `%S`: Segundos (`00` a `59`).\n\n```python\n# 1. Objeto a Texto\nahora = datetime(2026, 10, 18, 14, 30)\ntexto = ahora.strftime(\"%d/%m/%Y %H:%M\")  # \"18/10/2026 14:30\"\n\n# 2. Texto a Objeto\nfecha_recibida = datetime.strptime(\"2026-12-31\", \"%Y-%m-%d\")\n```",
+          "examples": [
+            {
+              "title": "Parseo de fecha desde string de API",
+              "code": "from datetime import datetime\n\napi_date = \"2026-04-15 08:00:00\"\nparsed = datetime.strptime(api_date, \"%Y-%m-%d %H:%M:%S\")\nprint(\"Año parseado:\", parsed.year)\nprint(\"Formato legible:\", parsed.strftime(\"%d de mes %m\"))",
+              "output": "Año parseado: 2026\nFormato legible: 15 de mes 04",
+              "explanation": "strptime reconstruye el objeto datetime nativo permitiendo hacer cálculos o reformatearlo libremente."
+            }
+          ],
+          "common_errors": "Confundir `%m` (mes en minúscula) con `%M` (minutos en mayúscula). `%Y-%M-%d` parseará los minutos como si fueran el mes.",
+          "mini_exercise": {
+            "starter_code": "from datetime import datetime\n# Parsea el texto a datetime usando %Y-%m-%d\ntexto = \"2026-11-20\"\nobj = datetime.strptime(texto, \"...\")\nprint(obj.month)",
+            "instructions": "Escribe %Y-%m-%d como patron de formato.",
+            "solution": "from datetime import datetime\ntexto = \"2026-11-20\"\nobj = datetime.strptime(texto, \"%Y-%m-%d\")\nprint(obj.month)"
+          },
+          "key_takeaways": [
+            "strftime serializa un datetime en un string con formato personalizado.",
+            "strptime parsea un string en un objeto datetime.",
+            "%m representa el mes y %M representa los minutos."
+          ],
+          "exercise": {
+            "id": "ex_py2_08_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Qué método se utiliza para transformar una cadena como '2026-08-15' en un objeto datetime de Python?",
+            "options": [
+              {
+                "id": "a",
+                "text": "datetime.strptime('2026-08-15', '%Y-%m-%d')"
+              },
+              {
+                "id": "b",
+                "text": "datetime.strftime('2026-08-15', '%Y-%m-%d')"
+              },
+              {
+                "id": "c",
+                "text": "datetime.to_date('2026-08-15')"
+              },
+              {
+                "id": "d",
+                "text": "int('2026-08-15')"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "strptime (parse time) analiza un texto de acuerdo a una máscara de formato y genera el objeto datetime correspondiente."
+          }
+        },
+        {
+          "id": "les_py2_08_04",
+          "code": "L04",
+          "title": "Expresiones Regulares con el Módulo re",
+          "slug": "expresiones-regulares-modulo-re",
+          "position": 4,
+          "concept_id": "py2-regex-basics",
+          "objective": "Buscar y extraer patrones textuales usando raw strings r\"...\", re.search(), re.findall() y metacaracteres esenciales.",
+          "theory_markdown": "Una **expresión regular (regex)** es un patrón formal que describe un conjunto de cadenas de texto para validación o extracción.\n\n### Regla de oro: Raw Strings (`r\"...\"`)\nEn Python, escribe **siempre** los patrones con el prefijo `r` (raw string): `r\"\\d+\"`. Esto evita que Python interprete `\\` como una secuencia de escape especial del lenguaje.\n\n### Metacaracteres más usados\n- `\\d`: Cualquier dígito del `0` al `9` (`\\D`: no dígito).\n- `\\w`: Carácter alfanumérico o guion bajo (`\\W`: no alfanumérico).\n- `\\s`: Espacio en blanco, tabulador o salto de línea.\n- `+`: Uno o más del elemento anterior.\n- `*`: Cero o más del elemento anterior.\n- `^` y `$`: Inicio y fin de la cadena de texto.\n\n### Funciones esenciales de `re`\n- `re.search(patron, texto)`: Escanea el texto y devuelve el primer objeto `Match` encontrado (o `None` si no coincide).\n- `re.findall(patron, texto)`: Devuelve **todas** las coincidencias como una lista de cadenas.",
+          "examples": [
+            {
+              "title": "Búsqueda y extracción múltiple",
+              "code": "import re\n\nregistro = \"Servidor 10.0.0.1 fallo en puerto 8080 con reintento 3\"\n# Extraer todos los numeros\nnumeros = re.findall(r\"\\d+\", registro)\nprint(\"Numeros detectados:\", numeros)\n\n# Buscar si contiene la palabra fallo\ncoincidencia = re.search(r\"fallo\", registro)\nprint(\"Encontrado:\", coincidencia is not None)",
+              "output": "Numeros detectados: ['10', '0', '0', '1', '8080', '3']\nEncontrado: True",
+              "explanation": "re.findall extrae todas las secuencias consecutivas de dígitos en una lista limpia de strings."
+            }
+          ],
+          "common_errors": "No usar raw strings: `\"\\bword\\b\"` en lugar de `r\"\\bword\\b\"`, donde `\\b` se interpreta como backspace ASCII.",
+          "mini_exercise": {
+            "starter_code": "import re\nfrase = \"El precio es 45 dolares\"\n# Extrae el numero 45 usando re.findall con r\"\\d+\"\nresultado = re.findall(r\"\\d+\", frase)\nprint(resultado)",
+            "instructions": "Verifica que el resultado imprima ['45'].",
+            "solution": "import re\nfrase = \"El precio es 45 dolares\"\nresultado = re.findall(r\"\\d+\", frase)\nprint(resultado)"
+          },
+          "key_takeaways": [
+            "Usa siempre raw strings r'...' para definir expresiones regulares en Python.",
+            "re.search() busca la primera ocurrencia en el texto.",
+            "re.findall() extrae todas las ocurrencias en forma de lista de strings.",
+            "\\d+ identifica secuencias continuas de uno o más dígitos numéricos."
+          ],
+          "exercise": {
+            "id": "ex_py2_08_04",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué imprime este código al buscar números con re.findall?",
+            "prompt_code": "import re\ntexto = \"Lote A-12, Lote B-99\"\nnums = re.findall(r\"\\d+\", texto)\nprint(nums)",
+            "options": [
+              {
+                "id": "a",
+                "text": "['12', '99']"
+              },
+              {
+                "id": "b",
+                "text": "['12']"
+              },
+              {
+                "id": "c",
+                "text": "[12, 99]"
+              },
+              {
+                "id": "d",
+                "text": "111"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "re.findall localiza todas las secuencias de dígitos y las entrega como una lista de strings: ['12', '99']."
           }
         }
       ]

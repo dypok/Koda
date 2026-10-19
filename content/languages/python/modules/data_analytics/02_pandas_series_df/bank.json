@@ -6,28 +6,158 @@
     {
       "id": "q_da_02_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Cuál es la diferencia entre df.loc[0] y df.iloc[0]?",
+      "difficulty": "easy",
+      "prompt": "Que estructura de Pandas representa una columna individual dentro de un DataFrame?",
       "options": [
         {
           "id": "a",
-          "text": "loc busca por el nombre de la etiqueta del índice; iloc busca por la posición numérica entera de la fila"
+          "text": "pd.Series"
         },
         {
           "id": "b",
-          "text": "loc es solo para columnas e iloc para filas"
+          "text": "pd.Index"
         },
         {
           "id": "c",
-          "text": "iloc está obsoleto"
+          "text": "pd.Matrix"
         },
         {
           "id": "d",
-          "text": "Son exactamente idénticos en todos los casos"
+          "text": "pd.ColumnArray"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "loc es label-based (basado en etiquetas) e iloc es integer-position based (basado en posiciones enteras 0-indexed)."
+      "explanation": "Un DataFrame es fundamentalmente una coleccion ordenada de objetos pd.Series alineados bajo un mismo indice."
+    },
+    {
+      "id": "q_da_02_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que argumento de pd.read_csv() permite indicar explicitamente que columnas deben interpretarse y convertirse a tipos de fecha (datetime)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "parse_dates"
+        },
+        {
+          "id": "b",
+          "text": "convert_dates"
+        },
+        {
+          "id": "c",
+          "text": "datetime_cols"
+        },
+        {
+          "id": "d",
+          "text": "as_date"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "parse_dates=['nombre_columna'] le instruye al lector de CSV que parsee las cadenas a objetos Timestamp de Pandas."
+    },
+    {
+      "id": "q_da_02_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cual es la funcion principal del metodo df.info()?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Mostrar el conteo de valores no nulos, los tipos de datos (dtypes) de cada columna y el consumo de memoria del DataFrame."
+        },
+        {
+          "id": "b",
+          "text": "Calcular la matriz de correlacion entre variables numericas."
+        },
+        {
+          "id": "c",
+          "text": "Graficar histogramas de las columnas."
+        },
+        {
+          "id": "d",
+          "text": "Exportar los datos a formato Parquet."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "df.info() proporciona el resumen tecnico estructural y diagnostico del dataset."
+    },
+    {
+      "id": "q_da_02_04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Cual afirmacion sobre la diferencia entre .loc e .iloc es totalmente CORRECTA?",
+      "options": [
+        {
+          "id": "a",
+          "text": ".loc indexa mediante etiquetas de indice y nombres de columna (inclusivo en extremos); .iloc indexa exclusivamente mediante posiciones enteras 0-indexed (excluyendo el extremo derecho)."
+        },
+        {
+          "id": "b",
+          "text": ".loc es exclusivamente para columnas y .iloc exclusivamente para filas."
+        },
+        {
+          "id": "c",
+          "text": ".iloc soporta filtros booleanos con strings pero .loc no."
+        },
+        {
+          "id": "d",
+          "text": "Ambos metodos son exactamente iguales y deprecados."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": ".loc (location by label) usa etiquetas y es inclusivo; .iloc (integer location) usa enteros posicionales y es excluyente en el extremo superior."
+    },
+    {
+      "id": "q_da_02_05",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "Como se escribe una consulta de filtrado para seleccionar filas donde 'categoria' sea 'Ropa' o 'Calzado' de forma eficiente?",
+      "options": [
+        {
+          "id": "a",
+          "text": "df[df['categoria'].isin(['Ropa', 'Calzado'])]"
+        },
+        {
+          "id": "b",
+          "text": "df[df['categoria'] in ['Ropa', 'Calzado']]"
+        },
+        {
+          "id": "c",
+          "text": "df.filter(categoria=['Ropa', 'Calzado'])"
+        },
+        {
+          "id": "d",
+          "text": "df.where('Ropa', 'Calzado')"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El metodo vectorizado .isin() comprueba membresia en una coleccion para cada elemento de la Serie."
+    },
+    {
+      "id": "q_da_02_06",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "En el metodo df.query('precio > @limite'), que funcion cumple el prefijo '@' antes de la palabra limite?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Le indica a Pandas que busque una variable llamada 'limite' en el espacio de nombres local de Python."
+        },
+        {
+          "id": "b",
+          "text": "Es un operador que convierte el valor en porcentaje."
+        },
+        {
+          "id": "c",
+          "text": "Indica que la variable es un puntero a memoria en C."
+        },
+        {
+          "id": "d",
+          "text": "Filtra exclusivamente direcciones de correo electronico."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Dentro de la expresion de string de df.query(), el caracter @ sirve para inyectar variables de Python definidas fuera de la consulta."
     }
   ]
 }

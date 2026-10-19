@@ -4,85 +4,250 @@
   "code": "IA_M06",
   "slug": "ia-embeddings-vector-dbs",
   "course_slug": "ai-agents",
-  "title": "Embeddings Semánticos y Bases de Datos Vectoriales",
-  "objective": "Transformar texto en vectores semánticos de alta dimensión, calcular distancias por similitud coseno e indexar con ChromaDB.",
-  "description": "La clave de la búsqueda semántica: cómo las computadoras entienden significados conceptuales y no solo coincidencias exactas de palabras.",
+  "title": "Embeddings Semanticos y Bases de Datos Vectoriales",
+  "objective": "Transformar texto en vectores semanticos, aplicar metricas de distancia y gestionar colecciones con bases de datos vectoriales como ChromaDB.",
+  "description": "La memoria asociativa de la IA: vectores densos, similitud coseno, tecnicas de chunking y busqueda aproximada de vecinos con HNSW.",
   "position": 56,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 340
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_ia_06_01",
       "code": "S01",
-      "title": "Vectores Semánticos y ChromaDB",
-      "slug": "embeddings-y-chromadb",
+      "title": "Embeddings, Similitud y Bases de Datos Vectoriales",
+      "slug": "embeddings-similitud-vector-dbs",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 50,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_ia_06_01",
           "code": "L01",
-          "title": "¿Qué es un Embedding y Cómo Funciona la Similitud Coseno?",
-          "slug": "embeddings-coseno-base",
+          "title": "Que son los Embeddings Semanticos",
+          "slug": "que-son-embeddings-semanticos",
           "position": 1,
-          "concept_id": "ia-embeddings",
-          "objective": "Comprender la representación vectorial de conceptos y la búsqueda por cercanía espacial.",
-          "theory_markdown": "Una búsqueda tradicional por palabras clave (como `LIKE '%perro%'` en SQL) falla si el usuario escribe `\"canino\"` o `\"cachorro\"`.\n\nUn **embedding** es una función matemática que convierte un texto en un vector numérico (una lista de ~1536 números flotantes). Frases con significados similares quedan ubicadas muy cerca unas de otras en ese espacio multidimensional.\n\nPara medir qué tan similares son dos textos, calculamos la **similitud coseno** (ángulo entre sus vectores):\n- `1.0`: Significados idénticos.\n- `0.0`: Conceptos completamente inconexos.\n\nPara buscar entre millones de vectores a gran velocidad usamos **Bases de Datos Vectoriales** como **ChromaDB**, **FAISS** o **Pinecone**.",
+          "concept_id": "ia-embeddings-concept",
+          "objective": "Comprender la representacion del significado en vectores densos multidimensionales y como se generan con modelos de embeddings.",
+          "theory_markdown": "Los seres humanos entendemos palabras por su significado; las computadoras solo entienden numeros.\n\nUn **Embedding Semantico** es una representacion matematica de un texto como un **vector continuo de punto flotante de alta dimensionalidad** (por ejemplo, 1536 dimensiones en `text-embedding-3-small` o 768 en modelos de HuggingFace).\n\n### La Hipotesis Distribucional\nLos modelos de embedding se entrenan de modo que **textos con significados semanticos similares se proyecten en puntos geometricamente cercanos** en el espacio vectorial:\n- La distancia entre los vectores de `'perro'` y `'cachorro'` es muy pequena.\n- La distancia entre `'perro'` y `'microprocesador'` es muy grande.\n\nEsto permite realizar **busqueda semantica**, encontrando pasajes que responden a una pregunta conceptual incluso si no comparten ninguna palabra exacta en comun.",
           "examples": [
             {
-              "title": "Simulación conceptual de similitud coseno con NumPy",
-              "code": "import numpy as np\n\ndef similitud_coseno(v1, v2):\n    return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))\n\n# Vectores conceptuales simplificados\nv_perro = np.array([0.9, 0.8, 0.1])\nv_cachorro = np.array([0.88, 0.79, 0.12])\nv_avion = np.array([0.05, 0.1, 0.95])\n\nprint(\"Perro vs Cachorro:\", round(similitud_coseno(v_perro, v_cachorro), 4))\nprint(\"Perro vs Avión:\", round(similitud_coseno(v_perro, v_avion), 4))",
-              "output": "Perro vs Cachorro: 0.9997\nPerro vs Avión: 0.2241",
-              "explanation": "Perro y cachorro tienen una similitud cercana a 1.0, mientras que avión está espacialmente distante."
+              "title": "Generacion de embeddings con la API",
+              "code": "from openai import AsyncOpenAI\n\nasync def obtener_vector(texto: str):\n    client = AsyncOpenAI()\n    res = await client.embeddings.create(\n        model=\"text-embedding-3-small\",\n        input=texto\n    )\n    return res.data[0].embedding # Lista de 1536 numeros flotantes",
+              "output": "[-0.0124, 0.0452, -0.0089, ...]",
+              "explanation": "Cada valor flotante codifica un rasgo latente en el espacio geometrico semantico del modelo."
             }
           ],
-          "common_errors": "Intentar comparar embeddings generados por modelos distintos (ej: comparar un embedding de OpenAI con uno de Google). Sus espacios vectoriales son incompatibles.",
+          "common_errors": "Intentar usar un modelo generativo de chat (como gpt-4o) para generar embeddings en lugar de un modelo especializado en representacion vectorial (como text-embedding-3).",
           "mini_exercise": {
-            "starter_code": "# En ChromaDB:\n# import chromadb\n# client = chromadb.Client()\n# coleccion = client.create_collection(\"documentos\")",
-            "instructions": "Observa la API minimalista de ChromaDB en Python.",
-            "solution": "# ChromaDB listo"
+            "instructions": "Escribe una llamada con client.embeddings.create usando model='text-embedding-3-small'.",
+            "starter_code": "# Genera embedding\n# res = await client.embeddings.create(...)",
+            "solution": "res = await client.embeddings.create(model=\"text-embedding-3-small\", input=\"Hola\")"
           },
           "key_takeaways": [
-            "Los embeddings capturan el significado semántico en vectores continuos.",
-            "La similitud coseno mide la cercanía angular entre significados.",
-            "Las bases de datos vectoriales indexan embeddings para búsqueda k-NN ultrarrápida."
+            "Un embedding es un vector denso de alta dimensionalidad que captura significado.",
+            "Textos conceptualmente parecidos se ubican cerca en el espacio geometrico.",
+            "Habilita busquedas semanticas mas alla de coincidencias de palabras clave literales."
           ],
           "exercise": {
             "id": "ex_ia_06_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Por qué la búsqueda mediante embeddings semánticos es superior a la búsqueda tradicional por palabras clave?",
+            "prompt": "Cual es la caracteristica distintiva de la busqueda semantica mediante embeddings frente a la busqueda por palabras clave tradicional?",
             "options": [
               {
                 "id": "a",
-                "text": "Porque encuentra textos con significado conceptual similar aunque no compartan exactamente las mismas palabras"
+                "text": "Encuentra documentos por afinidad de significado conceptual e intencion, aun cuando no contengan exactamente las mismas palabras de la consulta."
               },
               {
                 "id": "b",
-                "text": "Porque no requiere computadoras para funcionar"
+                "text": "Exige que todas las palabras esten escritas en mayusculas."
               },
               {
                 "id": "c",
-                "text": "Porque almacena archivos de audio únicamente"
+                "text": "Solo funciona si la consulta tiene menos de tres letras."
               },
               {
                 "id": "d",
-                "text": "Porque solo funciona con números pares"
+                "text": "Requiere reescribir la base de datos en SQL."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "La búsqueda semántica mapea conceptos (ej: \"clima frío\" y \"bajas temperaturas\"), superando la limitación sintáctica del matching literal de palabras."
+            "explanation": "Los embeddings proyectan conceptos en un espacio geometrico donde la proximidad vectorial refleja similitud semantica independientemente del lexico especifico."
+          }
+        },
+        {
+          "id": "les_ia_06_02",
+          "code": "L02",
+          "title": "Metricas de Similitud Vectorial: Coseno y Distancia Euclidiana",
+          "slug": "metricas-similitud-vectorial",
+          "position": 2,
+          "concept_id": "ia-embeddings-metrics",
+          "objective": "Calcular e interpretar la similitud coseno, la distancia euclidiana y el producto escalar sobre vectores densos.",
+          "theory_markdown": "Para comparar que tan parecidos son dos vectores $\\vec{u}$ y $\\vec{v}$, se utilizan metricas de distancia y similitud geometrica:\n\n### 1. Similitud Coseno (Cosine Similarity)\nMide el coseno del angulo entre dos vectores, independientemente de su magnitud o longitud:\n$$\\cos(\\theta) = \\frac{\\vec{u} \\cdot \\vec{v}}{\\|\\vec{u}\\| \\|\\vec{v}\\|}$$\n- $\\cos(\\theta) = 1.0$: Vectores paralelos con la misma direccion (significado identico).\n- $\\cos(\\theta) = 0.0$: Vectores ortogonales (sin relacion semantica).\n- $\\cos(\\theta) = -1.0$: Vectores diametralmente opuestos.\n\n### 2. Distancia Euclidiana ($L_2$)\nMide la distancia geometrica en linea recta entre dos puntos: $d = \\sqrt{\\sum (u_i - v_i)^2}$. A menor distancia, mayor cercania.\n\n### 3. Producto Escalar (Dot Product)\nSi los vectores estan previamente normalizados a longitud 1 (norma unitaria), el producto escalar es identico a la similitud coseno y computacionalmente mucho mas rapido.",
+          "examples": [
+            {
+              "title": "Calculo de similitud coseno con NumPy",
+              "code": "import numpy as np\n\ndef similitud_coseno(u, v):\n    return np.dot(u, v) / (np.linalg.norm(u) * np.linalg.norm(v))\n\nv1 = np.array([1.0, 2.0, 3.0])\nv2 = np.array([2.0, 4.0, 6.0]) # Misma direccion, diferente magnitud\nprint(\"Similitud:\", round(similitud_coseno(v1, v2), 4))",
+              "output": "Similitud: 1.0",
+              "explanation": "La similitud coseno es 1.0 porque el angulo es 0 grados, ignorando la diferencia de escala."
+            }
+          ],
+          "common_errors": "Comparar vectores sin normalizar mediante producto escalar directo, distorsionando los resultados a favor de textos mas largos con magnitudes mayores.",
+          "mini_exercise": {
+            "instructions": "Calcula el producto punto de dos vectores normalizados 'a' y 'b' usando np.dot(a, b).",
+            "starter_code": "import numpy as np\na = np.array([0.6, 0.8])\nb = np.array([0.6, 0.8])\n\n# Producto punto\nscore = ...",
+            "solution": "score = np.dot(a, b)"
+          },
+          "key_takeaways": [
+            "La similitud coseno evalua la orientacion del angulo independientemente de la magnitud.",
+            "Valores cercanos a 1.0 representan maxima afinidad conceptual.",
+            "Para vectores normalizados, el producto escalar equivale a la similitud coseno."
+          ],
+          "exercise": {
+            "id": "ex_ia_06_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual valor de similitud coseno indica que dos vectores semanticos apuntan exactamente en la misma direccion (maxima afinidad semantica)?",
+            "options": [
+              {
+                "id": "a",
+                "text": "1.0"
+              },
+              {
+                "id": "b",
+                "text": "0.0"
+              },
+              {
+                "id": "c",
+                "text": "-1.0"
+              },
+              {
+                "id": "d",
+                "text": "100.0"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Cuando el angulo entre dos vectores es de 0 grados, cos(0) = 1.0, lo que denota coincidencia direccional total."
+          }
+        },
+        {
+          "id": "les_ia_06_03",
+          "code": "L03",
+          "title": "Estrategias de Fragmentacion de Documentos (Chunking)",
+          "slug": "estrategias-fragmentacion-chunking",
+          "position": 3,
+          "concept_id": "ia-embeddings-chunking",
+          "objective": "Dividir documentos extensos en fragmentos (chunks) optimos con solapamiento (overlap) para no perder contexto semantico.",
+          "theory_markdown": "Los modelos de embedding tienen limites de longitud de entrada (ej. 8192 tokens) y embeber un libro de 300 paginas en un solo vector diluye tanto el significado que la busqueda puntual fracasa.\n\nPor ello, los documentos deben someterse a **Chunking (Fragmentacion)**:\n\n### Parametros Criticos de Chunking\n1. **`chunk_size` (Tamano del fragmento):** Cantidad de caracteres o tokens por bloque (tipicamente entre 500 y 1500 caracteres, o 200 a 400 tokens).\n2. **`chunk_overlap` (Solapamiento):** Cantidad de texto que se repite entre el final de un bloque y el inicio del siguiente (tipicamente entre 10% y 20% del tamano del chunk).\n\n### El Proposito del Overlap\nEl solapamiento asegura que una oracion o idea clave que quede justo en el borde de corte no se divida a la mitad, manteniendo la continuidad contextual en al menos uno de los dos fragmentos continuos.",
+          "examples": [
+            {
+              "title": "Chunking simple con solapamiento en Python",
+              "code": "def dividir_en_chunks(texto: str, tamano: int = 200, solapamiento: int = 40) -> list[str]:\n    chunks = []\n    inicio = 0\n    while inicio < len(texto):\n        fin = inicio + tamano\n        chunks.append(texto[inicio:fin])\n        inicio += (tamano - solapamiento)\n    return chunks",
+              "output": "Genera lista de fragmentos contiguos con solapamiento en los bordes.",
+              "explanation": "El incremento 'tamano - solapamiento' retrocede los caracteres necesarios para preservar el borde contextual."
+            }
+          ],
+          "common_errors": "Configurar un chunk_size diminuto (ej. 20 caracteres) perdiendo el contexto, o un chunk_size gigante que sobrepasa el limite del modelo de embedding.",
+          "mini_exercise": {
+            "instructions": "Calcula el paso de avance (paso = chunk_size - chunk_overlap) para chunk_size=500 y chunk_overlap=50.",
+            "starter_code": "chunk_size = 500\nchunk_overlap = 50\n# Calcula paso\npaso = ...",
+            "solution": "paso = chunk_size - chunk_overlap"
+          },
+          "key_takeaways": [
+            "Chunking divide documentos largos en unidades semanticas recuperables.",
+            "chunk_overlap previene cortes abruptos en medio de conceptos o clausulas.",
+            "Chunks bien dimensionados (300-1000 tokens) facilitan la precision de busqueda."
+          ],
+          "exercise": {
+            "id": "ex_ia_06_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es la funcion principal del solapamiento (overlap) al fragmentar documentos para indexacion vectorial?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Evitar que ideas u oraciones criticas queden partidas en el limite de corte perdiendo su significado contextual en los vectores de embedding."
+              },
+              {
+                "id": "b",
+                "text": "Ahorrar espacio en el disco duro."
+              },
+              {
+                "id": "c",
+                "text": "Acelerar el calculo matematico en la GPU."
+              },
+              {
+                "id": "d",
+                "text": "Encriptar el contenido de los documentos."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El solapamiento garantiza que la frontera entre bloques no mutile una proposicion logica completa, manteniendola integra en el bloque contiguo."
+          }
+        },
+        {
+          "id": "les_da_06_04",
+          "code": "L04",
+          "title": "Bases de Datos Vectoriales: ChromaDB",
+          "slug": "bases-datos-vectoriales-chromadb",
+          "position": 4,
+          "concept_id": "ia-vector-dbs-chromadb",
+          "objective": "Crear colecciones, almacenar embeddings con metadatos y consultar vecinos cercanos usando ChromaDB.",
+          "theory_markdown": "Una base de datos relacional tradicional utiliza arboles B+ para indexar numeros y texto. Para buscar entre millones de vectores de 1536 dimensiones de forma instantanea se requieren **Bases de Datos Vectoriales** basadas en algoritmos de busqueda aproximada de vecinos mas cercanos (**ANN**, como **HNSW** - Hierarchical Navigable Small World).\n\n**ChromaDB** es la base de datos vectorial embebida de codigo abierto estandar para Python:\n\n### Operaciones con ChromaDB\n```python\nimport chromadb\n\n# Cliente persistente en disco:\nclient = chromadb.PersistentClient(path=\"./vector_store\")\ncoleccion = client.get_or_create_collection(\"manuales_koda\")\n\n# Ingestion de documentos:\ncoleccion.add(\n    documents=[\"Instrucciones de instalacion de Python\", \"Guia de FastAPI\"],\n    metadatas=[{\"categoria\": \"core\"}, {\"categoria\": \"backend\"}],\n    ids=[\"doc_1\", \"doc_2\"]\n)\n\n# Consulta semantica por texto (Chroma embebe automaticamente):\nresultados = coleccion.query(\n    query_texts=[\"Como creo una API asincrona?\"],\n    n_results=1\n)\n```",
+          "examples": [
+            {
+              "title": "Busqueda semantica top-k en ChromaDB",
+              "code": "import chromadb\n\nclient = chromadb.EphemeralClient()\ncollection = client.create_collection(\"articulos\")\ncollection.add(\n    documents=[\"Receta de pastel de manzana\", \"Optimizacion de consultas SQL\", \"Guia de bucles en C++\"],\n    ids=[\"receta\", \"sql\", \"cpp\"]\n)\n\nres = collection.query(query_texts=[\"Como indexar una base de datos?\"], n_results=1)\nprint(\"Documento mas cercano:\", res[\"documents\"][0][0])",
+              "output": "Documento mas cercano: Optimizacion de consultas SQL",
+              "explanation": "Chroma identifico que la consulta tenia maxima afinidad con el documento de SQL sin que compartieran palabras literales."
+            }
+          ],
+          "common_errors": "Re-crear la coleccion en cada ejecucion con create_collection en vez de get_or_create_collection, provocando un error de colision de nombre.",
+          "mini_exercise": {
+            "instructions": "Usa collection.query con query_texts=['test'] y n_results=3 para recuperar los 3 documentos mas afines.",
+            "starter_code": "# Consulta ChromaDB\n# res = collection.query(...)",
+            "solution": "res = collection.query(query_texts=[\"test\"], n_results=3)"
+          },
+          "key_takeaways": [
+            "Las bases de datos vectoriales indexan vectores densos mediante algoritmos ANN como HNSW.",
+            "ChromaDB almacena vectores, documentos de texto plano y metadatos estructurados asociados.",
+            "query_texts permite buscar los N vecinos conceptualmente mas afines en milisegundos."
+          ],
+          "exercise": {
+            "id": "ex_ia_06_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual algoritmo de indexacion de grafos es ampliamente utilizado por bases de datos vectoriales modernas como ChromaDB para ejecutar busquedas aproximadas de vecinos mas cercanos (ANN) a alta velocidad?",
+            "options": [
+              {
+                "id": "a",
+                "text": "HNSW (Hierarchical Navigable Small World)"
+              },
+              {
+                "id": "b",
+                "text": "B-Tree clasico de PostgreSQL"
+              },
+              {
+                "id": "c",
+                "text": "Bubble Sort"
+              },
+              {
+                "id": "d",
+                "text": "Algoritmo de Dijkstra simple"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "HNSW estructura los vectores en capas jerarquicas de grafos para recorrer millones de puntos en tiempo logaritmico encontrando los vecinos mas cercanos."
           }
         }
       ]

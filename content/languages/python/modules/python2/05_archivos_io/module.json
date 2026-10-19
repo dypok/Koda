@@ -5,13 +5,13 @@
   "slug": "archivos-txt-csv-json",
   "course_slug": "python-2",
   "title": "Persistencia: Archivos TXT, CSV y JSON",
-  "objective": "Leer y escribir archivos de forma segura con el context manager with open(), serializar datos estructurados con json y procesar tablas con csv.",
-  "description": "Guarda información de manera persistente en disco: almacena configuraciones en JSON, procesa hojas de datos en CSV y gestiona recursos con with.",
-  "position": 15,
+  "objective": "Leer y escribir archivos de forma segura con el context manager with open(), serializar datos estructurados con json y procesar tablas estructuradas con csv.",
+  "description": "Guarda información de manera persistente en disco: gestiona recursos con with, manipula ficheros de texto, almacena configuraciones en JSON y procesa datos en CSV.",
+  "position": 5,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,231 @@
     {
       "id": "sec_py2_05_01",
       "code": "S01",
-      "title": "Context Manager with open() y JSON",
-      "slug": "open-y-json",
+      "title": "Entrada y Salida de Archivos en Python",
+      "slug": "archivos-io-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 18,
-      "xp_on_complete": 45,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py2_05_01",
           "code": "L01",
-          "title": "Manejo Seguro con with open() y JSON dumps/loads",
-          "slug": "open-json-base",
+          "title": "Lectura y Escritura de Texto con with open()",
+          "slug": "lectura-escritura-with-open",
           "position": 1,
-          "concept_id": "py2-file-io",
-          "objective": "Aprender por qué with open garantiza el cierre automático del descriptor de archivo y cómo persistir JSON.",
-          "theory_markdown": "Si abres un archivo con `f = open(\"datos.txt\")` y ocurre un error antes de `f.close()`, el archivo quedará bloqueado en el sistema operativo.\n\nLa sintaxis profesional es el **context manager with**:\n```python\nwith open(\"archivo.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"Línea guardada\\n\")\n# Al salir de la sangría, Python cierra el archivo automáticamente.\n```\n\nPara datos estructurados usamos el módulo nativo `json`:\n- `json.dumps(obj)`: Convierte un diccionario de Python a string JSON.\n- `json.loads(str)`: Parsea un string JSON a diccionario de Python.\n- `json.dump(obj, f)` / `json.load(f)`: Leen/escriben directamente en el archivo abierto.",
+          "concept_id": "py2-with-open-modes",
+          "objective": "Abrir archivos de forma segura usando el context manager with, seleccionar los modos 'r', 'w', 'a' y especificar encoding=\"utf-8\".",
+          "theory_markdown": "Para interactuar con archivos en el disco duro, Python proporciona la función integrada `open()`.\n\n### El peligro del cierre manual y la solución `with`\nSi usas `f = open(\"datos.txt\")` y ocurre un error antes de `f.close()`, el descriptor del archivo queda bloqueado en el sistema operativo generando fugas de recursos. El **context manager `with`** garantiza que el archivo se cierre automáticamente en cuanto termina el bloque, incluso si ocurre una excepción:\n\n```python\nwith open(\"salida.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"Primera línea\\n\")\n```\n\n### Modos principales de apertura\n- **`'r'` (Read)**: Modo por defecto para lectura. Si el archivo no existe, lanza `FileNotFoundError`.\n- **`'w'` (Write)**: Escritura. Si el archivo no existe, lo crea. Si ya existía, **sobrescribe y trunca** todo su contenido a 0 bytes.\n- **`'a'` (Append)**: Anexado. Si el archivo existe, escribe al final sin borrar nada.",
           "examples": [
             {
-              "title": "Serialización y recuperación JSON en disco",
-              "code": "import json\n\nusuario = {\"id\": 1, \"nombre\": \"Koda\", \"activo\": True}\n# Guardar como JSON\njson_str = json.dumps(usuario, indent=2)\nprint(\"JSON resultante:\\n\", json_str)\n\n# Recuperar como diccionario\nrecuperado = json.loads(json_str)\nprint(\"Nombre recuperado:\", recuperado[\"nombre\"])",
-              "output": "JSON resultante:\n {\n  \"id\": 1,\n  \"nombre\": \"Koda\",\n  \"activo\": true\n}\nNombre recuperado: Koda",
-              "explanation": "True en Python se serializa automáticamente a true en JSON estándar."
+              "title": "Escritura y anexado de texto con utf-8",
+              "code": "# Escritura inicial (sobrescribe)\nwith open(\"registro.txt\", \"w\", encoding=\"utf-8\") as f:\n    f.write(\"Sesion iniciada\\n\")\n\n# Anexado (preserva contenido previo)\nwith open(\"registro.txt\", \"a\", encoding=\"utf-8\") as f:\n    f.write(\"Operacion completada\\n\")\n\nprint(\"Archivos escritos correctamente\")",
+              "output": "Archivos escritos correctamente",
+              "explanation": "El modo 'a' agrega la nueva línea al final del archivo sin alterar el texto previo."
             }
           ],
-          "common_errors": "Olvidar el parámetro `encoding=\"utf-8\"`, lo que causa errores UnicodeDecodeError en Windows con caracteres como tildes o la letra ñ.",
+          "common_errors": "Olvidar especificar `encoding=\"utf-8\"`. En Windows, Python por defecto usa encodings heredados como CP1252, provocando errores al leer tildes o caracteres especiales.",
           "mini_exercise": {
-            "starter_code": "import json\ndata = '{\"puntos\": 100}'\n# Parsea data a diccionario usando json.loads\nresultado = ...\nprint(resultado[\"puntos\"])",
-            "instructions": "Usa json.loads(data).",
-            "solution": "import json\ndata = '{\"puntos\": 100}'\nresultado = json.loads(data)\nprint(resultado[\"puntos\"])"
+            "starter_code": "# Abre notas.txt en modo anexado ('a') con codificacion utf-8\nwith open(\"notas.txt\", ..., encoding=\"utf-8\") as archivo:\n    archivo.write(\"Nueva nota\\n\")",
+            "instructions": "Escribe \"a\" como segundo argumento de open.",
+            "solution": "with open(\"notas.txt\", \"a\", encoding=\"utf-8\") as archivo:\n    archivo.write(\"Nueva nota\\n\")"
           },
           "key_takeaways": [
-            "with open() cierra el archivo automáticamente pase lo que pase.",
-            "Siempre especifica encoding=\"utf-8\".",
-            "json.loads convierte string a dict; json.dumps convierte dict a string."
+            "with open(...) garantiza el cierre seguro del descriptor del archivo en el sistema operativo.",
+            "'w' sobrescribe el archivo completo; 'a' agrega contenido al final.",
+            "Siempre especifica encoding='utf-8' para evitar problemas con acentos y caracteres especiales."
           ],
           "exercise": {
             "id": "ex_py2_05_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Cuál es el beneficio de usar la instrucción `with open(...) as f:` sobre `f = open(...)`?",
+            "prompt": "¿Qué sucede con el contenido previo de un archivo si lo abres con el modo 'w'?",
             "options": [
               {
                 "id": "a",
-                "text": "Garantiza el cierre del archivo automáticamente incluso si ocurre una excepción"
+                "text": "Se borra completamente y el archivo se trunca a 0 bytes para escribir desde el inicio"
               },
               {
                 "id": "b",
-                "text": "Comprime el archivo en formato zip"
+                "text": "Se conserva y el nuevo texto se agrega al final"
               },
               {
                 "id": "c",
-                "text": "Aumenta la velocidad de lectura en disco un 500%"
+                "text": "Python lanza una excepción FileExistsError"
               },
               {
                 "id": "d",
-                "text": "Evita tener que escribir comillas"
+                "text": "El archivo se convierte en formato binario"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "El context manager with invoca __exit__ al salir del bloque, garantizando la liberación del recurso sin fugas de memoria."
+            "explanation": "El modo 'w' (write) sobrescribe el archivo desde cero eliminando cualquier dato preexistente. Para conservar los datos se debe usar el modo 'a' (append)."
+          }
+        },
+        {
+          "id": "les_py2_05_02",
+          "code": "L02",
+          "title": "Técnicas de Lectura: .read(), .readline() y .readlines()",
+          "slug": "tecnicas-lectura-archivos",
+          "position": 2,
+          "concept_id": "py2-reading-methods",
+          "objective": "Elegir el método de lectura óptimo según el tamaño del archivo para evitar saturación de memoria RAM.",
+          "theory_markdown": "Python ofrece tres métodos para consumir contenido de texto, además de la iteración directa sobre el descriptor:\n\n1. **`f.read()`**: Carga el contenido **entero** del archivo como un único string gigantesco. Excelente para archivos pequeños; peligroso en archivos de varios gigabytes porque satura la RAM.\n2. **`f.readline()`**: Lee una única línea por llamada, avanzando el cursor interno. Devuelve una cadena vacía `\"\"` cuando alcanza el final del archivo (EOF).\n3. **`f.readlines()`**: Lee todas las líneas y las devuelve como una **lista de strings**, conservando los saltos de línea `\\n`.\n\n### La técnica más eficiente en memoria (Streaming)\nPara archivos grandes, la mejor práctica en Python es iterar directamente sobre el objeto archivo `f` con un bucle `for`:\n```python\nwith open(\"logs_grandes.txt\", \"r\", encoding=\"utf-8\") as f:\n    for linea in f:\n        print(linea.strip())\n```\nEsta técnica procesa línea por línea en memoria constante O(1).",
+          "examples": [
+            {
+              "title": "Lectura línea por línea con for in f",
+              "code": "# Simulando lectura eficiente de un archivo\nlineas_ejemplo = [\"servidor_ok\\n\", \"error_404\\n\", \"servidor_ok\\n\"]\nconteo = 0\nfor linea in lineas_ejemplo:\n    if \"error\" in linea:\n        conteo += 1\nprint(\"Errores encontrados:\", conteo)",
+              "output": "Errores encontrados: 1",
+              "explanation": "Iterar línea a línea permite procesar terabytes de logs con un consumo mínimo de RAM."
+            }
+          ],
+          "common_errors": "Usar .read() en archivos de datos masivos (por ejemplo un volcado de base de datos de 10 GB), provocando un error MemoryError del sistema.",
+          "mini_exercise": {
+            "starter_code": "# Recorre cada linea del descriptor f usando un bucle for\n# with open(\"datos.txt\", \"r\") as f:\n#     for linea in ...:\n#         print(linea.strip())",
+            "instructions": "Escribe f para iterar directamente sobre el archivo.",
+            "solution": "# for linea in f:"
+          },
+          "key_takeaways": [
+            "f.read() carga todo el archivo como un único string.",
+            "f.readlines() entrega una lista con todas las líneas.",
+            "Iterar con for linea in f es el enfoque profesional y eficiente en memoria para archivos grandes."
+          ],
+          "exercise": {
+            "id": "ex_py2_05_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Al procesar un archivo de registro de 8 GB en una máquina con 4 GB de RAM, ¿cuál es la forma correcta de leerlo en Python?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Iterar directamente sobre el descriptor del archivo con un bucle 'for linea in f:'"
+              },
+              {
+                "id": "b",
+                "text": "Usar f.read() para tener todo el contenido en una sola variable"
+              },
+              {
+                "id": "c",
+                "text": "Usar f.readlines() para obtener una lista completa de líneas"
+              },
+              {
+                "id": "d",
+                "text": "Copiar el archivo a un diccionario primero"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Iterar con 'for linea in f' lee del disco de forma perezosa (streaming) una línea a la vez sin colapsar la memoria RAM."
+          }
+        },
+        {
+          "id": "les_py2_05_03",
+          "code": "L03",
+          "title": "Serialización Estructurada con el Módulo json",
+          "slug": "serializacion-json",
+          "position": 3,
+          "concept_id": "py2-json-module",
+          "objective": "Serializar y deserializar estructuras nativas de Python hacia y desde JSON mediante dump, dumps, load y loads.",
+          "theory_markdown": "**JSON (JavaScript Object Notation)** es el estándar global para intercambio de datos en la web y persistencia de configuraciones. Python incluye el módulo `json` en su biblioteca estándar.\n\n### Las 4 funciones clave\n- **Con strings en memoria** (terminan en `s` de string):\n  - `json.dumps(obj)`: Convierte un diccionario/lista de Python en una cadena de texto JSON (serialización).\n  - `json.loads(cadena_json)`: Parsea una cadena de texto JSON a estructuras nativas de Python (deserialización).\n- **Directo con archivos en disco**:\n  - `json.dump(obj, f)`: Escribe el objeto Python directamente en el archivo abierto `f`.\n  - `json.load(f)`: Lee y parsea directamente el contenido del archivo abierto `f`.\n\n### Mapeo de tipos entre Python y JSON\n- `dict` <-> Objeto `{}`\n- `list`, `tuple` <-> Array `[]`\n- `True` / `False` <-> `true` / `false`\n- `None` <-> `null`",
+          "examples": [
+            {
+              "title": "Conversión bidireccional en memoria con dumps y loads",
+              "code": "import json\n\nperfil = {\"usuario\": \"koda_bot\", \"nivel\": 2, \"activo\": True, \"roles\": None}\n# Serializar a texto JSON formateado\ntexto_json = json.dumps(perfil, indent=2)\nprint(\"Texto JSON:\\n\", texto_json)\n\n# Deserializar de vuelta a Python\nrecuperado = json.loads(texto_json)\nprint(\"Tipo recuperado:\", type(recuperado))\nprint(\"Valor booleano:\", recuperado[\"activo\"])",
+              "output": "Texto JSON:\n {\n  \"usuario\": \"koda_bot\",\n  \"nivel\": 2,\n  \"activo\": true,\n  \"roles\": null\n}\nTipo recuperado: <class 'dict'>\nValor booleano: True",
+              "explanation": "Observa cómo Python convierte automáticamente True en true y None en null al serializar."
+            }
+          ],
+          "common_errors": "Confundir json.load(f) (para archivos) con json.loads(s) (para cadenas de texto). La 's' final significa 'string'.",
+          "mini_exercise": {
+            "starter_code": "import json\n# Convierte este string JSON a diccionario con json.loads\ntexto = '{\"servicio\": \"activo\", \"codigo\": 200}'\ndatos = json....(texto)\nprint(datos[\"codigo\"])",
+            "instructions": "Usa json.loads(texto) para parsear el string.",
+            "solution": "import json\ntexto = '{\"servicio\": \"activo\", \"codigo\": 200}'\ndatos = json.loads(texto)\nprint(datos[\"codigo\"])"
+          },
+          "key_takeaways": [
+            "json.dumps/loads operan sobre cadenas de texto en memoria.",
+            "json.dump/load operan directamente sobre descriptores de archivos abiertos.",
+            "Python mapea None a null y True/False a true/false."
+          ],
+          "exercise": {
+            "id": "ex_py2_05_03",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué valor retorna json.loads('{\"items\": null}')[\"items\"] en Python?",
+            "options": [
+              {
+                "id": "a",
+                "text": "None"
+              },
+              {
+                "id": "b",
+                "text": "\"null\""
+              },
+              {
+                "id": "c",
+                "text": "0"
+              },
+              {
+                "id": "d",
+                "text": "TypeError"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El valor 'null' de JSON se convierte en el objeto nativo 'None' de Python al deserializarse con json.loads."
+          }
+        },
+        {
+          "id": "les_py2_05_04",
+          "code": "L04",
+          "title": "Procesamiento Tabular con el Módulo csv",
+          "slug": "modulo-csv-tablas",
+          "position": 4,
+          "concept_id": "py2-csv-processing",
+          "objective": "Leer y generar archivos CSV utilizando csv.reader, csv.writer y la variante orientada a diccionarios csv.DictReader.",
+          "theory_markdown": "Los archivos **CSV (Comma-Separated Values)** representan tablas donde cada fila es una línea y las columnas están separadas por comas (o delimitadores como punto y coma).\n\nPara no lidiar manualmente con comas dentro de textos entre comillas, Python incluye el módulo `csv`:\n\n### `csv.reader` vs `csv.DictReader`\n- **`csv.reader(f)`**: Devuelve cada fila como una **lista de strings**: `['Ana', '25', 'Bogota']`.\n- **`csv.DictReader(f)`**: Usa automáticamente la primera fila como nombres de campos y devuelve cada fila subsiguiente como un **diccionario**: `{'nombre': 'Ana', 'edad': '25', 'ciudad': 'Bogota'}`.\n\n### Escritura con `csv.writer`\nAl abrir archivos para escritura con `csv`, siempre debes pasar `newline=\"\"` en `open()` para evitar que Windows inserte líneas en blanco extra entre filas:\n```python\nimport csv\nwith open(\"reporte.csv\", \"w\", newline=\"\", encoding=\"utf-8\") as f:\n    writer = csv.writer(f)\n    writer.writerow([\"id\", \"producto\", \"precio\"])\n    writer.writerow([1, \"Laptop\", 850])\n```",
+          "examples": [
+            {
+              "title": "Lectura orientada a diccionarios con csv.DictReader",
+              "code": "import csv\nimport io\n\n# Simulamos el contenido de un archivo CSV en memoria\ncontenido_csv = \"id,nombre,rol\\n10,Carlos,Admin\\n11,Elena,Dev\"\nf = io.StringIO(contenido_csv)\n\nlector = csv.DictReader(f)\nfor fila in lector:\n    print(f\"{fila['nombre']} tiene rol {fila['rol']}\")",
+              "output": "Carlos tiene rol Admin\nElena tiene rol Dev",
+              "explanation": "csv.DictReader mapea los encabezados de las columnas como claves en cada diccionario resultante."
+            }
+          ],
+          "common_errors": "Olvidar `newline=\"\"` al abrir un archivo para escribir con csv.writer en Windows, lo que produce una línea vacía después de cada fila de datos.",
+          "mini_exercise": {
+            "starter_code": "import csv\n# Para escribir en CSV en Windows, ¿que parametro evita lineas en blanco extra?\n# with open(\"datos.csv\", \"w\", newline=..., encoding=\"utf-8\") as f:\n#     pass",
+            "instructions": "Usa newline=\"\" para prevenir líneas vacías no deseadas.",
+            "solution": "# newline=\"\""
+          },
+          "key_takeaways": [
+            "csv.reader entrega listas de cadenas por cada fila.",
+            "csv.DictReader mapea las filas a diccionarios usando la cabecera como claves.",
+            "Siempre define newline='' al escribir archivos CSV con csv.writer."
+          ],
+          "exercise": {
+            "id": "ex_py2_05_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Qué ventaja ofrece csv.DictReader sobre csv.reader al leer un archivo de datos tabulares?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Permite acceder a los valores de cada columna usando el nombre de su encabezado (como un diccionario) en lugar de depender de índices numéricos"
+              },
+              {
+                "id": "b",
+                "text": "Convierte automáticamente todos los números a float"
+              },
+              {
+                "id": "c",
+                "text": "Ordena el archivo alfabéticamente al momento de leerlo"
+              },
+              {
+                "id": "d",
+                "text": "No requiere importar el módulo csv"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "csv.DictReader usa la primera fila como nombres de clave, haciendo el código mucho más legible y resistente a cambios en el orden de las columnas."
           }
         }
       ]

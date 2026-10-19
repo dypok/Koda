@@ -6,12 +6,38 @@
     {
       "id": "q_ia_02_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "En la lista de mensajes de una API de chat, ¿qué rol se utiliza para condicionar el comportamiento y reglas permanentes del asistente?",
+      "difficulty": "easy",
+      "prompt": "Donde deben almacenarse de forma segura las API keys de servicios como OpenAI, Anthropic o Gemini?",
       "options": [
         {
           "id": "a",
-          "text": "system"
+          "text": "En variables de entorno del sistema operativo o gestores de secretos, nunca hardcodeadas en el codigo fuente."
+        },
+        {
+          "id": "b",
+          "text": "En el archivo README.md publico del repositorio."
+        },
+        {
+          "id": "c",
+          "text": "Como comentarios dentro de los scripts de Python."
+        },
+        {
+          "id": "d",
+          "text": "En una cookie no segura enviada al navegador del cliente."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Las credenciales son secretos que deben inyectarse en tiempo de ejecucion mediante variables de entorno para evitar filtraciones."
+    },
+    {
+      "id": "q_ia_02_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "En una conversacion con una API de chat, que rol representa las respuestas previamente devueltas por el modelo para brindar memoria contextual?",
+      "options": [
+        {
+          "id": "a",
+          "text": "assistant"
         },
         {
           "id": "b",
@@ -19,15 +45,119 @@
         },
         {
           "id": "c",
-          "text": "assistant"
+          "text": "system"
         },
         {
           "id": "d",
-          "text": "root"
+          "text": "history"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "El rol system define la directiva maestra (metaprompt) que guía la conducta general del modelo."
+      "explanation": "El rol 'assistant' modela los turnos previos del propio LLM dentro de la lista de mensajes conversacionales."
+    },
+    {
+      "id": "q_ia_02_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Como se activa la transmision de tokens en tiempo real en la llamada chat.completions.create()?",
+      "options": [
+        {
+          "id": "a",
+          "text": "stream=True"
+        },
+        {
+          "id": "b",
+          "text": "live=True"
+        },
+        {
+          "id": "c",
+          "text": "realtime=True"
+        },
+        {
+          "id": "d",
+          "text": "chunk_mode=True"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "stream=True activa la conexion persistente mediante Server-Sent Events transmitiendo cada token a medida que se genera."
+    },
+    {
+      "id": "q_ia_02_04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "En que consiste la estrategia de 'Backoff Exponencial con Jitter' para gestionar respuestas HTTP 429?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Duplicar progresivamente el tiempo de espera tras cada intento fallido (1s, 2s, 4s...) sumando una pequena variacion aleatoria para no saturar al servidor."
+        },
+        {
+          "id": "b",
+          "text": "Reintentar mil veces por segundo de forma continua."
+        },
+        {
+          "id": "c",
+          "text": "Apagar el servidor de inmediato sin registrar errores."
+        },
+        {
+          "id": "d",
+          "text": "Cambiar el modelo de GPT-4 a GPT-3 automaticamente."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El backoff exponencial espacia los intentos de forma creciente y el jitter aleatorio dispersa los reintentos concurrentes."
+    },
+    {
+      "id": "q_ia_02_05",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "Que devuelve chunk.choices[0].delta.content al iterar sobre un stream asincrono de OpenAI?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El nuevo fragmento de texto o token individual recibido en ese paquete SSE."
+        },
+        {
+          "id": "b",
+          "text": "El documento completo de principio a fin."
+        },
+        {
+          "id": "c",
+          "text": "Unicamente la fecha y hora de la llamada."
+        },
+        {
+          "id": "d",
+          "text": "Un numero entero con el total de palabras."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "delta contiene solo la diferencia o incremento de contenido correspondiente a ese fragmento puntual emitido por el modelo."
+    },
+    {
+      "id": "q_ia_02_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Cual libreria de Python es popularmente utilizada para decorar funciones con politicas de reintentos robustos y backoff exponencial?",
+      "options": [
+        {
+          "id": "a",
+          "text": "tenacity"
+        },
+        {
+          "id": "b",
+          "text": "matplotlib"
+        },
+        {
+          "id": "c",
+          "text": "numpy"
+        },
+        {
+          "id": "d",
+          "text": "jinja2"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "tenacity es la biblioteca lider en Python para configurar reintentos con diversas estrategias de espera (wait_exponential) y limites de parada."
     }
   ]
 }

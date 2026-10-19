@@ -5,13 +5,13 @@
   "slug": "diccionarios-y-sets",
   "course_slug": "python-1",
   "title": "Estructuras Clave-Valor y Conjuntos: Diccionarios y Sets",
-  "objective": "Almacenar datos asociativos con diccionarios (dict), dominar .get(), .keys(), .items() y operar con conjuntos (set) para garantizar unicidad.",
+  "objective": "Almacenar datos asociativos con diccionarios (dict), dominar .get(), .keys(), .values(), .items() y operar con conjuntos (set) para garantizar unicidad y búsquedas O(1).",
   "description": "Modela entidades del mundo real usando pares clave-valor y realiza búsquedas ultrarrápidas con tablas hash nativas.",
   "position": 9,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 2,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,51 +23,107 @@
     {
       "id": "sec_py1_09_01",
       "code": "S01",
-      "title": "Diccionarios y el Método Seguro .get()",
-      "slug": "diccionarios-get",
+      "title": "Diccionarios y Conjuntos en Python",
+      "slug": "diccionarios-sets",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 18,
-      "xp_on_complete": 45,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py1_09_01",
           "code": "L01",
-          "title": "Diccionarios: Mapeos Clave-Valor y .get()",
-          "slug": "diccionarios-mapeos",
+          "title": "Diccionarios: Creación, Acceso por Clave y KeyError",
+          "slug": "diccionarios-creacion-clave",
           "position": 1,
-          "concept_id": "py-dictionaries",
-          "objective": "Declarar diccionarios, acceder a claves y evitar KeyError usando .get(clave, default).",
-          "theory_markdown": "Un **diccionario (`dict`)** almacena pares de `clave: valor` entre llaves `{ }`. En lugar de buscar por índice numérico (como en listas), accedes por el nombre de la clave (un string, número o tupla inmutable).\n\n```python\nusuario = {\"nombre\": \"Koda\", \"rol\": \"Specialist\", \"nivel\": 1}\nprint(usuario[\"nombre\"])  # \"Koda\"\n```\n\n> **¡Evita el temido KeyError!** Si buscas una clave que no existe con `usuario[\"email\"]`, el programa se detiene con error. Usa siempre `.get(\"email\", \"No registrado\")`: si la clave no existe, devuelve el valor por defecto sin quebrar el programa.",
+          "concept_id": "py-dict-basics",
+          "objective": "Declarar diccionarios con pares clave-valor, acceder a valores mediante claves inmutables y comprender la excepción KeyError.",
+          "theory_markdown": "Un **diccionario (`dict`)** es una estructura de datos que almacena información en pares de `clave: valor` delimitados por llaves `{}`. A diferencia de las listas (donde accedes por posición numérica `0, 1, 2`), en un diccionario accedes directamente por el identificador de la clave.\n\n```python\nusuario = {\"nombre\": \"Ana\", \"nivel\": 5, \"activo\": True}\nprint(usuario[\"nombre\"])  # \"Ana\"\nprint(usuario[\"nivel\"])   # 5\n```\n\n### Reglas fundamentales de las claves\n1. **Unicidad**: Cada clave debe ser única. Si defines dos veces la misma clave, el último valor sobreescribe al anterior.\n2. **Inmutabilidad**: Las claves deben ser de tipos inmutables (comúnmente `str` o `int`). No puedes usar una lista como clave.\n3. **La excepción `KeyError`**: Si intentas acceder a una clave inexistente con corchetes (por ejemplo `usuario[\"email\"]`), Python detiene la ejecución inmediatamente lanzando un error `KeyError`.",
           "examples": [
             {
-              "title": "Lectura segura e iteración con .items()",
-              "code": "producto = {\"id\": 101, \"titulo\": \"Monitor 4K\", \"precio\": 350.0}\n\n# Acceso seguro con get\ncategoria = producto.get(\"categoria\", \"Sin categoría\")\nprint(\"Categoría:\", categoria)\n\n# Iteración de claves y valores\nfor clave, valor in producto.items():\n    print(f\"- {clave}: {valor}\")",
-              "output": "Categoría: Sin categoría\n- id: 101\n- titulo: Monitor 4K\n- precio: 350.0",
-              "explanation": "producto.items() devuelve tuplas (clave, valor) listas para desempaquetar en el bucle."
+              "title": "Acceso por clave y disparo de KeyError",
+              "code": "producto = {\"sku\": \"A-102\", \"precio\": 45}\nprint(producto[\"sku\"])\n\n# Intentar leer una clave no registrada genera KeyError\n# print(producto[\"stock\"])  # KeyError: 'stock'",
+              "output": "A-102",
+              "explanation": "El acceso directo con corchetes busca la clave exacta en la tabla hash interna del diccionario."
             }
           ],
-          "common_errors": "Usar corchetes en claves inexistentes (KeyError). Usa siempre .get() cuando no tengas la certeza absoluta de que la clave exista.",
+          "common_errors": "Intentar acceder a una clave que no existe usando corchetes dict[clave]. Si no tienes certeza de que la clave exista, esto provocará una parada por KeyError.",
           "mini_exercise": {
-            "starter_code": "perfil = {\"nombre\": \"Alex\", \"puntos\": 500}\n# Obtén \"rango\" con .get(), si no existe devuelve \"Novato\"\nrango = perfil.get(...)\nprint(rango)",
-            "instructions": "Usa .get(\"rango\", \"Novato\") para evitar errores.",
-            "solution": "perfil = {\"nombre\": \"Alex\", \"puntos\": 500}\nrango = perfil.get(\"rango\", \"Novato\")\nprint(rango)"
+            "starter_code": "servidor = {\"host\": \"localhost\", \"puerto\": 8000}\n# Lee e imprime el valor asociado a la clave \"host\"\nprint(servidor[...])",
+            "instructions": "Accede a la clave \"host\" usando corchetes.",
+            "solution": "servidor = {\"host\": \"localhost\", \"puerto\": 8000}\nprint(servidor[\"host\"])"
           },
           "key_takeaways": [
-            "Los diccionarios usan pares {clave: valor}.",
-            "Las claves deben ser inmutables (comúnmente strings).",
-            ".get(k, default) previene excepciones KeyError.",
-            ".items() permite iterar simultáneamente sobre claves y valores."
+            "Los diccionarios asocian pares de clave: valor entre llaves {}.",
+            "El acceso por corchetes dict[clave] requiere que la clave exista.",
+            "Consultar una clave inexistente con corchetes lanza KeyError."
           ],
           "exercise": {
             "id": "ex_py1_09_01",
-            "type": "predict_output",
+            "type": "find_error",
             "difficulty": "easy",
-            "prompt": "¿Qué devolverá config.get(\"timeout\", 30) si config = {\"puerto\": 8080}?",
+            "prompt": "¿Qué excepción se produce al ejecutar este código?",
+            "prompt_code": "persona = {\"nombre\": \"Luis\", \"edad\": 28}\nprint(persona[\"ciudad\"])",
             "options": [
               {
                 "id": "a",
-                "text": "30"
+                "text": "KeyError: 'ciudad'"
+              },
+              {
+                "id": "b",
+                "text": "IndexError: index out of range"
+              },
+              {
+                "id": "c",
+                "text": "ValueError: invalid key"
+              },
+              {
+                "id": "d",
+                "text": "TypeError: unhashable type"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Al intentar leer persona['ciudad'] y no existir esa clave en el diccionario, Python lanza un KeyError."
+          }
+        },
+        {
+          "id": "les_py1_09_02",
+          "code": "L02",
+          "title": "Acceso Seguro con .get() y Mutación de Diccionarios",
+          "slug": "acceso-seguro-get-mutacion",
+          "position": 2,
+          "concept_id": "py-dict-get-mutation",
+          "objective": "Prevenir fallos de ejecución usando .get(clave, default), agregar nuevos pares clave-valor y modificar valores existentes.",
+          "theory_markdown": "Para evitar que tu programa colapse ante claves opcionales o desconocidas, los diccionarios proporcionan el método seguro `.get()`.\n\n### Sintaxis de `.get()`\n```python\nvalor = mi_diccionario.get(clave, valor_por_defecto)\n```\n- Si la `clave` existe, retorna su valor.\n- Si la `clave` **no** existe, retorna `valor_por_defecto` (o `None` si omites el segundo argumento).\n- **Nunca** lanza `KeyError`.\n\n### Mutabilidad: Agregar y Modificar\nLos diccionarios son mutables. Puedes agregar una clave nueva o actualizar una existente mediante asignación directa:\n```python\nusuario = {\"nombre\": \"Carlos\"}\nusuario[\"rol\"] = \"Admin\"      # Agrega una nueva clave \"rol\"\nusuario[\"nombre\"] = \"Carlos M.\" # Modifica el valor existente\n```",
+          "examples": [
+            {
+              "title": "Lectura con .get() y actualización de valores",
+              "code": "ajustes = {\"tema\": \"oscuro\"}\n\n# Clave inexistente con valor fallback\nfuente = ajustes.get(\"fuente\", \"monospace\")\nprint(\"Fuente:\", fuente)\n\n# Agregar nueva clave y actualizar existente\najustes[\"notificaciones\"] = True\najustes[\"tema\"] = \"claro\"\nprint(\"Tema:\", ajustes[\"tema\"])\nprint(\"Notificaciones:\", ajustes[\"notificaciones\"])",
+              "output": "Fuente: monospace\nTema: claro\nNotificaciones: True",
+              "explanation": ".get('fuente', 'monospace') retorna 'monospace' porque 'fuente' no existía, sin alterar el diccionario."
+            }
+          ],
+          "common_errors": "Creer que .get() agrega la clave al diccionario si no existe. .get() solo lee y devuelve el valor de respaldo, no modifica el diccionario.",
+          "mini_exercise": {
+            "starter_code": "cuenta = {\"saldo\": 150}\n# Lee \"limite_credito\" de forma segura con respaldo 0\nlimite = cuenta.get(\"limite_credito\", ...)\nprint(limite)",
+            "instructions": "Usa cuenta.get(\"limite_credito\", 0) para obtener 0 sin provocar KeyError.",
+            "solution": "cuenta = {\"saldo\": 150}\nlimite = cuenta.get(\"limite_credito\", 0)\nprint(limite)"
+          },
+          "key_takeaways": [
+            ".get(clave, default) lee valores de forma segura sin riesgo de KeyError.",
+            "Si la clave no existe y no especificas default, .get() devuelve None.",
+            "Asignar dict[clave] = valor actualiza el valor si la clave existe, o la crea si es nueva."
+          ],
+          "exercise": {
+            "id": "ex_py1_09_02",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Qué imprime este código?",
+            "prompt_code": "config = {\"modo\": \"debug\"}\npuerto = config.get(\"puerto\", 5000)\nprint(puerto)",
+            "options": [
+              {
+                "id": "a",
+                "text": "5000"
               },
               {
                 "id": "b",
@@ -79,46 +135,103 @@
               },
               {
                 "id": "d",
-                "text": "8080"
+                "text": "debug"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Como la clave \"timeout\" no está en el diccionario, .get() retorna el valor por defecto especificado: 30."
+            "explanation": "Dado que la clave 'puerto' no existe en config, .get() entrega el valor por defecto configurado: 5000."
           }
         },
         {
-          "id": "les_py1_09_02",
-          "code": "L02",
-          "title": "Conjuntos (Sets): Unicidad y Operaciones Matemáticas",
-          "slug": "sets-conjuntos",
-          "position": 2,
-          "concept_id": "py-sets",
-          "objective": "Eliminar duplicados al instante y realizar uniones e intersecciones de conjuntos.",
-          "theory_markdown": "Un **set** es una colección desordenada de elementos **únicos** entre llaves `{ }` (o creada con `set()`).\n\n1. **Cero duplicados**: Si agregas el mismo valor dos veces, el set lo conserva solo una vez. Es la técnica más rápida de Python para eliminar duplicados de una lista: `lista_sin_duplicados = list(set(lista_original))`.\n2. **Búsqueda instantánea O(1)**: Verificar si un elemento está en un set (`x in mi_set`) toma tiempo constante, mucho más rápido que recorrer una lista.\n3. **Operaciones de conjuntos**: `A | B` (unión), `A & B` (intersección), `A - B` (diferencia).",
+          "id": "les_py1_09_03",
+          "code": "L03",
+          "title": "Iteración de Diccionarios: .keys(), .values() y .items()",
+          "slug": "iteracion-diccionarios",
+          "position": 3,
+          "concept_id": "py-dict-iteration",
+          "objective": "Recorrer diccionarios usando bucles for sobre sus claves, sus valores o simultáneamente con .items().",
+          "theory_markdown": "Python ofrece tres vistas especializadas para inspeccionar e iterar sobre el contenido de un diccionario:\n\n1. **Iteración directa o `.keys()`**: Recorre únicamente las claves.\n   ```python\n   for clave in mi_dict:\n       print(clave)\n   ```\n2. **`.values()`**: Recorre únicamente los valores asociados.\n   ```python\n   for valor in mi_dict.values():\n       print(valor)\n   ```\n3. **`.items()`**: Devuelve cada elemento como una tupla `(clave, valor)`. Es el método estándar de la industria porque permite desempaquetar ambos elementos en una sola línea limpia:\n   ```python\n   for clave, valor in mi_dict.items():\n       print(f\"{clave} -> {valor}\")\n   ```\n\n### Pertenencia rápida con `in`\nEl operador `in` verifica en tiempo constante O(1) si una **clave** pertenece al diccionario: `\"nombre\" in usuario`.",
           "examples": [
             {
-              "title": "Eliminación de duplicados e intersección",
-              "code": "usuarios_web = {\"ana\", \"carlos\", \"elena\", \"ana\"}\nprint(\"Usuarios únicos:\", usuarios_web)  # {\"ana\", \"carlos\", \"elena\"}\n\nadmin = {\"carlos\", \"marcos\"}\ncomunes = usuarios_web & admin\nprint(\"Admins en web:\", comunes)         # {\"carlos\"}",
-              "output": "Usuarios únicos: {'ana', 'carlos', 'elena'}\nAdmins en web: {'carlos'}",
-              "explanation": "El set descarta automáticamente el segundo \"ana\" y & halla la intersección de ambos grupos."
+              "title": "Iteración desempaquetando con .items()",
+              "code": "inventario = {\"teclados\": 12, \"mouses\": 25, \"monitores\": 8}\n\nfor producto, cantidad in inventario.items():\n    print(f\"{producto}: {cantidad} unidades\")",
+              "output": "teclados: 12 unidades\nmouses: 25 unidades\nmonitores: 8 unidades",
+              "explanation": ".items() genera pares (producto, cantidad) que el bucle for desempaqueta directamente en cada ciclo."
             }
           ],
-          "common_errors": "Intentar crear un set vacío con `{}`. En Python `{}` crea un diccionario vacío. Para un set vacío usa `set()`.",
+          "common_errors": "Iterar con `for x in mi_dict:` esperando que `x` sea el valor. Recuerda: iterar sobre un diccionario directamente siempre entrega las claves, no los valores.",
           "mini_exercise": {
-            "starter_code": "tags = [\"python\", \"ia\", \"python\", \"backend\"]\n# Convierte a set para eliminar duplicados\ntags_unicos = ...\nprint(tags_unicos)",
-            "instructions": "Usa set(tags) para eliminar los repetidos.",
-            "solution": "tags = [\"python\", \"ia\", \"python\", \"backend\"]\ntags_unicos = set(tags)\nprint(tags_unicos)"
+            "starter_code": "puntuaciones = {\"Ana\": 95, \"Juan\": 88}\n# Recorre con .items() imprimiendo cada nombre y nota\nfor nombre, nota in puntuaciones.items():\n    print(nombre, nota)",
+            "instructions": "Usa puntuaciones.items() para recorrer nombre y nota.",
+            "solution": "puntuaciones = {\"Ana\": 95, \"Juan\": 88}\nfor nombre, nota in puntuaciones.items():\n    print(nombre, nota)"
           },
           "key_takeaways": [
-            "Los sets no permiten elementos duplicados.",
-            "set() crea un conjunto vacío ({} es un dict vacío).",
-            "Permite operaciones matemáticas: unión (|), intersección (&), diferencia (-)."
+            "Iterar directamente sobre un diccionario recorre sus claves.",
+            ".values() proporciona acceso a la secuencia de valores.",
+            ".items() entrega tuplas (clave, valor) ideales para desempaquetar en bucles for.",
+            "El operador 'in' comprueba si una clave está presente de forma instantánea."
           ],
           "exercise": {
-            "id": "ex_py1_09_02",
+            "id": "ex_py1_09_03",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué imprime este código al sumar los valores del diccionario?",
+            "prompt_code": "ventas = {\"lunes\": 100, \"martes\": 200, \"miercoles\": 150}\ntotal = 0\nfor monto in ventas.values():\n    total += monto\nprint(total)",
+            "options": [
+              {
+                "id": "a",
+                "text": "450"
+              },
+              {
+                "id": "b",
+                "text": "300"
+              },
+              {
+                "id": "c",
+                "text": "TypeError"
+              },
+              {
+                "id": "d",
+                "text": "0"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "ventas.values() entrega 100, 200 y 150. El acumulador total suma 100 + 200 + 150 = 450."
+          }
+        },
+        {
+          "id": "les_py1_09_04",
+          "code": "L04",
+          "title": "Conjuntos (Sets): Unicidad y Operaciones Algebraicas",
+          "slug": "sets-unicidad-operaciones",
+          "position": 4,
+          "concept_id": "py-sets-operations",
+          "objective": "Crear conjuntos con set(), eliminar duplicados automáticamente y aplicar operaciones de unión, intersección y diferencia.",
+          "theory_markdown": "Un **conjunto (`set`)** es una colección desordenada de elementos mutables donde **no se permiten duplicados**.\n\n### Creación de un set\n- Con llaves y valores separados por comas: `numeros = {1, 2, 3}`.\n- Desde otra colección con el constructor: `set([1, 2, 2, 3])` -> `{1, 2, 3}`.\n- **¡Atención!** Para crear un set vacío debes escribir `set()`. Si escribes `{}` creas un diccionario vacío.\n\n### Operaciones de conjuntos\nLos sets implementan operaciones matemáticas de álgebra de conjuntos de forma nativa:\n- **Unión (`|`)**: Elementos presentes en al menos uno de los dos conjuntos.\n- **Intersección (`&`)**: Elementos que están presentes en **ambos** conjuntos.\n- **Diferencia (`-`)**: Elementos presentes en el primer conjunto que no están en el segundo.",
+          "examples": [
+            {
+              "title": "Eliminación de duplicados y cálculo de intersección",
+              "code": "registros = [\"python\", \"sql\", \"python\", \"git\"]\nhabilidades = set(registros)\nprint(\"Habilidades únicas:\", len(habilidades))\n\nrequeridos = {\"python\", \"docker\"}\ncoincidentes = habilidades & requeridos\nprint(\"En común:\", coincidentes)",
+              "output": "Habilidades únicas: 3\nEn común: {'python'}",
+              "explanation": "set(registros) descarta el 'python' repetido, dejando 3 elementos únicos. El operador & extrae únicamente los elementos compartidos."
+            }
+          ],
+          "common_errors": "Escribir conjunto_vacio = {} creyendo que es un set. En Python {} siempre crea un dict. Usa siempre set().",
+          "mini_exercise": {
+            "starter_code": "grupo_a = {1, 2, 3}\ngrupo_b = {2, 3, 4}\n# Calcula los elementos comunes usando el operador de intersección\ncomunes = grupo_a ... grupo_b\nprint(comunes)",
+            "instructions": "Usa grupo_a & grupo_b para obtener la intersección.",
+            "solution": "grupo_a = {1, 2, 3}\ngrupo_b = {2, 3, 4}\ncomunes = grupo_a & grupo_b\nprint(comunes)"
+          },
+          "key_takeaways": [
+            "Los sets garantizan que no existan valores duplicados en su interior.",
+            "Para instanciar un conjunto vacío se utiliza set() obligatoriamente, ya que {} crea un diccionario.",
+            "El operador & calcula la intersección y | calcula la unión entre conjuntos."
+          ],
+          "exercise": {
+            "id": "ex_py1_09_04",
             "type": "predict_output",
             "difficulty": "easy",
-            "prompt": "¿Cuántos elementos contendrá len(set([1, 1, 2, 2, 3, 3]))?",
+            "prompt": "¿Qué valor imprime len(set([10, 20, 10, 30, 20]))?",
             "options": [
               {
                 "id": "a",
@@ -126,11 +239,11 @@
               },
               {
                 "id": "b",
-                "text": "6"
+                "text": "5"
               },
               {
                 "id": "c",
-                "text": "1"
+                "text": "2"
               },
               {
                 "id": "d",
@@ -138,7 +251,7 @@
               }
             ],
             "correct_option_id": "a",
-            "explanation": "El set descarta los duplicados dejando únicamente los valores {1, 2, 3}, por lo que su longitud es 3."
+            "explanation": "Al convertir la lista a set se eliminan los duplicados, conservando únicamente {10, 20, 30}. La función len() mide 3 elementos."
           }
         }
       ]

@@ -5,9 +5,117 @@
   "questions": [
     {
       "id": "q_py1_09_01",
+      "type": "find_error",
+      "difficulty": "easy",
+      "prompt": "¿Qué error ocurrirá al ejecutar este código?",
+      "prompt_code": "usuario = {\"nombre\": \"Lucia\", \"edad\": 24}\nprint(usuario[\"correo\"])",
+      "options": [
+        {
+          "id": "a",
+          "text": "KeyError: 'correo'"
+        },
+        {
+          "id": "b",
+          "text": "IndexError: index out of range"
+        },
+        {
+          "id": "c",
+          "text": "NameError: name 'correo' is not defined"
+        },
+        {
+          "id": "d",
+          "text": "ValueError: invalid dictionary key"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El acceso por corchetes usuario['correo'] intenta localizar la clave exacta. Al no existir, Python lanza un KeyError."
+    },
+    {
+      "id": "q_py1_09_02",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué salida produce el método .get() en este escenario?",
+      "prompt_code": "configuracion = {\"tema\": \"oscuro\", \"volumen\": 80}\nidioma = configuracion.get(\"idioma\", \"es\")\nprint(idioma)",
+      "options": [
+        {
+          "id": "a",
+          "text": "es"
+        },
+        {
+          "id": "b",
+          "text": "None"
+        },
+        {
+          "id": "c",
+          "text": "KeyError"
+        },
+        {
+          "id": "d",
+          "text": "oscuro"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Como la clave 'idioma' no se encuentra en el diccionario, .get() devuelve de forma segura el valor de respaldo 'es'."
+    },
+    {
+      "id": "q_py1_09_03",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué imprime este código tras modificar y agregar claves?",
+      "prompt_code": "datos = {\"a\": 10, \"b\": 20}\ndatos[\"a\"] = 99\ndatos[\"c\"] = 30\nprint(datos[\"a\"] + datos[\"c\"])",
+      "options": [
+        {
+          "id": "a",
+          "text": "129"
+        },
+        {
+          "id": "b",
+          "text": "40"
+        },
+        {
+          "id": "c",
+          "text": "139"
+        },
+        {
+          "id": "d",
+          "text": "KeyError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "datos['a'] se actualiza a 99 y datos['c'] se crea con 30. La suma 99 + 30 es 129."
+    },
+    {
+      "id": "q_py1_09_04",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué salida genera la iteración con .items()?",
+      "prompt_code": "puntos = {\"x\": 5, \"y\": 15}\nresultado = 0\nfor clave, valor in puntos.items():\n    resultado += valor\nprint(resultado)",
+      "options": [
+        {
+          "id": "a",
+          "text": "20"
+        },
+        {
+          "id": "b",
+          "text": "15"
+        },
+        {
+          "id": "c",
+          "text": "5"
+        },
+        {
+          "id": "d",
+          "text": "TypeError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": ".items() entrega las tuplas ('x', 5) y ('y', 15). El bucle acumula 5 + 15 = 20."
+    },
+    {
+      "id": "q_py1_09_05",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "¿Cómo se crea un conjunto (set) vacío en Python?",
+      "prompt": "¿Cómo se define un conjunto (set) vacío en Python?",
       "options": [
         {
           "id": "a",
@@ -23,37 +131,38 @@
         },
         {
           "id": "d",
-          "text": "set([])"
+          "text": "set({})"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "{} crea un diccionario vacío. Para instanciar un set vacío se utiliza la función constructora set()."
+      "explanation": "En Python, {} crea un diccionario vacío por precedencia histórica. Para crear un set vacío se debe utilizar la función constructora set()."
     },
     {
-      "id": "q_py1_09_02",
+      "id": "q_py1_09_06",
       "type": "predict_output",
       "difficulty": "medium",
-      "prompt": "¿Qué imprime el operador de intersección & entre {1, 2, 3} y {2, 3, 4}?",
+      "prompt": "¿Qué imprime la operación de intersección entre estos dos conjuntos?",
+      "prompt_code": "frontend = {\"html\", \"css\", \"javascript\"}\nbackend = {\"python\", \"sql\", \"javascript\"}\ncomunes = frontend & backend\nprint(len(comunes))",
       "options": [
         {
           "id": "a",
-          "text": "{2, 3}"
+          "text": "1"
         },
         {
           "id": "b",
-          "text": "{1, 2, 3, 4}"
+          "text": "5"
         },
         {
           "id": "c",
-          "text": "{1, 4}"
+          "text": "3"
         },
         {
           "id": "d",
-          "text": "5"
+          "text": "6"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "La intersección (&) extrae los elementos presentes en ambos conjuntos simultáneamente (2 y 3)."
+      "explanation": "El operador & calcula la intersección, que contiene únicamente el elemento compartido {'javascript'}. len(comunes) es 1."
     }
   ]
 }

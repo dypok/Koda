@@ -5,29 +5,159 @@
   "questions": [
     {
       "id": "q_py2_10_01",
-      "type": "predict_output",
-      "difficulty": "medium",
-      "prompt": "¿Qué ocurre al ejecutar `assert 5 == 10` en Python sin capturar?",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué convención de nombres utiliza pytest por defecto para descubrir y ejecutar funciones de prueba automáticamente?",
       "options": [
         {
           "id": "a",
-          "text": "Lanza una excepción de tipo AssertionError"
+          "text": "Funciones que comiencen con el prefijo test_ (por ejemplo: def test_calcular():)"
         },
         {
           "id": "b",
-          "text": "Retorna False silenciosamente"
+          "text": "Funciones que terminen en _check"
         },
         {
           "id": "c",
-          "text": "Imprime un mensaje en la terminal"
+          "text": "Cualquier función dentro de un bloque try"
         },
         {
           "id": "d",
-          "text": "Convierte el 5 en 10"
+          "text": "Solo funciones que contengan la palabra main"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Si la expresión de un assert evalúa a False, Python lanza inmediatamente un AssertionError."
+      "explanation": "El motor de auto-descubrimiento de pytest busca archivos test_*.py / *_test.py y funciones con el prefijo test_."
+    },
+    {
+      "id": "q_py2_10_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué instrucción nativa de Python utiliza pytest para comprobar que el resultado de una prueba sea el esperado?",
+      "options": [
+        {
+          "id": "a",
+          "text": "assert"
+        },
+        {
+          "id": "b",
+          "text": "check"
+        },
+        {
+          "id": "c",
+          "text": "verify"
+        },
+        {
+          "id": "d",
+          "text": "ensure"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "pytest aprovecha la palabra reservada 'assert' de Python y reescribe su bytecode para ofrecer reportes detallados en fallos."
+    },
+    {
+      "id": "q_py2_10_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cómo se valida en pytest que una llamada a una función debe lanzar obligatoriamente una excepción de tipo ValueError?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Usando el context manager: with pytest.raises(ValueError):"
+        },
+        {
+          "id": "b",
+          "text": "Escribiendo try-except y haciendo assert False si no falla"
+        },
+        {
+          "id": "c",
+          "text": "Usando el decorador @pytest.expected_error"
+        },
+        {
+          "id": "d",
+          "text": "Con assert funcion() == ValueError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "pytest.raises es el context manager oficial que comprueba que el bloque contenido lance la excepción especificada."
+    },
+    {
+      "id": "q_py2_10_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la función del decorador @pytest.fixture?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Preparar y suministrar datos o recursos reutilizables inyectándolos como argumentos en las funciones de prueba"
+        },
+        {
+          "id": "b",
+          "text": "Medir el tiempo de CPU consumido por la prueba"
+        },
+        {
+          "id": "c",
+          "text": "Impedir que la prueba se ejecute en servidores de integración continua"
+        },
+        {
+          "id": "d",
+          "text": "Convertir las funciones de prueba en lambdas"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Las fixtures encapsulan la creación y limpieza de estados base (clientes HTTP, bases de datos, datos mock) facilitando la inyección de dependencias."
+    },
+    {
+      "id": "q_py2_10_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué beneficio aporta el decorador @pytest.mark.parametrize en una suite de pruebas?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permite ejecutar la misma función de prueba múltiples veces con distintos conjuntos de argumentos y valores esperados"
+        },
+        {
+          "id": "b",
+          "text": "Genera números aleatorios para probar límites"
+        },
+        {
+          "id": "c",
+          "text": "Obliga a que todos los parámetros sean de tipo float"
+        },
+        {
+          "id": "d",
+          "text": "Ejecuta las pruebas en navegadores móviles"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "@pytest.mark.parametrize convierte una lista de tuplas en múltiples ejecuciones individuales de prueba sin duplicar código."
+    },
+    {
+      "id": "q_py2_10_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué ocurre si una condición 'assert x == 10' resulta falsa durante la ejecución de una prueba con pytest?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Se lanza un AssertionError y pytest marca esa prueba específica como FAILED, mostrando los valores evaluados"
+        },
+        {
+          "id": "b",
+          "text": "Python se detiene y borra el archivo de prueba"
+        },
+        {
+          "id": "c",
+          "text": "pytest ignora la aserción y continúa como si fuera verdadera"
+        },
+        {
+          "id": "d",
+          "text": "El sistema operativo reinicia la terminal"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Una aserción falsa dispara AssertionError, que pytest captura para informar el fallo con los valores exactos que provocaron la discrepancia."
     }
   ]
 }

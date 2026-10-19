@@ -4,85 +4,250 @@
   "code": "FA_M05",
   "slug": "fastapi-docker-deploy",
   "course_slug": "fastapi-async",
-  "title": "Testing con TestClient, Dockerización y Despliegue",
-  "objective": "Testear endpoints HTTP con TestClient de pytest, construir imágenes Docker optimizadas multi-stage y desplegar la API en producción.",
-  "description": "Empaqueta y distribuye tu microservicio: pruebas automatizadas de integración, contenedores Docker ligeros y variables de entorno.",
+  "title": "Middlewares, Configuracion con Pydantic Settings y Despliegue con Docker",
+  "objective": "Configurar variables de entorno estrictas con pydantic-settings, middlewares de seguridad/CORS y empaquetar FastAPI en Docker multi-stage.",
+  "description": "Puesta en produccion: Middlewares asincronos, CORS, variables con BaseSettings y Dockerfiles seguros listos para la nube.",
   "position": 35,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 400
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_fa_05_01",
       "code": "S01",
-      "title": "Pruebas de Integración y Docker Multi-Stage",
-      "slug": "testing-docker",
+      "title": "Configuracion, Middlewares y Contenedores de Produccion",
+      "slug": "config-middlewares-docker",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 55,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_fa_05_01",
           "code": "L01",
-          "title": "TestClient de FastAPI y Dockerfile de Producción",
-          "slug": "testclient-docker-base",
+          "title": "Gestion de Entornos con Pydantic Settings",
+          "slug": "pydantic-settings-entornos",
           "position": 1,
-          "concept_id": "fa-deploy",
-          "objective": "Escribir pruebas end-to-end con TestClient y compilar un Dockerfile seguro y ligero.",
-          "theory_markdown": "FastAPI incluye un cliente de pruebas de primera clase basado en `httpx`: **TestClient**.\n\nPermite simular peticiones HTTP completas a tus endpoints dentro de `pytest` sin tener que levantar un servidor en un puerto real.\n\nPara el despliegue en producción, empaquetamos la API en un contenedor **Docker** usando una imagen base ligera como `python:3.12-slim`.",
+          "concept_id": "fa-deploy-settings",
+          "objective": "Centralizar y tipar la configuracion del sistema leyendo variables de entorno y archivos .env con BaseSettings.",
+          "theory_markdown": "El principio III de la metodologia de aplicaciones '12-Factor App' estipula que la configuracion del software debe residir estrictamente en el entorno de ejecucion, nunca grabada en el codigo fuente.\n\nLa libreria `pydantic-settings` proporciona la clase `BaseSettings`, que permite:\n1. Declarar variables requeridas con tipos estrictos (ej. `database_url: str`, `secret_key: str`, `port: int = 8000`).\n2. Leer de forma automatica variables de entorno del sistema operativo o de un archivo `.env`.\n3. Cachear la instancia de configuracion mediante `@lru_cache` para evitar lecturas recurrentes de disco o llamadas al sistema.",
           "examples": [
             {
-              "title": "Test unitario de endpoint con TestClient",
-              "code": "from fastapi.testclient import TestClient\nfrom fastapi import FastAPI\n\napp = FastAPI()\n@app.get(\"/items/{item_id}\")\ndef leer_item(item_id: int):\n    return {\"id\": item_id, \"nombre\": \"Widget\"}\n\nclient = TestClient(app)\n\ndef test_leer_item():\n    response = client.get(\"/items/42\")\n    assert response.status_code == 200\n    assert response.json() == {\"id\": 42, \"nombre\": \"Widget\"}",
-              "output": "PASSED test_leer_item",
-              "explanation": "TestClient ejecuta la pila de FastAPI completa de forma síncrona y transparente para pytest."
+              "title": "Definicion y cache de Settings",
+              "code": "from functools import lru_cache\nfrom pydantic_settings import BaseSettings, SettingsConfigDict\n\nclass Settings(BaseSettings):\n    app_name: str = \"Koda Production API\"\n    debug: bool = False\n    database_url: str\n    secret_key: str\n\n    model_config = SettingsConfigDict(env_file=\".env\", env_file_encoding=\"utf-8\")\n\n@lru_cache\ndef get_settings() -> Settings:\n    return Settings()",
+              "output": "Si DATABASE_URL no esta definida ni en el entorno ni en .env, Pydantic lanza ValidationError impidiendo que la app arranque sin configuracion.",
+              "explanation": "BaseSettings garantiza que la aplicacion falle de inmediato al inicio ('fail fast') si falta una variable critica."
             }
           ],
-          "common_errors": "Ejecutar el contenedor Docker como usuario root en producción. Es una buena práctica de seguridad crear un usuario sin privilegios en el Dockerfile.",
+          "common_errors": "Hacer commit de archivos .env que contienen claves de produccion a repositorios publicos de Git.",
           "mini_exercise": {
-            "starter_code": "# Dockerfile simplificado\n# FROM python:3.12-slim\n# WORKDIR /app\n# COPY requirements.txt .\n# RUN pip install --no-cache-dir -r requirements.txt\n# COPY . .\n# CMD [\"uvicorn\", \"main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]",
-            "instructions": "Revisa la estructura de un contenedor FastAPI estándar.",
-            "solution": "# Dockerfile listo"
+            "instructions": "Crea una clase Settings que herede de BaseSettings con un campo 'api_key: str'.",
+            "starter_code": "from pydantic_settings import BaseSettings\n\n# Define la clase Settings\n",
+            "solution": "from pydantic_settings import BaseSettings\n\nclass Settings(BaseSettings):\n    api_key: str"
           },
           "key_takeaways": [
-            "TestClient simula peticiones HTTP directamente en memoria.",
-            "python:3.12-slim genera imágenes Docker de menos de 150MB.",
-            "Gunicorn con workers Uvicorn escala la API a múltiples núcleos."
+            "BaseSettings lee variables de entorno y archivos .env con validacion tipada estricta.",
+            "La aplicacion falla al iniciar si falta una variable requerida, previniendo errores en ejecucion.",
+            "@lru_cache optimiza el acceso evitando reinstanciar la configuracion en cada peticion."
           ],
           "exercise": {
             "id": "ex_fa_05_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Por qué TestClient de FastAPI es preferible frente a hacer requests reales en las pruebas automatizadas?",
+            "prompt": "Cual es el comportamiento de BaseSettings de pydantic-settings si una variable obligatoria sin valor por defecto no existe en el entorno ni en el archivo .env?",
             "options": [
               {
                 "id": "a",
-                "text": "Porque no requiere abrir un puerto de red real y se ejecuta de forma inmediata en memoria"
+                "text": "Eleva un ValidationError impidiendo que la aplicacion arranque con una configuracion incompleta o invalida."
               },
               {
                 "id": "b",
-                "text": "Porque solo funciona con bases de datos Oracle"
+                "text": "Asigna una cadena vacia '' de forma silenciosa."
               },
               {
                 "id": "c",
-                "text": "Porque no requiere tener Python instalado"
+                "text": "Descarga un archivo de internet con claves por defecto."
               },
               {
                 "id": "d",
-                "text": "Porque desactiva la seguridad"
+                "text": "Continua ejecutandose ignorando el campo faltante."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "TestClient invoca la aplicación directamente a través de la interfaz ASGI en memoria, haciendo las pruebas ultra veloces y aisladas."
+            "explanation": "BaseSettings aplica validacion estricta: si falta un campo requerido, eleva ValidationError deteniendo el inicio del servicio ('fail-fast')."
+          }
+        },
+        {
+          "id": "les_fa_05_02",
+          "code": "L02",
+          "title": "Middlewares y Seguridad CORS",
+          "slug": "middlewares-seguridad-cors",
+          "position": 2,
+          "concept_id": "fa-deploy-cors-middleware",
+          "objective": "Configurar CORSMiddleware para habilitar solicitudes desde clientes web y crear middlewares personalizados.",
+          "theory_markdown": "Un **Middleware** es una funcion que intercepta cada peticion HTTP entrante antes de que llegue a la ruta, y cada respuesta saliente antes de que sea enviada al cliente.\n\n### CORS (Cross-Origin Resource Sharing)\nLos navegadores bloquean por defecto solicitudes JavaScript procedentes de un origen diferente (otro dominio, protocolo o puerto) por la politica del mismo origen (Same-Origin Policy).\n\nPara habilitar la comunicacion segura entre un frontend (ej. `http://localhost:3000`) y FastAPI se registra `CORSMiddleware`:\n```python\nfrom fastapi.middleware.cors import CORSMiddleware\n\napp.add_middleware(\n    CORSMiddleware,\n    allow_origins=[\"http://localhost:3000\", \"https://koda.academy\"],\n    allow_credentials=True,\n    allow_methods=[\"*\"],\n    allow_headers=[\"*\"],\n)\n```\n\nTambien se pueden crear middlewares personalizados usando el decorador `@app.middleware(\"http\")` para medir tiempos de respuesta o agregar cabeceras de trazabilidad.",
+          "examples": [
+            {
+              "title": "Middleware personalizado para calcular el tiempo de procesamiento",
+              "code": "import time\nfrom fastapi import FastAPI, Request\n\napp = FastAPI()\n\n@app.middleware(\"http\")\nasync def add_process_time_header(request: Request, call_next):\n    start_time = time.perf_counter()\n    response = await call_next(request)\n    process_time = time.perf_counter() - start_time\n    response.headers[\"X-Process-Time\"] = f\"{process_time:.4f}s\"\n    return response",
+              "output": "Todas las respuestas HTTP incluirán la cabecera 'X-Process-Time: 0.0025s'.",
+              "explanation": "call_next(request) pasa la solicitud al endpoint correspondiente y captura la respuesta resultante."
+            }
+          ],
+          "common_errors": "Configurar allow_origins=['*'] junto con allow_credentials=True en un entorno de produccion, lo cual es rechazado por las especificaciones de seguridad de los navegadores.",
+          "mini_exercise": {
+            "instructions": "Registra CORSMiddleware en la instancia app permitiendo allow_origins=['https://koda.academy'].",
+            "starter_code": "from fastapi import FastAPI\nfrom fastapi.middleware.cors import CORSMiddleware\n\napp = FastAPI()\n# Agrega el middleware CORS\n",
+            "solution": "from fastapi import FastAPI\nfrom fastapi.middleware.cors import CORSMiddleware\n\napp = FastAPI()\napp.add_middleware(CORSMiddleware, allow_origins=[\"https://koda.academy\"])"
+          },
+          "key_takeaways": [
+            "CORSMiddleware gestiona cabeceras Access-Control-Allow-* para navegadores.",
+            "Middlewares interceptan la peticion antes del endpoint y la respuesta despues del endpoint.",
+            "call_next(request) delega la ejecucion al siguiente eslabon de la cadena de middlewares."
+          ],
+          "exercise": {
+            "id": "ex_fa_05_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Por que un navegador web arroja un error de CORS al intentar realizar una peticion fetch() desde un frontend hacia una API de FastAPI?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque el origen (dominio/puerto) del frontend no coincide con el de la API y el servidor no devolvio cabeceras Access-Control-Allow-Origin autorizandolo."
+              },
+              {
+                "id": "b",
+                "text": "Porque FastAPI solo puede responder a peticiones enviadas por curl en la terminal."
+              },
+              {
+                "id": "c",
+                "text": "Porque el servidor Uvicorn no tiene soporte para lenguaje JavaScript."
+              },
+              {
+                "id": "d",
+                "text": "Porque la base de datos de la API se encuentra temporalmente bloqueada."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El mecanismo de CORS es una politica de seguridad impuesta por el navegador que requiere que el servidor autorice explicitamente origenes externos mediante cabeceras HTTP."
+          }
+        },
+        {
+          "id": "les_fa_05_03",
+          "code": "L03",
+          "title": "Dockerfile Multi-Stage Optimizado para Produccion",
+          "slug": "dockerfile-multistage-produccion",
+          "position": 3,
+          "concept_id": "fa-deploy-dockerfile",
+          "objective": "Escribir un Dockerfile multi-stage con usuario no privilegiado y artefactos minimos para desplegar FastAPI.",
+          "theory_markdown": "Desplegar aplicaciones en contenedores Docker requiere seguir estrictos principios de seguridad y eficiencia:\n\n1. **Construccion multi-etapa (Multi-Stage Builds):**\n   - **Etapa builder:** Instala compiladores (`gcc`), herramientas de empaquetado y compila paquetes 'wheels'.\n   - **Etapa final (runner):** Solo copia los paquetes binarios compilados y el codigo fuente, descartando compiladores y caches de instalacion. Esto reduce drásticamente el tamaño de la imagen y la superficie de ataque.\n\n2. **Ejecucion sin privilegios de root:**\n   Nunca se debe ejecutar el proceso principal del contenedor como usuario `root`. Se crea un usuario dedicado sin privilegios (ej. `appuser`) con la directiva `USER appuser`.",
+          "examples": [
+            {
+              "title": "Dockerfile multi-stage de produccion para FastAPI",
+              "code": "FROM python:3.12-slim AS builder\nWORKDIR /app\nRUN apt-get update && apt-get install -y --no-install-recommends build-essential\nCOPY requirements.txt .\nRUN pip install --no-cache-dir --user -r requirements.txt\n\nFROM python:3.12-slim AS runner\nWORKDIR /app\nRUN useradd -m -u 1000 appuser\nCOPY --from=builder /root/.local /home/appuser/.local\nCOPY . .\nENV PATH=/home/appuser/.local/bin:$PATH\nUSER appuser\nEXPOSE 8000\nCMD [\"uvicorn\", \"main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]",
+              "output": "Imagen resultante: ~150MB en comparacion con los >800MB de una imagen con dependencias de compilacion.",
+              "explanation": "El contenedor runner no contiene herramientas de desarrollo ni ejecuta procesos con privilegios administrativos."
+            }
+          ],
+          "common_errors": "Ejecutar uvicorn con --host 127.0.0.1 dentro del Dockerfile, lo que impide que el contenedor reciba trafico proveniente del host o de orquestadores como Kubernetes.",
+          "mini_exercise": {
+            "instructions": "Escribe la directiva CMD para ejecutar Uvicorn en el host 0.0.0.0 y puerto 8000 para el modulo 'app.main:app'.",
+            "starter_code": "# Directiva CMD para uvicorn\nCMD [...]",
+            "solution": "CMD [\"uvicorn\", \"app.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]"
+          },
+          "key_takeaways": [
+            "Multi-stage builds separan la etapa de compilacion de dependencias del entorno de ejecucion final.",
+            "Ejecutar con un usuario no-root mitiga riesgos criticos de escape de contenedores.",
+            "La aplicacion en Docker debe escuchar en --host 0.0.0.0 para ser accesible desde fuera del contenedor."
+          ],
+          "exercise": {
+            "id": "ex_fa_05_03",
+            "type": "single_choice",
+            "difficulty": "hard",
+            "prompt": "Por que es mandatorio enlazar Uvicorn a --host 0.0.0.0 en lugar de 127.0.0.1 dentro de un contenedor Docker?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque 0.0.0.0 escucha en todas las interfaces de red del contenedor, permitiendo recibir trafico enrutado desde el exterior."
+              },
+              {
+                "id": "b",
+                "text": "Porque 127.0.0.1 deshabilita la compresion gzip en Uvicorn."
+              },
+              {
+                "id": "c",
+                "text": "Porque 0.0.0.0 es la direccion IP asignada exclusivamente al usuario root."
+              },
+              {
+                "id": "d",
+                "text": "Porque Docker arroja un error de sintaxis si se escribe 127.0.0.1 en la directiva CMD."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "127.0.0.1 solo acepta conexiones originadas dentro del propio contenedor; 0.0.0.0 enlaza a todas las interfaces, permitiendo el reenvio de puertos desde el exterior."
+          }
+        },
+        {
+          "id": "les_fa_05_04",
+          "code": "L04",
+          "title": "Health Checks, Workers y Arquitectura en Produccion",
+          "slug": "health-checks-workers-produccion",
+          "position": 4,
+          "concept_id": "fa-deploy-health-workers",
+          "objective": "Crear endpoints de Health Check para orquestadores y entender la escala con workers de Uvicorn detras de un proxy inverso.",
+          "theory_markdown": "En entornos de produccion (como Kubernetes, Docker Swarm o AWS ECS), la infraestructura necesita monitorear el estado operativo del contenedor mediante **Health Checks**:\n\n- **Liveness probe (`/healthz` o `/health`):** Comprueba si el proceso esta vivo. Si no responde, el orquestador reinicia el contenedor.\n- **Readiness probe (`/ready`):** Verifica si la aplicacion esta lista para recibir trafico (por ejemplo, validando que la conexion a la base de datos este activa).\n\n### Escala y Proxy Inverso\nEn servidores de produccion:\n1. Un proxy inverso como **Nginx** o **Traefik** gestiona la terminacion SSL/TLS, la compresion estatica y la proteccion DDoS.\n2. Uvicorn se ejecuta con multiples procesos workers para aprovechar todos los nucleos de CPU disponibles:\n   ```bash\n   uvicorn main:app --workers 4 --host 0.0.0.0 --port 8000\n   ```\n   *(o gestionado mediante Gunicorn con clase de worker UvicornWorker)*.",
+          "examples": [
+            {
+              "title": "Implementacion de Liveness y Readiness probes",
+              "code": "from fastapi import FastAPI, Response, status\n\napp = FastAPI()\n\n@app.get(\"/healthz\", status_code=status.HTTP_200_OK, tags=[\"operaciones\"])\nasync def liveness():\n    return {\"status\": \"alive\"}\n\n@app.get(\"/ready\", tags=[\"operaciones\"])\nasync def readiness(response: Response):\n    # Simulamos comprobacion de base de datos\n    db_ok = True\n    if not db_ok:\n        response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE\n        return {\"status\": \"unhealthy\", \"db\": \"disconnected\"}\n    return {\"status\": \"ready\", \"db\": \"connected\"}",
+              "output": "GET /healthz -> 200 OK con {\"status\": \"alive\"}\nGET /ready -> 200 OK o 503 Service Unavailable si la BD no responde",
+              "explanation": "El orquestador no envia trafico a instancias que respondan con codigos de error en el readiness probe."
+            }
+          ],
+          "common_errors": "Ejecutar uvicorn con la bandera --reload en servidores de produccion, lo cual degrada seriamente el rendimiento e introduce sobrecarga innecesaria.",
+          "mini_exercise": {
+            "instructions": "Escribe un endpoint GET en '/health' que retorne {'ok': True} con status_code 200.",
+            "starter_code": "from fastapi import FastAPI\napp = FastAPI()\n\n# Define la ruta de salud\n",
+            "solution": "from fastapi import FastAPI, status\n\napp = FastAPI()\n\n@app.get(\"/health\", status_code=status.HTTP_200_OK)\nasync def health():\n    return {\"ok\": True}"
+          },
+          "key_takeaways": [
+            "Endpoints de salud (/healthz, /ready) permiten a los orquestadores supervisar y recuperar pods caidos.",
+            "En produccion se utilizan multiples workers de Uvicorn para escalar en sistemas multi-core.",
+            "La bandera --reload solo debe usarse en desarrollo local, nunca en produccion."
+          ],
+          "exercise": {
+            "id": "ex_fa_05_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es el rol de un endpoint de Readiness Check (/ready) en un despliegue sobre Kubernetes o contenedores?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Verificar si el contenedor ha inicializado sus recursos criticos (como la base de datos) para determinar si puede comenzar a recibir trafico de usuarios."
+              },
+              {
+                "id": "b",
+                "text": "Formatear el disco duro del servidor cada vez que se reinicia."
+              },
+              {
+                "id": "c",
+                "text": "Compilar el codigo Python a binario C++."
+              },
+              {
+                "id": "d",
+                "text": "Enviar correos electronicos al equipo de soporte de forma periodica."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El readiness probe le indica al balanceador u orquestador si la instancia ya establecio sus dependencias criticas y esta lista para aceptar peticiones reales."
           }
         }
       ]

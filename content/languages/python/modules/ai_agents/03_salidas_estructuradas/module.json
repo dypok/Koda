@@ -5,84 +5,249 @@
   "slug": "ia-salidas-estructuradas",
   "course_slug": "ai-agents",
   "title": "Salidas Estructuradas con Pydantic (Structured Outputs)",
-  "objective": "Forzar a los LLMs a responder en esquemas JSON válidos garantizados por Pydantic mediante el modo Structured Outputs.",
-  "description": "Elimina las alucinaciones de formato: convierte respuestas de texto libre en objetos tipados de Python listos para base de datos o lógica de negocio.",
+  "objective": "Forzar a los modelos a emitir esquemas JSON 100% validos basados en modelos de Pydantic v2 garantizando confiabilidad en produccion.",
+  "description": "Adios al parseo fragil con regex: esquemas estrictos con Structured Outputs, JSON Schema y validaciones de datos complejas.",
   "position": 53,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 300
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_ia_03_01",
       "code": "S01",
-      "title": "Garantía de Esquema JSON con Pydantic",
+      "title": "Structured Outputs, Pydantic y Validacion Estricta",
       "slug": "structured-outputs-pydantic",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 50,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_ia_03_01",
           "code": "L01",
-          "title": "Structured Outputs: De Texto a Modelos Tipados",
-          "slug": "structured-outputs-base",
+          "title": "La Fragilidad del Parseo de Texto Libre",
+          "slug": "fragilidad-parseo-texto-libre",
           "position": 1,
-          "concept_id": "ia-structured-output",
-          "objective": "Configurar response_format para obtener objetos Pydantic validados al 100% sin riesgo de error de parseo.",
-          "theory_markdown": "Históricamente, pedirle a un LLM \"responde en JSON\" fallaba con frecuencia: el modelo agregaba markdown ```json, textos de cortesía (\"¡Claro, aquí tienes tu JSON!\") o cometía errores de comas finales.\n\nLos modelos modernos implementan **Structured Outputs**: forzado a nivel de muestreo (constrained sampling con gramáticas formales) para que cada token emitido cumpla obligatoriamente con el schema JSON generado por tu clase `Pydantic`.\n\nEl resultado se convierte directamente en una instancia de tu clase en Python.",
+          "concept_id": "ia-structured-free-text-fragility",
+          "objective": "Comprender los fallos comunes al intentar extraer JSON mediante prompts de texto y la necesidad de garantias sintacticas.",
+          "theory_markdown": "Tradicionalmente, para obtener datos de un LLM se le pedia: *'Responde solo en formato JSON'*. En produccion, este enfoque falla con frecuencia debido a:\n1. **Texto conversacional previo o posterior:** El modelo anade frases de cortesia como *'Por supuesto, aqui esta tu JSON:'* o bloques markdown ```json ... ```.\n2. **Alucinacion de sintaxis:** Comas sobrantes al final de listas (`trailing commas`), comillas simples en vez de dobles o claves sin comillas.\n3. **Claves faltantes o tipos inconsistentes:** Enviar un numero como string o cambiar el nombre del campo de `user_id` a `id_usuario`.\n\nIntentar limpiar estas salidas con expresiones regulares o `json.loads` en un bloque `try/except` es una fuente constante de fallas en arquitecturas empresariales.",
           "examples": [
             {
-              "title": "Esquema de extracción de entidades con Pydantic",
-              "code": "from pydantic import BaseModel, Field\n\nclass ExtraccionContacto(BaseModel):\n    nombre: str\n    email: str\n    telefono: str | None = None\n    urgencia: int = Field(ge=1, le=5, description=\"1 muy bajo, 5 crítico\")\n\n# El LLM está forzado a responder en este esquema exacto\nschema = ExtraccionContacto.model_json_schema()\nprint(\"Schema JSON generado para el LLM:\", list(schema[\"properties\"].keys()))",
-              "output": "Schema JSON generado para el LLM: ['nombre', 'email', 'telefono', 'urgencia']",
-              "explanation": "Pydantic genera el schema JSON Schema que se envía a la API del modelo."
+              "title": "Fallo tipico de parseo tradicional",
+              "code": "import json\n\n# Lo que responde el modelo sin garantias:\nrespuesta_modelo = \"\"\"\nAqui tienes el resultado:\n{\n    'nombre': 'Koda',\n    'edad': 25,\n}\n\"\"\"\ntry:\n    datos = json.loads(respuesta_modelo) # FALLA: comillas simples, texto extra, trailing comma\nexcept json.JSONDecodeError as exc:\n    print(\"Error de parseo:\", exc)",
+              "output": "Error de parseo: Expecting property name enclosed in double quotes",
+              "explanation": "El parseo ingenuo con json.loads se rompe con cualquier desviacion minima del estandar JSON."
             }
           ],
-          "common_errors": "Intentar usar expresiones regulares complejas para limpiar JSON sucio en lugar de usar la funcionalidad nativa de Structured Outputs de la API.",
+          "common_errors": "Confiar en que pedirle al modelo 'solo genera JSON' resolvera el 100% de los casos en produccion sin aplicar esquemas estrictos a nivel de API.",
           "mini_exercise": {
-            "starter_code": "from pydantic import BaseModel\nclass Tarea(BaseModel):\n    titulo: str\n    completada: bool\n\nt = Tarea.model_validate_json('{\"titulo\": \"Aprender IA\", \"completada\": true}')\nprint(t.titulo, t.completada)",
-            "instructions": "Valida cómo Pydantic deserializa JSON válido en un objeto Python.",
-            "solution": "from pydantic import BaseModel\nclass Tarea(BaseModel):\n    titulo: str\n    completada: bool\n\nt = Tarea.model_validate_json('{\"titulo\": \"Aprender IA\", \"completada\": true}')\nprint(t.titulo, t.completada)"
+            "instructions": "Escribe una cadena JSON valida con claves entre comillas dobles y sin trailing comma.",
+            "starter_code": "# JSON valido\njson_str = ...",
+            "solution": "json_str = '{\"status\": \"ok\", \"codigo\": 200}'"
           },
           "key_takeaways": [
-            "Structured Outputs garantiza que la respuesta del LLM coincida 100% con el esquema.",
-            "Elimina el parsing frágil con regex o limpieza manual.",
-            "Pydantic valida tipos y rangos numéricos al instante."
+            "Pedir JSON en texto plano es vulnerable a alucinaciones de sintaxis y texto extra.",
+            "json.loads falla ante comas finales, comillas simples o bloques markdown.",
+            "Las aplicaciones de produccion requieren garantias de esquema validadas a nivel de token."
           ],
           "exercise": {
             "id": "ex_ia_03_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Por qué la técnica de Structured Outputs con Pydantic es crucial para construir agentes de software autónomos?",
+            "prompt": "Cual es el principal problema de pedirle a un LLM que devuelva JSON mediante instrucciones en lenguaje natural en el prompt?",
             "options": [
               {
                 "id": "a",
-                "text": "Porque garantiza que las respuestas sigan un formato determinista sin romper el código que consume los datos"
+                "text": "El modelo no ofrece garantia determinista de sintaxis, pudiendo incluir texto conversacional, comas finales invalidas o claves alteradas que rompen json.loads."
               },
               {
                 "id": "b",
-                "text": "Porque traduce el código a inglés"
+                "text": "El modelo solo puede responder en lenguaje binario."
               },
               {
                 "id": "c",
-                "text": "Porque hace que el LLM responda sin consumir energía"
+                "text": "La API cobra el triple de dinero si detecta la palabra JSON."
               },
               {
                 "id": "d",
-                "text": "Porque reemplaza la necesidad de usar bases de datos"
+                "text": "Los navegadores web bloquean peticiones que contengan llaves."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Un agente autónomo necesita tomar decisiones programáticas; si el JSON falla sintácticamente, todo el sistema se rompe."
+            "explanation": "Sin un mecanismo de decodificacion restringida (Constrained Decoding), el modelo genera tokens probabilistas que pueden desviarse de la gramatica JSON valida."
+          }
+        },
+        {
+          "id": "les_ia_03_02",
+          "code": "L02",
+          "title": "Structured Outputs con Pydantic y response_format",
+          "slug": "structured-outputs-pydantic-response-format",
+          "position": 2,
+          "concept_id": "ia-structured-pydantic-response-format",
+          "objective": "Integrar modelos de Pydantic v2 en response_format o el metodo parse() para forzar cumplimiento de esquema garantizado.",
+          "theory_markdown": "Las APIs modernas incorporan **Structured Outputs** con decodificacion guiada por gramatica (Constrained Decoding):\nEl motor de inferencia restringe matematicamente el muestreo de tokens: **unicamente se permite emitir tokens que cumplan con la gramatica del esquema JSON provisto**.\n\nEn Python, el SDK oficial integra **Pydantic v2** de forma transparente mediante el helper `client.beta.chat.completions.parse()`:\n```python\nfrom pydantic import BaseModel, Field\n\nclass Evento(BaseModel):\n    titulo: str = Field(description=\"Nombre del evento\")\n    asistentes: int = Field(ge=1, description=\"Cantidad de asistentes\")\n    es_virtual: bool\n\ncompletion = await client.beta.chat.completions.parse(\n    model=\"gpt-4o-mini\",\n    messages=[{\"role\": \"user\", \"content\": \"Conferencia de Python manana con 200 personas online\"}],\n    response_format=Evento\n)\nevento: Evento = completion.choices[0].message.parsed\n```\n`evento` es una instancia tipada de `Evento` ya validada por Pydantic.",
+          "examples": [
+            {
+              "title": "Extraccion de entidades tipada garantizada",
+              "code": "from pydantic import BaseModel\n\nclass PerfilUsuario(BaseModel):\n    nombre: str\n    habilidades: list[str]\n    anos_experiencia: int\n\n# Con parse(..., response_format=PerfilUsuario):\n# La respuesta retornara una instancia exacta de PerfilUsuario sin fallos de esquema.",
+              "output": "PerfilUsuario(nombre='Sara', habilidades=['Python', 'FastAPI'], anos_experiencia=4)",
+              "explanation": "El modelo no puede emitir texto previo ni claves no declaradas en el modelo Pydantic."
+            }
+          ],
+          "common_errors": "Usar response_format={\"type\": \"json_object\"} creyendo que valida el esquema de campos; 'json_object' solo garantiza sintaxis JSON general, mientras que Structured Outputs con Pydantic garantiza las claves y tipos exactos.",
+          "mini_exercise": {
+            "instructions": "Declara un modelo Pydantic llamado 'Producto' con 'nombre: str' y 'precio: float'.",
+            "starter_code": "from pydantic import BaseModel\n\n# Define Producto\n",
+            "solution": "from pydantic import BaseModel\n\nclass Producto(BaseModel):\n    nombre: str\n    precio: float"
+          },
+          "key_takeaways": [
+            "Structured Outputs utiliza decodificacion restringida para garantizar 100% de cumplimiento sintactico.",
+            "client.beta.chat.completions.parse() deserializa directamente a instancias de Pydantic.",
+            "Asegura nombres de campos, tipos estrictos y ausencia total de texto conversacional."
+          ],
+          "exercise": {
+            "id": "ex_ia_03_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es la diferencia entre response_format={'type': 'json_object'} y Structured Outputs con un modelo Pydantic?",
+            "options": [
+              {
+                "id": "a",
+                "text": "json_object solo asegura que la salida sea un JSON sintacticamente valido pero no restringe las claves ni los tipos; Structured Outputs fuerza el cumplimiento exacto del esquema definido por el modelo Pydantic."
+              },
+              {
+                "id": "b",
+                "text": "json_object es solo para imagenes y Pydantic para textos."
+              },
+              {
+                "id": "c",
+                "text": "No existe diferencia practica."
+              },
+              {
+                "id": "d",
+                "text": "Structured Outputs funciona sin modelos de lenguaje."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Structured Outputs garantiza que los campos solicitados esten presentes y coincidan con los tipos especificados en el schema sin omisiones ni invenciones."
+          }
+        },
+        {
+          "id": "les_ia_03_03",
+          "code": "L03",
+          "title": "Manejo de Errores y Validacion de Negocio",
+          "slug": "manejo-errores-validacion-negocio",
+          "position": 3,
+          "concept_id": "ia-structured-validation-errors",
+          "objective": "Capturar rechazos del modelo (refusals) y manejar validaciones complejas de negocio sobre los datos estructurados.",
+          "theory_markdown": "Incluso con Structured Outputs existen dos escenarios que deben gestionarse en el codigo:\n\n1. **Rechazos por Seguridad (`message.refusal`):**\n   Si la solicitud del usuario viola las politicas de seguridad del proveedor, el modelo no emite el esquema sino un mensaje de rechazo textual en `message.refusal`:\n   ```python\n   if completion.choices[0].message.refusal:\n       print(\"Solicitud rechazada:\", completion.choices[0].message.refusal)\n   ```\n\n2. **Validadores de Negocio en Pydantic:**\n   Podemos anadir `@field_validator` en el modelo Pydantic para corroborar reglas de dominio (ej. verificar que un email pertenezca a un dominio empresarial). Si la salida del LLM infringe la regla, Pydantic eleva un `ValidationError` en Python.",
+          "examples": [
+            {
+              "title": "Comprobacion de rechazo y validacion",
+              "code": "from pydantic import BaseModel, field_validator\n\nclass OrdenCompra(BaseModel):\n    codigo_item: str\n    cantidad: int\n\n    @field_validator(\"cantidad\")\n    @classmethod\n    def cantidad_positiva(cls, v: int) -> int:\n        if v <= 0:\n            raise ValueError(\"La cantidad debe ser mayor que cero\")\n        return v",
+              "output": "Si el modelo extrae cantidad=-5, Pydantic lanza ValidationError de inmediato en el backend.",
+              "explanation": "Los validadores de Pydantic complementan las restricciones sintacticas con logica de negocio real."
+            }
+          ],
+          "common_errors": "Asumir que completion.choices[0].message.parsed siempre estara presente sin verificar previamente si message.refusal contiene un texto de bloqueo de seguridad.",
+          "mini_exercise": {
+            "instructions": "Escribe una condicion que retorne 'Rechazado' si message.refusal no es None.",
+            "starter_code": "# Comprueba refusal\n# if ...:",
+            "solution": "if message.refusal is not None:\n    return \"Rechazado\""
+          },
+          "key_takeaways": [
+            "message.refusal indica que el modelo rechazo responder por politicas de seguridad.",
+            "@field_validator aplica reglas de negocio de Python sobre los datos emitidos por la IA.",
+            "La combinacion de Structured Outputs y Pydantic blinda el sistema contra entradas corruptas."
+          ],
+          "exercise": {
+            "id": "ex_ia_03_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Que propiedad de completion.choices[0].message debe inspeccionarse para saber si el modelo se nego a responder por violacion de politicas de contenido en Structured Outputs?",
+            "options": [
+              {
+                "id": "a",
+                "text": "message.refusal"
+              },
+              {
+                "id": "b",
+                "text": "message.error_code"
+              },
+              {
+                "id": "c",
+                "text": "message.is_blocked"
+              },
+              {
+                "id": "d",
+                "text": "message.status_reject"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Cuando un modelo decide no contestar una peticion sensible bajo Structured Outputs, puebla el atributo message.refusal con el motivo del rechazo."
+          }
+        },
+        {
+          "id": "les_ia_03_04",
+          "code": "L04",
+          "title": "Esquemas Complejos, Enums y Modelos Anidados",
+          "slug": "esquemas-complejos-enums-anidados",
+          "position": 4,
+          "concept_id": "ia-structured-nested-enums",
+          "objective": "Disenar esquemas jerarquicos con listas de objetos y tipos enumerados Enum para clasificaciones discretas.",
+          "theory_markdown": "Structured Outputs soporta estructuras complejas multidimensionales:\n\n### 1. Clasificaciones con `Enum`\nPara obligar al modelo a elegir exactamente una opcion de un catalogo cerrado sin inventar categorias:\n```python\nfrom enum import Enum\nfrom pydantic import BaseModel\n\nclass Prioridad(str, Enum):\n    BAJA = \"baja\"\n    MEDIA = \"media\"\n    ALTA = \"alta\"\n    CRITICA = \"critica\"\n```\n\n### 2. Modelos Anidados y Listas de Entidades\nPermite extraer multiples entidades jerarquicas en una sola pasada:\n```python\nclass Tarea(BaseModel):\n    descripcion: str\n    responsable: str\n    prioridad: Prioridad\n\nclass PlanAccion(BaseModel):\n    proyecto: str\n    tareas: list[Tarea]\n```",
+          "examples": [
+            {
+              "title": "Extraccion de multiples entidades con Enum",
+              "code": "from enum import Enum\nfrom pydantic import BaseModel\n\nclass Sentimiento(str, Enum):\n    POSITIVO = \"positivo\"\n    NEGATIVO = \"negativo\"\n    NEUTRO = \"neutro\"\n\nclass ResenaAnalizada(BaseModel):\n    sentimiento: Sentimiento\n    puntos_clave: list[str]\n    calificacion_estimada: int",
+              "output": "ResenaAnalizada(sentimiento=<Sentimiento.POSITIVO>, puntos_clave=['bateria durable', 'pantalla brillante'], calificacion_estimada=5)",
+              "explanation": "El modelo esta forzado a seleccionar exclusivamente uno de los tres valores definidos en Sentimiento."
+            }
+          ],
+          "common_errors": "Crear Enums sin heredar de str (usar solo Enum en vez de (str, Enum)), lo que puede generar problemas de serializacion a JSON Schema.",
+          "mini_exercise": {
+            "instructions": "Declara un Enum llamado Categoria que herede de (str, Enum) con los valores TECH = 'tech' y LEGAL = 'legal'.",
+            "starter_code": "from enum import Enum\n\n# Define Categoria\n",
+            "solution": "from enum import Enum\n\nclass Categoria(str, Enum):\n    TECH = \"tech\"\n    LEGAL = \"legal\""
+          },
+          "key_takeaways": [
+            "Enum acota las opciones del modelo a un conjunto estricto de categorias validas.",
+            "Modelos anidados (list[ModeloHijo]) permiten extraer grafos de datos complejos en una pasada.",
+            "Heredar de (str, Enum) garantiza compatibilidad directa con JSON Schema."
+          ],
+          "exercise": {
+            "id": "ex_ia_03_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es el beneficio principal de utilizar un Enum de Python en un modelo Pydantic para Structured Outputs?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Restringe estrictamente al modelo para que solo pueda seleccionar uno de los valores predefinidos en el catalogo, impidiendo alucinaciones de categorias."
+              },
+              {
+                "id": "b",
+                "text": "Reduce la velocidad del modelo para ahorrar ancho de banda."
+              },
+              {
+                "id": "c",
+                "text": "Convierte la respuesta en una imagen SVG."
+              },
+              {
+                "id": "d",
+                "text": "Obliga a que el modelo responda en idioma latin."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Un Enum define un conjunto cerrado de valores validos en el JSON Schema; la decodificacion restringida hace imposible que el LLM emita una categoria ajena."
           }
         }
       ]

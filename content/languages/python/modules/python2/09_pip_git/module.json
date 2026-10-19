@@ -4,14 +4,14 @@
   "code": "PY2_M09",
   "slug": "pip-entornos-y-git",
   "course_slug": "python-2",
-  "title": "Gestión de Paquetes (pip), PyProject y Git Esencial",
-  "objective": "Gestionar dependencias con pip y requirements.txt / pyproject.toml, e implementar flujo de control de versiones con Git.",
-  "description": "Herramientas esenciales del desarrollador profesional: instalación de librerías de terceros (PyPI), reproducibilidad de entornos y commits en Git.",
-  "position": 19,
+  "title": "Gestión de Entornos (venv), Paquetes (pip) y Git Esencial",
+  "objective": "Aislar dependencias de proyectos mediante venv, gestionar librerías con pip y requirements.txt, y dominar el flujo de control de versiones con Git y .gitignore.",
+  "description": "Las herramientas profesionales del desarrollador moderno: instalación de librerías en PyPI, reproducibilidad de entornos virtuales y versionado limpio con Git.",
+  "position": 9,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,231 @@
     {
       "id": "sec_py2_09_01",
       "code": "S01",
-      "title": "pip, requirements.txt y Git",
-      "slug": "pip-y-git",
+      "title": "Entornos Virtuales, Dependencias y Git",
+      "slug": "entornos-dependencias-git",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 15,
-      "xp_on_complete": 40,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py2_09_01",
           "code": "L01",
-          "title": "Instalación de Paquetes con pip y Control de Versiones con Git",
-          "slug": "pip-git-base",
+          "title": "Entornos Virtuales (venv) y Aislamiento de Proyectos",
+          "slug": "entornos-virtuales-venv",
           "position": 1,
-          "concept_id": "py2-tooling",
-          "objective": "Congelar dependencias con pip freeze y versionar con git init, add y commit.",
-          "theory_markdown": "El ecosistema de Python cuenta con más de 500,000 paquetes en **PyPI** (Python Package Index).\n\n1. `pip install requests`: Descarga e instala una librería en tu entorno virtual.\n2. `pip freeze > requirements.txt`: Congela las versiones exactas instaladas para que tus compañeros puedan replicar el entorno con `pip install -r requirements.txt`.\n3. **Git básico**:\n   - `git init`: Inicia el repositorio.\n   - `git add .`: Agrega cambios al área de preparación (stage).\n   - `git commit -m \"feat: nueva funcionalidad\"`: Guarda una instantánea permanente.\n   - **.gitignore**: Archivo imprescindible donde especificas `.venv/` o `__pycache__/` para no subir archivos basura al repositorio.",
+          "concept_id": "py2-venv-isolation",
+          "objective": "Comprender por qué nunca se deben instalar paquetes globales y crear entornos aislados con python -m venv.",
+          "theory_markdown": "Si trabajas en dos proyectos diferentes (uno con Django 4 y otro con Django 5), instalarlos a nivel global en el sistema operativo ocasiona **conflictos de versiones destructivos**.\n\nPara resolver esto, Python incluye el módulo `venv`, que crea un árbol de directorios aislado e independiente con su propio intérprete y su propio directorio `site-packages`.\n\n### Ciclo de vida de un entorno virtual\n1. **Creación**: `python -m venv .venv`\n2. **Activación**:\n   - Windows PowerShell: `.\\.venv\\Scripts\\Activate.ps1`\n   - macOS/Linux: `source .venv/bin/activate`\n3. **Desactivación**: Al terminar de trabajar, ejecutas simplemente `deactivate`.",
           "examples": [
             {
-              "title": "Contenido típico de un archivo requirements.txt",
-              "code": "# requirements.txt\nfastapi==0.115.0\npydantic>=2.9.0\npytest==8.3.0",
-              "output": "fastapi==0.115.0\npydantic>=2.9.0\npytest==8.3.0",
-              "explanation": "Define versiones explícitas para garantizar que la aplicación funcione idéntica en cualquier servidor."
+              "title": "Comando estándar de creación de entorno",
+              "code": "# En la terminal de tu proyecto:\n# python -m venv .venv\nprint(\"Entorno virtual aislado listo en carpeta .venv\")",
+              "output": "Entorno virtual aislado listo en carpeta .venv",
+              "explanation": ".venv contiene una copia aislada de Python dedicada exclusivamente a este proyecto."
             }
           ],
-          "common_errors": "Subir la carpeta `.venv/` a Git. Es pesada y depende del sistema operativo donde se creó; en su lugar se sube el archivo requirements.txt.",
+          "common_errors": "Instalar librerías con pip sin haber activado el entorno virtual primero, instalándolas accidentalmente en el Python global del sistema.",
           "mini_exercise": {
-            "starter_code": "# Comando para instalar librerías desde requirements.txt\n# Escribe el comando como comentario\n# pip ...",
-            "instructions": "Escribe: # pip install -r requirements.txt",
-            "solution": "# pip install -r requirements.txt"
+            "starter_code": "# Cual es el comando estandar para crear un entorno virtual llamado .venv?\n# python -m ... .venv",
+            "instructions": "Escribe venv después de -m.",
+            "solution": "# python -m venv .venv"
           },
           "key_takeaways": [
-            "pip instala librerías desde el índice PyPI.",
-            "requirements.txt asegura la reproducibilidad del entorno.",
-            "Nunca subas carpetas .venv/ o __pycache__/ a Git (usa .gitignore)."
+            "Los entornos virtuales aíslan las dependencias de cada proyecto evitando conflictos.",
+            "python -m venv .venv crea el entorno en el directorio local.",
+            "Siempre se debe activar el entorno antes de instalar paquetes con pip."
           ],
           "exercise": {
             "id": "ex_py2_09_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Por qué NUNCA se debe subir la carpeta `.venv` a un repositorio Git?",
+            "prompt": "¿Por qué es una mala práctica instalar librerías de proyectos en el Python global del sistema operativo?",
             "options": [
               {
                 "id": "a",
-                "text": "Porque contiene binarios dependientes del SO local y es fácilmente reproducible con requirements.txt"
+                "text": "Porque genera colisiones y conflictos de versiones incompatibles entre diferentes proyectos instalados en la misma máquina"
               },
               {
                 "id": "b",
-                "text": "Porque Git no soporta archivos de Python"
+                "text": "Porque Python global solo permite instalar una librería a la vez"
               },
               {
                 "id": "c",
-                "text": "Porque borrará el código de los demás desarrolladores"
+                "text": "Porque se borra el código fuente al reiniciar la computadora"
               },
               {
                 "id": "d",
-                "text": "Porque solo los archivos HTML se pueden subir a Git"
+                "text": "Porque requiere reiniciar el módem de internet"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Los entornos virtuales son locales y pesados. El equipo solo necesita el archivo de dependencias para reconstruir el entorno en segundos."
+            "explanation": "El aislamiento con venv garantiza que cada proyecto mantenga sus dependencias y versiones específicas sin interferir con otros proyectos."
+          }
+        },
+        {
+          "id": "les_py2_09_02",
+          "code": "L02",
+          "title": "Gestión de Paquetes con pip y PyPI",
+          "slug": "gestion-paquetes-pip",
+          "position": 2,
+          "concept_id": "py2-pip-pypi",
+          "objective": "Instalar, actualizar, desinstalar e inspeccionar librerías de terceros publicadas en el índice oficial PyPI.",
+          "theory_markdown": "**`pip`** es el administrador de paquetes estándar de Python. Conecta directamente con **PyPI (Python Package Index)**, el repositorio central con más de medio millón de librerías de código abierto.\n\n### Comandos esenciales de `pip`\n- `pip install <paquete>`: Descarga e instala la última versión estable (ej: `pip install requests`).\n- `pip install <paquete>==2.31.0`: Instala una versión exacta específica.\n- `pip install --upgrade <paquete>`: Actualiza una librería existente a la versión más reciente.\n- `pip uninstall <paquete>`: Remueve la librería del entorno.\n- `pip list`: Muestra todos los paquetes instalados en el entorno actual y sus números de versión.",
+          "examples": [
+            {
+              "title": "Inspección de metadatos con pip show",
+              "code": "# pip show requests\nprint(\"Name: requests\")\nprint(\"Version: 2.31.0\")\nprint(\"Summary: Python HTTP for Humans.\")",
+              "output": "Name: requests\nVersion: 2.31.0\nSummary: Python HTTP for Humans.",
+              "explanation": "pip show permite verificar la ubicación, dependencias secundarias y versión de cualquier paquete instalado."
+            }
+          ],
+          "common_errors": "Escribir `pip install python`. Python no se instala a través de pip; pip es para instalar paquetes y librerías externas de Python.",
+          "mini_exercise": {
+            "starter_code": "# Comando para instalar la version exacta 3.1.0 de un paquete\n# pip install paquete==...",
+            "instructions": "Escribe 3.1.0 tras el operador ==.",
+            "solution": "# pip install paquete==3.1.0"
+          },
+          "key_takeaways": [
+            "pip descarga e instala librerías desde PyPI en el entorno activo.",
+            "pip list permite auditar los paquetes y versiones instalados.",
+            "El operador == fija una versión fija inmutable."
+          ],
+          "exercise": {
+            "id": "ex_py2_09_02",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Qué comando de pip permite listar todos los paquetes instalados en el entorno virtual activo junto con sus versiones?",
+            "options": [
+              {
+                "id": "a",
+                "text": "pip list"
+              },
+              {
+                "id": "b",
+                "text": "pip all"
+              },
+              {
+                "id": "c",
+                "text": "pip status"
+              },
+              {
+                "id": "d",
+                "text": "pip check"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "pip list imprime una tabla con todos los paquetes presentes en el entorno virtual actual."
+          }
+        },
+        {
+          "id": "les_py2_09_03",
+          "code": "L03",
+          "title": "Reproducibilidad con requirements.txt",
+          "slug": "reproducibilidad-requirements",
+          "position": 3,
+          "concept_id": "py2-requirements-txt",
+          "objective": "Congelar dependencias con pip freeze y restaurar entornos idénticos usando pip install -r requirements.txt.",
+          "theory_markdown": "Para que tu código funcione exactamente igual en el computador de tus colegas o en los servidores de despliegue en la nube, se debe garantizar la **reproducibilidad del entorno**.\n\n### El estándar `requirements.txt`\n1. **Congelar el estado actual**:\n   ```bash\n   pip freeze > requirements.txt\n   ```\n   Este comando genera un archivo de texto plano con la lista exacta de dependencias y versiones instaladas (ej: `fastapi==0.115.0`).\n2. **Replicar el entorno en otra máquina**:\n   ```bash\n   pip install -r requirements.txt\n   ```\n   El indicador `-r` lee el archivo línea por línea e instala automáticamente todas las librerías con las versiones fijadas.",
+          "examples": [
+            {
+              "title": "Estructura típica de un archivo requirements.txt",
+              "code": "# requirements.txt de produccion\nfastapi==0.115.0\npydantic==2.9.2\nuvicorn==0.30.6\npytest==8.3.3",
+              "output": "fastapi==0.115.0\npydantic==2.9.2\nuvicorn==0.30.6\npytest==8.3.3",
+              "explanation": "Fijar versiones exactas con == previene que una actualización externa rompa la aplicación inesperadamente."
+            }
+          ],
+          "common_errors": "Editar a mano requirements.txt con nombres mal escritos. Es mucho más seguro dejar que `pip freeze` genere el listado verificado.",
+          "mini_exercise": {
+            "starter_code": "# Comando para restaurar todas las dependencias del archivo requirements.txt\n# pip install -r ...",
+            "instructions": "Escribe requirements.txt como argumento de -r.",
+            "solution": "# pip install -r requirements.txt"
+          },
+          "key_takeaways": [
+            "pip freeze vuelca las dependencias exactas instaladas.",
+            "requirements.txt es el estándar de la industria para compartir entornos.",
+            "pip install -r requirements.txt recrea el entorno idéntico en cualquier máquina."
+          ],
+          "exercise": {
+            "id": "ex_py2_09_03",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Qué comando se utiliza para instalar todas las dependencias listadas en un archivo 'requirements.txt'?",
+            "options": [
+              {
+                "id": "a",
+                "text": "pip install -r requirements.txt"
+              },
+              {
+                "id": "b",
+                "text": "pip load requirements.txt"
+              },
+              {
+                "id": "c",
+                "text": "python requirements.txt"
+              },
+              {
+                "id": "d",
+                "text": "pip restore"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El flag -r (requirement) le indica a pip que lea las especificaciones directamente desde el archivo indicado."
+          }
+        },
+        {
+          "id": "les_py2_09_04",
+          "code": "L04",
+          "title": "Flujo Esencial de Git y el Archivo .gitignore",
+          "slug": "flujo-git-gitignore",
+          "position": 4,
+          "concept_id": "py2-git-gitignore",
+          "objective": "Manejar el ciclo de vida de Git (Working Tree, Staging, Repository) y proteger carpetas efímeras con .gitignore.",
+          "theory_markdown": "**Git** es el sistema de control de versiones distribuido estándar en el desarrollo de software mundial.\n\n### Las 3 áreas de trabajo en Git\n1. **Working Directory (Directorio de trabajo)**: Tus archivos modificados en disco.\n2. **Staging Area (Área de preparación / Index)**: Archivos seleccionados listos para registrarse. Se agregan con `git add <archivo>` o `git add .`.\n3. **Repository (Historial de commits)**: Instantáneas inmutables guardadas permanentemente con `git commit -m \"mensaje\"`.\n\n### La regla sagrada de `.gitignore`\nExisten carpetas y archivos que **JAMÁS deben subirse al repositorio Git**:\n- `.venv/`: Pesa cientos de megabytes y contiene binarios específicos de tu computadora.\n- `__pycache__/` y `*.pyc`: Bytecode compilado generado localmente por Python.\n- `.env`: Contiene contraseñas y claves de API secretas.\n\nPara ignorarlos, creas un archivo de texto llamado `.gitignore` en la raíz del proyecto y escribes los patrones a excluir.",
+          "examples": [
+            {
+              "title": "Contenido recomendado de un .gitignore en Python",
+              "code": "# .gitignore para proyectos de Python\n.venv/\n__pycache__/\n*.pyc\n.env\n.pytest_cache/",
+              "output": ".venv/\n__pycache__/\n*.pyc\n.env\n.pytest_cache/",
+              "explanation": "Git omitirá estos archivos automáticamente impidiendo que se suban accidentalmente a GitHub o GitLab."
+            }
+          ],
+          "common_errors": "Hacer `git add .` y subir la carpeta `.venv/` al repositorio remoto. Para evitarlo se debe crear el archivo `.gitignore` antes del primer commit.",
+          "mini_exercise": {
+            "starter_code": "# Que archivo se utiliza para indicar a Git que ignore la carpeta .venv?\n# Archivo: .git...",
+            "instructions": "Escribe ignore para completar el nombre del archivo.",
+            "solution": "# Archivo: .gitignore"
+          },
+          "key_takeaways": [
+            "git add traslada cambios al Staging Area.",
+            "git commit guarda una instantánea permanente en el historial del repositorio.",
+            ".gitignore evita versionar entornos virtuales, cachés y credenciales privadas."
+          ],
+          "exercise": {
+            "id": "ex_py2_09_04",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "¿Por qué la carpeta '.venv' debe incluirse obligatoriamente en el archivo .gitignore?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque contiene binarios dependientes del sistema operativo local y es pesada; el equipo solo necesita requirements.txt para recrearla"
+              },
+              {
+                "id": "b",
+                "text": "Porque Git se congela si detecta archivos que terminen en .exe"
+              },
+              {
+                "id": "c",
+                "text": "Porque los entornos virtuales borran las ramas de Git"
+              },
+              {
+                "id": "d",
+                "text": "Porque .gitignore solo admite nombres que comiencen con punto"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Los entornos virtuales son locales y reproducibles. Subirlos satura el repositorio y genera fallos al clonarse en otros sistemas operativos."
           }
         }
       ]

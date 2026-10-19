@@ -5,29 +5,161 @@
   "questions": [
     {
       "id": "q_py2_06_01",
-      "type": "predict_output",
-      "difficulty": "medium",
-      "prompt": "¿Qué método mágico de Python se invoca al llamar a str(objeto) o print(objeto)?",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué representa el primer parámetro 'self' en los métodos de una clase en Python?",
       "options": [
         {
           "id": "a",
-          "text": "__str__"
+          "text": "La referencia a la instancia específica sobre la cual se está invocando el método"
         },
         {
           "id": "b",
-          "text": "__print__"
+          "text": "Una variable global compartida por todas las librerías"
         },
         {
           "id": "c",
-          "text": "__to_string__"
+          "text": "Un método constructor alternativo"
         },
         {
           "id": "d",
-          "text": "__text__"
+          "text": "Un identificador opcional que se puede omitir sin consecuencias"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "__str__ es el método especial que devuelve la representación en string legible para el usuario."
+      "explanation": "self permite que los métodos accedan y modifiquen los atributos propios del objeto concreto que los llamó."
+    },
+    {
+      "id": "q_py2_06_02",
+      "type": "find_error",
+      "difficulty": "medium",
+      "prompt": "¿Qué error arrojará Python si se omite el parámetro self en la definición de un método de instancia?",
+      "prompt_code": "class Sensor:\n    def leer():\n        return 25\n\ns = Sensor()\ns.leer()",
+      "options": [
+        {
+          "id": "a",
+          "text": "TypeError: leer() takes 0 positional arguments but 1 was given"
+        },
+        {
+          "id": "b",
+          "text": "NameError: s is not defined"
+        },
+        {
+          "id": "c",
+          "text": "AttributeError: 'Sensor' object has no attribute 'leer'"
+        },
+        {
+          "id": "d",
+          "text": "SyntaxError: missing colon"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Al invocar s.leer(), Python envía la instancia 's' como primer argumento posicional. Si leer() no tiene parámetros para recibirlo, lanza TypeError."
+    },
+    {
+      "id": "q_py2_06_03",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué salida imprime este código sobre el aislamiento del estado de las instancias?",
+      "prompt_code": "class Caja:\n    def __init__(self, item):\n        self.item = item\n\nc1 = Caja(\"oro\")\nc2 = Caja(\"plata\")\nc1.item = \"diamante\"\nprint(c1.item, c2.item)",
+      "options": [
+        {
+          "id": "a",
+          "text": "diamante plata"
+        },
+        {
+          "id": "b",
+          "text": "diamante diamante"
+        },
+        {
+          "id": "c",
+          "text": "oro plata"
+        },
+        {
+          "id": "d",
+          "text": "AttributeError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Cada objeto mantiene sus atributos de instancia aislados en memoria. Modificar c1 no afecta el atributo item de c2."
+    },
+    {
+      "id": "q_py2_06_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la diferencia fundamental entre un atributo de clase y un atributo de instancia?",
+      "options": [
+        {
+          "id": "a",
+          "text": "El atributo de clase se comparte entre todas las instancias, mientras que el atributo de instancia es exclusivo del objeto al que pertenece"
+        },
+        {
+          "id": "b",
+          "text": "Los atributos de clase solo aceptan enteros y los de instancia solo texto"
+        },
+        {
+          "id": "c",
+          "text": "Los atributos de instancia no pueden modificarse tras su creación"
+        },
+        {
+          "id": "d",
+          "text": "No hay diferencia en memoria, solo en el nombre"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Un atributo de clase vive en el espacio de la clase y es accesible por todos sus objetos; los atributos de instancia viven en el diccionario del objeto."
+    },
+    {
+      "id": "q_py2_06_05",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué método especial se debe implementar para personalizar la salida producida al llamar a print(objeto)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "__str__(self)"
+        },
+        {
+          "id": "b",
+          "text": "__init__(self)"
+        },
+        {
+          "id": "c",
+          "text": "__print__(self)"
+        },
+        {
+          "id": "d",
+          "text": "__call__(self)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "__str__ es el método especial que devuelve la representación en cadena legible para humanos cuando se usa print() o str()."
+    },
+    {
+      "id": "q_py2_06_06",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es el propósito del método especial __repr__(self)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Proporcionar una representación técnica y no ambigua del objeto, orientada a desarrolladores y tareas de depuración (debugging)"
+        },
+        {
+          "id": "b",
+          "text": "Reiniciar todos los valores del objeto a cero"
+        },
+        {
+          "id": "c",
+          "text": "Destruir el objeto de la memoria RAM"
+        },
+        {
+          "id": "d",
+          "text": "Clonar el objeto en un archivo JSON"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "__repr__ busca ser una descripción técnica precisa (idealmente válida como código Python) para entender el estado exacto del objeto al depurar."
     }
   ]
 }

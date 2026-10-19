@@ -7,27 +7,157 @@
       "id": "q_da_01_01",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "¿Cómo se le llama en NumPy a la capacidad de operar aritméticamente entre arrays de diferentes dimensiones compatibles sin copiar datos?",
+      "prompt": "Cual es la caracteristica principal de los elementos contenidos en un ndarray de NumPy?",
       "options": [
         {
           "id": "a",
-          "text": "Broadcasting"
+          "text": "Deben ser del mismo tipo de dato homogeneo (dtype) y se almacenan contiguos en memoria."
         },
         {
           "id": "b",
-          "text": "Sharding"
+          "text": "Pueden ser de tipos arbitrarios mezclados sin penalizacion de rendimiento."
         },
         {
           "id": "c",
-          "text": "Pipelining"
+          "text": "Solo pueden ser cadenas de texto de longitud fija."
         },
         {
           "id": "d",
-          "text": "Overfitting"
+          "text": "Se guardan en una base de datos relacional externa."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Broadcasting describe cómo NumPy trata matrices de diferentes formas durante operaciones aritméticas."
+      "explanation": "La homogeneidad de tipos es lo que permite a NumPy optimizar el almacenamiento en bloques contiguos de memoria y acelerar computos con C."
+    },
+    {
+      "id": "q_da_01_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que devuelve el atributo shape de un ndarray bidimensional?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Una tupla con la cantidad de filas y columnas del array."
+        },
+        {
+          "id": "b",
+          "text": "Un entero con el peso en kilobytes del objeto."
+        },
+        {
+          "id": "c",
+          "text": "Una cadena con el nombre del tipo de dato."
+        },
+        {
+          "id": "d",
+          "text": "El valor del determinante de la matriz."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "arr.shape retorna una tupla donde cada elemento representa la dimension de un eje (ej. (filas, columnas))."
+    },
+    {
+      "id": "q_da_01_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Como se evita que la modificacion de un slice de un array afecte al array original en NumPy?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Creando una copia explicita mediante el metodo .copy(): sub = arr[:5].copy()"
+        },
+        {
+          "id": "b",
+          "text": "Usando la funcion freeze()"
+        },
+        {
+          "id": "c",
+          "text": "Declarando el slice como constante con const"
+        },
+        {
+          "id": "d",
+          "text": "NumPy nunca modifica el array original, no se requiere ninguna accion"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El slicing genera una vista (view); invocar .copy() reserva un nuevo bloque de memoria desvinculado del original."
+    },
+    {
+      "id": "q_da_01_04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Segun las reglas de broadcasting de NumPy, que condicion permite operar dos dimensiones comparadas de derecha a izquierda?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que las dimensiones sean iguales o que una de ellas sea 1."
+        },
+        {
+          "id": "b",
+          "text": "Que ambas sean numeros pares."
+        },
+        {
+          "id": "c",
+          "text": "Que la suma de ambas sea divisible por 2."
+        },
+        {
+          "id": "d",
+          "text": "Que ambos arrays contengan menos de 1000 elementos."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La regla formal de broadcasting estipula que dos dimensiones son compatibles si son identicas o si una de ellas es exactamente 1."
+    },
+    {
+      "id": "q_da_01_05",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "Dado arr = np.array([10, 25, 3, 40, 15]), que produce la expresion arr[arr > 20]?",
+      "options": [
+        {
+          "id": "a",
+          "text": "array([25, 40])"
+        },
+        {
+          "id": "b",
+          "text": "array([True, False, True])"
+        },
+        {
+          "id": "c",
+          "text": "array([10, 3, 15])"
+        },
+        {
+          "id": "d",
+          "text": "array([20, 20])"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "arr > 20 crea una mascara booleana [False, True, False, True, False]; al indexar con ella se extraen solo los valores correspondientes a True (25 y 40)."
+    },
+    {
+      "id": "q_da_01_06",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Si se ejecuta matriz.sum(axis=0) sobre un array de shape (4, 6), cual sera la forma (shape) del array resultante?",
+      "options": [
+        {
+          "id": "a",
+          "text": "(6,)"
+        },
+        {
+          "id": "b",
+          "text": "(4,)"
+        },
+        {
+          "id": "c",
+          "text": "(1,)"
+        },
+        {
+          "id": "d",
+          "text": "(4, 6)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "axis=0 colapsa las 4 filas sumando a lo largo del eje vertical, produciendo un vector con 6 elementos (uno por columna)."
     }
   ]
 }

@@ -7,7 +7,7 @@
       "id": "q_py1_02_01",
       "type": "predict_output",
       "difficulty": "easy",
-      "prompt": "¿Cuál es la salida de print(type(True))?",
+      "prompt": "¿Cuál es la salida de ejecutar print(type(True))?",
       "options": [
         {
           "id": "a",
@@ -27,40 +27,13 @@
         }
       ],
       "correct_option_id": "a",
-      "explanation": "En Python, el tipo de datos booleano se representa formalmente con la clase bool."
+      "explanation": "En Python, los valores booleanos se representan formalmente con la clase nativa 'bool'."
     },
     {
       "id": "q_py1_02_02",
-      "type": "find_error",
-      "difficulty": "medium",
-      "prompt": "¿Qué error producirá la siguiente línea de código?",
-      "prompt_code": "resultado = int(\"koda_fox\")",
-      "options": [
-        {
-          "id": "a",
-          "text": "ValueError: no se puede convertir un texto no numérico a entero"
-        },
-        {
-          "id": "b",
-          "text": "TypeError: la función int solo acepta flotantes"
-        },
-        {
-          "id": "c",
-          "text": "NameError: koda_fox no está definida"
-        },
-        {
-          "id": "d",
-          "text": "Ninguno, devuelve 0"
-        }
-      ],
-      "correct_option_id": "a",
-      "explanation": "int() solo puede convertir cadenas que contengan dígitos numéricos válidos en base 10. De lo contrario lanza ValueError."
-    },
-    {
-      "id": "q_py1_02_03",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "Según las convenciones de estilo oficiales de Python (PEP 8), ¿cómo se deben nombrar las variables?",
+      "prompt": "Según las convenciones oficiales de estilo de Python (PEP 8), ¿cómo se deben nombrar las variables?",
       "options": [
         {
           "id": "a",
@@ -80,10 +53,10 @@
         }
       ],
       "correct_option_id": "a",
-      "explanation": "PEP 8 estipula snake_case (por ejemplo: saldo_cuenta, total_puntos) para variables y funciones en Python."
+      "explanation": "PEP 8 estipula snake_case (por ejemplo: saldo_cuenta, total_puntos) para nombrar variables y funciones en Python."
     },
     {
-      "id": "q_py1_02_04",
+      "id": "q_py1_02_03",
       "type": "true_false",
       "difficulty": "easy",
       "prompt": "En Python, la instrucción \"10\" + 5 funciona automáticamente convirtiendo el número 5 a texto.",
@@ -98,7 +71,88 @@
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Python es de tipado fuerte (strong typing); no realiza conversiones automáticas entre tipos incompatibles como str e int."
+      "explanation": "Python es de tipado fuerte (strong typing); no realiza conversiones automáticas entre tipos incompatibles como str e int, lanzando un TypeError."
+    },
+    {
+      "id": "q_py1_02_04",
+      "type": "find_error",
+      "difficulty": "easy",
+      "prompt": "¿Qué error producirá la siguiente línea de código?",
+      "prompt_code": "resultado = int(\"koda_fox\")",
+      "options": [
+        {
+          "id": "a",
+          "text": "ValueError: no se puede convertir un texto no numérico a entero"
+        },
+        {
+          "id": "b",
+          "text": "TypeError: la función int solo acepta flotantes"
+        },
+        {
+          "id": "c",
+          "text": "NameError: koda_fox no está definida como variable"
+        },
+        {
+          "id": "d",
+          "text": "Ninguno, devuelve 0"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "int() solo puede convertir cadenas que contengan dígitos numéricos válidos en base 10. De lo contrario, lanza un ValueError."
+    },
+    {
+      "id": "q_py1_02_05",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es el tipo de dato resultante de la variable x?",
+      "prompt_code": "x = \"100.5\"\nprint(type(x))",
+      "options": [
+        {
+          "id": "a",
+          "text": "<class 'str'>"
+        },
+        {
+          "id": "b",
+          "text": "<class 'float'>"
+        },
+        {
+          "id": "c",
+          "text": "<class 'int'>"
+        },
+        {
+          "id": "d",
+          "text": "<class 'number'>"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Al estar envuelto entre comillas (\"100.5\"), Python lo interpreta como una cadena de texto (str), independientemente de que contenga dígitos numéricos."
+    },
+    {
+      "id": "q_py1_02_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué valor imprimirá la siguiente instrucción?",
+      "prompt_code": "print(int(7.85))",
+      "options": [
+        {
+          "id": "a",
+          "text": "7"
+        },
+        {
+          "id": "b",
+          "text": "8"
+        },
+        {
+          "id": "c",
+          "text": "7.85"
+        },
+        {
+          "id": "d",
+          "text": "ValueError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Cuando se aplica int() sobre un número flotante (con decimales), Python descarta la parte decimal truncándola hacia abajo, devolviendo 7."
     }
   ]
 }

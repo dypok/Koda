@@ -6,8 +6,34 @@
     {
       "id": "q_py3_01_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Qué excepción lanza un generador cuando agota todos sus elementos disponibles al llamar a next()?",
+      "difficulty": "easy",
+      "prompt": "¿Qué acción realiza la palabra clave yield dentro de una función en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Entrega un valor al consumidor y suspende temporalmente la función congelando sus variables locales hasta la siguiente solicitud"
+        },
+        {
+          "id": "b",
+          "text": "Destruye la función y reinicia el intérprete"
+        },
+        {
+          "id": "c",
+          "text": "Retorna inmediatamente un valor booleano y cancela el bucle"
+        },
+        {
+          "id": "d",
+          "text": "Guarda el valor en un archivo JSON en disco"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "yield entrega un valor y pausa la ejecución de la función preservando el frame y las variables locales para continuar en la próxima llamada a next()."
+    },
+    {
+      "id": "q_py3_01_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué excepción se dispara cuando un iterador se agota y ya no tiene más elementos que producir?",
       "options": [
         {
           "id": "a",
@@ -23,11 +49,117 @@
         },
         {
           "id": "d",
-          "text": "EndOfStream"
+          "text": "KeyError"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "StopIteration es la señal estándar del protocolo de iteración para indicar que no hay más elementos."
+      "explanation": "StopIteration es la excepción estándar del protocolo de iteración de Python que indica el fin de la secuencia."
+    },
+    {
+      "id": "q_py3_01_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la principal ventaja de utilizar una generator expression (x for x in l) frente a una list comprehension [x for x in l] al trabajar con millones de registros?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Consume memoria constante O(1) produciendo datos bajo demanda en lugar de reservar memoria para toda la colección a la vez"
+        },
+        {
+          "id": "b",
+          "text": "Es compatible con versiones antiguas de Python 2"
+        },
+        {
+          "id": "c",
+          "text": "Convierte los números automáticamente a formato hexadecimal"
+        },
+        {
+          "id": "d",
+          "text": "Permite acceder por índices negativos más rápido"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Las generator expressions implementan evaluación perezosa, generando cada dato en el momento exacto en que se solicita con un consumo mínimo de RAM."
+    },
+    {
+      "id": "q_py3_01_04",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué tipo de objeto produce la llamada a una función que define al menos una instrucción yield?",
+      "prompt_code": "def gen_func():\n    yield 42\n\ng = gen_func()\nprint(type(g).__name__)",
+      "options": [
+        {
+          "id": "a",
+          "text": "generator"
+        },
+        {
+          "id": "b",
+          "text": "int"
+        },
+        {
+          "id": "c",
+          "text": "function"
+        },
+        {
+          "id": "d",
+          "text": "list"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Invocar una función generadora no ejecuta su bloque interno inmediatamente; devuelve un objeto de tipo 'generator'."
+    },
+    {
+      "id": "q_py3_01_05",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué imprime este código al utilizar 'yield from' sobre una lista anidada?",
+      "prompt_code": "def emitir():\n    yield from [10, 20]\n\nprint(list(emitir()))",
+      "options": [
+        {
+          "id": "a",
+          "text": "[10, 20]"
+        },
+        {
+          "id": "b",
+          "text": "[[10, 20]]"
+        },
+        {
+          "id": "c",
+          "text": "30"
+        },
+        {
+          "id": "d",
+          "text": "TypeError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "yield from itera sobre la secuencia secundaria entregando sus elementos directamente uno a uno, produciendo [10, 20]."
+    },
+    {
+      "id": "q_py3_01_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué métodos especiales debe implementar una clase para cumplir completamente el protocolo de iterador en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "__iter__() y __next__()"
+        },
+        {
+          "id": "b",
+          "text": "__init__() y __del__()"
+        },
+        {
+          "id": "c",
+          "text": "__getitem__() y __setitem__()"
+        },
+        {
+          "id": "d",
+          "text": "__enter__() y __exit__()"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El protocolo formal de iterador exige implementar __iter__() (que retorna el propio iterador) y __next__() (que produce el siguiente valor o lanza StopIteration)."
     }
   ]
 }

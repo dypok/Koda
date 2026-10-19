@@ -4,73 +4,128 @@
   "code": "DA_M02",
   "slug": "pandas-series-dataframes",
   "course_slug": "data-analytics",
-  "title": "Pandas: Estructuras Series, DataFrames e Ingestión",
-  "objective": "Cargar datasets masivos desde CSV, Excel y Parquet en DataFrames de Pandas, e inspeccionar con .head(), .info() y .describe().",
-  "description": "La navaja suiza del analista de datos: tablas bidimensionales con índices etiquetados, selección por loc/iloc y profiling estadístico.",
+  "title": "Pandas: Estructuras Series, DataFrames e Ingestion",
+  "objective": "Dominar las estructuras fundamentales Series y DataFrame, metodos de ingestion y seleccion con .loc e .iloc.",
+  "description": "La biblioteca esencial de analisis de datos en Python: indexacion, ingestion multiformato y filtrado booleano de alta velocidad.",
   "position": 42,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 280
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_da_02_01",
       "code": "S01",
-      "title": "DataFrames e Inspección Inicial",
-      "slug": "dataframes-inspeccion",
+      "title": "Estructuras, Ingestion y Seleccion con Pandas",
+      "slug": "estructuras-ingestion-seleccion-pandas",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 45,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_da_02_01",
           "code": "L01",
-          "title": "Estructura de un DataFrame y Carga con read_csv",
-          "slug": "dataframe-base",
+          "title": "Series y DataFrames: Indice y Tipos de Datos",
+          "slug": "series-dataframes-indice",
           "position": 1,
-          "concept_id": "da-pandas",
-          "objective": "Dominar la anatomía de un DataFrame: índice, columnas y tipos de datos (dtypes).",
-          "theory_markdown": "En **Pandas**, una columna individual es una **Series**, y una tabla completa es un **DataFrame**.\n\nTres métodos para entender cualquier dataset en 5 segundos:\n1. `df.head(5)`: Muestra las primeras 5 filas.\n2. `df.info()`: Revela tipos de datos (int64, float64, object), columnas y recuento de valores no nulos.\n3. `df.describe()`: Genera un resumen estadístico instantáneo (media, desviación estándar, percentiles 25%, 50%, 75%, mínimo y máximo).",
+          "concept_id": "da-pandas-structures",
+          "objective": "Comprender la anatomia de una Serie unidimensional y un DataFrame bidimensional, y el rol del Indice.",
+          "theory_markdown": "**Pandas** esta construido sobre NumPy pero anade etiquetas explicitas en filas y columnas mediante el concepto de **Indice** (`Index`).\n\n### Las dos estructuras core\n1. **`pd.Series`:** Array unidimensional homogeneo etiquetado.\n   Posee datos (`values`) y un indice (`index`). Cada columna de un DataFrame es una Serie.\n2. **`pd.DataFrame`:** Tabla bidimensional estructurada en filas y columnas, donde cada columna puede tener un tipo de dato (`dtype`) diferente (enteros, flotantes, strings, fechas, booleanos).\n\n### Atributos estructurales\n- `df.shape`: Tupla `(filas, columnas)`.\n- `df.columns`: Lista o Index de nombres de columnas.\n- `df.index`: Rango o etiquetas de las filas.\n- `df.dtypes`: Tipos de datos por columna.",
           "examples": [
             {
-              "title": "Creación y análisis descriptivo de un DataFrame",
-              "code": "import pandas as pd\n\ndata = {\n    \"estudiante\": [\"Ana\", \"Carlos\", \"Elena\", \"Marcos\"],\n    \"calificacion\": [95, 82, 90, 78],\n    \"aprobado\": [True, True, True, True]\n}\ndf = pd.DataFrame(data)\nprint(df.head(2))\nprint(\"\\nPromedio:\", df[\"calificacion\"].mean())",
-              "output": "  estudiante  calificacion  aprobado\n0        Ana            95      True\n1     Carlos            82      True\n\nPromedio: 86.25",
-              "explanation": "Pandas combina etiquetas de filas y columnas con operaciones agregadas automáticas."
+              "title": "Creacion manual de una Serie y un DataFrame",
+              "code": "import pandas as pd\n\nedades = pd.Series([23, 30, 28], index=[\"Ana\", \"Luis\", \"Sara\"], name=\"edad\")\nprint(edades[\"Luis\"])\n\ndf = pd.DataFrame({\n    \"nombre\": [\"Ana\", \"Luis\", \"Sara\"],\n    \"edad\": [23, 30, 28],\n    \"activo\": [True, False, True]\n})\nprint(df.dtypes)",
+              "output": "30\nnombre     object\nedad        int64\nactivo       bool\ndtype: object",
+              "explanation": "El DataFrame asigna tipos de datos especificos a cada columna de forma automatica."
             }
           ],
-          "common_errors": "Confundir `.loc[]` (selección por nombre de etiqueta o condición booleana) con `.iloc[]` (selección por posición entera numérica).",
+          "common_errors": "Creer que df['columna'] devuelve una lista ordinaria de Python, cuando en realidad devuelve una instancia de pd.Series con su propio indice y metodos vectorizados.",
           "mini_exercise": {
-            "starter_code": "import pandas as pd\ndf = pd.DataFrame({\"ventas\": [100, 250, 400]})\n# Calcula el total de ventas con df[\"ventas\"].sum()\ntotal = ...\nprint(total)",
-            "instructions": "Usa df[\"ventas\"].sum() para obtener 750.",
-            "solution": "import pandas as pd\ndf = pd.DataFrame({\"ventas\": [100, 250, 400]})\ntotal = df[\"ventas\"].sum()\nprint(total)"
+            "instructions": "Crea una Serie llamada 'precios' con valores [10.5, 20.0, 15.0] e indice ['a', 'b', 'c'].",
+            "starter_code": "import pandas as pd\n\n# Crea la Serie precios\nprecios = ...",
+            "solution": "import pandas as pd\n\nprecios = pd.Series([10.5, 20.0, 15.0], index=[\"a\", \"b\", \"c\"])"
           },
           "key_takeaways": [
-            "Un DataFrame es una tabla 2D compuesta por Series.",
-            "pd.read_csv() y pd.read_parquet() ingieren datos a alta velocidad.",
-            ".describe() calcula estadísticas de todas las columnas numéricas."
+            "Una Serie es un vector 1D con indice etiquetado; un DataFrame es una tabla 2D.",
+            "Cada columna de un DataFrame es una Serie de Pandas.",
+            "df.dtypes indica el tipo de dato asignado a cada columna."
           ],
           "exercise": {
             "id": "ex_da_02_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Qué método de un DataFrame de Pandas debes usar para ver el tipo de dato de cada columna y si existen valores nulos?",
+            "prompt": "Cual es la diferencia estructural entre un ndarray 2D de NumPy y un DataFrame de Pandas?",
             "options": [
               {
                 "id": "a",
-                "text": "df.info()"
+                "text": "El DataFrame soporta columnas heterogeneas con distintos dtypes e indices etiquetados para filas y columnas, mientras que el ndarray exige tipo uniforme."
               },
               {
                 "id": "b",
-                "text": "df.check()"
+                "text": "NumPy soporta tablas pero Pandas solo vectores de 1 dimension."
+              },
+              {
+                "id": "c",
+                "text": "Pandas solo puede almacenar hasta 500 filas en memoria."
+              },
+              {
+                "id": "d",
+                "text": "No existe diferencia, son clases identicas."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Pandas extiende la velocidad de NumPy permitiendo tabular datos tabulares reales con columnas de diferentes tipos (fechas, texto, numeros) e indices alineados."
+          }
+        },
+        {
+          "id": "les_da_02_02",
+          "code": "L02",
+          "title": "Ingestion de Datos y Diagnostico Inicial",
+          "slug": "ingestion-datos-diagnostico",
+          "position": 2,
+          "concept_id": "da-pandas-ingestion-diagnostics",
+          "objective": "Cargar datos desde CSV, Parquet o Excel aplicando parametros de optimizacion e inspeccionar estructura y estadisticas.",
+          "theory_markdown": "Pandas dispone de lectores de alta velocidad para multiples formatos:\n- `pd.read_csv('archivo.csv', sep=',', usecols=['id', 'valor'], parse_dates=['fecha'])`\n- `pd.read_parquet('archivo.parquet')` (formato columnar binario ultrarrapido recomendado para big data).\n- `pd.read_excel('archivo.xlsx', sheet_name='Ventas')`.\n\n### Metodos de Diagnostico Inmediato\nTras cargar un conjunto de datos, se deben ejecutar tres inspecciones fundamentales:\n1. `df.head(n)` / `df.tail(n)`: Muestra las primeras o ultimas n filas.\n2. `df.info()`: Informa el numero de filas, columnas, nombres, conteo de valores no nulos y uso exacto de memoria RAM.\n3. `df.describe()`: Genera un resumen estadistico instantaneo de las columnas numericas (conteo, media, desviacion estandar, minimo, percentiles 25%, 50%, 75% y maximo).",
+          "examples": [
+            {
+              "title": "Carga de CSV y resumen estadistico",
+              "code": "import pandas as pd\n\n# Simulando DataFrame cargado\ndf = pd.DataFrame({\"ventas\": [100, 250, 400, 150], \"clientes\": [10, 25, 30, 15]})\nprint(df.describe())",
+              "output": "           ventas   clientes\ncount    4.000000   4.000000\nmean   225.000000  20.000000\nstd    132.287566   8.888194\nmin    100.000000  10.000000\n50%    200.000000  20.000000\nmax    400.000000  30.000000",
+              "explanation": "describe() entrega de inmediato las metricas descriptivas parametricas y de posicion del conjunto."
+            }
+          ],
+          "common_errors": "Cargar archivos CSV con columnas de fechas sin indicar parse_dates, lo que deja las fechas como cadenas ordinarias ('object') impidiendo filtrados temporales posteriores.",
+          "mini_exercise": {
+            "instructions": "Invoca el metodo de df que imprime el tipo de datos de cada columna y el conteo de valores no nulos.",
+            "starter_code": "import pandas as pd\ndf = pd.DataFrame({\"a\": [1, 2], \"b\": [3, 4]})\n\n# Muestra el diagnostico de tipos y no-nulos\n",
+            "solution": "df.info()"
+          },
+          "key_takeaways": [
+            "pd.read_csv y pd.read_parquet ingieren datos optimizando columnas con usecols y parse_dates.",
+            "df.info() audita la integridad, nulos y huella de memoria RAM.",
+            "df.describe() calcula estadisticas parametricas y percentiles automaticamente."
+          ],
+          "exercise": {
+            "id": "ex_da_02_02",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "Cual metodo de un DataFrame de Pandas se debe invocar para obtener un resumen que incluya media, desviacion estandar y percentiles de las columnas numericas?",
+            "options": [
+              {
+                "id": "a",
+                "text": "df.describe()"
+              },
+              {
+                "id": "b",
+                "text": "df.info()"
               },
               {
                 "id": "c",
@@ -78,11 +133,121 @@
               },
               {
                 "id": "d",
-                "text": "df.types()"
+                "text": "df.stats()"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "df.info() muestra el recuento de no nulos, los dtypes de cada columna y el uso de memoria RAM total."
+            "explanation": "describe() es la funcion analitica estandar para generar la tabla de estadistica descriptiva de variables numericas en Pandas."
+          }
+        },
+        {
+          "id": "les_da_02_03",
+          "code": "L03",
+          "title": "Indexacion Estricta: .loc vs .iloc",
+          "slug": "indexacion-loc-iloc",
+          "position": 3,
+          "concept_id": "da-pandas-loc-iloc",
+          "objective": "Distinguir y utilizar correctamente la seleccion por etiquetas (.loc) y por posicion entera (.iloc).",
+          "theory_markdown": "Una de las fuentes mas comunes de errores en Pandas es la indexacion ambigua. Para eliminar la ambiguedad existen dos accesores obligatorios:\n\n### 1. `.loc[]` (Basado en Etiquetas / Labels)\nSelecciona filas y columnas por sus **nombres o etiquetas de indice**:\n- Sintaxis: `df.loc[etiqueta_filas, etiqueta_columnas]`\n- En slicing con `.loc`, **ambos extremos son inclusivos** (`df.loc['a':'c']` incluye 'c').\n\n### 2. `.iloc[]` (Basado en Posicion Entera / Integer Location)\nSelecciona filas y columnas por sus **posiciones numericas enteras** (0-indexed):\n- Sintaxis: `df.iloc[posicion_filas, posicion_columnas]`\n- En slicing con `.iloc`, se sigue la regla estandar de Python: **el extremo superior es excluyente** (`df.iloc[0:3]` selecciona posiciones 0, 1 y 2).",
+          "examples": [
+            {
+              "title": "Comparacion practica de seleccion con .loc e .iloc",
+              "code": "import pandas as pd\n\ndf = pd.DataFrame({\n    \"producto\": [\"Mouse\", \"Teclado\", \"Monitor\"],\n    \"precio\": [25, 45, 180]\n}, index=[\"p1\", \"p2\", \"p3\"])\n\n# Seleccion con .loc (por etiqueta):\nprint(df.loc[\"p2\", \"precio\"])  # 45\n\n# Seleccion con .iloc (por posicion entera):\nprint(df.iloc[1, 1])           # 45",
+              "output": "45\n45",
+              "explanation": ".loc usa las etiquetas 'p2' y 'precio'; .iloc usa los indices enteros 1 (segunda fila) y 1 (segunda columna)."
+            }
+          ],
+          "common_errors": "Intentar usar numeros en .loc cuando el indice contiene etiquetas de texto, o pasar nombres de columnas a .iloc, arrojando TypeError o KeyError.",
+          "mini_exercise": {
+            "instructions": "Usa .iloc para seleccionar las primeras 3 filas y las primeras 2 columnas del DataFrame 'df'.",
+            "starter_code": "import pandas as pd\ndf = pd.DataFrame({\"a\": [1,2,3,4], \"b\": [5,6,7,8], \"c\": [9,10,11,12]})\n\n# Selecciona con .iloc\nsub_df = ...",
+            "solution": "sub_df = df.iloc[:3, :2]"
+          },
+          "key_takeaways": [
+            ".loc indexa por etiquetas de texto y es inclusivo en ambos limites de rango.",
+            ".iloc indexa estrictamente por enteros (0 a N-1) y excluye el limite superior.",
+            "Ambos accesores admiten el formato [filas, columnas]."
+          ],
+          "exercise": {
+            "id": "ex_da_02_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es la diferencia principal entre df.loc[0:3] y df.iloc[0:3] cuando el indice del DataFrame es numerico [0, 1, 2, 3, 4]?",
+            "options": [
+              {
+                "id": "a",
+                "text": "df.loc[0:3] incluye las etiquetas hasta el 3 (4 filas: 0, 1, 2, 3); df.iloc[0:3] sigue la regla de Python y excluye el limite superior (3 filas: 0, 1, 2)."
+              },
+              {
+                "id": "b",
+                "text": "df.iloc[0:3] selecciona columnas y df.loc[0:3] selecciona filas."
+              },
+              {
+                "id": "c",
+                "text": "df.loc arroja un error si el indice es numerico."
+              },
+              {
+                "id": "d",
+                "text": "No existe ninguna diferencia."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Por definicion, el slicing con .loc incluye el extremo final porque se basa en etiquetas, mientras que .iloc emula los rangos normales de Python excluyendo el extremo derecho."
+          }
+        },
+        {
+          "id": "les_da_02_04",
+          "code": "L04",
+          "title": "Filtrado Booleano y Consultas con .query()",
+          "slug": "filtrado-booleano-query",
+          "position": 4,
+          "concept_id": "da-pandas-boolean-query",
+          "objective": "Filtrar DataFrames utilizando condiciones booleanas compuestas con operadores bit a bit y el metodo .query().",
+          "theory_markdown": "Para filtrar filas que satisfagan criterios de negocio en Pandas se utilizan dos enfoques:\n\n### 1. Mascaras Booleanas Compuestas\nEn Pandas no se pueden usar las palabras reservadas `and`, `or`, `not` de Python para operar Series. Se deben usar obligatoriamente los operadores bit a bit y **encerrar cada condicion entre parentesis**:\n- `&` para Y logico (AND).\n- `|` para O logico (OR).\n- `~` para negacion (NOT).\n- `.isin([val1, val2])` para evaluar membresia en una lista.\n\nEjemplo: `df[(df['edad'] >= 18) & (df['pais'] == 'Colombia')]`\n\n### 2. El Metodo `.query()`\nPermite escribir filtros mediante una cadena de texto limpia y altamente legible:\n```python\nlimite = 50\nresultado = df.query('precio > @limite and categoria == \"Electronica\"')\n```\nEl simbolo `@` permite referenciar variables externas del entorno local de Python.",
+          "examples": [
+            {
+              "title": "Filtrado con operadores y con .query",
+              "code": "import pandas as pd\n\ndf = pd.DataFrame({\n    \"cliente\": [\"A\", \"B\", \"C\", \"D\"],\n    \"gasto\": [120, 45, 300, 80],\n    \"vip\": [True, False, True, False]\n})\n\n# Metodo 1: Mascara con parentesis y &\nfiltro1 = df[(df[\"gasto\"] > 100) & (df[\"vip\"] == True)]\n\n# Metodo 2: .query()\nfiltro2 = df.query(\"gasto > 100 and vip == True\")\nprint(filtro1[\"cliente\"].tolist() == filtro2[\"cliente\"].tolist())",
+              "output": "True",
+              "explanation": "Ambos metodos producen exactamente el mismo subconjunto de datos filtrados."
+            }
+          ],
+          "common_errors": "Omitir los parentesis en expresiones como `df[df['edad'] > 18 & df['activo'] == True]`, lo que causa un ValueError por la precedencia de operadores en Python.",
+          "mini_exercise": {
+            "instructions": "Usa df.query para filtrar filas donde 'precio' sea mayor a 100 y 'en_stock' sea True.",
+            "starter_code": "import pandas as pd\ndf = pd.DataFrame({\"precio\": [150, 80, 200], \"en_stock\": [True, True, False]})\n\n# Filtra con .query\nfiltrado = ...",
+            "solution": "filtrado = df.query(\"precio > 100 and en_stock == True\")"
+          },
+          "key_takeaways": [
+            "El filtrado con mascaras booleanas exige operadores &, |, ~ y parentesis obligatorios.",
+            ".isin() evalua pertenencia a una coleccion de forma vectorizada.",
+            ".query() proporciona una sintaxis compacta y permite referenciar variables locales con @."
+          ],
+          "exercise": {
+            "id": "ex_da_02_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Por que es mandatorio encerrar cada condicion entre parentesis al filtrar un DataFrame con multiples condiciones, ej: df[(df['A'] > 0) & (df['B'] < 10)]?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque en Python el operador bit a bit '&' tiene mayor precedencia matematica que los operadores de comparacion '>' y '<'."
+              },
+              {
+                "id": "b",
+                "text": "Porque Pandas arroja error si el codigo no tiene parentesis redondos."
+              },
+              {
+                "id": "c",
+                "text": "Para convertir los datos a tuplas de Python."
+              },
+              {
+                "id": "d",
+                "text": "Para obligar a Pandas a usar la tarjeta grafica GPU."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "En Python '&' se evalua antes que '>' o '<'. Sin parentesis, '0 & df['B']' se evaluaria primero, corrompiendo la logica y arrojando una excepcion."
           }
         }
       ]
