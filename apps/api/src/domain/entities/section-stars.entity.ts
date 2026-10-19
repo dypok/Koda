@@ -122,6 +122,11 @@ export class SectionStarsEntity {
       } else {
         xpAwarded += 30;
       }
+    } else {
+      // En reintentos o practica de una seccion ya aprobada, si se envia targetXp explicito, acreditarlo
+      if (typeof targetXp === 'number' && targetXp > 0) {
+        xpAwarded += targetXp;
+      }
     }
     if (attemptStars === 3 && previousStars < 3 && (!targetXp || targetXp <= 30)) {
       xpAwarded += 10;
