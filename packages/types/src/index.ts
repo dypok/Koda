@@ -358,6 +358,7 @@ export interface LessonAnswerSubmission {
   input_text?: string;
   ordered_block_ids?: string[];
   time_spent_seconds?: number;
+  xp_earned?: number;
 }
 
 export interface LessonAnswerFeedback {

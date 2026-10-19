@@ -237,6 +237,7 @@ export class EvaluationService {
       selected_option_ids: string[];
       execution_code?: string;
       prediction_answer?: string;
+      xp_earned?: number;
     },
   ): Promise<LessonAnswerFeedback> {
     return requestWithAuth<LessonAnswerFeedback>(`/learning/lessons/${lessonId}/answer`, {

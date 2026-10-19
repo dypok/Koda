@@ -9,6 +9,8 @@ import { useLessonEngine } from './useLessonEngine';
 import { useLessonKeyboardShortcuts } from '@/hooks/useLessonKeyboardShortcuts';
 import { useRoadmapStore } from '@/stores/roadmap.store';
 import { cn } from '@/lib/utils';
+import { getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
+import type { GraphDataset, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 
 import { OrbitFieldBackground } from '@/components/landing/OrbitFieldBackground';
 import { EvaluationService } from '@/services/learning/evaluation.service';
@@ -215,6 +217,50 @@ function sampleQuiz(bank: ContentExercise[], seed: number): ContentExercise[] {
   return shuffled(picked, seed + 99);
 }
 
+function findNodeInDataset(
+  dataset: GraphDataset | null | undefined,
+  sectionRef: string,
+  moduleSlug?: string
+): GraphNode | null {
+  if (!dataset?.nodes?.length) return null;
+
+  const sRefLower = sectionRef.toLowerCase();
+
+  // 1. Coincidencia directa por ID exacto (ej. 'py-m04', 'les-05', 'py-boss-logic', 'py2-01')
+  const direct = dataset.nodes.find((n) => n.id.toLowerCase() === sRefLower);
+  if (direct) return direct;
+
+  // 2. Coincidencia por mapeo canónico de slug en NODE_TO_SLUG_MAP
+  if (moduleSlug) {
+    const targetSlugLower = moduleSlug.toLowerCase();
+    const bySlug = dataset.nodes.find((n) => {
+      const nodeSlug = NODE_TO_SLUG_MAP[n.id]?.moduleSlug;
+      return nodeSlug && nodeSlug.toLowerCase() === targetSlugLower;
+    });
+    if (bySlug) return bySlug;
+  }
+
+  // 3. Coincidencia por código numérico de lección (ej. '04', '4', 'm04', 'les-04')
+  const codeMatch = sectionRef.match(/(?:m|les-?)0?(\d+)/i);
+  if (codeMatch) {
+    const num = codeMatch[1].padStart(2, '0');
+    const byCode = dataset.nodes.find((n) => n.code === num);
+    if (byCode) return byCode;
+  }
+
+  // 4. Coincidencia por similitud de tokens en label
+  if (moduleSlug) {
+    const slugTokens = moduleSlug.toLowerCase().split('-');
+    const byToken = dataset.nodes.find((n) => {
+      const labelLower = n.label.toLowerCase();
+      return slugTokens.some((t) => t.length > 3 && labelLower.includes(t));
+    });
+    if (byToken) return byToken;
+  }
+
+  return null;
+}
+
 export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sectionRef }) => {
   const parsed = useMemo(() => parseCourse(courseId, sectionRef), [courseId, sectionRef]);
   const [module, setModule] = useState<ContentModule | null>(null);
@@ -226,15 +272,21 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   const completeSectionNode = useRoadmapStore((s) => s.completeSectionNode);
 
   const lessonsDataset = useRoadmapStore((s) => s.lessonsDataset);
+  const courseDataset = useMemo(() => getLessonsDatasetForCourse(courseId), [courseId]);
+
   const currentNode = useMemo(() => {
     return (
-      lessonsDataset?.nodes?.find(
-        (n) =>
-          n.id === sectionRef ||
-          n.id.toLowerCase().replace(/^py-m0?/, 'les-0') === sectionRef.toLowerCase().replace(/^py-m0?/, 'les-0')
-      ) ?? null
+      findNodeInDataset(lessonsDataset, sectionRef, parsed?.moduleSlug) ||
+      findNodeInDataset(courseDataset, sectionRef, parsed?.moduleSlug) ||
+      null
     );
-  }, [lessonsDataset, sectionRef]);
+  }, [lessonsDataset, courseDataset, sectionRef, parsed?.moduleSlug]);
+
+  const nodeTargetXp = useMemo(() => {
+    if (currentNode?.xp && currentNode.xp > 0) return currentNode.xp;
+    if ((module as any)?.xp?.on_pass && (module as any).xp.on_pass > 0) return (module as any).xp.on_pass;
+    return 120;
+  }, [currentNode?.xp, module]);
 
   const sessionExerciseXpRef = useRef<number>(0);
 
@@ -333,7 +385,6 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       const accuracy = total > 0 ? Math.round((ok / total) * 100) : 100;
       if (accuracy >= 70) {
         completeSectionNode(sectionRef, ok === total ? 3 : 2);
-        const nodeTargetXp = currentNode?.xp ?? 120;
         const completionReward = Math.max(30, nodeTargetXp - sessionExerciseXpRef.current);
         if (parsed) {
           EvaluationService.completeSection(sectionRef, {
@@ -345,7 +396,10 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             .then((res) => {
               const currentUser = useAuthStore.getState().user;
               if (currentUser) {
-                const awardXp = res.xpAwarded ?? completionReward;
+                const awardXp =
+                  typeof res.xpAwarded === 'number' && res.xpAwarded > 0
+                    ? res.xpAwarded
+                    : completionReward;
                 const newTotalXp = res.userTotalXp ?? (currentUser.totalXp + awardXp);
                 const todayStr = new Date().toLocaleDateString('en-CA');
                 const lastStudyStr = currentUser.lastStudyDate ? currentUser.lastStudyDate.slice(0, 10) : null;
@@ -383,7 +437,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         }
       }
     },
-    [completeSectionNode, sectionRef, parsed, courseId, currentNode]
+    [completeSectionNode, sectionRef, parsed, courseId, nodeTargetXp]
   );
 
   const handleCompleteCurrent = useCallback(() => {
@@ -476,7 +530,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
           </h1>
           <p className="text-slate-400 text-sm sm:text-base max-w-md">
             Quiz: <span className="font-mono font-bold text-orange-400">{quizScore.ok}/{quizScore.total}</span> aciertos
-            {passed ? ` · +${currentNode?.xp ?? 120} XP de maestría` : ' · necesitas 70% de aciertos para avanzar'}
+            {passed ? ` · +${nodeTargetXp} XP de maestría` : ' · necesitas 70% de aciertos para avanzar'}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
@@ -581,7 +635,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             currentIndex={lessonIdx}
             totalCount={section.lessons.length}
             isLast={lessonIdx + 1 >= section.lessons.length}
-            nodeTargetXp={currentNode?.xp ?? 120}
+            nodeTargetXp={nodeTargetXp}
           />
         ) : (
           <div className="w-full max-w-md mx-auto my-auto rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-8 flex flex-col items-center gap-4 text-center shadow-2xl">
@@ -681,6 +735,7 @@ function LessonView({
         if (lesson?.id) {
           EvaluationService.evaluateLessonAnswer(lesson.id, {
             selected_option_ids: engine.selected,
+            xp_earned: checkRes?.xp,
           }).catch((err) => {
             console.warn('Backend lesson answer sync fallback:', err?.message);
           });
@@ -925,6 +980,7 @@ function LessonView({
                     if (lesson?.id) {
                       EvaluationService.evaluateLessonAnswer(lesson.id, {
                         selected_option_ids: engine.selected,
+                        xp_earned: checkRes?.xp,
                       }).catch((err) => {
                         console.warn('Backend lesson answer sync fallback:', err?.message);
                       });
