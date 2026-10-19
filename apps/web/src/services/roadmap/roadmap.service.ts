@@ -1,5 +1,4 @@
 import { GraphDataset } from '@/models/roadmap/roadmap-graph.types';
-import { PYTHON_COURSES_DATASET } from '@/models/roadmap/python-courses-graph.mock';
 import { PYTHON_BASIC_LESSONS_DATASET, getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
 import { useAuthStore } from '@/stores/auth.store';
 
@@ -72,10 +71,12 @@ export class RoadmapService {
   public static async getCoursesGraph(langSlug: string): Promise<GraphDataset> {
     try {
       const data = await fetchWithFallback<{ dataset?: GraphDataset }>(`/roadmap/${langSlug}/courses`);
-      return sanitizeGraphDataset(data?.dataset || PYTHON_COURSES_DATASET);
+      if (data?.dataset && Array.isArray(data.dataset.nodes) && data.dataset.nodes.length > 0) {
+        return sanitizeGraphDataset(data.dataset);
+      }
+      return { sectorTitle: `${langSlug.toUpperCase()} ROADMAP`, progressPercent: 0, nodes: [], connections: [] };
     } catch {
-      // Graceful offline-first fallback to canonical seed
-      return sanitizeGraphDataset(PYTHON_COURSES_DATASET);
+      return { sectorTitle: `${langSlug.toUpperCase()} ROADMAP`, progressPercent: 0, nodes: [], connections: [] };
     }
   }
 
@@ -94,7 +95,7 @@ export class RoadmapService {
       const res = await fetch(`${API_BASE_URL}/roadmap/seed`, {
         method: 'POST',
         headers: getAuthHeaders(),
-        body: JSON.stringify({ language: langSlug, coursesDataset: PYTHON_COURSES_DATASET, lessonsDataset: PYTHON_BASIC_LESSONS_DATASET }),
+        body: JSON.stringify({ language: langSlug, lessonsDataset: PYTHON_BASIC_LESSONS_DATASET }),
       });
       return res.ok;
     } catch {

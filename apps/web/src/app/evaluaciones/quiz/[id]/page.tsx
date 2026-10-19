@@ -107,7 +107,7 @@ export default function QuizPage(props: QuizPageProps) {
       if (attemptId) {
         router.push(`/evaluaciones/resumen/${attemptId}`);
       } else {
-        router.push('/dashboard');
+        router.push('/');
       }
     } catch (err: any) {
       console.error('Error al calificar el quiz:', err);
