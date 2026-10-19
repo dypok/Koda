@@ -18,16 +18,15 @@ export class ProgressMapper {
 
   public static moduleProgressToDomain(raw: PrismaUserModuleProgress): ModuleProgressEntity {
     return new ModuleProgressEntity({
-
       id: raw.id,
       userId: raw.userId,
-      moduleId: raw.moduleId,
-      courseId: raw.courseId,
-      languageCode: raw.languageCode,
+      moduleId: raw.moduleSlug,
+      courseId: raw.courseSlug,
+      languageCode: raw.trackSlug,
       status: raw.status as ModuleProgressStatus,
-      starsEarnedPercentage: raw.score ? Number(raw.score) : 0,
+      starsEarnedPercentage: raw.starsPercentage ? Number(raw.starsPercentage) : 0,
       isUnlocked: raw.isUnlocked,
-      unlockedByDiagnostic: raw.unlockedByDiagnostic,
+      unlockedByDiagnostic: false,
       completedAt: raw.completedAt,
       updatedAt: raw.updatedAt,
     });

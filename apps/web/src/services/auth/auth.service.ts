@@ -42,6 +42,7 @@ export interface BackendUserSession {
   dailyGoalId: string;
   dailyGoalMinutes: number;
   lastStudyDate?: string | null;
+  isActiveToday?: boolean;
   createdAt?: string;
 }
 

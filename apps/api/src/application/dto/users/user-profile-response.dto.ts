@@ -32,7 +32,7 @@ export class UserProfileResponseDto {
   @ApiPropertyOptional({ description: 'Documento legal formateado con tipo y máscara', example: 'CC ***4567' })
   formattedMaskedDocument?: string | null;
 
-  @ApiPropertyOptional({ description: 'Biografía corta del estudiante', example: 'Aprendiendo Python 3.12 y algoritmos en Koda 🦊' })
+  @ApiPropertyOptional({ description: 'Biografía corta del estudiante', example: 'Aprendiendo Python 3.12 y algoritmos en Koda' })
   bio?: string | null;
 
   @ApiProperty({ description: 'Zona horaria configurada', example: 'America/Bogota' })
@@ -82,6 +82,9 @@ export class UserProfileResponseDto {
   @ApiPropertyOptional({ description: 'Fecha del último día de estudio activo (ISO-8601)', example: '2026-09-19T23:00:00.000Z' })
   lastStudyDate?: string | null;
 
+  @ApiProperty({ description: 'Indica si el usuario completó una actividad de estudio en el día de hoy', example: true })
+  isActiveToday: boolean;
+
   @ApiProperty({ description: 'Fecha de creación de la cuenta (ISO-8601)', example: '2026-09-15T12:00:00.000Z' })
   createdAt: string;
 
@@ -116,6 +119,21 @@ export class UserProfileResponseDto {
     dto.streakFreezeCount = user.streakFreezeCount;
     dto.totalStudyTimeSeconds = user.totalStudyTimeSeconds;
     dto.lastStudyDate = user.lastStudyDate ? user.lastStudyDate.toISOString() : null;
+
+    const userTz = user.timezone || 'America/Bogota';
+    const now = new Date();
+    let isActiveToday = false;
+    if (user.lastStudyDate) {
+      try {
+        const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: userTz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
+        const lastStudyStr = new Intl.DateTimeFormat('en-CA', { timeZone: userTz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(user.lastStudyDate);
+        isActiveToday = todayStr === lastStudyStr;
+      } catch {
+        isActiveToday = user.lastStudyDate.toISOString().slice(0, 10) === now.toISOString().slice(0, 10);
+      }
+    }
+    dto.isActiveToday = isActiveToday;
+
     dto.createdAt = user.createdAt.toISOString();
     dto.updatedAt = user.updatedAt.toISOString();
     return dto;

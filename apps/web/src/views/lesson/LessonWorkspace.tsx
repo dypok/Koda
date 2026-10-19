@@ -273,50 +273,19 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         return next;
       });
 
-      // Notificar al roadmap store para encender el nodo actual
-      completeSectionNode(sectionRef, 3);
-
-      // Calcular la recompensa de completitud para cumplir con la XP prometida en el nodo
-      const nodeTargetXp = currentNode?.xp ?? 120;
-      const completionReward = Math.max(30, nodeTargetXp - sessionExerciseXpRef.current);
-
-      // Sincronizar completitud de la seccion en PostgreSQL y actualizar AuthStore en tiempo real
-      if (parsed) {
-        EvaluationService.completeSection(sectionRef, {
-          moduleId: parsed.moduleSlug,
-          courseId,
-          accuracyPercentage: 100,
-          targetXp: completionReward,
-        })
-          .then((res) => {
-            const currentUser = useAuthStore.getState().user;
-            if (currentUser) {
-              useAuthStore.getState().updateUserProfile({
-                totalXp: res.userTotalXp ?? (currentUser.totalXp + (res.xpAwarded ?? completionReward)),
-                streak: res.currentStreak ?? (currentUser.streak > 0 ? currentUser.streak : 1),
-                longestStreak: res.longestStreak ?? currentUser.longestStreak,
-                streakFreezeCount: res.streakFreezeCount ?? currentUser.streakFreezeCount,
-                lastStudyDate: new Date().toISOString(),
-              });
-            }
-          })
-          .catch((err) => {
-            // Fallback optimista local si el usuario esta offline o sin sesion activa
-            console.warn('Sync section completion offline fallback:', err?.message);
-            const currentUser = useAuthStore.getState().user;
-            if (currentUser) {
-              const currentStreak = currentUser.streak > 0 ? currentUser.streak : 1;
-              useAuthStore.getState().updateUserProfile({
-                totalXp: (currentUser.totalXp ?? 0) + completionReward,
-                streak: currentStreak,
-                longestStreak: Math.max(currentUser.longestStreak ?? 1, currentStreak),
-                lastStudyDate: new Date().toISOString(),
-              });
-            }
-          });
+      // Asegurar que el usuario tenga racha e isActiveToday activos localmente de forma inmediata
+      const currentUser = useAuthStore.getState().user;
+      if (currentUser) {
+        const curStreak = currentUser.streak > 0 ? currentUser.streak : 1;
+        useAuthStore.getState().updateUserProfile({
+          streak: Math.max(currentUser.streak, curStreak),
+          longestStreak: Math.max(currentUser.longestStreak ?? 1, curStreak),
+          isActiveToday: true,
+          lastStudyDate: new Date().toISOString(),
+        });
       }
     },
-    [completeSectionNode, sectionRef, parsed, courseId, currentNode]
+    []
   );
 
   useEffect(() => {
@@ -358,26 +327,31 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     (ok: number, total: number) => {
       setQuizScore({ ok, total });
       setMode('done');
-      const accuracy = Math.round((ok / Math.max(1, total)) * 100);
+      const accuracy = total > 0 ? Math.round((ok / total) * 100) : 100;
       if (accuracy >= 70) {
         completeSectionNode(sectionRef, ok === total ? 3 : 2);
-        const quizTargetXp = currentNode?.xp ?? 250;
+        const nodeTargetXp = currentNode?.xp ?? 120;
+        const completionReward = Math.max(30, nodeTargetXp - sessionExerciseXpRef.current);
         if (parsed) {
           EvaluationService.completeSection(sectionRef, {
             moduleId: parsed.moduleSlug,
             courseId,
             accuracyPercentage: accuracy,
-            targetXp: quizTargetXp,
+            targetXp: completionReward,
           })
             .then((res) => {
               const currentUser = useAuthStore.getState().user;
               if (currentUser) {
+                const awardXp = res.xpAwarded ?? completionReward;
+                const newTotalXp = res.userTotalXp ?? (currentUser.totalXp + awardXp);
+                const newStreak = res.currentStreak ?? (currentUser.streak > 0 ? currentUser.streak : 1);
                 useAuthStore.getState().updateUserProfile({
-                  totalXp: res.userTotalXp ?? (currentUser.totalXp + (res.xpAwarded ?? quizTargetXp)),
-                  streak: res.currentStreak ?? (currentUser.streak > 0 ? currentUser.streak : 1),
-                  longestStreak: res.longestStreak ?? currentUser.longestStreak,
+                  totalXp: Math.max(currentUser.totalXp, newTotalXp),
+                  streak: Math.max(currentUser.streak, newStreak),
+                  longestStreak: Math.max(currentUser.longestStreak ?? 1, res.longestStreak ?? newStreak),
                   streakFreezeCount: res.streakFreezeCount ?? currentUser.streakFreezeCount,
                   lastStudyDate: new Date().toISOString(),
+                  isActiveToday: true,
                 });
               }
             })
@@ -385,8 +359,13 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
               console.warn('Sync quiz section completion offline fallback:', err?.message);
               const currentUser = useAuthStore.getState().user;
               if (currentUser) {
+                const curStreak = currentUser.streak > 0 ? currentUser.streak : 1;
                 useAuthStore.getState().updateUserProfile({
-                  totalXp: (currentUser.totalXp ?? 0) + quizTargetXp,
+                  totalXp: (currentUser.totalXp ?? 0) + completionReward,
+                  streak: Math.max(currentUser.streak, curStreak),
+                  longestStreak: Math.max(currentUser.longestStreak ?? 1, curStreak),
+                  lastStudyDate: new Date().toISOString(),
+                  isActiveToday: true,
                 });
               }
             });
@@ -667,8 +646,13 @@ function LessonView({
           onExerciseCorrect?.(checkRes.xp);
           const curUser = useAuthStore.getState().user;
           if (curUser) {
+            const curStreak = curUser.streak > 0 ? curUser.streak : 1;
             useAuthStore.getState().updateUserProfile({
               totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
+              streak: Math.max(curUser.streak, curStreak),
+              longestStreak: Math.max(curUser.longestStreak ?? 1, curStreak),
+              isActiveToday: true,
+              lastStudyDate: new Date().toISOString(),
             });
           }
         }
@@ -819,8 +803,13 @@ function LessonView({
                       onExerciseCorrect?.(checkRes.xp);
                       const curUser = useAuthStore.getState().user;
                       if (curUser) {
+                        const curStreak = curUser.streak > 0 ? curUser.streak : 1;
                         useAuthStore.getState().updateUserProfile({
                           totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
+                          streak: Math.max(curUser.streak, curStreak),
+                          longestStreak: Math.max(curUser.longestStreak ?? 1, curStreak),
+                          isActiveToday: true,
+                          lastStudyDate: new Date().toISOString(),
                         });
                       }
                     }

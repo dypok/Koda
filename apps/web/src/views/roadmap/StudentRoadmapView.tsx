@@ -23,12 +23,14 @@ export const StudentRoadmapView: React.FC = () => {
       UserProfileService.getProfile()
         .then((profile) => {
           if (profile) {
+            const currentStoreUser = useAuthStore.getState().user;
             useAuthStore.getState().updateUserProfile({
-              totalXp: profile.totalXp ?? 0,
-              streak: profile.currentStreak ?? 0,
-              longestStreak: profile.longestStreak ?? 0,
-              streakFreezeCount: profile.streakFreezeCount ?? 1,
-              lastStudyDate: profile.lastStudyDate ?? null,
+              totalXp: Math.max(profile.totalXp ?? 0, currentStoreUser?.totalXp ?? 0),
+              streak: Math.max(profile.currentStreak ?? 0, currentStoreUser?.streak ?? 0),
+              longestStreak: Math.max(profile.longestStreak ?? 0, currentStoreUser?.longestStreak ?? 0),
+              streakFreezeCount: profile.streakFreezeCount ?? currentStoreUser?.streakFreezeCount ?? 1,
+              lastStudyDate: profile.lastStudyDate ?? currentStoreUser?.lastStudyDate ?? null,
+              isActiveToday: profile.isActiveToday ?? currentStoreUser?.isActiveToday,
             });
           }
         })

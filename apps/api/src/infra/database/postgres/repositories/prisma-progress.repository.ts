@@ -47,12 +47,10 @@ export class PrismaProgressRepository implements IProgressRepository {
   }
 
   async findModuleProgress(userId: string, moduleId: string): Promise<ModuleProgressEntity | null> {
-    const record = await this.prisma.userModuleProgress.findUnique({
+    const record = await this.prisma.userModuleProgress.findFirst({
       where: {
-        userId_moduleId: {
-          userId,
-          moduleId,
-        },
+        userId,
+        moduleSlug: moduleId,
       },
     });
 
@@ -63,9 +61,9 @@ export class PrismaProgressRepository implements IProgressRepository {
     const records = await this.prisma.userModuleProgress.findMany({
       where: {
         userId,
-        ...(courseId ? { courseId } : {}),
+        ...(courseId ? { courseSlug: courseId } : {}),
       },
-      orderBy: { moduleId: 'asc' },
+      orderBy: { moduleSlug: 'asc' },
     });
 
     return records.map((r) => ProgressMapper.moduleProgressToDomain(r));
@@ -220,31 +218,39 @@ export class PrismaProgressRepository implements IProgressRepository {
         },
       });
 
-      // Sincronizar tabla relacional streaks si existe
+      // Sincronizar tabla relacional streaks diaria
+      const todayDateOnly = new Date(now.toISOString().slice(0, 10));
       try {
         await tx.streak.upsert({
-          where: { userId },
+          where: {
+            userId_activityDate: {
+              userId,
+              activityDate: todayDateOnly,
+            },
+          },
           create: {
             userId,
-            currentStreak,
-            longestStreak,
-            streakFreezeCount,
-            streakFreezeUsedAt,
-            lastActivityDate: now,
-            isActiveToday: true,
+            activityDate: todayDateOnly,
+            timezone: userTimezone,
+            activityCount: 1,
+            lessonsCompletedCount: 1,
+            xpEarnedToday: attemptResult.xpAwarded,
+            dailyGoalMet: true,
+            freezeUsed: streakFreezeUsedAt !== null,
+            firstActivityAt: now,
+            lastActivityAt: now,
           },
           update: {
-            currentStreak,
-            longestStreak,
-            streakFreezeCount,
-            streakFreezeUsedAt: streakFreezeUsedAt ?? undefined,
-            lastActivityDate: now,
-            isActiveToday: true,
-            updatedAt: now,
+            activityCount: { increment: 1 },
+            lessonsCompletedCount: { increment: 1 },
+            xpEarnedToday: { increment: attemptResult.xpAwarded },
+            dailyGoalMet: true,
+            freezeUsed: streakFreezeUsedAt !== null ? true : undefined,
+            lastActivityAt: now,
           },
         });
       } catch {
-        // Silencioso si la tabla streaks no está poblada para este usuario
+        // Silencioso si la tabla streaks no está disponible
       }
 
       // 5. Actualizar progreso del módulo
@@ -259,22 +265,33 @@ export class PrismaProgressRepository implements IProgressRepository {
 
       await tx.userModuleProgress.upsert({
         where: {
-          userId_moduleId: { userId, moduleId },
+          userId_courseSlug_moduleSlug: {
+            userId,
+            courseSlug: courseId,
+            moduleSlug: moduleId,
+          },
         },
         create: {
           userId,
-          moduleId,
-          courseId,
-          languageCode: 'python',
-          status: 'in_progress',
+          trackSlug: 'python',
+          courseSlug: courseId,
+          moduleSlug: moduleId,
+          status: starsPercentage >= 70 ? 'completed' : 'in_progress',
           isUnlocked: true,
-          score: new Prisma.Decimal(starsPercentage),
+          starsPercentage: new Prisma.Decimal(starsPercentage),
+          sectionsTotal: 10,
+          sectionsCompleted: moduleStars.length,
+          starsTotalPossible: maxPossibleModuleStars,
+          starsEarned: totalEarnedStars,
+          completedAt: starsPercentage >= 70 ? now : null,
         },
         update: {
-          score: new Prisma.Decimal(starsPercentage),
+          starsPercentage: new Prisma.Decimal(starsPercentage),
+          sectionsCompleted: moduleStars.length,
+          starsEarned: totalEarnedStars,
           status: starsPercentage >= 70 ? 'completed' : 'in_progress',
-          completedAt: starsPercentage >= 70 ? new Date() : undefined,
-          updatedAt: new Date(),
+          completedAt: starsPercentage >= 70 ? now : undefined,
+          updatedAt: now,
         },
       });
 
@@ -295,29 +312,30 @@ export class PrismaProgressRepository implements IProgressRepository {
   async unlockModule(userId: string, moduleId: string, courseId: string, byDiagnostic = false): Promise<ModuleProgressEntity> {
     const record = await this.prisma.userModuleProgress.upsert({
       where: {
-        userId_moduleId: { userId, moduleId },
+        userId_courseSlug_moduleSlug: {
+          userId,
+          courseSlug: courseId,
+          moduleSlug: moduleId,
+        },
       },
       create: {
         userId,
-        moduleId,
-        courseId,
-        languageCode: 'python',
+        trackSlug: 'python',
+        courseSlug: courseId,
+        moduleSlug: moduleId,
         status: byDiagnostic ? 'completed' : 'in_progress',
         isUnlocked: true,
-        unlockedByDiagnostic: byDiagnostic,
-        score: byDiagnostic ? new Prisma.Decimal(100) : new Prisma.Decimal(0),
+        starsPercentage: byDiagnostic ? new Prisma.Decimal(100) : new Prisma.Decimal(0),
         completedAt: byDiagnostic ? new Date() : null,
       },
       update: {
         isUnlocked: true,
         status: byDiagnostic ? 'completed' : 'in_progress',
-        unlockedByDiagnostic: byDiagnostic ? true : undefined,
-        score: byDiagnostic ? new Prisma.Decimal(100) : undefined,
+        starsPercentage: byDiagnostic ? new Prisma.Decimal(100) : undefined,
         completedAt: byDiagnostic ? new Date() : undefined,
         updatedAt: new Date(),
       },
     });
-
 
     return ProgressMapper.moduleProgressToDomain(record);
   }

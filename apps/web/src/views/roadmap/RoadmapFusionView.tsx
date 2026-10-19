@@ -35,15 +35,16 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
   const streakFreezeCount = user?.streakFreezeCount ?? 1;
 
   const isActiveToday = useMemo(() => {
+    if (user?.isActiveToday !== undefined) return Boolean(user.isActiveToday);
     if (!user?.lastStudyDate) return false;
     try {
-      const studyDate = new Date(user.lastStudyDate).toISOString().slice(0, 10);
-      const today = new Date().toISOString().slice(0, 10);
+      const studyDate = new Date(user.lastStudyDate).toLocaleDateString('en-CA');
+      const today = new Date().toLocaleDateString('en-CA');
       return studyDate === today;
     } catch {
       return false;
     }
-  }, [user?.lastStudyDate]);
+  }, [user?.isActiveToday, user?.lastStudyDate]);
 
   const [showStreakPopover, setShowStreakPopover] = useState(false);
 
