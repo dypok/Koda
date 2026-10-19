@@ -33,7 +33,7 @@ export const RoadmapBranchPill: React.FC = () => {
   };
 
   return (
-    <div ref={boxRef} className="absolute left-4 top-4 z-20">
+    <div ref={boxRef} className="absolute left-4 top-4 z-30">
       <div className="flex items-center gap-2 rounded-xl border border-slate-700/50 bg-slate-900/60 px-2.5 py-1.5 backdrop-blur-xl shadow-xl">
         <div
           aria-label="Koda"
