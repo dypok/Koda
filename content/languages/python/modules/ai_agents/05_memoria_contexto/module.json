@@ -4,85 +4,250 @@
   "code": "IA_M05",
   "slug": "ia-memoria-y-contexto",
   "course_slug": "ai-agents",
-  "title": "Gestión de Memoria y Ventana de Contexto (Context Window)",
-  "objective": "Implementar arquitecturas de memoria para agentes: ventana deslizante (sliding buffer), resumen progresivo y persistencia de estado.",
-  "description": "Los LLMs no tienen memoria por defecto (son stateless): aprende a construir sistemas que recuerden conversaciones largas sin desbordar el límite de tokens.",
+  "title": "Gestion de Memoria y Ventana de Contexto (Context Window)",
+  "objective": "Superar la naturaleza sin estado (stateless) de los LLMs gestionando memoria conversacional: ventanas deslizantes, resumen dinamico y persistencia.",
+  "description": "Patrones de memoria para asistentes y agentes: tecnicas para retener contexto a largo plazo sin desbordar tokens ni disparar costes.",
   "position": 55,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 320
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_ia_05_01",
       "code": "S01",
-      "title": "Estrategias de Memoria para Agentes",
-      "slug": "estrategias-memoria",
+      "title": "Arquitecturas de Memoria y Optimizacion de Contexto",
+      "slug": "arquitecturas-memoria-contexto",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 50,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_ia_05_01",
           "code": "L01",
-          "title": "Memoria de Ventana Deslizante y Resumen Periódico",
-          "slug": "memoria-sliding-summary",
+          "title": "La Naturaleza Sin Estado (Statelessness) de los LLMs",
+          "slug": "naturaleza-stateless-llms",
           "position": 1,
-          "concept_id": "ia-memory",
-          "objective": "Evitar desbordar la ventana de contexto y controlar el costo de tokens en conversaciones prolongadas.",
-          "theory_markdown": "Cada llamada a una API de LLM es totalmente independiente (stateless). Para que un agente \"recuerde\", debemos reenviarle todo el historial de mensajes en cada nueva interacción.\n\nProblema: A medida que la charla crece, el costo de tokens se dispara y eventualmente superas el límite de la ventana de contexto (Context Window).\n\nSoluciones de ingeniería:\n1. **Sliding Window Buffer**: Conserva únicamente los últimos `K` mensajes (ej: últimos 10 turnos).\n2. **Conversation Summary**: Un modelo más ligero y económico (ej: GPT-4o-mini o Gemini Flash) resume periódicamente los primeros 20 mensajes en un párrafo compacto que se inyecta en el `system prompt`.",
+          "concept_id": "ia-memory-statelessness",
+          "objective": "Comprender por que las APIs de modelos de lenguaje no poseen memoria entre peticiones y como se construye la ilusion de continuidad.",
+          "theory_markdown": "Una API de LLM es **completamente stateless (sin estado)**: cada peticion HTTP es una transaccion aislada y atomica. El modelo no guarda memoria de quien eres ni de lo que conversaste hace dos segundos.\n\n### Como se construye la 'memoria'\nLa ilusion de una conversacion continua existe unicamente porque la aplicacion cliente **re-envia todo el historial de mensajes acumulado en cada nueva peticion**:\n\n- Peticion 1: `[User: 'Hola']` -> `Assistant: 'Como te ayudo?'`\n- Peticion 2: `[User: 'Hola', Assistant: 'Como te ayudo?', User: 'Mi nombre es Alex']`\n- Peticion 3: `[User: 'Hola', Assistant: ..., User: 'Mi nombre es Alex', Assistant: ..., User: 'Cual es mi nombre?']`\n\n### El Dilema del Crecimiento Exponencial\nA medida que la conversacion se extiende:\n1. El consumo de tokens de entrada escala exponencialmente en cada turno.\n2. Se incrementa el costo monetario de la API.\n3. Se incrementa la latencia de respuesta.\n4. Se corre el riesgo de desbordar el limite del Context Window.",
           "examples": [
             {
-              "title": "Implementación de buffer de memoria deslizante en Python",
-              "code": "class MemoriaDeslizante:\n    def __init__(self, max_turnos=4):\n        self.historial = []\n        self.max_turnos = max_turnos\n        \n    def agregar(self, rol, contenido):\n        self.historial.append({\"role\": rol, \"content\": contenido})\n        if len(self.historial) > self.max_turnos:\n            self.historial.pop(0)  # Descarta el mensaje más antiguo\n            \nmem = MemoriaDeslizante(max_turnos=2)\nmem.agregar(\"user\", \"Hola\")\nmem.agregar(\"assistant\", \"¡Hola!\")\nmem.agregar(\"user\", \"¿Cómo estás?\")\nprint(\"Mensajes conservados:\", len(mem.historial))",
-              "output": "Mensajes conservados: 2",
-              "explanation": "La memoria deslizante descarta los mensajes viejos para mantenerse siempre por debajo del presupuesto de tokens."
+              "title": "Crecimiento del buffer de memoria",
+              "code": "buffer_conversacion = []\n\ndef chatear(mensaje_usuario: str):\n    buffer_conversacion.append({\"role\": \"user\", \"content\": mensaje_usuario})\n    # Se reenvia TODO el historial acumulado:\n    # respuesta = client.chat(messages=buffer_conversacion)\n    # buffer_conversacion.append({\"role\": \"assistant\", \"content\": respuesta})",
+              "output": "El buffer crece con cada turno conversacional acumulando tokens indefinidamente.",
+              "explanation": "El historial debe gestionarse y podarse con estrategias tecnicas para no desbordar recursos."
             }
           ],
-          "common_errors": "Reenviar historiales gigantescos sin podar, lo que incrementa el costo financiero de la API exponencialmente.",
+          "common_errors": "Enviar unicamente el ultimo mensaje del usuario esperando que el modelo recuerde datos suministrados en turnos anteriores.",
           "mini_exercise": {
-            "starter_code": "# Crea un historial que conserve solo los últimos 3 mensajes usando slicing\nhistorial = [\"m1\", \"m2\", \"m3\", \"m4\", \"m5\"]\nultimos = historial[-3:]\nprint(ultimos)",
-            "instructions": "Verifica que ultimos contenga [\"m3\", \"m4\", \"m5\"].",
-            "solution": "historial = [\"m1\", \"m2\", \"m3\", \"m4\", \"m5\"]\nultimos = historial[-3:]\nprint(ultimos)"
+            "instructions": "Escribe una frase explicando por que un LLM recuerda tu nombre en un chat.",
+            "starter_code": "# Por que recuerda tu nombre?\nexplicacion = ...",
+            "solution": "explicacion = \"Porque la aplicacion re-envia el historial completo que contiene tu nombre en cada nueva peticion.\""
           },
           "key_takeaways": [
-            "Los LLMs son stateless; el estado lo gestiona tu aplicación.",
-            "Sliding Window conserva los últimos K mensajes para limitar tokens.",
-            "El resumen periódico condensa la historia pasada en el system prompt."
+            "Los LLMs son funciones matematicas puras sin estado en el servidor.",
+            "La memoria conversacional es simulada re-enviando el historial de turnos.",
+            "Acumular mensajes indefinidamente incrementa costos, latencia y riesgo de saturacion."
           ],
           "exercise": {
             "id": "ex_ia_05_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Por qué no es viable en producción reenviar indefinidamente todo el historial completo de una conversación de 100 mensajes en cada turno?",
+            "prompt": "Como recuerda un chatbot de IA el nombre del usuario mencionado tres preguntas atras?",
             "options": [
               {
                 "id": "a",
-                "text": "Porque incrementa drásticamente el costo de tokens, la latencia y eventualmente excede el límite de la ventana de contexto"
+                "text": "Porque la aplicacion cliente re-envia el historial conversacional acumulado que incluye el turno donde el usuario dijo su nombre en la lista de mensajes."
               },
               {
                 "id": "b",
-                "text": "Porque los servidores de IA rechazan mensajes con números pares"
+                "text": "Porque el modelo guarda un archivo de texto en su disco duro con la sesion del usuario."
               },
               {
                 "id": "c",
-                "text": "Porque la memoria RAM del usuario se borra"
+                "text": "Porque los LLMs tienen memoria biologica persistente."
               },
               {
                 "id": "d",
-                "text": "No hay problema, es la práctica estándar"
+                "text": "Porque la IP del usuario queda guardada en los pesos del modelo."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "El costo y la latencia crecen linealmente con la cantidad de tokens enviados; la gestión de memoria compacta es obligatoria en producción."
+            "explanation": "Las APIs son stateless; la memoria se implementa reenviando el buffer de contexto historico en cada solicitud HTTP."
+          }
+        },
+        {
+          "id": "les_ia_05_02",
+          "code": "L02",
+          "title": "Ventana Deslizante (Sliding Window Memory)",
+          "slug": "ventana-deslizante-sliding-window",
+          "position": 2,
+          "concept_id": "ia-memory-sliding-window",
+          "objective": "Implementar podas de contexto mediante ventanas deslizantes basadas en conteo de turnos o presupuesto de tokens.",
+          "theory_markdown": "La estrategia mas directa para evitar el crecimiento infinito del historial es la **Ventana Deslizante (Sliding Window)**.\n\n### 1. Ventana por Conteo de Turnos ($K$)\nConserva siempre el mensaje de sistema inicial (`system`) mas los ultimos $K$ intercambios (ej. los ultimos 6 mensajes):\n```python\ndef podar_por_turnos(messages: list, k: int = 6) -> list:\n    if len(messages) <= k + 1:\n        return messages\n    system_message = messages[0]\n    ultimos_mensajes = messages[-k:]\n    return [system_message] + ultimos_mensajes\n```\n\n### 2. Ventana por Presupuesto de Tokens\nSe utiliza `tiktoken` para sumar tokens desde el final hacia el principio, conservando la mayor cantidad de mensajes recientes que no superen un umbral estricto (ej. maximo 3000 tokens de contexto).",
+          "examples": [
+            {
+              "title": "Poda preservando el system prompt",
+              "code": "mensajes = [\n    {\"role\": \"system\", \"content\": \"Eres un asistente util\"},\n    {\"role\": \"user\", \"content\": \"Mensaje 1\"},\n    {\"role\": \"assistant\", \"content\": \"Resp 1\"},\n    {\"role\": \"user\", \"content\": \"Mensaje 2\"},\n    {\"role\": \"assistant\", \"content\": \"Resp 2\"},\n    {\"role\": \"user\", \"content\": \"Mensaje 3\"},\n]\n# Ventana de K=2 ultimos mensajes:\npodados = [mensajes[0]] + mensajes[-2:]\nprint(\"Mensajes conservados:\", len(podados))",
+              "output": "Mensajes conservados: 3",
+              "explanation": "El system prompt se mantiene intacto y se descartan las conversaciones antiguas intermedias."
+            }
+          ],
+          "common_errors": "Hacer un slice simple como `messages[-k:]` que descarta el mensaje `system`, perdiendo las instrucciones maestras de comportamiento.",
+          "mini_exercise": {
+            "instructions": "Une el mensaje 'system_msg' con los ultimos 4 mensajes de la lista 'historial'.",
+            "starter_code": "system_msg = {\"role\": \"system\", \"content\": \"Instrucciones\"}\nhistorial = [{\"role\": \"user\", \"content\": f\"msg {i}\"} for i in range(10)]\n\n# Obtiene contexto_podado\ncontexto_podado = ...",
+            "solution": "contexto_podado = [system_msg] + historial[-4:]"
+          },
+          "key_takeaways": [
+            "La ventana deslizante limita el historial a los K mensajes mas recientes.",
+            "El mensaje system siempre debe preservarse al inicio de la lista podada.",
+            "Fija un limite maximo predecible de consumo de tokens y costes de API."
+          ],
+          "exercise": {
+            "id": "ex_ia_05_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual elemento NUNCA debe descartarse al aplicar una poda de historial mediante ventana deslizante en un chat con LLM?",
+            "options": [
+              {
+                "id": "a",
+                "text": "El mensaje inicial con rol 'system' que contiene las directivas y reglas maestras del asistente."
+              },
+              {
+                "id": "b",
+                "text": "El primer saludo 'Hola' del usuario."
+              },
+              {
+                "id": "c",
+                "text": "Las marcas de tiempo de las peticiones pasadas."
+              },
+              {
+                "id": "d",
+                "text": "Los identificadores de proceso de la base de datos."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El system prompt define la personalidad, formato y directivas de seguridad; si se descarta en la poda, el modelo pierde su orientacion de comportamiento."
+          }
+        },
+        {
+          "id": "les_ia_05_03",
+          "code": "L03",
+          "title": "Resumen Dinamico de Conversacion (Summary Memory)",
+          "slug": "resumen-dinamico-summary-memory",
+          "position": 3,
+          "concept_id": "ia-memory-summary",
+          "objective": "Compactar historiales conversacionales largos mediante tecnicas de resumen incremental automatizado.",
+          "theory_markdown": "El problema de la ventana deslizante es la **amnesia**: el modelo olvida por completo hechos ocurridos hace mas de $K$ turnos.\n\n### Conversation Summary Memory\nPara recordar hechos del pasado sin conservar miles de tokens verbatim:\n1. Se monitorea la longitud de la conversacion.\n2. Cuando el buffer supera un umbral de tokens (ej. 2000 tokens), se utiliza un modelo rapido y economico (ej. `gpt-4o-mini`) para generar un **resumen conciso** de los turnos antiguos.\n3. Los turnos antiguos se eliminan de la lista de mensajes y el resumen generado se inyecta en el `system` prompt o como primer turno sintactico:\n   `'Resumen de la conversacion previa: El usuario es cliente premium y solicito cotizacion para 5 laptops.'`\n4. Solo se conservan los ultimos 2 o 3 turnos en crudo mas el resumen.",
+          "examples": [
+            {
+              "title": "Estructura del prompt con resumen incremental",
+              "code": "system_prompt = \"\"\"\nEres un asistente de soporte.\n\nContexto historico resumido:\n- El cliente reporto lentitud en su conexion el dia de ayer.\n- Se valido que su router es modelo X-200.\n\nResponde cordialmente atendiendo a este contexto.\n\"\"\"\nmessages = [{\"role\": \"system\", \"content\": system_prompt}]",
+              "output": "El modelo retiene los datos criticos pasados consumiendo menos de 60 tokens en lugar de 2500.",
+              "explanation": "El resumen sintetiza la esencia informativa minimizando el espacio consumido en el Context Window."
+            }
+          ],
+          "common_errors": "Re-resumir toda la conversacion en cada turno individual, multiplicando las llamadas de API innecesariamente en vez de esperar a que se alcance un umbral limite.",
+          "mini_exercise": {
+            "instructions": "Escribe una plantilla de f-string para un system prompt que incorpore la variable 'resumen_previo'.",
+            "starter_code": "resumen_previo = \"El usuario busca autos electricos\"\n\n# Crea prompt_con_resumen\nprompt_con_resumen = ...",
+            "solution": "prompt_con_resumen = f\"Eres un asesor. Contexto previo: {resumen_previo}\""
+          },
+          "key_takeaways": [
+            "Summary Memory compacta mensajes antiguos en sintesis semanticas concisas.",
+            "Combina memoria a largo plazo con bajo consumo de tokens en el Context Window.",
+            "Se activa de forma periodica o cuando se supera un umbral definido de tokens."
+          ],
+          "exercise": {
+            "id": "ex_ia_05_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es la ventaja fundamental de Conversation Summary Memory sobre una ventana deslizante pura (Sliding Window)?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Permite conservar informacion y hechos criticos de turnos conversacionales antiguos sin saturar la ventana de tokens con el texto verbatim."
+              },
+              {
+                "id": "b",
+                "text": "Elimina la necesidad de usar claves de API."
+              },
+              {
+                "id": "c",
+                "text": "Convierte todas las respuestas en archivos de audio."
+              },
+              {
+                "id": "d",
+                "text": "Impide que el usuario haga preguntas de mas de diez palabras."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La ventana deslizante borra completamente los datos antiguos; el resumen dinámico retiene los hechos esenciales comprimidos semánticamente."
+          }
+        },
+        {
+          "id": "les_ia_05_04",
+          "code": "L04",
+          "title": "Persistencia de Memoria en Bases de Datos (SQLite/Redis)",
+          "slug": "persistencia-memoria-bases-datos",
+          "position": 4,
+          "concept_id": "ia-memory-persistence-db",
+          "objective": "Persistir historiales conversacionales asociados a session_id de usuario en SQLite o Redis y reconstruir el contexto por peticion.",
+          "theory_markdown": "En aplicaciones reales multiusuario, la memoria no puede residir en variables globales en la RAM del proceso de Python, ya que se perderia al reiniciar el servidor y se mezclaria entre usuarios.\n\n### Diseno de Persistencia por Sesion\nCada usuario interactua con un identificador unico de conversacion (`session_id`).\n\nEn cada peticion HTTP:\n1. El backend recibe `session_id` y el nuevo `mensaje`.\n2. **Rehidratacion:** Se consultan los mensajes previos de esa sesion desde la base de datos (SQLite, PostgreSQL o Redis):\n   `SELECT rol, contenido FROM historial WHERE session_id = ? ORDER BY id ASC LIMIT 20`.\n3. Se construye la lista de mensajes y se invoca la API del LLM.\n4. **Persistencia:** Se guardan tanto el nuevo mensaje del usuario como la respuesta del asistente en la base de datos vinculados al `session_id`.",
+          "examples": [
+            {
+              "title": "Persistencia basica de mensajes en SQLite",
+              "code": "import sqlite3\n\nconn = sqlite3.connect(\":memory:\")\ncursor = conn.cursor()\ncursor.execute(\"\"\"\nCREATE TABLE chat_history (\n    id INTEGER PRIMARY KEY AUTOINCREMENT,\n    session_id TEXT,\n    role TEXT,\n    content TEXT\n)\n\"\"\")\n\ndef guardar_mensaje(session_id: str, role: str, content: str):\n    cursor.execute(\"INSERT INTO chat_history (session_id, role, content) VALUES (?, ?, ?)\", (session_id, role, content))\n    conn.commit()",
+              "output": "Mensajes asociados a sesiones independientes listos para recuperarse bajo demanda.",
+              "explanation": "El session_id aisla los historiales impidiendo colisiones entre clientes concurrentes."
+            }
+          ],
+          "common_errors": "Almacenar historiales en una variable global como buffer = [] en FastAPI, provocando que todos los usuarios compartan la misma conversacion.",
+          "mini_exercise": {
+            "instructions": "Escribe una consulta SQL para recuperar los mensajes de una 'session_123' ordenados por id.",
+            "starter_code": "-- Consulta de historial\n-- SELECT role, content FROM chat_history WHERE ...",
+            "solution": "SELECT role, content FROM chat_history WHERE session_id = 'session_123' ORDER BY id ASC"
+          },
+          "key_takeaways": [
+            "La memoria de chat en produccion debe desacoplarse del proceso en bases de datos externas.",
+            "session_id garantiza aislamiento estricto entre conversaciones y usuarios concurrentes.",
+            "El flujo requiere rehidratacion previa de mensajes y persistencia posterior de respuestas."
+          ],
+          "exercise": {
+            "id": "ex_ia_05_04",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "Por que es peligroso almacenar el historial de una conversacion en una lista global en memoria de Python (ej. historial = []) en una API web con multiples usuarios?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque todos los usuarios concurrentes compartiran el mismo historial, mezclando sus datos privados y quebrando el aislamiento de sesiones."
+              },
+              {
+                "id": "b",
+                "text": "Porque Python solo permite listas de hasta 5 elementos."
+              },
+              {
+                "id": "c",
+                "text": "Porque la base de datos se borra automaticamente."
+              },
+              {
+                "id": "d",
+                "text": "Porque el modelo no acepta listas de Python."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Una variable global es compartida por todo el proceso del servidor; se requiere una base de datos indexada por session_id para aislar a cada usuario."
           }
         }
       ]

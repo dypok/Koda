@@ -6,28 +6,158 @@
     {
       "id": "q_ia_05_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Cuál es la estrategia de memoria que utiliza un LLM secundario para comprimir mensajes antiguos en un resumen factual conciso?",
+      "difficulty": "easy",
+      "prompt": "Que significa que las APIs de modelos de lenguaje grande (LLMs) sean stateless?",
       "options": [
         {
           "id": "a",
-          "text": "Conversation Summary Memory (Memoria por Resumen)"
+          "text": "Que el servidor no retiene ningun recuerdo de llamadas anteriores; cada solicitud HTTP es evaluada de forma aislada e independiente."
         },
         {
           "id": "b",
-          "text": "Hard Reset Buffer"
+          "text": "Que no requieren conexion de red para funcionar."
         },
         {
           "id": "c",
-          "text": "Binary Heap Cache"
+          "text": "Que no cobran dinero por las consultas."
         },
         {
           "id": "d",
-          "text": "Volatile RAM Store"
+          "text": "Que el modelo solo responde en dias habiles."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Summary Memory condensa turnos anteriores en un párrafo que mantiene el contexto clave con mínimo gasto de tokens."
+      "explanation": "La propiedad stateless implica ausencia de memoria persistente interna en el servidor de inferencia entre conexiones HTTP separadas."
+    },
+    {
+      "id": "q_ia_05_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Como opera una memoria conversacional basada en Ventana Deslizante (Sliding Window) en un chatbot?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Mantiene el mensaje system y unicamente los ultimos K mensajes mas recientes, descartando los mensajes intermedios mas antiguos."
+        },
+        {
+          "id": "b",
+          "text": "Descarga la conversacion a un archivo de audio cada 10 minutos."
+        },
+        {
+          "id": "c",
+          "text": "Borra el modelo de la memoria RAM del servidor."
+        },
+        {
+          "id": "d",
+          "text": "Traduce todos los mensajes al frances."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Sliding window acota el historial reteniendo una ventana fija de los K mensajes mas nuevos mas las directivas del system prompt."
+    },
+    {
+      "id": "q_ia_05_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que problema resuelve Conversation Summary Memory frente a la simple eliminacion de mensajes antiguos?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Evita la perdida total de contexto antiguo resumiendo periodicamente los turnos previos e inyectando la sintesis en el prompt."
+        },
+        {
+          "id": "b",
+          "text": "Elimina los costos de la API por completo."
+        },
+        {
+          "id": "c",
+          "text": "Evita tener que usar Pydantic."
+        },
+        {
+          "id": "d",
+          "text": "Permite que el modelo funcione sin tokens."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El resumen dinamico condensa miles de tokens pasados en pocos parrafos esenciales, reteniendo los datos criticos con minimo espacio."
+    },
+    {
+      "id": "q_ia_05_04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Que ocurre si una aplicacion continua acumulando turnos en la lista messages sin aplicar ninguna estrategia de poda ni resumen?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La latencia y el coste por token escalan en cada turno hasta que se sobrepasa el Context Window del modelo, momento en el cual la API rechaza la peticion con un error."
+        },
+        {
+          "id": "b",
+          "text": "El modelo se vuelve mas rapido e inteligente de forma indefinida."
+        },
+        {
+          "id": "c",
+          "text": "La API reduce automaticamente el precio a la mitad."
+        },
+        {
+          "id": "d",
+          "text": "Los mensajes se encriptan con grado militar en la memoria cache."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El envio de buffers crecientes dispara la facturacion de tokens de entrada y colapsa el servicio al exceder el limite de contexto maximo."
+    },
+    {
+      "id": "q_ia_05_05",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "Cual es el identificador clave utilizado en una base de datos relacional o cache para aislar y recuperar el historial de chat de un usuario especifico?",
+      "options": [
+        {
+          "id": "a",
+          "text": "session_id (o conversation_id)"
+        },
+        {
+          "id": "b",
+          "text": "process_pid"
+        },
+        {
+          "id": "c",
+          "text": "model_version"
+        },
+        {
+          "id": "d",
+          "text": "token_cost"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El session_id actua como llave de particion logica para asociar y consultar unicamente los turnos correspondientes a esa conversacion particular."
+    },
+    {
+      "id": "q_ia_05_06",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "En que orden cronologico deben inyectarse los mensajes previos al reconstruir el contexto de una conversacion para el LLM?",
+      "options": [
+        {
+          "id": "a",
+          "text": "En orden cronologico estricto ascendente (del mas antiguo al mas reciente) precedidos por el system prompt."
+        },
+        {
+          "id": "b",
+          "text": "En orden aleatorio para incentivar la creatividad del modelo."
+        },
+        {
+          "id": "c",
+          "text": "Del mas nuevo al mas antiguo de forma inversa."
+        },
+        {
+          "id": "d",
+          "text": "Unicamente los mensajes del usuario, omitiendo las respuestas del asistente."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Los LLMs dependen del orden temporal natural para comprender la causalidad y el flujo logico de la conversacion."
     }
   ]
 }

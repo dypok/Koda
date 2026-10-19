@@ -4,85 +4,250 @@
   "code": "IA_M10",
   "slug": "ia-proyecto-agente-completo",
   "course_slug": "ai-agents",
-  "title": "Proyecto Integrador: Agente Autónomo Multi-Herramienta",
-  "objective": "Integrar todos los conceptos: agente con bucle ReAct, herramientas personalizadas (SQL, búsqueda, calculadora), memoria y frontend en Streamlit.",
-  "description": "La culminación de la especialización en Inteligencia Artificial: construye y despliega un agente autónomo de grado profesional capaz de resolver problemas complejos de principio a fin.",
+  "title": "Proyecto Integrador: Agente Autonomo Multi-Herramienta",
+  "objective": "Disenar, construir, evaluar y desplegar un agente autonomo multi-herramienta empresarial con memoria, RAG y trazabilidad completa.",
+  "description": "El hito culminante de AI Agents: integra herramientas de calculo, consulta vectorial, persistencia conversacional y exposicion como microservicio web.",
   "position": 60,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 500
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_ia_10_01",
       "code": "S01",
-      "title": "Arquitectura del Agente Autónomo Completo",
-      "slug": "agente-autonomo-final",
+      "title": "Construccion, Trazabilidad y Despliegue del Agente",
+      "slug": "construccion-trazabilidad-despliegue",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 25,
-      "xp_on_complete": 60,
+      "estimated_minutes": 60,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_ia_10_01",
           "code": "L01",
-          "title": "Ensamblaje del Agente Multi-Herramienta con Memoria y UI",
-          "slug": "ensamblaje-agente-final",
+          "title": "Arquitectura y Catalogo de Herramientas del Agente",
+          "slug": "arquitectura-catalogo-herramientas",
           "position": 1,
-          "concept_id": "ia-capstone-agent",
-          "objective": "Conectar el bucle de razonamiento con el toolkit de ejecución y la interfaz web interactiva.",
-          "theory_markdown": "En este proyecto final ensamblamos la arquitectura completa de un agente de investigación autónomo:\n\n1. **Toolkit de herramientas**:\n   - Herramienta de búsqueda en base de conocimiento documental (RAG).\n   - Herramienta de consulta estructurada a base de datos (SQL).\n   - Herramienta de cálculos matemáticos seguros.\n2. **Bucle ReAct**: Planifica y ejecuta las herramientas secuencialmente.\n3. **Capa de Guardrails**: Valida que no existan inyecciones maliciosas.\n4. **Interfaz Streamlit**: Visualiza los pensamientos del agente (`st.status`, `st.expander`) y muestra la respuesta enriquecida al usuario final.",
+          "concept_id": "ia-capstone-architecture-tools",
+          "objective": "Disenar la arquitectura de dominio del agente integrando un catalogo heterogeneo de herramientas validadas con Pydantic.",
+          "theory_markdown": "El proyecto integrador une todos los componentes en un **Asistente de Analitica Financiera y Gestion Documental**:\n\n### Los Componentes Arquitectonicos\n1. **Cerebro Cognitivo:** Modelo de razonamiento (LLM) con directivas de sistema estructuradas.\n2. **Catalogo de Herramientas:**\n   - Herramienta 1 (`consultar_documentos_rag`): Busqueda semantica en ChromaDB.\n   - Herramienta 2 (`ejecutar_calculo_matematico`): Evaluacion segura de formulas numericas en Python.\n   - Herramienta 3 (`consultar_base_sql`): Consultas sobre tablas de clientes y transacciones.\n3. **Capa de Contratos:** Modelos Pydantic v2 que validan estrictamente los argumentos de cada llamada a herramienta antes de la ejecucion.",
           "examples": [
             {
-              "title": "Orquestación de ejecución multi-tool",
-              "code": "class AgenteInvestigador:\n    def __init__(self, herramientas):\n        self.herramientas = herramientas\n        self.historial = []\n        \n    def ejecutar(self, consulta):\n        # 1. Razonar\n        # 2. Despachar herramienta\n        # 3. Formular respuesta final\n        return f\"Reporte final generado para: '{consulta}' con {len(self.herramientas)} herramientas disponibles.\"\n\nagente = AgenteInvestigador([\"buscar_rag\", \"consultar_sql\", \"calcular\"])\nprint(agente.ejecutar(\"Analizar balance de ventas trimestrales\"))",
-              "output": "Reporte final generado para: 'Analizar balance de ventas trimestrales' con 3 herramientas disponibles.",
-              "explanation": "El agente orquesta de forma autónoma el conjunto de herramientas para resolver la consulta."
+              "title": "Registro tipado de herramientas",
+              "code": "from pydantic import BaseModel, Field\n\nclass CalculoArgs(BaseModel):\n    expresion: str = Field(description=\"Operacion matematica, ej: (1200 * 1.16) - 50\")\n\ndef tool_calculo(expresion: str) -> float:\n    # Evaluacion segura de operaciones aritmeticas\n    return eval(expresion, {\"__builtins__\": None}, {})",
+              "output": "Herramienta con esquema de validacion rigido lista para el catalogo.",
+              "explanation": "El esquema de argumentos previene la inyeccion de funciones no autorizadas."
             }
           ],
-          "common_errors": "No informar al usuario qué está haciendo el agente en cada momento. En interfaces con agentes autónomos es vital mostrar el estado (\"Consultando base de datos...\", \"Analizando documentos...\") para mitigar la percepción de latencia.",
+          "common_errors": "Crear herramientas que retornan objetos complejos de Python no serializables en vez de cadenas de texto o JSON legibles para el modelo.",
           "mini_exercise": {
-            "starter_code": "# En Streamlit, usa st.status para mostrar las acciones del agente\n# with st.status(\"Agente trabajando...\") as status:\n#     st.write(\"Buscando en documentos...\")\n#     st.write(\"Generando gráfico...\")\n#     status.update(label=\"¡Listo!\", state=\"complete\")",
-            "instructions": "Comprende el uso de st.status para transparencia operativa.",
-            "solution": "# st.status listo"
+            "instructions": "Define un catalogo como un diccionario que vincule el string 'calculadora' con la funcion tool_calculo.",
+            "starter_code": "# Catalogo de funciones\ncatalogo = ...",
+            "solution": "catalogo = {\"calculadora\": tool_calculo}"
           },
           "key_takeaways": [
-            "Un agente completo combina LLMs, Function Calling, RAG, Memoria y Guardrails.",
-            "La interfaz debe transparentar el proceso de razonamiento del agente.",
-            "¡Felicidades! Has completado el dominio integral de Inteligencia Artificial con Python."
+            "El agente orquesta multiples herramientas especializadas (RAG, calculo, SQL).",
+            "Pydantic valida los argumentos generados por el modelo antes de invocar el codigo.",
+            "Las respuestas de herramientas deben ser serializables a cadenas de texto."
           ],
           "exercise": {
             "id": "ex_ia_10_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Cuál es el beneficio de mostrar los pasos intermedios (\"Thought\" y \"Action\") de un agente autónomo en la interfaz de usuario?",
+            "prompt": "Cual es el proposito de utilizar Pydantic para validar los argumentos emitidos por el LLM antes de ejecutar la funcion de Python correspondiente?",
             "options": [
               {
                 "id": "a",
-                "text": "Brinda transparencia, permite auditar el razonamiento del agente y mejora la experiencia de espera del usuario"
+                "text": "Garantizar que los parametros coincidan estrictamente con los tipos y restricciones de negocio requeridos antes de su ejecucion, previniendo excepciones y vulnerabilidades."
               },
               {
                 "id": "b",
-                "text": "Hace que el modelo cobre menos por token"
+                "text": "Hacer que el servidor sea compatible con Windows 95."
               },
               {
                 "id": "c",
-                "text": "Es un requisito obligatorio del sistema operativo"
+                "text": "Eliminar la necesidad de usar async/await."
               },
               {
                 "id": "d",
-                "text": "Oculta los errores"
+                "text": "Duplicar la velocidad del disco duro."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "La transparencia genera confianza en el usuario al evidenciar de qué fuentes extrajo el agente la información para su conclusión final."
+            "explanation": "La validacion intermedia con Pydantic blinda el backend impidiendo que argumentos malformados o tipos incompatibles colapsen el sistema."
+          }
+        },
+        {
+          "id": "les_ia_10_02",
+          "code": "L02",
+          "title": "Orquestacion Asincrona, Memoria y Bucle ReAct",
+          "slug": "orquestacion-asincrona-memoria-react",
+          "position": 2,
+          "concept_id": "ia-capstone-async-orchestration",
+          "objective": "Integrar el bucle ReAct con memoria persistente por session_id y ejecucion no bloqueante con asyncio.",
+          "theory_markdown": "En el proyecto integrador, la ejecucion del agente debe coordinar:\n1. **Carga de Memoria:** Rehidratar los ultimos turnos de la conversacion para el `session_id` del usuario desde la base de datos.\n2. **Bucle de Razonamiento:** Ejecutar el ciclo ReAct con un limite de seguridad `max_pasos=6`.\n3. **Ejecucion Concurrente de Herramientas:** Si el modelo genera multiples llamadas en paralelo, ejecutarlas simultaneamente con `asyncio.gather`.\n4. **Persistencia de Eventos:** Guardar el intercambio final en la base de datos antes de responder.",
+          "examples": [
+            {
+              "title": "Flujo de orquestacion unificado",
+              "code": "async def ejecutar_turno_agente(session_id: str, prompt: str):\n    historial = await db.obtener_historial(session_id, limit=6)\n    mensajes = [system_prompt] + historial + [{\"role\": \"user\", \"content\": prompt}]\n    \n    respuesta_final = await bucle_react(mensajes, max_pasos=5)\n    await db.guardar_mensaje(session_id, \"user\", prompt)\n    await db.guardar_mensaje(session_id, \"assistant\", respuesta_final)\n    return respuesta_final",
+              "output": "Orquestacion completa con memoria por sesion y ciclo ReAct integrado.",
+              "explanation": "El flujo asegura persistencia y aislamiento total entre usuarios."
+            }
+          ],
+          "common_errors": "No capturar las excepciones individuales en las llamadas concurrentes de asyncio.gather, provocando que el fallo de una herramienta aborte las demas operaciones.",
+          "mini_exercise": {
+            "instructions": "Usa return_exceptions=True en asyncio.gather para evitar que un fallo aborte las demas tareas.",
+            "starter_code": "import asyncio\n# Ejecuta tareas con return_exceptions\n# res = await asyncio.gather(*tareas, ...)",
+            "solution": "res = await asyncio.gather(*tareas, return_exceptions=True)"
+          },
+          "key_takeaways": [
+            "La orquestacion combina memoria por sesion, bucle ReAct y concurrencia asincrona.",
+            "return_exceptions=True en asyncio.gather asegura resiliencia ante fallos parciales.",
+            "Cada turno persiste preguntas y respuestas finales para el siguiente ciclo."
+          ],
+          "exercise": {
+            "id": "ex_ia_10_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Por que es fundamental usar return_exceptions=True en asyncio.gather al ejecutar multiples llamadas a herramientas paralelas en un agente?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque previene que el fallo de una herramienta cancele abruptamente a las demas, devolviendo la excepcion como un objeto para que el agente la analice."
+              },
+              {
+                "id": "b",
+                "text": "Porque convierte las excepciones en cadenas de texto en C++."
+              },
+              {
+                "id": "c",
+                "text": "Porque acelera la velocidad del procesador."
+              },
+              {
+                "id": "d",
+                "text": "Porque elimina la necesidad de usar bloques try/except."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "return_exceptions=True captura errores individuales como resultados de la lista, permitiendo al agente saber que herramienta fallo y cuales tuvieron exito."
+          }
+        },
+        {
+          "id": "les_ia_10_03",
+          "code": "L03",
+          "title": "Observabilidad y Logging Estructurado de Trazas",
+          "slug": "observabilidad-logging-trazas",
+          "position": 3,
+          "concept_id": "ia-capstone-observability-logging",
+          "objective": "Instrumentar el agente con logging estructurado para auditar pensamientos, acciones, latencia y consumo de tokens.",
+          "theory_markdown": "En sistemas autonomos, la **observabilidad** es vital para diagnosticar por que un agente tomo una decision equivocada:\n\n### Que debe registrarse en cada paso\n- `trace_id` unico por sesion o peticion.\n- Conteo de tokens consumidos (prompt tokens y completion tokens).\n- Latencia en segundos de cada llamada a modelo o herramienta.\n- El texto exacto de `Thought`, el nombre de la `Action` y la respuesta de `Observation`.\n\nEn Python se utiliza el modulo `logging` con formato JSON estructurado o herramientas de trazabilidad especializadas (OpenTelemetry, Langfuse o Arize Phoenix).",
+          "examples": [
+            {
+              "title": "Registro estructurado de un paso del agente",
+              "code": "import logging\nimport json\n\nlogger = logging.getLogger(\"agente_audit\")\n\ndef registrar_paso(step_num: int, thought: str, action: str, latency: float):\n    evento = {\n        \"paso\": step_num,\n        \"thought\": thought,\n        \"action\": action,\n        \"latency_sec\": round(latency, 3)\n    }\n    logger.info(json.dumps(evento))",
+              "output": "{\"paso\": 1, \"thought\": \"Consultar saldo\", \"action\": \"get_balance\", \"latency_sec\": 0.245}",
+              "explanation": "Los logs estructurados en JSON pueden indexarse en Datadog, Grafana o CloudWatch para auditorias en tiempo real."
+            }
+          ],
+          "common_errors": "Imprimir trazas con print() simple en lugar de usar un logger estructurado con niveles de severidad (INFO, WARNING, ERROR).",
+          "mini_exercise": {
+            "instructions": "Usa logger.info para registrar un diccionario estructurado 'evento' serializado a JSON.",
+            "starter_code": "import logging, json\nlogger = logging.getLogger(\"audit\")\nevento = {\"status\": \"completado\"}\n\n# Registra el log\n",
+            "solution": "logger.info(json.dumps(evento))"
+          },
+          "key_takeaways": [
+            "La observabilidad permite auditar la cadena de razonamiento y uso de herramientas.",
+            "Registrar latencias y consumo de tokens es indispensable para optimizar costos.",
+            "El logging estructurado en JSON se integra con plataformas de monitoreo en la nube."
+          ],
+          "exercise": {
+            "id": "ex_ia_10_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es el proposito principal de la observabilidad y el logging estructurado de trazas en un agente autonomo en produccion?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Permitir auditar de forma granular cada ciclo de razonamiento (Thought), accion (Action) y latencia/costos para depurar decisiones erroneas y optimizar rendimiento."
+              },
+              {
+                "id": "b",
+                "text": "Aumentar la resolucion grafica de las pantallas de los usuarios."
+              },
+              {
+                "id": "c",
+                "text": "Borrar el historial cada cinco minutos."
+              },
+              {
+                "id": "d",
+                "text": "Evitar tener que escribir funciones asincronas."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Sin trazas estructuradas, un agente autonomo es una caja negra inauditable; los logs permiten diagnosticar alucinaciones, fallos de herramientas y desvios de presupuesto."
+          }
+        },
+        {
+          "id": "les_ia_10_04",
+          "code": "L04",
+          "title": "Exposicion en API con FastAPI y Evaluacion E2E",
+          "slug": "api-fastapi-evaluacion-e2e",
+          "position": 4,
+          "concept_id": "ia-capstone-deploy-eval-e2e",
+          "objective": "Exponer el agente como microservicio REST con FastAPI y validar su tasa de exito con pruebas automatizadas en Pytest.",
+          "theory_markdown": "El paso culminante de la ingenieria de agentes es su **puesta en servicio y verificacion continua**:\n\n### 1. Exposicion como Endpoint en FastAPI\n```python\nfrom fastapi import FastAPI, HTTPException\nfrom pydantic import BaseModel\n\napp = FastAPI(title=\"Agente Analitico Enterprise\")\n\nclass ChatRequest(BaseModel):\n    session_id: str\n    mensaje: str\n\nclass ChatResponse(BaseModel):\n    respuesta: str\n    pasos_ejecutados: int\n\n@app.post(\"/chat\", response_model=ChatResponse)\nasync def chat_endpoint(req: ChatRequest):\n    res, pasos = await orquestador_agente.ejecutar(req.session_id, req.mensaje)\n    return ChatResponse(respuesta=res, pasos_ejecutados=pasos)\n```\n\n### 2. Pruebas E2E (End-to-End) con Pytest\nSe prueba un conjunto dorado (*golden dataset*) de escenarios de negocio, verificando:\n- Que invoque la herramienta adecuada segun la intencion.\n- Que no supere el presupuesto maximo de pasos.\n- Que el formato de salida sea consistente.",
+          "examples": [
+            {
+              "title": "Prueba E2E automatizada con Pytest",
+              "code": "import pytest\n\n@pytest.mark.asyncio\nasync def test_agente_calculo():\n    resultado, pasos = await orquestador_agente.ejecutar(\"test_sess\", \"Cuanto es 25 * 4?\")\n    assert \"100\" in resultado\n    assert pasos <= 3",
+              "output": "test_agente_calculo PASSED [100%]",
+              "explanation": "Valida que el agente invoco la herramienta de calculo y respondio con la respuesta precisa en menos de 3 pasos."
+            }
+          ],
+          "common_errors": "Desplegar agentes sin pruebas automatizadas E2E, descubriendo fallos de seleccion de herramientas solo cuando los clientes reales reportan quejas en produccion.",
+          "mini_exercise": {
+            "instructions": "Escribe un endpoint POST en '/agente' en FastAPI que reciba ChatRequest y retorne la respuesta.",
+            "starter_code": "from fastapi import FastAPI\napp = FastAPI()\n\n# Define el endpoint /agente\n",
+            "solution": "from fastapi import FastAPI\napp = FastAPI()\n\n@app.post(\"/agente\")\nasync def agente_api(req: ChatRequest):\n    return {\"status\": \"ok\"}"
+          },
+          "key_takeaways": [
+            "FastAPI ofrece la infraestructura ASGI ideal para servir agentes asincronos con tipado.",
+            "Pruebas E2E en Pytest miden la tasa de exito en datasets dorados de referencia.",
+            "El sistema queda empaquetado, auditable y listo para produccion."
+          ],
+          "exercise": {
+            "id": "ex_ia_10_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es el proposito de ejecutar pruebas automatizadas E2E sobre un dataset dorado (Golden Dataset) antes de desplegar un agente autonomo en produccion?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Medir cuantitativamente la tasa de resolucion de tareas (Task Success Rate) y asegurar que el agente seleccione las herramientas correctas y respete los presupuestos de pasos definidos."
+              },
+              {
+                "id": "b",
+                "text": "Eliminar la necesidad de usar Docker en el despliegue."
+              },
+              {
+                "id": "c",
+                "text": "Evitar tener que pagar la factura de internet."
+              },
+              {
+                "id": "d",
+                "text": "Convertir las funciones de Python en codigo ensamblador."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Las pruebas E2E contra un dataset de referencia cuantifican la confiabilidad y precision operativa del agente antes de exponerlo a usuarios reales."
           }
         }
       ]
