@@ -58,22 +58,13 @@ export class LessonAnsweredListener {
 
         if (user) {
           const userTz = user.timezone || 'America/Bogota';
-          const formatCalDate = (d: Date | null | undefined, tz: string) => {
-            if (!d) return null;
-            try {
-              return new Intl.DateTimeFormat('en-CA', {
-                timeZone: tz,
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-              }).format(d);
-            } catch {
-              return d.toISOString().slice(0, 10);
-            }
-          };
-
-          const todayStr = formatCalDate(now, userTz);
-          const lastStudyStr = formatCalDate(user.lastStudyDate, userTz);
+          const todayStr = new Intl.DateTimeFormat('en-CA', {
+            timeZone: userTz,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+          }).format(now);
+          const lastStudyStr = user.lastStudyDate ? user.lastStudyDate.toISOString().slice(0, 10) : null;
 
           let currentStreak = user.currentStreak ?? 0;
           let longestStreak = user.longestStreak ?? 0;
@@ -111,6 +102,8 @@ export class LessonAnsweredListener {
             }
           }
 
+          const todayDateOnly = new Date(`${todayStr}T00:00:00.000Z`);
+
           await this.prisma.user.update({
             where: { id: payload.userId },
             data: {
@@ -118,12 +111,11 @@ export class LessonAnsweredListener {
               currentStreak,
               longestStreak,
               streakFreezeCount,
-              lastStudyDate: now,
+              lastStudyDate: todayDateOnly,
             },
           });
 
           // Registrar en tabla streaks
-          const todayDateOnly = new Date(now.toISOString().slice(0, 10));
           try {
             await this.prisma.streak.upsert({
               where: {

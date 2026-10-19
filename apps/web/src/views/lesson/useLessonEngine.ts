@@ -22,7 +22,7 @@ function setsEqual(a: string[], b: string[]): boolean {
  * Motor local de lección: intentos, XP (+5 primer acierto, +2 recuperado),
  * cola de repaso sin spoilers y barajado determinista.
  */
-export function useLessonEngine(exercises: ContentExercise[], seed = 42) {
+export function useLessonEngine(exercises: ContentExercise[], seed = 42, rewardXp = 5) {
   const queue = useMemo(() => shuffled(exercises.map((e) => e.id), seed), [exercises, seed]);
   const byId = useMemo(() => new Map(exercises.map((e) => [e.id, e])), [exercises]);
   const [order, setOrder] = useState<string[]>(queue);
@@ -58,13 +58,13 @@ export function useLessonEngine(exercises: ContentExercise[], seed = 42) {
     setAttempts((p) => ({ ...p, [current.id]: tries }));
     if (ok) {
       const recovered = Boolean(failedFirst[current.id]);
-      const gained = recovered ? 2 : 5;
+      const gained = recovered ? Math.max(1, Math.round(rewardXp * 0.4)) : rewardXp;
       setXp((x) => x + gained);
       const res: AnswerResult = {
         correct: true,
         recovered,
         xp: gained,
-        feedback: current.explanation ?? '¡Correcto! +5 XP.',
+        feedback: current.explanation ?? `¡Correcto! +${gained} XP.`,
       };
       setResult(res);
       return res;
@@ -81,7 +81,7 @@ export function useLessonEngine(exercises: ContentExercise[], seed = 42) {
     };
     setResult(res);
     return res;
-  }, [current, selected, result, attempts, failedFirst]);
+  }, [current, selected, result, attempts, failedFirst, rewardXp]);
 
   const next = useCallback(() => {
     setSelected([]);

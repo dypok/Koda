@@ -37,10 +37,12 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
     );
   }
 
+  const isLongOptions = options.some((o) => (o.body?.length ?? 0) > 70);
+
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       {exercise.prompt_code ? (
-        <pre className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950 p-3.5 font-mono text-sm leading-relaxed text-slate-200 shadow-inner">
+        <pre className="overflow-x-auto max-h-36 rounded-xl border border-slate-800/90 bg-slate-950 p-3 font-mono text-xs sm:text-sm leading-relaxed text-amber-300 shadow-inner">
           <code>{exercise.prompt_code}</code>
         </pre>
       ) : null}
@@ -48,7 +50,7 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
       <div
         role={multi ? 'group' : 'radiogroup'}
         aria-label="Opciones de respuesta"
-        className="space-y-2.5"
+        className="space-y-2"
       >
         {options.map((opt, i) => {
           const active = selectedIds.includes(opt.id);
@@ -66,7 +68,7 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
               disabled={disabled}
               onClick={() => onToggle(opt.id)}
               className={cn(
-                'group relative flex w-full items-center justify-between gap-3 rounded-xl border px-4 py-3.5 text-left text-sm transition-all duration-200 min-h-[54px] select-none cursor-pointer',
+                'group relative flex w-full items-center justify-between gap-3 rounded-xl border px-3.5 py-2.5 text-left transition-all duration-200 min-h-[44px] select-none cursor-pointer',
                 isPressed
                   ? 'scale-[0.98] border-orange-500 bg-orange-500/25 text-white shadow-[0_0_20px_rgba(255,106,0,0.4)] ring-2 ring-orange-500/60 translate-x-1.5'
                   : active
@@ -75,11 +77,11 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
                 disabled && 'opacity-60 cursor-default hover:translate-x-0 hover:shadow-none'
               )}
             >
-              <div className="flex items-center gap-3 min-w-0">
+              <div className="flex items-center gap-2.5 min-w-0">
                 <span
                   aria-hidden="true"
                   className={cn(
-                    'flex h-7 w-7 shrink-0 items-center justify-center border text-xs font-mono font-bold transition-all duration-200',
+                    'flex h-6 w-6 shrink-0 items-center justify-center border text-xs font-mono font-bold transition-all duration-200',
                     multi ? 'rounded-md' : 'rounded-lg',
                     isPressed || active
                       ? 'border-orange-500 bg-orange-500 text-slate-950 shadow-sm'
@@ -87,12 +89,15 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
                   )}
                 >
                   {multi && active ? (
-                    <Check className="w-4 h-4 stroke-[3]" />
+                    <Check className="w-3.5 h-3.5 stroke-[3]" />
                   ) : (
                     opt.label ?? shortcutChar
                   )}
                 </span>
-                <span className="font-mono text-xs sm:text-sm leading-snug break-words group-hover:text-white transition-colors">
+                <span className={cn(
+                  'font-mono leading-snug break-words group-hover:text-white transition-colors',
+                  isLongOptions ? 'text-xs sm:text-[13px]' : 'text-xs sm:text-sm'
+                )}>
                   {renderMarkdownInline(opt.body)}
                 </span>
               </div>
@@ -104,7 +109,7 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
               >
                 <kbd
                   className={cn(
-                    'inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded border text-[10px] font-mono font-semibold transition-all shadow-sm',
+                    'inline-flex items-center justify-center min-w-[18px] h-4.5 px-1 rounded border text-[9px] font-mono font-semibold transition-all shadow-sm',
                     isPressed
                       ? 'border-orange-400 bg-orange-400 text-slate-950 translate-y-0.5'
                       : active
