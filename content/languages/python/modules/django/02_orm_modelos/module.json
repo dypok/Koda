@@ -6,83 +6,249 @@
   "course_slug": "django-enterprise",
   "title": "Django ORM: Modelos, Relaciones y QuerySets",
   "objective": "Modelar tablas relacionales con models.Model, gestionar migraciones y consultar datos de forma optimizada con QuerySets.",
-  "description": "Manipula bases de datos complejas sin escribir SQL manual: relaciones 1-a-N, M-a-N, filtros avanzados y evaluación perezosa.",
+  "description": "Manipula bases de datos complejas sin escribir SQL manual: relaciones 1-a-N, M-a-N, filtros avanzados y evaluacion perezosa.",
   "position": 37,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 280
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_dj_02_01",
       "code": "S01",
-      "title": "Modelos Declarativos y QuerySets",
-      "slug": "modelos-querysets",
+      "title": "Modelado Relacional, Migraciones y QuerySets",
+      "slug": "modelado-migraciones-querysets",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 50,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_dj_02_01",
           "code": "L01",
-          "title": "Modelos con models.Model y el Ciclo makemigrations / migrate",
-          "slug": "modelos-migraciones-base",
+          "title": "Definicion de Modelos y Tipos de Campos",
+          "slug": "definicion-modelos-campos",
           "position": 1,
-          "concept_id": "dj-orm",
-          "objective": "Declarar modelos relacionales y aplicar cambios de esquema a la base de datos.",
-          "theory_markdown": "El ORM de Django mapea clases de Python a tablas SQL:\n```python\nfrom django.db import models\n\nclass Curso(models.Model):\n    titulo = models.CharField(max_length=100)\n    precio = models.DecimalField(max_digits=6, decimal_places=2)\n    activo = models.BooleanField(default=True)\n```\n\nCiclo de vida de cambios:\n1. Modificas o creas tu clase en `models.py`.\n2. `python manage.py makemigrations`: Genera el archivo de migración en Python describiendo los cambios.\n3. `python manage.py migrate`: Traduce y ejecuta las sentencias DDL correspondientes en el motor SQL.",
+          "concept_id": "dj-orm-models-fields",
+          "objective": "Declarar modelos relacionales heredando de models.Model y configurar restricciones en los campos.",
+          "theory_markdown": "El **ORM de Django** abstrae el motor SQL permitiendo definir tablas de base de datos como clases de Python que heredan de `django.db.models.Model`.\n\n### Campos comunes en Django Models\n- `CharField(max_length=...)`: Texto con limite de caracteres (requiere `max_length`).\n- `TextField()`: Texto largo de longitud ilimitada.\n- `IntegerField()`, `FloatField()`, `DecimalField(max_digits=..., decimal_places=...)`.\n- `BooleanField(default=...)`.\n- `DateTimeField(auto_now_add=True)` (asigna fecha en creacion) y `auto_now=True` (actualiza en cada guardado).\n\n### Opciones esenciales de campo\n- `null=True`: Permite que la base de datos almacene `NULL`.\n- `blank=True`: Permite que el campo quede vacio en validaciones de formularios y panel de administracion.\n- `default=...`: Valor por defecto si no se especifica uno.\n- `unique=True`: Garantiza unicidad del campo a nivel de indice SQL.\n\nTodo modelo debe implementar `__str__(self)` para ofrecer una representacion legible en consola y en el admin.",
           "examples": [
             {
-              "title": "Consultas idiomáticas con QuerySets",
-              "code": "# Consultas perezosas (lazy)\ncursos_activos = Curso.objects.filter(activo=True).order_by(\"-precio\")\n# Búsqueda exacta de un solo objeto\ncurso_python = Curso.objects.get(titulo=\"Python Specialist\")",
-              "output": "<QuerySet [<Curso: Python Specialist>, <Curso: FastAPI Pro>]>",
-              "explanation": "filter() devuelve un QuerySet que solo consulta la base de datos cuando los datos son realmente leídos."
+              "title": "Modelo de Articulo con campos tipados",
+              "code": "from django.db import models\n\nclass Articulo(models.Model):\n    titulo = models.CharField(max_length=200, unique=True)\n    contenido = models.TextField()\n    publicado = models.BooleanField(default=False)\n    creado_el = models.DateTimeField(auto_now_add=True)\n\n    def __str__(self) -> str:\n        return self.titulo",
+              "output": "Tabla 'miapp_articulo' lista para sincronizarse con SQL.",
+              "explanation": "Django anade automaticamente una clave primaria autoincremental entera llamada 'id' a menos que se defina una explicitamente."
             }
           ],
-          "common_errors": "Usar `.get()` cuando pueden existir múltiples resultados o ninguno: lanza `MultipleObjectsReturned` o `DoesNotExist`. Para búsquedas seguras usa `.filter(...).first()`.",
+          "common_errors": "Confundir null=True (nivel base de datos SQL) con blank=True (nivel validacion de formularios en Django).",
           "mini_exercise": {
-            "starter_code": "# Filtra cursos con precio menor a 50 usando el lookup __lt (less than)\n# Curso.objects.filter(precio__lt=50)",
-            "instructions": "Comprende el uso del doble guión bajo para lookups en Django ORM.",
-            "solution": "# precio__lt=50"
+            "instructions": "Declara una clase Producto con campo 'nombre' como CharField con max_length 100 y 'precio' como DecimalField.",
+            "starter_code": "from django.db import models\n\nclass Producto(models.Model):\n    # Agrega nombre y precio\n    pass",
+            "solution": "from django.db import models\n\nclass Producto(models.Model):\n    nombre = models.CharField(max_length=100)\n    precio = models.DecimalField(max_digits=10, decimal_places=2)"
           },
           "key_takeaways": [
-            "makemigrations prepara el plano; migrate aplica los cambios en SQL.",
-            "Los QuerySets son perezosos (lazy evaluation).",
-            "Los field lookups usan doble guión bajo (campo__gte, campo__icontains)."
+            "Los modelos heredan de models.Model y cada atributo representa una columna SQL.",
+            "null=True aplica a la columna SQL; blank=True aplica a la validacion de formularios.",
+            "__str__() devuelve la representacion en texto legible del objeto."
           ],
           "exercise": {
             "id": "ex_dj_02_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Qué comando de Django genera los archivos de migración tras modificar models.py?",
+            "prompt": "Cual es la diferencia fundamental entre los argumentos null=True y blank=True en un campo de modelo Django?",
             "options": [
               {
                 "id": "a",
-                "text": "python manage.py makemigrations"
+                "text": "null=True determina si la base de datos permite valores NULL; blank=True determina si los formularios permiten dejar el campo vacio."
               },
               {
                 "id": "b",
-                "text": "python manage.py migrate"
+                "text": "null=True es para numeros y blank=True es para textos."
               },
               {
                 "id": "c",
-                "text": "python manage.py sqlcreate"
+                "text": "Son sinonimos que configuran unicamente la base de datos."
               },
               {
                 "id": "d",
-                "text": "python manage.py syncdb"
+                "text": "blank=True encripta el campo antes de guardarlo."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "makemigrations inspecciona tus modelos y crea los archivos de migración; migrate es quien los ejecuta en la BD."
+            "explanation": "null es una restriccion puramente de base de datos relacional (almacenamiento), mientras que blank es una restriccion de validacion en la capa de aplicacion y formularios."
+          }
+        },
+        {
+          "id": "les_dj_02_02",
+          "code": "L02",
+          "title": "Ciclo de Migraciones: makemigrations y migrate",
+          "slug": "ciclo-migraciones-makemigrations-migrate",
+          "position": 2,
+          "concept_id": "dj-orm-migrations",
+          "objective": "Crear, inspeccionar y aplicar cambios de esquema relacional utilizando el sistema de migraciones de Django.",
+          "theory_markdown": "Las **migraciones** son el mecanismo de Django para propagar los cambios realizados en los modelos (`models.py`) al esquema de la base de datos relacional de manera versionada y segura.\n\n### Comandos del flujo de migraciones\n1. `python manage.py makemigrations`:\n   Inspecciona las diferencias entre los modelos actuales y las migraciones previas, generando un nuevo archivo de migracion (ej. `0001_initial.py`).\n2. `python manage.py migrate`:\n   Ejecuta las migraciones pendientes contra la base de datos, aplicando las sentencias DDL correspondientes (`CREATE TABLE`, `ALTER TABLE`).\n3. `python manage.py showmigrations`:\n   Muestra el listado de todas las migraciones del proyecto indicando con `[X]` las que ya fueron aplicadas.\n4. `python manage.py sqlmigrate app_name 0001`:\n   Muestra en consola el codigo SQL puro que Django ejecutaria para esa migracion sin aplicarlo.",
+          "examples": [
+            {
+              "title": "Flujo de trabajo al anadir un campo a un modelo",
+              "code": "# 1. Se modifica models.py agregando 'stock = models.IntegerField(default=0)'\n# 2. En la terminal se genera la migracion:\n# python manage.py makemigrations\n# Migrations for 'tienda':\n#   tienda/migrations/0002_producto_stock.py\n#     - Add field stock to producto\n# 3. Se sincroniza la base de datos:\n# python manage.py migrate",
+              "output": "Applying tienda.0002_producto_stock... OK",
+              "explanation": "El proceso es idempotente y garantiza que todos los desarrolladores y entornos apliquen exactamente el mismo esquema SQL."
+            }
+          ],
+          "common_errors": "Modificar directamente las tablas en el motor SQL (ej. ejecutando ALTER TABLE a mano) sin pasar por migraciones de Django, rompiendo la consistencia del estado de migraciones.",
+          "mini_exercise": {
+            "instructions": "Escribe el comando de consola de Django que genera los archivos de migracion a partir de los cambios en los modelos.",
+            "starter_code": "# Comando para generar migraciones\n",
+            "solution": "python manage.py makemigrations"
+          },
+          "key_takeaways": [
+            "makemigrations crea los archivos de migracion analizando models.py.",
+            "migrate aplica los cambios de esquema en el motor de base de datos.",
+            "sqlmigrate permite auditar el SQL puro antes de ejecutarlo en produccion."
+          ],
+          "exercise": {
+            "id": "ex_dj_02_02",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "Cual comando de Django aplica efectivamente las migraciones pendientes ejecutando las sentencias DDL en la base de datos?",
+            "options": [
+              {
+                "id": "a",
+                "text": "python manage.py migrate"
+              },
+              {
+                "id": "b",
+                "text": "python manage.py makemigrations"
+              },
+              {
+                "id": "c",
+                "text": "python manage.py createschema"
+              },
+              {
+                "id": "d",
+                "text": "python manage.py sync"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "makemigrations solo crea los archivos de especificacion de cambios; migrate es el comando que ejecuta las operaciones DDL en el motor de base de datos."
+          }
+        },
+        {
+          "id": "les_dj_02_03",
+          "code": "L03",
+          "title": "Relaciones entre Modelos: ForeignKey, OneToOne y ManyToMany",
+          "slug": "relaciones-modelos-foreignkey",
+          "position": 3,
+          "concept_id": "dj-orm-relationships",
+          "objective": "Establecer relaciones relacionales 1 a N, 1 a 1 y N a M configurando politicas de borrado con on_delete.",
+          "theory_markdown": "Django modela las relaciones entre tablas relacionales mediante campos especializados:\n\n1. **Uno a Muchos (1 a N) con `ForeignKey`:**\n   Un registro se asocia a otro (ej. muchos Articulos pertenecen a una Categoria).\n   Requiere obligatoriamente el argumento `on_delete`:\n   - `models.CASCADE`: Al eliminar el registro padre, se eliminan en cascada sus hijos.\n   - `models.PROTECT`: Impide la eliminacion del padre si tiene hijos asociados, lanzando `ProtectedError`.\n   - `models.SET_NULL`: Asigna `NULL` a la clave foranea (requiere `null=True`).\n   - `related_name`: Nombre con el cual el modelo padre accede a sus hijos (ej. `categoria.articulos.all()`).\n\n2. **Uno a Uno (1 a 1) con `OneToOneField`:**\n   Ideal para extensiones de perfiles (ej. un `User` tiene exactamente un `Perfil`).\n\n3. **Muchos a Muchos (N a M) con `ManyToManyField`:**\n   Crea de forma transparente una tabla intermedia en la base de datos relacional (ej. Articulos y Etiquetas).",
+          "examples": [
+            {
+              "title": "Definicion de relaciones 1 a N y N a M",
+              "code": "from django.db import models\n\nclass Categoria(models.Model):\n    nombre = models.CharField(max_length=50)\n\nclass Etiqueta(models.Model):\n    slug = models.SlugField(unique=True)\n\nclass Publicacion(models.Model):\n    titulo = models.CharField(max_length=150)\n    categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE, related_name=\"publicaciones\")\n    etiquetas = models.ManyToManyField(Etiqueta, blank=True)",
+              "output": "categoria.publicaciones.all() accede a todas las publicaciones asociadas.",
+              "explanation": "related_name='publicaciones' permite la consulta inversa sin recurrir al sufijo predeterminado _set."
+            }
+          ],
+          "common_errors": "Omitir el argumento on_delete en ForeignKey o OneToOneField en versiones modernas de Django, lo que genera un error de definicion inmediato.",
+          "mini_exercise": {
+            "instructions": "Define un ForeignKey hacia la clase 'Autor' con politica de borrado CASCADE y related_name='libros'.",
+            "starter_code": "from django.db import models\n\n# Define el campo autor\n# autor = models.ForeignKey(...)",
+            "solution": "autor = models.ForeignKey(Autor, on_delete=models.CASCADE, related_name=\"libros\")"
+          },
+          "key_takeaways": [
+            "ForeignKey define relaciones 1 a N y exige definir la politica on_delete.",
+            "models.CASCADE propaga el borrado; models.PROTECT bloquea la eliminacion de registros con dependientes.",
+            "related_name define el descriptor de acceso en la direccion inversa de la relacion.",
+            "ManyToManyField gestiona tablas intermedias automaticamente."
+          ],
+          "exercise": {
+            "id": "ex_dj_02_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Que ocurre si se intenta borrar una Categoria asociada a Articulos cuando la relacion fue definida con on_delete=models.PROTECT?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Django lanza una excepcion ProtectedError impidiendo que la categoria sea eliminada de la base de datos."
+              },
+              {
+                "id": "b",
+                "text": "Borra la categoria y tambien todos los articulos asociados silenciosamente."
+              },
+              {
+                "id": "c",
+                "text": "Asigna NULL al campo categoria en todos los articulos."
+              },
+              {
+                "id": "d",
+                "text": "Duplica la categoria en una tabla de historicos."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "models.PROTECT emula la restriccion de integridad referencial RESTRICT de SQL, bloqueando la eliminacion del registro principal si existen hijos vinculados."
+          }
+        },
+        {
+          "id": "les_dj_02_04",
+          "code": "L04",
+          "title": "Consultas Optimizadas con QuerySets y Evitacion de N+1",
+          "slug": "querysets-optimizacion-n-mas-1",
+          "position": 4,
+          "concept_id": "dj-orm-querysets-n1",
+          "objective": "Aprovechar la evaluacion perezosa de los QuerySets y resolver el problema de rendimiento N+1 con select_related y prefetch_related.",
+          "theory_markdown": "Los **QuerySets** de Django son colecciones de objetos que representan consultas SQL.\n\n### Evaluacion Perezosa (Lazy Evaluation)\nUn QuerySet no consulta la base de datos en el instante en que se declara, sino cuando es evaluado (al iterar sobre el con un bucle `for`, al llamar a `list()`, `len()`, o serializarlo).\n\n### Filtros y Lookups de doble guion bajo\n```python\nArticulo.objects.filter(publicado=True, precio__gte=50.0).exclude(titulo__icontains=\"test\")\n```\n- `__gte`: mayor o igual que.\n- `__icontains`: busqueda textual insensible a mayusculas/minusculas.\n\n### El problema de consultas N+1\nSi se iteran 100 articulos accediendo a `articulo.categoria.nombre`, Django ejecutara 1 consulta para los articulos y 100 consultas individuales para las categorias (101 consultas en total).\n\n**Solucion:**\n- `select_related('categoria')`: Realiza un `SQL JOIN` inmediato (ideal para relaciones 1 a 1 y 1 a N).\n- `prefetch_related('etiquetas')`: Realiza 2 consultas agrupadas con `WHERE IN` en Python (ideal para N a M y relaciones inversas).",
+          "examples": [
+            {
+              "title": "Optimizacion de consulta con select_related",
+              "code": "# Ineficiente (1 + N consultas):\narticulos = Articulo.objects.all()\nfor art in articulos:\n    print(art.categoria.nombre)  # Ejecuta 1 consulta SQL por iteracion\n\n# Optimizado (1 consulta con JOIN):\narticulos_opt = Articulo.objects.select_related(\"categoria\").all()\nfor art in articulos_opt:\n    print(art.categoria.nombre)  # Los datos ya estan en memoria",
+              "output": "De 101 consultas SQL se reduce a exactamente 1 sola consulta SQL con INNER/LEFT JOIN.",
+              "explanation": "select_related trae los datos de la clave foranea en la misma consulta original."
+            }
+          ],
+          "common_errors": "Usar Articulo.objects.get() esperando encontrar un elemento que puede no existir, sin capturar la excepcion Articulo.DoesNotExist.",
+          "mini_exercise": {
+            "instructions": "Escribe una consulta que filtre productos con 'precio__gt=100' y use select_related('categoria').",
+            "starter_code": "# Consulta con filter y select_related\nproductos = ...",
+            "solution": "productos = Producto.objects.filter(precio__gt=100).select_related(\"categoria\")"
+          },
+          "key_takeaways": [
+            "Los QuerySets son perezosos (lazy) y se ejecutan unicamente al iterar o evaluarlos.",
+            "select_related optimiza relaciones ForeignKey mediante un JOIN en SQL.",
+            "prefetch_related optimiza relaciones ManyToMany mediante consultas separadas combinadas en memoria."
+          ],
+          "exercise": {
+            "id": "ex_dj_02_04",
+            "type": "single_choice",
+            "difficulty": "hard",
+            "prompt": "Cual metodo de QuerySet se debe utilizar en Django para evitar el problema N+1 al consultar una relacion ForeignKey (1 a N)?",
+            "options": [
+              {
+                "id": "a",
+                "text": "select_related()"
+              },
+              {
+                "id": "b",
+                "text": "prefetch_cache()"
+              },
+              {
+                "id": "c",
+                "text": "join_models()"
+              },
+              {
+                "id": "d",
+                "text": "aggregate_all()"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "select_related() realiza una consulta con JOIN SQL para precargar objetos vinculados por claves foraneas en una unica ejecucion."
           }
         }
       ]

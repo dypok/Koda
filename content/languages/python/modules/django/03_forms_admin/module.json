@@ -4,85 +4,250 @@
   "code": "DJ_M03",
   "slug": "django-forms-admin",
   "course_slug": "django-enterprise",
-  "title": "ModelForms, Validación y el Panel de Administración",
-  "objective": "Construir formularios validados automáticamente con ModelForm y personalizar el panel Django Admin para gestión operativa.",
-  "description": "El superpoder más celebrado de Django: un back-office completo generado automáticamente para administrar datos desde el día uno.",
+  "title": "ModelForms, Validacion y el Panel de Administracion",
+  "objective": "Construir formularios validados automaticamente con ModelForm y personalizar el panel Django Admin para gestion operativa.",
+  "description": "El superpoder mas celebrado de Django: un back-office completo generado automaticamente para administrar datos desde el dia uno.",
   "position": 38,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 300
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_dj_03_01",
       "code": "S01",
-      "title": "ModelForms y Registro en Django Admin",
-      "slug": "forms-y-admin",
+      "title": "Formularios, Validaciones y Django Admin",
+      "slug": "forms-validacion-admin",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 18,
-      "xp_on_complete": 45,
+      "estimated_minutes": 50,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_dj_03_01",
           "code": "L01",
-          "title": "Registro de Modelos en admin.py y ModelForms",
-          "slug": "admin-modelforms-base",
+          "title": "Formularios HTML y forms.Form con Proteccion CSRF",
+          "slug": "formularios-forms-form-csrf",
           "position": 1,
-          "concept_id": "dj-admin",
-          "objective": "Personalizar el panel administrativo con list_display, search_fields y filtros.",
-          "theory_markdown": "Con solo 3 líneas de código en `admin.py`, Django genera una interfaz visual con login seguro, búsqueda y edición para tus tablas de base de datos:\n```python\nfrom django.contrib import admin\nfrom .models import Curso\n\n@admin.register(Curso)\nclass CursoAdmin(admin.ModelAdmin):\n    list_display = (\"titulo\", \"precio\", \"activo\")\n    search_fields = (\"titulo\",)\n    list_filter = (\"activo\",)\n```\n\nPara validar datos de entrada de usuarios, `ModelForm` extrae los tipos y restricciones directamente del modelo para validar automáticamente con `form.is_valid()`.",
+          "concept_id": "dj-forms-csrf",
+          "objective": "Construir formularios desacoplados con forms.Form, validar entradas y aplicar tokens CSRF en plantillas.",
+          "theory_markdown": "Django incluye un subsistema de formularios para automatizar tres tareas criticas:\n1. Generacion segura del marcado HTML de entrada.\n2. Conversion de cadenas recibidas en tipos nativos de Python.\n3. Validacion y saneamiento contra ataques de seguridad.\n\n### Proteccion CSRF (Cross-Site Request Forgery)\nTodo formulario que envie datos mediante peticion POST debe incluir obligatoriamente la etiqueta de plantilla `{% csrf_token %}` dentro del elemento `<form>`.\nDjango valida este token en el middleware; si no esta presente o es invalido, rechaza la peticion con un error HTTP 403 Forbidden para prevenir ataques de falsificacion.\n\n### Validacion con is_valid() y cleaned_data\nAl enviar el formulario, se instancia con `form = FormularioContacto(request.POST)`. Si `form.is_valid()` es `True`, los valores procesados y saneados estan disponibles en el diccionario `form.cleaned_data`.",
           "examples": [
             {
-              "title": "Definición de un ModelForm",
-              "code": "from django import forms\nfrom .models import Curso\n\nclass CursoForm(forms.ModelForm):\n    class Meta:\n        model = Curso\n        fields = [\"titulo\", \"precio\", \"activo\"]\n\n# En la vista:\n# form = CursoForm(request.POST)\n# if form.is_valid():\n#     form.save()",
-              "output": "Formulario validado y guardado en base de datos",
-              "explanation": "form.save() persiste directamente la instancia en base de datos si las validaciones pasan."
+              "title": "Definicion y procesamiento de un formulario basico",
+              "code": "from django import forms\nfrom django.shortcuts import render\nfrom django.http import HttpResponse\n\nclass ContactoForm(forms.Form):\n    nombre = forms.CharField(max_length=50)\n    email = forms.EmailField()\n    mensaje = forms.CharField(widget=forms.Textarea)\n\ndef contactar(request):\n    if request.method == \"POST\":\n        form = ContactoForm(request.POST)\n        if form.is_valid():\n            datos = form.cleaned_data\n            return HttpResponse(f\"Gracias {datos['nombre']}\")\n    else:\n        form = ContactoForm()\n    return render(request, \"contacto.html\", {\"form\": form})",
+              "output": "Formulario renderizado con validacion de correos electronicos y campos obligatorios.",
+              "explanation": "cleaned_data solo existe si is_valid() retorno True tras superar todas las validaciones."
             }
           ],
-          "common_errors": "Olvidar el tag `{% csrf_token %}` dentro de formularios HTML en Django, lo que provoca un error 403 Forbidden por protección contra CSRF.",
+          "common_errors": "Intentar acceder a form.cleaned_data antes de haber invocado form.is_valid(), lo que provoca un AttributeError.",
           "mini_exercise": {
-            "starter_code": "# Registra el modelo Estudiante en admin.py\n# admin.site.register(Estudiante)",
-            "instructions": "Observa la sintaxis básica de registro en el panel de control.",
-            "solution": "# admin.site.register(Estudiante)"
+            "instructions": "Escribe un formulario con forms.Form que contenga un campo 'asunto' de tipo CharField y 'edad' de tipo IntegerField.",
+            "starter_code": "from django import forms\n\nclass EncuestaForm(forms.Form):\n    # Define asunto y edad\n    pass",
+            "solution": "from django import forms\n\nclass EncuestaForm(forms.Form):\n    asunto = forms.CharField(max_length=100)\n    edad = forms.IntegerField()"
           },
           "key_takeaways": [
-            "Django Admin provee un panel CRUD completo sin desarrollo frontend adicional.",
-            "ModelForm vincula formularios con modelos reduciendo código repetitivo.",
-            "La protección CSRF es obligatoria en todos los formularios de Django."
+            "{% csrf_token %} previene ataques CSRF en formularios con metodo POST.",
+            "is_valid() valida tipos, longitudes y reglas de negocio del formulario.",
+            "cleaned_data contiene los datos tipados y limpios listos para operar."
           ],
           "exercise": {
             "id": "ex_dj_03_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Cuál es el comando para crear el usuario administrador inicial para ingresar a /admin en Django?",
+            "prompt": "Que ocurre si se envia un formulario con metodo POST en Django sin incluir la etiqueta {% csrf_token %}?",
             "options": [
               {
                 "id": "a",
-                "text": "python manage.py createsuperuser"
+                "text": "Django rechaza la peticion con un error HTTP 403 Forbidden por falla de verificacion CSRF."
               },
               {
                 "id": "b",
-                "text": "python manage.py new-admin"
+                "text": "El formulario se procesa con normalidad omitiendo la seguridad."
               },
               {
                 "id": "c",
-                "text": "python manage.py root"
+                "text": "La base de datos se reinicia de inmediato."
               },
               {
                 "id": "d",
-                "text": "django admin create"
+                "text": "El navegador redirige a la pagina de Google."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "createsuperuser solicita nombre, email y contraseña para crear el usuario con permisos totales en Django."
+            "explanation": "El CsrfViewMiddleware de Django intercepta las solicitudes POST y bloquea con 403 si el token secreto no viaja con el formulario."
+          }
+        },
+        {
+          "id": "les_dj_03_02",
+          "code": "L02",
+          "title": "ModelForm y Persistencia Directa",
+          "slug": "modelform-persistencia-directa",
+          "position": 2,
+          "concept_id": "dj-forms-modelform",
+          "objective": "Vincular formularios a modelos ORM mediante ModelForm y persistir registros con form.save().",
+          "theory_markdown": "Cuando un formulario refleja exactamente los campos de una tabla de base de datos, repetir las definiciones de campos es redundante. Django resuelve esto con **`ModelForm`**.\n\n### Estructura de ModelForm\n```python\nfrom django import forms\nfrom .models import Articulo\n\nclass ArticuloForm(forms.ModelForm):\n    class Meta:\n        model = Articulo\n        fields = [\"titulo\", \"contenido\", \"publicado\"]\n        # o fields = '__all__'\n```\n`ModelForm`:\n1. Infiere automaticamente los widgets y tipos de campo HTML desde el modelo.\n2. Tras validar con `form.is_valid()`, permite invocar directamente `form.save()` para persistir el registro en la base de datos.\n3. Si se pasa `commit=False` (`instancia = form.save(commit=False)`), crea el objeto en memoria sin insertarlo aun en SQL, permitiendo asociarle campos como el usuario creador antes del commit final.",
+          "examples": [
+            {
+              "title": "Creacion de registro con ModelForm y commit=False",
+              "code": "def crear_articulo(request):\n    if request.method == \"POST\":\n        form = ArticuloForm(request.POST)\n        if form.is_valid():\n            articulo = form.save(commit=False)\n            articulo.autor = request.user  # Asigna el usuario actual\n            articulo.save()                # Persiste en la base de datos\n            return redirect(\"articulos-lista\")",
+              "output": "Registro creado en base de datos vinculado al autor autenticado.",
+              "explanation": "commit=False es la tecnica estandar para poblar campos que no deben ser editables por el usuario en el formulario."
+            }
+          ],
+          "common_errors": "Usar fields = '__all__' en ModelForms de modelos que contienen atributos sensibles como 'es_staff' o 'saldo', permitiendo ataques de asignacion masiva (mass assignment).",
+          "mini_exercise": {
+            "instructions": "Declara una clase TareaForm que herede de forms.ModelForm vinculada al modelo Tarea con fields=['titulo', 'completada'].",
+            "starter_code": "from django import forms\nfrom .models import Tarea\n\n# Define TareaForm con class Meta\n",
+            "solution": "from django import forms\nfrom .models import Tarea\n\nclass TareaForm(forms.ModelForm):\n    class Meta:\n        model = Tarea\n        fields = [\"titulo\", \"completada\"]"
+          },
+          "key_takeaways": [
+            "ModelForm mapea campos del modelo a controles de formulario automaticamente.",
+            "form.save() persiste directamente la instancia validada en la base de datos.",
+            "commit=False permite modificar la instancia antes de insertarla definitivamente en SQL."
+          ],
+          "exercise": {
+            "id": "ex_dj_03_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Para que se utiliza el argumento commit=False al invocar form.save(commit=False) en un ModelForm de Django?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Para obtener la instancia del modelo en memoria sin persistirla todavia en la base de datos, permitiendo asignarle datos adicionales."
+              },
+              {
+                "id": "b",
+                "text": "Para revertir una transaccion SQL fallida."
+              },
+              {
+                "id": "c",
+                "text": "Para evitar que el formulario valide los campos obligatorios."
+              },
+              {
+                "id": "d",
+                "text": "Para exportar el formulario a un archivo de migracion."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "commit=False retorna el objeto instanciado con los datos del formulario sin guardarlo en el motor SQL de inmediato, ideal para anadir campos automaticos como el autor."
+          }
+        },
+        {
+          "id": "les_dj_03_03",
+          "code": "L03",
+          "title": "Validadores Personalizados y Metodos clean",
+          "slug": "validadores-metodos-clean",
+          "position": 3,
+          "concept_id": "dj-forms-clean-validation",
+          "objective": "Implementar validaciones de campo especificas con clean_<campo>() y validaciones de formulario global con clean().",
+          "theory_markdown": "Django ofrece dos niveles para personalizar la logica de validacion de formularios:\n\n1. **Validacion de un campo individual (`clean_<nombre_campo>()`):**\n   - Se accede al valor mediante `self.cleaned_data.get('nombre_campo')`.\n   - Si el valor infringe una regla, se eleva `forms.ValidationError('Mensaje de error')`.\n   - Debe retornar obligatoriamente el valor validado o transformado.\n\n2. **Validacion cruzada entre multiples campos (`clean()`):**\n   - Se sobreescribe el metodo general `clean(self)`.\n   - Se invoca `super().clean()`.\n   - Permite comparar campos entre si (por ejemplo, verificar que `password` coincida con `password_confirmacion`).",
+          "examples": [
+            {
+              "title": "Validacion de campo individual y validacion cruzada",
+              "code": "from django import forms\n\nclass RegistroForm(forms.Form):\n    email = forms.EmailField()\n    clave = forms.CharField(widget=forms.PasswordInput)\n    confirmar_clave = forms.CharField(widget=forms.PasswordInput)\n\n    def clean_email(self):\n        email = self.cleaned_data.get(\"email\")\n        if not email.endswith(\"@koda.academy\"):\n            raise forms.ValidationError(\"El correo debe pertenecer al dominio @koda.academy\")\n        return email.lower()\n\n    def clean(self):\n        cleaned_data = super().clean()\n        clave = cleaned_data.get(\"clave\")\n        confirmacion = cleaned_data.get(\"confirmar_clave\")\n        if clave and confirmacion and clave != confirmacion:\n            raise forms.ValidationError(\"Las contraseñas no coinciden\")\n        return cleaned_data",
+              "output": "Formulario que aplica reglas corporativas y validacion cruzada de passwords.",
+              "explanation": "clean_email valida un campo individual y clean() valida la relacion entre dos campos."
+            }
+          ],
+          "common_errors": "Olvidar retornar el valor validado al final del metodo clean_<campo>(), lo que provoca que ese campo quede almacenado como None en cleaned_data.",
+          "mini_exercise": {
+            "instructions": "Escribe un metodo clean_edad en un formulario que eleve forms.ValidationError si edad es menor a 18 y retorne edad en caso contrario.",
+            "starter_code": "from django import forms\n\nclass PerfilForm(forms.Form):\n    edad = forms.IntegerField()\n    \n    # Implementa clean_edad\n",
+            "solution": "from django import forms\n\nclass PerfilForm(forms.Form):\n    edad = forms.IntegerField()\n\n    def clean_edad(self):\n        edad = self.cleaned_data.get(\"edad\")\n        if edad is not None and edad < 18:\n            raise forms.ValidationError(\"Debes ser mayor de edad\")\n        return edad"
+          },
+          "key_takeaways": [
+            "clean_<campo>() valida y normaliza un campo y debe retornar el valor.",
+            "clean() global permite validar relaciones cruzadas entre multiples campos.",
+            "forms.ValidationError es la excepcion que almacena los errores para mostrarlos en el template."
+          ],
+          "exercise": {
+            "id": "ex_dj_03_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual excepcion estandar de Django se debe elevar dentro de clean_<campo>() para indicar que el valor no satisface la regla de negocio?",
+            "options": [
+              {
+                "id": "a",
+                "text": "django.core.exceptions.ValidationError (o forms.ValidationError)"
+              },
+              {
+                "id": "b",
+                "text": "ValueError"
+              },
+              {
+                "id": "c",
+                "text": "django.http.Http404"
+              },
+              {
+                "id": "d",
+                "text": "TypeError"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "ValidationError es capturada por el sistema de formularios de Django y vinculada al campo para ser renderizada visualmente en la interfaz."
+          }
+        },
+        {
+          "id": "les_dj_03_04",
+          "code": "L04",
+          "title": "Personalizacion Avanzada del Django Admin",
+          "slug": "personalizacion-django-admin",
+          "position": 4,
+          "concept_id": "dj-admin-customization",
+          "objective": "Configurar y personalizar el panel de administracion de Django mediante ModelAdmin y decoradores.",
+          "theory_markdown": "El panel de administracion de Django (`/admin`) es una interfaz web generada dinamicamente para que el personal operativo administre los datos del sistema.\n\n### Creacion de superusuario\nPara acceder se crea una cuenta administrativa mediante:\n```bash\npython manage.py createsuperuser\n```\n\n### Registro y personalizacion con ModelAdmin\nEn `admin.py`, se registra el modelo decorando una clase `admin.ModelAdmin` con `@admin.register(Modelo)`:\n- `list_display`: Tupla de nombres de columnas visibles en la tabla principal.\n- `list_filter`: Filtros laterales dinamicos basados en campos (fechas, booleanos, categorias).\n- `search_fields`: Barra de busqueda que ejecuta sentencias `LIKE` o `ILIKE` en los campos indicados.\n- `readonly_fields`: Campos que se muestran pero no pueden ser alterados (ej. marcas temporales `creado_el`).",
+          "examples": [
+            {
+              "title": "Configuracion profesional en admin.py",
+              "code": "from django.contrib import admin\nfrom .models import Articulo\n\n@admin.register(Articulo)\nclass ArticuloAdmin(admin.ModelAdmin):\n    list_display = (\"titulo\", \"categoria\", \"publicado\", \"creado_el\")\n    list_filter = (\"publicado\", \"categoria\", \"creado_el\")\n    search_fields = (\"titulo\", \"contenido\")\n    readonly_fields = (\"creado_el\",)",
+              "output": "Panel de administracion con tabla interactiva, filtros laterales y buscador full-text.",
+              "explanation": "ModelAdmin permite crear un back-office completo sin escribir lineas de HTML ni JavaScript."
+            }
+          ],
+          "common_errors": "Agregar campos ManyToManyField directamente a list_display, lo cual provoca un error de configuracion en Django Admin porque list_display espera campos escalares.",
+          "mini_exercise": {
+            "instructions": "Usa el decorador @admin.register(Producto) para registrar la clase ProductoAdmin con list_display=('nombre', 'precio').",
+            "starter_code": "from django.contrib import admin\nfrom .models import Producto\n\n# Registra ProductoAdmin\n",
+            "solution": "from django.contrib import admin\nfrom .models import Producto\n\n@admin.register(Producto)\nclass ProductoAdmin(admin.ModelAdmin):\n    list_display = (\"nombre\", \"precio\")"
+          },
+          "key_takeaways": [
+            "python manage.py createsuperuser habilita el acceso inicial al panel.",
+            "list_display, list_filter y search_fields configuran la experiencia operativa del admin.",
+            "@admin.register(Modelo) es la forma limpia y moderna de registrar ModelAdmin."
+          ],
+          "exercise": {
+            "id": "ex_dj_03_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual atributo de ModelAdmin se utiliza para habilitar una barra de busqueda textual en la vista de lista del panel de Django Admin?",
+            "options": [
+              {
+                "id": "a",
+                "text": "search_fields"
+              },
+              {
+                "id": "b",
+                "text": "list_search"
+              },
+              {
+                "id": "c",
+                "text": "query_inputs"
+              },
+              {
+                "id": "d",
+                "text": "filter_horizontal"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "search_fields define la lista de campos sobre los que la barra de busqueda del admin aplicara busquedas textuales."
           }
         }
       ]

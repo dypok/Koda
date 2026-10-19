@@ -7,27 +7,157 @@
       "id": "q_dj_05_01",
       "type": "single_choice",
       "difficulty": "medium",
-      "prompt": "¿Qué comando de Django recolecta todos los archivos estáticos (CSS, JS, imágenes) de todas las apps en una sola carpeta central (STATIC_ROOT) para producción?",
+      "prompt": "Cual clase base se recomienda heredar al crear un modelo de usuario personalizado en Django manteniendo todos los campos estandar?",
       "options": [
         {
           "id": "a",
-          "text": "python manage.py collectstatic"
+          "text": "django.contrib.auth.models.AbstractUser"
         },
         {
           "id": "b",
-          "text": "python manage.py buildstatic"
+          "text": "django.contrib.auth.models.AbstractBaseUser"
         },
         {
           "id": "c",
-          "text": "python manage.py export_assets"
+          "text": "django.db.models.Model"
         },
         {
           "id": "d",
-          "text": "python manage.py sync_media"
+          "text": "django.views.View"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "collectstatic unifica todos los recursos estáticos en STATIC_ROOT para que WhiteNoise o Nginx puedan servirlos con alto rendimiento."
+      "explanation": "AbstractUser conserva la implementacion completa de usuario de Django (nombres, permisos, staff) permitiendo anadir campos personalizados con facilidad."
+    },
+    {
+      "id": "q_dj_05_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Como previene el ORM de Django los ataques de Inyeccion SQL (SQL Injection)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Parametrizando automaticamente todos los valores pasados a metodos como filter(), get() y exclude()."
+        },
+        {
+          "id": "b",
+          "text": "Eliminando la clausula WHERE de todas las consultas."
+        },
+        {
+          "id": "c",
+          "text": "Encriptando la base de datos con una contrasena maestra."
+        },
+        {
+          "id": "d",
+          "text": "Permitiendo solo conexiones desde localhost."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El ORM compila sentencias SQL parametrizadas donde los valores nunca se interpolan como cadenas crudas, neutralizando cualquier intento de inyeccion de codigo."
+    },
+    {
+      "id": "q_dj_05_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que libreria permite a una aplicacion Django servir sus propios archivos estaticos en produccion de forma altamente eficiente con compresion y cache?",
+      "options": [
+        {
+          "id": "a",
+          "text": "WhiteNoise"
+        },
+        {
+          "id": "b",
+          "text": "Boto3"
+        },
+        {
+          "id": "c",
+          "text": "Pillow"
+        },
+        {
+          "id": "d",
+          "text": "Requests"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "WhiteNoise se integra como middleware en el stack WSGI permitiendo servir activos estaticos directamente con compresion y hashes de versionado."
+    },
+    {
+      "id": "q_dj_05_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que servidor WSGI basado en un modelo pre-fork de workers es comunmente utilizado para servir Django en servidores Linux de produccion?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Gunicorn"
+        },
+        {
+          "id": "b",
+          "text": "Apache Tomcat"
+        },
+        {
+          "id": "c",
+          "text": "Node.js"
+        },
+        {
+          "id": "d",
+          "text": "manage.py runserver"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Gunicorn (Green Unicorn) es el servidor WSGI estandar para Python en sistemas Unix, disenado para gestionar multiples workers concurrentes de forma estable."
+    },
+    {
+      "id": "q_dj_05_05",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Que efecto tiene configurar SECURE_SSL_REDIRECT = True en settings.py de Django?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Redirige automaticamente todas las peticiones entrantes no seguras HTTP hacia su equivalente seguro HTTPS."
+        },
+        {
+          "id": "b",
+          "text": "Deshabilita el protocolo SSL en el servidor."
+        },
+        {
+          "id": "c",
+          "text": "Exige que el cliente tenga instalado un certificado digital en su navegador."
+        },
+        {
+          "id": "d",
+          "text": "Impide que los usuarios puedan cerrar sesion."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "SecurityMiddleware inspecciona el esquema de la solicitud y responde con una redireccion 301/302 a HTTPS si la conexion fue establecida por HTTP plano."
+    },
+    {
+      "id": "q_dj_05_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "Cual es el valor obligatorio que debe tener la variable DEBUG en settings.py en un entorno de produccion real?",
+      "options": [
+        {
+          "id": "a",
+          "text": "False"
+        },
+        {
+          "id": "b",
+          "text": "True"
+        },
+        {
+          "id": "c",
+          "text": "None"
+        },
+        {
+          "id": "d",
+          "text": "\"development\""
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "DEBUG debe ser siempre False en produccion para evitar fugas criticas de informacion confidencial a traves de paginas de depuracion detalladas."
     }
   ]
 }

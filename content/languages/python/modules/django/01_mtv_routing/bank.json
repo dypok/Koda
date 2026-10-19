@@ -7,27 +7,157 @@
       "id": "q_dj_01_01",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "¿Cuál es el comando de la CLI de Django para crear una nueva aplicación modular dentro del proyecto?",
+      "prompt": "Que significa el patron arquitectonico MTV en el que se basa Django?",
       "options": [
         {
           "id": "a",
-          "text": "python manage.py startapp <nombre>"
+          "text": "Model (capa de datos/ORM), Template (capa de presentacion visual) y View (capa logica de control y respuesta)."
         },
         {
           "id": "b",
-          "text": "django-admin new-project <nombre>"
+          "text": "Memory, Threading y Virtualization."
         },
         {
           "id": "c",
-          "text": "pip install app <nombre>"
+          "text": "Multiple Table Verification."
         },
         {
           "id": "d",
-          "text": "django create-service"
+          "text": "Module, Test y Versioning."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "manage.py startapp genera la estructura de carpetas (models.py, views.py, etc.) para una nueva app."
+      "explanation": "Django utiliza MTV como su interpretacion del clasico MVC: el Model gestiona datos, el Template la interfaz y la View orquesta la logica de peticion/respuesta."
+    },
+    {
+      "id": "q_dj_01_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Que comando de consola se ejecuta para inicializar una nueva aplicacion modular dentro de un proyecto Django existente?",
+      "options": [
+        {
+          "id": "a",
+          "text": "python manage.py startapp nombre_app"
+        },
+        {
+          "id": "b",
+          "text": "django-admin createproject nombre_app"
+        },
+        {
+          "id": "c",
+          "text": "python manage.py newmodule nombre_app"
+        },
+        {
+          "id": "d",
+          "text": "pip install nombre_app"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "startapp genera la estructura de carpetas estandar (models.py, views.py, admin.py, apps.py) para una aplicacion modular en Django."
+    },
+    {
+      "id": "q_dj_01_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "En que lista de settings.py debe agregarse obligatoriamente una nueva app creada en el proyecto para que Django cargue sus modelos y configuraciones?",
+      "options": [
+        {
+          "id": "a",
+          "text": "INSTALLED_APPS"
+        },
+        {
+          "id": "b",
+          "text": "MIDDLEWARE"
+        },
+        {
+          "id": "c",
+          "text": "AUTHENTICATION_BACKENDS"
+        },
+        {
+          "id": "d",
+          "text": "ALLOWED_HOSTS"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "INSTALLED_APPS lista las aplicaciones activas del proyecto. Sin registrarla alli, Django ignorara las migraciones y modelos de la aplicacion."
+    },
+    {
+      "id": "q_dj_01_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que funcion cumple include() en el archivo urls.py principal de un proyecto Django?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permite referenciar y delegar el enrutamiento a un archivo urls.py secundario perteneciente a una aplicacion modular especifica."
+        },
+        {
+          "id": "b",
+          "text": "Descarga archivos estaticos CSS desde un CDN externo."
+        },
+        {
+          "id": "c",
+          "text": "Importa automaticamente todas las librerias instaladas con pip."
+        },
+        {
+          "id": "d",
+          "text": "Crea una copia de seguridad de la base de datos."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "include() posibilita un enrutamiento jerarquico y desacoplado, haciendo que cada aplicacion gestione sus propias rutas."
+    },
+    {
+      "id": "q_dj_01_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Dada la ruta path('articulos/<int:articulo_id>/', views.detalle), que garantiza el convertidor <int:articulo_id>?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que la ruta solo coincidira si el valor es numerico entero, y lo entregara a la vista como un entero (int) de Python."
+        },
+        {
+          "id": "b",
+          "text": "Que el articulo se creara automaticamente en la base de datos si no existe."
+        },
+        {
+          "id": "c",
+          "text": "Que el parametro se transmitira codificado en Base64."
+        },
+        {
+          "id": "d",
+          "text": "Que el usuario debe ser obligatoriamente administrador para acceder."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Los convertidores de ruta de Django realizan coincidencia de patron regex y conversion de tipo automatica al tipo especificado."
+    },
+    {
+      "id": "q_dj_01_06",
+      "type": "predict_output",
+      "difficulty": "hard",
+      "prompt": "Que ocurre si se define una vista basada en clase sin heredar de View y se intenta registrar con .as_view() en urls.py?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Se produce un AttributeError porque el metodo .as_view() es provisto por la clase base View de Django."
+        },
+        {
+          "id": "b",
+          "text": "Django compila la vista sin problemas."
+        },
+        {
+          "id": "c",
+          "text": "La vista se convierte en un endpoint GraphQL."
+        },
+        {
+          "id": "d",
+          "text": "El servidor se ejecuta en modo solo lectura."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "as_view() es un metodo de clase implementado en django.views.generic.base.View; una clase arbitraria no dispone de dicho metodo a menos que herede de View."
     }
   ]
 }
