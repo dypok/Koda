@@ -2,8 +2,8 @@
 
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key, Code } from '@phosphor-icons/react';
-import { ContentExercise, ContentLesson, ContentModule, loadBank, loadModule, shuffled } from '@/lib/content';
+import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key, Code, Shield, Lightbulb } from '@phosphor-icons/react';
+import { ContentExercise, ContentLesson, ContentModule, isModuleAvailable, loadBank, loadModule, shuffled } from '@/lib/content';
 import { QuestionRenderer } from './QuestionRenderer';
 import { useLessonEngine } from './useLessonEngine';
 import { useLessonKeyboardShortcuts } from '@/hooks/useLessonKeyboardShortcuts';
@@ -12,6 +12,8 @@ import { cn } from '@/lib/utils';
 
 import { OrbitFieldBackground } from '@/components/landing/OrbitFieldBackground';
 import { EvaluationService } from '@/services/learning/evaluation.service';
+import { useAuthStore } from '@/stores/auth.store';
+import { MarkdownContent, renderMarkdownInline } from '@/components/ui/markdown-content';
 
 interface LessonWorkspaceProps {
   courseId: string;
@@ -19,7 +21,17 @@ interface LessonWorkspaceProps {
 }
 
 const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'lesson' | 'quiz' }> = {
-  // Python 1: Fundamentos
+  // Python 1: Fundamentos (IDs emitidos por Backend / API)
+  'py-m01': { moduleSlug: 'fundamentos-de-python' },
+  'py-m02': { moduleSlug: 'variables-y-tipos-de-datos' },
+  'py-m03': { moduleSlug: 'operadores-y-expresiones' },
+  'py-m04': { moduleSlug: 'condicionales' },
+  'py-boss-logic': { moduleSlug: 'condicionales', initialMode: 'quiz' },
+  'py-m05': { moduleSlug: 'bucles-for' },
+  'py-m06': { moduleSlug: 'bucles-while' },
+  'py-apex-1': { moduleSlug: 'funciones-fundamentales', initialMode: 'quiz' },
+
+  // Python 1: Fundamentos (IDs canónicos de dataset mock frontend)
   'les-01': { moduleSlug: 'fundamentos-de-python' },
   'les-02': { moduleSlug: 'variables-y-tipos-de-datos' },
   'les-03': { moduleSlug: 'operadores-y-expresiones' },
@@ -33,7 +45,14 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'les-10': { moduleSlug: 'funciones-fundamentales' },
   'les-boss': { moduleSlug: 'funciones-fundamentales', initialMode: 'quiz' },
 
-  // Python 2: Intermedio
+  // Python 2: Intermedio (IDs Backend / API)
+  'py2-m01': { moduleSlug: 'comprensiones' },
+  'py2-m02': { moduleSlug: 'funciones-avanzadas' },
+  'py2-m03': { moduleSlug: 'modulos-y-paquetes' },
+  'py2-m04': { moduleSlug: 'manejo-de-excepciones' },
+  'py2-m05': { moduleSlug: 'archivos-txt-csv-json' },
+
+  // Python 2: Intermedio (IDs dataset mock frontend)
   'py2-01': { moduleSlug: 'comprensiones' },
   'py2-02': { moduleSlug: 'funciones-avanzadas' },
   'py2-03': { moduleSlug: 'modulos-y-paquetes' },
@@ -47,7 +66,14 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'py2-10': { moduleSlug: 'testing-con-pytest' },
   'py2-boss': { moduleSlug: 'testing-con-pytest', initialMode: 'quiz' },
 
-  // Python 3: Avanzado
+  // Python 3: Avanzado (IDs Backend / API)
+  'py3-m01': { moduleSlug: 'iteradores-y-generadores' },
+  'py3-m02': { moduleSlug: 'decoradores' },
+  'py3-m03': { moduleSlug: 'context-managers' },
+  'py3-m04': { moduleSlug: 'type-hints-y-dataclasses' },
+  'py3-m05': { moduleSlug: 'programacion-funcional' },
+
+  // Python 3: Avanzado (IDs dataset mock frontend)
   'py3-01': { moduleSlug: 'iteradores-y-generadores' },
   'py3-02': { moduleSlug: 'decoradores' },
   'py3-03': { moduleSlug: 'context-managers' },
@@ -61,21 +87,30 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'py3-10': { moduleSlug: 'patrones-de-diseno' },
   'py3-boss': { moduleSlug: 'patrones-de-diseno', initialMode: 'quiz' },
 
-  // FastAPI
+  // FastAPI (IDs Backend y Mock)
+  'fa-m01': { moduleSlug: 'fastapi-http-rest' },
+  'fa-m02': { moduleSlug: 'fastapi-pydantic' },
+  'fa-m03': { moduleSlug: 'fastapi-sqlalchemy-alembic' },
+  'fa-m04': { moduleSlug: 'fastapi-auth-jwt' },
   'fa-01': { moduleSlug: 'fastapi-http-rest' },
   'fa-02': { moduleSlug: 'fastapi-pydantic' },
   'fa-03': { moduleSlug: 'fastapi-sqlalchemy-alembic' },
   'fa-04': { moduleSlug: 'fastapi-auth-jwt' },
   'fa-05': { moduleSlug: 'fastapi-docker-deploy' },
 
-  // Django
+  // Django (IDs Backend y Mock)
+  'dj-m01': { moduleSlug: 'django-mtv-routing' },
+  'dj-m02': { moduleSlug: 'django-orm-models' },
+  'dj-m03': { moduleSlug: 'django-forms-admin' },
+  'dj-m04': { moduleSlug: 'django-rest-framework' },
   'dj-01': { moduleSlug: 'django-mtv-routing' },
   'dj-02': { moduleSlug: 'django-orm-models' },
   'dj-03': { moduleSlug: 'django-forms-admin' },
   'dj-04': { moduleSlug: 'django-rest-framework' },
   'dj-05': { moduleSlug: 'django-auth-security-deploy' },
 
-  // Data Analytics
+  // Data Analytics (IDs Backend y Mock)
+  'data-analytics-s01': { moduleSlug: 'numpy-fundamentos' },
   'da-01': { moduleSlug: 'numpy-fundamentos' },
   'da-02': { moduleSlug: 'pandas-series-dataframes' },
   'da-03': { moduleSlug: 'pandas-limpieza-transformacion' },
@@ -89,7 +124,8 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'da-10': { moduleSlug: 'streamlit-dashboards' },
   'da-boss': { moduleSlug: 'streamlit-dashboards', initialMode: 'quiz' },
 
-  // AI Agents
+  // AI Agents (IDs Backend y Mock)
+  'ai-agents-s01': { moduleSlug: 'ia-llms-y-prompts' },
   'ia-01': { moduleSlug: 'ia-llms-y-prompts' },
   'ia-02': { moduleSlug: 'ia-apis-modelos' },
   'ia-03': { moduleSlug: 'ia-salidas-estructuradas' },
@@ -102,10 +138,22 @@ const NODE_TO_SLUG_MAP: Record<string, { moduleSlug: string; initialMode?: 'less
   'ia-09': { moduleSlug: 'ia-guardrails-y-evaluacion' },
   'ia-10': { moduleSlug: 'ia-proyecto-agente-completo' },
 
-  // Apex Master Gate
+  // Apex (IDs Backend y Mock)
+  'python-apex-s01': { moduleSlug: 'apex-master-gate' },
   'apex-01': { moduleSlug: 'apex-master-gate' },
   'apex-02': { moduleSlug: 'apex-master-gate' },
   'apex-03': { moduleSlug: 'apex-master-gate', initialMode: 'quiz' },
+};
+
+const COURSE_DEFAULT_SLUGS: Record<string, string> = {
+  'python-1': 'fundamentos-de-python',
+  'python-2': 'comprensiones',
+  'python-3': 'iteradores-y-generadores',
+  'fastapi-async': 'fastapi-http-rest',
+  'django-enterprise': 'django-mtv-routing',
+  'data-analytics': 'numpy-fundamentos',
+  'ai-agents': 'ia-llms-y-prompts',
+  'python-apex': 'apex-master-gate',
 };
 
 function parseCourse(courseId: string, sectionRef: string): { lang: string; moduleSlug: string; initialMode: 'lesson' | 'quiz' } {
@@ -121,13 +169,23 @@ function parseCourse(courseId: string, sectionRef: string): { lang: string; modu
     };
   }
 
-  // 2. Si el sectionRef es directamente un slug de módulo conocido
-  const isDirectSlug = sectionRef.includes('-');
+  // 2. Si sectionRef es directamente un slug de módulo conocido y disponible
+  if (isModuleAvailable(lang, sectionRef)) {
+    const isQuizMode = sectionRef.includes('boss') || sectionRef.includes('quiz') || sectionRef.includes('exam');
+    return {
+      lang,
+      moduleSlug: sectionRef,
+      initialMode: isQuizMode ? 'quiz' : 'lesson',
+    };
+  }
+
+  // 3. Fallback inteligente según curso para evitar que un ID de sección no mapeado rompa el workspace
+  const defaultSlug = COURSE_DEFAULT_SLUGS[courseId] || 'fundamentos-de-python';
   const isQuizMode = sectionRef.includes('boss') || sectionRef.includes('quiz') || sectionRef.includes('exam');
 
   return {
     lang,
-    moduleSlug: isDirectSlug ? sectionRef : 'fundamentos-de-python',
+    moduleSlug: defaultSlug,
     initialMode: isQuizMode ? 'quiz' : 'lesson',
   };
 }
@@ -167,7 +225,24 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   const [quizScore, setQuizScore] = useState<{ ok: number; total: number } | null>(null);
   const completeSectionNode = useRoadmapStore((s) => s.completeSectionNode);
 
-  // Registro atómico de lecciones completadas
+  const lessonsDataset = useRoadmapStore((s) => s.lessonsDataset);
+  const currentNode = useMemo(() => {
+    return (
+      lessonsDataset?.nodes?.find(
+        (n) =>
+          n.id === sectionRef ||
+          n.id.toLowerCase().replace(/^py-m0?/, 'les-0') === sectionRef.toLowerCase().replace(/^py-m0?/, 'les-0')
+      ) ?? null
+    );
+  }, [lessonsDataset, sectionRef]);
+
+  const sessionExerciseXpRef = useRef<number>(0);
+
+  const handleExerciseCorrect = useCallback((xp: number) => {
+    sessionExerciseXpRef.current += xp;
+  }, []);
+
+  // Registro atomico de lecciones completadas
   const [completedLessons, setCompletedLessons] = useState<Set<string>>(() => {
     try {
       const saved = window.localStorage.getItem('koda_completed_lessons');
@@ -186,7 +261,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     (lessonId: string) => {
       if (!lessonId) return;
 
-      // Si la lección ya fue registrada como completada, evitar re-renders en bucle
+      // Si la leccion ya fue registrada como completada, evitar re-renders en bucle
       if (completedLessonsRef.current.has(lessonId)) return;
 
       setCompletedLessons((prev) => {
@@ -198,22 +273,19 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         return next;
       });
 
-      // Notificar al roadmap store para encender el nodo actual
-      completeSectionNode(sectionRef, 3);
-
-      // Sincronizar completitud de la sección en PostgreSQL
-      if (parsed) {
-        EvaluationService.completeSection(sectionRef, {
-          moduleId: parsed.moduleSlug,
-          courseId,
-          accuracyPercentage: 100,
-        }).catch((err) => {
-          // Fallback silencioso si el usuario está offline o sin sesión activa
-          console.warn('Sync section completion offline fallback:', err?.message);
+      // Asegurar que el usuario tenga racha e isActiveToday activos localmente de forma inmediata
+      const currentUser = useAuthStore.getState().user;
+      if (currentUser) {
+        const curStreak = currentUser.streak > 0 ? currentUser.streak : 1;
+        useAuthStore.getState().updateUserProfile({
+          streak: Math.max(currentUser.streak, curStreak),
+          longestStreak: Math.max(currentUser.longestStreak ?? 1, curStreak),
+          isActiveToday: true,
+          lastStudyDate: new Date().toISOString(),
         });
       }
     },
-    [completeSectionNode, sectionRef, parsed, courseId]
+    []
   );
 
   useEffect(() => {
@@ -249,114 +321,59 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     return module.sections[0] ?? null;
   }, [module, sectionRef]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
-        <p role="status" className="font-mono text-xs text-orange-400 tracking-widest animate-pulse">
-          CARGANDO SECCIÓN…
-        </p>
-      </div>
-    );
-  }
-
-  if (!parsed || !module || !section) {
-    return (
-      <div className="relative isolate min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4 px-4 text-center">
-        <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
-        <p className="font-display text-2xl font-bold text-white">Sección no disponible todavía</p>
-        <p className="text-sm text-slate-400 max-w-md">
-          Este módulo se encuentra en sincronización. Vuelve al roadmap para continuar con las lecciones activas de Python Specialist.
-        </p>
-        <Link
-          href="/"
-          className="inline-flex min-h-[48px] items-center rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] hover:brightness-110 active:translate-y-1 active:border-b-0 active:shadow-none transition-all"
-        >
-          Volver a la ruta
-        </Link>
-      </div>
-    );
-  }
+  const lesson = section?.lessons?.[lessonIdx] ?? null;
 
   const handleQuizFinish = useCallback(
     (ok: number, total: number) => {
       setQuizScore({ ok, total });
       setMode('done');
-      const accuracy = Math.round((ok / Math.max(1, total)) * 100);
+      const accuracy = total > 0 ? Math.round((ok / total) * 100) : 100;
       if (accuracy >= 70) {
         completeSectionNode(sectionRef, ok === total ? 3 : 2);
+        const nodeTargetXp = currentNode?.xp ?? 120;
+        const completionReward = Math.max(30, nodeTargetXp - sessionExerciseXpRef.current);
         if (parsed) {
           EvaluationService.completeSection(sectionRef, {
             moduleId: parsed.moduleSlug,
             courseId,
             accuracyPercentage: accuracy,
-          }).catch((err) => {
-            console.warn('Sync quiz section completion offline fallback:', err?.message);
-          });
+            targetXp: completionReward,
+          })
+            .then((res) => {
+              const currentUser = useAuthStore.getState().user;
+              if (currentUser) {
+                const awardXp = res.xpAwarded ?? completionReward;
+                const newTotalXp = res.userTotalXp ?? (currentUser.totalXp + awardXp);
+                const newStreak = res.currentStreak ?? (currentUser.streak > 0 ? currentUser.streak : 1);
+                useAuthStore.getState().updateUserProfile({
+                  totalXp: Math.max(currentUser.totalXp, newTotalXp),
+                  streak: Math.max(currentUser.streak, newStreak),
+                  longestStreak: Math.max(currentUser.longestStreak ?? 1, res.longestStreak ?? newStreak),
+                  streakFreezeCount: res.streakFreezeCount ?? currentUser.streakFreezeCount,
+                  lastStudyDate: new Date().toISOString(),
+                  isActiveToday: true,
+                });
+              }
+            })
+            .catch((err) => {
+              console.warn('Sync quiz section completion offline fallback:', err?.message);
+              const currentUser = useAuthStore.getState().user;
+              if (currentUser) {
+                const curStreak = currentUser.streak > 0 ? currentUser.streak : 1;
+                useAuthStore.getState().updateUserProfile({
+                  totalXp: (currentUser.totalXp ?? 0) + completionReward,
+                  streak: Math.max(currentUser.streak, curStreak),
+                  longestStreak: Math.max(currentUser.longestStreak ?? 1, curStreak),
+                  lastStudyDate: new Date().toISOString(),
+                  isActiveToday: true,
+                });
+              }
+            });
         }
       }
     },
-    [completeSectionNode, sectionRef, parsed, courseId]
+    [completeSectionNode, sectionRef, parsed, courseId, currentNode]
   );
-
-  if (mode === 'quiz') {
-    return (
-      <QuizMode
-        bank={bank}
-        sectionTitle={parsed.initialMode === 'quiz' && (sectionRef === 'les-miniboss' || sectionRef === 'py-boss-logic') ? '🛡️ El Centinela de la Lógica' : section.title}
-        courseTitle={module.title}
-        onFinish={handleQuizFinish}
-      />
-    );
-  }
-
-  if (mode === 'done' && quizScore) {
-    const passed = quizScore.ok / Math.max(1, quizScore.total) >= 0.7;
-    return (
-      <div className="relative isolate min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-6 px-4 text-center">
-        <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
-        {passed ? (
-          <div className="relative">
-            <div className="absolute -inset-6 rounded-full bg-orange-500/20 blur-2xl animate-pulse" />
-            <div className="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-b from-orange-500 to-amber-500 text-slate-950 shadow-[0_0_30px_rgba(255,106,0,0.5)] border border-amber-200">
-              <Trophy aria-hidden="true" className="w-10 h-10" />
-            </div>
-          </div>
-        ) : null}
-        <div className="space-y-2">
-          <h1 className="font-display text-3xl sm:text-4xl font-black text-white tracking-tight">
-            {passed ? '¡Sección completada!' : 'Casi lo logras'}
-          </h1>
-          <p className="text-slate-400 text-sm sm:text-base max-w-md">
-            Quiz: <span className="font-mono font-bold text-orange-400">{quizScore.ok}/{quizScore.total}</span> aciertos
-            {passed ? ' · +10 XP de maestría' : ' · necesitas 70% de aciertos para avanzar'}
-          </p>
-        </div>
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
-          {!passed ? (
-            <button
-              type="button"
-              onClick={() => {
-                setQuizScore(null);
-                setMode('quiz');
-              }}
-              className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
-            >
-              <ArrowCounterClockwise aria-hidden="true" className="w-4 h-4" />
-              <span>REINTENTAR QUIZ</span>
-            </button>
-          ) : null}
-          <Link
-            href="/"
-            className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-slate-700 bg-slate-900/80 px-6 font-mono text-xs font-bold text-slate-200 hover:border-orange-500/50 hover:bg-slate-800 transition-colors shadow-lg"
-          >
-            Volver a la ruta
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
-  const lesson = section.lessons[lessonIdx] ?? null;
 
   const handleCompleteCurrent = useCallback(() => {
     if (lesson?.id) {
@@ -387,6 +404,94 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     },
     [section]
   );
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <p role="status" className="font-mono text-xs text-orange-400 tracking-widest animate-pulse">
+          CARGANDO SECCIÓN…
+        </p>
+      </div>
+    );
+  }
+
+  if (!parsed || !module || !section) {
+    return (
+      <div className="relative isolate min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4 px-4 text-center">
+        <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
+        <p className="font-display text-2xl font-bold text-white">Sección no disponible todavía</p>
+        <p className="text-sm text-slate-400 max-w-md">
+          Este módulo se encuentra en sincronización. Vuelve al roadmap para continuar con las lecciones activas de Python Specialist.
+        </p>
+        <Link
+          href="/"
+          className="inline-flex min-h-[48px] items-center rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] hover:brightness-110 active:translate-y-1 active:border-b-0 active:shadow-none transition-all"
+        >
+          Volver a la ruta
+        </Link>
+      </div>
+    );
+  }
+
+  if (mode === 'quiz') {
+    const isMiniBoss = sectionRef === 'les-miniboss' || sectionRef === 'py-boss-logic';
+    return (
+      <QuizMode
+        bank={bank}
+        sectionTitle={isMiniBoss ? 'Guardián de la Lógica' : section.title}
+        courseTitle={module.title}
+        isBoss={isMiniBoss}
+        onFinish={handleQuizFinish}
+      />
+    );
+  }
+
+  if (mode === 'done' && quizScore) {
+    const passed = quizScore.ok / Math.max(1, quizScore.total) >= 0.7;
+    return (
+      <div className="relative isolate min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-6 px-4 text-center">
+        <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
+        {passed ? (
+          <div className="relative">
+            <div className="absolute -inset-6 rounded-full bg-orange-500/20 blur-2xl animate-pulse" />
+            <div className="relative flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-b from-orange-500 to-amber-500 text-slate-950 shadow-[0_0_30px_rgba(255,106,0,0.5)] border border-amber-200">
+              <Trophy aria-hidden="true" className="w-10 h-10" />
+            </div>
+          </div>
+        ) : null}
+        <div className="space-y-2">
+          <h1 className="font-display text-3xl sm:text-4xl font-black text-white tracking-tight">
+            {passed ? '¡Sección completada!' : 'Casi lo logras'}
+          </h1>
+          <p className="text-slate-400 text-sm sm:text-base max-w-md">
+            Quiz: <span className="font-mono font-bold text-orange-400">{quizScore.ok}/{quizScore.total}</span> aciertos
+            {passed ? ` · +${currentNode?.xp ?? 250} XP de maestría` : ' · necesitas 70% de aciertos para avanzar'}
+          </p>
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          {!passed ? (
+            <button
+              type="button"
+              onClick={() => {
+                setQuizScore(null);
+                setMode('quiz');
+              }}
+              className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
+            >
+              <ArrowCounterClockwise aria-hidden="true" className="w-4 h-4" />
+              <span>REINTENTAR QUIZ</span>
+            </button>
+          ) : null}
+          <Link
+            href="/"
+            className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-slate-700 bg-slate-900/80 px-6 font-mono text-xs font-bold text-slate-200 hover:border-orange-500/50 hover:bg-slate-800 transition-colors shadow-lg"
+          >
+            Volver a la ruta
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
@@ -458,6 +563,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             lesson={lesson}
             isCompleted={completedLessons.has(lesson.id)}
             onComplete={handleCompleteCurrent}
+            onExerciseCorrect={handleExerciseCorrect}
             onNext={handleNext}
             onPrev={handlePrev}
             onJumpTo={handleJumpTo}
@@ -486,6 +592,7 @@ function LessonView({
   lesson,
   isCompleted,
   onComplete,
+  onExerciseCorrect,
   onNext,
   onPrev,
   onJumpTo: _onJumpTo,
@@ -496,6 +603,7 @@ function LessonView({
   lesson: ContentLesson;
   isCompleted?: boolean;
   onComplete?: () => void;
+  onExerciseCorrect?: (xp: number) => void;
   onNext: () => void;
   onPrev: () => void;
   onJumpTo?: (idx: number) => void;
@@ -533,7 +641,21 @@ function LessonView({
     },
     onSubmit: () => {
       if (!engine.result && engine.selected.length > 0) {
-        engine.check();
+        const checkRes = engine.check();
+        if (checkRes?.correct && checkRes.xp > 0) {
+          onExerciseCorrect?.(checkRes.xp);
+          const curUser = useAuthStore.getState().user;
+          if (curUser) {
+            const curStreak = curUser.streak > 0 ? curUser.streak : 1;
+            useAuthStore.getState().updateUserProfile({
+              totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
+              streak: Math.max(curUser.streak, curStreak),
+              longestStreak: Math.max(curUser.longestStreak ?? 1, curStreak),
+              isActiveToday: true,
+              lastStudyDate: new Date().toISOString(),
+            });
+          }
+        }
         if (lesson?.id) {
           EvaluationService.evaluateLessonAnswer(lesson.id, {
             selected_option_ids: engine.selected,
@@ -582,9 +704,9 @@ function LessonView({
           <h1 className="font-display text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">
             {lesson.title}
           </h1>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            {lesson.explanation}
-          </p>
+          <div className="pt-1">
+            <MarkdownContent content={lesson.explanation} />
+          </div>
         </div>
 
         {/* Terminal interactiva */}
@@ -604,7 +726,9 @@ function LessonView({
                 </div>
               ) : null}
               {ex.explanation ? (
-                <p className="text-[11px] text-slate-400 leading-normal pl-1">{ex.explanation}</p>
+                <div className="text-[11px] text-slate-400 leading-normal pl-1">
+                  <MarkdownContent content={ex.explanation} inline />
+                </div>
               ) : null}
             </div>
           ))}
@@ -653,9 +777,9 @@ function LessonView({
                 </span>
               </div>
 
-              <p className="text-base sm:text-lg font-bold text-white leading-snug">
-                {exercise.prompt}
-              </p>
+              <div className="text-base sm:text-lg font-bold text-white leading-snug">
+                <MarkdownContent content={exercise.prompt} inline />
+              </div>
 
               <div className="pt-2">
                 <QuestionRenderer
@@ -674,7 +798,21 @@ function LessonView({
                 <button
                   type="button"
                   onClick={() => {
-                    engine.check();
+                    const checkRes = engine.check();
+                    if (checkRes?.correct && checkRes.xp > 0) {
+                      onExerciseCorrect?.(checkRes.xp);
+                      const curUser = useAuthStore.getState().user;
+                      if (curUser) {
+                        const curStreak = curUser.streak > 0 ? curUser.streak : 1;
+                        useAuthStore.getState().updateUserProfile({
+                          totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
+                          streak: Math.max(curUser.streak, curStreak),
+                          longestStreak: Math.max(curUser.longestStreak ?? 1, curStreak),
+                          isActiveToday: true,
+                          lastStudyDate: new Date().toISOString(),
+                        });
+                      }
+                    }
                     if (lesson?.id) {
                       EvaluationService.evaluateLessonAnswer(lesson.id, {
                         selected_option_ids: engine.selected,
@@ -711,13 +849,17 @@ function LessonView({
                       {engine.result.correct ? `¡Excelente! +${engine.result.xp} XP` : 'Respuesta incorrecta'}
                     </p>
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                    {engine.result.feedback}
-                  </p>
+                  <div className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                    <MarkdownContent content={engine.result.feedback} />
+                  </div>
                   {engine.result.hint ? (
-                    <p className="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg">
-                      💡 <strong>Pista:</strong> {engine.result.hint}
-                    </p>
+                    <div className="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg flex items-start gap-2">
+                      <Lightbulb className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" aria-hidden="true" />
+                      <div>
+                        <strong className="font-bold text-amber-300 mr-1">Pista:</strong>
+                        <MarkdownContent content={engine.result.hint} inline />
+                      </div>
+                    </div>
                   ) : null}
                   <div className="flex gap-2.5 pt-1">
                     {!engine.result.correct ? (
@@ -785,11 +927,13 @@ function QuizMode({
   bank,
   sectionTitle,
   courseTitle,
+  isBoss,
   onFinish,
 }: {
   bank: ContentExercise[];
   sectionTitle: string;
   courseTitle?: string;
+  isBoss?: boolean;
   onFinish: (ok: number, total: number) => void;
 }) {
   const questions = useMemo(
@@ -865,7 +1009,10 @@ function QuizMode({
             <div className="flex items-center gap-2 font-mono text-xs">
               <span className="text-slate-400">{courseTitle ?? 'Curso'}</span>
               <span className="text-slate-600">›</span>
-              <span className="text-orange-400 font-bold uppercase tracking-wider">Quiz · {sectionTitle}</span>
+              <span className="text-orange-400 font-bold uppercase tracking-wider inline-flex items-center gap-1.5">
+                {isBoss && <Shield className="w-3.5 h-3.5 text-amber-400 shrink-0" aria-hidden="true" />}
+                <span>Quiz · {sectionTitle}</span>
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <div className="hidden sm:flex items-center gap-1 text-[11px] font-mono text-slate-400 bg-slate-800/60 px-2.5 py-1 rounded-full border border-slate-700/50">
@@ -898,9 +1045,9 @@ function QuizMode({
               </span>
             </div>
 
-            <p className="text-lg sm:text-xl font-bold text-white leading-snug">
-              {engine.current.prompt}
-            </p>
+            <div className="text-lg sm:text-xl font-bold text-white leading-snug">
+              <MarkdownContent content={engine.current.prompt} inline />
+            </div>
 
             <QuestionRenderer
               exercise={engine.current}

@@ -68,6 +68,7 @@ export class LearningController {
       moduleId: body.moduleId,
       courseId: body.courseId,
       accuracyPercentage: body.accuracyPercentage,
+      targetXp: body.targetXp,
     });
   }
 

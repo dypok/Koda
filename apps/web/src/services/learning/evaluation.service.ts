@@ -19,6 +19,10 @@ export interface SectionCompletionResult {
   isNewBest?: boolean;
   xpAwarded?: number;
   userTotalXp?: number;
+  currentStreak?: number;
+  longestStreak?: number;
+  streakFreezeCount?: number;
+  isActiveToday?: boolean;
 }
 
 export interface EvaluationQuestion {
@@ -242,7 +246,7 @@ export class EvaluationService {
   }
 
   /**
-   * Registra la finalización de una sección en PostgreSQL otorgando estrellas y XP.
+   * Registra la finalizacion de una seccion en PostgreSQL otorgando estrellas y XP.
    */
   public static async completeSection(
     sectionId: string,
@@ -250,6 +254,7 @@ export class EvaluationService {
       moduleId: string;
       courseId: string;
       accuracyPercentage: number;
+      targetXp?: number;
     },
   ): Promise<SectionCompletionResult> {
     return requestWithAuth<SectionCompletionResult>(`/learning/sections/${sectionId}/complete`, {

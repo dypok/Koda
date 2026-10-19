@@ -27,6 +27,7 @@
 - [x] [FRONTEND] Integrar aceleración `transform` y discriminador de arrastre vs. clic en `RoadmapCanvas.tsx`.
 - [x] [FRONTEND] Implementar controles de zoom y botón de recentrado focal en `RoadmapCanvasControls.tsx`.
 - [x] [FRONTEND] Optimizar flujos láser SVG vectoriales orientados hacia adelante en `RoadmapSvgPaths.tsx`.
+- [x] [FRONTEND] Anclaje matemático y resolución de desfasaje de conexiones en `RoadmapPixiGraph.tsx` y `RoadmapService`.
 - [x] [FRONTEND] Modularizar canvas de estrellas ambientales y partículas a 120 FPS en `RoadmapAmbientStars.tsx`.
 
 ---

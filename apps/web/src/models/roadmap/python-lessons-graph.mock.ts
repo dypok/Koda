@@ -74,14 +74,14 @@ function buildSectionDataset(
 // 1. Python 1: Fundamentos
 export const PYTHON_1_LESSONS_DATASET = buildSectionDataset(
   'PYTHON 1: FUNDAMENTOS & SINTAXIS',
-  45,
+  0,
   [
-    { id: 'les-01', code: '01', label: 'TU PRIMER PROGRAMA', subtitle: 'PRINT, SINTAXIS & COMENTARIOS', variant: 'completed', iconType: 'brackets', stars: 3, maxStars: 3, xp: 120, statusText: 'DOMINADO • +120 XP' },
-    { id: 'les-02', code: '02', label: 'VARIABLES & TIPOS', subtitle: 'INT, FLOAT, STR, BOOL & TYPE', variant: 'completed', iconType: 'flow', stars: 3, maxStars: 3, xp: 150, statusText: 'DOMINADO • +150 XP' },
-    { id: 'les-03', code: '03', label: 'OPERADORES & LÓGICA', subtitle: 'ARITMÉTICA & BOOLEANOS', variant: 'completed', iconType: 'atom', stars: 3, maxStars: 3, xp: 180, statusText: 'DOMINADO • +180 XP' },
-    { id: 'les-04', code: '04', label: 'ENTRADA/SALIDA & STRINGS', subtitle: 'INPUT(), PRINT() & F-STRINGS', variant: 'completed', iconType: 'matrix', stars: 3, maxStars: 3, xp: 180, statusText: 'DOMINADO • +180 XP' },
-    { id: 'les-05', code: '05', label: 'CONDICIONALES', subtitle: 'IF, ELIF, ELSE & DECISIONES', variant: 'active', iconType: 'code', stars: 1, maxStars: 3, xp: 200, statusText: 'EN PROGRESO • +200 XP' },
-    { id: 'les-miniboss', code: 'MB', label: 'GUARDIÁN DE LA LÓGICA', subtitle: 'MINI-BOSS: RETO MÓDULOS 1-5', variant: 'branch', iconType: 'code', stars: 0, maxStars: 3, xp: 250, statusText: 'MINI-BOSS • REQUIERE M05' },
+    { id: 'les-01', code: '01', label: 'ENTORNO & SINTAXIS', subtitle: 'VS CODE, VENV & PRINT', variant: 'active', iconType: 'brackets', stars: 0, maxStars: 3, xp: 120, statusText: 'DISPONIBLE • +120 XP' },
+    { id: 'les-02', code: '02', label: 'VARIABLES & TIPOS', subtitle: 'INT, FLOAT, STR, BOOL & TYPE', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 150, statusText: 'RQ M01' },
+    { id: 'les-03', code: '03', label: 'OPERADORES & LÓGICA', subtitle: 'ARITMÉTICA & BOOLEANOS', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 180, statusText: 'RQ M02' },
+    { id: 'les-04', code: '04', label: 'ENTRADA/SALIDA & STRINGS', subtitle: 'INPUT(), PRINT() & F-STRINGS', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 180, statusText: 'RQ M03' },
+    { id: 'les-05', code: '05', label: 'CONDICIONALES', subtitle: 'IF, ELIF, ELSE & DECISIONES', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 200, statusText: 'RQ M04' },
+    { id: 'les-miniboss', code: 'MB', label: 'GUARDIÁN DE LA LÓGICA', subtitle: 'MINI-BOSS: RETO MÓDULOS 1-5', variant: 'branch', iconType: 'lock', stars: 0, maxStars: 3, xp: 250, statusText: 'MINI-BOSS • REQUIERE M05' },
     { id: 'les-06', code: '06', label: 'BUCLE FOR', subtitle: 'ITERACIÓN CON FOR & RANGE()', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 220, statusText: 'RQ GUARDIÁN' },
     { id: 'les-07', code: '07', label: 'BUCLE WHILE', subtitle: 'REPETICIÓN CONDICIONAL & FLAGS', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 220, statusText: 'RQ BUCLE FOR' },
     { id: 'les-08', code: '08', label: 'LISTAS & TUPLAS', subtitle: 'COLECCIONES & MUTABILIDAD', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 240, statusText: 'RQ BUCLE WHILE' },

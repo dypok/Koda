@@ -34,6 +34,7 @@ export class CompleteSectionUseCase {
       moduleId,
       courseId,
       accuracyPercentage,
+      targetXp: dto.targetXp,
     });
 
     const attemptStars = SectionStarsEntity.calculateStars(accuracyPercentage);
@@ -45,6 +46,10 @@ export class CompleteSectionUseCase {
       isNewBest: result.isNewBest,
       xpAwarded: result.xpAwarded,
       userTotalXp: result.userTotalXp,
+      currentStreak: result.currentStreak,
+      longestStreak: result.longestStreak,
+      streakFreezeCount: result.streakFreezeCount,
+      isActiveToday: result.isActiveToday,
     });
   }
 }

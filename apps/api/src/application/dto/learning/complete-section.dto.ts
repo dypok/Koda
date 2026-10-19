@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString, Max, Min } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString, Max, Min } from 'class-validator';
 
 export class CompleteSectionDto {
   @IsString()
@@ -17,4 +17,9 @@ export class CompleteSectionDto {
   @Min(0)
   @Max(100)
   accuracyPercentage!: number;
+
+  @IsOptional()
+  @IsNumber()
+  @Min(0)
+  targetXp?: number;
 }
