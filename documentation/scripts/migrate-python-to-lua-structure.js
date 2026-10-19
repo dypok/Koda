@@ -12,24 +12,29 @@
  *   node documentation/scripts/migrate-python-to-lua-structure.js --out=/tmp/preview
  *   node documentation/scripts/migrate-python-to-lua-structure.js
  *   node documentation/scripts/migrate-python-to-lua-structure.js --bank-form=array
+ *   node documentation/scripts/migrate-python-to-lua-structure.js --modules-root=content/languages/python/modules
+ *   node documentation/scripts/migrate-python-to-lua-structure.js --no-prefix-ids
  *
- * Es idempotente: volver a ejecutarlo no duplica ejercicios ni ejemplos.
+ * Descubre módulos de forma recursiva (soporta `modules/<track>/<modulo>/`),
+ * preserva claves extra del banco (p. ej. `course_slug`) y es idempotente:
+ * volver a ejecutarlo no duplica ejercicios ni ejemplos.
  */
 
 const fs = require('fs');
 const path = require('path');
 
 const ROOT = process.cwd();
-const PY_MODULES = path.join(ROOT, 'content/languages/python/modules');
 
 const args = process.argv.slice(2);
 const getArg = (name, fallback) => {
   const found = args.find((a) => a.startsWith(`--${name}=`));
   return found ? found.split('=').slice(1).join('=') : fallback;
 };
+const MODULES_ROOT = path.resolve(ROOT, getArg('modules-root', 'content/languages/python/modules'));
 const BANK_FORM = getArg('bank-form', 'object');
 const OUT_DIR = getArg('out', '');
 const DRY_RUN = args.includes('--dry-run');
+const PREFIX_IDS = !args.includes('--no-prefix-ids');
 
 if (!['array', 'object'].includes(BANK_FORM)) {
   console.error(`--bank-form inválido: ${BANK_FORM}. Usa "array" u "object".`);
@@ -163,7 +168,7 @@ const canonicalizeQuestion = (question, context) => {
   }
 
   // Los ids de ejercicios de lección deben ser únicos incluso entre módulos.
-  if (!inBank && !out.id.startsWith(`${module.id}_`)) {
+  if (PREFIX_IDS && !inBank && !out.id.startsWith(`${module.id}_`)) {
     out.id = `${module.id}_${out.id}`;
   }
 
@@ -377,41 +382,62 @@ const normalizeBank = (rawBank, module, dirName) => {
   stats.bankQuestions += converted.length;
 
   if (BANK_FORM === 'array') return converted;
+  const base = isArray ? {} : { ...rawBank };
+  delete base.questions;
   return {
-    module_code: (!isArray && rawBank.module_code) || module.code,
-    module_slug: (!isArray && rawBank.module_slug) || module.slug,
+    ...base,
+    module_code: base.module_code || module.code,
+    module_slug: base.module_slug || module.slug,
     questions: converted,
   };
 };
 
 const writeJson = (filePath, data) => {
   if (DRY_RUN) return;
-  const target = OUT_DIR
-    ? path.join(OUT_DIR, path.relative(ROOT, filePath))
-    : filePath;
+  if (!OUT_DIR) {
+    fs.writeFileSync(filePath, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
+    return;
+  }
+  // Con --out se refleja el árbol relativo a ROOT; si el módulo vive fuera de
+  // ROOT (p. ej. una extracción temporal), se usa la ruta relativa al módulo raíz.
+  const relativeToRoot = path.relative(ROOT, filePath);
+  const relative = relativeToRoot.startsWith('..')
+    ? path.relative(MODULES_ROOT, filePath)
+    : relativeToRoot;
+  const target = path.join(OUT_DIR, relative);
   fs.mkdirSync(path.dirname(target), { recursive: true });
   fs.writeFileSync(target, `${JSON.stringify(data, null, 2)}\n`, 'utf8');
 };
 
+const findModuleDirs = (root) => {
+  const found = [];
+  const walk = (dir) => {
+    for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (!entry.isDirectory()) continue;
+      const full = path.join(dir, entry.name);
+      if (fs.existsSync(path.join(full, 'module.json'))) {
+        found.push(full);
+      } else {
+        walk(full);
+      }
+    }
+  };
+  walk(root);
+  return found.sort();
+};
+
 const run = () => {
-  if (!fs.existsSync(PY_MODULES)) {
-    console.error(`No existe ${PY_MODULES}`);
+  if (!fs.existsSync(MODULES_ROOT)) {
+    console.error(`No existe ${MODULES_ROOT}`);
     process.exit(1);
   }
 
-  const moduleDirs = fs
-    .readdirSync(PY_MODULES, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map((entry) => entry.name)
-    .sort();
+  const moduleDirs = findModuleDirs(MODULES_ROOT);
 
-  for (const dirName of moduleDirs) {
-    const modulePath = path.join(PY_MODULES, dirName, 'module.json');
-    const bankPath = path.join(PY_MODULES, dirName, 'bank.json');
-    if (!fs.existsSync(modulePath)) {
-      warn(`${dirName}: no tiene module.json.`);
-      continue;
-    }
+  for (const moduleDir of moduleDirs) {
+    const dirName = path.basename(moduleDir);
+    const modulePath = path.join(moduleDir, 'module.json');
+    const bankPath = path.join(moduleDir, 'bank.json');
 
     const module = JSON.parse(fs.readFileSync(modulePath, 'utf8'));
     const normalizedModule = normalizeModule(module, dirName);
@@ -419,7 +445,7 @@ const run = () => {
     writeJson(modulePath, normalizedModule);
 
     if (!fs.existsSync(bankPath)) {
-      stats.modulesWithoutBank.push(dirName);
+      stats.modulesWithoutBank.push(path.relative(MODULES_ROOT, moduleDir));
       continue;
     }
 
