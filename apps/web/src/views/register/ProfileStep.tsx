@@ -58,7 +58,7 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
             <KodaMascot
               state="idle"
               size={56}
-              className="w-full h-full"
+              className="max-h-full max-w-full object-contain"
             />
             {!reduceMotion && (
               <span

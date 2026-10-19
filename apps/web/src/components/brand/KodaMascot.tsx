@@ -105,7 +105,11 @@ export const KodaMascot: React.FC<KodaMascotProps> = ({
       height={finalHeight}
       priority={priority}
       className={cn('object-contain select-none', animationClass, glowClass, className)}
-      style={{ width: finalWidth, height: 'auto', ...restProps.style }}
+      style={{
+        maxWidth: '100%',
+        maxHeight: '100%',
+        ...restProps.style,
+      }}
       {...restProps}
     />
   );
