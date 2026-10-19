@@ -5,13 +5,13 @@
   "slug": "rendimiento-y-profiling",
   "course_slug": "python-3",
   "title": "Rendimiento, Profiling y Optimización de Memoria",
-  "objective": "Identificar cuellos de botella con cProfile y timeit, y optimizar estructuras reduciendo el consumo con __slots__.",
-  "description": "Aprende a medir científicamente la velocidad de tu código: no adivines dónde está la lentitud; encuéntrala y optimízala con herramientas estadísticas.",
-  "position": 29,
+  "objective": "Medir el rendimiento con rigor estadístico usando timeit, localizar cuellos de botella con cProfile, compactar memoria con __slots__ y rastrear fugas de memoria con tracemalloc.",
+  "description": "Aprende a medir científicamente la velocidad y consumo de tu código: no adivines dónde está la lentitud; encuéntrala y optimízala con herramientas deterministas de la biblioteca estándar.",
+  "position": 9,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,232 @@
     {
       "id": "sec_py3_09_01",
       "code": "S01",
-      "title": "Medición con timeit y Optimización con __slots__",
-      "slug": "timeit-slots",
+      "title": "Profiling y Optimización de Rendimiento",
+      "slug": "profiling-optimizacion-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 18,
-      "xp_on_complete": 45,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py3_09_01",
           "code": "L01",
-          "title": "Medición Precisa con timeit y Reducción de Memoria con __slots__",
-          "slug": "timeit-slots-base",
+          "title": "Micro-benchmarking Científico con timeit",
+          "slug": "micro-benchmarking-timeit",
           "position": 1,
-          "concept_id": "py3-profiling",
-          "objective": "Comparar alternativas de rendimiento y ahorrar 60% de memoria en clases con __slots__.",
-          "theory_markdown": "Por defecto, cada objeto en Python almacena sus atributos en un diccionario dinámico oculto (`__dict__`), lo que consume bastante memoria.\n\nSi vas a crear **millones de instancias**, puedes declarar `__slots__` en la clase para asignar memoria estática y compacta, ahorrando hasta un 60% de RAM y acelerando el acceso a atributos.\n\nPara comparar la velocidad de dos algoritmos de forma fiable, usamos `timeit`, que ejecuta la prueba miles de veces para aislar el ruido del sistema operativo.",
+          "concept_id": "py3-timeit-benchmarks",
+          "objective": "Comparar la velocidad de algoritmos y expresiones evitando el ruido del sistema operativo mediante el módulo timeit.",
+          "theory_markdown": "Medir la duración de un bloque restando `time.time()` o `time.perf_counter()` es útil para operaciones largas, pero produce resultados muy distorsionados en micro-operaciones debido a cambios de contexto del sistema operativo y pausas del recolector de basura.\n\nEl módulo nativo **`timeit`** está diseñado para benchmarking científico:\n- Ejecuta el fragmento de código miles o millones de veces (`number=100_000`).\n- Aísla la medición en un entorno controlado.\n- Permite comparar de forma objetiva dos sintaxis alternativas (ej: `list comprehension` vs `map()`):\n\n```python\nimport timeit\n\nt_comp = timeit.timeit(\"[x * 2 for x in range(100)]\", number=10_000)\nt_map = timeit.timeit(\"list(map(lambda x: x * 2, range(100)))\", number=10_000)\nprint(f\"Comprension: {t_comp:.4f}s vs Map: {t_map:.4f}s\")\n```",
           "examples": [
             {
-              "title": "Clase ultra compacta con __slots__",
-              "code": "class CoordenadaSlots:\n    __slots__ = (\"x\", \"y\")  # Sin __dict__ interno\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\np = CoordenadaSlots(10.5, 20.5)\nprint(f\"Punto: ({p.x}, {p.y})\")",
-              "output": "Punto: (10.5, 20.5)",
-              "explanation": "__slots__ prohíbe atributos dinámicos arbitrarios pero reduce drásticamente el espacio de memoria."
+              "title": "Comparativa de velocidad con timeit",
+              "code": "import timeit\n\nt_format = timeit.timeit('f\"{10} + {20}\"', number=50_000)\nt_concat = timeit.timeit('str(10) + \" + \" + str(20)', number=50_000)\n\nprint(\"f-string es mas rapido que concatenacion:\", t_format < t_concat)",
+              "output": "f-string es mas rapido que concatenacion: True",
+              "explanation": "timeit repite la medición 50,000 veces entregando una comparación estadística real sin fluctuaciones aleatorias."
             }
           ],
-          "common_errors": "Optimización prematura: \"La optimización prematura es la raíz de todos los males\" (Donald Knuth). Primero escribe código claro y con tests; luego haz profiling antes de optimizar.",
+          "common_errors": "Hacer micro-benchmarks usando un único ciclo de ejecución con `time.time()`. Una interrupción del sistema operativo puede hacer que el código más rápido parezca el más lento.",
           "mini_exercise": {
-            "starter_code": "# Declara __slots__ en una clase Nodo con valor y siguiente\nclass Nodo:\n    __slots__ = (\"valor\", \"siguiente\")\n    def __init__(self, valor):\n        self.valor = valor\n        self.siguiente = None\n\nn = Nodo(10)\nprint(n.valor)",
-            "instructions": "Verifica la instanciación con __slots__.",
-            "solution": "class Nodo:\n    __slots__ = (\"valor\", \"siguiente\")\n    def __init__(self, valor):\n        self.valor = valor\n        self.siguiente = None\n\nn = Nodo(10)\nprint(n.valor)"
+            "starter_code": "import timeit\n# Mide el tiempo de crear una lista vacia [] en 10,000 repeticiones\nt = timeit.timeit(\"[]\", number=10000)\nprint(t > 0)",
+            "instructions": "Ejecuta timeit y confirma que el tiempo sea medible.",
+            "solution": "import timeit\nt = timeit.timeit(\"[]\", number=10000)\nprint(t > 0)"
           },
           "key_takeaways": [
-            "cProfile analiza el tiempo dedicado en cada función.",
-            "timeit mide snippets de código con rigor estadístico.",
-            "__slots__ optimiza clases creadas millones de veces."
+            "timeit ejecuta el código miles de veces para neutralizar el ruido del sistema operativo.",
+            "Es la herramienta estándar para comparar snippets y micro-optimizaciones.",
+            "Evita conclusiones erróneas basadas en ejecuciones aisladas."
           ],
           "exercise": {
             "id": "ex_py3_09_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Cuál es el beneficio de usar `__slots__` en una clase de Python?",
+            "prompt": "¿Por qué es preferible usar el módulo 'timeit' en lugar de medir la diferencia con 'time.time()' al comparar dos fragmentos de código pequeños?",
             "options": [
               {
                 "id": "a",
-                "text": "Reduce significativamente el consumo de memoria RAM al eliminar el __dict__ interno por instancia"
+                "text": "Porque timeit repite la prueba miles de veces para calcular un promedio fiable y aísla el ruido de fondo del sistema operativo"
               },
               {
                 "id": "b",
-                "text": "Permite conectar a bases de datos SQL"
+                "text": "Porque timeit sobreclockea la CPU al 100%"
               },
               {
                 "id": "c",
-                "text": "Convierte el código a lenguaje Rust"
+                "text": "Porque time.time() fue eliminado en Python 3"
               },
               {
                 "id": "d",
-                "text": "Hace que la clase tenga atributos infinitos"
+                "text": "Porque timeit solo funciona en servidores Linux"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "__slots__ reemplaza el diccionario dinámico __dict__ por una estructura interna fija mucho más ligera."
+            "explanation": "timeit proporciona rigor estadístico al repetir miles de ciclos e independizar la medición de picos de carga momentáneos del sistema operativo."
+          }
+        },
+        {
+          "id": "les_py3_09_02",
+          "code": "L02",
+          "title": "Profiling de Aplicaciones con cProfile",
+          "slug": "profiling-aplicaciones-cprofile",
+          "position": 2,
+          "concept_id": "py3-cprofile-analysis",
+          "objective": "Identificar cuellos de botella reales en aplicaciones completas analizando métricas de tottime y cumtime con cProfile.",
+          "theory_markdown": "> *\"La optimización prematura es la raíz de todos los males.\"* — Donald Knuth.\n\nAntes de intentar acelerar tu código, debes medir exactamente **en qué funciones pasa el tiempo la CPU**. Para esto se utiliza el profiler nativo de C **`cProfile`**:\n\n```bash\npython -m cProfile -s cumtime mi_script.py\n```\n\n### Las 4 métricas clave de un perfil de cProfile\n1. **`ncalls`**: Número total de veces que fue invocada la función.\n2. **`tottime`**: Tiempo total invertido exclusivamente en el cuerpo de esa función (**sin contar** el tiempo de las funciones que llamó internamente).\n3. **`cumtime` (Cumulative Time)**: Tiempo total transcurrido desde que la función fue llamada hasta que retornó (**incluyendo** todas sus subfunciones anidadas).\n4. **`percall`**: Promedio de tiempo por cada llamada individual (`tottime / ncalls`).",
+          "examples": [
+            {
+              "title": "Profiling programático con cProfile.run",
+              "code": "import cProfile\n\ndef tarea():\n    total = sum(i ** 2 for i in range(10_000))\n    return total\n\ncProfile.run('tarea()')",
+              "output": "   ncalls  tottime  percall  cumtime  percall filename:lineno(function)\n        1    0.001    0.001    0.001    0.001 <string>:1(tarea)",
+              "explanation": "cProfile desglosa con exactitud quirúrgica cuántos milisegundos consumió cada función del programa."
+            }
+          ],
+          "common_errors": "Optimizar una función que tiene un tottime insignificante del 1% del total. La regla del profiling es atacar siempre las funciones con el mayor cumtime o tottime.",
+          "mini_exercise": {
+            "starter_code": "import cProfile\n# Corre cProfile sobre la expresion 'sum(range(1000))'\ncProfile.run('sum(range(1000))')",
+            "instructions": "Ejecuta y examina las columnas ncalls y tottime.",
+            "solution": "import cProfile\ncProfile.run('sum(range(1000))')"
+          },
+          "key_takeaways": [
+            "cProfile mide llamadas y tiempos de ejecución a nivel de función.",
+            "tottime mide el tiempo interno propio sin subllamadas.",
+            "cumtime mide el tiempo acumulado completo incluyendo funciones hijas.",
+            "Permite aplicar la regla 80/20: optimizar solo el 20% del código que consume el 80% del tiempo."
+          ],
+          "exercise": {
+            "id": "ex_py3_09_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "En el reporte de cProfile, ¿qué representa la columna 'tottime'?",
+            "options": [
+              {
+                "id": "a",
+                "text": "El tiempo total consumido exclusivamente dentro de la función evaluada, excluyendo el tiempo invertido en las subfunciones que ella invoca"
+              },
+              {
+                "id": "b",
+                "text": "El tiempo total acumulado incluyendo todas las subfunciones"
+              },
+              {
+                "id": "c",
+                "text": "El número de llamadas a la base de datos"
+              },
+              {
+                "id": "d",
+                "text": "El tiempo de arranque de Python"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "tottime descuenta el tiempo de las llamadas descendientes para revelar si la lentitud reside en la propia función o en lo que manda a llamar."
+          }
+        },
+        {
+          "id": "les_py3_09_03",
+          "code": "L03",
+          "title": "Optimización Drástica de Memoria con __slots__",
+          "slug": "optimizacion-memoria-slots",
+          "position": 3,
+          "concept_id": "py3-slots-memory-optimization",
+          "objective": "Eliminar el overhead del diccionario dinámico de instancias declarando __slots__ para reducir hasta un 60% de memoria RAM.",
+          "theory_markdown": "En Python estándar, cada instancia de una clase almacena sus atributos en un diccionario dinámico oculto llamado `__dict__`. Aunque esto permite agregar atributos arbitrarios en cualquier momento (`p.nuevo_campo = 123`), los diccionarios consumen un overhead de memoria significativo por objeto.\n\n### El rescate con `__slots__`\nCuando vas a instanciar cientos de miles o millones de objetos (ej: nodos de un árbol, puntos espaciales, registros de telemetría), puedes declarar `__slots__` a nivel de clase:\n\n```python\nclass PuntoSlots:\n    __slots__ = (\"x\", \"y\")  # Define estricta y fijamente los atributos admitidos\n\n    def __init__(self, x: float, y: float):\n        self.x = x\n        self.y = y\n```\n\n### Consecuencias técnicas\n1. **Ahorro masivo**: Suprime la creación de `__dict__` por objeto, reduciendo el consumo de RAM hasta un **60%**.\n2. **Acceso más veloz**: El acceso a atributos es ligeramente más rápido porque se traduce en desplazamientos de puntero fijos en C.\n3. **Bloqueo dinámico**: Si intentas asignar un atributo no declarado en `__slots__` (ej: `p.z = 10`), Python lanza inmediatamente un `AttributeError`.",
+          "examples": [
+            {
+              "title": "Comportamiento estricto de atributos con __slots__",
+              "code": "class Registro:\n    __slots__ = (\"id\", \"valor\")\n    def __init__(self, id, valor):\n        self.id = id\n        self.valor = valor\n\nr = Registro(1, 100)\nprint(\"Atributos declarados:\", r.id, r.valor)\n# r.extra = 99  # AttributeError: 'Registro' object has no attribute 'extra'",
+              "output": "Atributos declarados: 1 100",
+              "explanation": "La clase no posee __dict__, por lo que cualquier atributo fuera de __slots__ es rechazado impidiendo fugas accidentales."
+            }
+          ],
+          "common_errors": "Usar __slots__ en todas las clases de tu aplicación indiscriminadamente. Solo se justifica en clases donde se instanciarán decenas o cientos de miles de objetos en memoria simultáneamente.",
+          "mini_exercise": {
+            "starter_code": "class Nodo:\n    # Define __slots__ con los atributos dato y siguiente\n    __slots__ = (\"dato\", \"siguiente\")\n    def __init__(self, dato):\n        self.dato = dato\n        self.siguiente = None\n\nn = Nodo(5)\nprint(n.dato)",
+            "instructions": "Verifica la declaración de atributos en __slots__.",
+            "solution": "class Nodo:\n    __slots__ = (\"dato\", \"siguiente\")\n    def __init__(self, dato):\n        self.dato = dato\n        self.siguiente = None\n\nn = Nodo(5)\nprint(n.dato)"
+          },
+          "key_takeaways": [
+            "__slots__ elimina el diccionario interno __dict__ de cada instancia.",
+            "Reduce el consumo de RAM hasta en un 60% en clases masivas.",
+            "Bloquea la asignación de atributos dinámicos no declarados lanzando AttributeError."
+          ],
+          "exercise": {
+            "id": "ex_py3_09_03",
+            "type": "find_error",
+            "difficulty": "medium",
+            "prompt": "¿Qué error ocurre si intentas asignar 'p.color = \"rojo\"' sobre una instancia de una clase que define '__slots__ = (\"x\", \"y\")'?",
+            "options": [
+              {
+                "id": "a",
+                "text": "AttributeError: 'Punto' object has no attribute 'color' (porque __slots__ prohíbe atributos no listados)"
+              },
+              {
+                "id": "b",
+                "text": "TypeError: color no es un número"
+              },
+              {
+                "id": "c",
+                "text": "ValueError: slots excedidos"
+              },
+              {
+                "id": "d",
+                "text": "La asignación se realiza con éxito"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Al no existir __dict__ dinámico en la instancia, solo pueden asignarse los atributos explícitamente declarados en la tupla __slots__."
+          }
+        },
+        {
+          "id": "les_py3_09_04",
+          "code": "L04",
+          "title": "Inspección de Memoria con tracemalloc y sys.getsizeof",
+          "slug": "inspeccion-memoria-tracemalloc",
+          "position": 4,
+          "concept_id": "py3-tracemalloc-memory-leak",
+          "objective": "Medir el tamaño de objetos con sys.getsizeof() y rastrear fugas de memoria comparando instantáneas con tracemalloc.",
+          "theory_markdown": "A veces una aplicación en producción experimenta un consumo de RAM que crece sin control (Memory Leak). Para diagnosticar exactamente qué línea de código está reservando memoria, la biblioteca estándar incluye **`tracemalloc`**.\n\n### Diagnóstico de fugas con `tracemalloc`\n1. Inicias el rastreo: `tracemalloc.start()`.\n2. Tomas una instantánea base: `snapshot1 = tracemalloc.take_snapshot()`.\n3. Ejecutas la función sospechosa.\n4. Tomas una segunda instantánea: `snapshot2 = tracemalloc.take_snapshot()`.\n5. Comparas las diferencias filtradas por línea de código:\n   ```python\n   estadisticas = snapshot2.compare_to(snapshot1, 'lineno')\n   for stat in estadisticas[:3]:\n       print(stat)\n   ```\n\n### Medición individual con `sys.getsizeof`\n`sys.getsizeof(objeto)` devuelve los bytes que ocupa el objeto directamente en memoria (sin incluir los objetos anidados referenciados).",
+          "examples": [
+            {
+              "title": "Comparativa de tamaño de memoria en bytes",
+              "code": "import sys\n\nlista_vacia = []\nlista_elementos = list(range(100))\n\nprint(\"Bytes lista vacia:\", sys.getsizeof(lista_vacia))\nprint(\"Bytes lista 100 ints:\", sys.getsizeof(lista_elementos))",
+              "output": "Bytes lista vacia: 56\nBytes lista 100 ints: 856",
+              "explanation": "sys.getsizeof revela el costo de memoria exacto en bytes de las estructuras de datos de Python."
+            }
+          ],
+          "common_errors": "Olvidar detener tracemalloc: en scripts de producción continuos debe llamarse `tracemalloc.stop()` tras el diagnóstico para no mantener overhead de profiling innecesario.",
+          "mini_exercise": {
+            "starter_code": "import sys\n# Mide el tamaño en bytes de un string con sys.getsizeof\npeso = sys.getsizeof(\"hola\")\nprint(peso > 0)",
+            "instructions": "Verifica que el tamaño en bytes sea mayor a 0.",
+            "solution": "import sys\npeso = sys.getsizeof(\"hola\")\nprint(peso > 0)"
+          },
+          "key_takeaways": [
+            "sys.getsizeof(obj) mide el tamaño superficial en bytes de una variable.",
+            "tracemalloc rastrea qué líneas de código específicas reservan memoria RAM.",
+            "La comparación de snapshots permite localizar memory leaks con precisión milimétrica."
+          ],
+          "exercise": {
+            "id": "ex_py3_09_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Cuál es la función del módulo nativo tracemalloc en Python?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Rastrear las asignaciones de memoria RAM en tiempo de ejecución para identificar qué líneas de código generan fugas de memoria (memory leaks)"
+              },
+              {
+                "id": "b",
+                "text": "Comprimir la memoria RAM a formato gzip"
+              },
+              {
+                "id": "c",
+                "text": "Aumentar el número de núcleos de la CPU"
+              },
+              {
+                "id": "d",
+                "text": "Borrar el archivo temporal de pytest"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "tracemalloc vincula cada bloque de memoria asignado con el archivo y la línea de código exacta que lo reservó."
           }
         }
       ]

@@ -7,7 +7,111 @@
       "id": "q_py3_08_01",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "¿Cuál es el archivo de configuración estándar en Python moderno para definir metadatos y empaquetar librerías?",
+      "prompt": "¿Cuál es el orden ascendente correcto de los 5 niveles estándar de severidad en el módulo logging?",
+      "options": [
+        {
+          "id": "a",
+          "text": "DEBUG < INFO < WARNING < ERROR < CRITICAL"
+        },
+        {
+          "id": "b",
+          "text": "INFO < DEBUG < ERROR < WARNING < CRITICAL"
+        },
+        {
+          "id": "c",
+          "text": "CRITICAL < ERROR < WARNING < INFO < DEBUG"
+        },
+        {
+          "id": "d",
+          "text": "DEBUG < WARNING < INFO < CRITICAL < ERROR"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La escala de gravedad en Python va desde el nivel más detallado DEBUG (10) hasta la falla catastrófica CRITICAL (50)."
+    },
+    {
+      "id": "q_py3_08_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué acción automática realiza 'logger.exception(\"Fallo en operacion\")' al llamarse dentro de un bloque except?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Registra el mensaje con nivel ERROR y anexa automáticamente el Traceback completo de la excepción activa"
+        },
+        {
+          "id": "b",
+          "text": "Borra el archivo de logs anterior"
+        },
+        {
+          "id": "c",
+          "text": "Ignora el error sin imprimir nada"
+        },
+        {
+          "id": "d",
+          "text": "Detiene el servidor inmediatamente"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "logger.exception() extrae la información de sys.exc_info() adjuntando la traza de llamadas y la línea exacta del error."
+    },
+    {
+      "id": "q_py3_08_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Si configuras tu logger con nivel INFO, ¿cuál de los siguientes mensajes NO será emitido a la salida?",
+      "options": [
+        {
+          "id": "a",
+          "text": "logger.debug(\"Detalle de calculo\")"
+        },
+        {
+          "id": "b",
+          "text": "logger.info(\"Usuario autenticado\")"
+        },
+        {
+          "id": "c",
+          "text": "logger.warning(\"Memoria al 80%\")"
+        },
+        {
+          "id": "d",
+          "text": "logger.error(\"Conexion fallida\")"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Al tener nivel INFO (20), cualquier mensaje con severidad inferior (como DEBUG, nivel 10) es filtrado y descartado."
+    },
+    {
+      "id": "q_py3_08_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué clase de Handler se utiliza para restringir el tamaño de los archivos de log en disco y rotar copias de respaldo?",
+      "options": [
+        {
+          "id": "a",
+          "text": "RotatingFileHandler"
+        },
+        {
+          "id": "b",
+          "text": "StreamHandler"
+        },
+        {
+          "id": "c",
+          "text": "SocketHandler"
+        },
+        {
+          "id": "d",
+          "text": "NullHandler"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "RotatingFileHandler limita el crecimiento de los archivos fijando un tamaño máximo en bytes y conservando un número controlado de backups."
+    },
+    {
+      "id": "q_py3_08_05",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es el archivo de configuración declarativo estándar (PEP 621) para empaquetar librerías y gestionar metadatos en Python moderno?",
       "options": [
         {
           "id": "a",
@@ -15,19 +119,45 @@
         },
         {
           "id": "b",
-          "text": "package.json"
+          "text": "setup.py"
         },
         {
           "id": "c",
-          "text": "settings.ini"
+          "text": "requirements.txt"
         },
         {
           "id": "d",
-          "text": "pip.conf"
+          "text": "package.json"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "pyproject.toml (PEP 518/621) es el estándar contemporáneo universal para empaquetado de proyectos en Python."
+      "explanation": "pyproject.toml es el estándar unificado oficial de empaquetado y configuración de herramientas para Python."
+    },
+    {
+      "id": "q_py3_08_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál de las siguientes es una ventaja fundamental del módulo logging frente al uso de print() en sistemas profesionales?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permite clasificar la gravedad de los eventos, añadir marcas de tiempo automáticas y filtrar la salida por niveles de severidad sin alterar el código"
+        },
+        {
+          "id": "b",
+          "text": "Hace que el programa se ejecute 10 veces más rápido"
+        },
+        {
+          "id": "c",
+          "text": "No requiere importar ningún módulo"
+        },
+        {
+          "id": "d",
+          "text": "Solo funciona si hay una base de datos conectada"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "logging ofrece trazabilidad, control granular de severidad, marcas temporales y capacidad de dirigir la salida a múltiples destinos independientes."
     }
   ]
 }
