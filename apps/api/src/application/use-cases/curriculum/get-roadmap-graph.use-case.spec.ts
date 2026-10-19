@@ -85,4 +85,55 @@ describe('GetRoadmapGraphUseCase', () => {
     const conn2 = dataset.connections.find((c) => c.fromId === 'py-m02');
     expect(conn2?.isDashed).toBe(false);
   });
+
+  it('debe marcar python-1 completado y desbloquear python-2 cuando el usuario aprueba el examen apex py-apex-1', async () => {
+    const mockStars = [
+      new SectionStarsEntity({ userId: 'user-apex', sectionId: 'py-apex-1', moduleId: 'funciones-fundamentales', starsEarned: 3 }),
+    ];
+    progressRepository.findAllSectionStarsByUser.mockResolvedValue(mockStars);
+
+    const dataset = await useCase.getCoursesGraph('python', 'user-apex');
+
+    const py1 = dataset.nodes.find((n) => n.id === 'python-1');
+    expect(py1?.variant).toBe('completed');
+    expect(py1?.isUnlocked).toBe(true);
+
+    const py2 = dataset.nodes.find((n) => n.id === 'python-2');
+    expect(py2?.variant).toBe('active');
+    expect(py2?.isUnlocked).toBe(true);
+
+    const py3 = dataset.nodes.find((n) => n.id === 'python-3');
+    expect(py3?.variant).toBe('locked');
+    expect(py3?.isUnlocked).toBe(false);
+
+    // La conexión de python-1 hacia python-2 debe ser sólida (isDashed: false)
+    const edge = dataset.connections.find((c) => c.fromId === 'python-1' && c.toId === 'python-2');
+    expect(edge?.isDashed).toBe(false);
+  });
+
+  it('debe retornar la estructura completa de 12 nodos para python-2 en lugar del fallback quemado', async () => {
+    const dataset = await useCase.getLessonsGraph('python-2');
+
+    expect(dataset.nodes.length).toBe(12);
+    expect(dataset.nodes[0].id).toBe('py2-m01');
+    expect(dataset.nodes[0].label).toBe('COMPRENSIONES');
+    expect(dataset.nodes[11].id).toBe('py2-boss');
+    expect(dataset.nodes[11].variant).toBe('boss');
+    expect(dataset.sectorTitle).toContain('PYTHON 2');
+  });
+
+  it('debe retornar las fases de certificacion para python-apex sin usar fallback falso', async () => {
+    const dataset = await useCase.getLessonsGraph('python-apex');
+
+    expect(dataset.nodes.length).toBe(3);
+    expect(dataset.nodes[0].id).toBe('apex-01');
+    expect(dataset.nodes[2].id).toBe('apex-03');
+    expect(dataset.sectorTitle).toContain('APEX MASTER GATE');
+  });
+
+  it('debe lanzar NotFoundException si se consulta un curso inexistente', async () => {
+    await expect(useCase.getLessonsGraph('curso-inexistente-123')).rejects.toThrow(
+      'Curso \'curso-inexistente-123\' no encontrado',
+    );
+  });
 });
