@@ -1,12 +1,51 @@
 import { GraphDataset } from '@/models/roadmap/roadmap-graph.types';
 import { PYTHON_COURSES_DATASET } from '@/models/roadmap/python-courses-graph.mock';
 import { PYTHON_BASIC_LESSONS_DATASET, getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
+import { useAuthStore } from '@/stores/auth.store';
 
 const RAW_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
 // Evita duplicar `/api/v1` cuando el env ya lo incluye.
 const API_BASE_URL = RAW_BASE_URL.replace(/\/$/, '').endsWith('/api/v1')
   ? RAW_BASE_URL.replace(/\/$/, '')
   : `${RAW_BASE_URL.replace(/\/$/, '')}/api/v1`;
+
+function getAuthHeaders(): Record<string, string> {
+  const token = typeof window !== 'undefined'
+    ? (useAuthStore.getState().token || localStorage.getItem('koda_auth_token'))
+    : null;
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+}
+
+async function fetchWithFallback<T>(endpoint: string): Promise<T> {
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  const headers = getAuthHeaders();
+
+  // 1. Probar ruta relativa con proxy si estamos en navegador
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch(`/api/v1${cleanEndpoint}`, {
+        headers,
+        cache: 'no-store',
+      });
+      if (res.ok) {
+        return (await res.json()) as T;
+      }
+    } catch {
+      // Continuar al fallback directo
+    }
+  }
+
+  // 2. Conexión directa a API_BASE_URL
+  const res = await fetch(`${API_BASE_URL}${cleanEndpoint}`, {
+    headers,
+    cache: 'no-store',
+  });
+  if (!res.ok) throw new Error(`HTTP error ${res.status}`);
+  return (await res.json()) as T;
+}
 
 function sanitizeGraphDataset(dataset: GraphDataset): GraphDataset {
   if (!dataset || !Array.isArray(dataset.nodes) || !Array.isArray(dataset.connections)) {
@@ -32,12 +71,7 @@ function sanitizeGraphDataset(dataset: GraphDataset): GraphDataset {
 export class RoadmapService {
   public static async getCoursesGraph(langSlug: string): Promise<GraphDataset> {
     try {
-      const res = await fetch(`${API_BASE_URL}/roadmap/${langSlug}/courses`, {
-        headers: { 'Content-Type': 'application/json' },
-        cache: 'no-store',
-      });
-      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-      const data = await res.json();
+      const data = await fetchWithFallback<{ dataset?: GraphDataset }>(`/roadmap/${langSlug}/courses`);
       return sanitizeGraphDataset(data?.dataset || PYTHON_COURSES_DATASET);
     } catch {
       // Graceful offline-first fallback to canonical seed
@@ -47,12 +81,7 @@ export class RoadmapService {
 
   public static async getCourseLessonsGraph(courseId: string): Promise<GraphDataset> {
     try {
-      const res = await fetch(`${API_BASE_URL}/roadmap/courses/${courseId}/lessons`, {
-        headers: { 'Content-Type': 'application/json' },
-        cache: 'no-store',
-      });
-      if (!res.ok) throw new Error(`HTTP error ${res.status}`);
-      const data = await res.json();
+      const data = await fetchWithFallback<{ dataset?: GraphDataset }>(`/roadmap/courses/${courseId}/lessons`);
       return sanitizeGraphDataset(data?.dataset || getLessonsDatasetForCourse(courseId));
     } catch {
       // Graceful offline-first fallback to canonical seed
@@ -64,7 +93,7 @@ export class RoadmapService {
     try {
       const res = await fetch(`${API_BASE_URL}/roadmap/seed`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ language: langSlug, coursesDataset: PYTHON_COURSES_DATASET, lessonsDataset: PYTHON_BASIC_LESSONS_DATASET }),
       });
       return res.ok;

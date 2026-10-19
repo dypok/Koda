@@ -3,6 +3,9 @@ import { ApiExcludeController, ApiBearerAuth, ApiOperation, ApiResponse, ApiTags
 import { RoadmapService } from './roadmap.service';
 import { SeedRoadmapDto } from './dto/seed-roadmap.dto';
 import { SupabaseAuthGuard } from '../../common/guards/supabase-auth.guard';
+import { OptionalSupabaseAuthGuard } from '../../common/guards/optional-supabase-auth.guard';
+import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import type { User as SupabaseAuthUser } from '@supabase/supabase-js';
 import type { GraphDataset } from './roadmap-graph.types';
 
 @ApiExcludeController()
@@ -11,18 +14,26 @@ export class RoadmapController {
   constructor(private readonly roadmapService: RoadmapService) {}
 
   @Get(':lang/courses')
+  @UseGuards(OptionalSupabaseAuthGuard)
   @ApiOperation({ summary: 'Obtener el grafo de cursos (nodos + conexiones) de un lenguaje' })
   @ApiResponse({ status: 200, description: 'Dataset del grafo de cursos' })
-  async getCoursesGraph(@Param('lang') lang: string): Promise<{ dataset: GraphDataset }> {
-    const dataset = await this.roadmapService.getCoursesGraph(lang);
+  async getCoursesGraph(
+    @Param('lang') lang: string,
+    @CurrentUser() authUser?: SupabaseAuthUser,
+  ): Promise<{ dataset: GraphDataset }> {
+    const dataset = await this.roadmapService.getCoursesGraph(lang, authUser?.id);
     return { dataset };
   }
 
   @Get('courses/:courseId/lessons')
+  @UseGuards(OptionalSupabaseAuthGuard)
   @ApiOperation({ summary: 'Obtener el grafo de lecciones (nodos + conexiones) de un curso' })
   @ApiResponse({ status: 200, description: 'Dataset del grafo de lecciones' })
-  async getLessonsGraph(@Param('courseId') courseId: string): Promise<{ dataset: GraphDataset }> {
-    const dataset = await this.roadmapService.getLessonsGraph(courseId);
+  async getLessonsGraph(
+    @Param('courseId') courseId: string,
+    @CurrentUser() authUser?: SupabaseAuthUser,
+  ): Promise<{ dataset: GraphDataset }> {
+    const dataset = await this.roadmapService.getLessonsGraph(courseId, authUser?.id);
     return { dataset };
   }
 

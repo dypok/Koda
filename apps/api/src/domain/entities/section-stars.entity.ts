@@ -113,8 +113,8 @@ export class SectionStarsEntity {
     }
 
     // Regla de XP determinista:
-    // Si se especifica targetXp (bono calibrado del nodo del roadmap), se otorga dicho valor.
-    // En caso contrario, regla base: +30 XP por primera aprobacion (+10 XP bono por perfeccion 3 estrellas).
+    // Si la seccion es recien aprobada (primera vez), se otorga el bono calibrado (targetXp) o la regla base.
+    // En reintentos de una seccion ya aprobada, se bloquea estrictamente a +0 XP.
     let xpAwarded = 0;
     if (isNewlyPassed) {
       if (typeof targetXp === 'number' && targetXp > 0) {
@@ -122,14 +122,12 @@ export class SectionStarsEntity {
       } else {
         xpAwarded += 30;
       }
-    } else {
-      // En reintentos o practica de una seccion ya aprobada, si se envia targetXp explicito, acreditarlo
-      if (typeof targetXp === 'number' && targetXp > 0) {
-        xpAwarded += targetXp;
+      if (attemptStars === 3 && previousStars < 3 && (!targetXp || targetXp <= 30)) {
+        xpAwarded += 10;
       }
-    }
-    if (attemptStars === 3 && previousStars < 3 && (!targetXp || targetXp <= 30)) {
-      xpAwarded += 10;
+    } else {
+      // Reintentos o practica de una seccion ya aprobada: 0 XP adicional
+      xpAwarded = 0;
     }
 
     return {

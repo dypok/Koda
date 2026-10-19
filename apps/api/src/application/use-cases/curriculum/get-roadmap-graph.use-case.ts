@@ -1,14 +1,20 @@
-import { Inject, Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, Optional } from '@nestjs/common';
 import {
   CURRICULUM_REPOSITORY_TOKEN,
   ICurriculumRepository,
 } from '../../../domain/repositories/curriculum.repository';
+import {
+  PROGRESS_REPOSITORY_TOKEN,
+  IProgressRepository,
+} from '../../../domain/repositories/progress.repository';
+import { SectionStarsEntity } from '../../../domain/entities/section-stars.entity';
 import { CourseEntity } from '../../../domain/entities/curriculum';
 import {
   GraphConnection,
   GraphDataset,
   GraphNode,
   GraphNodeIconType,
+  GraphNodeVariant,
 } from '../../../modules/roadmap/roadmap-graph.types';
 
 import * as fs from 'fs';
@@ -56,6 +62,9 @@ export class GetRoadmapGraphUseCase {
   constructor(
     @Inject(CURRICULUM_REPOSITORY_TOKEN)
     private readonly curriculumRepository: ICurriculumRepository,
+    @Optional()
+    @Inject(PROGRESS_REPOSITORY_TOKEN)
+    private readonly progressRepository?: IProgressRepository,
   ) {}
 
   private mapIconType(icon: string): GraphNodeIconType {
@@ -78,7 +87,7 @@ export class GetRoadmapGraphUseCase {
     return `M ${startX} ${startY} C ${startX + dx} ${startY}, ${endX - dx} ${endY}, ${endX} ${endY}`;
   }
 
-  async getCoursesGraph(trackOrLangSlug: string): Promise<GraphDataset> {
+  async getCoursesGraph(trackOrLangSlug: string, userId?: string): Promise<GraphDataset> {
     const slug = trackOrLangSlug.toLowerCase();
     let allCourses: CourseEntity[] = [];
 
@@ -104,7 +113,7 @@ export class GetRoadmapGraphUseCase {
     const displayCourses = filteredCourses.length > 0 ? filteredCourses : allCourses;
 
     // Coordenadas calculadas según topología DAG
-    const nodes: GraphNode[] = displayCourses.map((c: CourseEntity) => {
+    let nodes: GraphNode[] = displayCourses.map((c: CourseEntity) => {
       const isTrunk = c.topology.tier === 0;
       const x = c.topology.tier * 220 + 140;
       const y = c.topology.lane * 130 + 290;
@@ -150,19 +159,48 @@ export class GetRoadmapGraphUseCase {
       });
     });
 
+    let progressPercent = 0;
+    if (userId && this.progressRepository) {
+      try {
+        const userStars = await this.progressRepository.findAllSectionStarsByUser(userId);
+        if (userStars && userStars.length > 0) {
+          const totalEarnedStars = userStars.reduce((sum, s) => sum + s.starsEarned, 0);
+          nodes = nodes.map((node) => {
+            if (node.id === 'python-1' || node.targetCourseId === 'python-1' || node.id === 'py-level-1') {
+              const stars = Math.min(24, totalEarnedStars);
+              const isCompleted = stars >= 24;
+              return {
+                ...node,
+                stars,
+                maxStars: 24,
+                variant: isCompleted ? 'completed' : 'active',
+                statusText: isCompleted ? 'DOMINADO • 100%' : `EN PROGRESO • ${stars}/24 ★`,
+              };
+            }
+            return node;
+          });
+          progressPercent = Math.min(100, Math.round((totalEarnedStars / 24) * 100));
+        }
+      } catch {
+        // En caso de falla, retornar dataset estandar
+      }
+    }
+
     return {
       sectorTitle: `SECTOR: ${slug.toUpperCase()} ROADMAP (DAG)`,
-      progressPercent: 0,
+      progressPercent,
       nodes,
       connections,
     };
   }
 
-  async getLessonsGraph(courseSlug: string): Promise<GraphDataset> {
+  async getLessonsGraph(courseSlug: string, userId?: string): Promise<GraphDataset> {
     let normalizedSlug = courseSlug.toLowerCase();
     if (normalizedSlug === 'py-basic' || normalizedSlug === 'python-basico' || normalizedSlug === 'python-core') {
       normalizedSlug = 'python-1';
     }
+
+    let dataset: GraphDataset;
 
     // Grafo especializado para Python 1 con Mini-Boss Gate tras Módulo 4
     if (normalizedSlug === 'python-1' || normalizedSlug === 'py-level-1') {
@@ -219,16 +257,13 @@ export class GetRoadmapGraphUseCase {
         { id: 'c-06-apex', fromId: 'py-m06', toId: 'py-apex-1', color: '#F43F5E', path: this.generateSvgPath(970, 350, 1120, 290), isDashed: true },
       ];
 
-      return {
+      dataset = {
         sectorTitle: 'PYTHON 1: FUNDAMENTOS & SINTAXIS',
         progressPercent: 0,
         nodes,
         connections,
       };
-    }
-
-    // Grafo para Python 2
-    if (normalizedSlug === 'python-2' || normalizedSlug === 'py-level-2') {
+    } else if (normalizedSlug === 'python-2' || normalizedSlug === 'py-level-2') {
       const nodes: GraphNode[] = [
         { id: 'py2-m01', code: '01', label: 'FUNCIONES', subtitle: 'PARÁMETROS, SCOPE & RETURN', x: 140, y: 290, variant: 'active', iconType: 'brackets', xp: 200, isUnlocked: true, statusText: 'ACTIVO' },
         { id: 'py2-m02', code: '02', label: 'LISTAS & TUPLAS', subtitle: 'MÉTODOS & MUTABILIDAD', x: 340, y: 290, variant: 'locked', iconType: 'lock', xp: 200, isUnlocked: false, statusText: 'RQ FUNCIONES' },
@@ -242,11 +277,8 @@ export class GetRoadmapGraphUseCase {
         { id: 'c-p2-3-4', fromId: 'py2-m03', toId: 'py2-m04', color: '#06B6D4', path: this.generateSvgPath(540, 290, 740, 290), isDashed: true },
         { id: 'c-p2-4-5', fromId: 'py2-m04', toId: 'py2-m05', color: '#06B6D4', path: this.generateSvgPath(740, 290, 940, 290), isDashed: true },
       ];
-      return { sectorTitle: 'PYTHON 2: ESTRUCTURAS & POO', progressPercent: 0, nodes, connections };
-    }
-
-    // Grafo para Python 3
-    if (normalizedSlug === 'python-3' || normalizedSlug === 'py-level-3') {
+      dataset = { sectorTitle: 'PYTHON 2: ESTRUCTURAS & POO', progressPercent: 0, nodes, connections };
+    } else if (normalizedSlug === 'python-3' || normalizedSlug === 'py-level-3') {
       const nodes: GraphNode[] = [
         { id: 'py3-m01', code: '01', label: 'POO AVANZADA', subtitle: 'HERENCIA & DUNDER METHODS', x: 140, y: 290, variant: 'active', iconType: 'brackets', xp: 250, isUnlocked: true, statusText: 'ACTIVO' },
         { id: 'py3-m02', code: '02', label: 'GENERADORES', subtitle: 'ITERADORES & YIELD', x: 340, y: 290, variant: 'locked', iconType: 'lock', xp: 250, isUnlocked: false, statusText: 'RQ POO AV.' },
@@ -260,11 +292,8 @@ export class GetRoadmapGraphUseCase {
         { id: 'c-p3-3-4', fromId: 'py3-m03', toId: 'py3-m04', color: '#F59E0B', path: this.generateSvgPath(540, 290, 740, 290), isDashed: true },
         { id: 'c-p3-4-5', fromId: 'py3-m04', toId: 'py3-m05', color: '#F59E0B', path: this.generateSvgPath(740, 290, 940, 290), isDashed: true },
       ];
-      return { sectorTitle: 'PYTHON 3: AVANZADO & MODULAR', progressPercent: 0, nodes, connections };
-    }
-
-    // Grafo para Especialización FastAPI
-    if (normalizedSlug === 'fastapi-async' || normalizedSlug === 'py-fastapi') {
+      dataset = { sectorTitle: 'PYTHON 3: AVANZADO & MODULAR', progressPercent: 0, nodes, connections };
+    } else if (normalizedSlug === 'fastapi-async' || normalizedSlug === 'py-fastapi') {
       const nodes: GraphNode[] = [
         { id: 'fa-m01', code: 'F1', label: 'ARQUITECTURA ASGI', subtitle: 'PRIMERA API REST CON FASTAPI', x: 140, y: 290, variant: 'active', iconType: 'server', xp: 250, isUnlocked: true, statusText: 'ACTIVO' },
         { id: 'fa-m02', code: 'F2', label: 'PYDANTIC V2', subtitle: 'VALIDACIÓN & SCHEMAS', x: 370, y: 290, variant: 'locked', iconType: 'lock', xp: 250, isUnlocked: false, statusText: 'RQ ASGI' },
@@ -276,11 +305,8 @@ export class GetRoadmapGraphUseCase {
         { id: 'c-fa-2-3', fromId: 'fa-m02', toId: 'fa-m03', color: '#8B5CF6', path: this.generateSvgPath(370, 290, 600, 290), isDashed: true },
         { id: 'c-fa-3-4', fromId: 'fa-m03', toId: 'fa-m04', color: '#8B5CF6', path: this.generateSvgPath(600, 290, 830, 290), isDashed: true },
       ];
-      return { sectorTitle: 'ESPECIALIZACIÓN FASTAPI', progressPercent: 0, nodes, connections };
-    }
-
-    // Grafo para Especialización Django
-    if (normalizedSlug === 'django-enterprise' || normalizedSlug === 'py-django') {
+      dataset = { sectorTitle: 'ESPECIALIZACIÓN FASTAPI', progressPercent: 0, nodes, connections };
+    } else if (normalizedSlug === 'django-enterprise' || normalizedSlug === 'py-django') {
       const nodes: GraphNode[] = [
         { id: 'dj-m01', code: 'D1', label: 'ARQUITECTURA MVT', subtitle: 'ESTRUCTURA DE PROYECTO DJANGO', x: 140, y: 290, variant: 'active', iconType: 'server', xp: 250, isUnlocked: true, statusText: 'ACTIVO' },
         { id: 'dj-m02', code: 'D2', label: 'DJANGO ORM', subtitle: 'MODELOS, MIGRACIONES & QUERIES', x: 370, y: 290, variant: 'locked', iconType: 'lock', xp: 280, isUnlocked: false, statusText: 'RQ MVT' },
@@ -292,17 +318,131 @@ export class GetRoadmapGraphUseCase {
         { id: 'c-dj-2-3', fromId: 'dj-m02', toId: 'dj-m03', color: '#10B981', path: this.generateSvgPath(370, 290, 600, 290), isDashed: true },
         { id: 'c-dj-3-4', fromId: 'dj-m03', toId: 'dj-m04', color: '#10B981', path: this.generateSvgPath(600, 290, 830, 290), isDashed: true },
       ];
-      return { sectorTitle: 'ESPECIALIZACIÓN DJANGO', progressPercent: 0, nodes, connections };
+      dataset = { sectorTitle: 'ESPECIALIZACIÓN DJANGO', progressPercent: 0, nodes, connections };
+    } else {
+      dataset = {
+        sectorTitle: `CURSO: ${normalizedSlug.toUpperCase()}`,
+        progressPercent: 0,
+        nodes: [
+          { id: `${normalizedSlug}-s01`, code: '01', label: 'INTRODUCCIÓN', subtitle: 'CONCEPTOS INICIALES', x: 200, y: 290, variant: 'active', iconType: 'brackets', xp: 100, isUnlocked: true, statusText: 'DISPONIBLE' },
+        ],
+        connections: [],
+      };
     }
 
-    // Fallback general para otros cursos
+    if (userId && this.progressRepository) {
+      try {
+        const userStars = await this.progressRepository.findAllSectionStarsByUser(userId);
+        if (userStars && userStars.length > 0) {
+          dataset = this.enrichLessonsWithProgress(dataset, userStars);
+        }
+      } catch {
+        // En caso de fallo, retornar dataset base
+      }
+    }
+
+    return dataset;
+  }
+
+  private enrichLessonsWithProgress(dataset: GraphDataset, userStars: SectionStarsEntity[]): GraphDataset {
+    const normalizeKey = (key: string) => key.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+    const starsMap = new Map<string, number>();
+    userStars.forEach((s) => {
+      if (s.isPassed) {
+        starsMap.set(s.sectionId.toLowerCase(), s.starsEarned);
+        starsMap.set(normalizeKey(s.sectionId), s.starsEarned);
+      }
+    });
+
+    const connections = dataset.connections.map((c) => ({ ...c }));
+    const completedNodeIds = new Set<string>();
+
+    // 1. Identificar nodos completados
+    const nodes = dataset.nodes.map((node) => {
+      const exactStars = starsMap.get(node.id.toLowerCase());
+      const normStars = starsMap.get(normalizeKey(node.id));
+      const earnedStars = exactStars ?? normStars;
+
+      if (earnedStars !== undefined && earnedStars > 0) {
+        completedNodeIds.add(node.id);
+        return {
+          ...node,
+          stars: earnedStars,
+          variant: 'completed' as const,
+          isUnlocked: true,
+          statusText: 'COMPLETADO',
+        };
+      }
+      return { ...node };
+    });
+
+    // 2. Determinar nodos desbloqueados y activos
+    let hasFoundFirstActive = false;
+
+    const enrichedNodes: GraphNode[] = nodes.map((node) => {
+      if (completedNodeIds.has(node.id)) {
+        return node;
+      }
+
+      const incoming = connections.filter((c) => c.toId === node.id);
+      const isRoot = incoming.length === 0;
+      const allPredecessorsCompleted = isRoot || incoming.every((c) => completedNodeIds.has(c.fromId));
+
+      if (allPredecessorsCompleted) {
+        const isApex = node.variant === 'boss' || node.id.includes('apex');
+        const isBoss = node.variant === 'branch' || node.id.includes('boss');
+        const shouldBeActive = !hasFoundFirstActive;
+        if (shouldBeActive) {
+          hasFoundFirstActive = true;
+        }
+
+        const variant: GraphNodeVariant = isApex
+          ? 'boss'
+          : isBoss
+            ? 'branch'
+            : shouldBeActive
+              ? 'active'
+              : 'unlocked';
+
+        const iconType: GraphNodeIconType = isApex
+          ? 'skull'
+          : node.iconType === 'lock'
+            ? 'brackets'
+            : node.iconType;
+
+        return {
+          ...node,
+          isUnlocked: true,
+          variant,
+          iconType,
+          statusText: isApex
+            ? 'DESAFÍO FINAL DISPONIBLE'
+            : isBoss
+              ? 'MINI-BOSS DISPONIBLE'
+              : `DISPONIBLE • +${node.xp ?? 120} XP`,
+        };
+      }
+
+      return node;
+    });
+
+    // 3. Conexiones: iluminar haz cuando origen este completado
+    const enrichedConnections = connections.map((c) => {
+      if (completedNodeIds.has(c.fromId)) {
+        return { ...c, isDashed: false };
+      }
+      return c;
+    });
+
+    const completedCount = completedNodeIds.size;
+    const progressPercent = Math.round((completedCount / Math.max(1, enrichedNodes.length)) * 100);
+
     return {
-      sectorTitle: `CURSO: ${normalizedSlug.toUpperCase()}`,
-      progressPercent: 0,
-      nodes: [
-        { id: `${normalizedSlug}-s01`, code: '01', label: 'INTRODUCCIÓN', subtitle: 'CONCEPTOS INICIALES', x: 200, y: 290, variant: 'active', iconType: 'brackets', xp: 100, isUnlocked: true, statusText: 'DISPONIBLE' },
-      ],
-      connections: [],
+      ...dataset,
+      progressPercent,
+      nodes: enrichedNodes,
+      connections: enrichedConnections,
     };
   }
 }

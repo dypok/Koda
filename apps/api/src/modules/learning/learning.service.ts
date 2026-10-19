@@ -262,7 +262,19 @@ export class LearningService {
           : (lesson.item2Quiz.options.find((o) => submission.selected_option_ids.includes(o.id))?.feedback ||
              'Respuesta incorrecta. Revisa la teoría y vuelve a intentarlo.');
 
-        const xpEarned = isCorrect
+        let isSectionAlreadyPassed = false;
+        try {
+          if (userId && this.progressRepository) {
+            const star = await this.progressRepository.findSectionStars(userId, lesson.sectionSlug);
+            if (star && star.isPassed) {
+              isSectionAlreadyPassed = true;
+            }
+          }
+        } catch {
+          // Continuar con evaluacion normal si falla la consulta
+        }
+
+        const xpEarned = isCorrect && !isSectionAlreadyPassed
           ? (typeof submission.xp_earned === 'number' && submission.xp_earned > 0
               ? submission.xp_earned
               : lesson.xpReward)
