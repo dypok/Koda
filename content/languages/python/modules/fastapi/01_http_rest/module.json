@@ -6,12 +6,12 @@
   "course_slug": "fastapi-async",
   "title": "Protocolo HTTP, Arquitectura ASGI y Primera API con FastAPI",
   "objective": "Comprender el ciclo Request/Response de HTTP, la arquitectura ASGI y levantar una API con FastAPI y Uvicorn.",
-  "description": "El framework web moderno de Python con tipado estricto, documentación interactiva Swagger y rendimiento ASGI a la par de Node y Go.",
+  "description": "El framework web moderno de Python con tipado estricto, documentacion interactiva Swagger y rendimiento ASGI a la par de Node y Go.",
   "position": 31,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,231 @@
     {
       "id": "sec_fa_01_01",
       "code": "S01",
-      "title": "Servidores ASGI y Creación de Endpoints",
-      "slug": "asgi-endpoints",
+      "title": "Fundamentos de HTTP, ASGI y Rutas en FastAPI",
+      "slug": "fundamentos-http-asgi",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 45,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_fa_01_01",
           "code": "L01",
-          "title": "¿Por qué FastAPI? ASGI, Uvicorn y Primer Endpoint",
-          "slug": "fastapi-asgi-base",
+          "title": "Arquitectura ASGI, Uvicorn y Primer Endpoint",
+          "slug": "asgi-uvicorn-primer-endpoint",
           "position": 1,
-          "concept_id": "fa-intro",
-          "objective": "Inicializar una aplicación FastAPI y servir endpoints HTTP con el servidor asíncrono Uvicorn.",
-          "theory_markdown": "Tradicionalmente, Python usaba **WSGI** (como en Django o Flask clásicos), que procesaba una petición por hilo de forma sincrónica.\n\n**FastAPI** está construido sobre **ASGI** (Asynchronous Server Gateway Interface) y la librería **Starlette**, permitiendo manejar miles de conexiones WebSocket y HTTP concurrentes mediante el Event Loop de Python.\n\nPara ejecutar la app en desarrollo usamos **Uvicorn**:\n`uvicorn main:app --reload`.",
+          "concept_id": "fa-intro-asgi",
+          "objective": "Comprender la diferencia entre WSGI y ASGI, y levantar una aplicacion FastAPI ejecutada por Uvicorn.",
+          "theory_markdown": "Tradicionalmente, los frameworks web de Python como Django y Flask clasicos operaban sobre el estandar **WSGI** (Web Server Gateway Interface), el cual bloqueaba un hilo completo del sistema operativo por cada peticion HTTP entrante.\n\n**FastAPI** adopta **ASGI** (Asynchronous Server Gateway Interface), construido sobre la libreria asincrona **Starlette**. ASGI permite que un unico hilo de ejecucion gestione miles de conexiones concurrentes no bloqueantes a traves del Event Loop de `asyncio`.\n\nPara servir una aplicacion FastAPI se requiere un servidor ASGI como **Uvicorn**:\n```bash\nuvicorn main:app --reload\n```\nLa bandera `--reload` activa el reinicio automatico del proceso al detectar cambios en el codigo fuente durante la fase de desarrollo.",
           "examples": [
             {
-              "title": "Tu primera API REST asíncrona",
-              "code": "from fastapi import FastAPI\n\napp = FastAPI(title=\"Koda API\", version=\"1.0.0\")\n\n@app.get(\"/\")\nasync def root():\n    return {\"status\": \"online\", \"mensaje\": \"Bienvenido a FastAPI\"}\n\n@app.get(\"/salud\")\ndef health_check():\n    return {\"ok\": True, \"servicios\": \"operativos\"}",
-              "output": "{\"status\": \"online\", \"mensaje\": \"Bienvenido a FastAPI\"}",
-              "explanation": "FastAPI serializa automáticamente los diccionarios de Python a JSON con las cabeceras HTTP correctas."
+              "title": "Instanciacion de FastAPI y endpoint basico",
+              "code": "from fastapi import FastAPI\n\napp = FastAPI(title=\"Koda Service\", version=\"1.0.0\")\n\n@app.get(\"/\")\nasync def read_root() -> dict[str, str]:\n    return {\"status\": \"ok\", \"message\": \"API operativa\"}",
+              "output": "{\"status\": \"ok\", \"message\": \"API operativa\"}",
+              "explanation": "FastAPI serializa automaticamente los diccionarios retornados a formato JSON con la cabecera Content-Type: application/json."
             }
           ],
-          "common_errors": "Olvidar el parámetro `--reload` en uvicorn durante el desarrollo, teniendo que reiniciar el servidor manualmente en cada cambio.",
+          "common_errors": "Definir un endpoint con async def pero ejecutar dentro funciones bloqueantes sincronas intensivas en CPU sin delegarlas a un threadpool, congelando el bucle de eventos.",
           "mini_exercise": {
-            "starter_code": "from fastapi import FastAPI\napp = FastAPI()\n\n# Define un endpoint GET en \"/ping\" que retorne {\"pong\": True}\n@app.get(\"/ping\")\ndef ping():\n    return ...",
-            "instructions": "Retorna {\"pong\": True}.",
-            "solution": "from fastapi import FastAPI\napp = FastAPI()\n\n@app.get(\"/ping\")\ndef ping():\n    return {\"pong\": True}"
+            "instructions": "Crea una instancia de FastAPI llamada app y un endpoint GET en '/ping' que retorne {'ping': 'pong'}.",
+            "starter_code": "from fastapi import FastAPI\n\n# Inicializa app y define la ruta /ping\n",
+            "solution": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/ping\")\nasync def ping() -> dict[str, str]:\n    return {\"ping\": \"pong\"}"
           },
           "key_takeaways": [
-            "FastAPI genera documentación interactiva automática en /docs (Swagger UI).",
-            "ASGI permite concurrencia masiva nativa.",
-            "Los endpoints pueden ser def síncronos o async def no bloqueantes."
+            "ASGI permite concurrencia masiva no bloqueante mediante el Event Loop de asyncio.",
+            "Uvicorn es el servidor web ASGI que ejecuta aplicaciones FastAPI.",
+            "FastAPI serializa estructuras nativas de Python a JSON de forma transparente."
           ],
           "exercise": {
             "id": "ex_fa_01_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿En qué ruta genera FastAPI automáticamente la documentación interactiva Swagger?",
+            "prompt": "Cual es la principal diferencia arquitectonica entre un servidor WSGI clasico y un servidor ASGI como Uvicorn?",
             "options": [
               {
                 "id": "a",
-                "text": "/docs"
+                "text": "ASGI soporta concurrencia asincrona no bloqueante sobre el Event Loop, mientras que WSGI es sincronico por peticion."
               },
               {
                 "id": "b",
-                "text": "/swagger.html"
+                "text": "WSGI solo funciona con Node.js y ASGI solo con Python compilado en C."
               },
               {
                 "id": "c",
-                "text": "/api/v1/help"
+                "text": "ASGI inhabilita el uso de tipos estaticos en las rutas."
               },
               {
                 "id": "d",
-                "text": "/readme"
+                "text": "WSGI requiere obligatoriamente Docker y ASGI requiere Kubernetes."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "FastAPI expone la interfaz interactiva de Swagger UI en /docs y ReDoc en /redoc por defecto."
+            "explanation": "ASGI fue disenado especificamente para permitir operaciones asincronas, WebSockets y concurrencia eficiente sin requerir un hilo por conexion como WSGI."
+          }
+        },
+        {
+          "id": "les_fa_01_02",
+          "code": "L02",
+          "title": "Path Parameters y Tipado Estricto",
+          "slug": "path-parameters-tipado",
+          "position": 2,
+          "concept_id": "fa-path-params",
+          "objective": "Capturar variables dinamicas en la ruta HTTP y aprovechar la conversion y validacion automatica de tipos.",
+          "theory_markdown": "Los **Path Parameters** (parametros de ruta) permiten capturar valores variables dentro de la URL declarandolos con llaves `{param}` en el decorador de ruta.\n\nFastAPI utiliza las anotaciones de tipo de Python para realizar dos acciones esenciales:\n1. **Conversion de tipos (Data Parsing):** Convierte la cadena que viaja en la URL al tipo especificado (por ejemplo, `int`, `float`, `UUID`).\n2. **Validacion automatica:** Si el cliente envia un valor que no puede ser convertido al tipo esperado (por ejemplo `/items/abc` cuando se requiere `int`), FastAPI responde de inmediato con codigo HTTP 422 Unprocessable Entity indicando el error de validacion exacto en formato JSON.",
+          "examples": [
+            {
+              "title": "Captura de un identificador numerico en la ruta",
+              "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/usuarios/{user_id}\")\nasync def get_usuario(user_id: int) -> dict[str, int]:\n    return {\"user_id\": user_id}",
+              "output": "Peticion GET /usuarios/42 -> {\"user_id\": 42}\nPeticion GET /usuarios/hola -> HTTP 422 Unprocessable Entity",
+              "explanation": "Al declarar user_id: int, FastAPI convierte la cadena '42' al entero 42, y rechaza peticiones con valores no numericos."
+            }
+          ],
+          "common_errors": "Colocar rutas estaticas despues de rutas con path parameters dinamicos coincidentes (ejemplo: '/usuarios/{user_id}' antes de '/usuarios/me'), lo que provocara que 'me' sea interpretado como un parametro user_id.",
+          "mini_exercise": {
+            "instructions": "Define un endpoint GET en '/cursos/{curso_id}' donde curso_id sea un entero estricto y retorne un diccionario con la clave 'id'.",
+            "starter_code": "from fastapi import FastAPI\napp = FastAPI()\n\n# Define el endpoint con tipado int\n",
+            "solution": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/cursos/{curso_id}\")\nasync def obtener_curso(curso_id: int) -> dict[str, int]:\n    return {\"id\": curso_id}"
+          },
+          "key_takeaways": [
+            "Los parametros de ruta se definen con llaves {parametro} en el decorador.",
+            "El tipado estricto permite a FastAPI parsear y validar automaticamente los parametros.",
+            "Errores de tipo en la ruta producen una respuesta estandar HTTP 422 Unprocessable Entity."
+          ],
+          "exercise": {
+            "id": "ex_fa_01_02",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "Si un endpoint esta declarado como def read_item(item_id: int) y el cliente solicita GET /items/texto, que respuesta genera FastAPI por defecto?",
+            "options": [
+              {
+                "id": "a",
+                "text": "HTTP 422 Unprocessable Entity con detalle del error de validacion en JSON."
+              },
+              {
+                "id": "b",
+                "text": "HTTP 500 Internal Server Error con un volcado de traza no controlado."
+              },
+              {
+                "id": "c",
+                "text": "HTTP 200 OK asignando None a item_id."
+              },
+              {
+                "id": "d",
+                "text": "HTTP 404 Not Found."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "FastAPI valida los tipos antes de invocar la funcion; si la conversion falla, responde automaticamente con 422 y un esquema descriptivo del error."
+          }
+        },
+        {
+          "id": "les_fa_01_03",
+          "code": "L03",
+          "title": "Query Parameters y Parametros Opcionales",
+          "slug": "query-parameters-opcionales",
+          "position": 3,
+          "concept_id": "fa-query-params",
+          "objective": "Declarar y procesar parametros de consulta en la URL, estableciendo valores por defecto y tipos opcionales.",
+          "theory_markdown": "Los argumentos de la funcion de ruta que **no** coinciden con nombres declarados en el path del decorador son interpretados automaticamente por FastAPI como **Query Parameters** (parametros de consulta que viajan tras el simbolo `?` en la URL).\n\nPara definir parametros opcionales o con valores predeterminados:\n- Con valor por defecto: `limit: int = 10`\n- Opcional sin valor: `busqueda: str | None = None`\n- Booleans: FastAPI parsea de forma inteligente valores como `1`, `true`, `True`, `on`, `yes` a `True`.",
+          "examples": [
+            {
+              "title": "Paginacion y filtros mediante Query Parameters",
+              "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/articulos\")\nasync def listar_articulos(offset: int = 0, limit: int = 10, categoria: str | None = None) -> dict[str, object]:\n    return {\"offset\": offset, \"limit\": limit, \"categoria\": categoria}",
+              "output": "Peticion GET /articulos?limit=5 -> {\"offset\": 0, \"limit\": 5, \"categoria\": null}",
+              "explanation": "offset toma su valor por defecto 0, limit es sobreescrito con 5, y categoria permanece como None."
+            }
+          ],
+          "common_errors": "No proveer un valor por defecto ni None para un query parameter opcional, lo cual lo convierte involuntariamente en un parametro requerido.",
+          "mini_exercise": {
+            "instructions": "Escribe un endpoint GET en '/buscar' que reciba 'q: str' (requerido) y 'limite: int = 20' (opcional).",
+            "starter_code": "from fastapi import FastAPI\napp = FastAPI()\n\n# Define el endpoint con q y limite\n",
+            "solution": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/buscar\")\nasync def buscar(q: str, limite: int = 20) -> dict[str, object]:\n    return {\"consulta\": q, \"limite\": limite}"
+          },
+          "key_takeaways": [
+            "Cualquier argumento de funcion que no este en el path se convierte en un Query Parameter.",
+            "Asignar un valor por defecto o None hace que el query parameter sea opcional.",
+            "FastAPI convierte tipos nativos como enteros, flotantes y booleanos automaticamente."
+          ],
+          "exercise": {
+            "id": "ex_fa_01_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Como se define un Query Parameter en FastAPI para que no sea obligatorio y su valor predeterminado sea None?",
+            "options": [
+              {
+                "id": "a",
+                "text": "parametro: str | None = None"
+              },
+              {
+                "id": "b",
+                "text": "parametro: str = Required(None)"
+              },
+              {
+                "id": "c",
+                "text": "@app.optional('parametro')"
+              },
+              {
+                "id": "d",
+                "text": "parametro: Optional[str] sin valor asignado"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Al declarar 'parametro: str | None = None', FastAPI identifica que el parametro es de tipo string opcional y que si se omite en la URL tendra el valor None."
+          }
+        },
+        {
+          "id": "les_fa_01_04",
+          "code": "L04",
+          "title": "Codigos de Estado HTTP y Documentacion OpenAPI",
+          "slug": "status-codes-openapi",
+          "position": 4,
+          "concept_id": "fa-status-openapi",
+          "objective": "Controlar codigos de respuesta HTTP con HTTPException y personalizar la documentacion interactiva OpenAPI.",
+          "theory_markdown": "Una API REST profesional debe responder con los codigos de estado HTTP adecuados segun el resultado de la operacion:\n- `status.HTTP_200_OK`: Lectura o actualizacion exitosa.\n- `status.HTTP_201_CREATED`: Recurso creado exitosamente.\n- `status.HTTP_404_NOT_FOUND`: Recurso inexistente.\n- `status.HTTP_400_BAD_REQUEST`: Solicitud invalida por logica de negocio.\n\nPara emitir errores controlados se eleva `HTTPException`:\n```python\nfrom fastapi import HTTPException, status\nraise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"Elemento no hallado\")\n```\n\nAdemas, FastAPI genera automaticamente la especificacion **OpenAPI** y ofrece dos interfaces web interactivas por defecto:\n- **Swagger UI** en `/docs`: Permite explorar y probar los endpoints interactivamente desde el navegador.\n- **ReDoc** en `/redoc`: Presenta una documentacion estructurada y visualmente limpia.",
+          "examples": [
+            {
+              "title": "Control de status_code y lanzamiento de HTTPException",
+              "code": "from fastapi import FastAPI, HTTPException, status\n\napp = FastAPI(title=\"Catalogo API\", version=\"2.0.0\")\n\nITEMS = {1: \"Laptop\", 2: \"Teclado\"}\n\n@app.get(\"/items/{item_id}\", status_code=status.HTTP_200_OK, tags=[\"inventario\"])\nasync def get_item(item_id: int) -> dict[str, str]:\n    if item_id not in ITEMS:\n        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"Item inexistente\")\n    return {\"nombre\": ITEMS[item_id]}",
+              "output": "GET /items/99 -> HTTP 404 con {\"detail\": \"Item inexistente\"}",
+              "explanation": "status_code en el decorador fija el estado para casos exitosos, mientras que HTTPException interrumpe el flujo retornando el codigo indicado."
+            }
+          ],
+          "common_errors": "Retornar un diccionario como {'error': 'no encontrado'} con codigo 200 OK en lugar de elevar una HTTPException con status 404.",
+          "mini_exercise": {
+            "instructions": "Eleva una HTTPException con codigo 404 y detalle 'No encontrado' si el parametro activo es False.",
+            "starter_code": "from fastapi import FastAPI, HTTPException, status\n\napp = FastAPI()\n\n@app.get(\"/check\")\nasync def check(activo: bool):\n    # Si no esta activo, eleva HTTPException 404\n    pass",
+            "solution": "from fastapi import FastAPI, HTTPException, status\n\napp = FastAPI()\n\n@app.get(\"/check\")\nasync def check(activo: bool):\n    if not activo:\n        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"No encontrado\")\n    return {\"estado\": \"activo\"}"
+          },
+          "key_takeaways": [
+            "El decorador de ruta acepta status_code para definir el codigo HTTP de respuesta exitosa.",
+            "HTTPException interrumpe la ejecucion y retorna una respuesta de error con codigo y detalle JSON.",
+            "FastAPI genera documentacion interactiva automatica en /docs (Swagger UI) y /redoc."
+          ],
+          "exercise": {
+            "id": "ex_fa_01_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es la forma correcta de interrumpir una peticion y responder al cliente con un codigo HTTP 404 y un mensaje de error en FastAPI?",
+            "options": [
+              {
+                "id": "a",
+                "text": "raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=\"Mensaje\")"
+              },
+              {
+                "id": "b",
+                "text": "return {\"status\": 404, \"error\": \"Mensaje\"}"
+              },
+              {
+                "id": "c",
+                "text": "sys.exit(404)"
+              },
+              {
+                "id": "d",
+                "text": "raise ValueError(404)"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Elevar una instancia de HTTPException con el status_code y detail es el mecanismo oficial de FastAPI para enviar respuestas de error HTTP formateadas."
           }
         }
       ]
