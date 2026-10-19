@@ -36,24 +36,80 @@
           "code": "L01",
           "title": "Tomando decisiones con if",
           "position": 1,
-          "theory_markdown": "La sentencia `if` evalúa una condición. Si esa condición es verdadera (`True`), ejecuta el bloque de código que tiene sangría o indentación (4 espacios).",
-          "code_example": "puntos = 15\nif puntos > 10:\n    print(\"¡Nivel superado!\")",
-          "expected_output": "¡Nivel superado!",
-          "tip_markdown": "En Python la indentación no es estética; es obligatoria para definir bloques de código.",
-          "exercise": {
-            "id": "ex_py_04_01",
-            "type": "single_choice",
-            "prompt": "¿Qué carácter obligatorio debe ir al final de la línea del 'if condicion'?",
-            "hint": "Son dos puntos (:)",
-            "options": [
-              { "id": "opt_a", "text": "Dos puntos (:)" },
-              { "id": "opt_b", "text": "Punto y coma (;)" },
-              { "id": "opt_c", "text": "Llaves ({)" },
-              { "id": "opt_d", "text": "Flecha (->)" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Correcto! En Python, cada encabezado de bloque como if, elif, else, for o def termina siempre con dos puntos (:)."
-          }
+          "explanation": "La sentencia `if` evalúa una condición. Si esa condición es verdadera (`True`), ejecuta el bloque de código que tiene sangría o indentación (4 espacios).",
+          "concept_id": "py-condicionales-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "puntos = 15\nif puntos > 10:\n    print(\"¡Nivel superado!\")",
+              "language": "python",
+              "output": "¡Nivel superado!",
+              "explanation": "En Python la indentación no es estética; es obligatoria para definir bloques de código.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_04_ex_py_04_01",
+              "type": "single_choice",
+              "prompt": "¿Qué carácter obligatorio debe ir al final de la línea del 'if condicion'?",
+              "explanation": "¡Correcto! En Python, cada encabezado de bloque como if, elif, else, for o def termina siempre con dos puntos (:).",
+              "difficulty": "medium",
+              "category": "condicionales",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "Dos puntos (:)",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "Punto y coma (;)",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "Llaves ({)",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "Flecha (->)",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Son dos puntos (:)"
+              ],
+              "concept_ids": [
+                "py-condicionales-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_04",
+              "section_id": "sec_py_04_01",
+              "lesson_id": "les_py_04_01"
+            }
+          ]
         }
       ]
     }

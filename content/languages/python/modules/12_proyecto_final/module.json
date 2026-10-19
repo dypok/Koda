@@ -36,24 +36,80 @@
           "code": "L01",
           "title": "Integración de componentes",
           "position": 1,
-          "theory_markdown": "Un proyecto real se compone de módulos coordinados: modelos de datos con clases, funciones para la lógica de negocio y manejo defensivo de errores para evitar cierres inesperados.",
-          "code_example": "# Proyecto integrador: Gestor de Tareas Koda\nclass Tarea:\n    def __init__(self, titulo):\n        self.titulo = titulo\n        self.completada = False\n\nt = Tarea(\"Completar curso de Python\")\nprint(f\"Tarea: {t.titulo} - ¿Lista? {t.completada}\")",
-          "expected_output": "Tarea: Completar curso de Python - ¿Lista? False",
-          "tip_markdown": "¡Felicitaciones! Estás a un paso de completar los 12 módulos y desbloquear tu examen de certificación.",
-          "exercise": {
-            "id": "ex_py_12_01",
-            "type": "single_choice",
-            "prompt": "¿Qué práctica de ingeniería de software es fundamental al construir el proyecto integrador?",
-            "hint": "Dividir en módulos independientes y reutilizables.",
-            "options": [
-              { "id": "opt_a", "text": "Separar el código en módulos con responsabilidades únicas y funciones limpias" },
-              { "id": "opt_b", "text": "Escribir todo el código en una sola función gigante de 1000 líneas" },
-              { "id": "opt_c", "text": "Eliminar todos los comentarios y nombres descriptivos" },
-              { "id": "opt_d", "text": "Ignorar los errores y no usar bloques try/except" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Exacto! La modularidad, cohesión y claridad de diseño son los pilares de una aplicación profesional en Python."
-          }
+          "explanation": "Un proyecto real se compone de módulos coordinados: modelos de datos con clases, funciones para la lógica de negocio y manejo defensivo de errores para evitar cierres inesperados.",
+          "concept_id": "py-proyecto-final-y-certificacion-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "# Proyecto integrador: Gestor de Tareas Koda\nclass Tarea:\n    def __init__(self, titulo):\n        self.titulo = titulo\n        self.completada = False\n\nt = Tarea(\"Completar curso de Python\")\nprint(f\"Tarea: {t.titulo} - ¿Lista? {t.completada}\")",
+              "language": "python",
+              "output": "Tarea: Completar curso de Python - ¿Lista? False",
+              "explanation": "¡Felicitaciones! Estás a un paso de completar los 12 módulos y desbloquear tu examen de certificación.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_12_ex_py_12_01",
+              "type": "single_choice",
+              "prompt": "¿Qué práctica de ingeniería de software es fundamental al construir el proyecto integrador?",
+              "explanation": "¡Exacto! La modularidad, cohesión y claridad de diseño son los pilares de una aplicación profesional en Python.",
+              "difficulty": "medium",
+              "category": "proyecto-final",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "Separar el código en módulos con responsabilidades únicas y funciones limpias",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "Escribir todo el código en una sola función gigante de 1000 líneas",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "Eliminar todos los comentarios y nombres descriptivos",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "Ignorar los errores y no usar bloques try/except",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Dividir en módulos independientes y reutilizables."
+              ],
+              "concept_ids": [
+                "py-proyecto-final-y-certificacion-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_12",
+              "section_id": "sec_py_12_01",
+              "lesson_id": "les_py_12_01"
+            }
+          ]
         }
       ]
     }

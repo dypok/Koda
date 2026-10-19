@@ -35,24 +35,80 @@
           "code": "L01",
           "title": "Hola FastAPI: Tu primera ruta GET",
           "position": 1,
-          "theory_markdown": "FastAPI se basa en el estándar ASGI (Asynchronous Server Gateway Interface), lo que permite manejar miles de conexiones simultáneas. Creas una instancia de `FastAPI()` y usas decoradores como `@app.get(\"/\")` para asociar funciones a rutas HTTP.",
-          "code_example": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/\")\ndef root():\n    return {\"mensaje\": \"¡API en línea con FastAPI!\"}",
-          "expected_output": "{\"mensaje\": \"¡API en línea con FastAPI!\"}",
-          "tip_markdown": "FastAPI serializa automáticamente diccionarios y modelos a formato JSON válido.",
-          "exercise": {
-            "id": "ex_fa_01_01",
-            "type": "single_choice",
-            "prompt": "¿Qué decorador se usa en FastAPI para registrar un endpoint que responda a peticiones HTTP GET?",
-            "hint": "Comienza con @app seguido del método HTTP en minúsculas.",
-            "options": [
-              { "id": "opt_a", "text": "@app.get(\"/ruta\")" },
-              { "id": "opt_b", "text": "@route.get(\"/ruta\")" },
-              { "id": "opt_c", "text": "@fastapi.endpoint(\"/ruta\")" },
-              { "id": "opt_d", "text": "@api.get(\"/ruta\")" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Correcto! En FastAPI las operaciones de ruta se declaran usando `@app.get()`, `@app.post()`, `@app.put()`, etc."
-          }
+          "explanation": "FastAPI se basa en el estándar ASGI (Asynchronous Server Gateway Interface), lo que permite manejar miles de conexiones simultáneas. Creas una instancia de `FastAPI()` y usas decoradores como `@app.get(\"/\")` para asociar funciones a rutas HTTP.",
+          "concept_id": "py-fastapi-asgi-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "from fastapi import FastAPI\n\napp = FastAPI()\n\n@app.get(\"/\")\ndef root():\n    return {\"mensaje\": \"¡API en línea con FastAPI!\"}",
+              "language": "python",
+              "output": "{\"mensaje\": \"¡API en línea con FastAPI!\"}",
+              "explanation": "FastAPI serializa automáticamente diccionarios y modelos a formato JSON válido.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_14_fastapi_asgi_ex_fa_01_01",
+              "type": "single_choice",
+              "prompt": "¿Qué decorador se usa en FastAPI para registrar un endpoint que responda a peticiones HTTP GET?",
+              "explanation": "¡Correcto! En FastAPI las operaciones de ruta se declaran usando `@app.get()`, `@app.post()`, `@app.put()`, etc.",
+              "difficulty": "medium",
+              "category": "fastapi-asgi",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "@app.get(\"/ruta\")",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "@route.get(\"/ruta\")",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "@fastapi.endpoint(\"/ruta\")",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "@api.get(\"/ruta\")",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Comienza con @app seguido del método HTTP en minúsculas."
+              ],
+              "concept_ids": [
+                "py-fastapi-asgi-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_14_fastapi_asgi",
+              "section_id": "sec_fa_01",
+              "lesson_id": "les_fa_01_01"
+            }
+          ]
         }
       ]
     }

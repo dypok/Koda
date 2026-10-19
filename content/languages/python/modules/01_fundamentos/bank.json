@@ -1,35 +1,102 @@
 {
   "module_code": "PY_MOD_01",
+  "module_slug": "fundamentos-de-python",
   "questions": [
     {
       "id": "bnk_py_01_01",
-      "concept_id": "print_function",
       "type": "single_choice",
       "difficulty": "easy",
       "prompt": "¿Qué función de Python se utiliza para mostrar datos en la consola?",
-      "options": [
-        { "id": "opt_a", "text": "print()" },
-        { "id": "opt_b", "text": "echo()" },
-        { "id": "opt_c", "text": "display()" },
-        { "id": "opt_d", "text": "write()" }
+      "category": "fundamentos",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "print()",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "echo()",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "display()",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "write()",
+          "is_correct": false,
+          "position": 4
+        }
       ],
-      "correct_option_id": "opt_a",
-      "hint": "Comienza por la letra p."
+      "correct_answer_ids": [
+        "opt_a"
+      ],
+      "hints": [
+        "Comienza por la letra p."
+      ],
+      "concept_ids": [
+        "print-function"
+      ],
+      "explanation": "La respuesta correcta es \"print()\". Comienza por la letra p."
     },
     {
       "id": "bnk_py_01_02",
-      "concept_id": "variable_assignment",
       "type": "single_choice",
       "difficulty": "easy",
       "prompt": "¿Qué operador se utiliza en Python para asignar un valor a una variable?",
-      "options": [
-        { "id": "opt_a", "text": "=" },
-        { "id": "opt_b", "text": "==" },
-        { "id": "opt_c", "text": "->" },
-        { "id": "opt_d", "text": ":" }
+      "category": "fundamentos",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "=",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "==",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "->",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": ":",
+          "is_correct": false,
+          "position": 4
+        }
       ],
-      "correct_option_id": "opt_a",
-      "hint": "Es un solo signo igual."
+      "correct_answer_ids": [
+        "opt_a"
+      ],
+      "hints": [
+        "Es un solo signo igual."
+      ],
+      "concept_ids": [
+        "variable-assignment"
+      ],
+      "explanation": "La respuesta correcta es \"=\". Es un solo signo igual."
     }
   ]
 }

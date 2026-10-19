@@ -36,24 +36,80 @@
           "code": "L01",
           "title": "Repetición con for y range",
           "position": 1,
-          "theory_markdown": "El bucle `for` permite iterar sobre una secuencia de valores. Con `range(n)` generamos una serie de números desde 0 hasta n - 1.",
-          "code_example": "for i in range(3):\n    print(\"Hola\", i)",
-          "expected_output": "Hola 0\nHola 1\nHola 2",
-          "tip_markdown": "range(3) produce los números 0, 1 y 2. El número 3 no se incluye.",
-          "exercise": {
-            "id": "ex_py_05_01",
-            "type": "single_choice",
-            "prompt": "¿Cuántas veces se ejecuta un bucle que inicia con 'for i in range(5):'?",
-            "hint": "Cuenta desde 0 hasta 4.",
-            "options": [
-              { "id": "opt_a", "text": "5 veces" },
-              { "id": "opt_b", "text": "4 veces" },
-              { "id": "opt_c", "text": "6 veces" },
-              { "id": "opt_d", "text": "Infinitas veces" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Exacto! range(5) genera los índices 0, 1, 2, 3 y 4, por lo que el cuerpo del bucle se ejecuta exactamente 5 veces."
-          }
+          "explanation": "El bucle `for` permite iterar sobre una secuencia de valores. Con `range(n)` generamos una serie de números desde 0 hasta n - 1.",
+          "concept_id": "py-bucles-e-iteracion-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "for i in range(3):\n    print(\"Hola\", i)",
+              "language": "python",
+              "output": "Hola 0\nHola 1\nHola 2",
+              "explanation": "range(3) produce los números 0, 1 y 2. El número 3 no se incluye.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_05_ex_py_05_01",
+              "type": "single_choice",
+              "prompt": "¿Cuántas veces se ejecuta un bucle que inicia con 'for i in range(5):'?",
+              "explanation": "¡Exacto! range(5) genera los índices 0, 1, 2, 3 y 4, por lo que el cuerpo del bucle se ejecuta exactamente 5 veces.",
+              "difficulty": "medium",
+              "category": "bucles",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "5 veces",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "4 veces",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "6 veces",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "Infinitas veces",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Cuenta desde 0 hasta 4."
+              ],
+              "concept_ids": [
+                "py-bucles-e-iteracion-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_05",
+              "section_id": "sec_py_05_01",
+              "lesson_id": "les_py_05_01"
+            }
+          ]
         }
       ]
     }

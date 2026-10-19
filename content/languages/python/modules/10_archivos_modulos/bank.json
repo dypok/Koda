@@ -1,28 +1,90 @@
-[
-  {
-    "id": "q_py_10_01",
-    "type": "single_choice",
-    "prompt": "¿Por qué es una buena práctica utilizar la sentencia `with open(...) as f:` para manipular archivos?",
-    "options": [
-      { "id": "opt_a", "text": "Cierra automáticamente el archivo al finalizar el bloque, incluso si ocurre un error" },
-      { "id": "opt_b", "text": "Permite escribir en archivos protegidos contra escritura" },
-      { "id": "opt_c", "text": "Hace que la lectura sea 10 veces más rápida" },
-      { "id": "opt_d", "text": "Convierte el archivo a JSON automáticamente" }
-    ],
-    "correct_option_id": "opt_a",
-    "explanation": "El gestor de contexto (`with`) asegura la llamada a `.close()` automáticamente liberando los descriptores de archivo del sistema operativo."
-  },
-  {
-    "id": "q_py_10_02",
-    "type": "single_choice",
-    "prompt": "¿Qué modo de apertura se usa en `open()` para añadir contenido al final de un archivo sin sobreescribirlo?",
-    "options": [
-      { "id": "opt_a", "text": "\"a\" (append)" },
-      { "id": "opt_b", "text": "\"w\" (write)" },
-      { "id": "opt_c", "text": "\"r\" (read)" },
-      { "id": "opt_d", "text": "\"x\" (exclusive)" }
-    ],
-    "correct_option_id": "opt_a",
-    "explanation": "El modo `\"a\"` abre el archivo en modo adición (append), situando el cursor al final para preservar lo existente."
-  }
-]
+{
+  "module_code": "PY_MOD_10",
+  "module_slug": "archivos-y-modulos",
+  "questions": [
+    {
+      "id": "q_py_10_01",
+      "type": "single_choice",
+      "prompt": "¿Por qué es una buena práctica utilizar la sentencia `with open(...) as f:` para manipular archivos?",
+      "explanation": "El gestor de contexto (`with`) asegura la llamada a `.close()` automáticamente liberando los descriptores de archivo del sistema operativo.",
+      "difficulty": "medium",
+      "category": "archivos-modulos",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "Cierra automáticamente el archivo al finalizar el bloque, incluso si ocurre un error",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "Permite escribir en archivos protegidos contra escritura",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "Hace que la lectura sea 10 veces más rápida",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "Convierte el archivo a JSON automáticamente",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "opt_a"
+      ]
+    },
+    {
+      "id": "q_py_10_02",
+      "type": "single_choice",
+      "prompt": "¿Qué modo de apertura se usa en `open()` para añadir contenido al final de un archivo sin sobreescribirlo?",
+      "explanation": "El modo `\"a\"` abre el archivo en modo adición (append), situando el cursor al final para preservar lo existente.",
+      "difficulty": "medium",
+      "category": "archivos-modulos",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "\"a\" (append)",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "\"w\" (write)",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "\"r\" (read)",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "\"x\" (exclusive)",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "opt_a"
+      ]
+    }
+  ]
+}

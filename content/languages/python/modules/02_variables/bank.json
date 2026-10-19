@@ -1,35 +1,102 @@
 {
   "module_code": "PY_MOD_02",
+  "module_slug": "variables-y-tipos-de-datos",
   "questions": [
     {
       "id": "bnk_py_02_01",
-      "concept_id": "type_inspection",
       "type": "single_choice",
       "difficulty": "easy",
       "prompt": "¿Qué resultado devuelve la instrucción type(\"Python\")?",
-      "options": [
-        { "id": "opt_a", "text": "<class 'str'>" },
-        { "id": "opt_b", "text": "<class 'text'>" },
-        { "id": "opt_c", "text": "<class 'string'>" },
-        { "id": "opt_d", "text": "<class 'char'>" }
+      "category": "variables",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "<class 'str'>",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "<class 'text'>",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "<class 'string'>",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "<class 'char'>",
+          "is_correct": false,
+          "position": 4
+        }
       ],
-      "correct_option_id": "opt_a",
-      "hint": "En Python, los textos son del tipo 'str' (abreviación de string)."
+      "correct_answer_ids": [
+        "opt_a"
+      ],
+      "hints": [
+        "En Python, los textos son del tipo 'str' (abreviación de string)."
+      ],
+      "concept_ids": [
+        "type-inspection"
+      ],
+      "explanation": "La respuesta correcta es \"<class 'str'>\". En Python, los textos son del tipo 'str' (abreviación de string)."
     },
     {
       "id": "bnk_py_02_02",
-      "concept_id": "boolean_values",
       "type": "single_choice",
       "difficulty": "easy",
       "prompt": "¿Cuáles son los dos únicos valores del tipo booleano (bool) en Python?",
-      "options": [
-        { "id": "opt_a", "text": "True y False (con mayúscula inicial)" },
-        { "id": "opt_b", "text": "true y false (en minúsculas)" },
-        { "id": "opt_c", "text": "1 y 0 exclusivamente" },
-        { "id": "opt_d", "text": "yes y no" }
+      "category": "variables",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "True y False (con mayúscula inicial)",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "true y false (en minúsculas)",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "1 y 0 exclusivamente",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "yes y no",
+          "is_correct": false,
+          "position": 4
+        }
       ],
-      "correct_option_id": "opt_a",
-      "hint": "En Python los booleanos siempre llevan la primera letra en mayúscula."
+      "correct_answer_ids": [
+        "opt_a"
+      ],
+      "hints": [
+        "En Python los booleanos siempre llevan la primera letra en mayúscula."
+      ],
+      "concept_ids": [
+        "boolean-values"
+      ],
+      "explanation": "La respuesta correcta es \"True y False (con mayúscula inicial)\". En Python los booleanos siempre llevan la primera letra en mayúscula."
     }
   ]
 }

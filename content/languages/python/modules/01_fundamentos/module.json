@@ -35,48 +35,160 @@
           "code": "L01",
           "title": "Bienvenido a Python",
           "position": 1,
-          "theory_markdown": "Python es uno de los lenguajes de programación más populares y amigables del mundo. Su diseño prioriza la legibilidad, permitiéndote escribir código limpio que parece casi inglés cotidiano.",
-          "code_example": "# En Python, el código es directo y legible\nprint(\"¡Hola, Koda!\")",
-          "expected_output": "¡Hola, Koda!",
-          "tip_markdown": "Grandes plataformas como Google, YouTube, Instagram y Netflix usan Python a diario.",
-          "exercise": {
-            "id": "ex_py_01_01",
-            "type": "single_choice",
-            "prompt": "¿Cuál es uno de los mayores beneficios de Python para principiantes?",
-            "hint": "Python fue creado pensando en que las personas lean el código con facilidad.",
-            "options": [
-              { "id": "opt_a", "text": "Su sintaxis es clara, legible y muy cercana al lenguaje humano" },
-              { "id": "opt_b", "text": "Exige escribir código complejo con punto y coma obligatorio" },
-              { "id": "opt_c", "text": "Solo funciona para crear páginas web estáticas" },
-              { "id": "opt_d", "text": "No permite imprimir mensajes en pantalla" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "Exacto. Python fue diseñado deliberadamente para ser ultra legible y directo, permitiéndote concentrarte en la lógica sin pelear con sintaxis engorrosa."
-          }
+          "explanation": "Python es uno de los lenguajes de programación más populares y amigables del mundo. Su diseño prioriza la legibilidad, permitiéndote escribir código limpio que parece casi inglés cotidiano.",
+          "concept_id": "py-fundamentos-de-python-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "# En Python, el código es directo y legible\nprint(\"¡Hola, Koda!\")",
+              "language": "python",
+              "output": "¡Hola, Koda!",
+              "explanation": "Grandes plataformas como Google, YouTube, Instagram y Netflix usan Python a diario.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_01_ex_py_01_01",
+              "type": "single_choice",
+              "prompt": "¿Cuál es uno de los mayores beneficios de Python para principiantes?",
+              "explanation": "Exacto. Python fue diseñado deliberadamente para ser ultra legible y directo, permitiéndote concentrarte en la lógica sin pelear con sintaxis engorrosa.",
+              "difficulty": "medium",
+              "category": "fundamentos",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "Su sintaxis es clara, legible y muy cercana al lenguaje humano",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "Exige escribir código complejo con punto y coma obligatorio",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "Solo funciona para crear páginas web estáticas",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "No permite imprimir mensajes en pantalla",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Python fue creado pensando en que las personas lean el código con facilidad."
+              ],
+              "concept_ids": [
+                "py-fundamentos-de-python-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_01",
+              "section_id": "sec_py_01",
+              "lesson_id": "les_py_01_01"
+            }
+          ]
         },
         {
           "id": "les_py_01_02",
           "code": "L02",
           "title": "La función print()",
           "position": 2,
-          "theory_markdown": "Para que tu programa muestre un mensaje en la pantalla, utilizas la función print(). Solo debes colocar el texto que deseas mostrar dentro de sus paréntesis, envuelto entre comillas.",
-          "code_example": "print(\"Aprendo a programar\")",
-          "expected_output": "Aprendo a programar",
-          "tip_markdown": "print significa 'imprimir' en inglés, pero en computación significa mostrar texto en la consola.",
-          "exercise": {
-            "id": "ex_py_01_02",
-            "type": "single_choice",
-            "prompt": "¿Qué instrucción muestra exactamente el texto 'Hola mundo' en la consola?",
-            "hint": "La función se escribe en minúsculas y el texto va entre paréntesis y comillas.",
-            "options": [
-              { "id": "opt_a", "text": "print(\"Hola mundo\")" },
-              { "id": "opt_b", "text": "mostrar \"Hola mundo\"" },
-              { "id": "opt_c", "text": "PRINT(Hola mundo)" },
-              { "id": "opt_d", "text": "escribir('Hola mundo')" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Correcto! En Python print() es la función estándar para enviar mensajes a la salida de la consola."
-          }
+          "explanation": "Para que tu programa muestre un mensaje en la pantalla, utilizas la función print(). Solo debes colocar el texto que deseas mostrar dentro de sus paréntesis, envuelto entre comillas.",
+          "concept_id": "py-fundamentos-de-python-l02",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "print(\"Aprendo a programar\")",
+              "language": "python",
+              "output": "Aprendo a programar",
+              "explanation": "print significa 'imprimir' en inglés, pero en computación significa mostrar texto en la consola.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_01_ex_py_01_02",
+              "type": "single_choice",
+              "prompt": "¿Qué instrucción muestra exactamente el texto 'Hola mundo' en la consola?",
+              "explanation": "¡Correcto! En Python print() es la función estándar para enviar mensajes a la salida de la consola.",
+              "difficulty": "medium",
+              "category": "fundamentos",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "print(\"Hola mundo\")",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "mostrar \"Hola mundo\"",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "PRINT(Hola mundo)",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "escribir('Hola mundo')",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "La función se escribe en minúsculas y el texto va entre paréntesis y comillas."
+              ],
+              "concept_ids": [
+                "py-fundamentos-de-python-l02"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_01",
+              "section_id": "sec_py_01",
+              "lesson_id": "les_py_01_02"
+            }
+          ]
         }
       ]
     },
@@ -97,24 +209,80 @@
           "code": "L01",
           "title": "Guardar datos en una variable",
           "position": 1,
-          "theory_markdown": "Una variable es como una cajita con nombre en la memoria de la computadora donde puedes guardar datos. Para guardar un valor, escribes el nombre de la variable, el signo igual (=) y el valor.",
-          "code_example": "mascota = \"Koda\"\nprint(mascota)",
-          "expected_output": "Koda",
-          "tip_markdown": "El signo = en programación significa 'asignar' o guardar, no igualdad matemática.",
-          "exercise": {
-            "id": "ex_py_02_01",
-            "type": "single_choice",
-            "prompt": "Si ejecutas x = 10 y luego print(x), ¿qué verás en la consola?",
-            "hint": "Al imprimir la variable x, verás el valor que tiene guardado adentro.",
-            "options": [
-              { "id": "opt_a", "text": "10" },
-              { "id": "opt_b", "text": "x" },
-              { "id": "opt_c", "text": "\"x\"" },
-              { "id": "opt_d", "text": "Error" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Exacto! La variable x contiene el número 10, por lo que print(x) muestra su valor almacenado: 10."
-          }
+          "explanation": "Una variable es como una cajita con nombre en la memoria de la computadora donde puedes guardar datos. Para guardar un valor, escribes el nombre de la variable, el signo igual (=) y el valor.",
+          "concept_id": "py-fundamentos-de-python-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "mascota = \"Koda\"\nprint(mascota)",
+              "language": "python",
+              "output": "Koda",
+              "explanation": "El signo = en programación significa 'asignar' o guardar, no igualdad matemática.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_01_ex_py_02_01",
+              "type": "single_choice",
+              "prompt": "Si ejecutas x = 10 y luego print(x), ¿qué verás en la consola?",
+              "explanation": "¡Exacto! La variable x contiene el número 10, por lo que print(x) muestra su valor almacenado: 10.",
+              "difficulty": "medium",
+              "category": "fundamentos",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "10",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "x",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "\"x\"",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "Error",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Al imprimir la variable x, verás el valor que tiene guardado adentro."
+              ],
+              "concept_ids": [
+                "py-fundamentos-de-python-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_01",
+              "section_id": "sec_py_02",
+              "lesson_id": "les_py_02_01"
+            }
+          ]
         }
       ]
     }

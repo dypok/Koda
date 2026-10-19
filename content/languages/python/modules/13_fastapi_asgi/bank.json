@@ -1,28 +1,90 @@
-[
-  {
-    "id": "q_fa_01_01",
-    "type": "single_choice",
-    "prompt": "¿Qué servidor ASGI de alto rendimiento se utiliza convencionalmente para ejecutar aplicaciones FastAPI?",
-    "options": [
-      { "id": "opt_a", "text": "Uvicorn" },
-      { "id": "opt_b", "text": "Apache HTTP" },
-      { "id": "opt_c", "text": "Gunicorn WSGI puro" },
-      { "id": "opt_d", "text": "Nginx directamente sin puente" }
-    ],
-    "correct_option_id": "opt_a",
-    "explanation": "Uvicorn es el servidor web ASGI ligero y ultrarrápido basado en uvloop recomendado para FastAPI."
-  },
-  {
-    "id": "q_fa_01_02",
-    "type": "single_choice",
-    "prompt": "¿Qué documentación interactiva genera FastAPI automáticamente por defecto en la ruta `/docs`?",
-    "options": [
-      { "id": "opt_a", "text": "Swagger UI interactivo conforme al estándar OpenAPI" },
-      { "id": "opt_b", "text": "Un archivo PDF estático descargable" },
-      { "id": "opt_c", "text": "Un archivo README en Markdown" },
-      { "id": "opt_d", "text": "Javadoc HTML" }
-    ],
-    "correct_option_id": "opt_a",
-    "explanation": "FastAPI genera de forma nativa documentación Swagger UI interactiva en `/docs` y ReDoc en `/redoc` sin configuración adicional."
-  }
-]
+{
+  "module_code": "FA_MOD_01",
+  "module_slug": "fastapi-asgi",
+  "questions": [
+    {
+      "id": "q_fa_01_01",
+      "type": "single_choice",
+      "prompt": "¿Qué servidor ASGI de alto rendimiento se utiliza convencionalmente para ejecutar aplicaciones FastAPI?",
+      "explanation": "Uvicorn es el servidor web ASGI ligero y ultrarrápido basado en uvloop recomendado para FastAPI.",
+      "difficulty": "medium",
+      "category": "fastapi-asgi",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "Uvicorn",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "Apache HTTP",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "Gunicorn WSGI puro",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "Nginx directamente sin puente",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "opt_a"
+      ]
+    },
+    {
+      "id": "q_fa_01_02",
+      "type": "single_choice",
+      "prompt": "¿Qué documentación interactiva genera FastAPI automáticamente por defecto en la ruta `/docs`?",
+      "explanation": "FastAPI genera de forma nativa documentación Swagger UI interactiva en `/docs` y ReDoc en `/redoc` sin configuración adicional.",
+      "difficulty": "medium",
+      "category": "fastapi-asgi",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "Swagger UI interactivo conforme al estándar OpenAPI",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "Un archivo PDF estático descargable",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "Un archivo README en Markdown",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "Javadoc HTML",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "opt_a"
+      ]
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 > Backlog corto de tareas pendientes **detectadas y verificadas en el repositorio**.
 > Los ítems de producto viven en Jira (proyecto `KA`); este archivo lista lo accionable sobre el repo.
 >
-> **Última actualización:** 2026-10-15 (America/Bogota)
+> **Última actualización:** 2026-10-19 (America/Bogota)
 > **Fuentes:** sesión de trabajo + Jira `KA` + `documentation/`.
 
 **Leyenda:** `[ ]` pendiente · `[x]` hecho · **P1** alto · **P2** medio · **P3** bajo
@@ -30,9 +30,10 @@
 
 ## 📚 P2 — Contenido (bancos y dialectos)
 
-- [ ] **Migrar el dialecto shorthand → canónico** en `content/languages/lua/modules/03_operadores/bank.json` y en los bancos de `python` (`options`/`correct_option_id`/`hint` → `answers`/`correct_answer_ids`/`hints`).
+- [ ] **Migrar el dialecto shorthand → canónico** en `content/languages/lua/modules/03_operadores/bank.json` (Python ya migrado: 16 bancos / 46 preguntas canónicas en esta rama).
 - [ ] **Completar `correct_answer_ids` y `difficulty`** en las **20** preguntas de `content/languages/lua/modules/02_variables/bank.json` (hoy dependen solo de `answers[].is_correct`; válido, pero incompleto).
 - [ ] **Completar `id` en respuestas** donde falta (p. ej. `02_variables/bank.json`, pregunta índice `5`, respuestas 1–3).
+- [ ] **Alinear `concept_ids` de los bancos de Python con las lecciones** (42 preguntas sin `concept_ids` y 4 con conceptos heredados sin lección correspondiente) y decidir si se crea `bank.json` para `12_proyecto_final` (hoy no tiene).
 - [ ] **Ampliar bancos de Lua para cumplir B_min** (quiz ≥30, examen ≥80; por tipo ≥2× cuota). Estado actual: `01_fundamentos`=15, `02_variables`=20, `03_operadores`=2.
 - [ ] **Visores de los tipos sin UI** (`select_code`, `order_lines`, `matching`, `small_problem`, `multiple_choice`, `write_code`): documentados en `29` §4 pero aún sin datos ni render.
 
@@ -57,6 +58,7 @@
 ## ✅ Hecho (referencia)
 
 - [x] Docs `29_QUESTION_JSON_CONTRACT.md` y `30_ROADMAP_STRUCTURE_AND_COORDINATES.md` + `content/schemas/question.schema.json` (rama `docs/content-question-json-contract`, commit `36edcdd`).
+- [x] **Migración de Python a la estructura canónica de Lua** (`explanation`, `examples[]`, `exercises[]`, `answers`, `correct_answer_ids`, `difficulty`) + script reutilizable `documentation/scripts/migrate-python-to-lua-structure.js`; 18 módulos / 16 bancos / 46 preguntas validados contra el schema (2026-10-19).
 - [x] `GEMINI.md`: visión multilingüe, superficie REST real, §6 Contrato de Contenido y §4 sincronizada con Jira.
 
 ---

@@ -36,24 +36,80 @@
           "code": "L01",
           "title": "El Gestor de Contexto with open",
           "position": 1,
-          "theory_markdown": "Para abrir un archivo usamos `open()`. Usar la instrucción `with` asegura que el archivo se cierre automáticamente al terminar el bloque, evitando fugas de memoria o corrupción de datos.",
-          "code_example": "with open(\"datos.txt\", \"w\") as archivo:\n    archivo.write(\"Koda Fox\")",
-          "expected_output": "Koda Fox",
-          "tip_markdown": "El modo \"r\" es para lectura, \"w\" para sobreescribir y \"a\" para añadir contenido al final.",
-          "exercise": {
-            "id": "ex_py_10_01",
-            "type": "single_choice",
-            "prompt": "¿Por qué se recomienda usar 'with open(...)' en lugar de solo 'open()' y luego 'close()'?",
-            "hint": "Garantiza el cierre automático del archivo.",
-            "options": [
-              { "id": "opt_a", "text": "Cierra el archivo automáticamente incluso si ocurre un error" },
-              { "id": "opt_b", "text": "Hace que el archivo sea más rápido de leer" },
-              { "id": "opt_c", "text": "Convierte el texto en código binario" },
-              { "id": "opt_d", "text": "Impide que otros usuarios lean el archivo" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Exacto! El gestor de contexto `with` invoca el método de salida automáticamente, liberando los recursos del sistema."
-          }
+          "explanation": "Para abrir un archivo usamos `open()`. Usar la instrucción `with` asegura que el archivo se cierre automáticamente al terminar el bloque, evitando fugas de memoria o corrupción de datos.",
+          "concept_id": "py-archivos-y-modulos-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "with open(\"datos.txt\", \"w\") as archivo:\n    archivo.write(\"Koda Fox\")",
+              "language": "python",
+              "output": "Koda Fox",
+              "explanation": "El modo \"r\" es para lectura, \"w\" para sobreescribir y \"a\" para añadir contenido al final.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_10_ex_py_10_01",
+              "type": "single_choice",
+              "prompt": "¿Por qué se recomienda usar 'with open(...)' en lugar de solo 'open()' y luego 'close()'?",
+              "explanation": "¡Exacto! El gestor de contexto `with` invoca el método de salida automáticamente, liberando los recursos del sistema.",
+              "difficulty": "medium",
+              "category": "archivos-modulos",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "Cierra el archivo automáticamente incluso si ocurre un error",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "Hace que el archivo sea más rápido de leer",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "Convierte el texto en código binario",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "Impide que otros usuarios lean el archivo",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Garantiza el cierre automático del archivo."
+              ],
+              "concept_ids": [
+                "py-archivos-y-modulos-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_10",
+              "section_id": "sec_py_10_01",
+              "lesson_id": "les_py_10_01"
+            }
+          ]
         }
       ]
     }

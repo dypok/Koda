@@ -43,27 +43,72 @@
               "title": "Conteo regresivo",
               "code": "segundos = 3\nwhile segundos > 0:\n    print(segundos)\n    segundos -= 1",
               "output": "3\n2\n1",
-              "explanation": "El ciclo se repite mientras segundos sea mayor a cero, restando 1 en cada iteración."
+              "explanation": "El ciclo se repite mientras segundos sea mayor a cero, restando 1 en cada iteración.",
+              "language": "python",
+              "position": 1
             }
           ],
           "exercises": [
             {
-              "id": "ex_py_06_01",
+              "id": "py_mod_06_while_ex_py_06_01",
               "type": "predict_output",
               "difficulty": "easy",
               "prompt": "¿Qué imprime este código?",
               "prompt_code": "x = 1\nwhile x < 3:\n    print(x)\n    x += 1",
               "answers": [
-                { "id": "a", "label": "A", "body": "1 y 2 en líneas separadas", "is_correct": true },
-                { "id": "b", "label": "B", "body": "1, 2, 3", "is_correct": false },
-                { "id": "c", "label": "C", "body": "0, 1, 2", "is_correct": false },
-                { "id": "d", "label": "D", "body": "Bucle infinito", "is_correct": false }
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "1 y 2 en líneas separadas",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "1, 2, 3",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "0, 1, 2",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Bucle infinito",
+                  "is_correct": false,
+                  "position": 4
+                }
               ],
-              "correct_answer_ids": ["a"],
+              "correct_answer_ids": [
+                "a"
+              ],
               "explanation": "Inicia en 1 (imprime 1, suma 1 = 2), luego imprime 2 (suma 1 = 3). 3 no es menor a 3, por lo que el bucle termina.",
-              "hints": ["La condición es menor estricto (< 3)."]
+              "hints": [
+                "La condición es menor estricto (< 3)."
+              ],
+              "category": "bucles-while",
+              "concept_ids": [
+                "py-while-syntax"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_06_while",
+              "section_id": "sec_py_06_01",
+              "lesson_id": "les_py_06_01"
             }
-          ]
+          ],
+          "status": "published",
+          "content_version": 1
         },
         {
           "id": "les_py_06_02",
@@ -78,26 +123,72 @@
               "title": "Control con bandera activo",
               "code": "activo = True\npasos = 0\nwhile activo:\n    pasos += 1\n    if pasos == 2:\n        activo = False\nprint('Terminado en', pasos)",
               "output": "Terminado en 2",
-              "explanation": "Al alcanzar 2 pasos, activo se vuelve False y el bucle finaliza."
+              "explanation": "Al alcanzar 2 pasos, activo se vuelve False y el bucle finaliza.",
+              "language": "python",
+              "position": 1
             }
           ],
           "exercises": [
             {
-              "id": "ex_py_06_02",
+              "id": "py_mod_06_while_ex_py_06_02",
               "type": "single_choice",
               "difficulty": "medium",
               "prompt": "¿Por qué es crucial actualizar la variable de control dentro del cuerpo de un while?",
               "answers": [
-                { "id": "a", "label": "A", "body": "Para evitar un bucle infinito que congele la ejecución del programa", "is_correct": true },
-                { "id": "b", "label": "B", "body": "Porque si no se actualiza, Python genera un SyntaxError", "is_correct": false },
-                { "id": "c", "label": "C", "body": "Para cambiar automáticamente el tipo de dato de la variable", "is_correct": false },
-                { "id": "d", "label": "D", "body": "Es opcional; Python sabe cuándo detener el bucle por sí solo", "is_correct": false }
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Para evitar un bucle infinito que congele la ejecución del programa",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Porque si no se actualiza, Python genera un SyntaxError",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Para cambiar automáticamente el tipo de dato de la variable",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Es opcional; Python sabe cuándo detener el bucle por sí solo",
+                  "is_correct": false,
+                  "position": 4
+                }
               ],
-              "correct_answer_ids": ["a"],
+              "correct_answer_ids": [
+                "a"
+              ],
               "explanation": "Si la condición nunca cambia a False, el bucle se ejecutará indefinidamente consumiendo CPU y memoria.",
-              "hints": ["Piensa en qué pasa si una condición nunca cambia."]
+              "hints": [
+                "Piensa en qué pasa si una condición nunca cambia."
+              ],
+              "category": "bucles-while",
+              "prompt_code": null,
+              "concept_ids": [
+                "py-flags-sentinels"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_06_while",
+              "section_id": "sec_py_06_01",
+              "lesson_id": "les_py_06_02"
             }
-          ]
+          ],
+          "status": "published",
+          "content_version": 1
         },
         {
           "id": "les_py_06_03",
@@ -112,26 +203,72 @@
               "title": "Comparativa directa",
               "code": "# for: sabes cuántas veces (5 veces)\nfor _ in range(5): pass\n\n# while: hasta que se cumpla algo\nconectado = True\nwhile conectado: pass",
               "output": "",
-              "explanation": "for para rangos conocidos; while para condiciones variables."
+              "explanation": "for para rangos conocidos; while para condiciones variables.",
+              "language": "python",
+              "position": 1
             }
           ],
           "exercises": [
             {
-              "id": "ex_py_06_03",
+              "id": "py_mod_06_while_ex_py_06_03",
               "type": "single_choice",
               "difficulty": "medium",
               "prompt": "Si necesitas pedir una contraseña al usuario hasta que sea correcta, ¿qué bucle es el más adecuado?",
               "answers": [
-                { "id": "a", "label": "A", "body": "while (porque no sabes cuántos intentos necesitará)", "is_correct": true },
-                { "id": "b", "label": "B", "body": "for con range(10) obligatoriamente", "is_correct": false },
-                { "id": "c", "label": "C", "body": "Ninguno, solo se usa if", "is_correct": false },
-                { "id": "d", "label": "D", "body": "print() repetido", "is_correct": false }
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "while (porque no sabes cuántos intentos necesitará)",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "for con range(10) obligatoriamente",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Ninguno, solo se usa if",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "print() repetido",
+                  "is_correct": false,
+                  "position": 4
+                }
               ],
-              "correct_answer_ids": ["a"],
+              "correct_answer_ids": [
+                "a"
+              ],
               "explanation": "while es ideal para eventos condicionales donde la cantidad de intentos es incierta.",
-              "hints": ["El usuario puede acertar en el 1er o en el 10mo intento."]
+              "hints": [
+                "El usuario puede acertar en el 1er o en el 10mo intento."
+              ],
+              "category": "bucles-while",
+              "prompt_code": null,
+              "concept_ids": [
+                "py-for-vs-while"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_06_while",
+              "section_id": "sec_py_06_01",
+              "lesson_id": "les_py_06_03"
             }
-          ]
+          ],
+          "status": "published",
+          "content_version": 1
         }
       ]
     }

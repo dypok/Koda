@@ -36,24 +36,80 @@
           "code": "L01",
           "title": "Interpolación moderna con f-strings",
           "position": 1,
-          "theory_markdown": "Las `f-strings` permiten insertar variables y expresiones directamente dentro de un texto anteponiendo una letra `f` antes de las comillas y usando llaves `{}`.",
-          "code_example": "usuario = \"Koda\"\nnivel = 10\nprint(f\"El zorro {usuario} tiene nivel {nivel}\")",
-          "expected_output": "El zorro Koda tiene nivel 10",
-          "tip_markdown": "Las f-strings son la forma más rápida y legible de formatear texto en Python moderno.",
-          "exercise": {
-            "id": "ex_py_08_01",
-            "type": "single_choice",
-            "prompt": "¿Qué prefijo debe colocarse antes de las comillas para crear una f-string?",
-            "hint": "Es la letra inicial de 'format'.",
-            "options": [
-              { "id": "opt_a", "text": "f o F" },
-              { "id": "opt_b", "text": "$" },
-              { "id": "opt_c", "text": "format:" },
-              { "id": "opt_d", "text": "str" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Correcto! Una letra `f` o `F` justo antes de abrir las comillas indica a Python que procese las llaves como código."
-          }
+          "explanation": "Las `f-strings` permiten insertar variables y expresiones directamente dentro de un texto anteponiendo una letra `f` antes de las comillas y usando llaves `{}`.",
+          "concept_id": "py-strings-avanzados-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "usuario = \"Koda\"\nnivel = 10\nprint(f\"El zorro {usuario} tiene nivel {nivel}\")",
+              "language": "python",
+              "output": "El zorro Koda tiene nivel 10",
+              "explanation": "Las f-strings son la forma más rápida y legible de formatear texto en Python moderno.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_08_ex_py_08_01",
+              "type": "single_choice",
+              "prompt": "¿Qué prefijo debe colocarse antes de las comillas para crear una f-string?",
+              "explanation": "¡Correcto! Una letra `f` o `F` justo antes de abrir las comillas indica a Python que procese las llaves como código.",
+              "difficulty": "medium",
+              "category": "strings-avanzados",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "f o F",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "$",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "format:",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "str",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Es la letra inicial de 'format'."
+              ],
+              "concept_ids": [
+                "py-strings-avanzados-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_08",
+              "section_id": "sec_py_08_01",
+              "lesson_id": "les_py_08_01"
+            }
+          ]
         }
       ]
     }

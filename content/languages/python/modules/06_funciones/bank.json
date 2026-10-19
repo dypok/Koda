@@ -1,41 +1,132 @@
-[
-  {
-    "id": "q_py_06_01",
-    "type": "single_choice",
-    "prompt": "¿Qué palabra clave se utiliza en Python para definir una función reutilizable?",
-    "options": [
-      { "id": "opt_a", "text": "def" },
-      { "id": "opt_b", "text": "function" },
-      { "id": "opt_c", "text": "func" },
-      { "id": "opt_d", "text": "define" }
-    ],
-    "correct_option_id": "opt_a",
-    "explanation": "En Python toda función se define con la palabra reservada `def`."
-  },
-  {
-    "id": "q_py_06_02",
-    "type": "single_choice",
-    "prompt": "¿Qué valor retorna una función en Python si no incluye ninguna sentencia `return`?",
-    "options": [
-      { "id": "opt_a", "text": "None" },
-      { "id": "opt_b", "text": "0" },
-      { "id": "opt_c", "text": "False" },
-      { "id": "opt_d", "text": "undefined" }
-    ],
-    "correct_option_id": "opt_a",
-    "explanation": "Toda función sin `return` explícito retorna el valor especial `None` al terminar."
-  },
-  {
-    "id": "q_py_06_03",
-    "type": "single_choice",
-    "prompt": "¿Cómo se define un parámetro con valor predeterminado o por defecto en Python?",
-    "options": [
-      { "id": "opt_a", "text": "def saludar(nombre=\"Mundo\"):" },
-      { "id": "opt_b", "text": "def saludar(nombre : \"Mundo\"):" },
-      { "id": "opt_c", "text": "def saludar(default nombre = \"Mundo\"):" },
-      { "id": "opt_d", "text": "def saludar(nombre := \"Mundo\"):" }
-    ],
-    "correct_option_id": "opt_a",
-    "explanation": "Los valores por defecto se asignan directamente con `=` dentro de los paréntesis de la definición."
-  }
-]
+{
+  "module_code": "PY_MOD_06",
+  "module_slug": "funciones",
+  "questions": [
+    {
+      "id": "q_py_06_01",
+      "type": "single_choice",
+      "prompt": "¿Qué palabra clave se utiliza en Python para definir una función reutilizable?",
+      "explanation": "En Python toda función se define con la palabra reservada `def`.",
+      "difficulty": "medium",
+      "category": "funciones",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "def",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "function",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "func",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "define",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "opt_a"
+      ]
+    },
+    {
+      "id": "q_py_06_02",
+      "type": "single_choice",
+      "prompt": "¿Qué valor retorna una función en Python si no incluye ninguna sentencia `return`?",
+      "explanation": "Toda función sin `return` explícito retorna el valor especial `None` al terminar.",
+      "difficulty": "medium",
+      "category": "funciones",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "None",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "0",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "False",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "undefined",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "opt_a"
+      ]
+    },
+    {
+      "id": "q_py_06_03",
+      "type": "single_choice",
+      "prompt": "¿Cómo se define un parámetro con valor predeterminado o por defecto en Python?",
+      "explanation": "Los valores por defecto se asignan directamente con `=` dentro de los paréntesis de la definición.",
+      "difficulty": "medium",
+      "category": "funciones",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "def saludar(nombre=\"Mundo\"):",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "def saludar(nombre : \"Mundo\"):",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "def saludar(default nombre = \"Mundo\"):",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "def saludar(nombre := \"Mundo\"):",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "opt_a"
+      ]
+    }
+  ]
+}

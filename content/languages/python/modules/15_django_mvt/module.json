@@ -35,24 +35,80 @@
           "code": "L01",
           "title": "¿Qué es el patrón MVT de Django?",
           "position": 1,
-          "theory_markdown": "Django organiza las aplicaciones mediante MVT: el **Modelo** gestiona los datos y la base de datos; la **Vista** procesa la lógica de negocio y responde a las peticiones HTTP; y el **Template** renderiza el HTML visible para el usuario final.",
-          "code_example": "# Vista básica en Django (views.py)\nfrom django.http import HttpResponse\n\ndef inicio(request):\n    return HttpResponse(\"¡Bienvenido a Django!\")",
-          "expected_output": "¡Bienvenido a Django!",
-          "tip_markdown": "En Django, la 'Vista' equivale al Controlador en la arquitectura MVC clásica.",
-          "exercise": {
-            "id": "ex_dj_01_01",
-            "type": "single_choice",
-            "prompt": "En la arquitectura MVT de Django, ¿qué componente es responsable de renderizar el HTML al usuario?",
-            "hint": "Comienza con la letra T.",
-            "options": [
-              { "id": "opt_a", "text": "Template" },
-              { "id": "opt_b", "text": "Model" },
-              { "id": "opt_c", "text": "View" },
-              { "id": "opt_d", "text": "Middleware" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Correcto! En MVT, el Template es la capa de presentación encargada de la estructura HTML y presentación visual."
-          }
+          "explanation": "Django organiza las aplicaciones mediante MVT: el **Modelo** gestiona los datos y la base de datos; la **Vista** procesa la lógica de negocio y responde a las peticiones HTTP; y el **Template** renderiza el HTML visible para el usuario final.",
+          "concept_id": "py-django-mvt-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "# Vista básica en Django (views.py)\nfrom django.http import HttpResponse\n\ndef inicio(request):\n    return HttpResponse(\"¡Bienvenido a Django!\")",
+              "language": "python",
+              "output": "¡Bienvenido a Django!",
+              "explanation": "En Django, la 'Vista' equivale al Controlador en la arquitectura MVC clásica.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_16_django_mvt_ex_dj_01_01",
+              "type": "single_choice",
+              "prompt": "En la arquitectura MVT de Django, ¿qué componente es responsable de renderizar el HTML al usuario?",
+              "explanation": "¡Correcto! En MVT, el Template es la capa de presentación encargada de la estructura HTML y presentación visual.",
+              "difficulty": "medium",
+              "category": "django-mvt",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "Template",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "Model",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "View",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "Middleware",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Comienza con la letra T."
+              ],
+              "concept_ids": [
+                "py-django-mvt-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_16_django_mvt",
+              "section_id": "sec_dj_01",
+              "lesson_id": "les_dj_01_01"
+            }
+          ]
         }
       ]
     }

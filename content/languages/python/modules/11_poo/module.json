@@ -36,24 +36,80 @@
           "code": "L01",
           "title": "Creando tu primera clase",
           "position": 1,
-          "theory_markdown": "Una clase es un plano de construcción. Con la palabra reservada `class` defines una plantilla, y el método especial `__init__` se ejecuta automáticamente al crear un nuevo objeto para inicializar sus datos.",
-          "code_example": "class Mascota:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nkoda = Mascota(\"Koda\")\nprint(koda.nombre)",
-          "expected_output": "Koda",
-          "tip_markdown": "El parámetro self representa la instancia específica del objeto que se está manipulando.",
-          "exercise": {
-            "id": "ex_py_11_01",
-            "type": "single_choice",
-            "prompt": "¿Cuál es el propósito principal del método especial '__init__' en una clase de Python?",
-            "hint": "Es el constructor de la clase.",
-            "options": [
-              { "id": "opt_a", "text": "Inicializar los atributos de la instancia al ser creada" },
-              { "id": "opt_b", "text": "Eliminar la clase de la memoria" },
-              { "id": "opt_c", "text": "Imprimir el código en la pantalla" },
-              { "id": "opt_d", "text": "Convertir la clase en una función matemática" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Correcto! `__init__` es el método inicializador/constructor invocado al instanciar una nueva clase."
-          }
+          "explanation": "Una clase es un plano de construcción. Con la palabra reservada `class` defines una plantilla, y el método especial `__init__` se ejecuta automáticamente al crear un nuevo objeto para inicializar sus datos.",
+          "concept_id": "py-programacion-orientada-a-objetos-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "class Mascota:\n    def __init__(self, nombre):\n        self.nombre = nombre\n\nkoda = Mascota(\"Koda\")\nprint(koda.nombre)",
+              "language": "python",
+              "output": "Koda",
+              "explanation": "El parámetro self representa la instancia específica del objeto que se está manipulando.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_11_ex_py_11_01",
+              "type": "single_choice",
+              "prompt": "¿Cuál es el propósito principal del método especial '__init__' en una clase de Python?",
+              "explanation": "¡Correcto! `__init__` es el método inicializador/constructor invocado al instanciar una nueva clase.",
+              "difficulty": "medium",
+              "category": "poo",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "Inicializar los atributos de la instancia al ser creada",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "Eliminar la clase de la memoria",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "Imprimir el código en la pantalla",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "Convertir la clase en una función matemática",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Es el constructor de la clase."
+              ],
+              "concept_ids": [
+                "py-programacion-orientada-a-objetos-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_11",
+              "section_id": "sec_py_11_01",
+              "lesson_id": "les_py_11_01"
+            }
+          ]
         }
       ]
     }

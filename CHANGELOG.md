@@ -93,6 +93,10 @@ Zona horaria: America/Bogota (UTC-5)
   - Se implementó un selector de modo visual en `HeroSection` permitiendo alternar entre el "Render 3D Oficial" flotante y la animación interactiva "WebGL 2D" que sigue el cursor.
 
 ### Changed
+- [2026-10-19 08:03] [Changed] **Migración del contenido de Python a la estructura canónica de Lua:**
+  - `content/languages/python/modules/**`: 18 módulos, 27 lecciones y 46 preguntas de banco pasan de `theory_markdown`/`code_example`/`exercise` y `options`/`correct_option_id`/`hint` a `explanation`/`examples[]`/`exercises[]` y `answers[]`/`correct_answer_ids`/`difficulty`.
+  - Nuevo script idempotente `documentation/scripts/migrate-python-to-lua-structure.js` con flags `--dry-run`, `--out=<dir>` y `--bank-form=object|array`.
+  - Validado con `jsonschema` (draft 2020-12) contra `content/schemas/question.schema.json`: 18/18 módulos y 16/16 bancos sin errores. Detalle en `documentation/changelog/19-10-2026-changelog.md`.
 - [2026-09-14 23:56] [Changed] **Cromo del roadmap a píldoras flotantes:**
   - TopHud y Legend como píldoras (título + continuar, racha, XP); panel de detalle a `top-16`; lienzo a todo ancho.
   - Detalle por commit en `documentation/changelog/14-09-2026-changelog.md`.

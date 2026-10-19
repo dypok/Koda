@@ -36,48 +36,160 @@
           "code": "L01",
           "title": "Cajas con nombre en memoria",
           "position": 1,
-          "theory_markdown": "Una variable es un contenedor con un nombre asignado donde guardamos información en la memoria de la computadora. En Python, creas una variable escribiendo su nombre, seguido del operador de asignación `=` y el valor.",
-          "code_example": "vidas = 3\nprint(vidas)",
-          "expected_output": "3",
-          "tip_markdown": "El signo `=` en programación significa 'asigna este valor a la variable', no igualdad matemática.",
-          "exercise": {
-            "id": "ex_py_02_01",
-            "type": "single_choice",
-            "prompt": "¿Qué instrucción guarda el número 100 en la variable llamada 'puntos'?",
-            "hint": "Escribe el nombre de la variable, el signo = y el valor.",
-            "options": [
-              { "id": "opt_a", "text": "puntos = 100" },
-              { "id": "opt_b", "text": "100 = puntos" },
-              { "id": "opt_c", "text": "variable puntos : 100" },
-              { "id": "opt_d", "text": "set puntos to 100" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Correcto! En Python primero se escribe el nombre de la variable a la izquierda y el valor a la derecha del signo `=`."
-          }
+          "explanation": "Una variable es un contenedor con un nombre asignado donde guardamos información en la memoria de la computadora. En Python, creas una variable escribiendo su nombre, seguido del operador de asignación `=` y el valor.",
+          "concept_id": "py-variables-y-tipos-de-datos-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "vidas = 3\nprint(vidas)",
+              "language": "python",
+              "output": "3",
+              "explanation": "El signo `=` en programación significa 'asigna este valor a la variable', no igualdad matemática.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_02_ex_py_02_01",
+              "type": "single_choice",
+              "prompt": "¿Qué instrucción guarda el número 100 en la variable llamada 'puntos'?",
+              "explanation": "¡Correcto! En Python primero se escribe el nombre de la variable a la izquierda y el valor a la derecha del signo `=`.",
+              "difficulty": "medium",
+              "category": "variables",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "puntos = 100",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "100 = puntos",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "variable puntos : 100",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "set puntos to 100",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Escribe el nombre de la variable, el signo = y el valor."
+              ],
+              "concept_ids": [
+                "py-variables-y-tipos-de-datos-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_02",
+              "section_id": "sec_py_02_01",
+              "lesson_id": "les_py_02_01"
+            }
+          ]
         },
         {
           "id": "les_py_02_02",
           "code": "L02",
           "title": "Nombres válidos para variables",
           "position": 2,
-          "theory_markdown": "Los nombres de variables deben ser claros y descriptivos. En Python usamos la convención snake_case (minúsculas separadas por guion bajo). No pueden comenzar con números ni contener espacios.",
-          "code_example": "nivel_jugador = 5\nnombre_usuario = \"Koda\"\nprint(nivel_jugador)",
-          "expected_output": "5",
-          "tip_markdown": "Evita nombres genéricos como x o y a menos que representen coordenadas.",
-          "exercise": {
-            "id": "ex_py_02_02",
-            "type": "single_choice",
-            "prompt": "¿Cuál de los siguientes es un nombre de variable válido y recomendado en Python?",
-            "hint": "Usa minúsculas y separa palabras con guion bajo (_).",
-            "options": [
-              { "id": "opt_a", "text": "puntaje_maximo" },
-              { "id": "opt_b", "text": "2do_puesto" },
-              { "id": "opt_c", "text": "puntaje maximo" },
-              { "id": "opt_d", "text": "puntaje-maximo" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "Exacto. puntaje_maximo cumple todas las reglas: inicia con letra, no tiene espacios ni guiones medios y sigue snake_case."
-          }
+          "explanation": "Los nombres de variables deben ser claros y descriptivos. En Python usamos la convención snake_case (minúsculas separadas por guion bajo). No pueden comenzar con números ni contener espacios.",
+          "concept_id": "py-variables-y-tipos-de-datos-l02",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "nivel_jugador = 5\nnombre_usuario = \"Koda\"\nprint(nivel_jugador)",
+              "language": "python",
+              "output": "5",
+              "explanation": "Evita nombres genéricos como x o y a menos que representen coordenadas.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_02_ex_py_02_02",
+              "type": "single_choice",
+              "prompt": "¿Cuál de los siguientes es un nombre de variable válido y recomendado en Python?",
+              "explanation": "Exacto. puntaje_maximo cumple todas las reglas: inicia con letra, no tiene espacios ni guiones medios y sigue snake_case.",
+              "difficulty": "medium",
+              "category": "variables",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "puntaje_maximo",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "2do_puesto",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "puntaje maximo",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "puntaje-maximo",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Usa minúsculas y separa palabras con guion bajo (_)."
+              ],
+              "concept_ids": [
+                "py-variables-y-tipos-de-datos-l02"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_02",
+              "section_id": "sec_py_02_01",
+              "lesson_id": "les_py_02_02"
+            }
+          ]
         }
       ]
     },
@@ -98,24 +210,80 @@
           "code": "L01",
           "title": "Enteros y Flotantes",
           "position": 1,
-          "theory_markdown": "Python tiene dos tipos numéricos principales: `int` para números enteros (sin decimales, como 42 o -5) y `float` para números con punto decimal (como 3.14 o 0.5).",
-          "code_example": "edad = 25\nprecio = 19.99\nprint(type(edad))\nprint(type(precio))",
-          "expected_output": "<class 'int'>\n<class 'float'>",
-          "tip_markdown": "La función type() te permite inspeccionar de qué tipo es cualquier valor en Python.",
-          "exercise": {
-            "id": "ex_py_02_03",
-            "type": "single_choice",
-            "prompt": "¿Qué tipo de dato tiene el valor 7.0 en Python?",
-            "hint": "Aunque sea un número entero en valor matemático, tiene un punto decimal.",
-            "options": [
-              { "id": "opt_a", "text": "float" },
-              { "id": "opt_b", "text": "int" },
-              { "id": "opt_c", "text": "str" },
-              { "id": "opt_d", "text": "decimal_int" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Muy bien! Todo número con punto decimal en Python es interpretado como float."
-          }
+          "explanation": "Python tiene dos tipos numéricos principales: `int` para números enteros (sin decimales, como 42 o -5) y `float` para números con punto decimal (como 3.14 o 0.5).",
+          "concept_id": "py-variables-y-tipos-de-datos-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "edad = 25\nprecio = 19.99\nprint(type(edad))\nprint(type(precio))",
+              "language": "python",
+              "output": "<class 'int'>\n<class 'float'>",
+              "explanation": "La función type() te permite inspeccionar de qué tipo es cualquier valor en Python.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_02_ex_py_02_03",
+              "type": "single_choice",
+              "prompt": "¿Qué tipo de dato tiene el valor 7.0 en Python?",
+              "explanation": "¡Muy bien! Todo número con punto decimal en Python es interpretado como float.",
+              "difficulty": "medium",
+              "category": "variables",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "float",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "int",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "str",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "decimal_int",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Aunque sea un número entero en valor matemático, tiene un punto decimal."
+              ],
+              "concept_ids": [
+                "py-variables-y-tipos-de-datos-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_02",
+              "section_id": "sec_py_02_02",
+              "lesson_id": "les_py_02_03"
+            }
+          ]
         }
       ]
     }

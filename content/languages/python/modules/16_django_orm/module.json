@@ -35,24 +35,80 @@
           "code": "L01",
           "title": "Definir un Modelo con models.Model",
           "position": 1,
-          "theory_markdown": "En Django, cada tabla de la base de datos se representa como una clase Python que hereda de `models.Model`. Cada atributo de la clase corresponde a una columna de la tabla con su tipo de dato correspondiente.",
-          "code_example": "from django.db import models\n\nclass Curso(models.Model):\n    titulo = models.CharField(max_length=100)\n    estudiantes = models.IntegerField(default=0)\n    activo = models.BooleanField(default=True)",
-          "expected_output": "<Curso: Python 1>",
-          "tip_markdown": "Tras modificar models.py debes ejecutar 'makemigrations' y luego 'migrate'.",
-          "exercise": {
-            "id": "ex_dj_02_01",
-            "type": "single_choice",
-            "prompt": "¿De qué clase base de Django deben heredar todos los modelos de base de datos?",
-            "hint": "Pertenece al módulo django.db.models.",
-            "options": [
-              { "id": "opt_a", "text": "models.Model" },
-              { "id": "opt_b", "text": "models.Entity" },
-              { "id": "opt_c", "text": "models.Table" },
-              { "id": "opt_d", "text": "models.Schema" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Correcto! En Django cada entidad de persistencia relacional deriva de `models.Model`."
-          }
+          "explanation": "En Django, cada tabla de la base de datos se representa como una clase Python que hereda de `models.Model`. Cada atributo de la clase corresponde a una columna de la tabla con su tipo de dato correspondiente.",
+          "concept_id": "py-django-orm-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "from django.db import models\n\nclass Curso(models.Model):\n    titulo = models.CharField(max_length=100)\n    estudiantes = models.IntegerField(default=0)\n    activo = models.BooleanField(default=True)",
+              "language": "python",
+              "output": "<Curso: Python 1>",
+              "explanation": "Tras modificar models.py debes ejecutar 'makemigrations' y luego 'migrate'.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_17_django_orm_ex_dj_02_01",
+              "type": "single_choice",
+              "prompt": "¿De qué clase base de Django deben heredar todos los modelos de base de datos?",
+              "explanation": "¡Correcto! En Django cada entidad de persistencia relacional deriva de `models.Model`.",
+              "difficulty": "medium",
+              "category": "django-orm",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "models.Model",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "models.Entity",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "models.Table",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "models.Schema",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Pertenece al módulo django.db.models."
+              ],
+              "concept_ids": [
+                "py-django-orm-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_17_django_orm",
+              "section_id": "sec_dj_02",
+              "lesson_id": "les_dj_02_01"
+            }
+          ]
         }
       ]
     }

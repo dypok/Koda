@@ -36,24 +36,80 @@
           "code": "L01",
           "title": "Capturando excepciones",
           "position": 1,
-          "theory_markdown": "Cuando un error ocurre en Python, se lanza una 'excepción'. Si envuelves la operación peligrosa en un bloque `try`, puedes capturar el error con `except` sin que tu programa colapse.",
-          "code_example": "try:\n    resultado = 10 / 0\nexcept ZeroDivisionError:\n    print(\"No se puede dividir por cero.\")",
-          "expected_output": "No se puede dividir por cero.",
-          "tip_markdown": "Capturar errores específicos como ZeroDivisionError o ValueError es una buena práctica.",
-          "exercise": {
-            "id": "ex_py_09_01",
-            "type": "single_choice",
-            "prompt": "¿Qué bloque de código se ejecuta si ocurre un error dentro de un bloque 'try'?",
-            "hint": "Es el bloque que 'atrapa' la excepción.",
-            "options": [
-              { "id": "opt_a", "text": "except" },
-              { "id": "opt_b", "text": "catch" },
-              { "id": "opt_c", "text": "error" },
-              { "id": "opt_d", "text": "finally_only" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Correcto! A diferencia de otros lenguajes que usan 'catch', en Python se utiliza la palabra reservada `except`."
-          }
+          "explanation": "Cuando un error ocurre en Python, se lanza una 'excepción'. Si envuelves la operación peligrosa en un bloque `try`, puedes capturar el error con `except` sin que tu programa colapse.",
+          "concept_id": "py-manejo-de-errores-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "try:\n    resultado = 10 / 0\nexcept ZeroDivisionError:\n    print(\"No se puede dividir por cero.\")",
+              "language": "python",
+              "output": "No se puede dividir por cero.",
+              "explanation": "Capturar errores específicos como ZeroDivisionError o ValueError es una buena práctica.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_09_ex_py_09_01",
+              "type": "single_choice",
+              "prompt": "¿Qué bloque de código se ejecuta si ocurre un error dentro de un bloque 'try'?",
+              "explanation": "¡Correcto! A diferencia de otros lenguajes que usan 'catch', en Python se utiliza la palabra reservada `except`.",
+              "difficulty": "medium",
+              "category": "manejo-errores",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "except",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "catch",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "error",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "finally_only",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Es el bloque que 'atrapa' la excepción."
+              ],
+              "concept_ids": [
+                "py-manejo-de-errores-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_09",
+              "section_id": "sec_py_09_01",
+              "lesson_id": "les_py_09_01"
+            }
+          ]
         }
       ]
     }

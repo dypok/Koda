@@ -35,24 +35,80 @@
           "code": "L01",
           "title": "Definir un Schema de petición con BaseModel",
           "position": 1,
-          "theory_markdown": "Pydantic permite declarar esquemas de datos heredando de `BaseModel`. Si un cliente envía datos inválidos (por ejemplo, texto en un campo `int`), FastAPI rechaza la petición automáticamente con un error 422 Unprocessable Entity detallado.",
-          "code_example": "from pydantic import BaseModel\n\nclass Item(BaseModel):\n    nombre: str\n    precio: float\n    activo: bool = True",
-          "expected_output": "Item(nombre='Teclado', precio=49.99, activo=True)",
-          "tip_markdown": "Los valores asignados con `=` dentro del modelo actúan como valores predeterminados opcionales.",
-          "exercise": {
-            "id": "ex_fa_02_01",
-            "type": "single_choice",
-            "prompt": "¿De qué clase base de Pydantic deben heredar los modelos de datos en FastAPI?",
-            "hint": "Comienza con Base...",
-            "options": [
-              { "id": "opt_a", "text": "BaseModel" },
-              { "id": "opt_b", "text": "DataModel" },
-              { "id": "opt_c", "text": "Schema" },
-              { "id": "opt_d", "text": "Model" }
-            ],
-            "correct_option_id": "opt_a",
-            "explanation": "¡Correcto! En Pydantic y FastAPI, todos los esquemas derivan de `pydantic.BaseModel`."
-          }
+          "explanation": "Pydantic permite declarar esquemas de datos heredando de `BaseModel`. Si un cliente envía datos inválidos (por ejemplo, texto en un campo `int`), FastAPI rechaza la petición automáticamente con un error 422 Unprocessable Entity detallado.",
+          "concept_id": "py-fastapi-pydantic-l01",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "examples": [
+            {
+              "title": "Ejemplo",
+              "code": "from pydantic import BaseModel\n\nclass Item(BaseModel):\n    nombre: str\n    precio: float\n    activo: bool = True",
+              "language": "python",
+              "output": "Item(nombre='Teclado', precio=49.99, activo=True)",
+              "explanation": "Los valores asignados con `=` dentro del modelo actúan como valores predeterminados opcionales.",
+              "position": 1
+            }
+          ],
+          "exercises": [
+            {
+              "id": "py_mod_15_fastapi_pydantic_ex_fa_02_01",
+              "type": "single_choice",
+              "prompt": "¿De qué clase base de Pydantic deben heredar los modelos de datos en FastAPI?",
+              "explanation": "¡Correcto! En Pydantic y FastAPI, todos los esquemas derivan de `pydantic.BaseModel`.",
+              "difficulty": "medium",
+              "category": "fastapi-pydantic",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "opt_a",
+                  "label": "A",
+                  "body": "BaseModel",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "opt_b",
+                  "label": "B",
+                  "body": "DataModel",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "opt_c",
+                  "label": "C",
+                  "body": "Schema",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "opt_d",
+                  "label": "D",
+                  "body": "Model",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "opt_a"
+              ],
+              "hints": [
+                "Comienza con Base..."
+              ],
+              "concept_ids": [
+                "py-fastapi-pydantic-l01"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_15_fastapi_pydantic",
+              "section_id": "sec_fa_02",
+              "lesson_id": "les_fa_02_01"
+            }
+          ]
         }
       ]
     }

@@ -43,27 +43,72 @@
               "title": "Iteración básica",
               "code": "for letra in 'Koda':\n    print(letra)",
               "output": "K\no\nd\na",
-              "explanation": "La variable letra toma el valor de cada caracter en cada repetición."
+              "explanation": "La variable letra toma el valor de cada caracter en cada repetición.",
+              "language": "python",
+              "position": 1
             }
           ],
           "exercises": [
             {
-              "id": "ex_py_05_01",
+              "id": "py_mod_05_for_ex_py_05_01",
               "type": "predict_output",
               "difficulty": "easy",
               "prompt": "¿Qué imprimirá este bucle for?",
               "prompt_code": "for char in 'Sol':\n    print(char)",
               "answers": [
-                { "id": "a", "label": "A", "body": "S, o, l en líneas separadas", "is_correct": true },
-                { "id": "b", "label": "B", "body": "Sol en una sola línea", "is_correct": false },
-                { "id": "c", "label": "C", "body": "char", "is_correct": false },
-                { "id": "d", "label": "D", "body": "Error de sintaxis", "is_correct": false }
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "S, o, l en líneas separadas",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Sol en una sola línea",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "char",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Error de sintaxis",
+                  "is_correct": false,
+                  "position": 4
+                }
               ],
-              "correct_answer_ids": ["a"],
+              "correct_answer_ids": [
+                "a"
+              ],
               "explanation": "print() agrega un salto de línea en cada iteración del bucle.",
-              "hints": ["Cada ciclo imprime una sola letra."]
+              "hints": [
+                "Cada ciclo imprime una sola letra."
+              ],
+              "category": "bucles-for",
+              "concept_ids": [
+                "py-for-basics"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_05_for",
+              "section_id": "sec_py_05_01",
+              "lesson_id": "les_py_05_01"
             }
-          ]
+          ],
+          "status": "published",
+          "content_version": 1
         },
         {
           "id": "les_py_05_02",
@@ -78,26 +123,72 @@
               "title": "Conteo con range(4)",
               "code": "for i in range(4):\n    print(i)",
               "output": "0\n1\n2\n3",
-              "explanation": "range(4) produce exactamente 4 números: 0, 1, 2 y 3."
+              "explanation": "range(4) produce exactamente 4 números: 0, 1, 2 y 3.",
+              "language": "python",
+              "position": 1
             }
           ],
           "exercises": [
             {
-              "id": "ex_py_05_02",
+              "id": "py_mod_05_for_ex_py_05_02",
               "type": "single_choice",
               "difficulty": "easy",
               "prompt": "¿Cuáles son los valores generados por range(3)?",
               "answers": [
-                { "id": "a", "label": "A", "body": "0, 1, 2", "is_correct": true },
-                { "id": "b", "label": "B", "body": "1, 2, 3", "is_correct": false },
-                { "id": "c", "label": "C", "body": "0, 1, 2, 3", "is_correct": false },
-                { "id": "d", "label": "D", "body": "1, 2", "is_correct": false }
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "0, 1, 2",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "1, 2, 3",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "0, 1, 2, 3",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "1, 2",
+                  "is_correct": false,
+                  "position": 4
+                }
               ],
-              "correct_answer_ids": ["a"],
+              "correct_answer_ids": [
+                "a"
+              ],
               "explanation": "range(3) inicia en 0 y se detiene antes del 3.",
-              "hints": ["Inicia en cero y genera 3 números."]
+              "hints": [
+                "Inicia en cero y genera 3 números."
+              ],
+              "category": "bucles-for",
+              "prompt_code": null,
+              "concept_ids": [
+                "py-range-single"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_05_for",
+              "section_id": "sec_py_05_01",
+              "lesson_id": "les_py_05_02"
             }
-          ]
+          ],
+          "status": "published",
+          "content_version": 1
         },
         {
           "id": "les_py_05_03",
@@ -112,27 +203,72 @@
               "title": "Pares del 2 al 6",
               "code": "for n in range(2, 7, 2):\n    print(n)",
               "output": "2\n4\n6",
-              "explanation": "Comienza en 2, incrementa de 2 en 2, y termina antes del 7."
+              "explanation": "Comienza en 2, incrementa de 2 en 2, y termina antes del 7.",
+              "language": "python",
+              "position": 1
             }
           ],
           "exercises": [
             {
-              "id": "ex_py_05_03",
+              "id": "py_mod_05_for_ex_py_05_03",
               "type": "predict_output",
               "difficulty": "medium",
               "prompt": "¿Qué números imprime range(1, 6, 2)?",
               "prompt_code": "for n in range(1, 6, 2):\n    print(n)",
               "answers": [
-                { "id": "a", "label": "A", "body": "1, 3, 5", "is_correct": true },
-                { "id": "b", "label": "B", "body": "1, 2, 3, 4, 5", "is_correct": false },
-                { "id": "c", "label": "C", "body": "2, 4, 6", "is_correct": false },
-                { "id": "d", "label": "D", "body": "1, 3", "is_correct": false }
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "1, 3, 5",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "1, 2, 3, 4, 5",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "2, 4, 6",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "1, 3",
+                  "is_correct": false,
+                  "position": 4
+                }
               ],
-              "correct_answer_ids": ["a"],
+              "correct_answer_ids": [
+                "a"
+              ],
               "explanation": "Inicia en 1: 1 + 2 = 3; 3 + 2 = 5; 5 + 2 = 7 (excede el límite 6).",
-              "hints": ["Suma de 2 en 2 comenzando en 1."]
+              "hints": [
+                "Suma de 2 en 2 comenzando en 1."
+              ],
+              "category": "bucles-for",
+              "concept_ids": [
+                "py-range-steps"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_05_for",
+              "section_id": "sec_py_05_01",
+              "lesson_id": "les_py_05_03"
             }
-          ]
+          ],
+          "status": "published",
+          "content_version": 1
         },
         {
           "id": "les_py_05_04",
@@ -147,26 +283,72 @@
               "title": "Detener el bucle con break",
               "code": "for x in range(5):\n    if x == 2:\n        break\n    print(x)",
               "output": "0\n1",
-              "explanation": "Cuando x es 2, el bucle se detiene por completo."
+              "explanation": "Cuando x es 2, el bucle se detiene por completo.",
+              "language": "python",
+              "position": 1
             }
           ],
           "exercises": [
             {
-              "id": "ex_py_05_04",
+              "id": "py_mod_05_for_ex_py_05_04",
               "type": "single_choice",
               "difficulty": "medium",
               "prompt": "¿Qué instrucción omite el resto del ciclo actual y pasa a la siguiente iteración?",
               "answers": [
-                { "id": "a", "label": "A", "body": "continue", "is_correct": true },
-                { "id": "b", "label": "B", "body": "break", "is_correct": false },
-                { "id": "c", "label": "C", "body": "pass", "is_correct": false },
-                { "id": "d", "label": "D", "body": "stop", "is_correct": false }
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "continue",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "break",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "pass",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "stop",
+                  "is_correct": false,
+                  "position": 4
+                }
               ],
-              "correct_answer_ids": ["a"],
+              "correct_answer_ids": [
+                "a"
+              ],
               "explanation": "continue reinicia el ciclo en el siguiente elemento sin abortar el bucle completo.",
-              "hints": ["En inglés significa continuar."]
+              "hints": [
+                "En inglés significa continuar."
+              ],
+              "category": "bucles-for",
+              "prompt_code": null,
+              "concept_ids": [
+                "py-loop-control"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_05_for",
+              "section_id": "sec_py_05_01",
+              "lesson_id": "les_py_05_04"
             }
-          ]
+          ],
+          "status": "published",
+          "content_version": 1
         }
       ]
     }

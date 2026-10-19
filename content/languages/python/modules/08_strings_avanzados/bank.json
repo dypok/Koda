@@ -1,41 +1,132 @@
-[
-  {
-    "id": "q_py_08_01",
-    "type": "single_choice",
-    "prompt": "¿Cómo se formatea una cadena insertando variables de manera moderna y legible en Python 3.6+?",
-    "options": [
-      { "id": "opt_a", "text": "f\"Hola {nombre}\"" },
-      { "id": "opt_b", "text": "\"Hola ${nombre}\"" },
-      { "id": "opt_c", "text": "format(\"Hola %s\", nombre)" },
-      { "id": "opt_d", "text": "str(\"Hola\", nombre)" }
-    ],
-    "correct_option_id": "opt_a",
-    "explanation": "Las f-strings (cadenas literales formateadas con prefijo `f` y llaves `{}`) son la sintaxis estándar y más eficiente en Python moderno."
-  },
-  {
-    "id": "q_py_08_02",
-    "type": "single_choice",
-    "prompt": "Dada la cadena `texto = \"Python\"`, ¿qué produce el rebanado (slicing) `texto[0:2]`?",
-    "options": [
-      { "id": "opt_a", "text": "\"Py\"" },
-      { "id": "opt_b", "text": "\"Pyt\"" },
-      { "id": "opt_c", "text": "\"P\"" },
-      { "id": "opt_d", "text": "\"th\"" }
-    ],
-    "correct_option_id": "opt_a",
-    "explanation": "El límite superior del slice es no inclusivo: toma los índices 0 y 1, resultando en 'Py'."
-  },
-  {
-    "id": "q_py_08_03",
-    "type": "single_choice",
-    "prompt": "¿Qué método divide una cadena de texto en una lista según un separador?",
-    "options": [
-      { "id": "opt_a", "text": "split()" },
-      { "id": "opt_b", "text": "join()" },
-      { "id": "opt_c", "text": "divide()" },
-      { "id": "opt_d", "text": "slice()" }
-    ],
-    "correct_option_id": "opt_a",
-    "explanation": "`split()` fragmenta la cadena usando el delimitador especificado (o espacios por defecto) y retorna una lista."
-  }
-]
+{
+  "module_code": "PY_MOD_08",
+  "module_slug": "strings-avanzados",
+  "questions": [
+    {
+      "id": "q_py_08_01",
+      "type": "single_choice",
+      "prompt": "¿Cómo se formatea una cadena insertando variables de manera moderna y legible en Python 3.6+?",
+      "explanation": "Las f-strings (cadenas literales formateadas con prefijo `f` y llaves `{}`) son la sintaxis estándar y más eficiente en Python moderno.",
+      "difficulty": "medium",
+      "category": "strings-avanzados",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "f\"Hola {nombre}\"",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "\"Hola ${nombre}\"",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "format(\"Hola %s\", nombre)",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "str(\"Hola\", nombre)",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "opt_a"
+      ]
+    },
+    {
+      "id": "q_py_08_02",
+      "type": "single_choice",
+      "prompt": "Dada la cadena `texto = \"Python\"`, ¿qué produce el rebanado (slicing) `texto[0:2]`?",
+      "explanation": "El límite superior del slice es no inclusivo: toma los índices 0 y 1, resultando en 'Py'.",
+      "difficulty": "medium",
+      "category": "strings-avanzados",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "\"Py\"",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "\"Pyt\"",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "\"P\"",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "\"th\"",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "opt_a"
+      ]
+    },
+    {
+      "id": "q_py_08_03",
+      "type": "single_choice",
+      "prompt": "¿Qué método divide una cadena de texto en una lista según un separador?",
+      "explanation": "`split()` fragmenta la cadena usando el delimitador especificado (o espacios por defecto) y retorna una lista.",
+      "difficulty": "medium",
+      "category": "strings-avanzados",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "split()",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "join()",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "divide()",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "slice()",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "opt_a"
+      ]
+    }
+  ]
+}

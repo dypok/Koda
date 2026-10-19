@@ -1,28 +1,90 @@
-[
-  {
-    "id": "q_fa_02_01",
-    "type": "single_choice",
-    "prompt": "¿Qué código de estado HTTP devuelve automáticamente FastAPI cuando el JSON enviado no cumple con el modelo de Pydantic?",
-    "options": [
-      { "id": "opt_a", "text": "422 Unprocessable Entity" },
-      { "id": "opt_b", "text": "500 Internal Server Error" },
-      { "id": "opt_c", "text": "404 Not Found" },
-      { "id": "opt_d", "text": "401 Unauthorized" }
-    ],
-    "correct_option_id": "opt_a",
-    "explanation": "FastAPI valida contra el esquema Pydantic y retorna HTTP 422 con un desglose exhaustivo de los campos erróneos o faltantes."
-  },
-  {
-    "id": "q_fa_02_02",
-    "type": "single_choice",
-    "prompt": "¿Cómo se indica que un parámetro de endpoint debe extraerse de la URL como parámetro de ruta (Path parameter)?",
-    "options": [
-      { "id": "opt_a", "text": "Declarando el parámetro entre llaves en la ruta `@app.get('/items/{item_id}')`" },
-      { "id": "opt_b", "text": "Usando el decorador @app.param" },
-      { "id": "opt_c", "text": "Escribiendo @app.path_variable" },
-      { "id": "opt_d", "text": "Agregando un signo de interrogación al final de la ruta" }
-    ],
-    "correct_option_id": "opt_a",
-    "explanation": "Los parámetros de ruta se especifican usando llaves `{}` dentro del string de ruta y declarando el mismo nombre como argumento tipado en la función."
-  }
-]
+{
+  "module_code": "FA_MOD_02",
+  "module_slug": "fastapi-pydantic",
+  "questions": [
+    {
+      "id": "q_fa_02_01",
+      "type": "single_choice",
+      "prompt": "¿Qué código de estado HTTP devuelve automáticamente FastAPI cuando el JSON enviado no cumple con el modelo de Pydantic?",
+      "explanation": "FastAPI valida contra el esquema Pydantic y retorna HTTP 422 con un desglose exhaustivo de los campos erróneos o faltantes.",
+      "difficulty": "medium",
+      "category": "fastapi-pydantic",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "422 Unprocessable Entity",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "500 Internal Server Error",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "404 Not Found",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "401 Unauthorized",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "opt_a"
+      ]
+    },
+    {
+      "id": "q_fa_02_02",
+      "type": "single_choice",
+      "prompt": "¿Cómo se indica que un parámetro de endpoint debe extraerse de la URL como parámetro de ruta (Path parameter)?",
+      "explanation": "Los parámetros de ruta se especifican usando llaves `{}` dentro del string de ruta y declarando el mismo nombre como argumento tipado en la función.",
+      "difficulty": "medium",
+      "category": "fastapi-pydantic",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "opt_a",
+          "label": "A",
+          "body": "Declarando el parámetro entre llaves en la ruta `@app.get('/items/{item_id}')`",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "opt_b",
+          "label": "B",
+          "body": "Usando el decorador @app.param",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "opt_c",
+          "label": "C",
+          "body": "Escribiendo @app.path_variable",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "opt_d",
+          "label": "D",
+          "body": "Agregando un signo de interrogación al final de la ruta",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "opt_a"
+      ]
+    }
+  ]
+}
