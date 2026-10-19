@@ -6,28 +6,158 @@
     {
       "id": "q_da_08_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Cuál es la forma segura de prevenir SQL Injection al ejecutar consultas con el módulo sqlite3 en Python?",
+      "difficulty": "easy",
+      "prompt": "Cual modulo de la biblioteca estandar de Python permite crear y operar bases de datos relacionales sin instalar servidores externos?",
       "options": [
         {
           "id": "a",
-          "text": "Pasar los parámetros como tupla separada en cursor.execute(\"SELECT ... WHERE id = ?\", (id,))"
+          "text": "sqlite3"
         },
         {
           "id": "b",
-          "text": "Usar f-strings f\"SELECT ... WHERE id = {id}\""
+          "text": "psycopg2"
         },
         {
           "id": "c",
-          "text": "Convertir todo el SQL a mayúsculas"
+          "text": "sqlalchemy_core"
         },
         {
           "id": "d",
-          "text": "Eliminar los espacios en blanco"
+          "text": "mysqldb"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Los placeholders (?) con parámetros vinculados separan la sintaxis SQL de los datos proporcionados por el usuario."
+      "explanation": "sqlite3 es el motor SQL embebido y autocontenido provisto de serie por el lenguaje Python."
+    },
+    {
+      "id": "q_da_08_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que metodo de Pandas lee una sentencia SELECT directamente a una estructura de DataFrame estructurada?",
+      "options": [
+        {
+          "id": "a",
+          "text": "pd.read_sql_query()"
+        },
+        {
+          "id": "b",
+          "text": "pd.sql_to_df()"
+        },
+        {
+          "id": "c",
+          "text": "pd.execute_sql()"
+        },
+        {
+          "id": "d",
+          "text": "pd.load_table()"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "pd.read_sql_query(sql, conn) ejecuta la consulta y construye el DataFrame mapeando columnas e infiriendo tipos."
+    },
+    {
+      "id": "q_da_08_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cual clausula SQL se debe emplear para filtrar grupos de datos resultantes de un GROUP BY segun el valor de una funcion agregadora?",
+      "options": [
+        {
+          "id": "a",
+          "text": "HAVING"
+        },
+        {
+          "id": "b",
+          "text": "WHERE"
+        },
+        {
+          "id": "c",
+          "text": "FILTER BY"
+        },
+        {
+          "id": "d",
+          "text": "ORDER GROUP"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "HAVING es la clausula especifica para filtrar grupos en base a condiciones agregadas (ej. HAVING COUNT(*) > 10)."
+    },
+    {
+      "id": "q_da_08_04",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "En una consulta SQL analitica, que efecto produce la instruccion AVG(precio) OVER(PARTITION BY categoria)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Calcula el promedio de la categoria y lo anade a cada fila sin colapsar el numero de registros de la tabla."
+        },
+        {
+          "id": "b",
+          "text": "Agrupa la tabla reduciendola a una sola fila por categoria."
+        },
+        {
+          "id": "c",
+          "text": "Elimina las categorias que no tengan precios validos."
+        },
+        {
+          "id": "d",
+          "text": "Ordena alfabeticamente las categorias."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Las funciones ventana (OVER PARTITION BY) computan agregaciones dentro de particiones conservando la granularidad de fila original."
+    },
+    {
+      "id": "q_da_08_05",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Como permite DuckDB ejecutar consultas SQL sobre un DataFrame de Pandas llamado 'ventas'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Referenciando directamente el nombre de la variable 'ventas' dentro de la cadena SQL de duckdb.query('SELECT * FROM ventas') sin copias previas."
+        },
+        {
+          "id": "b",
+          "text": "Exportando primero el DataFrame a un servidor PostgreSQL."
+        },
+        {
+          "id": "c",
+          "text": "Convirtiendo el DataFrame a un archivo CSV en disco obligatorio."
+        },
+        {
+          "id": "d",
+          "text": "DuckDB no puede interactuar con DataFrames de Pandas."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "DuckDB inspecciona el ambito local de Python e implementa zero-copy scanning para consultar DataFrames de Pandas directamente."
+    },
+    {
+      "id": "q_da_08_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Por que es peligroso concatenar variables de usuario mediante cadenas de texto f-strings en una consulta SQL?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque expone a la aplicacion a ataques criticos de Inyeccion SQL (SQL Injection), permitiendo a terceros alterar o eliminar datos."
+        },
+        {
+          "id": "b",
+          "text": "Porque Python duplica el uso de memoria."
+        },
+        {
+          "id": "c",
+          "text": "Porque las f-strings no soportan variables numericas."
+        },
+        {
+          "id": "d",
+          "text": "Porque SQLite solo admite lenguaje C."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Interpolar texto sin parametrizar permite a un atacante inyectar comandos SQL maliciosos que el motor ejecutara con plenos privilegios."
     }
   ]
 }

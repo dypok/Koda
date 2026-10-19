@@ -6,28 +6,158 @@
     {
       "id": "q_da_09_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Cuál métrica de evaluación se utiliza para medir el porcentaje de varianza explicada en un problema de regresión (varía típicamente entre 0 y 1)?",
+      "difficulty": "easy",
+      "prompt": "Cual es la funcion de train_test_split en el flujo estandar de Machine Learning?",
       "options": [
         {
           "id": "a",
-          "text": "R² (Coeficiente de determinación)"
+          "text": "Dividir el conjunto de datos en subconjuntos disjuntos para entrenamiento y prueba, permitiendo validar la generalizacion del modelo."
         },
         {
           "id": "b",
-          "text": "Accuracy"
+          "text": "Imputar valores nulos en el dataset."
         },
         {
           "id": "c",
-          "text": "F1-Score"
+          "text": "Convertir texto a numeros flotantes."
         },
         {
           "id": "d",
-          "text": "Matriz de confusión"
+          "text": "Graficar la curva de aprendizaje."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "R² cuantifica qué proporción de la variabilidad del target es explicada por las features del modelo."
+      "explanation": "train_test_split desacopla los datos de entrenamiento de los de prueba para garantizar evaluaciones honestas sin sesgo de memorizacion."
+    },
+    {
+      "id": "q_da_09_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que transformador de Scikit-Learn escala variables continuas restando la media y dividiendo por la desviacion estandar?",
+      "options": [
+        {
+          "id": "a",
+          "text": "StandardScaler"
+        },
+        {
+          "id": "b",
+          "text": "OneHotEncoder"
+        },
+        {
+          "id": "c",
+          "text": "SimpleImputer"
+        },
+        {
+          "id": "d",
+          "text": "NormalizerPCA"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "StandardScaler implementa la estandarizacion z-score centrando en media 0 y escalando a varianza 1."
+    },
+    {
+      "id": "q_da_09_03",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Cual es la regla fundamental para evitar Data Leakage al utilizar transformadores de preprocesamiento?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Aprender parametros exclusivamente en X_train usando fit_transform(), y aplicar transform() en X_test sin recalcular estadisticas."
+        },
+        {
+          "id": "b",
+          "text": "Usar fit_transform tanto en X_train como en X_test."
+        },
+        {
+          "id": "c",
+          "text": "Escalar todo el dataset antes de llamar a train_test_split."
+        },
+        {
+          "id": "d",
+          "text": "No utilizar escalado si hay mas de 3 columnas."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Los parametros del transformador (media, desviacion) deben provenir unicamente del conjunto de entrenamiento para no filtrar informacion de prueba al modelo."
+    },
+    {
+      "id": "q_da_09_04",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Cual metodo de un modelo entrenado en Scikit-Learn genera predicciones de salida para un nuevo conjunto de caracteristicas?",
+      "options": [
+        {
+          "id": "a",
+          "text": "model.predict(X_nuevos)"
+        },
+        {
+          "id": "b",
+          "text": "model.forecast(X_nuevos)"
+        },
+        {
+          "id": "c",
+          "text": "model.classify(X_nuevos)"
+        },
+        {
+          "id": "d",
+          "text": "model.run(X_nuevos)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "predict() es el metodo universal de inferencia en toda la arquitectura de Scikit-Learn."
+    },
+    {
+      "id": "q_da_09_05",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "En un problema de clasificacion binaria con clases desbalanceadas (ej. 98% clase 0 y 2% clase 1), que metrica sintetiza el balance entre Precision y Recall?",
+      "options": [
+        {
+          "id": "a",
+          "text": "F1-Score"
+        },
+        {
+          "id": "b",
+          "text": "Accuracy global"
+        },
+        {
+          "id": "c",
+          "text": "R2 Score"
+        },
+        {
+          "id": "d",
+          "text": "Varianza residual"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El F1-Score es la media armonica entre Precision y Recall, evitando las trampas del Accuracy en clases fuertemente desbalanceadas."
+    },
+    {
+      "id": "q_da_09_06",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que significa que un modelo de regresion lineal obtenga un coeficiente de determinacion R2 = 0.85?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que el modelo explica el 85% de la variabilidad de la variable objetivo en los datos evaluados."
+        },
+        {
+          "id": "b",
+          "text": "Que el modelo acerto el 85% de las etiquetas discretas."
+        },
+        {
+          "id": "c",
+          "text": "Que el margen de error promedio es del 15% en dolares."
+        },
+        {
+          "id": "d",
+          "text": "Que el modelo tardo 0.85 segundos en entrenar."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "R2 mide la proporcion de varianza de la variable dependiente que es explicada o predicha por las variables independientes del modelo."
     }
   ]
 }

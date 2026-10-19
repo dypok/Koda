@@ -4,85 +4,250 @@
   "code": "DA_M06",
   "slug": "plotly-interactivo",
   "course_slug": "data-analytics",
-  "title": "Visualización Interactiva Moderna con Plotly Express",
-  "objective": "Construir gráficos web interactivos con zoom, pan, hover tooltips y mapas coropléticos usando Plotly Express.",
-  "description": "Lleva tus datos al navegador: gráficos reactivos que permiten a directores y usuarios explorar cada punto con el cursor.",
+  "title": "Visualizacion Interactiva Moderna con Plotly Express",
+  "objective": "Desarrollar graficos interactivos basados en D3.js/WebGL con zoom, tooltips hover y exportacion HTML/JSON.",
+  "description": "Lleva la visualizacion de datos al siguiente nivel: interactividad web fluida, animaciones, facetas y mapas sin escribir JavaScript.",
   "position": 46,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 340
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_da_06_01",
       "code": "S01",
-      "title": "Plotly Express y Gráficos Reactivos",
-      "slug": "plotly-express",
+      "title": "Graficos Interactivos, Layouts y Exportacion con Plotly",
+      "slug": "graficos-interactivos-plotly",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 45,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_da_06_01",
           "code": "L01",
-          "title": "Gráficos Interactivos en Una Línea con px",
-          "slug": "plotly-base",
+          "title": "Filosofia de Plotly y Plotly Express",
+          "slug": "filosofia-plotly-express",
           "position": 1,
-          "concept_id": "da-plotly",
-          "objective": "Crear gráficos de dispersión multidimensionales con tooltips dinámicos.",
-          "theory_markdown": "A diferencia de Matplotlib (que produce imágenes estáticas PNG), **Plotly** genera gráficos basados en **D3.js y WebGL** renderizados directamente en el navegador.\n\nCon **Plotly Express (`px`)**, creas visualizaciones interactivas con hover, zoom y selección en una sola línea:\n```python\nimport plotly.express as px\nfig = px.scatter(df, x=\"gdp\", y=\"esperanza_vida\", color=\"continente\", hover_name=\"pais\")\nfig.show()\n```",
+          "concept_id": "da-plotly-intro",
+          "objective": "Comprender la arquitectura interactiva de Plotly basada en JSON y D3.js y utilizar la interfaz de alto nivel Plotly Express.",
+          "theory_markdown": "A diferencia de Matplotlib o Seaborn que generan imagenes de mapa de bits estaticas (PNG/JPG), **Plotly** genera graficos basados en **JavaScript (D3.js) y WebGL**.\n\n### Caracteristicas interactivas nativas\n- **Zoom y paneo:** Exploracion detallada arrastrando el raton.\n- **Tooltips dinámicos (Hover):** Al pasar el cursor sobre cualquier punto, barra o linea, se despliegan sus valores exactos.\n- **Aislamiento en leyendas:** Al hacer clic en un elemento de la leyenda, esa serie se oculta o aisla interactivamente.\n\n### Plotly Express (`px`)\nEs la interfaz declarativa y concisa de alto nivel para Python:\n```python\nimport plotly.express as px\n\nfig = px.scatter(df, x='ingresos', y='gastos', color='segmento')\nfig.show()\n```",
           "examples": [
             {
-              "title": "Exportación de gráfico interactivo a HTML",
-              "code": "import plotly.express as px\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"mes\": [\"Ene\", \"Feb\", \"Mar\", \"Abr\"],\n    \"ingresos\": [12000, 15000, 18500, 22000]\n})\nfig = px.line(df, x=\"mes\", y=\"ingresos\", title=\"Crecimiento MRR\", markers=True)\n# fig.write_html(\"reporte.html\")\nprint(\"Gráfico Plotly configurado con título:\", fig.layout.title.text)",
-              "output": "Gráfico Plotly configurado con título: Crecimiento MRR",
-              "explanation": "fig.write_html() genera un archivo HTML autónomo con todo el motor interactivo incluido."
+              "title": "Grafico de dispersion interactivo basico",
+              "code": "import plotly.express as px\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"x\": [1, 2, 3, 4],\n    \"y\": [10, 11, 12, 13],\n    \"grupo\": [\"A\", \"A\", \"B\", \"B\"]\n})\nfig = px.scatter(df, x=\"x\", y=\"y\", color=\"grupo\", title=\"Dispersion Interactiva\")",
+              "output": "Figura interactiva lista para renderizarse en navegador o Jupyter Notebook.",
+              "explanation": "px.scatter infiere automaticamente la leyenda y los tooltips a partir de las columnas de Pandas."
             }
           ],
-          "common_errors": "Intentar renderizar gráficos de Plotly en terminales de texto sin un entorno gráfico o navegador compatible.",
+          "common_errors": "Intentar usar Plotly en terminales sin entorno grafico o sin soporte de navegador, esperando ver una imagen por consola en vez de un servidor o archivo HTML.",
           "mini_exercise": {
-            "starter_code": "# Crea un gráfico de barras con px.bar(df, x=\"categoria\", y=\"total\")\n# fig.show()",
-            "instructions": "Revisa la sintaxis de px.bar.",
-            "solution": "# px.bar listo"
+            "instructions": "Crea una figura interactiva de lineas usando px.line con el DataFrame 'df', x='tiempo' e y='valor'.",
+            "starter_code": "import plotly.express as px\nimport pandas as pd\ndf = pd.DataFrame({\"tiempo\": [1, 2], \"valor\": [10, 20]})\n\n# Crea la figura con px.line\nfig = ...",
+            "solution": "fig = px.line(df, x=\"tiempo\", y=\"valor\")"
           },
           "key_takeaways": [
-            "Plotly genera gráficos HTML interactivos basados en JavaScript.",
-            "px.scatter, px.bar, px.line simplifican la API.",
-            "Los gráficos pueden exportarse a HTML interactivo o integrarse en Streamlit."
+            "Plotly produce graficos interactivos web en HTML/JavaScript sin escribir codigo JS.",
+            "Permite zoom, paneo, seleccion y filtrado por leyendas de serie.",
+            "Plotly Express (px) ofrece una API compacta y declarativa sobre DataFrames."
           ],
           "exercise": {
             "id": "ex_da_06_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Cuál es la principal ventaja de Plotly frente a Matplotlib para reportes corporativos?",
+            "prompt": "Cual es la diferencia principal entre un grafico generado por Seaborn y uno generado por Plotly?",
             "options": [
               {
                 "id": "a",
-                "text": "Permite interactividad en el navegador (zoom, hover sobre datos, filtrado dinámico)"
+                "text": "Seaborn genera graficos estaticos como imagenes; Plotly genera graficos web interactivos con zoom, hover y tooltips en tiempo real."
               },
               {
                 "id": "b",
-                "text": "Es un lenguaje de programación diferente"
+                "text": "Plotly solo funciona con archivos de texto plano."
               },
               {
                 "id": "c",
-                "text": "Solo funciona en servidores Linux"
+                "text": "Seaborn requiere internet para funcionar."
               },
               {
                 "id": "d",
-                "text": "No permite exportar gráficos"
+                "text": "Plotly no soporta DataFrames de Pandas."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Plotly genera visualizaciones interactivas donde el usuario puede pasar el cursor para ver detalles, aislar series y hacer zoom."
+            "explanation": "Plotly se basa en D3.js y WebGL para renderizar elementos SVG interactivos en navegadores web, mientras que Seaborn genera graficos rasterizados o vectoriales estaticos."
+          }
+        },
+        {
+          "id": "les_da_06_02",
+          "code": "L02",
+          "title": "Graficos con Facetas y Dimension Temporal",
+          "slug": "facetas-dimension-temporal",
+          "position": 2,
+          "concept_id": "da-plotly-facets-animation",
+          "objective": "Descomponer visualizaciones complejas mediante subplots de facetas (facet_col) y anadir animaciones temporales.",
+          "theory_markdown": "Plotly Express simplifica la visualizacion multivariada mediante parametros nativos:\n\n### 1. Subplots por Facetas (`facet_col` y `facet_row`)\nPermite dividir una visualizacion en una cuadricula de subgraficos alineados por una variable categorica:\n```python\nfig = px.bar(\n    df, x='producto', y='ventas',\n    color='categoria',\n    facet_col='region',  # Una columna por region\n    category_orders={'region': ['Norte', 'Sur', 'Centro']}\n)\n```\n\n### 2. Animaciones con `animation_frame`\nSi el dataset contiene una dimension temporal (ej. anos o trimestres), Plotly Express anade automaticamente controles de reproduccion interactiva (Play, Pause y Slider de tiempo):\n```python\nfig = px.scatter(\n    df, x='pib_per_capita', y='esperanza_vida',\n    size='poblacion', color='continente',\n    animation_frame='anio',  # Slider interactivo temporal\n    hover_name='pais', log_x=True\n)\n```",
+          "examples": [
+            {
+              "title": "Subplots interactivos segmentados por facetas",
+              "code": "import plotly.express as px\nimport pandas as pd\n\ndf = pd.DataFrame({\n    \"dia\": [\"Lunes\", \"Martes\", \"Lunes\", \"Martes\"],\n    \"ventas\": [100, 150, 80, 200],\n    \"turno\": [\"Manana\", \"Manana\", \"Tarde\", \"Tarde\"]\n})\nfig = px.bar(df, x=\"dia\", y=\"ventas\", facet_col=\"turno\")",
+              "output": "Dos columnas de graficos de barras alineadas con escalas comparables.",
+              "explanation": "facet_col genera subgraficos consistentes compartiendo los ejes."
+            }
+          ],
+          "common_errors": "Usar animation_frame sobre una columna no ordenada o con tipos de datos mezclados, provocando saltos inconsistentes en la reproduccion temporal.",
+          "mini_exercise": {
+            "instructions": "Usa facet_col='categoria' en px.scatter para dividir la grafica por la variable 'categoria'.",
+            "starter_code": "import plotly.express as px\n# Completa px.scatter con facet_col\n# fig = px.scatter(df, x='x', y='y', ...)",
+            "solution": "fig = px.scatter(df, x=\"x\", y=\"y\", facet_col=\"categoria\")"
+          },
+          "key_takeaways": [
+            "facet_col y facet_row descomponen la visualizacion en subgraficos limpios.",
+            "animation_frame anade botones de reproduccion y controles deslizantes de tiempo.",
+            "Las facetas comparten escalas de forma predeterminada facilitando la comparacion."
+          ],
+          "exercise": {
+            "id": "ex_da_06_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Que argumento de Plotly Express se utiliza para anadir un control interactivo de reproduccion (Play/Slider) a lo largo de los anos en un dataset?",
+            "options": [
+              {
+                "id": "a",
+                "text": "animation_frame='anio'"
+              },
+              {
+                "id": "b",
+                "text": "time_slider='anio'"
+              },
+              {
+                "id": "c",
+                "text": "play_by='anio'"
+              },
+              {
+                "id": "d",
+                "text": "loop_dimension='anio'"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "animation_frame agrupa los datos en cuadros de animacion vinculados a controles de reproduccion en el navegador."
+          }
+        },
+        {
+          "id": "les_da_06_03",
+          "code": "L03",
+          "title": "Personalizacion con update_layout y update_traces",
+          "slug": "personalizacion-layout-traces",
+          "position": 3,
+          "concept_id": "da-plotly-styling",
+          "objective": "Personalizar temas visuales, tipografias, tooltips hover y configuracion de ejes mediante update_layout y update_traces.",
+          "theory_markdown": "Una figura de Plotly (`Figure`) se compone de dos elementos principales en su estructura JSON:\n1. **Traces (Trazas de datos):** Los puntos, lineas o barras individuales.\n2. **Layout (Diseno global):** Titulos, fuentes, fondo, ejes, margenes y leyendas.\n\n### Metodos de Personalizacion\n- **`fig.update_layout()`:**\n  ```python\n  fig.update_layout(\n      title={'text': 'Reporte Ejecutivo Q3', 'x': 0.5}, # Centrar titulo\n      template='plotly_white',  # Temas: plotly_dark, seaborn, simple_white\n      hovermode='x unified',     # Tooltip consolidado vertical\n      legend_title_text='Segmento'\n  )\n  ```\n- **`fig.update_traces()`:**\n  Modifica las propiedades de dibujo:\n  ```python\n  fig.update_traces(marker=dict(size=10, line=dict(width=1, color='DarkSlateGrey')))\n  ```\n- **Tooltips enriquecidos (`hover_data`):**\n  En la creacion con `px`: `hover_data=['id_cliente', 'margen_ganancia']`.",
+          "examples": [
+            {
+              "title": "Personalizacion visual y tema oscuro",
+              "code": "import plotly.express as px\nimport pandas as pd\n\ndf = pd.DataFrame({\"mes\": [\"Ene\", \"Feb\", \"Mar\"], \"ingreso\": [1000, 1500, 1300]})\nfig = px.bar(df, x=\"mes\", y=\"ingreso\")\nfig.update_layout(\n    title=\"Ingresos Mensuales\",\n    template=\"plotly_dark\",\n    xaxis_title=\"Mes del Ejercicio\",\n    yaxis_title=\"Monto (USD)\"\n)",
+              "output": "Grafico estilizado con paleta oscura y titulos de ejes descriptivos.",
+              "explanation": "update_layout modifica cualquier propiedad del contenedor sin reconstruir la figura."
+            }
+          ],
+          "common_errors": "Intentar modificar el titulo pasando argumentos desconocidos a px.bar en vez de usar title='...' o fig.update_layout(title=...).",
+          "mini_exercise": {
+            "instructions": "Usa fig.update_layout para cambiar el tema a 'plotly_white'.",
+            "starter_code": "import plotly.express as px\nfig = px.scatter(x=[1, 2], y=[3, 4])\n\n# Actualiza el template a 'plotly_white'\n",
+            "solution": "fig.update_layout(template=\"plotly_white\")"
+          },
+          "key_takeaways": [
+            "update_layout controla el diseno global, temas, margenes y leyendas.",
+            "update_traces modifica la apariencia geometrica de puntos, lineas y barras.",
+            "hovermode='x unified' muestra un unico tooltip comparativo al deslizar por el eje X."
+          ],
+          "exercise": {
+            "id": "ex_da_06_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual metodo de una figura de Plotly se utiliza para modificar propiedades globales del grafico como el tema visual (template) y las etiquetas de los ejes?",
+            "options": [
+              {
+                "id": "a",
+                "text": "fig.update_layout()"
+              },
+              {
+                "id": "b",
+                "text": "fig.modify_style()"
+              },
+              {
+                "id": "c",
+                "text": "fig.set_appearance()"
+              },
+              {
+                "id": "d",
+                "text": "fig.configure_plot()"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "update_layout() es el metodo oficial para alterar la configuracion y estetica general del contenedor de la figura en Plotly."
+          }
+        },
+        {
+          "id": "les_da_06_04",
+          "code": "L04",
+          "title": "Exportacion a HTML, JSON y Embeds",
+          "slug": "exportacion-html-json-embeds",
+          "position": 4,
+          "concept_id": "da-plotly-export",
+          "objective": "Exportar figuras interactivas a archivos HTML autonomos, representaciones JSON para APIs y formatos estaticos.",
+          "theory_markdown": "Dado que las figuras de Plotly son serializables, se pueden distribuir mediante diferentes canales:\n\n1. **Exportar a archivo HTML autonomo (`write_html`):**\n   Genera un archivo `.html` autocontenido que puede enviarse por correo electronico o alojarse en un servidor web sin requerir Python:\n   ```python\n   fig.write_html('dashboard.html', include_plotlyjs='cdn')\n   ```\n   `include_plotlyjs='cdn'` descarga la libreria desde CDN reduciendo el tamano del archivo a pocos kilobytes.\n\n2. **Serializacion a JSON para APIs REST (`to_json`):**\n   Ideal para responder desde un backend FastAPI hacia un frontend React/Vue:\n   ```python\n   json_data = fig.to_json()\n   ```\n\n3. **Exportacion a imagen estatica (`write_image`):**\n   Requiere la libreria `kaleido`:\n   `fig.write_image('grafico.pdf', width=1200, height=800)`.",
+          "examples": [
+            {
+              "title": "Guardado de reporte interactivo HTML ligero",
+              "code": "import plotly.express as px\nimport pandas as pd\n\ndf = pd.DataFrame({\"categoria\": [\"A\", \"B\"], \"total\": [10, 20]})\nfig = px.pie(df, names=\"categoria\", values=\"total\", title=\"Distribucion\")\n# Exportar para entrega a cliente:\nfig.write_html(\"distribucion_interactiva.html\", include_plotlyjs=\"cdn\")",
+              "output": "Archivo HTML interactivo creado con peso inferior a 15 KB.",
+              "explanation": "Cualquier persona puede abrir el archivo en su navegador y explorar los datos interactivamente."
+            }
+          ],
+          "common_errors": "Usar include_plotlyjs=True por defecto, generando archivos HTML de mas de 3 MB con toda la libreria empaquetada cuando se podria referenciar via CDN.",
+          "mini_exercise": {
+            "instructions": "Guarda la figura 'fig' en un archivo HTML llamado 'grafico.html' usando include_plotlyjs='cdn'.",
+            "starter_code": "import plotly.express as px\nfig = px.bar(x=[1, 2], y=[3, 4])\n\n# Guarda en HTML\n",
+            "solution": "fig.write_html(\"grafico.html\", include_plotlyjs=\"cdn\")"
+          },
+          "key_takeaways": [
+            "fig.write_html() genera aplicaciones web interactivas autocontenidas.",
+            "include_plotlyjs='cdn' optimiza radicalmente el tamano de archivo.",
+            "fig.to_json() permite transmitir figuras directamente en APIs web modernas."
+          ],
+          "exercise": {
+            "id": "ex_da_06_04",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "Cual metodo se utiliza para guardar un grafico de Plotly como un archivo interactivo que cualquier usuario pueda abrir en su navegador web sin tener Python instalado?",
+            "options": [
+              {
+                "id": "a",
+                "text": "fig.write_html('archivo.html')"
+              },
+              {
+                "id": "b",
+                "text": "fig.save_web('archivo.html')"
+              },
+              {
+                "id": "c",
+                "text": "fig.export_browser('archivo.html')"
+              },
+              {
+                "id": "d",
+                "text": "fig.dump('archivo.html')"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "write_html() crea un documento HTML completo con el bundle JS necesario para mantener toda la interactividad nativa."
           }
         }
       ]
