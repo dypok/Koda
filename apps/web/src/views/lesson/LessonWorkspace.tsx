@@ -282,11 +282,16 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     );
   }, [lessonsDataset, courseDataset, sectionRef, parsed?.moduleSlug]);
 
+  const isAlreadyCompleted = useMemo(() => {
+    return currentNode?.variant === 'completed' || (currentNode?.stars ?? 0) > 0;
+  }, [currentNode]);
+
   const nodeTargetXp = useMemo(() => {
+    if (isAlreadyCompleted) return 0;
     if (currentNode?.xp && currentNode.xp > 0) return currentNode.xp;
     if ((module as any)?.xp?.on_pass && (module as any).xp.on_pass > 0) return (module as any).xp.on_pass;
     return 120;
-  }, [currentNode?.xp, module]);
+  }, [currentNode?.xp, module, isAlreadyCompleted]);
 
   const sessionExerciseXpRef = useRef<number>(0);
 
@@ -385,7 +390,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       const accuracy = total > 0 ? Math.round((ok / total) * 100) : 100;
       if (accuracy >= 70) {
         completeSectionNode(sectionRef, ok === total ? 3 : 2);
-        const completionReward = Math.max(30, nodeTargetXp - sessionExerciseXpRef.current);
+        const completionReward = isAlreadyCompleted ? 0 : Math.max(30, nodeTargetXp - sessionExerciseXpRef.current);
         if (parsed) {
           EvaluationService.completeSection(sectionRef, {
             moduleId: parsed.moduleSlug,
@@ -396,10 +401,11 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             .then((res) => {
               const currentUser = useAuthStore.getState().user;
               if (currentUser) {
-                const awardXp =
-                  typeof res.xpAwarded === 'number' && res.xpAwarded > 0
-                    ? res.xpAwarded
-                    : completionReward;
+                const awardXp = isAlreadyCompleted
+                  ? 0
+                  : (typeof res.xpAwarded === 'number'
+                      ? res.xpAwarded
+                      : completionReward);
                 const newTotalXp = res.userTotalXp ?? (currentUser.totalXp + awardXp);
                 const todayStr = new Date().toLocaleDateString('en-CA');
                 const lastStudyStr = currentUser.lastStudyDate ? currentUser.lastStudyDate.slice(0, 10) : null;
@@ -421,12 +427,13 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
               console.warn('Sync quiz section completion offline fallback:', err?.message);
               const currentUser = useAuthStore.getState().user;
               if (currentUser) {
+                const awardXp = isAlreadyCompleted ? 0 : completionReward;
                 const todayStr = new Date().toLocaleDateString('en-CA');
                 const lastStudyStr = currentUser.lastStudyDate ? currentUser.lastStudyDate.slice(0, 10) : null;
                 const isSameDay = lastStudyStr === todayStr;
                 const curStreak = isSameDay ? Math.max(1, currentUser.streak) : (currentUser.streak > 0 ? currentUser.streak : 1);
                 useAuthStore.getState().updateUserProfile({
-                  totalXp: (currentUser.totalXp ?? 0) + completionReward,
+                  totalXp: (currentUser.totalXp ?? 0) + awardXp,
                   streak: curStreak,
                   longestStreak: Math.max(currentUser.longestStreak ?? 1, curStreak),
                   lastStudyDate: new Date().toISOString(),
@@ -437,7 +444,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         }
       }
     },
-    [completeSectionNode, sectionRef, parsed, courseId, nodeTargetXp]
+    [completeSectionNode, sectionRef, parsed, courseId, nodeTargetXp, isAlreadyCompleted]
   );
 
   const handleCompleteCurrent = useCallback(() => {
@@ -530,7 +537,11 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
           </h1>
           <p className="text-slate-400 text-sm sm:text-base max-w-md">
             Quiz: <span className="font-mono font-bold text-orange-400">{quizScore.ok}/{quizScore.total}</span> aciertos
-            {passed ? ` · +${nodeTargetXp} XP de maestría` : ' · necesitas 70% de aciertos para avanzar'}
+            {passed
+              ? isAlreadyCompleted
+                ? ' · +0 XP (Módulo ya dominado)'
+                : ` · +${nodeTargetXp} XP de maestría`
+              : ' · necesitas 70% de aciertos para avanzar'}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
@@ -627,6 +638,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             key={lesson.id}
             lesson={lesson}
             isCompleted={completedLessons.has(lesson.id)}
+            isAlreadyCompleted={isAlreadyCompleted}
             onComplete={handleCompleteCurrent}
             onExerciseCorrect={handleExerciseCorrect}
             onNext={handleNext}
@@ -657,6 +669,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
 function LessonView({
   lesson,
   isCompleted,
+  isAlreadyCompleted = false,
   onComplete,
   onExerciseCorrect,
   onNext,
@@ -669,6 +682,7 @@ function LessonView({
 }: {
   lesson: ContentLesson;
   isCompleted?: boolean;
+  isAlreadyCompleted?: boolean;
   onComplete?: () => void;
   onExerciseCorrect?: (xp: number) => void;
   onNext: () => void;
@@ -680,9 +694,9 @@ function LessonView({
   nodeTargetXp?: number;
 }) {
   const totalSteps = totalCount + 1; // Las N lecciones de la sección + el Quiz de cierre
-  const baseStepXp = Math.max(5, Math.floor(nodeTargetXp / totalSteps));
+  const baseStepXp = isAlreadyCompleted ? 0 : Math.max(5, Math.floor(nodeTargetXp / totalSteps));
   const exerciseCount = Math.max(1, lesson.exercises?.length ?? 1);
-  const questionXp = Math.max(1, Math.round(baseStepXp / exerciseCount));
+  const questionXp = isAlreadyCompleted ? 0 : Math.max(1, Math.round(baseStepXp / exerciseCount));
 
   const exercise = lesson.exercises[0] ?? null;
   const engine = useLessonEngine(exercise ? [exercise] : [], lesson.position, questionXp);
@@ -1011,7 +1025,11 @@ function LessonView({
                   <div className="flex items-center justify-between">
                     <p className="text-sm font-bold flex items-center gap-2">
                       {engine.result.correct ? <Check aria-hidden="true" className="w-5 h-5 text-emerald-400" /> : null}
-                      {engine.result.correct ? `¡Excelente! +${engine.result.xp} XP` : 'Respuesta incorrecta'}
+                      {engine.result.correct
+                        ? isAlreadyCompleted
+                          ? '¡Excelente! +0 XP (Repaso)'
+                          : `¡Excelente! +${engine.result.xp} XP`
+                        : 'Respuesta incorrecta'}
                     </p>
                   </div>
                   <div className="text-xs sm:text-sm text-slate-300 leading-relaxed max-h-24 overflow-y-auto pr-1">

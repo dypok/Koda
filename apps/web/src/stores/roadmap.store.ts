@@ -63,7 +63,7 @@ interface RoadmapStoreState {
   setBranch: (branchId: CareerBranchId) => void;
   setPanOffset: (pan: { x: number; y: number }) => void;
   setZoomLevel: (zoom: number | ((prev: number) => number)) => void;
-  hydrateProgress: () => void;
+  hydrateProgress: () => Promise<void> | void;
   completeSectionNode: (nodeId: string, stars: number) => void;
   zoomIn: () => void;
   zoomOut: () => void;
@@ -329,9 +329,26 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     });
   },
   setPanOffset: (pan) => set({ panOffset: pan }),
-  hydrateProgress: () => {
+  hydrateProgress: async () => {
     if (typeof window === 'undefined') return;
     set({ coursesDataset: restoreProgress(get().coursesDataset) });
+    try {
+      const branchId = get().activeBranchId || 'python';
+      const courseId = get().selectedCourseId || 'python-1';
+      const [coursesData, lessonsData] = await Promise.all([
+        RoadmapService.getCoursesGraph(branchId),
+        RoadmapService.getCourseLessonsGraph(courseId),
+      ]);
+      if (coursesData && coursesData.nodes && coursesData.nodes.length > 0) {
+        set({ coursesDataset: coursesData });
+        persistProgress(coursesData);
+      }
+      if (lessonsData && lessonsData.nodes && lessonsData.nodes.length > 0) {
+        set({ lessonsDataset: lessonsData });
+      }
+    } catch {
+      // Silencioso en caso de falla de red o modo offline
+    }
   },
   completeSectionNode: (nodeId: string, stars: number) => {
     const dataset = get().lessonsDataset;
@@ -344,21 +361,31 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
 
     const nodes = dataset.nodes.map((n, i) => {
       if (i === idx) {
-        return { ...n, variant: 'completed' as const, stars: Math.max(n.stars ?? 0, stars), statusText: 'COMPLETADA' };
+        return { ...n, variant: 'completed' as const, stars: Math.max(n.stars ?? 0, stars), statusText: 'COMPLETADO' };
       }
       if (i === idx + 1 && !n.isUnlocked) {
         return {
           ...n,
           isUnlocked: true,
-          variant: (n.variant === 'boss' ? 'boss' : 'unlocked') as NodeVariant,
-          iconType: n.iconType === 'lock' ? 'code' : n.iconType,
-          statusText: 'DISPONIBLE',
+          variant: (n.variant === 'boss' ? 'boss' : 'active') as NodeVariant,
+          iconType: n.iconType === 'lock' ? 'brackets' : n.iconType,
+          statusText: `DISPONIBLE • +${n.xp ?? 120} XP`,
         };
       }
       return n;
     });
 
-    set({ lessonsDataset: { ...dataset, nodes } });
+    const connections = dataset.connections.map((c) => {
+      if (c.fromId === nodeId || norm(c.fromId) === targetNorm) {
+        return { ...c, isDashed: false };
+      }
+      return c;
+    });
+
+    const completedCount = nodes.filter((n) => n.variant === 'completed').length;
+    const progressPercent = Math.round((completedCount / Math.max(1, nodes.length)) * 100);
+
+    set({ lessonsDataset: { ...dataset, progressPercent, nodes, connections } });
   },
   setZoomLevel: (zoom) =>
     set((s) => ({

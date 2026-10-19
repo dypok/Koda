@@ -58,13 +58,13 @@ export function useLessonEngine(exercises: ContentExercise[], seed = 42, rewardX
     setAttempts((p) => ({ ...p, [current.id]: tries }));
     if (ok) {
       const recovered = Boolean(failedFirst[current.id]);
-      const gained = recovered ? Math.max(1, Math.round(rewardXp * 0.4)) : rewardXp;
+      const gained = rewardXp <= 0 ? 0 : (recovered ? Math.max(1, Math.round(rewardXp * 0.4)) : rewardXp);
       setXp((x) => x + gained);
       const res: AnswerResult = {
         correct: true,
         recovered,
         xp: gained,
-        feedback: current.explanation ?? `¡Correcto! +${gained} XP.`,
+        feedback: current.explanation ?? (gained === 0 ? '¡Correcto! +0 XP (Repaso).' : `¡Correcto! +${gained} XP.`),
       };
       setResult(res);
       return res;
