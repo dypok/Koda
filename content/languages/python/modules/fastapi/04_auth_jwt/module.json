@@ -1,0 +1,126 @@
+{
+  "id": "fa_mod_04",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "FA_M04",
+  "slug": "fastapi-auth-jwt",
+  "course_slug": "fastapi-async",
+  "title": "Autenticación con JWT, Hashing y Dependencias (Depends)",
+  "objective": "Proteger endpoints con JSON Web Tokens (JWT), hashear contraseñas con bcrypt e inyectar usuarios autenticados con Depends.",
+  "description": "Seguridad de grado bancario para tu API: autenticación sin estado (stateless), expiración de tokens y control de acceso.",
+  "position": 34,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 320
+  },
+  "sections": [
+    {
+      "id": "sec_fa_04_01",
+      "code": "S01",
+      "title": "Tokens JWT y Rutas Protegidas",
+      "slug": "jwt-y-rutas",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_fa_04_01",
+          "code": "L01",
+          "title": "Flujo OAuth2 con JWT y Dependency Injection",
+          "slug": "jwt-depends-base",
+          "position": 1,
+          "concept_id": "fa-auth",
+          "objective": "Implementar el login que emite JWT y proteger rutas mediante Depends(obtener_usuario_actual).",
+          "examples": [
+            {
+              "title": "Protección de endpoint con Depends",
+              "code": "from fastapi import FastAPI, Depends, HTTPException, status\n\napp = FastAPI()\n\ndef get_usuario_actual(token: str = \"token_simulado\"):\n    if token != \"token_valido_123\":\n        raise HTTPException(\n            status_code=status.HTTP_401_UNAUTHORIZED,\n            detail=\"Token inválido o expirado\"\n        )\n    return {\"id\": 1, \"username\": \"koda_specialist\"}\n\n@app.get(\"/perfil\")\ndef ver_perfil(usuario = Depends(get_usuario_actual)):\n    return {\"mensaje\": \"Acceso autorizado\", \"usuario\": usuario}",
+              "output": "HTTP 200 OK\n{\"mensaje\": \"Acceso autorizado\", \"usuario\": {\"id\": 1, \"username\": \"koda_specialist\"}}",
+              "explanation": "Cualquier endpoint que requiera usuario autenticado solo añade usuario = Depends(...).",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Guardar contraseñas en texto plano en la base de datos (grave vulnerabilidad). Siempre deben almacenarse con un algoritmo de derivación de claves con sal (salt) como bcrypt/argon2.",
+          "mini_exercise": {
+            "starter_code": "# Verifica si una contraseña coincide con el hash\n# bcrypt.checkpw(password.encode(), hash_guardado.encode())",
+            "instructions": "Recuerda que las contraseñas nunca se desencriptan; se compara el hash de entrada contra el hash almacenado.",
+            "solution": "# contraseñas siempre con hash"
+          },
+          "key_takeaways": [
+            "JWT es stateless: el servidor no necesita guardar sesiones en memoria.",
+            "Depends reutiliza la lógica de autenticación en cualquier endpoint.",
+            "HTTP 401 Unauthorized es el código estándar ante credenciales inválidas."
+          ],
+          "explanation": "El estándar de la industria para autenticar APIs REST es **JWT (JSON Web Token)**:\n1. El cliente envía usuario y contraseña a `/login`.\n2. El servidor valida el hash con `bcrypt` y emite un token firmado criptográficamente con una clave secreta (`SECRET_KEY`) y fecha de expiración.\n3. El cliente incluye el token en la cabecera `Authorization: Bearer <token>` en cada solicitud subsiguiente.\n\nEn FastAPI, el sistema de **inyección de dependencias (`Depends`)** intercepta el token, lo valida y entrega el objeto de usuario directamente al endpoint.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_fa_04_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Qué cabecera HTTP estándar se utiliza para enviar un token JWT al servidor en cada petición?",
+              "explanation": "El esquema estándar RFC 6750 estipula la cabecera Authorization con el prefijo Bearer.",
+              "category": "auth-jwt",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Authorization: Bearer <token>",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "X-Token-Password",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "User-Token: True",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Cookie-Secret",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "fa-auth"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "fa_mod_04",
+              "section_id": "sec_fa_04_01",
+              "lesson_id": "les_fa_04_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

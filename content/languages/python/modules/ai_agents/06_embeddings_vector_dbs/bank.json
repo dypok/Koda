@@ -1,0 +1,49 @@
+{
+  "module_code": "IA_M06",
+  "module_slug": "ia-embeddings-vector-dbs",
+  "course_slug": "ai-agents",
+  "questions": [
+    {
+      "id": "q_ia_06_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál métrica matemática mide el coseno del ángulo entre dos vectores para determinar su cercanía semántica?",
+      "explanation": "Cosine Similarity calcula dot(A, B) / (||A|| * ||B||), siendo el estándar universal para comparar embeddings de texto.",
+      "category": "embeddings-vector-dbs",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Similitud Coseno (Cosine Similarity)",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Desviación estándar",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Regla de Bayes",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Varianza de Poisson",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

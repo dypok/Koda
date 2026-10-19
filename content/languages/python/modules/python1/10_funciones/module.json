@@ -1,0 +1,217 @@
+{
+  "id": "py1_mod_10",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY1_M10",
+  "slug": "funciones-fundamentales",
+  "course_slug": "python-1",
+  "title": "Funciones Fundamentales, Debugging y Mini-Proyecto",
+  "objective": "Estructurar lógica modular reutilizable con def, return, parámetros por defecto, entender scope local/global y leer tracebacks de error.",
+  "description": "El clímax de Fundamentos: crea tus propias herramientas con funciones puras, aprende a interpretar mensajes de error y construye el proyecto integrador del nivel 1.",
+  "position": 10,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 2,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 300
+  },
+  "sections": [
+    {
+      "id": "sec_py1_10_01",
+      "code": "S01",
+      "title": "Definición de Funciones y la Instrucción return",
+      "slug": "definicion-funciones-return",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_py1_10_01",
+          "code": "L01",
+          "title": "Funciones con def, Parámetros y return",
+          "slug": "funciones-def-return",
+          "position": 1,
+          "concept_id": "py-functions-basic",
+          "objective": "Diferenciar entre imprimir en consola con print() y retornar un valor utilizable con return.",
+          "examples": [
+            {
+              "title": "Función con parámetros por defecto y retorno",
+              "code": "def saludar(nombre, prefijo=\"Bienvenido\"):\n    return f\"¡{prefijo}, {nombre}!\"\n\nmsj1 = saludar(\"Koda\")\nmsj2 = saludar(\"Alex\", prefijo=\"Hola\")\nprint(msj1)\nprint(msj2)",
+              "output": "¡Bienvenido, Koda!\n¡Hola, Alex!",
+              "explanation": "Si no envías el argumento prefijo, toma el valor por defecto \"Bienvenido\".",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Olvidar el return y luego intentar usar el resultado: `resultado = mi_funcion()` tendrá el valor `None`.",
+          "mini_exercise": {
+            "starter_code": "# Crea una función que reciba n y retorne su cuadrado (n ** 2)\ndef cuadrado(n):\n    ...\n\nprint(cuadrado(5))  # Debe mostrar 25",
+            "instructions": "Usa return n ** 2 dentro de la función.",
+            "solution": "def cuadrado(n):\n    return n ** 2\n\nprint(cuadrado(5))"
+          },
+          "key_takeaways": [
+            "def declara una función reutilizable.",
+            "return entrega el resultado y finaliza la ejecución de la función.",
+            "Los parámetros por defecto van al final de la lista de parámetros.",
+            "Una función sin return devuelve None."
+          ],
+          "explanation": "Una **función** es un bloque de código empaquetado con nombre que realiza una tarea específica y puede ser invocado tantas veces como sea necesario (principio DRY: Don't Repeat Yourself).\n\n```python\ndef calcular_area_rectangulo(base, altura):\n    area = base * altura\n    return area  # Devuelve el resultado al invocador\n```\n\n> **La diferencia vital entre print y return:** `print()` simplemente muestra un texto en la pantalla para ojos humanos y se pierde en la nada. `return` entrega el valor de vuelta al programa para que puedas guardarlo en una variable, sumarlo o pasarlo a otra función. Si una función no tiene `return`, devuelve `None` por defecto.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py1_10_01",
+              "type": "predict_output",
+              "difficulty": "easy",
+              "prompt": "¿Qué valor se almacenará en res?",
+              "prompt_code": "def sumar(a, b):\n    print(a + b)\n\nres = sumar(2, 3)\nprint(res)",
+              "explanation": "sumar imprime 5 durante su ejecución, pero como carece de return, res recibe el valor None por defecto.",
+              "category": "funciones",
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "5 en la primera línea y None en la segunda",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "5 en ambas líneas",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "None",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Error",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py-functions-basic"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py1_mod_10",
+              "section_id": "sec_py1_10_01",
+              "lesson_id": "les_py1_10_01"
+            }
+          ]
+        },
+        {
+          "id": "les_py1_10_02",
+          "code": "L02",
+          "title": "Lectura de Tracebacks y Diagnóstico de Errores",
+          "slug": "lectura-tracebacks",
+          "position": 2,
+          "concept_id": "py-tracebacks",
+          "objective": "Interpretar los mensajes de error de Python de abajo hacia arriba sin pánico.",
+          "examples": [
+            {
+              "title": "Ejemplo de traceback y su traducción",
+              "code": "# ZeroDivisionError: division by zero\ndef calcular_promedio(total, cantidad):\n    if cantidad == 0:\n        return 0\n    return total / cantidad\n\nprint(\"Promedio:\", calcular_promedio(100, 0))",
+              "output": "Promedio: 0",
+              "explanation": "Validamos cantidad == 0 antes de dividir para prevenir la excepción ZeroDivisionError.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Asustarse con el texto rojo en la consola en lugar de leer calmadamente la última línea del Traceback.",
+          "mini_exercise": {
+            "starter_code": "# Corrige la función para que no falle si la lista viene vacía\ndef primer_elemento(lista):\n    if len(lista) == 0:\n        return None\n    return lista[0]",
+            "instructions": "Observa cómo la guardia if len(lista) == 0 previene un IndexError.",
+            "solution": "def primer_elemento(lista):\n    if len(lista) == 0:\n        return None\n    return lista[0]"
+          },
+          "key_takeaways": [
+            "La última línea del traceback describe el error exacto.",
+            "Los tipos frecuentes son TypeError, NameError, IndexError y ValueError.",
+            "Las comprobaciones de guardia previenen fallos en tiempo de ejecución."
+          ],
+          "explanation": "Cuando Python encuentra un problema que no sabe cómo resolver, se detiene y genera un **Traceback** (el registro de la pila de llamadas).\n\nPara leer un traceback como un programador senior:\n1. **Mira la última línea primero**: Indica el tipo exacto de error (`NameError`, `TypeError`, `IndexError`, `ZeroDivisionError`) y una breve explicación en inglés.\n2. **Sube a la línea anterior**: Te indica exactamente el nombre del archivo y el número de línea donde ocurrió el fallo.\n3. **Causa común**: Un error en la línea 12 a menudo se debe a una variable mal definida en la línea 10.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py1_10_02",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "Al depurar un fallo en Python, ¿cuál es la mejor estrategia para leer el Traceback?",
+              "explanation": "La última línea contiene el nombre del error y la causa específica, siendo el punto de partida fundamental para solucionarlo.",
+              "category": "funciones",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Leer la última línea para identificar el tipo de excepción y el mensaje de error",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Borrar todo el archivo y empezar de nuevo",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Ignorar el mensaje y cambiar nombres al azar",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Los tracebacks solo son informativos y no indican la línea del error",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py-tracebacks"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py1_mod_10",
+              "section_id": "sec_py1_10_01",
+              "lesson_id": "les_py1_10_02"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,127 @@
+{
+  "id": "py2_mod_06",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY2_M06",
+  "slug": "poo-clases-y-objetos",
+  "course_slug": "python-2",
+  "title": "POO I: Clases, Instancias y Métodos Especiales",
+  "objective": "Modelar conceptos del mundo real mediante clases, entender el rol de self, el constructor __init__ y los métodos __str__ y __repr__.",
+  "description": "La base de la arquitectura de software moderna: empaqueta estado (atributos) y comportamiento (métodos) en clases reutilizables.",
+  "position": 16,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 260
+  },
+  "sections": [
+    {
+      "id": "sec_py2_06_01",
+      "code": "S01",
+      "title": "Clases, Instancias y self",
+      "slug": "clases-y-self",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_py2_06_01",
+          "code": "L01",
+          "title": "El Molde y la Galleta: Clases y el Constructor __init__",
+          "slug": "clases-init-self",
+          "position": 1,
+          "concept_id": "py2-oop-basics",
+          "objective": "Comprender que una clase es un plano y self es la referencia a la instancia viva en memoria.",
+          "examples": [
+            {
+              "title": "Definición de una clase de cuenta bancaria",
+              "code": "class CuentaBancaria:\n    def __init__(self, titular, saldo_inicial=0.0):\n        self.titular = titular\n        self.saldo = saldo_inicial\n\n    def depositar(self, monto):\n        if monto > 0:\n            self.saldo += monto\n\n    def __str__(self):\n        return f\"Cuenta({self.titular}, Saldo: ${self.saldo:.2f})\"\n\ncuenta = CuentaBancaria(\"Elena\", 100.0)\ncuenta.depositar(50.0)\nprint(cuenta)",
+              "output": "Cuenta(Elena, Saldo: $150.00)",
+              "explanation": "self.saldo mantiene el estado privado de esa cuenta específica.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Olvidar poner self como primer parámetro de los métodos de instancia (TypeError: metodo() takes 0 positional arguments but 1 was given).",
+          "mini_exercise": {
+            "starter_code": "class Jugador:\n    def __init__(self, nombre):\n        self.nombre = nombre\n        self.nivel = 1\n\nj = Jugador(\"Koda\")\nprint(j.nombre, j.nivel)",
+            "instructions": "Crea una instancia Jugador(\"Koda\") y verifica que su nivel inicial sea 1.",
+            "solution": "class Jugador:\n    def __init__(self, nombre):\n        self.nombre = nombre\n        self.nivel = 1\n\nj = Jugador(\"Koda\")\nprint(j.nombre, j.nivel)"
+          },
+          "key_takeaways": [
+            "class NombreClase: define un nuevo tipo.",
+            "__init__ inicializa los atributos de instancia.",
+            "self representa a la instancia viva que llama al método.",
+            "__str__ define la representación textual para print()."
+          ],
+          "explanation": "Piensa en una **clase** como el plano arquitectónico de una casa, y en un **objeto (o instancia)** como la casa física construida con ladrillos en un terreno real.\n\n- `__init__(self, ...)`: Es el método inicializador que se ejecuta automáticamente al crear un nuevo objeto (`u = Usuario(\"Alex\")`).\n- `self`: Es la referencia a la instancia concreta sobre la que se está operando. Cuando llamas a `u.saludar()`, Python lo traduce internamente a `Usuario.saludar(u)`.\n- `__str__(self)`: Define cómo se muestra tu objeto como texto cuando alguien hace `print(objeto)`.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py2_06_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Qué representa el primer parámetro `self` en los métodos de una clase en Python?",
+              "explanation": "self permite a los métodos de instancia acceder y modificar los atributos de ese objeto en particular.",
+              "category": "poo-clases",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Una referencia explícita a la instancia actual del objeto",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Una palabra reservada para acceder a la base de datos",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "El número de veces que se ha instanciado la clase",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "El archivo .py donde vive la clase",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py2-oop-basics"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py2_mod_06",
+              "section_id": "sec_py2_06_01",
+              "lesson_id": "les_py2_06_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

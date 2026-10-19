@@ -1,0 +1,49 @@
+{
+  "module_code": "PY3_M01",
+  "module_slug": "iteradores-y-generadores",
+  "course_slug": "python-3",
+  "questions": [
+    {
+      "id": "q_py3_01_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué excepción lanza un generador cuando agota todos sus elementos disponibles al llamar a next()?",
+      "explanation": "StopIteration es la señal estándar del protocolo de iteración para indicar que no hay más elementos.",
+      "category": "iteradores-generadores",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "StopIteration",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "IndexError",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "GeneratorExit",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "EndOfStream",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

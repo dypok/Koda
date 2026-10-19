@@ -1,0 +1,324 @@
+{
+  "id": "py_mod_apex_gate",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY_APEX_GATE",
+  "slug": "apex-master-gate",
+  "course_slug": "python-apex",
+  "title": "Apex Master Gate: Proyecto Integrador de Certificación",
+  "objective": "Construir, auditar y desplegar una plataforma completa de software en Python que integre arquitectura avanzada, servicios asíncronos y componentes inteligentes.",
+  "description": "El desafío cumbre de Python Specialist. Unifica el tronco común avanzado con tu especialidad en una aplicación empresarial lista para producción.",
+  "position": 61,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 3,
+  "total_lessons": 3,
+  "thresholds": {
+    "quiz": 85,
+    "exam": 90
+  },
+  "xp": {
+    "on_pass": 1000
+  },
+  "sections": [
+    {
+      "id": "sec-apex-01",
+      "code": "APEX-S1",
+      "title": "Fase 1: Arquitectura y Modelado del Dominio",
+      "slug": "fase-1-arquitectura",
+      "position": 1,
+      "type": "project",
+      "estimated_minutes": 60,
+      "xp_on_complete": 400,
+      "lessons": [
+        {
+          "id": "apex-01",
+          "code": "APEX-01",
+          "title": "Fase 1: Arquitectura Hexagonal y Contratos de Datos",
+          "slug": "fase-1-arquitectura-contratos",
+          "position": 1,
+          "concept_id": "apex-clean-architecture",
+          "objective": "Estructurar una solución Python profesional desacoplando la lógica de negocio de la infraestructura mediante arquitectura limpia y tipado estricto.",
+          "examples": [
+            {
+              "title": "Definición de Entidad y Protocolo de Repositorio",
+              "code": "from dataclasses import dataclass\nfrom typing import Protocol, List\nfrom datetime import datetime\n\n@dataclass(frozen=True)\nclass KnowledgeItem:\n    id: str\n    title: str\n    content: str\n    created_at: datetime\n\nclass KnowledgeRepository(Protocol):\n    async def save(self, item: KnowledgeItem) -> None: ...\n    async def get_by_id(self, item_id: str) -> KnowledgeItem | None: ...\n    async def search(self, query: str, limit: int = 5) -> List[KnowledgeItem]: ...",
+              "explanation": "El dominio solo depende de tipos estándar de Python y `typing.Protocol`.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Acoplar la base de datos o el framework web dentro de las clases del modelo de negocio, lo que impide probar o reemplazar componentes.",
+          "mini_exercise": {
+            "instructions": "Declara una dataclass inmutable Document y un Protocol DocumentEngine con un método process(doc: Document) -> bool.",
+            "starter_code": "from dataclasses import dataclass\nfrom typing import Protocol\n\n# Define Document y DocumentEngine\n",
+            "solution": "from dataclasses import dataclass\nfrom typing import Protocol\n\n@dataclass(frozen=True)\nclass Document:\n    doc_id: str\n    body: str\n\nclass DocumentEngine(Protocol):\n    def process(self, doc: Document) -> bool:\n        ..."
+          },
+          "key_takeaways": [
+            "La arquitectura limpia aísla las reglas de negocio de librerías y bases de datos.",
+            "Los Protocols permiten tipado estático estructural sin acoplamiento por herencia."
+          ],
+          "explanation": "El Apex Master Gate simula un encargo del mundo real: diseñar una plataforma de análisis y automatización empresarial.\n\n### 1. El Principio de Inversión de Dependencias (DIP)\nTu núcleo de dominio no debe importar frameworks externos (ni FastAPI, ni Django, ni ChromaDB). Las interfaces y entidades de negocio son código Python puro (`dataclasses`, `Protocol`, `AbstractBaseClasses`).\n\n```\n  +---------------------------------------------+\n  |               Entidades / Dominio            |\n  |  (Modelos inmutables, reglas de negocio)     |\n  +----------------------+----------------------+\n                         ^\n  +----------------------+----------------------+\n  |           Casos de Uso / Servicios          |\n  |  (Orquestación, protocolos de repositorios)  |\n  +----------------------+----------------------+\n                         ^\n  +----------------------+----------------------+\n  |          Adaptadores / Infraestructura       |\n  |  (FastAPI routers, SQLite/PostgreSQL, LLMs) |\n  +---------------------------------------------+\n```\n\n### 2. Estructura de Paquetes\nOrganiza el proyecto con un diseño modular:\n```text\nsrc/\n├── domain/\n│   ├── models.py\n│   └── ports.py\n├── application/\n│   └── use_cases.py\n└── infrastructure/\n    ├── api/\n    └── storage/\n```",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex-apex-01",
+              "type": "single_choice",
+              "difficulty": "hard",
+              "prompt": "¿Cuál es el beneficio de definir contratos de infraestructura mediante typing.Protocol en el módulo de dominio?",
+              "explanation": "Protocol establece un tipado estructural independiente de cómo y dónde se implemente la infraestructura.",
+              "category": "apex-master-gate",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Permite que el dominio defina la interfaz requerida sin depender de implementaciones concretas.",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Obliga a que Python compile el código a lenguaje ensamblador.",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Convierte todas las funciones síncronas en asíncronas automáticamente.",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Elimina la necesidad de escribir pruebas unitarias.",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "apex-clean-architecture"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 90,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_apex_gate",
+              "section_id": "sec-apex-01",
+              "lesson_id": "apex-01"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-apex-02",
+      "code": "APEX-S2",
+      "title": "Fase 2: Motor de Servicios y Capacidades Inteligentes",
+      "slug": "fase-2-servicios-ia",
+      "position": 2,
+      "type": "project",
+      "estimated_minutes": 90,
+      "xp_on_complete": 500,
+      "lessons": [
+        {
+          "id": "apex-02",
+          "code": "APEX-02",
+          "title": "Fase 2: Orquestación Asíncrona y Agentes de Decisión",
+          "slug": "fase-2-orquestacion-agentes",
+          "position": 1,
+          "concept_id": "apex-async-orchestration",
+          "objective": "Implementar el motor asíncrono central combinando procesamiento concurrente seguro y toma de decisiones guiada por herramientas.",
+          "examples": [
+            {
+              "title": "Ejecución Resiliente con Timeout y Manejo de Errores",
+              "code": "import asyncio\nfrom typing import Any\n\nasync def fetch_with_safety(coro: Any, timeout_secs: float = 3.0) -> Any:\n    try:\n        return await asyncio.wait_for(coro, timeout=timeout_secs)\n    except asyncio.TimeoutError:\n        return {\"status\": \"error\", \"reason\": \"timeout_exceeded\"}\n    except Exception as exc:\n        return {\"status\": \"error\", \"reason\": str(exc)}",
+              "explanation": "Protege las llamadas a servicios externos para que una falla no bloquee todo el ciclo de eventos.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "No poner timeout a llamadas de red, provocando que los workers asíncronos queden colgados indefinidamente.",
+          "mini_exercise": {
+            "instructions": "Escribe una función asíncrona execute_tasks(task_list) que use asyncio.gather con return_exceptions=True.",
+            "starter_code": "import asyncio\n\nasync def execute_tasks(tasks: list):\n    # Completa la ejecución concurrente\n    pass",
+            "solution": "import asyncio\n\nasync def execute_tasks(tasks: list):\n    return await asyncio.gather(*tasks, return_exceptions=True)"
+          },
+          "key_takeaways": [
+            "Las APIs y servicios externos requieren timeouts y esquemas estrictos de validación.",
+            "asyncio.gather con return_exceptions=True previene que una excepción individual cancele las demás tareas."
+          ],
+          "explanation": "En la Fase 2, conectamos los adaptadores de infraestructura para dar vida al sistema.\n\n### 1. Concurrencia Robusta con AsyncIO\nAsegúrate de manejar excepciones concurrentes y tareas cancelables mediante `asyncio.TaskGroup` o `asyncio.gather` con `return_exceptions=True`.\n\n### 2. Integración de Herramientas y Fallbacks\nSi el sistema consulta un modelo de IA o una API externa, debe incluir:\n- **Timeouts explícitos:** Nunca dejes una llamada a la red sin límite de tiempo.\n- **Circuit Breaker:** Si la API externa falla reiteradamente, responder con un fallback predeterminado.\n- **Validación con Pydantic:** Todas las respuestas de modelos de lenguaje deben someterse a esquemas estrictos antes de ser procesadas por el negocio.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex-apex-02",
+              "type": "single_choice",
+              "difficulty": "hard",
+              "prompt": "¿Por qué es fundamental usar return_exceptions=True al invocar asyncio.gather en tareas críticas de recolección de datos?",
+              "explanation": "Por defecto, gather cancela el grupo si una tarea falla; return_exceptions=True devuelve las excepciones como elementos de la lista de resultados para inspección controlada.",
+              "category": "apex-master-gate",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Porque evita que una excepción en una tarea aborte de inmediato las demás operaciones concurrentes.",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Porque incrementa el ancho de banda del canal de red.",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Porque convierte los errores de sintaxis en avisos informativos.",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Porque reemplaza la necesidad de usar bloques try/except en el código síncrono.",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "apex-async-orchestration"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 90,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_apex_gate",
+              "section_id": "sec-apex-02",
+              "lesson_id": "apex-02"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sec-apex-03",
+      "code": "APEX-S3",
+      "title": "Fase 3: Auditoría, Testing y Despliegue en Producción",
+      "slug": "fase-3-auditoria-deploy",
+      "position": 3,
+      "type": "exam",
+      "estimated_minutes": 120,
+      "xp_on_complete": 700,
+      "lessons": [
+        {
+          "id": "apex-03",
+          "code": "APEX-03",
+          "title": "Fase 3: Pruebas Automatizadas, Dockerfile Multi-Stage y Certificación",
+          "slug": "fase-3-pruebas-docker-certificacion",
+          "position": 1,
+          "concept_id": "apex-testing-deployment",
+          "objective": "Auditar la calidad del código con cobertura de pruebas, empaquetar la solución en contenedores seguros y obtener la certificación Python Specialist.",
+          "examples": [
+            {
+              "title": "Fixture Asíncrono de Pytest para Pruebas E2E",
+              "code": "import pytest\nimport pytest_asyncio\nfrom httpx import AsyncClient, ASGITransport\n\n@pytest_asyncio.fixture\nasync def client():\n    # Asume que app es tu aplicación ASGI (ej. FastAPI)\n    from src.main import app\n    transport = ASGITransport(app=app)\n    async with AsyncClient(transport=transport, base_url=\"http://test\") as ac:\n        yield ac",
+              "explanation": "Permite probar rutas HTTP asíncronas de extremo a extremo sin levantar un servidor socket real.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Ejecutar contenedores de producción con el usuario root o dejar secretos y tokens hardcodeados en el Dockerfile.",
+          "mini_exercise": {
+            "instructions": "Escribe una directiva de pytest para marcar un test como asíncrono y definir un caso de prueba para una función async que verifique un resultado.",
+            "starter_code": "import pytest\n\n# Marca la prueba y define test_async_operation\n",
+            "solution": "import pytest\n\n@pytest.mark.asyncio\nasync def test_async_operation():\n    result = await asyncio.sleep(0.01, result=42)\n    assert result == 42"
+          },
+          "key_takeaways": [
+            "Las pruebas automatizadas y el tipado estático garantizan la estabilidad del software en el tiempo.",
+            "Los contenedores multi-stage y sin privilegios de root protegen el entorno de producción."
+          ],
+          "explanation": "La última fase evalúa la madurez ingenieril de la solución.\n\n### 1. Pirámide de Pruebas con Pytest\n- **Unitarias:** Pruebas instantáneas de la capa de dominio sin dependencias de red ni bases de datos.\n- **Integración:** Pruebas con bases de datos en memoria o fixtures con `httpx.AsyncClient`.\n- **Regresión y límites:** Pruebas parametrizadas para validar entradas inválidas, tokens expirados y cargas grandes.\n\n### 2. Dockerfile Multi-Stage de Producción\nUn contenedor de producción no debe contener compiladores ni herramientas de testing:\n```dockerfile\nFROM python:3.12-slim AS builder\nWORKDIR /app\nRUN pip install --no-cache-dir poetry\nCOPY pyproject.toml .\nRUN poetry export -f requirements.txt --output requirements.txt\n\nFROM python:3.12-slim AS runner\nWORKDIR /app\nRUN useradd -m appuser\nCOPY --from=builder /app/requirements.txt .\nRUN pip install --no-cache-dir -r requirements.txt\nCOPY src/ ./src/\nUSER appuser\nCMD [\"uvicorn\", \"src.main:app\", \"--host\", \"0.0.0.0\", \"--port\", \"8000\"]\n```\n\n### 3. Criterio de Certificación Apex\n- Cobertura de pruebas superior al 85%.\n- Cumplimiento de PEP 8 y tipos estáticos validados con Mypy / Ruff.\n- Arquitectura desacoplada y lista para escalar vertical u horizontalmente.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex-apex-03",
+              "type": "single_choice",
+              "difficulty": "hard",
+              "prompt": "¿Por qué se utiliza una imagen base \"multi-stage\" en Docker para desplegar aplicaciones de Python en producción?",
+              "explanation": "Multi-stage builds permiten descartar compiladores y paquetes dev en la imagen de ejecución final, logrando contenedores mínimos, ligeros y más seguros.",
+              "category": "apex-master-gate",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Para aislar herramientas de compilación y pruebas del artefacto final, reduciendo el tamaño y la superficie de ataque.",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Para que el código Python se ejecute en múltiples CPUs simultáneamente.",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Porque Docker no permite instalar librerías con pip en una sola etapa.",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Para evitar tener que escribir un archivo requirements.txt.",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "apex-testing-deployment"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 90,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py_mod_apex_gate",
+              "section_id": "sec-apex-03",
+              "lesson_id": "apex-03"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "id": "py2_mod_08",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY2_M08",
+  "slug": "datetime-y-regex",
+  "course_slug": "python-2",
+  "title": "Fechas, Tiempos y Expresiones Regulares (regex)",
+  "objective": "Gestionar marcas de tiempo, diferencias de fecha con timedelta y validar patrones complejos de texto con el módulo re.",
+  "description": "Domina el tiempo y los patrones de texto: zonas horarias, cálculo de plazos y extracción de correos o teléfonos con regex.",
+  "position": 18,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 250
+  },
+  "sections": [
+    {
+      "id": "sec_py2_08_01",
+      "code": "S01",
+      "title": "Módulo datetime y el Módulo re",
+      "slug": "datetime-y-re",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 45,
+      "lessons": [
+        {
+          "id": "les_py2_08_01",
+          "code": "L01",
+          "title": "Fechas con datetime y Patrones con re.search()",
+          "slug": "datetime-re-base",
+          "position": 1,
+          "concept_id": "py2-datetime-regex",
+          "objective": "Operar con fechas (timedelta) y buscar patrones usando expresiones regulares.",
+          "examples": [
+            {
+              "title": "Cálculo de vencimiento y extracción de números con regex",
+              "code": "from datetime import datetime, timedelta\nimport re\n\n# Sumar 30 días\nhoy = datetime(2026, 1, 1)\nvencimiento = hoy + timedelta(days=30)\nprint(\"Vence el:\", vencimiento.strftime(\"%d/%m/%Y\"))\n\n# Buscar números en texto\nlog = \"Error en puerto 8080 con código 404\"\nnumeros = re.findall(r\"\\d+\", log)\nprint(\"Números detectados:\", numeros)",
+              "output": "Vence el: 31/01/2026\nNúmeros detectados: ['8080', '404']",
+              "explanation": "timedelta suma periodos exactos y r\"\\d+\" extrae todas las secuencias numéricas.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Olvidar el prefijo r en strings de regex: `r\"\\d+\"` evita que Python interprete las barras invertidas como escapes de texto.",
+          "mini_exercise": {
+            "starter_code": "import re\ntexto = \"Usuario: koda_fox123\"\n# Extrae los dígitos con re.findall(r\"\\d+\", texto)\ndigitos = ...\nprint(digitos)",
+            "instructions": "Usa re.findall(r\"\\d+\", texto).",
+            "solution": "import re\ntexto = \"Usuario: koda_fox123\"\ndigitos = re.findall(r\"\\d+\", texto)\nprint(digitos)"
+          },
+          "key_takeaways": [
+            "timedelta representa duraciones para cálculos de fechas.",
+            "strftime convierte fechas a texto; strptime parsea texto a fechas.",
+            "Usa siempre raw strings r\"...\" para patrones de regex."
+          ],
+          "explanation": "Dos módulos estándar imprescindibles en Python profesional:\n\n1. `datetime`:\n   - `datetime.now()`: Fecha y hora actual.\n   - `timedelta(days=7)`: Representa una duración o lapso temporal para sumar o restar a fechas.\n   - `dt.strftime(\"%Y-%m-%d\")`: Formatea fecha a string.\n\n2. `re` (Expresiones Regulares):\n   - `re.search(patron, texto)`: Busca la primera coincidencia del patrón.\n   - `re.findall(patron, texto)`: Devuelve todas las coincidencias encontradas.\n   - Patrones clave: `\\d+` (uno o más dígitos), `[a-zA-Z]+` (letras).",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py2_08_01",
+              "type": "predict_output",
+              "difficulty": "easy",
+              "prompt": "¿Qué devolverá re.findall(r\"\\d+\", \"Tengo 2 perros y 10 peces\")?",
+              "explanation": "re.findall extrae todas las coincidencias como una lista de strings: [\"2\", \"10\"].",
+              "category": "datetime-regex",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "['2', '10']",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "['2']",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "[2, 10]",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "12",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py2-datetime-regex"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py2_mod_08",
+              "section_id": "sec_py2_08_01",
+              "lesson_id": "les_py2_08_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

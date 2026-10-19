@@ -1,0 +1,217 @@
+{
+  "id": "py1_mod_09",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY1_M09",
+  "slug": "diccionarios-y-sets",
+  "course_slug": "python-1",
+  "title": "Estructuras Clave-Valor y Conjuntos: Diccionarios y Sets",
+  "objective": "Almacenar datos asociativos con diccionarios (dict), dominar .get(), .keys(), .items() y operar con conjuntos (set) para garantizar unicidad.",
+  "description": "Modela entidades del mundo real usando pares clave-valor y realiza búsquedas ultrarrápidas con tablas hash nativas.",
+  "position": 9,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 2,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 240
+  },
+  "sections": [
+    {
+      "id": "sec_py1_09_01",
+      "code": "S01",
+      "title": "Diccionarios y el Método Seguro .get()",
+      "slug": "diccionarios-get",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 45,
+      "lessons": [
+        {
+          "id": "les_py1_09_01",
+          "code": "L01",
+          "title": "Diccionarios: Mapeos Clave-Valor y .get()",
+          "slug": "diccionarios-mapeos",
+          "position": 1,
+          "concept_id": "py-dictionaries",
+          "objective": "Declarar diccionarios, acceder a claves y evitar KeyError usando .get(clave, default).",
+          "examples": [
+            {
+              "title": "Lectura segura e iteración con .items()",
+              "code": "producto = {\"id\": 101, \"titulo\": \"Monitor 4K\", \"precio\": 350.0}\n\n# Acceso seguro con get\ncategoria = producto.get(\"categoria\", \"Sin categoría\")\nprint(\"Categoría:\", categoria)\n\n# Iteración de claves y valores\nfor clave, valor in producto.items():\n    print(f\"- {clave}: {valor}\")",
+              "output": "Categoría: Sin categoría\n- id: 101\n- titulo: Monitor 4K\n- precio: 350.0",
+              "explanation": "producto.items() devuelve tuplas (clave, valor) listas para desempaquetar en el bucle.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Usar corchetes en claves inexistentes (KeyError). Usa siempre .get() cuando no tengas la certeza absoluta de que la clave exista.",
+          "mini_exercise": {
+            "starter_code": "perfil = {\"nombre\": \"Alex\", \"puntos\": 500}\n# Obtén \"rango\" con .get(), si no existe devuelve \"Novato\"\nrango = perfil.get(...)\nprint(rango)",
+            "instructions": "Usa .get(\"rango\", \"Novato\") para evitar errores.",
+            "solution": "perfil = {\"nombre\": \"Alex\", \"puntos\": 500}\nrango = perfil.get(\"rango\", \"Novato\")\nprint(rango)"
+          },
+          "key_takeaways": [
+            "Los diccionarios usan pares {clave: valor}.",
+            "Las claves deben ser inmutables (comúnmente strings).",
+            ".get(k, default) previene excepciones KeyError.",
+            ".items() permite iterar simultáneamente sobre claves y valores."
+          ],
+          "explanation": "Un **diccionario (`dict`)** almacena pares de `clave: valor` entre llaves `{ }`. En lugar de buscar por índice numérico (como en listas), accedes por el nombre de la clave (un string, número o tupla inmutable).\n\n```python\nusuario = {\"nombre\": \"Koda\", \"rol\": \"Specialist\", \"nivel\": 1}\nprint(usuario[\"nombre\"])  # \"Koda\"\n```\n\n> **¡Evita el temido KeyError!** Si buscas una clave que no existe con `usuario[\"email\"]`, el programa se detiene con error. Usa siempre `.get(\"email\", \"No registrado\")`: si la clave no existe, devuelve el valor por defecto sin quebrar el programa.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py1_09_01",
+              "type": "predict_output",
+              "difficulty": "easy",
+              "prompt": "¿Qué devolverá config.get(\"timeout\", 30) si config = {\"puerto\": 8080}?",
+              "explanation": "Como la clave \"timeout\" no está en el diccionario, .get() retorna el valor por defecto especificado: 30.",
+              "category": "diccionarios-sets",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "30",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "None",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "KeyError",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "8080",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py-dictionaries"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py1_mod_09",
+              "section_id": "sec_py1_09_01",
+              "lesson_id": "les_py1_09_01"
+            }
+          ]
+        },
+        {
+          "id": "les_py1_09_02",
+          "code": "L02",
+          "title": "Conjuntos (Sets): Unicidad y Operaciones Matemáticas",
+          "slug": "sets-conjuntos",
+          "position": 2,
+          "concept_id": "py-sets",
+          "objective": "Eliminar duplicados al instante y realizar uniones e intersecciones de conjuntos.",
+          "examples": [
+            {
+              "title": "Eliminación de duplicados e intersección",
+              "code": "usuarios_web = {\"ana\", \"carlos\", \"elena\", \"ana\"}\nprint(\"Usuarios únicos:\", usuarios_web)  # {\"ana\", \"carlos\", \"elena\"}\n\nadmin = {\"carlos\", \"marcos\"}\ncomunes = usuarios_web & admin\nprint(\"Admins en web:\", comunes)         # {\"carlos\"}",
+              "output": "Usuarios únicos: {'ana', 'carlos', 'elena'}\nAdmins en web: {'carlos'}",
+              "explanation": "El set descarta automáticamente el segundo \"ana\" y & halla la intersección de ambos grupos.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Intentar crear un set vacío con `{}`. En Python `{}` crea un diccionario vacío. Para un set vacío usa `set()`.",
+          "mini_exercise": {
+            "starter_code": "tags = [\"python\", \"ia\", \"python\", \"backend\"]\n# Convierte a set para eliminar duplicados\ntags_unicos = ...\nprint(tags_unicos)",
+            "instructions": "Usa set(tags) para eliminar los repetidos.",
+            "solution": "tags = [\"python\", \"ia\", \"python\", \"backend\"]\ntags_unicos = set(tags)\nprint(tags_unicos)"
+          },
+          "key_takeaways": [
+            "Los sets no permiten elementos duplicados.",
+            "set() crea un conjunto vacío ({} es un dict vacío).",
+            "Permite operaciones matemáticas: unión (|), intersección (&), diferencia (-)."
+          ],
+          "explanation": "Un **set** es una colección desordenada de elementos **únicos** entre llaves `{ }` (o creada con `set()`).\n\n1. **Cero duplicados**: Si agregas el mismo valor dos veces, el set lo conserva solo una vez. Es la técnica más rápida de Python para eliminar duplicados de una lista: `lista_sin_duplicados = list(set(lista_original))`.\n2. **Búsqueda instantánea O(1)**: Verificar si un elemento está en un set (`x in mi_set`) toma tiempo constante, mucho más rápido que recorrer una lista.\n3. **Operaciones de conjuntos**: `A | B` (unión), `A & B` (intersección), `A - B` (diferencia).",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py1_09_02",
+              "type": "predict_output",
+              "difficulty": "easy",
+              "prompt": "¿Cuántos elementos contendrá len(set([1, 1, 2, 2, 3, 3]))?",
+              "explanation": "El set descarta los duplicados dejando únicamente los valores {1, 2, 3}, por lo que su longitud es 3.",
+              "category": "diccionarios-sets",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "3",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "6",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "1",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "TypeError",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py-sets"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py1_mod_09",
+              "section_id": "sec_py1_09_01",
+              "lesson_id": "les_py1_09_02"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

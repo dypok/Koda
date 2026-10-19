@@ -1,0 +1,49 @@
+{
+  "module_code": "DA_M01",
+  "module_slug": "numpy-fundamentos",
+  "course_slug": "data-analytics",
+  "questions": [
+    {
+      "id": "q_da_01_01",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cómo se le llama en NumPy a la capacidad de operar aritméticamente entre arrays de diferentes dimensiones compatibles sin copiar datos?",
+      "explanation": "Broadcasting describe cómo NumPy trata matrices de diferentes formas durante operaciones aritméticas.",
+      "category": "numpy",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Broadcasting",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Sharding",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Pipelining",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Overfitting",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

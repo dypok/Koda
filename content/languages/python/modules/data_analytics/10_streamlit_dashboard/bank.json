@@ -1,0 +1,49 @@
+{
+  "module_code": "DA_M10",
+  "module_slug": "streamlit-dashboards",
+  "course_slug": "data-analytics",
+  "questions": [
+    {
+      "id": "q_da_10_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cómo reacciona Streamlit cuando un usuario interactúa con un widget (como mover un slider o elegir una opción)?",
+      "explanation": "El modelo de ejecución reactivo de Streamlit re-ejecuta el script completo aplicando el nuevo estado del widget de forma transparente.",
+      "category": "streamlit-dashboard",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Re-ejecuta todo el script de Python de arriba hacia abajo con el nuevo valor del widget",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Recarga la página completa del navegador con F5",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Envía un correo al administrador",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Detiene el servidor",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

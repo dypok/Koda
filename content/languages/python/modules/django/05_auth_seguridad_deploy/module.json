@@ -1,0 +1,126 @@
+{
+  "id": "dj_mod_05",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "DJ_M05",
+  "slug": "django-auth-security-deploy",
+  "course_slug": "django-enterprise",
+  "title": "Seguridad Web, Permisos y Despliegue en Producción",
+  "objective": "Blindar la aplicación contra CSRF, XSS, SQLi, gestionar grupos/permisos y configurar Gunicorn con WhiteNoise para despliegue.",
+  "description": "Pon tu aplicación Django en producción: checklist de seguridad, gestión estática con WhiteNoise y servidores WSGI.",
+  "position": 40,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 400
+  },
+  "sections": [
+    {
+      "id": "sec_dj_05_01",
+      "code": "S01",
+      "title": "Checklist de Producción y Gunicorn",
+      "slug": "seguridad-y-produccion",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_dj_05_01",
+          "code": "L01",
+          "title": "Checklist de Seguridad (DEBUG=False) y Servidor Gunicorn",
+          "slug": "produccion-gunicorn-base",
+          "position": 1,
+          "concept_id": "dj-deploy",
+          "objective": "Configurar settings para producción y servir archivos estáticos con WhiteNoise.",
+          "examples": [
+            {
+              "title": "Comando de ejecución de producción",
+              "code": "# Comando típico en Procfile o Docker\n# gunicorn mi_proyecto.wsgi:application --workers 4 --bind 0.0.0.0:8000",
+              "output": "[INFO] Starting gunicorn 22.0.0\n[INFO] Listening at: http://0.0.0.0:8000 (4 workers)",
+              "explanation": "Gunicorn distribuye la carga en 4 procesos trabajadores paralelos para alta disponibilidad.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Subir la `SECRET_KEY` quemada en el código a GitHub. Debe cargarse obligatoriamente desde variables de entorno.",
+          "mini_exercise": {
+            "starter_code": "# Verifica la configuración del proyecto antes de desplegar con:\n# python manage.py check --deploy",
+            "instructions": "Recuerda usar check --deploy para auditoría de seguridad automática.",
+            "solution": "# python manage.py check --deploy"
+          },
+          "key_takeaways": [
+            "DEBUG=False es obligatorio en producción.",
+            "ALLOWED_HOSTS previene ataques de envenenamiento de cabecera Host.",
+            "python manage.py check --deploy audita la configuración de seguridad."
+          ],
+          "explanation": "Antes de poner un proyecto Django en Internet, la regla número 1 absoluta es:\n```python\nDEBUG = False\nALLOWED_HOSTS = [\"midominio.com\", \"api.midominio.com\"]\nSECRET_KEY = os.environ[\"DJANGO_SECRET_KEY\"]\n```\n\nSi dejas `DEBUG = True` en producción, cualquier fallo revelará tu código fuente, variables de entorno y contraseñas de base de datos a los usuarios.\n\nPara servir la app usamos **Gunicorn** como servidor WSGI detrás de un reverse proxy (como Nginx o Cloudflare), y **WhiteNoise** para servir archivos estáticos eficientemente sin necesidad de un servidor web separado.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_dj_05_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Por qué es extremadamente peligroso dejar `DEBUG = True` en un entorno de producción accesible en Internet?",
+              "explanation": "La pantalla de depuración interactiva de Django revela variables de entorno, consultas SQL y secretos si DEBUG está habilitado.",
+              "category": "auth-seguridad-deploy",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Porque ante cualquier error expone trazas de código, configuraciones y credenciales sensibles a los usuarios",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Porque hace que el servidor no acepte más de 2 visitas",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Porque borra la base de datos automáticamente cada 24 horas",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Porque bloquea el puerto 80",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "dj-deploy"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "dj_mod_05",
+              "section_id": "sec_dj_05_01",
+              "lesson_id": "les_dj_05_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

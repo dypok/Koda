@@ -1,0 +1,49 @@
+{
+  "module_code": "DJ_M04",
+  "module_slug": "django-rest-framework",
+  "course_slug": "django-enterprise",
+  "questions": [
+    {
+      "id": "q_dj_04_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es el rol principal de un Serializer en Django REST Framework?",
+      "explanation": "Los serializers permiten que los datos de modelos de Django se rendericen a JSON y deserializan datos JSON entrantes validándolos antes de guardar.",
+      "category": "drf-apis",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Convertir tipos de datos complejos como QuerySets y modelos a JSON nativo y validar datos entrantes",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Encriptar el disco duro del servidor",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Generar archivos CSS",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Ejecutar pruebas unitarias",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

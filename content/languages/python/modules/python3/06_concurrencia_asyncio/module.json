@@ -1,0 +1,126 @@
+{
+  "id": "py3_mod_06",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY3_M06",
+  "slug": "concurrencia-asyncio",
+  "course_slug": "python-3",
+  "title": "Concurrencia Moderna y Asyncio",
+  "objective": "Diseñar aplicaciones concurrentes no bloqueantes con el bucle de eventos (event loop), async, await y asyncio.gather.",
+  "description": "La tecnología detrás de los servidores más veloces: atiende miles de peticiones simultáneas sin consumir hilos del sistema operativo.",
+  "position": 26,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 350
+  },
+  "sections": [
+    {
+      "id": "sec_py3_06_01",
+      "code": "S01",
+      "title": "Corrutinas y el Event Loop con asyncio",
+      "slug": "asyncio-corrutinas",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_py3_06_01",
+          "code": "L01",
+          "title": "El Event Loop, async def y await",
+          "slug": "asyncio-base",
+          "position": 1,
+          "concept_id": "py3-asyncio",
+          "objective": "Ejecutar tareas I/O concurrentes delegando el control con await.",
+          "examples": [
+            {
+              "title": "Ejecución concurrente con asyncio.gather",
+              "code": "import asyncio\n\nasync def descargar_datos(id_sensor: int):\n    # Simula espera de red no bloqueante\n    await asyncio.sleep(0.1)\n    return f\"Sensor {id_sensor}: OK\"\n\nasync def main():\n    resultados = await asyncio.gather(\n        descargar_datos(1),\n        descargar_datos(2),\n        descargar_datos(3)\n    )\n    for r in resultados:\n        print(r)\n\nasyncio.run(main())",
+              "output": "Sensor 1: OK\nSensor 2: OK\nSensor 3: OK",
+              "explanation": "Los 3 sensores se descargan concurrentemente en ~0.1s en lugar de tardar 0.3s secuenciales.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Usar funciones bloqueantes como `time.sleep()` dentro de una corrutina. `time.sleep()` congela todo el Event Loop; debes usar siempre `await asyncio.sleep()`.",
+          "mini_exercise": {
+            "starter_code": "import asyncio\nasync def saludar():\n    await asyncio.sleep(0.01)\n    return \"Hola async\"\n\n# Ejecuta con asyncio.run(saludar())\nprint(asyncio.run(saludar()))",
+            "instructions": "Comprueba el retorno asíncrono.",
+            "solution": "import asyncio\nasync def saludar():\n    await asyncio.sleep(0.01)\n    return \"Hola async\"\n\nprint(asyncio.run(saludar()))"
+          },
+          "key_takeaways": [
+            "async def crea una corrutina que debe ejecutarse en un Event Loop.",
+            "await pausa la corrutina actual y permite atender otras tareas.",
+            "asyncio.gather() ejecuta múltiples corrutinas de manera concurrente."
+          ],
+          "explanation": "En operaciones I/O-bound (como consultar una base de datos o llamar a una API web), la CPU pasa el 99% del tiempo ociosa esperando la respuesta de la red.\n\n**asyncio** implementa **multitarea cooperativa mono-hilo** mediante un **Event Loop**:\n- `async def`: Declara una **corrutina** (función especial pausible).\n- `await`: Cede voluntariamente el control del hilo mientras espera que termine una tarea asíncrona, permitiendo que el Event Loop atienda otras peticiones en ese intervalo.\n- `asyncio.gather(*tareas)`: Lanza múltiples corrutinas en paralelo y espera sus resultados.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py3_06_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Qué ocurre si llamas a una función `async def calcular():` sin poner await ni usar asyncio.run()?",
+              "explanation": "Invocar una función async def simplemente crea la corrutina; para que se ejecute debe ser planificada en el Event Loop.",
+              "category": "concurrencia-asyncio",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Retorna un objeto corrutina sin ejecutar su código interior",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Se ejecuta en un hilo separado del sistema",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Lanza SyntaxError",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Borra la función",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py3-asyncio"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py3_mod_06",
+              "section_id": "sec_py3_06_01",
+              "lesson_id": "les_py3_06_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

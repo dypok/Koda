@@ -1,0 +1,49 @@
+{
+  "module_code": "IA_M03",
+  "module_slug": "ia-salidas-estructuradas",
+  "course_slug": "ai-agents",
+  "questions": [
+    {
+      "id": "q_ia_03_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué método de una clase BaseModel de Pydantic v2 genera el diccionario JSON Schema requerido por las APIs de LLMs?",
+      "explanation": "En Pydantic v2, model_json_schema() es el método oficial que genera el estándar JSON Schema.",
+      "category": "salidas-estructuradas",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "MiModelo.model_json_schema()",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "MiModelo.get_schema()",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "MiModelo.to_json()",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "MiModelo.schema_dict()",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

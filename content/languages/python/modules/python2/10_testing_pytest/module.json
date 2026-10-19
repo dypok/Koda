@@ -1,0 +1,126 @@
+{
+  "id": "py2_mod_10",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY2_M10",
+  "slug": "testing-con-pytest",
+  "course_slug": "python-2",
+  "title": "Testing Automatizado con Pytest y Proyecto Intermedio",
+  "objective": "Escribir pruebas unitarias automatizadas con pytest, asserts idiomáticos, fixtures y parametrización de pruebas.",
+  "description": "El sello de los desarrolladores profesionales: escribe código verificado con pruebas unitarias que garanticen cero regresiones.",
+  "position": 20,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 350
+  },
+  "sections": [
+    {
+      "id": "sec_py2_10_01",
+      "code": "S01",
+      "title": "Pruebas Unitarias con pytest y asserts",
+      "slug": "pytest-asserts",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_py2_10_01",
+          "code": "L01",
+          "title": "Filosofía de Pytest y la Sentencia assert",
+          "slug": "pytest-base",
+          "position": 1,
+          "concept_id": "py2-pytest",
+          "objective": "Escribir funciones de prueba que validen la lógica de tu aplicación sin librerías complejas.",
+          "examples": [
+            {
+              "title": "Suite de pruebas con validación de excepciones",
+              "code": "import pytest\n\ndef dividir(a, b):\n    if b == 0:\n        raise ValueError(\"Divisor no puede ser 0\")\n    return a / b\n\ndef test_division_correcta():\n    assert dividir(10, 2) == 5.0\n\ndef test_division_por_cero():\n    with pytest.raises(ValueError):\n        dividir(10, 0)",
+              "output": "PASSED test_division_correcta\nPASSED test_division_por_cero",
+              "explanation": "pytest.raises verifica que la función lance exactamente la excepción esperada ante datos inválidos.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Nombrar las funciones sin el prefijo `test_`, lo cual provoca que pytest no las descubra automáticamente al ejecutar `pytest` en la terminal.",
+          "mini_exercise": {
+            "starter_code": "# Completa la prueba con assert para validar que len(\"koda\") es 4\ndef test_longitud():\n    assert ...",
+            "instructions": "Escribe: assert len(\"koda\") == 4",
+            "solution": "def test_longitud():\n    assert len(\"koda\") == 4"
+          },
+          "key_takeaways": [
+            "pytest descubre automáticamente archivos test_*.py y funciones test_*().",
+            "assert valida condiciones booleanas con mensajes de error ricos.",
+            "pytest.raises(Error) comprueba el lanzamiento de excepciones esperadas."
+          ],
+          "explanation": "En Python, el framework estándar de la industria para pruebas es **pytest**.\n\nA diferencia de otros lenguajes con métodos extensos como `assertEquals()`, en pytest solo usas la palabra nativa de Python `assert`:\n\n```python\n# test_calculadora.py\ndef test_suma_basica():\n    assert 2 + 2 == 4\n```\n\nReglas clave de pytest:\n1. Los archivos deben llamarse `test_*.py` o `*_test.py`.\n2. Las funciones de prueba deben iniciar con `def test_...()`.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py2_10_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Cómo debe llamarse una función para que pytest la ejecute como prueba de forma automática?",
+              "explanation": "Por convención de auto-descubrimiento, pytest busca funciones que comiencen con test_.",
+              "category": "testing-pytest",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Debe iniciar con el prefijo test_ (ej: def test_calcular():)",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Debe llamarse obligatoriamente main()",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Debe tener el decorador @run_now",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "No importa el nombre mientras termine en _check",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py2-pytest"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py2_mod_10",
+              "section_id": "sec_py2_10_01",
+              "lesson_id": "les_py2_10_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

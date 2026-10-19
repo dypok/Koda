@@ -1,0 +1,126 @@
+{
+  "id": "da_mod_05",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "DA_M05",
+  "slug": "matplotlib-seaborn",
+  "course_slug": "data-analytics",
+  "title": "Visualización Estática con Matplotlib y Seaborn",
+  "objective": "Graficar distribuciones, correlaciones y tendencias con Matplotlib (fig, ax) y gráficos estadísticos de alto nivel con Seaborn.",
+  "description": "Transforma tablas de números en revelaciones visuales impactantes: heatmaps, histogramas con KDE, boxplots y personalización estética.",
+  "position": 45,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 320
+  },
+  "sections": [
+    {
+      "id": "sec_da_05_01",
+      "code": "S01",
+      "title": "La Interfaz Orientada a Objetos de Matplotlib y Seaborn",
+      "slug": "matplotlib-y-seaborn",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_da_05_01",
+          "code": "L01",
+          "title": "Interfaz fig, ax en Matplotlib y Gráficos Estadísticos con Seaborn",
+          "slug": "fig-ax-seaborn-base",
+          "position": 1,
+          "concept_id": "da-visualization",
+          "objective": "Dominar la creación de figuras profesionales con la arquitectura de subplots y paletas de Seaborn.",
+          "examples": [
+            {
+              "title": "Matriz de correlación con Seaborn",
+              "code": "import pandas as pd\nimport seaborn as sns\nimport matplotlib.pyplot as plt\n\ndf = pd.DataFrame({\n    \"horas_estudio\": [2, 4, 6, 8, 10],\n    \"calificacion\": [60, 70, 80, 92, 98]\n})\ncorrelacion = df.corr()\nprint(correlacion)",
+              "output": "               horas_estudio  calificacion\nhoras_estudio       1.000000      0.993414\ncalificacion        0.993414      1.000000",
+              "explanation": "Una correlación de ~0.99 indica una relación lineal fuertemente positiva entre horas y nota.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "No cerrar las figuras con `plt.close()` en scripts por lotes o servidores web, provocando consumo acumulativo de memoria RAM.",
+          "mini_exercise": {
+            "starter_code": "# Comando para mostrar la gráfica en pantalla\n# plt.show()",
+            "instructions": "Recuerda que plt.show() abre la ventana interactiva.",
+            "solution": "# plt.show()"
+          },
+          "key_takeaways": [
+            "fig, ax = plt.subplots() es la arquitectura recomendada de Matplotlib.",
+            "Seaborn agrega estética y soporte estadístico nativo a DataFrames.",
+            "Los boxplots y heatmaps son herramientas fundamentales de diagnóstico."
+          ],
+          "explanation": "En lugar de usar el estilo procedural antiguo de pyplot (`plt.plot()`), los profesionales usan la **interfaz orientada a objetos**:\n```python\nfig, ax = plt.subplots(figsize=(8, 5))\nax.plot(x, y, label=\"Tendencia\")\nax.set_title(\"Ventas Trimestrales\")\n```\n\n**Seaborn** se construye encima de Matplotlib pero automatiza agregaciones estadísticas:\n- `sns.histplot(df[\"edad\"], kde=True)`: Histograma con curva de densidad.\n- `sns.boxplot(x=\"categoria\", y=\"precio\", data=df)`: Detección visual de cuartiles y outliers.\n- `sns.heatmap(df.corr(), annot=True, cmap=\"coolwarm\")`: Matriz de correlación visual.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_da_05_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Qué tipo de gráfica de Seaborn es la más adecuada para visualizar la matriz de correlación entre múltiples variables numéricas?",
+              "explanation": "Un mapa de calor (heatmap) codifica los coeficientes de correlación en una cuadrícula con gradiente de color.",
+              "category": "matplotlib-seaborn",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "sns.heatmap()",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "sns.lineplot()",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "sns.barplot()",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "sns.piechart()",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "da-visualization"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "da_mod_05",
+              "section_id": "sec_da_05_01",
+              "lesson_id": "les_da_05_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

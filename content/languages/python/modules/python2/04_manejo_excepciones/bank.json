@@ -1,0 +1,49 @@
+{
+  "module_code": "PY2_M04",
+  "module_slug": "manejo-de-excepciones",
+  "course_slug": "python-2",
+  "questions": [
+    {
+      "id": "q_py2_04_01",
+      "type": "find_error",
+      "difficulty": "medium",
+      "prompt": "¿Por qué la comunidad de Python desaconseja fuertemente `except: pass`?",
+      "explanation": "Un except desnudo silencia cualquier error sin informar, haciendo imposible la depuración.",
+      "category": "manejo-excepciones",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Oculta bugs críticos y excepciones del sistema como KeyboardInterrupt o MemoryError",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Porque hace que el programa consuma 100% de CPU",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Porque la palabra pass es ilegal dentro de un except",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "No está desaconsejado, es la mejor práctica de PEP 8",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

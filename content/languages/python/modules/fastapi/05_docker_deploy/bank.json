@@ -1,0 +1,49 @@
+{
+  "module_code": "FA_M05",
+  "module_slug": "fastapi-docker-deploy",
+  "course_slug": "fastapi-async",
+  "questions": [
+    {
+      "id": "q_fa_05_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "En un contenedor Docker para producción, ¿por qué es fundamental enlazar Uvicorn a la dirección 0.0.0.0 en lugar de 127.0.0.1 (localhost)?",
+      "explanation": "127.0.0.1 solo escucha peticiones dentro del contenedor mismo. 0.0.0.0 permite que el host y balanceadores de carga alcancen el servicio.",
+      "category": "docker-deploy",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Para que el servidor acepte tráfico proveniente desde fuera del contenedor (a través del puerto expuesto de Docker)",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Porque 127.0.0.1 está prohibido en Linux",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Para encriptar las conexiones",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "No hace ninguna diferencia",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "id": "py1_mod_02",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY1_M02",
+  "slug": "variables-y-tipos-de-datos",
+  "course_slug": "python-1",
+  "title": "Variables, Memoria y Tipos Primitivos",
+  "objective": "Comprender el modelo de memoria por referencias de Python y dominar los tipos int, float, str, bool y la función type().",
+  "description": "Aprende a almacenar información en memoria, cómo funciona el tipado dinámico y cómo transformar datos con conversiones explícitas (casting).",
+  "position": 2,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 2,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 160
+  },
+  "sections": [
+    {
+      "id": "sec_py1_02_01",
+      "code": "S01",
+      "title": "Variables y Tipos Fundamentales",
+      "slug": "variables-y-tipos-fundamentales",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 35,
+      "lessons": [
+        {
+          "id": "les_py1_02_01",
+          "code": "L01",
+          "title": "Nombres, Referencias y Tipado Dinámico",
+          "slug": "nombres-y-referencias",
+          "position": 1,
+          "concept_id": "py-variables-memory",
+          "objective": "Entender que las variables en Python son etiquetas que apuntan a objetos en memoria.",
+          "examples": [
+            {
+              "title": "Inspección de tipos con type()",
+              "code": "puntos = 100\nratio = 4.5\njugador = \"Alex\"\nactivo = True\n\nprint(type(puntos))   # <class \"int\">\nprint(type(ratio))    # <class \"float\">\nprint(type(jugador))  # <class \"str\">\nprint(type(activo))   # <class \"bool\">",
+              "output": "<class 'int'>\n<class 'float'>\n<class 'str'>\n<class 'bool'>",
+              "explanation": "type() revela la clase del objeto al que apunta la variable en ese instante.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Escribir booleanos en minúscula (`true` o `false`), lo que genera un NameError porque Python busca una variable con ese nombre.",
+          "mini_exercise": {
+            "starter_code": "# Declara tu edad como int y tu altura en metros como float\nedad = ...\naltura = ...",
+            "instructions": "Asigna valores válidos y muestra sus tipos con print(type(...)).",
+            "solution": "edad = 25\naltura = 1.75\nprint(type(edad))\nprint(type(altura))"
+          },
+          "key_takeaways": [
+            "Las variables son etiquetas que apuntan a objetos en memoria.",
+            "Python infiere el tipo automáticamente en tiempo de ejecución.",
+            "Los tipos básicos son int, float, str y bool (True/False con mayúscula)."
+          ],
+          "explanation": "En otros lenguajes (como C o Java), una variable es una caja rígida donde solo cabe un tipo de dato. En Python, **una variable es una etiqueta adhesiva con nombre** que se pega a un objeto que vive en la memoria.\n\nCuando escribes `edad = 25`, Python crea un objeto entero `25` en memoria y le pega la etiqueta `edad`. Si luego haces `edad = \"veinticinco\"`, despega la etiqueta y se la pega al texto. Esto se llama **tipado dinámico**.\n\nLos 4 tipos primitivos esenciales son:\n- **int**: Enteros sin decimales (`10`, `-3`, `1_000_000`).\n- **float**: Números reales con coma flotante (`3.14159`, `-0.5`).\n- **str**: Cadenas de caracteres alfanuméricos (`\"Koda\"`, `'Backend'`).\n- **bool**: Valores de verdad lógica (`True` o `False`, con mayúscula inicial).",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py1_02_01",
+              "type": "predict_output",
+              "difficulty": "easy",
+              "prompt": "¿Cuál es el tipo de dato resultante de la variable x?",
+              "prompt_code": "x = \"100.5\"\nprint(type(x))",
+              "explanation": "Al estar envuelto entre comillas (\"100.5\"), Python lo interpreta como una cadena de texto (str), sin importar que contenga dígitos y punto.",
+              "category": "variables",
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "<class 'str'>",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "<class 'float'>",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "<class 'int'>",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "<class 'number'>",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py-variables-memory"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py1_mod_02",
+              "section_id": "sec_py1_02_01",
+              "lesson_id": "les_py1_02_01"
+            }
+          ]
+        },
+        {
+          "id": "les_py1_02_02",
+          "code": "L02",
+          "title": "Conversión de Tipos (Casting Explícito)",
+          "slug": "casting-explicito",
+          "position": 2,
+          "concept_id": "py-casting",
+          "objective": "Transformar datos de un tipo a otro de manera segura mediante funciones constructoras.",
+          "examples": [
+            {
+              "title": "Conversión segura de entrada a cálculo numérico",
+              "code": "entrada_usuario = \"15\"\nprecio = int(entrada_usuario)\ntotal = precio * 2\nprint(\"El total es:\", total)",
+              "output": "El total es: 30",
+              "explanation": "int(entrada_usuario) transforma el texto \"15\" en el número 15 antes de multiplicarlo.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Intentar hacer int(\"15.5\") directamente (ValueError: invalid literal for int() with base 10: \"15.5\"). Si el texto contiene decimales, primero debes convertir a float: int(float(\"15.5\")).",
+          "mini_exercise": {
+            "starter_code": "valor_texto = \"50\"\n# Conviértelo a entero y súmale 10\nresultado = ...\nprint(resultado)",
+            "instructions": "Convierte valor_texto a int y suma 10 para obtener 60.",
+            "solution": "valor_texto = \"50\"\nresultado = int(valor_texto) + 10\nprint(resultado)"
+          },
+          "key_takeaways": [
+            "El casting convierte datos explícitamente usando int(), float(), str(), bool().",
+            "Convertir un texto con formato no numérico a int lanza ValueError.",
+            "En Python el tipado es fuerte: no puedes sumar \"5\" + 5 sin convertir previamente."
+          ],
+          "explanation": "Muy a menudo recibes datos como texto (por ejemplo, desde un formulario o la terminal) y necesitas convertirlos a números para operar matemáticamente con ellos. A este proceso se le llama **casting** o conversión de tipos.\n\nPython provee funciones con el mismo nombre del tipo:\n- `int(\"42\")` -> Devuelve el entero `42`.\n- `float(\"3.14\")` -> Devuelve el flotante `3.14`.\n- `str(100)` -> Devuelve la cadena `\"100\"`.\n- `bool(1)` -> Devuelve `True` (`0`, `\"\"`, `None` se evalúan como `False`).",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py1_02_02",
+              "type": "single_choice",
+              "difficulty": "medium",
+              "prompt": "¿Qué ocurre al ejecutar: `print(\"Nivel \" + str(1))`?",
+              "explanation": "Al usar str(1), el número 1 se transforma en la cadena \"1\", permitiendo concatenar perfectamente ambas cadenas con el operador +.",
+              "category": "variables",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Imprime \"Nivel 1\" sin errores",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Lanza TypeError porque no se pueden sumar números y cadenas",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Imprime \"Nivel + 1\"",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Lanza ValueError",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py-casting"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py1_mod_02",
+              "section_id": "sec_py1_02_01",
+              "lesson_id": "les_py1_02_02"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

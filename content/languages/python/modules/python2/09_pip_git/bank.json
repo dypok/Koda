@@ -1,0 +1,49 @@
+{
+  "module_code": "PY2_M09",
+  "module_slug": "pip-entornos-y-git",
+  "course_slug": "python-2",
+  "questions": [
+    {
+      "id": "q_py2_09_01",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué comando de pip genera la lista de paquetes instalados con sus versiones exactas?",
+      "explanation": "pip freeze produce la salida en formato paquete==version lista para redirigir a requirements.txt.",
+      "category": "pip-git",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "pip freeze",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "pip export",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "pip list --save",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "pip lock",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

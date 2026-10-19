@@ -124,6 +124,54 @@
     "is_active": true
   },
   {
+    "slug": "data-analytics",
+    "track_slug": "python",
+    "name": "Rama Análisis de Datos",
+    "description": "NumPy, Pandas, EDA, Matplotlib, Seaborn, Plotly, estadística aplicada, SQL, Scikit-learn y Streamlit.",
+    "color": "#06B6D4",
+    "icon": "IconChartBar",
+    "topology": {
+      "tier": 3,
+      "lane": 0
+    },
+    "prerequisites": [
+      "python-3"
+    ],
+    "edges": [
+      {
+        "target_course_slug": "python-apex",
+        "connection_type": "unlocks",
+        "visual_effect_code": "dotted_amber_pulse",
+        "edge_color": "#06B6D4"
+      }
+    ],
+    "is_active": true
+  },
+  {
+    "slug": "ai-agents",
+    "track_slug": "python",
+    "name": "Rama Python + IA: Crear tu Agente",
+    "description": "LLMs, APIs, prompting, salidas estructuradas, function calling, memoria, RAG, bucle ReAct y agente multi-herramienta.",
+    "color": "#EC4899",
+    "icon": "IconRobot",
+    "topology": {
+      "tier": 3,
+      "lane": 1
+    },
+    "prerequisites": [
+      "python-3"
+    ],
+    "edges": [
+      {
+        "target_course_slug": "python-apex",
+        "connection_type": "unlocks",
+        "visual_effect_code": "dotted_amber_pulse",
+        "edge_color": "#EC4899"
+      }
+    ],
+    "is_active": true
+  },
+  {
     "slug": "python-apex",
     "track_slug": "python",
     "name": "Apex Master Gate: Proyecto Integrador",

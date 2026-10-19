@@ -1,0 +1,126 @@
+{
+  "id": "ia_mod_05",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "IA_M05",
+  "slug": "ia-memoria-y-contexto",
+  "course_slug": "ai-agents",
+  "title": "Gestión de Memoria y Ventana de Contexto (Context Window)",
+  "objective": "Implementar arquitecturas de memoria para agentes: ventana deslizante (sliding buffer), resumen progresivo y persistencia de estado.",
+  "description": "Los LLMs no tienen memoria por defecto (son stateless): aprende a construir sistemas que recuerden conversaciones largas sin desbordar el límite de tokens.",
+  "position": 55,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 320
+  },
+  "sections": [
+    {
+      "id": "sec_ia_05_01",
+      "code": "S01",
+      "title": "Estrategias de Memoria para Agentes",
+      "slug": "estrategias-memoria",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_ia_05_01",
+          "code": "L01",
+          "title": "Memoria de Ventana Deslizante y Resumen Periódico",
+          "slug": "memoria-sliding-summary",
+          "position": 1,
+          "concept_id": "ia-memory",
+          "objective": "Evitar desbordar la ventana de contexto y controlar el costo de tokens en conversaciones prolongadas.",
+          "examples": [
+            {
+              "title": "Implementación de buffer de memoria deslizante en Python",
+              "code": "class MemoriaDeslizante:\n    def __init__(self, max_turnos=4):\n        self.historial = []\n        self.max_turnos = max_turnos\n        \n    def agregar(self, rol, contenido):\n        self.historial.append({\"role\": rol, \"content\": contenido})\n        if len(self.historial) > self.max_turnos:\n            self.historial.pop(0)  # Descarta el mensaje más antiguo\n            \nmem = MemoriaDeslizante(max_turnos=2)\nmem.agregar(\"user\", \"Hola\")\nmem.agregar(\"assistant\", \"¡Hola!\")\nmem.agregar(\"user\", \"¿Cómo estás?\")\nprint(\"Mensajes conservados:\", len(mem.historial))",
+              "output": "Mensajes conservados: 2",
+              "explanation": "La memoria deslizante descarta los mensajes viejos para mantenerse siempre por debajo del presupuesto de tokens.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Reenviar historiales gigantescos sin podar, lo que incrementa el costo financiero de la API exponencialmente.",
+          "mini_exercise": {
+            "starter_code": "# Crea un historial que conserve solo los últimos 3 mensajes usando slicing\nhistorial = [\"m1\", \"m2\", \"m3\", \"m4\", \"m5\"]\nultimos = historial[-3:]\nprint(ultimos)",
+            "instructions": "Verifica que ultimos contenga [\"m3\", \"m4\", \"m5\"].",
+            "solution": "historial = [\"m1\", \"m2\", \"m3\", \"m4\", \"m5\"]\nultimos = historial[-3:]\nprint(ultimos)"
+          },
+          "key_takeaways": [
+            "Los LLMs son stateless; el estado lo gestiona tu aplicación.",
+            "Sliding Window conserva los últimos K mensajes para limitar tokens.",
+            "El resumen periódico condensa la historia pasada en el system prompt."
+          ],
+          "explanation": "Cada llamada a una API de LLM es totalmente independiente (stateless). Para que un agente \"recuerde\", debemos reenviarle todo el historial de mensajes en cada nueva interacción.\n\nProblema: A medida que la charla crece, el costo de tokens se dispara y eventualmente superas el límite de la ventana de contexto (Context Window).\n\nSoluciones de ingeniería:\n1. **Sliding Window Buffer**: Conserva únicamente los últimos `K` mensajes (ej: últimos 10 turnos).\n2. **Conversation Summary**: Un modelo más ligero y económico (ej: GPT-4o-mini o Gemini Flash) resume periódicamente los primeros 20 mensajes en un párrafo compacto que se inyecta en el `system prompt`.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_ia_05_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Por qué no es viable en producción reenviar indefinidamente todo el historial completo de una conversación de 100 mensajes en cada turno?",
+              "explanation": "El costo y la latencia crecen linealmente con la cantidad de tokens enviados; la gestión de memoria compacta es obligatoria en producción.",
+              "category": "memoria-contexto",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Porque incrementa drásticamente el costo de tokens, la latencia y eventualmente excede el límite de la ventana de contexto",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Porque los servidores de IA rechazan mensajes con números pares",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Porque la memoria RAM del usuario se borra",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "No hay problema, es la práctica estándar",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "ia-memory"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "ia_mod_05",
+              "section_id": "sec_ia_05_01",
+              "lesson_id": "les_ia_05_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

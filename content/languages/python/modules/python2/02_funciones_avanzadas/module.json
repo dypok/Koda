@@ -1,0 +1,126 @@
+{
+  "id": "py2_mod_02",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY2_M02",
+  "slug": "funciones-avanzadas",
+  "course_slug": "python-2",
+  "title": "Funciones Avanzadas: *args, **kwargs y Lambdas",
+  "objective": "Escribir funciones flexibles con cantidad variable de argumentos posicionales (*args) y nombrados (**kwargs), junto con funciones anónimas lambda.",
+  "description": "Lleva tus funciones al siguiente nivel: parámetros dinámicos, empaquetado/desempaquetado y funciones de primer orden.",
+  "position": 12,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 230
+  },
+  "sections": [
+    {
+      "id": "sec_py2_02_01",
+      "code": "S01",
+      "title": "Empaquetado *args y **kwargs",
+      "slug": "args-kwargs",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 45,
+      "lessons": [
+        {
+          "id": "les_py2_02_01",
+          "code": "L01",
+          "title": "*args y **kwargs en Profundidad",
+          "slug": "args-y-kwargs-base",
+          "position": 1,
+          "concept_id": "py2-args-kwargs",
+          "objective": "Recibir una cantidad arbitraria de argumentos en tus funciones.",
+          "examples": [
+            {
+              "title": "Función sumadora flexible y logger de metadatos",
+              "code": "def sumar_todo(*numeros):\n    return sum(numeros)\n\ndef registrar_evento(evento, **metadata):\n    print(f\"Evento: {evento}\")\n    for k, v in metadata.items():\n        print(f\"  {k}: {v}\")\n\nprint(\"Suma:\", sumar_todo(10, 20, 30, 40))\nregistrar_evento(\"LOGIN\", usuario=\"alex\", ip=\"192.168.1.1\", exito=True)",
+              "output": "Suma: 100\nEvento: LOGIN\n  usuario: alex\n  ip: 192.168.1.1\n  exito: True",
+              "explanation": "sumar_todo acepta cualquier número de argumentos como tupla, y registrar_evento recibe pares clave-valor como dict.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Colocar *args después de **kwargs. El orden estricto de parámetros en Python es: posicionales, *args, por defecto, **kwargs.",
+          "mini_exercise": {
+            "starter_code": "# Crea una función que multiplique todos los números pasados en *args\ndef multiplicar(*nums):\n    res = 1\n    for n in nums:\n        res *= n\n    return res\n\nprint(multiplicar(2, 3, 4))",
+            "instructions": "Verifica que la función retorne 24.",
+            "solution": "def multiplicar(*nums):\n    res = 1\n    for n in nums:\n        res *= n\n    return res\n\nprint(multiplicar(2, 3, 4))"
+          },
+          "key_takeaways": [
+            "*args empaqueta argumentos posicionales en una tupla.",
+            "**kwargs empaqueta argumentos nombrados en un diccionario.",
+            "El orden estricto es obligatorio en la cabecera def."
+          ],
+          "explanation": "En muchas situaciones no sabes cuántos argumentos pasará el usuario:\n- `*args` (arguments): Empaqueta todos los argumentos posicionales adicionales en una **tupla**.\n- `**kwargs` (keyword arguments): Empaqueta todos los argumentos nombrados adicionales en un **diccionario**.\n\nEl nombre de la variable no es lo importante; el poder reside en el operador asterisco (`*` y `**`).",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py2_02_01",
+              "type": "predict_output",
+              "difficulty": "easy",
+              "prompt": "¿De qué tipo es args dentro de una función definida como def f(*args)?",
+              "explanation": "*args empaqueta siempre en una tupla inmutable.",
+              "category": "funciones-avanzadas",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "tuple",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "list",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "dict",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "set",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py2-args-kwargs"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py2_mod_02",
+              "section_id": "sec_py2_02_01",
+              "lesson_id": "les_py2_02_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

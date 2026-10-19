@@ -1,0 +1,49 @@
+{
+  "module_code": "IA_M01",
+  "module_slug": "ia-llms-y-prompts",
+  "course_slug": "ai-agents",
+  "questions": [
+    {
+      "id": "q_ia_01_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿En qué consiste la técnica de Few-Shot Prompting?",
+      "explanation": "Few-Shot proporciona demostraciones en el contexto para condicionar el patrón de respuesta sin modificar los pesos del modelo.",
+      "category": "llms-prompts",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Incluir dentro del prompt algunos ejemplos de pares de entrada y salida esperada para guiar al modelo",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Entrenar el modelo desde cero con millones de libros",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Limitar el prompt a menos de 5 palabras",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Ejecutar el modelo en 4 tarjetas gráficas",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

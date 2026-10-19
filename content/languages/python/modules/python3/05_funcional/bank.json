@@ -1,0 +1,49 @@
+{
+  "module_code": "PY3_M05",
+  "module_slug": "programacion-funcional",
+  "course_slug": "python-3",
+  "questions": [
+    {
+      "id": "q_py3_05_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál función de itertools permite encadenar múltiples listas en un solo iterador continuo?",
+      "explanation": "itertools.chain(lista1, lista2) recorre ambas secuencias consecutivamente sin crear una lista intermedia.",
+      "category": "funcional",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "itertools.chain()",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "itertools.concat()",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "itertools.merge()",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "itertools.join()",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

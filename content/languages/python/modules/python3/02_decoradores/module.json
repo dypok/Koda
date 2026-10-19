@@ -1,0 +1,126 @@
+{
+  "id": "py3_mod_02",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY3_M02",
+  "slug": "decoradores",
+  "course_slug": "python-3",
+  "title": "Decoradores, Closures y functools.wraps",
+  "objective": "Interceptar y extender el comportamiento de funciones mediante closures, el azúcar sintáctico @ y preservar metadatos con @functools.wraps.",
+  "description": "La herramienta definitiva de metaprogramación en Python: implementa sistemas de autenticación, medición de tiempos y registro de auditoría sin tocar el código original.",
+  "position": 22,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 300
+  },
+  "sections": [
+    {
+      "id": "sec_py3_02_01",
+      "code": "S01",
+      "title": "Closures y Creación de Decoradores",
+      "slug": "closures-decoradores",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_py3_02_01",
+          "code": "L01",
+          "title": "Anatomía de un Decorador con @functools.wraps",
+          "slug": "anatomia-decorador",
+          "position": 1,
+          "concept_id": "py3-decorators",
+          "objective": "Construir decoradores profesionales que admitan cualquier firma (*args, **kwargs) y preserven docstrings.",
+          "examples": [
+            {
+              "title": "Decorador medidor de tiempo de ejecución (benchmark)",
+              "code": "import time\nfrom functools import wraps\n\ndef cronometrar(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        inicio = time.perf_counter()\n        resultado = func(*args, **kwargs)\n        duracion = time.perf_counter() - inicio\n        print(f\"[{func.__name__}] tomó {duracion:.5f}s\")\n        return resultado\n    return wrapper\n\n@cronometrar\ndef tarea_pesada():\n    return sum(i * i for i in range(100_000))\n\nres = tarea_pesada()\nprint(\"Nombre preservado:\", tarea_pesada.__name__)",
+              "output": "[tarea_pesada] tomó 0.00512s\nNombre preservado: tarea_pesada",
+              "explanation": "@wraps preserva tarea_pesada.__name__ intacto en lugar de mostrar \"wrapper\".",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Olvidar el return en la función wrapper interior. Si olvidas `return func(*args, **kwargs)`, la función decorada retornará `None`.",
+          "mini_exercise": {
+            "starter_code": "def mayusculas(func):\n    def wrapper():\n        return func().upper()\n    return wrapper\n\n@mayusculas\ndef saludo():\n    return \"hola koda\"\n\nprint(saludo())",
+            "instructions": "Observa cómo el decorador transforma la salida en \"HOLA KODA\".",
+            "solution": "def mayusculas(func):\n    def wrapper():\n        return func().upper()\n    return wrapper\n\n@mayusculas\ndef saludo():\n    return \"hola koda\"\n\nprint(saludo())"
+          },
+          "key_takeaways": [
+            "Un decorador envuelve una función existente sin alterar su código fuente.",
+            "*args y **kwargs en el wrapper garantizan compatibilidad universal.",
+            "@wraps de functools conserva la identidad y metadatos de la función original."
+          ],
+          "explanation": "Un **decorador** es una función que recibe otra función como argumento, le añade superpoderes antes o después de ejecutarla, y devuelve una función modificada (wrapper).\n\nEl símbolo `@mi_decorador` es simplemente un atajo sintáctico de: `funcion_original = mi_decorador(funcion_original)`.\n\nPara que la función decorada no pierda su nombre original ni sus docstrings, siempre debemos usar `@functools.wraps(func)` en el wrapper interior.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py3_02_01",
+              "type": "single_choice",
+              "difficulty": "medium",
+              "prompt": "¿Por qué es indispensable usar @functools.wraps(func) al crear un decorador?",
+              "explanation": "Sin @wraps, las herramientas de introspección, testing y depuración verán el nombre genérico \"wrapper\" en lugar del nombre real de la función.",
+              "category": "decoradores",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Para preservar el nombre original (__name__) y la documentación (__doc__) de la función decorada",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Para que el código se ejecute en múltiples hilos",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Para compilar la función a lenguaje ensamblador",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Es puramente estético y no tiene ningún efecto",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py3-decorators"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py3_mod_02",
+              "section_id": "sec_py3_02_01",
+              "lesson_id": "les_py3_02_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

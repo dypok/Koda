@@ -1,0 +1,175 @@
+{
+  "module_code": "PY1_M03",
+  "module_slug": "operadores-y-expresiones",
+  "course_slug": "python-1",
+  "questions": [
+    {
+      "id": "q_py1_03_01",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué devuelve print(2 ** 3 ** 2)? (Nota: la potencia en Python asocia de derecha a izquierda)",
+      "explanation": "Las potencias se evalúan de derecha a izquierda: 3 ** 2 = 9, y luego 2 ** 9 = 512.",
+      "category": "operadores",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "512",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "64",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "36",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "18",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    },
+    {
+      "id": "q_py1_03_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es la forma correcta y pythónica de verificar si una variable num está entre 10 y 20 (inclusive)?",
+      "explanation": "Python soporta comparación encadenada 10 <= num <= 20, siendo la sintaxis más limpia y pythónica.",
+      "category": "operadores",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "10 <= num <= 20",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "num >= 10 && num <= 20",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "10 <= num AND num <= 20",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "between(num, 10, 20)",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    },
+    {
+      "id": "q_py1_03_03",
+      "type": "find_error",
+      "difficulty": "medium",
+      "prompt": "¿Qué error hay en: `if x = 10:`?",
+      "explanation": "= asigna un valor a una variable. Para verificar si x es igual a 10 se debe usar el comparador de igualdad ==.",
+      "category": "operadores",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Se usó el operador de asignación (=) en vez del de comparación (==)",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Falta un punto y coma al final",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "El número 10 debe ir entre comillas",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "No se puede usar la palabra if en Python",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    },
+    {
+      "id": "q_py1_03_04",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué valor produce 16 % 5?",
+      "explanation": "16 dividido entre 5 cabe a 3 con residuo 1 (5 * 3 = 15; 16 - 15 = 1).",
+      "category": "operadores",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "1",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "3",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "3.2",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "0",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

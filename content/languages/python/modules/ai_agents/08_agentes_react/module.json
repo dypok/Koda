@@ -1,0 +1,126 @@
+{
+  "id": "ia_mod_08",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "IA_M08",
+  "slug": "ia-agentes-bucle-react",
+  "course_slug": "ai-agents",
+  "title": "Arquitectura de Agentes Autónomos: El Bucle ReAct",
+  "objective": "Implementar el bucle de razonamiento y acción ReAct (Thought -> Action -> Observation) para agentes con autonomía de múltiples pasos.",
+  "description": "De chatbots pasivos a agentes autónomos: construye sistemas capaces de planificar, evaluar el entorno y tomar medidas correctivas hasta cumplir su meta.",
+  "position": 58,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 400
+  },
+  "sections": [
+    {
+      "id": "sec_ia_08_01",
+      "code": "S01",
+      "title": "El Bucle de Razonamiento ReAct",
+      "slug": "bucle-react",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 22,
+      "xp_on_complete": 55,
+      "lessons": [
+        {
+          "id": "les_ia_08_01",
+          "code": "L01",
+          "title": "El Patrón ReAct: Thought, Action, Observation",
+          "slug": "react-loop-base",
+          "position": 1,
+          "concept_id": "ia-react-pattern",
+          "objective": "Programar un bucle while que permita al agente ejecutar múltiples herramientas encadenadas hasta alcanzar la solución.",
+          "examples": [
+            {
+              "title": "Estructura simplificada del bucle de un agente autónomo",
+              "code": "def ejecutar_agente(objetivo, max_pasos=5):\n    paso = 0\n    while paso < max_pasos:\n        paso += 1\n        # 1. El LLM decide si llama herramienta o emite respuesta\n        decision = \"FINAL_ANSWER\" if paso == 2 else \"CALL_TOOL\"\n        if decision == \"FINAL_ANSWER\":\n            return f\"Objetivo cumplido en el paso {paso}.\"\n    return \"Límite de pasos alcanzado sin finalizar.\"",
+              "output": "Objetivo cumplido en el paso 2.",
+              "explanation": "El bucle while con max_pasos es el guardrail fundamental para evitar bucles infinitos en agentes autónomos.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "No poner un límite máximo de iteraciones (`max_iterations = 10`) en el bucle del agente. Si el modelo entra en un bucle lógico alucinatorio, puede agotar todo tu saldo de API en minutos.",
+          "mini_exercise": {
+            "starter_code": "# Siempre define un límite de pasos para evitar bucles infinitos\nMAX_PASOS_AGENTE = 10\nprint(\"Límite seguro configurado:\", MAX_PASOS_AGENTE)",
+            "instructions": "Verifica la variable de protección.",
+            "solution": "MAX_PASOS_AGENTE = 10\nprint(\"Límite seguro configurado:\", MAX_PASOS_AGENTE)"
+          },
+          "key_takeaways": [
+            "ReAct combina pensamiento (razonamiento interno) y acción (uso de herramientas).",
+            "El agente itera dinámicamente según las observaciones que recibe.",
+            "Un límite max_iterations es un guardrail obligatorio de seguridad."
+          ],
+          "explanation": "El patrón **ReAct (Reasoning + Acting)** publicado por investigadores de Princeton y Google es la base de los agentes autónomos modernos:\n\n1. **Thought (Pensamiento)**: El agente reflexiona sobre el estado actual y su objetivo: *\"Necesito saber el precio de las acciones de Apple hoy y compararlo con el de Microsoft\"*\n2. **Action (Acción)**: Decide qué herramienta ejecutar y con qué argumentos: `obtener_precio(\"AAPL\")`\n3. **Observation (Observación)**: Lee el resultado devuelto por la herramienta: `225.50 USD`\n4. **Repite el bucle**: Razona con la nueva información y ejecuta la siguiente herramienta hasta que determina que tiene todo lo necesario para emitir la **Final Answer**.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_ia_08_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "En la arquitectura de agentes autónomos ReAct, ¿qué representa la fase de \"Observation\"?",
+              "explanation": "Observation es la retroalimentación del mundo exterior (el retorno de la tool) que permite al agente evaluar si cumplió su objetivo o requiere otra acción.",
+              "category": "agentes-react",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "El resultado devuelto por la herramienta ejecutada, el cual se reinyecta al modelo para el siguiente razonamiento",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Mirar al usuario a través de la webcam",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Un error fatal del sistema operativo",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "El guardado del código en Git",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "ia-react-pattern"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "ia_mod_08",
+              "section_id": "sec_ia_08_01",
+              "lesson_id": "les_ia_08_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

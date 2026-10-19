@@ -1,0 +1,126 @@
+{
+  "id": "da_mod_10",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "DA_M10",
+  "slug": "streamlit-dashboards",
+  "course_slug": "data-analytics",
+  "title": "Dashboards con Streamlit y Storytelling con Dataset Real",
+  "objective": "Construir una aplicación web interactiva completa en Python con Streamlit, sliders reactivos, filtros en tiempo real y storytelling con datos.",
+  "description": "El proyecto final de Análisis de Datos: convierte tus notebooks en una aplicación web interactiva lista para presentar a clientes y directivos.",
+  "position": 50,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 450
+  },
+  "sections": [
+    {
+      "id": "sec_da_10_01",
+      "code": "S01",
+      "title": "Construcción de Dashboards con Streamlit",
+      "slug": "streamlit-app",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 22,
+      "xp_on_complete": 55,
+      "lessons": [
+        {
+          "id": "les_da_10_01",
+          "code": "L01",
+          "title": "Widgets Reactivos en Streamlit: st.sidebar, st.dataframe y st.plotly_chart",
+          "slug": "streamlit-base",
+          "position": 1,
+          "concept_id": "da-streamlit",
+          "objective": "Construir una aplicación analítica completa en un solo archivo Python sin tocar HTML ni JavaScript.",
+          "examples": [
+            {
+              "title": "Estructura canónica de un dashboard Streamlit",
+              "code": "import streamlit as st\nimport pandas as pd\nimport plotly.express as px\n\nst.title(\"🦊 Koda Analytics Hub\")\nst.sidebar.header(\"Filtros\")\n\ndf = pd.DataFrame({\n    \"categoria\": [\"AI\", \"Web\", \"Cloud\", \"AI\"],\n    \"ventas\": [120, 90, 80, 150]\n})\n\ncat = st.sidebar.selectbox(\"Filtrar por categoría\", [\"Todas\"] + list(df[\"categoria\"].unique()))\nif cat != \"Todas\":\n    df = df[df[\"categoria\"] == cat]\n\nst.metric(label=\"Total Ventas\", value=f\"${df['ventas'].sum():,}\")\nst.dataframe(df)",
+              "output": "Dashboard interactivo servido en http://localhost:8501",
+              "explanation": "Streamlit convierte código de análisis Python en una interfaz web elegante y reactiva.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "No cachear la carga de datasets pesados con `@st.cache_data`. Sin caché, mover un slider volverá a leer el archivo de disco cada vez.",
+          "mini_exercise": {
+            "starter_code": "# Comando para ejecutar una app Streamlit en la terminal\n# streamlit run app.py",
+            "instructions": "Recuerda el comando de arranque de Streamlit.",
+            "solution": "# streamlit run app.py"
+          },
+          "key_takeaways": [
+            "Streamlit no requiere conocimientos de frontend (HTML/CSS/JS).",
+            "@st.cache_data optimiza la carga de datos en memoria.",
+            "Se integra nativamente con DataFrames de Pandas y figuras de Plotly."
+          ],
+          "explanation": "**Streamlit** es el estándar de oro para crear aplicaciones web de datos en minutos:\n- Cada vez que un usuario mueve un control deslizante (`slider`) o cambia un menú (`selectbox`), Streamlit re-ejecuta el script de arriba a abajo reactivamente.\n- `st.title(\"Mi Dashboard\")`: Título principal.\n- `st.sidebar.selectbox(...)`: Controles de filtrado en la barra lateral.\n- `st.plotly_chart(fig, use_container_width=True)`: Renderiza visualizaciones interactivas de Plotly adaptadas al ancho de pantalla.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_da_10_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Qué decorador de Streamlit se utiliza para almacenar en caché los resultados de carga de un dataset pesado y evitar recargas lentas?",
+              "explanation": "@st.cache_data es el decorador oficial y recomendado de Streamlit para cachear datos y cálculos puros.",
+              "category": "streamlit-dashboard",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "@st.cache_data",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "@st.memo",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "@st.freeze",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "@st.keep",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "da-streamlit"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "da_mod_10",
+              "section_id": "sec_da_10_01",
+              "lesson_id": "les_da_10_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "module_code": "PY2_M10",
+  "module_slug": "testing-con-pytest",
+  "course_slug": "python-2",
+  "questions": [
+    {
+      "id": "q_py2_10_01",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué ocurre al ejecutar `assert 5 == 10` en Python sin capturar?",
+      "explanation": "Si la expresión de un assert evalúa a False, Python lanza inmediatamente un AssertionError.",
+      "category": "testing-pytest",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Lanza una excepción de tipo AssertionError",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Retorna False silenciosamente",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Imprime un mensaje en la terminal",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Convierte el 5 en 10",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

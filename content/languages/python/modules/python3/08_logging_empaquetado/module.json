@@ -1,0 +1,126 @@
+{
+  "id": "py3_mod_08",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY3_M08",
+  "slug": "logging-y-empaquetado",
+  "course_slug": "python-3",
+  "title": "Logging Profesional y Empaquetado PyProject",
+  "objective": "Reemplazar print() por el módulo logging con niveles (DEBUG, INFO, ERROR), handlers estructurados y empaquetar librerías con pyproject.toml.",
+  "description": "Deja de usar print para depurar en producción: implementa auditoría profesional de logs y empaqueta tus herramientas para compartirlas.",
+  "position": 28,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 300
+  },
+  "sections": [
+    {
+      "id": "sec_py3_08_01",
+      "code": "S01",
+      "title": "Módulo logging y Configuración de Handlers",
+      "slug": "logging-handlers",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 45,
+      "lessons": [
+        {
+          "id": "les_py3_08_01",
+          "code": "L01",
+          "title": "Jerarquía de Logs: DEBUG, INFO, WARNING, ERROR, CRITICAL",
+          "slug": "logging-niveles",
+          "position": 1,
+          "concept_id": "py3-logging",
+          "objective": "Configurar un logger con formato, niveles de severidad y destinos múltiples (consola y archivo).",
+          "examples": [
+            {
+              "title": "Logger con formato profesional",
+              "code": "import logging\n\nlogger = logging.getLogger(\"koda_app\")\nlogging.basicConfig(\n    level=logging.INFO,\n    format=\"%(asctime)s [%(levelname)s] %(name)s: %(message)s\",\n    datefmt=\"%H:%M:%S\"\n)\n\nlogger.info(\"Servidor iniciado en puerto 8000\")\nlogger.warning(\"Uso de memoria al 82%\")\nlogger.error(\"No se pudo conectar a la base de datos\")",
+              "output": "12:00:00 [INFO] koda_app: Servidor iniciado en puerto 8000\n12:00:00 [WARNING] koda_app: Uso de memoria al 82%\n12:00:00 [ERROR] koda_app: No se pudo conectar a la base de datos",
+              "explanation": "El log incluye timestamp, nivel y nombre del módulo emisor automáticamente.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Llamar a `logging.basicConfig()` múltiples veces; solo la primera invocación tiene efecto.",
+          "mini_exercise": {
+            "starter_code": "import logging\n# Registra un mensaje de advertencia con logging.warning\nlogging.warning(\"...\")",
+            "instructions": "Usa logging.warning(\"Espacio en disco bajo\").",
+            "solution": "import logging\nlogging.warning(\"Espacio en disco bajo\")"
+          },
+          "key_takeaways": [
+            "logging sustituye a print() en aplicaciones reales.",
+            "Permite filtrar qué mensajes mostrar cambiando el nivel mínimo.",
+            "Los logs pueden enviarse a archivos, consola o servicios en la nube."
+          ],
+          "explanation": "En servidores de producción, los `print()` se pierden y no registran fecha ni nivel de gravedad. El módulo estándar `logging` resuelve esto:\n\n1. `DEBUG`: Información detallada para diagnóstico en desarrollo.\n2. `INFO`: Confirmación de eventos esperados en el flujo normal.\n3. `WARNING`: Alerta de algo imprevisto pero que permite continuar.\n4. `ERROR`: Falla en una función o petición concreta.\n5. `CRITICAL`: Error fatal que detiene el servicio.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py3_08_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "Si un logger tiene configurado el nivel INFO, ¿cuál de los siguientes mensajes NO se mostrará?",
+              "explanation": "DEBUG tiene un nivel de severidad inferior a INFO, por lo que es filtrado y omitido.",
+              "category": "logging-empaquetado",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "logger.debug(\"Detalle interno\")",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "logger.info(\"Operación exitosa\")",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "logger.warning(\"Memoria alta\")",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "logger.error(\"Fallo de conexión\")",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py3-logging"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py3_mod_08",
+              "section_id": "sec_py3_08_01",
+              "lesson_id": "les_py3_08_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

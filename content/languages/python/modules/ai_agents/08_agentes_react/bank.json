@@ -1,0 +1,49 @@
+{
+  "module_code": "IA_M08",
+  "module_slug": "ia-agentes-bucle-react",
+  "course_slug": "ai-agents",
+  "questions": [
+    {
+      "id": "q_ia_08_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la función del parámetro max_iterations en el bucle principal de un agente autónomo?",
+      "explanation": "Un guardrail de iteraciones máximas frena la ejecución si el agente se desorienta o la herramienta falla repetidamente.",
+      "category": "agentes-react",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Prevenir bucles infinitos y costos descontrolados de API si el agente no logra resolver el problema",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Aumentar la resolución de las imágenes",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Validar la contraseña del usuario",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Apagar el computador tras 10 minutos",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

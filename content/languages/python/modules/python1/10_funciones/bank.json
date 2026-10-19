@@ -1,0 +1,91 @@
+{
+  "module_code": "PY1_M10",
+  "module_slug": "funciones-fundamentales",
+  "course_slug": "python-1",
+  "questions": [
+    {
+      "id": "q_py1_10_01",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué salida produce este código?",
+      "prompt_code": "def operar(x, factor=2):\n    return x * factor\n\nprint(operar(5) + operar(3, 4))",
+      "explanation": "operar(5) usa el factor por defecto (5 * 2 = 10). operar(3, 4) usa factor=4 (3 * 4 = 12). 10 + 12 = 22.",
+      "category": "funciones",
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "22",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "16",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "20",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "TypeError",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    },
+    {
+      "id": "q_py1_10_02",
+      "type": "find_error",
+      "difficulty": "medium",
+      "prompt": "¿Qué error de sintaxis tiene la siguiente cabecera de función?",
+      "prompt_code": "def configurar(tema=\"oscuro\", usuario):\n    pass",
+      "explanation": "En Python, todos los parámetros posicionales obligatorios deben colocarse antes de cualquier parámetro con valor por defecto.",
+      "category": "funciones",
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "SyntaxError: los parámetros sin valor por defecto no pueden ir después de los que sí tienen",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Falta especificar el tipo de retorno",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "La palabra pass es inválida",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "No se pueden tener parámetros con comillas",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "id": "py2_mod_04",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY2_M04",
+  "slug": "manejo-de-excepciones",
+  "course_slug": "python-2",
+  "title": "Manejo Robusto de Excepciones",
+  "objective": "Interceptar y gestionar fallos de forma elegante con try, except específico, else, finally y raise.",
+  "description": "Crea software resiliente que no se caiga ante errores imprevistos: manejo defensivo, jerarquía de excepciones y limpieza de recursos.",
+  "position": 14,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 250
+  },
+  "sections": [
+    {
+      "id": "sec_py2_04_01",
+      "code": "S01",
+      "title": "Bloques try-except-else-finally",
+      "slug": "try-except-finally",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 45,
+      "lessons": [
+        {
+          "id": "les_py2_04_01",
+          "code": "L01",
+          "title": "Captura Específica de Excepciones",
+          "slug": "captura-especifica",
+          "position": 1,
+          "concept_id": "py2-exceptions",
+          "objective": "Evitar el antipatrón de captura genérica (except:) y manejar errores específicos.",
+          "examples": [
+            {
+              "title": "Conversión robusta con try-except completo",
+              "code": "def dividir_seguro(a, b):\n    try:\n        res = a / b\n    except ZeroDivisionError:\n        return \"Error: no puedes dividir entre cero\"\n    except TypeError:\n        return \"Error: los argumentos deben ser números\"\n    else:\n        return f\"Éxito: {res}\"\n    finally:\n        # Limpieza o log garantizado\n        pass\n\nprint(dividir_seguro(10, 2))\nprint(dividir_seguro(10, 0))",
+              "output": "Éxito: 5.0\nError: no puedes dividir entre cero",
+              "explanation": "Captura con precisión ZeroDivisionError sin silenciar otros posibles errores no previstos.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Escribir un simple `except: pass` (captura muda). Oculta errores de sintaxis, variables mal escritas e interrupciones del teclado (KeyboardInterrupt).",
+          "mini_exercise": {
+            "starter_code": "# Captura ValueError al convertir texto a entero\ntry:\n    num = int(\"koda\")\nexcept ...:\n    print(\"Número inválido\")",
+            "instructions": "Usa except ValueError: para manejar el fallo.",
+            "solution": "try:\n    num = int(\"koda\")\nexcept ValueError:\n    print(\"Número inválido\")"
+          },
+          "key_takeaways": [
+            "Captura siempre la excepción más específica posible.",
+            "else corre solo si el try tuvo éxito.",
+            "finally se ejecuta invariablemente al final."
+          ],
+          "explanation": "En lugar de dejar que tu servidor colapse ante una entrada inválida, usas un bloque `try-except`:\n- `try:`: Bloque con código propenso a fallar.\n- `except ValueError as e:`: Se ejecuta SOLO si ocurre esa excepción específica.\n- `else:`: Se ejecuta si NO ocurrió ningún error en el `try`.\n- `finally:`: Se ejecuta **SIEMPRE**, haya o no error (ideal para cerrar conexiones o archivos).",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py2_04_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿En qué caso se ejecuta el bloque finally de un try-except?",
+              "explanation": "El bloque finally está garantizado que se ejecutará siempre, haya o no ocurrido una excepción.",
+              "category": "manejo-excepciones",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Siempre, sin importar si hubo excepción o no",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Solo si ocurrió un error",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Solo si el bloque try tuvo éxito",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Únicamente si se ejecuta un break",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py2-exceptions"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py2_mod_04",
+              "section_id": "sec_py2_04_01",
+              "lesson_id": "les_py2_04_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

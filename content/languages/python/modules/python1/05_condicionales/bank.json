@@ -1,0 +1,131 @@
+{
+  "module_code": "PY1_M05",
+  "module_slug": "condicionales",
+  "course_slug": "python-1",
+  "questions": [
+    {
+      "id": "q_py1_05_01",
+      "type": "find_error",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es el error de sintaxis en el siguiente bloque?",
+      "prompt_code": "if edad >= 18\n    print(\"Mayor de edad\")",
+      "explanation": "En Python toda cabecera de control de flujo (if, elif, else, for, while, def) debe finalizar con dos puntos (:).",
+      "category": "condicionales",
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Faltan los dos puntos (:) al final de la línea del if",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "La palabra print debe ir sin sangría",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "La condición debe ir entre paréntesis obligatoriamente",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "El número 18 debe ser un flotante",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    },
+    {
+      "id": "q_py1_05_02",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué se imprimirá?",
+      "prompt_code": "x = 0\nif x:\n    print(\"Verdadero\")\nelse:\n    print(\"Falso\")",
+      "explanation": "En Python, el número 0 es considerado \"falsy\" (evalúa a False en un contexto booleano), por lo que se ejecuta el else.",
+      "category": "condicionales",
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Falso",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Verdadero",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "0",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "TypeError",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    },
+    {
+      "id": "q_py1_05_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la convención oficial de sangría en Python según PEP 8?",
+      "category": "condicionales",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "4 espacios por nivel de indentación",
+          "is_correct": false,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "1 tabulación obligatoria",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "2 espacios como en JavaScript",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "No importa la cantidad mientras se use punto y coma",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [],
+      "explanation": "Revisa el concepto de la lección antes de responder."
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "module_code": "PY3_M10",
+  "module_slug": "patrones-de-diseno",
+  "course_slug": "python-3",
+  "questions": [
+    {
+      "id": "q_py3_10_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es el objetivo principal del patrón de diseño Factory?",
+      "explanation": "Factory provee una interfaz para crear objetos permitiendo que las subclases o la configuración determinen qué clase instanciar.",
+      "category": "patrones-diseno",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Encapsular e independizar la lógica de instanciación de objetos de las clases que los consumen",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Garantizar que solo exista una sola instancia de una clase",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Convertir código asíncrono en síncrono",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Validar consultas SQL",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

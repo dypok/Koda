@@ -1,0 +1,126 @@
+{
+  "id": "py2_mod_09",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY2_M09",
+  "slug": "pip-entornos-y-git",
+  "course_slug": "python-2",
+  "title": "Gestión de Paquetes (pip), PyProject y Git Esencial",
+  "objective": "Gestionar dependencias con pip y requirements.txt / pyproject.toml, e implementar flujo de control de versiones con Git.",
+  "description": "Herramientas esenciales del desarrollador profesional: instalación de librerías de terceros (PyPI), reproducibilidad de entornos y commits en Git.",
+  "position": 19,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 250
+  },
+  "sections": [
+    {
+      "id": "sec_py2_09_01",
+      "code": "S01",
+      "title": "pip, requirements.txt y Git",
+      "slug": "pip-y-git",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 15,
+      "xp_on_complete": 40,
+      "lessons": [
+        {
+          "id": "les_py2_09_01",
+          "code": "L01",
+          "title": "Instalación de Paquetes con pip y Control de Versiones con Git",
+          "slug": "pip-git-base",
+          "position": 1,
+          "concept_id": "py2-tooling",
+          "objective": "Congelar dependencias con pip freeze y versionar con git init, add y commit.",
+          "examples": [
+            {
+              "title": "Contenido típico de un archivo requirements.txt",
+              "code": "# requirements.txt\nfastapi==0.115.0\npydantic>=2.9.0\npytest==8.3.0",
+              "output": "fastapi==0.115.0\npydantic>=2.9.0\npytest==8.3.0",
+              "explanation": "Define versiones explícitas para garantizar que la aplicación funcione idéntica en cualquier servidor.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Subir la carpeta `.venv/` a Git. Es pesada y depende del sistema operativo donde se creó; en su lugar se sube el archivo requirements.txt.",
+          "mini_exercise": {
+            "starter_code": "# Comando para instalar librerías desde requirements.txt\n# Escribe el comando como comentario\n# pip ...",
+            "instructions": "Escribe: # pip install -r requirements.txt",
+            "solution": "# pip install -r requirements.txt"
+          },
+          "key_takeaways": [
+            "pip instala librerías desde el índice PyPI.",
+            "requirements.txt asegura la reproducibilidad del entorno.",
+            "Nunca subas carpetas .venv/ o __pycache__/ a Git (usa .gitignore)."
+          ],
+          "explanation": "El ecosistema de Python cuenta con más de 500,000 paquetes en **PyPI** (Python Package Index).\n\n1. `pip install requests`: Descarga e instala una librería en tu entorno virtual.\n2. `pip freeze > requirements.txt`: Congela las versiones exactas instaladas para que tus compañeros puedan replicar el entorno con `pip install -r requirements.txt`.\n3. **Git básico**:\n   - `git init`: Inicia el repositorio.\n   - `git add .`: Agrega cambios al área de preparación (stage).\n   - `git commit -m \"feat: nueva funcionalidad\"`: Guarda una instantánea permanente.\n   - **.gitignore**: Archivo imprescindible donde especificas `.venv/` o `__pycache__/` para no subir archivos basura al repositorio.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py2_09_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Por qué NUNCA se debe subir la carpeta `.venv` a un repositorio Git?",
+              "explanation": "Los entornos virtuales son locales y pesados. El equipo solo necesita el archivo de dependencias para reconstruir el entorno en segundos.",
+              "category": "pip-git",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Porque contiene binarios dependientes del SO local y es fácilmente reproducible con requirements.txt",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Porque Git no soporta archivos de Python",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Porque borrará el código de los demás desarrolladores",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Porque solo los archivos HTML se pueden subir a Git",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py2-tooling"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py2_mod_09",
+              "section_id": "sec_py2_09_01",
+              "lesson_id": "les_py2_09_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

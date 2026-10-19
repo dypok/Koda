@@ -1,0 +1,126 @@
+{
+  "id": "da_mod_01",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "DA_M01",
+  "slug": "numpy-fundamentos",
+  "course_slug": "data-analytics",
+  "title": "NumPy: Computación Vectorizada y Arrays N-Dimensionales",
+  "objective": "Reemplazar bucles lentos por operaciones vectorizadas en C mediante ndarrays de NumPy y broadcasting.",
+  "description": "El pilar matemático de la ciencia de datos y el machine learning en Python: arrays contiguos en memoria y álgebra lineal.",
+  "position": 41,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 250
+  },
+  "sections": [
+    {
+      "id": "sec_da_01_01",
+      "code": "S01",
+      "title": "Arrays ndarray y Vectorización",
+      "slug": "ndarray-vectorizacion",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_da_01_01",
+          "code": "L01",
+          "title": "NumPy ndarray vs Listas de Python",
+          "slug": "numpy-ndarray-base",
+          "position": 1,
+          "concept_id": "da-numpy",
+          "objective": "Comprender por qué los arrays de NumPy son hasta 50x más veloces y consumen menos memoria que las listas estándar.",
+          "examples": [
+            {
+              "title": "Operaciones vectorizadas y funciones estadísticas",
+              "code": "import numpy as np\n\nprecios = np.array([19.99, 45.50, 120.00, 89.90])\ncon_iva = precios * 1.16\nprint(\"Con IVA:\", np.round(con_iva, 2))\nprint(\"Promedio:\", np.mean(precios))\nprint(\"Máximo:\", np.max(precios))",
+              "output": "Con IVA: [ 23.19  52.78 139.2  104.28]\nPromedio: 68.8475\nMáximo: 120.0",
+              "explanation": "np.mean y np.round operan en C sobre todo el bloque de datos a velocidad nativa.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Intentar mezclar tipos distintos en un array (ej: strings y números). NumPy forzará a que todos los elementos se conviertan al tipo más general (upcasting a string).",
+          "mini_exercise": {
+            "starter_code": "import numpy as np\n# Crea un array con los números del 0 al 9 usando np.arange(10)\narr = ...\nprint(arr)",
+            "instructions": "Usa np.arange(10).",
+            "solution": "import numpy as np\narr = np.arange(10)\nprint(arr)"
+          },
+          "key_takeaways": [
+            "ndarray almacena tipos homogéneos contiguos en memoria.",
+            "La vectorización elimina bucles for lentos en Python.",
+            "np.arange, np.zeros, np.ones facilitan la creación de tensores."
+          ],
+          "explanation": "Las listas de Python almacenan punteros a objetos dispersos en la memoria. Un **array de NumPy (`ndarray`)** almacena datos del mismo tipo en un bloque de memoria contiguo en C.\n\nEsto habilita la **vectorización**: aplicar una operación matemática a millones de elementos simultáneamente sin escribir un solo bucle `for`.\n\n```python\nimport numpy as np\narr = np.array([1, 2, 3, 4, 5])\nresultado = arr * 2  # Multiplica cada elemento instantáneamente en C\n```",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_da_01_01",
+              "type": "predict_output",
+              "difficulty": "easy",
+              "prompt": "Si arr = np.array([10, 20, 30]), ¿cuál es el resultado de arr + 5?",
+              "explanation": "Por la regla de broadcasting de NumPy, el escalar 5 se suma a cada elemento del array: [15, 25, 35].",
+              "category": "numpy",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "array([15, 25, 35])",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "[10, 20, 30, 5]",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "TypeError",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "array([10, 20, 30, 5])",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "da-numpy"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "da_mod_01",
+              "section_id": "sec_da_01_01",
+              "lesson_id": "les_da_01_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "module_code": "PY3_M02",
+  "module_slug": "decoradores",
+  "course_slug": "python-3",
+  "questions": [
+    {
+      "id": "q_py3_02_01",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué sintaxis equivale exactamente a @decorador sobre def funcion(): pass?",
+      "explanation": "El azúcar sintáctico @decorador reasigna el identificador de la función al resultado de llamar al decorador pasándole la función original.",
+      "category": "decoradores",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "funcion = decorador(funcion)",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "decorador = funcion(decorador)",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "decorador(funcion())",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "funcion.decorar(decorador)",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

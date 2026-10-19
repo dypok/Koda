@@ -1,0 +1,49 @@
+{
+  "module_code": "FA_M04",
+  "module_slug": "fastapi-auth-jwt",
+  "course_slug": "fastapi-async",
+  "questions": [
+    {
+      "id": "q_fa_04_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué información NUNCA debe incluirse en el payload de un token JWT?",
+      "explanation": "El payload de un JWT solo está codificado en Base64 (cualquiera puede leerlo decodificándolo), por lo que nunca debe contener secretos.",
+      "category": "auth-jwt",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Contraseñas en texto plano o datos confidenciales no encriptados",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "El ID del usuario (sub)",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "La fecha de expiración (exp)",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "El nombre de usuario",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

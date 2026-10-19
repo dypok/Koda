@@ -1,0 +1,126 @@
+{
+  "id": "fa_mod_02",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "FA_M02",
+  "slug": "fastapi-pydantic",
+  "course_slug": "fastapi-async",
+  "title": "Modelado, Validación y Serialización con Pydantic v2",
+  "objective": "Validar payloads JSON entrantes con BaseModel, Field, tipos de datos estrictos y contratos response_model.",
+  "description": "Garantiza que ningún dato corrupto ingrese a tu sistema: validación en tiempo de compilación/ejecución con Pydantic Core.",
+  "position": 32,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 280
+  },
+  "sections": [
+    {
+      "id": "sec_fa_02_01",
+      "code": "S01",
+      "title": "Esquemas Pydantic y Reglas de Validación",
+      "slug": "pydantic-schemas",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_fa_02_01",
+          "code": "L01",
+          "title": "BaseModel, Field y Validación Automática de Pydantic v2",
+          "slug": "pydantic-base",
+          "position": 1,
+          "concept_id": "fa-pydantic",
+          "objective": "Declarar contratos de datos que validen tipos, longitudes y rangos numéricos automáticamente.",
+          "examples": [
+            {
+              "title": "Esquema de creación de producto con validaciones",
+              "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel, Field, EmailStr\n\nclass UsuarioRegistro(BaseModel):\n    username: str = Field(min_length=3, max_length=20)\n    edad: int = Field(ge=18, le=120, description=\"Mayor de edad\")\n    activo: bool = True\n\napp = FastAPI()\n\n@app.post(\"/usuarios\", status_code=201)\ndef crear_usuario(payload: UsuarioRegistro):\n    # payload es una instancia validada de UsuarioRegistro\n    return {\"mensaje\": f\"Usuario {payload.username} creado\", \"edad\": payload.edad}",
+              "output": "HTTP 201 Created\n{\"mensaje\": \"Usuario koda_dev creado\", \"edad\": 25}",
+              "explanation": "Si el cliente envía edad: 16, Pydantic rechaza la petición con HTTP 422 automáticamente.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "No tipar los argumentos del endpoint con el esquema BaseModel, lo que hace que FastAPI los interprete como query parameters en lugar de JSON body.",
+          "mini_exercise": {
+            "starter_code": "from pydantic import BaseModel\n# Crea un modelo Item con titulo: str y precio: float\nclass Item(BaseModel):\n    ...\n\ni = Item(titulo=\"Teclado\", precio=89.99)\nprint(i.titulo)",
+            "instructions": "Declara Item(BaseModel) con titulo y precio.",
+            "solution": "from pydantic import BaseModel\nclass Item(BaseModel):\n    titulo: str\n    precio: float\n\ni = Item(titulo=\"Teclado\", precio=89.99)\nprint(i.titulo)"
+          },
+          "key_takeaways": [
+            "Pydantic v2 está escrito en Rust y valida a máxima velocidad.",
+            "Field(ge=..., min_length=...) añade restricciones semánticas.",
+            "FastAPI genera HTTP 422 con errores detallados ante entradas no válidas."
+          ],
+          "explanation": "En FastAPI, los modelos de datos se definen heredando de `pydantic.BaseModel`.\n\nCuando un cliente envía una petición POST:\n1. FastAPI lee el cuerpo JSON.\n2. Lo pasa por el esquema Pydantic.\n3. Si algún campo tiene un tipo incorrecto o falta un campo requerido, FastAPI responde automáticamente con un **HTTP 422 Unprocessable Entity** detallando exactamente qué campo falló, sin que tengas que escribir un solo `if` de validación manual.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_fa_02_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Qué código de estado HTTP devuelve FastAPI automáticamente si un cliente envía un JSON que no cumple con el esquema Pydantic?",
+              "explanation": "FastAPI sigue los estándares de la Web retornando 422 Unprocessable Entity con la lista exacta de campos erróneos.",
+              "category": "pydantic",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "422 Unprocessable Entity",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "500 Internal Server Error",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "404 Not Found",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "200 OK con mensaje de error",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "fa-pydantic"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "fa_mod_02",
+              "section_id": "sec_fa_02_01",
+              "lesson_id": "les_fa_02_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

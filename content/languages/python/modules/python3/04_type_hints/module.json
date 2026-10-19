@@ -1,0 +1,126 @@
+{
+  "id": "py3_mod_04",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY3_M04",
+  "slug": "type-hints-y-dataclasses",
+  "course_slug": "python-3",
+  "title": "Type Hints Estáticos y Data Classes",
+  "objective": "Anotar tipos profesionales con typing (Union, Optional, Callable) y modelar estructuras inmutables con @dataclass.",
+  "description": "Construye código autoevaluado y robusto: aprovecha la verificación estática con Mypy y simplifica clases con @dataclass.",
+  "position": 24,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 320
+  },
+  "sections": [
+    {
+      "id": "sec_py3_04_01",
+      "code": "S01",
+      "title": "Anotaciones de Tipo y @dataclass",
+      "slug": "typing-dataclasses",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 45,
+      "lessons": [
+        {
+          "id": "les_py3_04_01",
+          "code": "L01",
+          "title": "Modern Type Hints y @dataclass(frozen=True)",
+          "slug": "dataclass-base",
+          "position": 1,
+          "concept_id": "py3-dataclasses",
+          "objective": "Eliminar el boilerplate de clases creando objetos inmutables con validación de tipos.",
+          "examples": [
+            {
+              "title": "Modelo de datos inmutable con dataclass",
+              "code": "from dataclasses import dataclass\n\n@dataclass(frozen=True)\nclass Usuario:\n    id: int\n    username: str\n    email: str\n    activo: bool = True\n\nu1 = Usuario(id=1, username=\"koda_dev\", email=\"dev@koda.com\")\nprint(u1)\n# u1.email = \"otro@koda.com\"  # Lanza FrozenInstanceError si se intenta mutar",
+              "output": "Usuario(id=1, username='koda_dev', email='dev@koda.com', activo=True)",
+              "explanation": "@dataclass genera un constructor con tipos y un __repr__ legible automáticamente.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Crear valores por defecto mutables en dataclasses: `lista: list = []` causa ValueError. Debe usarse `field(default_factory=list)`.",
+          "mini_exercise": {
+            "starter_code": "from dataclasses import dataclass\n# Crea una dataclass Punto con x: float e y: float\n@dataclass\nclass Punto:\n    x: float\n    y: float\n\np = Punto(1.5, 2.5)\nprint(p.x, p.y)",
+            "instructions": "Instancia Punto y verifica sus coordenadas.",
+            "solution": "from dataclasses import dataclass\n@dataclass\nclass Punto:\n    x: float\n    y: float\n\np = Punto(1.5, 2.5)\nprint(p.x, p.y)"
+          },
+          "key_takeaways": [
+            "Type hints documentan y permiten análisis estático con Mypy.",
+            "@dataclass elimina la necesidad de escribir __init__ y __repr__ manualmente.",
+            "frozen=True convierte a las instancias en inmutables (hashables)."
+          ],
+          "explanation": "En Python 3 moderno, los **type hints** permiten que tu editor (VS Code) y analizadores estáticos (como `mypy` o `ruff`) detecten bugs antes de ejecutar el código:\n\n```python\ndef buscar_usuario(id: int) -> str | None:\n    ...\n```\n\nEl decorador `@dataclass` genera automáticamente `__init__`, `__repr__`, y comparadores de igualdad `__eq__` sin que tengas que escribir código repetitivo. Con `frozen=True`, la clase se vuelve inmutable y protegida contra modificaciones accidentales.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py3_04_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Qué ocurre en tiempo de ejecución si pasas un string a una función anotada con `def f(x: int):` en Python estándar?",
+              "explanation": "Python estándar no impone los tipos en runtime; los type hints están diseñados para linters, IDEs y herramientas estáticas.",
+              "category": "type-hints",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Se ejecuta normalmente, porque los type hints no son validados por el intérprete en tiempo de ejecución",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Lanza TypeError inmediatamente",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Se convierte automáticamente a int",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "El programa no compila",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py3-dataclasses"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py3_mod_04",
+              "section_id": "sec_py3_04_01",
+              "lesson_id": "les_py3_04_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

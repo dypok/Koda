@@ -1,0 +1,49 @@
+{
+  "module_code": "DA_M05",
+  "module_slug": "matplotlib-seaborn",
+  "course_slug": "data-analytics",
+  "questions": [
+    {
+      "id": "q_da_05_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué información revela visualmente un diagrama de caja y bigotes (boxplot)?",
+      "explanation": "El boxplot sintetiza la distribución estadística de 5 números y señala los puntos fuera de 1.5 * IQR como outliers.",
+      "category": "matplotlib-seaborn",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "La mediana, los cuartiles Q1 y Q3, el rango intercuartílico y posibles valores atípicos (outliers)",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "La velocidad de la red",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "El porcentaje de memoria libre en la GPU",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Únicamente el valor máximo del dataset",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

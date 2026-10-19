@@ -1,0 +1,49 @@
+{
+  "module_code": "DJ_M01",
+  "module_slug": "django-mtv-routing",
+  "course_slug": "django-enterprise",
+  "questions": [
+    {
+      "id": "q_dj_01_01",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es el comando de la CLI de Django para crear una nueva aplicación modular dentro del proyecto?",
+      "explanation": "manage.py startapp genera la estructura de carpetas (models.py, views.py, etc.) para una nueva app.",
+      "category": "mtv-routing",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "python manage.py startapp <nombre>",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "django-admin new-project <nombre>",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "pip install app <nombre>",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "django create-service",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

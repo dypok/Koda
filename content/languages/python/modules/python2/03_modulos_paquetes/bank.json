@@ -1,0 +1,49 @@
+{
+  "module_code": "PY2_M03",
+  "module_slug": "modulos-y-paquetes",
+  "course_slug": "python-2",
+  "questions": [
+    {
+      "id": "q_py2_03_01",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es el archivo especial que tradicionalmente indica que una carpeta debe tratarse como un paquete de Python?",
+      "explanation": "__init__.py inicializa el paquete e indica al intérprete que la carpeta es un módulo estructurado.",
+      "category": "modulos-paquetes",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "__init__.py",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "package.json",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "__main__.py",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "module.config",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

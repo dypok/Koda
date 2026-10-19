@@ -1,0 +1,126 @@
+{
+  "id": "py2_mod_03",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY2_M03",
+  "slug": "modulos-y-paquetes",
+  "course_slug": "python-2",
+  "title": "Módulos, Paquetes y __init__.py",
+  "objective": "Organizar código a gran escala dividiendo en módulos .py, paquetes con __init__.py y el condicional __name__ == \"__main__\".",
+  "description": "Aprende a estructurar proyectos limpios: cómo importar correctamente, namespaces y crear scripts reutilizables como librerías.",
+  "position": 13,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 240
+  },
+  "sections": [
+    {
+      "id": "sec_py2_03_01",
+      "code": "S01",
+      "title": "Módulos y el Bloque __main__",
+      "slug": "modulos-y-main",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 15,
+      "xp_on_complete": 40,
+      "lessons": [
+        {
+          "id": "les_py2_03_01",
+          "code": "L01",
+          "title": "Módulos, Importaciones y if __name__ == \"__main__\"",
+          "slug": "modulos-main-base",
+          "position": 1,
+          "concept_id": "py2-modules",
+          "objective": "Evitar que código de prueba se ejecute al ser importado por otro archivo.",
+          "examples": [
+            {
+              "title": "Estructura canónica de un módulo",
+              "code": "def sumar(a, b):\n    return a + b\n\n# Solo se ejecuta si se corre directamente: python mi_script.py\nif __name__ == \"__main__\":\n    print(\"Probando función sumar:\", sumar(2, 3))",
+              "output": "Probando función sumar: 5",
+              "explanation": "Al importarlo desde otro archivo, la prueba no se dispara contaminando la consola.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Usar `from modulo import *`. Esto contamina el namespace local y dificulta saber de dónde proviene cada función.",
+          "mini_exercise": {
+            "starter_code": "# Protege este print para que solo corra como script principal\nif ...:\n    print(\"Ejecutando como script\")",
+            "instructions": "Usa if __name__ == \"__main__\":",
+            "solution": "if __name__ == \"__main__\":\n    print(\"Ejecutando como script\")"
+          },
+          "key_takeaways": [
+            "Todo archivo .py es un módulo importable.",
+            "__name__ vale \"__main__\" únicamente cuando el archivo se lanza directamente.",
+            "__init__.py marca un directorio como un paquete Python."
+          ],
+          "explanation": "Todo archivo `.py` es un **módulo**. Cuando importas un módulo con `import matematicas`, Python ejecuta todo el archivo de arriba a abajo.\n\nPara que un archivo pueda comportarse tanto como **script ejecutable independiente** y como **módulo importable**: usamos la variable especial `__name__`:\n- Si ejecutas el archivo directamente: `__name__ == \"__main__\"`.\n- Si otro archivo lo importa: `__name__ == \"nombre_del_modulo\"`.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py2_03_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Qué valor tiene __name__ cuando un archivo calculadora.py es importado desde main.py?",
+              "explanation": "Al ser importado, __name__ adopta el nombre del módulo importado (\"calculadora\").",
+              "category": "modulos-paquetes",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "\"calculadora\"",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "\"__main__\"",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "None",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "True",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py2-modules"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py2_mod_03",
+              "section_id": "sec_py2_03_01",
+              "lesson_id": "les_py2_03_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

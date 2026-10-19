@@ -3,7 +3,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key, Code } from '@phosphor-icons/react';
-import { ContentExercise, ContentLesson, ContentModule, loadBank, loadModule, shuffled } from '@/lib/content';
+import { ContentExercise, ContentLesson, ContentModule, loadBank, loadModule, shuffled, hasModule } from '@/lib/content';
 import { QuestionRenderer } from './QuestionRenderer';
 import { useLessonEngine } from './useLessonEngine';
 import { useLessonKeyboardShortcuts } from '@/hooks/useLessonKeyboardShortcuts';
@@ -49,31 +49,37 @@ function parseCourse(courseId: string, sectionRef: string): { lang: string; modu
     return { lang: 'css', moduleSlug: 'selectores-y-box-model', initialMode: 'lesson' };
   }
 
-  // 4. Mapeo para Python (Nivel 1, Nivel 2, FastAPI y Django)
+  // 4. Mapeo para Python (currículo anidado + atajos legacy)
   if (lang === 'python') {
+    // Si el slug ya existe en el catálogo, respetarlo. Evita que heurísticas
+    // como `includes('fundamentos')` secuestren módulos nuevos.
+    if (hasModule('python', sectionRef)) {
+      return { lang: 'python', moduleSlug: sectionRef, initialMode: 'lesson' };
+    }
+
     // Especialización FastAPI
     if (courseId === 'fastapi-async' || sectionRef.startsWith('fa-') || sectionRef.includes('fastapi')) {
       if (sectionRef === 'fa-m02' || sectionRef.includes('pydantic')) {
         return { lang: 'python', moduleSlug: 'fastapi-pydantic', initialMode: 'lesson' };
       }
-      return { lang: 'python', moduleSlug: 'fastapi-asgi', initialMode: 'lesson' };
+      return { lang: 'python', moduleSlug: 'fastapi-http-rest', initialMode: 'lesson' };
     }
 
     // Especialización Django
     if (courseId === 'django-enterprise' || sectionRef.startsWith('dj-') || sectionRef.includes('django')) {
       if (sectionRef === 'dj-m02' || sectionRef.includes('orm')) {
-        return { lang: 'python', moduleSlug: 'django-orm', initialMode: 'lesson' };
+        return { lang: 'python', moduleSlug: 'django-orm-models', initialMode: 'lesson' };
       }
-      return { lang: 'python', moduleSlug: 'django-mvt', initialMode: 'lesson' };
+      return { lang: 'python', moduleSlug: 'django-mtv-routing', initialMode: 'lesson' };
     }
 
     // Python Nivel 2
     if (courseId === 'python-2' || sectionRef.startsWith('py2-')) {
-      if (sectionRef === 'py2-m01' || sectionRef.includes('funcion')) return { lang: 'python', moduleSlug: 'funciones-y-modularidad', initialMode: 'lesson' };
-      if (sectionRef === 'py2-m02' || sectionRef.includes('coleccion') || sectionRef.includes('lista')) return { lang: 'python', moduleSlug: 'colecciones', initialMode: 'lesson' };
-      if (sectionRef === 'py2-m03' || sectionRef.includes('string') || sectionRef.includes('dict')) return { lang: 'python', moduleSlug: 'strings-avanzados', initialMode: 'lesson' };
-      if (sectionRef === 'py2-m04' || sectionRef.includes('error') || sectionRef.includes('archivo')) return { lang: 'python', moduleSlug: 'manejo-de-errores', initialMode: 'lesson' };
-      if (sectionRef === 'py2-m05' || sectionRef.includes('poo') || sectionRef.includes('clase')) return { lang: 'python', moduleSlug: 'programacion-orientada-a-objetos', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m01' || sectionRef.includes('funcion')) return { lang: 'python', moduleSlug: 'funciones-avanzadas', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m02' || sectionRef.includes('coleccion') || sectionRef.includes('lista')) return { lang: 'python', moduleSlug: 'comprensiones', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m03' || sectionRef.includes('string') || sectionRef.includes('dict')) return { lang: 'python', moduleSlug: 'entrada-salida-y-strings', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m04' || sectionRef.includes('error') || sectionRef.includes('archivo')) return { lang: 'python', moduleSlug: 'manejo-de-excepciones', initialMode: 'lesson' };
+      if (sectionRef === 'py2-m05' || sectionRef.includes('poo') || sectionRef.includes('clase')) return { lang: 'python', moduleSlug: 'poo-clases-y-objetos', initialMode: 'lesson' };
     }
 
     // Python Nivel 1

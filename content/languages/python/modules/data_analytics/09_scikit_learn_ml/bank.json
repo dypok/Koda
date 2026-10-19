@@ -1,0 +1,49 @@
+{
+  "module_code": "DA_M09",
+  "module_slug": "scikit-learn-intro-ml",
+  "course_slug": "data-analytics",
+  "questions": [
+    {
+      "id": "q_da_09_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál métrica de evaluación se utiliza para medir el porcentaje de varianza explicada en un problema de regresión (varía típicamente entre 0 y 1)?",
+      "explanation": "R² cuantifica qué proporción de la variabilidad del target es explicada por las features del modelo.",
+      "category": "scikit-learn-ml",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "R² (Coeficiente de determinación)",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Accuracy",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "F1-Score",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Matriz de confusión",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

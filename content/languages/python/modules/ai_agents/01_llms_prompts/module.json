@@ -1,0 +1,126 @@
+{
+  "id": "ia_mod_01",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "IA_M01",
+  "slug": "ia-llms-y-prompts",
+  "course_slug": "ai-agents",
+  "title": "Arquitectura de LLMs, Tokens y Prompt Engineering",
+  "objective": "Comprender el funcionamiento interno de los Modelos de Lenguaje (tokens, temperatura, ventana de contexto) y dominar técnicas de prompting (Few-Shot, Chain-of-Thought).",
+  "description": "El punto de partida de la Inteligencia Artificial moderna: cómo predicen los LLMs el siguiente token y cómo instruirlos con máxima precisión.",
+  "position": 51,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 260
+  },
+  "sections": [
+    {
+      "id": "sec_ia_01_01",
+      "code": "S01",
+      "title": "Modelos de Lenguaje y Técnicas de Prompting",
+      "slug": "llms-y-prompting",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 20,
+      "xp_on_complete": 50,
+      "lessons": [
+        {
+          "id": "les_ia_01_01",
+          "code": "L01",
+          "title": "Tokens, Hiperparámetros y Chain-of-Thought",
+          "slug": "tokens-parametros-cot",
+          "position": 1,
+          "concept_id": "ia-foundations",
+          "objective": "Dominar la relación entre tokens, temperatura (creatividad vs determinismo) y razonamiento paso a paso.",
+          "examples": [
+            {
+              "title": "Estructura de un prompt robusto para agentes",
+              "code": "system_prompt = \"\"\"\nEres un asistente senior de auditoría de código en Python.\n\nReglas:\n1. Analiza el código proporcionado línea por línea.\n2. Identifica posibles vulnerabilidades de seguridad (SQLi, XSS).\n3. Responde estrictamente en formato Markdown con sugerencias concretas.\n\"\"\"\nprint(system_prompt.strip())",
+              "output": "Eres un asistente senior de auditoría de código en Python.\n...",
+              "explanation": "Un buen system prompt establece rol, reglas inviolables y formato de salida esperado.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Usar temperature=1.0 cuando se espera que el modelo devuelva un JSON estructurado o código ejecutable (aumenta el riesgo de alucinaciones sintácticas).",
+          "mini_exercise": {
+            "starter_code": "# Para tareas de código y extracción de datos, ¿qué temperatura es la óptima?\ntemperatura_optima = ...  # 0.0 o 1.5?",
+            "instructions": "Asigna 0.0 a temperatura_optima.",
+            "solution": "temperatura_optima = 0.0"
+          },
+          "key_takeaways": [
+            "Los LLMs predicen el siguiente token estadísticamente.",
+            "Temperature=0.0 garantiza respuestas reproducibles y precisas.",
+            "Chain-of-Thought (pensar paso a paso) aumenta la precisión en tareas complejas."
+          ],
+          "explanation": "Un **LLM (Large Language Model)** no procesa letras ni palabras directamente; procesa **tokens** (fragmentos de ~4 caracteres en inglés o sílabas en español).\n\nParámetros clave:\n- **Temperature (0.0 a 2.0)**: Controla la aleatoriedad. Para código, JSON y agentes usamos `0.0` (determinista y exacto). Para redacción creativa usamos `0.7 - 1.0`.\n- **Top_p (Nucleus Sampling)**: Limita la selección a los tokens que acumulan el porcentaje de probabilidad más alto.\n\nTécnicas avanzadas de Prompt Engineering:\n1. **Role Prompting**: Definir el rol, contexto y restricciones explícitas.\n2. **Few-Shot**: Proporcionar 2 o 3 ejemplos claros de `Entrada -> Salida` deseada.\n3. **Chain-of-Thought (CoT)**: Pedir al modelo que \"piense paso a paso antes de emitir la conclusión final\", lo cual reduce los errores lógicos en más de un 60%.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_ia_01_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Por qué para tareas de generación de código o extracción estructurada se recomienda configurar temperature=0.0?",
+              "explanation": "Temperature 0.0 selecciona siempre el token más probable, ideal para tareas lógicas y formatos estrictos.",
+              "category": "llms-prompts",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Porque minimiza la aleatoriedad y hace que las respuestas sean deterministas y precisas",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Porque hace que el modelo responda en mayúsculas",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Porque apaga los servidores del modelo",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Porque elimina la necesidad de tokens",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "ia-foundations"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "ia_mod_01",
+              "section_id": "sec_ia_01_01",
+              "lesson_id": "les_ia_01_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

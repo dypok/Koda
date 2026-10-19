@@ -1,0 +1,49 @@
+{
+  "module_code": "IA_M05",
+  "module_slug": "ia-memoria-y-contexto",
+  "course_slug": "ai-agents",
+  "questions": [
+    {
+      "id": "q_ia_05_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la estrategia de memoria que utiliza un LLM secundario para comprimir mensajes antiguos en un resumen factual conciso?",
+      "explanation": "Summary Memory condensa turnos anteriores en un párrafo que mantiene el contexto clave con mínimo gasto de tokens.",
+      "category": "memoria-contexto",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Conversation Summary Memory (Memoria por Resumen)",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Hard Reset Buffer",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Binary Heap Cache",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Volatile RAM Store",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

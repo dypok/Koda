@@ -1,0 +1,126 @@
+{
+  "id": "py3_mod_03",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY3_M03",
+  "slug": "context-managers",
+  "course_slug": "python-3",
+  "title": "Context Managers: Protocolo __enter__, __exit__ y contextlib",
+  "objective": "Gestionar ciclos de vida de recursos críticos (conexiones, bloqueos, transacciones) mediante clases y el decorador @contextmanager.",
+  "description": "Aprende a crear tus propios bloques with para adquirir y liberar recursos con seguridad garantizada y manejo de excepciones integrado.",
+  "position": 23,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 300
+  },
+  "sections": [
+    {
+      "id": "sec_py3_03_01",
+      "code": "S01",
+      "title": "Creación de Context Managers Personalizados",
+      "slug": "creacion-context-managers",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 45,
+      "lessons": [
+        {
+          "id": "les_py3_03_01",
+          "code": "L01",
+          "title": "Protocolo __enter__ / __exit__ y el decorador @contextmanager",
+          "slug": "protocolo-enter-exit",
+          "position": 1,
+          "concept_id": "py3-context-managers",
+          "objective": "Implementar gestores de contexto con clases y mediante generadores con contextlib.",
+          "examples": [
+            {
+              "title": "Temporizador de bloques con contextmanager",
+              "code": "from contextlib import contextmanager\nimport time\n\n@contextmanager\ndef temporizar(etiqueta):\n    t0 = time.perf_counter()\n    try:\n        yield\n    finally:\n        t1 = time.perf_counter()\n        print(f\"[{etiqueta}] {t1 - t0:.4f}s\")\n\nwith temporizar(\"Procesamiento intensivo\"):\n    total = sum(i for i in range(500_000))",
+              "output": "[Procesamiento intensivo] 0.0152s",
+              "explanation": "El bloque try...finally asegura que el código posterior al yield se ejecute siempre al salir del with.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "No envolver el yield con try...finally en @contextmanager: si ocurre una excepción dentro del with, el código de limpieza posterior al yield nunca se ejecutará.",
+          "mini_exercise": {
+            "starter_code": "from contextlib import contextmanager\n@contextmanager\ndef saludo():\n    print(\"Hola\")\n    yield\n    print(\"Adiós\")\n\nwith saludo():\n    print(\"En el bloque\")",
+            "instructions": "Ejecuta el bloque y observa el orden: Hola, En el bloque, Adiós.",
+            "solution": "from contextlib import contextmanager\n@contextmanager\ndef saludo():\n    print(\"Hola\")\n    yield\n    print(\"Adiós\")\n\nwith saludo():\n    print(\"En el bloque\")"
+          },
+          "key_takeaways": [
+            "__enter__ prepara el recurso; __exit__ lo limpia.",
+            "__exit__ recibe la información de la excepción si ocurrió alguna.",
+            "@contextmanager de contextlib simplifica la sintaxis usando yield."
+          ],
+          "explanation": "Cualquier objeto que implemente los métodos especiales `__enter__` y `__exit__` puede ser usado con la sentencia `with`.\n\n- `__enter__(self)`: Se ejecuta al entrar al bloque `with`. Lo que retorne se asigna a la variable tras el `as`.\n- `__exit__(self, exc_type, exc_val, exc_tb)`: Se ejecuta al salir del bloque. Si ocurrió un error, recibe los datos de la excepción. Si retorna `True`, la excepción es suprimida y el programa continúa.\n\nAlternativamente, el módulo nativo `contextlib` permite crear gestores usando un generador:\n```python\nfrom contextlib import contextmanager\n\n@contextmanager\ndef conexion_temporal():\n    print(\"Conectando...\")\n    yield \"CONEXION_ACTIVA\"\n    print(\"Desconectando...\")\n```",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py3_03_01",
+              "type": "single_choice",
+              "difficulty": "medium",
+              "prompt": "¿Cómo puede el método __exit__ suprimir una excepción ocurrida dentro del bloque with para que no se propague?",
+              "explanation": "Si __exit__ retorna True, Python interpreta que la excepción fue manejada y no la re-lanza.",
+              "category": "context-managers",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Retornando True explícitamente",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Lanzando un nuevo error",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Retornando None",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Las excepciones en bloques with nunca se pueden suprimir",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py3-context-managers"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 60,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py3_mod_03",
+              "section_id": "sec_py3_03_01",
+              "lesson_id": "les_py3_03_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

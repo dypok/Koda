@@ -1,0 +1,126 @@
+{
+  "id": "py3_mod_09",
+  "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  "code": "PY3_M09",
+  "slug": "rendimiento-y-profiling",
+  "course_slug": "python-3",
+  "title": "Rendimiento, Profiling y Optimización de Memoria",
+  "objective": "Identificar cuellos de botella con cProfile y timeit, y optimizar estructuras reduciendo el consumo con __slots__.",
+  "description": "Aprende a medir científicamente la velocidad de tu código: no adivines dónde está la lentitud; encuéntrala y optimízala con herramientas estadísticas.",
+  "position": 29,
+  "status": "published",
+  "content_version": 1,
+  "total_sections": 1,
+  "total_lessons": 1,
+  "thresholds": {
+    "quiz": 70,
+    "exam": 80
+  },
+  "xp": {
+    "on_pass": 320
+  },
+  "sections": [
+    {
+      "id": "sec_py3_09_01",
+      "code": "S01",
+      "title": "Medición con timeit y Optimización con __slots__",
+      "slug": "timeit-slots",
+      "position": 1,
+      "type": "theory",
+      "estimated_minutes": 18,
+      "xp_on_complete": 45,
+      "lessons": [
+        {
+          "id": "les_py3_09_01",
+          "code": "L01",
+          "title": "Medición Precisa con timeit y Reducción de Memoria con __slots__",
+          "slug": "timeit-slots-base",
+          "position": 1,
+          "concept_id": "py3-profiling",
+          "objective": "Comparar alternativas de rendimiento y ahorrar 60% de memoria en clases con __slots__.",
+          "examples": [
+            {
+              "title": "Clase ultra compacta con __slots__",
+              "code": "class CoordenadaSlots:\n    __slots__ = (\"x\", \"y\")  # Sin __dict__ interno\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n\np = CoordenadaSlots(10.5, 20.5)\nprint(f\"Punto: ({p.x}, {p.y})\")",
+              "output": "Punto: (10.5, 20.5)",
+              "explanation": "__slots__ prohíbe atributos dinámicos arbitrarios pero reduce drásticamente el espacio de memoria.",
+              "language": "python",
+              "position": 1
+            }
+          ],
+          "common_errors": "Optimización prematura: \"La optimización prematura es la raíz de todos los males\" (Donald Knuth). Primero escribe código claro y con tests; luego haz profiling antes de optimizar.",
+          "mini_exercise": {
+            "starter_code": "# Declara __slots__ en una clase Nodo con valor y siguiente\nclass Nodo:\n    __slots__ = (\"valor\", \"siguiente\")\n    def __init__(self, valor):\n        self.valor = valor\n        self.siguiente = None\n\nn = Nodo(10)\nprint(n.valor)",
+            "instructions": "Verifica la instanciación con __slots__.",
+            "solution": "class Nodo:\n    __slots__ = (\"valor\", \"siguiente\")\n    def __init__(self, valor):\n        self.valor = valor\n        self.siguiente = None\n\nn = Nodo(10)\nprint(n.valor)"
+          },
+          "key_takeaways": [
+            "cProfile analiza el tiempo dedicado en cada función.",
+            "timeit mide snippets de código con rigor estadístico.",
+            "__slots__ optimiza clases creadas millones de veces."
+          ],
+          "explanation": "Por defecto, cada objeto en Python almacena sus atributos en un diccionario dinámico oculto (`__dict__`), lo que consume bastante memoria.\n\nSi vas a crear **millones de instancias**, puedes declarar `__slots__` en la clase para asignar memoria estática y compacta, ahorrando hasta un 60% de RAM y acelerando el acceso a atributos.\n\nPara comparar la velocidad de dos algoritmos de forma fiable, usamos `timeit`, que ejecuta la prueba miles de veces para aislar el ruido del sistema operativo.",
+          "is_required": true,
+          "status": "published",
+          "content_version": 1,
+          "exercises": [
+            {
+              "id": "ex_py3_09_01",
+              "type": "single_choice",
+              "difficulty": "easy",
+              "prompt": "¿Cuál es el beneficio de usar `__slots__` en una clase de Python?",
+              "explanation": "__slots__ reemplaza el diccionario dinámico __dict__ por una estructura interna fija mucho más ligera.",
+              "category": "profiling",
+              "prompt_code": null,
+              "answers": [
+                {
+                  "id": "a",
+                  "label": "A",
+                  "body": "Reduce significativamente el consumo de memoria RAM al eliminar el __dict__ interno por instancia",
+                  "is_correct": true,
+                  "position": 1
+                },
+                {
+                  "id": "b",
+                  "label": "B",
+                  "body": "Permite conectar a bases de datos SQL",
+                  "is_correct": false,
+                  "position": 2
+                },
+                {
+                  "id": "c",
+                  "label": "C",
+                  "body": "Convierte el código a lenguaje Rust",
+                  "is_correct": false,
+                  "position": 3
+                },
+                {
+                  "id": "d",
+                  "label": "D",
+                  "body": "Hace que la clase tenga atributos infinitos",
+                  "is_correct": false,
+                  "position": 4
+                }
+              ],
+              "correct_answer_ids": [
+                "a"
+              ],
+              "concept_ids": [
+                "py3-profiling"
+              ],
+              "version": 1,
+              "status": "published",
+              "content_version": 1,
+              "is_diagnostic": false,
+              "time_estimated_seconds": 30,
+              "language_id": "a1e2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+              "module_id": "py3_mod_09",
+              "section_id": "sec_py3_09_01",
+              "lesson_id": "les_py3_09_01"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

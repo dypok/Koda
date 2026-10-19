@@ -1,0 +1,49 @@
+{
+  "module_code": "PY3_M06",
+  "module_slug": "concurrencia-asyncio",
+  "course_slug": "python-3",
+  "questions": [
+    {
+      "id": "q_py3_06_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Por qué asyncio es ideal para operaciones I/O-bound (APIs, red, bases de datos) pero no para cálculos matemáticos pesados en CPU?",
+      "explanation": "Para tareas pesadas de CPU se utiliza multiprocessing (procesos en múltiples núcleos) para evitar acaparar el hilo de asyncio.",
+      "category": "concurrencia-asyncio",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Porque corre en un solo hilo; los cálculos en CPU bloquean el Event Loop e impiden que otras corrutinas avancen",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Porque asyncio solo acepta números enteros",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Porque no soporta el operador de suma (+)",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Porque la CPU no tiene soporte para async",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

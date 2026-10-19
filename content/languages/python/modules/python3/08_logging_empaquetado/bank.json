@@ -1,0 +1,49 @@
+{
+  "module_code": "PY3_M08",
+  "module_slug": "logging-y-empaquetado",
+  "course_slug": "python-3",
+  "questions": [
+    {
+      "id": "q_py3_08_01",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es el archivo de configuración estándar en Python moderno para definir metadatos y empaquetar librerías?",
+      "explanation": "pyproject.toml (PEP 518/621) es el estándar contemporáneo universal para empaquetado de proyectos en Python.",
+      "category": "logging-empaquetado",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "pyproject.toml",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "package.json",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "settings.ini",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "pip.conf",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,91 @@
+{
+  "module_code": "PY1_M06",
+  "module_slug": "bucles-for",
+  "course_slug": "python-1",
+  "questions": [
+    {
+      "id": "q_py1_06_01",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué genera list(range(3, 7))?",
+      "explanation": "Inicia en 3 y termina antes del 7, produciendo los números 3, 4, 5 y 6.",
+      "category": "bucles-for",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "[3, 4, 5, 6]",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "[3, 4, 5, 6, 7]",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "[4, 5, 6, 7]",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "[3, 7]",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    },
+    {
+      "id": "q_py1_06_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué hace la instrucción continue dentro de un bucle for?",
+      "explanation": "continue descarta el resto del bloque para el elemento actual y procede con el siguiente elemento.",
+      "category": "bucles-for",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "Salta el código restante de la iteración actual y pasa a la siguiente",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "Termina y rompe el bucle por completo",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "Reinicia el bucle desde el primer elemento",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "Pausa el programa durante 1 segundo",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}

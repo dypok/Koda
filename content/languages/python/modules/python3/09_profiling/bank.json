@@ -1,0 +1,49 @@
+{
+  "module_code": "PY3_M09",
+  "module_slug": "rendimiento-y-profiling",
+  "course_slug": "python-3",
+  "questions": [
+    {
+      "id": "q_py3_09_01",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué módulo nativo de Python se utiliza para realizar profiling determinista detallado de todas las funciones de un programa?",
+      "explanation": "cProfile es el analizador de rendimiento integrado en C estándar de Python.",
+      "category": "profiling",
+      "prompt_code": null,
+      "answers": [
+        {
+          "id": "a",
+          "label": "A",
+          "body": "cProfile",
+          "is_correct": true,
+          "position": 1
+        },
+        {
+          "id": "b",
+          "label": "B",
+          "body": "benchmark",
+          "is_correct": false,
+          "position": 2
+        },
+        {
+          "id": "c",
+          "label": "C",
+          "body": "valgrind",
+          "is_correct": false,
+          "position": 3
+        },
+        {
+          "id": "d",
+          "label": "D",
+          "body": "speedup",
+          "is_correct": false,
+          "position": 4
+        }
+      ],
+      "correct_answer_ids": [
+        "a"
+      ]
+    }
+  ]
+}
