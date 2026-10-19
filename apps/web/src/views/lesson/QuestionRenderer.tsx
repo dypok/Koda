@@ -3,6 +3,7 @@
 import React from 'react';
 import { Check } from '@phosphor-icons/react';
 import { ContentExercise } from '@/lib/content';
+import { RichInline } from './RichText';
 import { cn } from '@/lib/utils';
 
 interface QuestionRendererProps {
@@ -91,7 +92,7 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
                     opt.label ?? shortcutChar
                   )}
                 </span>
-                <span className="font-mono text-xs sm:text-sm leading-snug break-words group-hover:text-white transition-colors">{opt.body}</span>
+                <span className="font-mono text-xs sm:text-sm leading-snug break-words group-hover:text-white transition-colors"><RichInline text={opt.body} /></span>
               </div>
 
               {/* Keycap Badge táctil visible en desktop */}

@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState } from 'react';
 import { ContentExercise, shuffled } from '@/lib/content';
+import { runPython } from '@/lib/python-runner';
 
 export type AnswerResult = {
   correct: boolean;
@@ -9,6 +10,8 @@ export type AnswerResult = {
   xp: number;
   feedback: string;
   hint?: string;
+  output?: string;
+  error?: string;
 };
 
 function setsEqual(a: string[], b: string[]): boolean {
@@ -83,6 +86,64 @@ export function useLessonEngine(exercises: ContentExercise[], seed = 42) {
     return res;
   }, [current, selected, result, attempts, failedFirst]);
 
+  /**
+   * Evalúa un ejercicio de consola (`write_code`): ejecuta el código del
+   * alumno y compara la salida real con la esperada. Permite reintentar en el
+   * sitio mientras la última respuesta haya sido incorrecta.
+   */
+  const submitCode = useCallback(
+    async (code: string): Promise<AnswerResult | null> => {
+      if (!current || current.type !== 'write_code') return null;
+      if (result && result.correct) return null;
+
+      const tries = (attempts[current.id] ?? 0) + 1;
+      setAttempts((p) => ({ ...p, [current.id]: tries }));
+
+      const run = await runPython(code);
+      const output = run.output ?? '';
+      const error = run.error;
+
+      const normalize = (value: string) => value.replace(/\r/g, '').trim();
+      const expected = current.accepted_answers ?? [];
+      const tokens = current.accepted_tokens ?? [];
+      const outputMatches =
+        expected.length === 0 || expected.some((value) => normalize(value) === normalize(output));
+      const tokensPresent = tokens.every((token) => code.includes(token));
+      const ok = !error && outputMatches && tokensPresent;
+
+      if (ok) {
+        const recovered = Boolean(failedFirst[current.id]);
+        const gained = recovered ? 2 : 5;
+        setXp((x) => x + gained);
+        const res: AnswerResult = {
+          correct: true,
+          recovered,
+          xp: gained,
+          feedback: current.explanation ?? '¡Correcto! Tu código hace lo que pedíamos.',
+          output,
+        };
+        setResult(res);
+        return res;
+      }
+
+      setFailedFirst((p) => ({ ...p, [current.id]: true }));
+      const res: AnswerResult = {
+        correct: false,
+        recovered: false,
+        xp: 0,
+        feedback: error
+          ? 'Tu código dio un error. Léelo en la consola, corrígelo e inténtalo otra vez.'
+          : 'La salida no es la que esperábamos. Revisa la pista e inténtalo otra vez.',
+        hint: current.hints?.[0],
+        output,
+        error,
+      };
+      setResult(res);
+      return res;
+    },
+    [current, result, attempts, failedFirst]
+  );
+
   const next = useCallback(() => {
     setSelected([]);
     setResult(null);
@@ -100,5 +161,5 @@ export function useLessonEngine(exercises: ContentExercise[], seed = 42) {
     setResult(null);
   }, []);
 
-  return { current, selected, result, toggle, check, next, prev, resetSelection, done, index, total: order.length, xp };
+  return { current, selected, result, toggle, check, submitCode, next, prev, resetSelection, done, index, total: order.length, xp };
 }

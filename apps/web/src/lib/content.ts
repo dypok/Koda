@@ -18,6 +18,10 @@ export interface ContentExercise {
   explanation?: string;
   hints?: string[];
   score?: number;
+  starter_code?: string | null;
+  accepted_answers?: string[];
+  accepted_tokens?: string[];
+  epsilon?: number;
 }
 
 export interface ContentExample {
@@ -269,6 +273,10 @@ function normalizeLesson(raw: any, index: number): ContentLesson {
         correct_answer_ids: rawEx.correct_answer_ids || (rawEx.correct_option_id ? [rawEx.correct_option_id] : []),
         explanation: rawEx.explanation || '',
         hints: rawEx.hints || (rawEx.hint ? [rawEx.hint] : []),
+        starter_code: rawEx.starter_code ?? null,
+        accepted_answers: Array.isArray(rawEx.accepted_answers) ? rawEx.accepted_answers : [],
+        accepted_tokens: Array.isArray(rawEx.accepted_tokens) ? rawEx.accepted_tokens : [],
+        epsilon: typeof rawEx.epsilon === 'number' ? rawEx.epsilon : undefined,
       }]
     : [];
 
@@ -348,6 +356,9 @@ export async function loadBank(lang: string, moduleSlug: string): Promise<Conten
         correct_answer_ids: q.correct_option_id ? [q.correct_option_id] : (q.correct_answer_ids || []),
         explanation: q.explanation || '',
         hints: q.hint ? [q.hint] : (q.hints || []),
+        starter_code: q.starter_code ?? null,
+        accepted_answers: Array.isArray(q.accepted_answers) ? q.accepted_answers : [],
+        accepted_tokens: Array.isArray(q.accepted_tokens) ? q.accepted_tokens : [],
       };
     });
   } catch {

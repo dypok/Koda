@@ -1,10 +1,12 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key, Code } from '@phosphor-icons/react';
 import { ContentExercise, ContentLesson, ContentModule, loadBank, loadModule, shuffled, hasModule } from '@/lib/content';
+import { ConsoleExercise } from './ConsoleExercise';
 import { QuestionRenderer } from './QuestionRenderer';
+import { RichInline, RichText } from './RichText';
 import { useLessonEngine } from './useLessonEngine';
 import { useLessonKeyboardShortcuts } from '@/hooks/useLessonKeyboardShortcuts';
 import { useRoadmapStore } from '@/stores/roadmap.store';
@@ -162,6 +164,7 @@ const QUIZ_COMPOSITION: Record<string, number> = {
   fill_blank: 1,
   find_error: 1,
   select_code: 1,
+  write_code: 1,
 };
 
 function sampleQuiz(bank: ContentExercise[], seed: number): ContentExercise[] {
@@ -200,17 +203,28 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     }
   });
 
-  const handleLessonCompleted = (lessonId: string) => {
-    setCompletedLessons((prev) => {
-      const next = new Set(prev).add(lessonId);
+  // Espejo síncrono del estado para poder decidir sin esperar al re-render.
+  const completedRef = useRef(completedLessons);
+  completedRef.current = completedLessons;
+
+  // Idempotente: registrar la misma lección dos veces no debe generar un
+  // estado nuevo, porque eso re-renderiza y vuelve a disparar el efecto de
+  // completitud (bucle de actualizaciones de React).
+  const handleLessonCompleted = useCallback(
+    (lessonId: string) => {
+      if (completedRef.current.has(lessonId)) return;
+
+      const next = new Set(completedRef.current).add(lessonId);
+      completedRef.current = next;
+      setCompletedLessons(next);
       try {
         window.localStorage.setItem('koda_completed_lessons', JSON.stringify(Array.from(next)));
       } catch {}
-      return next;
-    });
-    // Notificar al roadmap store para encender el nodo actual
-    completeSectionNode(sectionRef, 3);
-  };
+      // Notificar al roadmap store para encender el nodo actual
+      completeSectionNode(sectionRef, 3);
+    },
+    [completeSectionNode, sectionRef]
+  );
 
   useEffect(() => {
     let alive = true;
@@ -339,11 +353,11 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
 
   const lesson = section.lessons[lessonIdx] ?? null;
   return (
-    <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
+    <div className="relative isolate h-dvh overflow-hidden bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 font-sans">
       <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
 
       {/* Header Fijo de Navegación HUD */}
-      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
+      <header className="shrink-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
         <div className="mx-auto max-w-6xl space-y-2.5">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
@@ -401,7 +415,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center p-4 md:p-6 lg:p-8">
+      <main className="flex-1 min-h-0 overflow-y-auto lg:overflow-hidden flex items-start lg:items-center justify-center p-4 md:p-6 lg:p-8">
         {lesson ? (
           <LessonView
             key={lesson.id}
@@ -464,12 +478,22 @@ function LessonView({
   const exercise = lesson.exercises[0] ?? null;
   const engine = useLessonEngine(exercise ? [exercise] : [], lesson.position);
 
+  // El callback llega como arrow inline desde el padre: su identidad cambia en
+  // cada render. Guardarlo en un ref evita que el efecto de completitud se
+  // vuelva a disparar y entre en bucle.
+  const onCompleteRef = useRef(onComplete);
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  });
+
+  const solved = Boolean(engine.result?.correct);
+
   // Notificar completitud automática si el ejercicio es correcto
   useEffect(() => {
-    if (engine.result?.correct) {
-      onComplete?.();
+    if (solved) {
+      onCompleteRef.current?.();
     }
-  }, [engine.result, onComplete]);
+  }, [solved]);
 
   // Hook de atajos ergonómicos por teclado
   const { pressedIndex, pressedAction } = useLessonKeyboardShortcuts({
@@ -502,10 +526,11 @@ function LessonView({
   });
 
   return (
-    <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6 lg:h-full lg:min-h-0">
       {/* Columna Izquierda: Teoría & Terminal */}
-      <section aria-label="Teoría" className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col justify-between gap-6 shadow-2xl">
-        <div className="space-y-4">
+      <section aria-label="Teoría" className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col gap-6 shadow-2xl lg:min-h-0">
+        {/* Región con scroll propio: la teoría se desplaza dentro de la tarjeta. */}
+        <div className="space-y-4 lg:flex-1 lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain lg:pr-1">
           <div className="flex items-center gap-2">
             <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-orange-500/10 border border-orange-500/20 text-[10px] font-mono font-bold text-orange-300 uppercase tracking-wider">
               <span>Lección 0{lesson.position ?? 1}</span>
@@ -520,40 +545,42 @@ function LessonView({
           <h1 className="font-display text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">
             {lesson.title}
           </h1>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-            {lesson.explanation}
-          </p>
-        </div>
+          <RichText text={lesson.explanation} />
 
-        {/* Terminal interactiva */}
-        <div className="space-y-3">
-          {lesson.examples.map((ex, i) => (
-            <div key={i} className="space-y-3">
-              <div className="rounded-xl border border-slate-800 bg-slate-950/80 p-4 font-mono text-sm leading-relaxed text-slate-200 shadow-inner">
-                <span className="text-slate-600 select-none">// Ejemplo interactivo</span>
-                <div className="text-amber-300 pt-1">
-                  <code>{ex.code}</code>
+          {/* Terminal interactiva */}
+          <div className="space-y-3 pt-2">
+            {lesson.examples.map((ex, i) => (
+              <div key={i} className="space-y-3">
+                <div className="rounded-xl border border-slate-800 bg-slate-950/80 p-4 font-mono text-sm leading-relaxed text-slate-200 shadow-inner">
+                  <span className="text-slate-600 select-none">// Ejemplo interactivo</span>
+                  <div className="text-amber-300 pt-1">
+                    <code>{ex.code}</code>
+                  </div>
                 </div>
+                {ex.output ? (
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-950/30 border border-emerald-500/30 text-xs font-mono text-emerald-300">
+                    <span className="text-emerald-500 font-bold">$</span>
+                    <span>{ex.output}</span>
+                  </div>
+                ) : null}
+                {ex.explanation ? (
+                  <RichText
+                    text={ex.explanation}
+                    compact
+                    className="text-[11px] text-slate-400 leading-normal pl-1"
+                  />
+                ) : null}
               </div>
-              {ex.output ? (
-                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-950/30 border border-emerald-500/30 text-xs font-mono text-emerald-300">
-                  <span className="text-emerald-500 font-bold">$</span>
-                  <span>{ex.output}</span>
-                </div>
-              ) : null}
-              {ex.explanation ? (
-                <p className="text-[11px] text-slate-400 leading-normal pl-1">{ex.explanation}</p>
-              ) : null}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Columna Derecha: Práctica & Desafío de Comprensión */}
-      <section aria-label="Práctica" className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col justify-between gap-6 shadow-2xl">
+      <section aria-label="Práctica" className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col justify-between gap-6 shadow-2xl lg:min-h-0">
         {!exercise ? (
-          <div className="space-y-6 flex flex-col justify-between h-full">
-            <div className="space-y-4">
+          <div className="space-y-6 flex flex-col justify-between h-full lg:min-h-0">
+            <div className="space-y-4 lg:flex-1 lg:min-h-0 lg:overflow-y-auto lg:overscroll-contain lg:pr-1">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-500/10 border border-amber-500/20 text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider">
                 <span>Lectura Conceptual</span>
               </div>
@@ -580,8 +607,8 @@ function LessonView({
             </button>
           </div>
         ) : (
-          <div className="space-y-5 flex flex-col justify-between h-full">
-            <div className="space-y-4">
+          <div className="space-y-5 flex flex-col h-full lg:min-h-0">
+            <div className="space-y-4 min-h-0 max-h-[55vh] lg:max-h-none lg:flex-1 overflow-y-auto overscroll-contain pr-1">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
                   Desafío de Comprensión
@@ -591,9 +618,10 @@ function LessonView({
                 </span>
               </div>
 
-              <p className="text-base sm:text-lg font-bold text-white leading-snug">
-                {exercise.prompt}
-              </p>
+              <RichText
+                text={exercise.prompt}
+                className="text-base sm:text-lg font-bold text-white leading-snug"
+              />
 
               <div className="pt-2">
                 <QuestionRenderer
@@ -607,7 +635,7 @@ function LessonView({
             </div>
 
             {/* Acciones de Evaluación */}
-            <div className="pt-3">
+            <div className="pt-3 shrink-0">
               {!engine.result ? (
                 <button
                   type="button"
@@ -640,12 +668,14 @@ function LessonView({
                       {engine.result.correct ? `¡Excelente! +${engine.result.xp} XP` : 'Respuesta incorrecta'}
                     </p>
                   </div>
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                    {engine.result.feedback}
-                  </p>
+                  <RichText
+                    text={engine.result.feedback}
+                    compact
+                    className="text-xs sm:text-sm text-slate-300 leading-relaxed"
+                  />
                   {engine.result.hint ? (
                     <p className="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg">
-                      💡 <strong>Pista:</strong> {engine.result.hint}
+                      💡 <strong>Pista:</strong> <RichInline text={engine.result.hint} />
                     </p>
                   ) : null}
                   <div className="flex gap-2.5 pt-1">
@@ -683,7 +713,7 @@ function LessonView({
             </div>
 
             {/* Pie de navegación libre entre lecciones independientes */}
-            <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-xs font-mono text-slate-400">
+            <div className="flex shrink-0 items-center justify-between pt-2 border-t border-slate-800/80 text-xs font-mono text-slate-400">
               <button
                 type="button"
                 onClick={onPrev}
@@ -730,11 +760,19 @@ function QuizMode({
   const answered = engine.index;
   const total = engine.total;
 
+  // `onFinish` es una arrow inline en el padre: su identidad cambia en cada
+  // render. El ref + el flag de una sola vez evitan el bucle de actualizaciones.
+  const onFinishRef = useRef(onFinish);
   useEffect(() => {
-    if (engine.done) {
-      onFinish(okCount, total);
-    }
-  }, [engine.done, okCount, total, onFinish]);
+    onFinishRef.current = onFinish;
+  });
+  const finishedRef = useRef(false);
+
+  useEffect(() => {
+    if (!engine.done || finishedRef.current) return;
+    finishedRef.current = true;
+    onFinishRef.current(okCount, total);
+  }, [engine.done, okCount, total]);
 
   // Hook de atajos de teclado para Quiz
   const { pressedIndex, pressedAction } = useLessonKeyboardShortcuts({
@@ -778,10 +816,10 @@ function QuizMode({
   }
 
   return (
-    <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
+    <div className="relative isolate h-dvh overflow-hidden bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 font-sans">
       <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
 
-      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
+      <header className="shrink-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
         <div className="mx-auto max-w-4xl space-y-2.5">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 font-mono text-xs">
@@ -808,32 +846,49 @@ function QuizMode({
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center p-4 md:p-6 lg:p-8">
+      <main className="flex-1 min-h-0 flex items-center justify-center p-4 md:p-6 lg:p-8">
         {engine.current ? (
-          <div className="w-full max-w-3xl rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-2xl">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                Pregunta del Quiz
-              </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-300 border border-orange-500/30">
-                Progreso {answered + 1} de {total}
-              </span>
+          <div className="flex w-full max-w-3xl max-h-full flex-col overflow-hidden rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl shadow-2xl">
+            {/* Región con scroll propio: enunciado + ejercicio. La página nunca scrollea. */}
+            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-6 sm:p-8 space-y-6">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+                  Pregunta del Quiz
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-300 border border-orange-500/30">
+                  Progreso {answered + 1} de {total}
+                </span>
             </div>
 
-            <p className="text-lg sm:text-xl font-bold text-white leading-snug">
-              {engine.current.prompt}
-            </p>
-
-            <QuestionRenderer
-              exercise={engine.current}
-              selectedIds={engine.selected}
-              onToggle={engine.toggle}
-              disabled={Boolean(engine.result)}
-              pressedIndex={pressedIndex}
+            <RichText
+              text={engine.current.prompt}
+              className="text-base sm:text-lg lg:text-xl font-bold text-white leading-snug"
             />
 
-            <div className="pt-2">
+            {engine.current.type === 'write_code' ? (
+              <ConsoleExercise
+                exercise={engine.current}
+                result={engine.result}
+                onSubmit={engine.submitCode}
+                onReset={engine.resetSelection}
+              />
+            ) : (
+              <QuestionRenderer
+                exercise={engine.current}
+                selectedIds={engine.selected}
+                onToggle={engine.toggle}
+                disabled={Boolean(engine.result)}
+                pressedIndex={pressedIndex}
+              />
+            )}
+            </div>
+
+            {/* Pie fijo: la acción de evaluación queda siempre visible, sin salir de pantalla. */}
+            {engine.result || engine.current.type !== 'write_code' ? (
+              <div className="shrink-0 border-t border-slate-800/80 bg-slate-950/40 px-6 py-4 sm:px-8">
+                <div className="space-y-3">
               {!engine.result ? (
+                engine.current.type === 'write_code' ? null : (
                 <button
                   type="button"
                   onClick={() => engine.check()}
@@ -849,6 +904,7 @@ function QuizMode({
                     Enter ↵
                   </kbd>
                 </button>
+                )
               ) : (
                 <div
                   role={engine.result.correct ? 'status' : 'alert'}
@@ -866,8 +922,22 @@ function QuizMode({
                     )}
                   >
                     {engine.result.correct ? <Check aria-hidden="true" className="w-5 h-5 text-emerald-400" /> : null}
-                    {engine.result.correct ? '¡Correcto!' : 'Anotado para repaso. Continuemos.'}
+                    {engine.result.correct
+                      ? '¡Correcto!'
+                      : engine.current.type === 'write_code'
+                        ? 'Todavía no. Corrige tu código e inténtalo otra vez.'
+                        : 'Anotado para repaso. Continuemos.'}
                   </p>
+                  <RichText
+                    text={engine.result.feedback}
+                    compact
+                    className="text-xs sm:text-sm text-slate-300 leading-relaxed"
+                  />
+                  {engine.result.hint ? (
+                    <p className="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg">
+                      💡 <strong>Pista:</strong> <RichInline text={engine.result.hint} />
+                    </p>
+                  ) : null}
                   <button
                     type="button"
                     onClick={() => {
@@ -887,9 +957,11 @@ function QuizMode({
                   </button>
                 </div>
               )}
+              </div>
             </div>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
+      ) : null}
       </main>
     </div>
   );
