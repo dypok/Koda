@@ -30,6 +30,7 @@ interface AuthState {
   updateUserProfile: (partial: Partial<AuthUser>) => void;
   login: (email: string, fullName?: string) => void;
   loginSocial: (provider: 'google' | 'github') => void;
+  loginAsGuest: () => void;
   logout: () => void;
 }
 
@@ -82,6 +83,17 @@ function scheduleBackgroundRefresh(token: string | null, refreshToken: string | 
       scheduleBackgroundRefresh(token, refreshToken, onRefresh);
     }
   }, ms);
+}
+
+/**
+ * Token simbólico para el modo invitado. No se valida contra el backend:
+ * sólo permite que `initAuth` reconozca la sesión local tras recargar.
+ */
+function createGuestToken(): string {
+  const encode = (value: object) =>
+    btoa(JSON.stringify(value)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  const now = Math.floor(Date.now() / 1000);
+  return `${encode({ alg: 'none', typ: 'JWT' })}.${encode({ sub: 'guest', exp: now + 60 * 60 * 24 * 365 })}.`;
 }
 
 export const useAuthStore = create<AuthState>((set, get) => ({
@@ -197,6 +209,41 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     scheduleBackgroundRefresh(accessToken, finalRefresh, (newToken, newRefresh) => {
       set({ token: newToken, refreshToken: newRefresh });
+    });
+  },
+
+  loginAsGuest: () => {
+    if (refreshTimer) {
+      clearTimeout(refreshTimer);
+      refreshTimer = null;
+    }
+
+    const guestUser: AuthUser = {
+      id: 'guest',
+      email: 'invitado@koda.local',
+      fullName: 'Invitado',
+      avatarUrl: '/brand/koda-mascot-cartoon-2d.svg',
+      totalXp: 0,
+      level: 1,
+      streak: 0,
+      initialLanguageSlug: 'python',
+      onboardingCompleted: true,
+    };
+    const guestToken = createGuestToken();
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(guestUser));
+      localStorage.setItem(STORAGE_KEYS.TOKEN, guestToken);
+      localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+      localStorage.setItem(STORAGE_KEYS.HAS_LOGGED, 'true');
+    }
+
+    set({
+      user: guestUser,
+      token: guestToken,
+      refreshToken: null,
+      isAuthenticated: true,
+      hasEverLoggedIn: true,
     });
   },
 

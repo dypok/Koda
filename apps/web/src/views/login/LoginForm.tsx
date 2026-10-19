@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Envelope, Lock, Eye, EyeSlash, CircleNotch, ArrowRight, CheckCircle } from '@phosphor-icons/react';
+import { Envelope, Lock, Eye, EyeSlash, CircleNotch, ArrowRight, CheckCircle, UserCircle } from '@phosphor-icons/react';
 import { WipeButton } from '@/components/ui/wipe-button';
 import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
 import { useAuthStore } from '@/stores/auth.store';
@@ -13,6 +13,7 @@ import { LoginSocialButtons } from './LoginSocialButtons';
 export const LoginForm: React.FC = () => {
   const router = useRouter();
   const setUserSession = useAuthStore((s) => s.setUserSession);
+  const loginAsGuest = useAuthStore((s) => s.loginAsGuest);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -89,6 +90,12 @@ export const LoginForm: React.FC = () => {
       setError(err.message || 'Error al conectar con proveedor social.');
       setIsSubmitting(false);
     }
+  };
+
+  const handleGuest = () => {
+    setError('');
+    loginAsGuest();
+    router.replace('/');
   };
 
   const handleForgotPassword = async () => {
@@ -210,6 +217,28 @@ export const LoginForm: React.FC = () => {
         <Link href="/register" className="text-amber-400 font-bold hover:underline">
           Regístrate gratis
         </Link>
+      </div>
+
+      <div className="pt-2">
+        <div className="flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.25em] text-slate-600">
+          <span className="h-px flex-1 bg-slate-800" />
+          <span>o</span>
+          <span className="h-px flex-1 bg-slate-800" />
+        </div>
+
+        <button
+          type="button"
+          onClick={handleGuest}
+          disabled={isSubmitting}
+          className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-slate-700/70 bg-slate-900/40 px-4 py-3 text-sm font-semibold text-slate-300 transition-colors hover:border-amber-500/60 hover:bg-amber-500/10 hover:text-amber-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/60 disabled:opacity-50"
+        >
+          <UserCircle className="h-5 w-5" weight="bold" />
+          <span>Entrar sin cuenta</span>
+        </button>
+
+        <p className="mt-2 text-center text-[11px] leading-relaxed text-slate-500">
+          Explora las lecciones en modo invitado. Tu progreso no se guardará.
+        </p>
       </div>
     </div>
   );
