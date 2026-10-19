@@ -6,28 +6,158 @@
     {
       "id": "q_py3_06_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Por qué asyncio es ideal para operaciones I/O-bound (APIs, red, bases de datos) pero no para cálculos matemáticos pesados en CPU?",
+      "difficulty": "easy",
+      "prompt": "¿Qué sucede si invocas una función declarada como 'async def procesar():' sin anteponer await ni pasarla a un Event Loop?",
       "options": [
         {
           "id": "a",
-          "text": "Porque corre en un solo hilo; los cálculos en CPU bloquean el Event Loop e impiden que otras corrutinas avancen"
+          "text": "Se crea y retorna un objeto de tipo coroutine sin haber ejecutado su código interno"
         },
         {
           "id": "b",
-          "text": "Porque asyncio solo acepta números enteros"
+          "text": "La función se ejecuta síncronamente bloqueando el programa"
         },
         {
           "id": "c",
-          "text": "Porque no soporta el operador de suma (+)"
+          "text": "Python lanza un SyntaxError de forma inmediata"
         },
         {
           "id": "d",
-          "text": "Porque la CPU no tiene soporte para async"
+          "text": "Se crea un hilo secundario en el sistema operativo"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Para tareas pesadas de CPU se utiliza multiprocessing (procesos en múltiples núcleos) para evitar acaparar el hilo de asyncio."
+      "explanation": "En Python, llamar a una corrutina solo instancia el objeto corrutina. Para que su código se ejecute, debe ser esperada con await o planificada en el Event Loop."
+    },
+    {
+      "id": "q_py3_06_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Por qué el uso de 'time.sleep()' es considerado un antipatrón crítico dentro de una corrutina de asyncio?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque bloquea de forma síncrona el único hilo donde corre el Event Loop, impidiendo que cualquier otra corrutina pueda ejecutarse durante la espera"
+        },
+        {
+          "id": "b",
+          "text": "Porque time.sleep solo acepta números enteros"
+        },
+        {
+          "id": "c",
+          "text": "Porque time.sleep fue eliminado en Python 3"
+        },
+        {
+          "id": "d",
+          "text": "Porque lanza una excepción MemoryError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El Event Loop es mono-hilo y cooperativo. Una llamada bloqueante síncrona detiene el bucle completo afectando a todas las tareas activas."
+    },
+    {
+      "id": "q_py3_06_03",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es la instrucción adecuada para pausar la ejecución de una corrutina durante 2 segundos de forma no bloqueante?",
+      "options": [
+        {
+          "id": "a",
+          "text": "await asyncio.sleep(2)"
+        },
+        {
+          "id": "b",
+          "text": "time.sleep(2)"
+        },
+        {
+          "id": "c",
+          "text": "asyncio.pause(2)"
+        },
+        {
+          "id": "d",
+          "text": "await thread.wait(2)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "await asyncio.sleep(2) cede el control del Event Loop a otras tareas mientras transcurre el temporizador en segundo plano."
+    },
+    {
+      "id": "q_py3_06_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué función cumple 'asyncio.gather(*tareas)'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ejecuta de forma concurrente múltiples corrutinas y reúne los resultados de todas ellas en una lista ordenada"
+        },
+        {
+          "id": "b",
+          "text": "Detiene todas las tareas que lleven más de 10 segundos corriendo"
+        },
+        {
+          "id": "c",
+          "text": "Convierte corrutinas asíncronas en generadores de texto"
+        },
+        {
+          "id": "d",
+          "text": "Borra las variables locales de cada tarea"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "asyncio.gather despacha simultáneamente todas las corrutinas suministradas y espera sus retornos retornando una lista de resultados."
+    },
+    {
+      "id": "q_py3_06_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué excepción lanza 'asyncio.wait_for(corrutina, timeout=3)' si la corrutina no concluye dentro de los 3 segundos establecidos?",
+      "options": [
+        {
+          "id": "a",
+          "text": "TimeoutError"
+        },
+        {
+          "id": "b",
+          "text": "StopIteration"
+        },
+        {
+          "id": "c",
+          "text": "ValueError"
+        },
+        {
+          "id": "d",
+          "text": "SystemExit"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "wait_for aborta la corrutina que excedió el tiempo límite y lanza TimeoutError para proteger el sistema contra peticiones colgadas."
+    },
+    {
+      "id": "q_py3_06_06",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Para qué tipo de cargas de trabajo está especialmente diseñado el modelo de concurrencia de asyncio?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Operaciones I/O-bound (red, peticiones HTTP, bases de datos y sockets) donde la mayor parte del tiempo se espera respuesta externa"
+        },
+        {
+          "id": "b",
+          "text": "Operaciones CPU-bound intensivas (renderizado 3D masivo, criptografía pesada o entrenamiento de redes neuronales puras)"
+        },
+        {
+          "id": "c",
+          "text": "Para compilar archivos C a código binario"
+        },
+        {
+          "id": "d",
+          "text": "Para aumentar la memoria física del equipo"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Asyncio brilla en operaciones I/O-bound porque permite atender miles de conexiones con un solo hilo mientras esperan paquetes de red."
     }
   ]
 }
