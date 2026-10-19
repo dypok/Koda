@@ -37,7 +37,7 @@
           "slug": "pip-git-base",
           "position": 1,
           "concept_id": "py2-tooling",
-          "objective": "Congelar dependencias con pip freeze y versionar con git init, add y commit.",
+          "objective": "Crear un entorno virtual, congelar dependencias con pip freeze y versionar con git init, add y commit.",
           "examples": [
             {
               "title": "Contenido típico de un archivo requirements.txt",
@@ -55,11 +55,12 @@
             "solution": "# pip install -r requirements.txt"
           },
           "key_takeaways": [
+            "venv aísla las dependencias de cada proyecto.",
             "pip instala librerías desde el índice PyPI.",
             "requirements.txt asegura la reproducibilidad del entorno.",
             "Nunca subas carpetas .venv/ o __pycache__/ a Git (usa .gitignore)."
           ],
-          "explanation": "El ecosistema de Python cuenta con más de 500,000 paquetes en **PyPI** (Python Package Index).\n\n1. `pip install requests`: Descarga e instala una librería en tu entorno virtual.\n2. `pip freeze > requirements.txt`: Congela las versiones exactas instaladas para que tus compañeros puedan replicar el entorno con `pip install -r requirements.txt`.\n3. **Git básico**:\n   - `git init`: Inicia el repositorio.\n   - `git add .`: Agrega cambios al área de preparación (stage).\n   - `git commit -m \"feat: nueva funcionalidad\"`: Guarda una instantánea permanente.\n   - **.gitignore**: Archivo imprescindible donde especificas `.venv/` o `__pycache__/` para no subir archivos basura al repositorio.",
+          "explanation": "Antes de instalar librerías, crea un **entorno virtual (venv)**: una carpeta aislada donde viven las dependencias de *este* proyecto. Así, actualizar una librería aquí no rompe otros proyectos que usan versiones distintas.\n\n```bash\n# Crear el entorno (una sola vez por proyecto)\npython -m venv .venv\n\n# Activarlo antes de instalar o ejecutar\nsource .venv/bin/activate   # macOS y Linux\n.venv\\Scripts\\activate      # Windows\n```\n\nSabrás que está activo porque su nombre aparece al inicio de la terminal. Para salir, escribe `deactivate`.\n\nCon el entorno activo, ya puedes instalar paquetes desde **PyPI** (Python Package Index), el catálogo con más de 500,000 librerías.\n\n1. `pip install requests`: Descarga e instala una librería en tu entorno virtual.\n2. `pip freeze > requirements.txt`: Congela las versiones exactas instaladas para que tus compañeros puedan replicar el entorno con `pip install -r requirements.txt`.\n3. **Git básico**:\n   - `git init`: Inicia el repositorio.\n   - `git add .`: Agrega cambios al área de preparación (stage).\n   - `git commit -m \"feat: nueva funcionalidad\"`: Guarda una instantánea permanente.\n   - **.gitignore**: Archivo imprescindible donde especificas `.venv/` o `__pycache__/` para no subir archivos basura al repositorio.",
           "is_required": true,
           "status": "published",
           "content_version": 1,

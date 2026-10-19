@@ -7,120 +7,138 @@
       "id": "q_py1_01_01",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "¿Cuál de las siguientes afirmaciones sobre Python es CORRECTA?",
-      "explanation": "Python es interpretado, altamente legible y no exige puntos y coma al final de las sentencias.",
+      "prompt": "¿Qué hace `print(\"Hola\")` cuando lo ejecutas?",
+      "explanation": "print() muestra en pantalla el texto que escribes entre paréntesis.",
       "category": "fundamentos",
+      "concept_ids": [
+        "py-print"
+      ],
       "prompt_code": null,
+      "hints": [
+        "Mira la palabra print y lo que está entre comillas."
+      ],
       "answers": [
         {
           "id": "a",
           "label": "A",
-          "body": "Es un lenguaje interpretado que prioriza la legibilidad del código",
-          "is_correct": true,
+          "body": "Guarda el texto en un archivo",
+          "is_correct": false,
           "position": 1
         },
         {
           "id": "b",
           "label": "B",
-          "body": "Requiere obligatoriamente punto y coma (;) al final de cada línea",
+          "body": "Pide un dato al usuario",
           "is_correct": false,
           "position": 2
         },
         {
           "id": "c",
           "label": "C",
-          "body": "No distingue entre mayúsculas y minúsculas en nombres de funciones",
-          "is_correct": false,
+          "body": "Muestra Hola en la pantalla",
+          "is_correct": true,
           "position": 3
         },
         {
           "id": "d",
           "label": "D",
-          "body": "Solo puede ejecutarse dentro de un navegador web",
+          "body": "Repite Hola dos veces",
           "is_correct": false,
           "position": 4
         }
       ],
       "correct_answer_ids": [
-        "a"
+        "c"
       ]
     },
     {
       "id": "q_py1_01_02",
       "type": "predict_output",
       "difficulty": "easy",
-      "prompt": "¿Qué salida produce la ejecución del siguiente código?",
-      "prompt_code": "print(\"Hola\", \"Mundo\", sep=\"-\")",
-      "explanation": "El parámetro nombrado sep=\"-\" en print() define el separador entre los argumentos impresos.",
+      "prompt": "¿Qué mostrará este código?",
+      "prompt_code": "print(\"Hola\")\nprint(\"Mundo\")",
+      "explanation": "Cada print() muestra su mensaje en una línea nueva: primero Hola y luego Mundo.",
       "category": "fundamentos",
+      "concept_ids": [
+        "py-print"
+      ],
+      "hints": [
+        "Cada print() empieza en una línea distinta."
+      ],
       "answers": [
         {
           "id": "a",
           "label": "A",
-          "body": "Hola-Mundo",
-          "is_correct": true,
+          "body": "Hola Mundo en una sola línea",
+          "is_correct": false,
           "position": 1
         },
         {
           "id": "b",
           "label": "B",
-          "body": "Hola Mundo",
-          "is_correct": false,
+          "body": "Hola en una línea y Mundo en otra",
+          "is_correct": true,
           "position": 2
         },
         {
           "id": "c",
           "label": "C",
-          "body": "Hola, Mundo",
+          "body": "HolaMundo",
           "is_correct": false,
           "position": 3
         },
         {
           "id": "d",
           "label": "D",
-          "body": "HolaMundo-",
+          "body": "Un error",
           "is_correct": false,
           "position": 4
         }
       ],
       "correct_answer_ids": [
-        "a"
+        "b"
       ]
     },
     {
       "id": "q_py1_01_03",
       "type": "find_error",
-      "difficulty": "medium",
-      "prompt": "¿Por qué la siguiente línea de código fallará al ejecutarse?",
-      "prompt_code": "print(\"Aprender Python es genial)",
-      "explanation": "Toda cadena iniciada con comillas dobles debe cerrarse con comillas dobles antes de cerrar el paréntesis.",
+      "difficulty": "easy",
+      "prompt": "¿Por qué este código no funciona?",
+      "prompt_code": "print(\"Hola)",
+      "explanation": "El texto empieza con comillas y debe terminar con otras comillas. Aquí falta la comilla de cierre.",
       "category": "fundamentos",
+      "concept_ids": [
+        "py-print"
+      ],
+      "hints": [
+        "Cuenta las comillas: debe haber una al inicio y otra al final."
+      ],
       "answers": [
         {
           "id": "a",
           "label": "A",
-          "body": "Falta la comilla de cierre de la cadena de texto (SyntaxError)",
+          "body": "Falta la comilla que cierra el texto",
           "is_correct": true,
           "position": 1
         },
         {
           "id": "b",
           "label": "B",
-          "body": "La palabra print debe ir con mayúscula inicial",
+          "body": "print debe escribirse en mayúsculas",
           "is_correct": false,
           "position": 2
         },
         {
           "id": "c",
           "label": "C",
-          "body": "Los textos deben escribirse con comillas triples únicamente",
+          "body": "Los textos no pueden llevar tildes",
           "is_correct": false,
           "position": 3
         },
         {
           "id": "d",
           "label": "D",
-          "body": "No se puede imprimir texto en español con tildes",
+          "body": "Falta un punto y coma al final",
           "is_correct": false,
           "position": 4
         }
@@ -133,70 +151,127 @@
       "id": "q_py1_01_04",
       "type": "fill_blank",
       "difficulty": "easy",
-      "prompt": "Para escribir un comentario de una sola línea en Python se utiliza el carácter: _____",
-      "explanation": "En Python, el carácter # se utiliza para comentarios de una línea.",
+      "prompt": "Para escribir un comentario de una sola línea en Python se usa el símbolo _____.",
+      "explanation": "El símbolo # marca el inicio de un comentario. Python ignora el resto de la línea.",
       "category": "fundamentos",
+      "concept_ids": [
+        "py-comments"
+      ],
       "prompt_code": null,
+      "hints": [
+        "Es el símbolo que parece una almohadilla."
+      ],
       "answers": [
         {
           "id": "a",
           "label": "A",
-          "body": "#",
-          "is_correct": true,
+          "body": "//",
+          "is_correct": false,
           "position": 1
         },
         {
           "id": "b",
           "label": "B",
-          "body": "//",
-          "is_correct": false,
+          "body": "#",
+          "is_correct": true,
           "position": 2
         },
         {
           "id": "c",
           "label": "C",
-          "body": "/*",
+          "body": "--",
           "is_correct": false,
           "position": 3
         },
         {
           "id": "d",
           "label": "D",
-          "body": "--",
+          "body": "/*",
           "is_correct": false,
           "position": 4
         }
       ],
       "correct_answer_ids": [
-        "a"
+        "b"
       ]
     },
     {
       "id": "q_py1_01_05",
       "type": "true_false",
       "difficulty": "easy",
-      "prompt": "En Python, las instrucciones PRINT(\"hola\") y print(\"hola\") son idénticas para el intérprete.",
-      "explanation": "Python es estricto con las mayúsculas y minúsculas (case-sensitive). La función nativa se llama print en minúsculas.",
+      "prompt": "En Python, `PRINT(\"hola\")` y `print(\"hola\")` hacen lo mismo.",
+      "explanation": "Python distingue mayúsculas de minúsculas. La instrucción correcta es print, en minúsculas.",
       "category": "fundamentos",
+      "concept_ids": [
+        "py-print"
+      ],
       "prompt_code": null,
+      "hints": [
+        "Python trata PRINT y print como nombres distintos."
+      ],
       "answers": [
         {
           "id": "a",
           "label": "A",
-          "body": "Falso, Python es sensible a mayúsculas y PRINT generará un NameError",
-          "is_correct": true,
+          "body": "Verdadero: PRINT y print son iguales",
+          "is_correct": false,
           "position": 1
         },
         {
           "id": "b",
           "label": "B",
-          "body": "Verdadero, Python ignora las mayúsculas en funciones nativas",
-          "is_correct": false,
+          "body": "Falso: print debe escribirse en minúsculas",
+          "is_correct": true,
           "position": 2
         }
       ],
       "correct_answer_ids": [
-        "a"
+        "b"
+      ]
+    },
+    {
+      "id": "q_py1_01_06",
+      "type": "write_code",
+      "difficulty": "easy",
+      "prompt": "**Objetivo:** mostrar un mensaje en la pantalla usando `print()`.\n\n**Instrucciones:**\n\n1. En la **línea 2** del editor (justo debajo del comentario que ya está escrito), escribe esto: `print(\"Hola, Koda\")`\n2. El mensaje va **entre comillas**: una comilla antes de `Hola` y otra después de `Koda`.\n3. No borres el `#` de la línea 1: Python ignora los comentarios, pero puedes usar esa línea como nota.\n4. Pulsa **EJECUTAR** y mira lo que aparece en la consola.\n\n**Resultado esperado en la consola:**\n\n`Hola, Koda`\n\n**Si no sale:** revisa que las dos comillas estén cerradas y que el paréntesis que cierra `print(` esté al final.",
+      "explanation": "Usaste print() con el texto entre comillas. Así se muestran los mensajes en Python.",
+      "category": "fundamentos",
+      "concept_ids": [
+        "py-print"
+      ],
+      "starter_code": "# Escribe tu código aquí\n",
+      "accepted_tokens": [
+        "print",
+        "Hola, Koda"
+      ],
+      "accepted_answers": [
+        "Hola, Koda"
+      ],
+      "hints": [
+        "Escribe print(\"Hola, Koda\") y no olvides las comillas."
+      ]
+    },
+    {
+      "id": "q_py1_01_07",
+      "type": "write_code",
+      "difficulty": "easy",
+      "prompt": "**Objetivo:** escribir un programa de dos líneas: una nota para ti y un mensaje en la pantalla.\n\n**Instrucciones:**\n\n1. En la **línea 1** ya tienes escrito un comentario que empieza por `#`. **No lo borres:** Python lo ignora, así que puedes usarlo como nota tuya.\n2. En la **línea 2**, debajo del comentario, escribe esto: `print(\"Estoy aprendiendo\")`\n3. El mensaje va **entre comillas**: una antes de `Estoy` y otra después de `aprendiendo`.\n4. Pulsa **EJECUTAR** y mira lo que aparece en la consola.\n\n**Resultado esperado en la consola:**\n\n`Estoy aprendiendo`\n\n**Si no sale:** revisa que el texto esté entre comillas, que el paréntesis que cierra `print(` esté al final y que el comentario de la línea 1 empiece por `#`.",
+      "explanation": "El comentario empieza con # y Python lo ignora. El print() muestra el mensaje en pantalla.",
+      "category": "fundamentos",
+      "concept_ids": [
+        "py-comments"
+      ],
+      "starter_code": "# Escribe un comentario\n",
+      "accepted_tokens": [
+        "#",
+        "print",
+        "Estoy aprendiendo"
+      ],
+      "accepted_answers": [
+        "Estoy aprendiendo"
+      ],
+      "hints": [
+        "El comentario empieza con #. Después usa print(\"Estoy aprendiendo\")."
       ]
     }
   ]

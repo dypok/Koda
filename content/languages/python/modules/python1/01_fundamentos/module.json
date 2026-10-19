@@ -4,9 +4,9 @@
   "code": "PY1_M01",
   "slug": "fundamentos-de-python",
   "course_slug": "python-1",
-  "title": "Entorno de Desarrollo y Primeros Pasos",
-  "objective": "Configurar un entorno profesional con VS Code y venv, dominar la función print() y la sintaxis base.",
-  "description": "Aprende qué es Python, cómo se ejecuta tu código, cómo configurar un entorno virtual y cómo comunicarte con la consola.",
+  "title": "Primeros pasos con Python",
+  "objective": "Escribir tus primeros mensajes con print() y usar comentarios para explicar tu código.",
+  "description": "Aprende a mostrar mensajes en pantalla y a dejar notas con comentarios. Sin tecnicismos y sin instalar nada.",
   "position": 1,
   "status": "published",
   "content_version": 1,
@@ -23,7 +23,7 @@
     {
       "id": "sec_py1_01_01",
       "code": "S01",
-      "title": "El Intérprete y la Función print()",
+      "title": "Tu primer programa",
       "slug": "interprete-y-print",
       "position": 1,
       "type": "theory",
@@ -33,33 +33,33 @@
         {
           "id": "les_py1_01_01",
           "code": "L01",
-          "title": "¿Cómo Piensa Python y Cómo se Ejecuta?",
+          "title": "Tu primer print()",
           "slug": "como-piensa-python",
           "position": 1,
-          "concept_id": "py-runtime",
-          "objective": "Comprender el ciclo de ejecución interpretado de Python frente a lenguajes compilados.",
+          "concept_id": "py-print",
+          "objective": "Mostrar mensajes en pantalla con print() y reconocer el error de una comilla sin cerrar.",
           "examples": [
             {
-              "title": "Primer script ejecutable",
-              "code": "# Línea 1: Mensaje de bienvenida\nprint(\"¡Hola, programador!\")\n\n# Línea 2: Impresión de números y cálculos directos\nprint(42)\nprint(10 + 5)",
-              "output": "¡Hola, programador!\n42\n15",
-              "explanation": "print() puede recibir texto entre comillas o expresiones numéricas directamente.",
+              "title": "Tu primer mensaje",
+              "code": "# Primera instrucción\nprint(\"Hola, Koda\")\n\n# También podemos mostrar números\nprint(7)",
+              "output": "Hola, Koda\n7",
+              "explanation": "Cada print() muestra su resultado en una línea nueva. El texto va entre comillas; los números no.",
               "language": "python",
               "position": 1
             }
           ],
-          "common_errors": "Olvidar cerrar comillas (SyntaxError: unterminated string literal) o escribir Print con mayúscula inicial (NameError: name \"Print\" is not defined; Python es sensible a mayúsculas).",
+          "common_errors": "Olvidar la comilla de cierre, como en print(\"Hola), genera un error. También falla escribir Print con mayúscula inicial.",
           "mini_exercise": {
-            "starter_code": "# Imprime tu nombre y tu lenguaje favorito en dos líneas\nprint(\"...\")",
-            "instructions": "Usa print() para mostrar tu nombre en la primera línea y Python 3 en la segunda.",
-            "solution": "print(\"Dev\")\nprint(\"Python 3\")"
+            "starter_code": "# Escribe tu nombre y el lenguaje que estás aprendiendo\nprint(\"...\")",
+            "instructions": "Usa print() para mostrar tu nombre en la primera línea y la palabra Python en la segunda.",
+            "solution": "print(\"Ana\")\nprint(\"Python\")"
           },
           "key_takeaways": [
-            "Python se ejecuta línea por línea de forma interpretada.",
-            "print() envía datos a la terminal.",
-            "Python distingue estrictamente entre mayúsculas y minúsculas."
+            "print() muestra un mensaje en la pantalla.",
+            "El texto se escribe entre comillas.",
+            "Cada print() muestra su resultado en una línea nueva."
           ],
-          "explanation": "Python es un lenguaje **interpretado y de alto nivel**. Imagina al intérprete de Python como un traductor simultáneo en las Naciones Unidas: en lugar de exigir que compiles todo un libro de una sola vez antes de leerlo (como C++ o Rust), Python lee tu archivo línea por línea de arriba hacia abajo y lo ejecuta en tiempo real.\n\nPara comunicarnos con el mundo exterior desde nuestro script, utilizamos la función nativa `print()`. Todo lo que pongas dentro de sus paréntesis será enviado a la salida estándar (la consola).\n\n> **Analogía del mundo real:** Un script de Python es como una receta de cocina paso a paso. El chef (el intérprete) lee la instrucción 1, la ejecuta en su estación de trabajo, luego pasa a la instrucción 2. Si la instrucción 2 tiene un error ortográfico, se detiene exactamente en esa línea.",
+          "explanation": "Un programa es una lista de instrucciones que la computadora sigue en orden. En Python, la primera instrucción que vas a aprender es `print()`. Sirve para mostrar un mensaje en la pantalla.\n\n```python\nprint(\"Hola, Koda\")\n```\n\nLo que está entre comillas es el mensaje. Los paréntesis le dicen a Python: «muestra esto». Al ejecutar el código, verás la palabra `Hola, Koda` en la pantalla.\n\nTambién puedes mostrar números: `print(7)`.\n\n**Ojo con esto:** las comillas deben abrir y cerrar. Si escribes `print(\"Hola)` sin la comilla final, Python no sabrá dónde termina el mensaje y mostrará un error.\n\n> **En simple:** `print()` es como un altavoz: lo que pones entre paréntesis se muestra en la pantalla.",
           "is_required": true,
           "status": "published",
           "content_version": 1,
@@ -68,45 +68,45 @@
               "id": "ex_py1_01_01",
               "type": "predict_output",
               "difficulty": "easy",
-              "prompt": "¿Qué mostrará la consola tras ejecutar este código?",
-              "prompt_code": "print(\"3\" + \"3\")\nprint(3 + 3)",
-              "explanation": "Entre comillas (\"3\" + \"3\"), el operador + concatena texto generando \"33\". Sin comillas (3 + 3), suma aritméticamente generando 6.",
+              "prompt": "¿Qué mostrará la pantalla al ejecutar este código?",
+              "prompt_code": "print(\"Hola\")\nprint(7)",
+              "explanation": "Cada print() muestra su mensaje en una línea. Primero aparece Hola y luego el número 7.",
               "category": "fundamentos",
               "answers": [
                 {
                   "id": "a",
                   "label": "A",
-                  "body": "33 en la primera línea y 6 en la segunda",
-                  "is_correct": true,
+                  "body": "Hola y 7 en la misma línea",
+                  "is_correct": false,
                   "position": 1
                 },
                 {
                   "id": "b",
                   "label": "B",
-                  "body": "6 en ambas líneas",
-                  "is_correct": false,
+                  "body": "Hola en una línea y 7 en otra",
+                  "is_correct": true,
                   "position": 2
                 },
                 {
                   "id": "c",
                   "label": "C",
-                  "body": "Error de tipo",
+                  "body": "Un error",
                   "is_correct": false,
                   "position": 3
                 },
                 {
                   "id": "d",
                   "label": "D",
-                  "body": "\"3+3\"",
+                  "body": "Hola7",
                   "is_correct": false,
                   "position": 4
                 }
               ],
               "correct_answer_ids": [
-                "a"
+                "b"
               ],
               "concept_ids": [
-                "py-runtime"
+                "py-print"
               ],
               "version": 1,
               "status": "published",
@@ -123,33 +123,33 @@
         {
           "id": "les_py1_01_02",
           "code": "L02",
-          "title": "Entornos Virtuales (venv) y Comentarios Limpios",
+          "title": "Comentarios: notas para tu yo del futuro",
           "slug": "entornos-virtuales-y-comentarios",
           "position": 2,
-          "concept_id": "py-venv",
-          "objective": "Aprender la importancia de aislar dependencias con venv y documentar con comentarios PEP 8.",
+          "concept_id": "py-comments",
+          "objective": "Usar comentarios con # para explicar tu código.",
           "examples": [
             {
-              "title": "Comentarios efectivos y auto-explicativos",
-              "code": "# Calcula el precio con impuesto del 16%\nprecio_base = 100\nimpuesto = precio_base * 0.16\ntotal = precio_base + impuesto\nprint(total)  # Muestra 116.0",
-              "output": "116.0",
-              "explanation": "Los comentarios explican el \"por qué\", no lo que el código ya dice a simple vista.",
+              "title": "Un comentario útil",
+              "code": "# Mostramos un saludo al usuario\nprint(\"Hola, Ana\")\n\n# Explicamos que esta línea da la bienvenida\nprint(\"Bienvenida a Koda\")",
+              "output": "Hola, Ana\nBienvenida a Koda",
+              "explanation": "Los comentarios empiezan con #. Python los ignora y solo muestra los print().",
               "language": "python",
               "position": 1
             }
           ],
-          "common_errors": "No activar el entorno virtual antes de instalar paquetes, o abusar de comentarios obvios como `# suma 1` en vez de dar nombres claros a las variables.",
+          "common_errors": "Repetir en el comentario lo que el código ya dice a simple vista. Es mejor explicar para qué sirve.",
           "mini_exercise": {
             "starter_code": "# Escribe un comentario explicando tu meta de aprendizaje\nprint(\"Koda Specialist\")",
             "instructions": "Agrega un comentario de una línea antes del print.",
             "solution": "# Mi objetivo es dominar Python Specialist\nprint(\"Koda Specialist\")"
           },
           "key_takeaways": [
-            "venv previene conflictos de versiones entre proyectos.",
-            "Los comentarios inician con # y son ignorados por el intérprete.",
-            "El código limpio reduce la necesidad de comentarios excesivos."
+            "Los comentarios empiezan con #.",
+            "Python ignora los comentarios.",
+            "Un buen comentario explica el porqué, no repite el código."
           ],
-          "explanation": "En proyectos reales, cada aplicación puede requerir versiones distintas de librerías. Un **entorno virtual (venv)** es una burbuja aislada en tu disco que contiene su propia copia del ejecutable de Python y sus paquetes, evitando que un proyecto rompa a otro.\n\nPara documentar código en Python, usamos el símbolo numeral (`#`). El intérprete ignora por completo cualquier texto que comience con `#`, permitiéndote dejar notas para tu equipo o tu \"yo\" del futuro.\n\n```bash\n# Crear un entorno virtual en terminal\npython -m venv .venv\n# Activar en Windows\n.venv\\Scripts\\activate\n```",
+          "explanation": "Cuando escribes código, a veces necesitas dejar una nota para explicar lo que hiciste. En Python, esas notas se llaman **comentarios** y empiezan con `#`.\n\n```python\n# Esto es un comentario. Python lo ignora.\nprint(\"Hola\")  # Esto sí se muestra\n```\n\nLos comentarios no se ejecutan: sirven para que otra persona (o tú mismo dentro de un mes) entienda tu código.\n\n**Consejo:** escribe comentarios que expliquen el *por qué*, no para repetir lo que el código ya dice. `# Saludamos al usuario` ayuda más que `# print`.\n\nCuando más adelante necesites instalar librerías, verás los entornos virtuales (`venv`). Por ahora no los necesitas: puedes practicar aquí mismo.",
           "is_required": true,
           "status": "published",
           "content_version": 1,
@@ -158,45 +158,45 @@
               "id": "ex_py1_01_02",
               "type": "single_choice",
               "difficulty": "easy",
-              "prompt": "¿Cuál es el propósito principal de crear un entorno virtual con `python -m venv .venv`?",
-              "explanation": "Un entorno virtual aísla las librerías del proyecto para evitar colisiones con paquetes globales u otros proyectos del sistema.",
+              "prompt": "¿Para qué sirve un comentario en Python?",
+              "explanation": "Los comentarios son notas para las personas. Python los ignora y no los ejecuta.",
               "category": "fundamentos",
               "prompt_code": null,
               "answers": [
                 {
                   "id": "a",
                   "label": "A",
-                  "body": "Aislar las librerías y dependencias específicas del proyecto",
-                  "is_correct": true,
+                  "body": "Para que el programa se ejecute más rápido",
+                  "is_correct": false,
                   "position": 1
                 },
                 {
                   "id": "b",
                   "label": "B",
-                  "body": "Hacer que Python se ejecute 10 veces más rápido",
+                  "body": "Para mostrar un mensaje en la pantalla",
                   "is_correct": false,
                   "position": 2
                 },
                 {
                   "id": "c",
                   "label": "C",
-                  "body": "Compilar el código a lenguaje máquina",
-                  "is_correct": false,
+                  "body": "Para dejar notas que Python ignora",
+                  "is_correct": true,
                   "position": 3
                 },
                 {
                   "id": "d",
                   "label": "D",
-                  "body": "Instalar Windows en una máquina virtual",
+                  "body": "Para borrar una línea de código",
                   "is_correct": false,
                   "position": 4
                 }
               ],
               "correct_answer_ids": [
-                "a"
+                "c"
               ],
               "concept_ids": [
-                "py-venv"
+                "py-comments"
               ],
               "version": 1,
               "status": "published",
