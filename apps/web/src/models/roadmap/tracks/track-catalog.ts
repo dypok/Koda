@@ -1,9 +1,15 @@
 import { CodeSimple } from '@phosphor-icons/react';
 import React from 'react';
 import { GraphDataset } from '../roadmap-graph.types';
-import { PYTHON_COURSES_DATASET } from './python-track.mock';
 
 export type CareerBranchId = 'python';
+
+const EMPTY_BRANCH_DATASET: GraphDataset = {
+  sectorTitle: 'PYTHON SPECIALIST: DE FUNDAMENTOS A AGENTES AUTÓNOMOS',
+  progressPercent: 0,
+  nodes: [],
+  connections: [],
+};
 
 export interface CareerBranchInfo {
   id: CareerBranchId;
@@ -33,6 +39,6 @@ export const CAREER_BRANCHES: CareerBranchInfo[] = [
     totalStars: 60,
     completedCourses: 0,
     totalCourses: 7,
-    dataset: PYTHON_COURSES_DATASET,
+    dataset: EMPTY_BRANCH_DATASET,
   },
 ];

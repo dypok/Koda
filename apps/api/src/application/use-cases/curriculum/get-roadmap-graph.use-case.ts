@@ -87,6 +87,73 @@ export class GetRoadmapGraphUseCase {
     return `M ${startX} ${startY} C ${startX + dx} ${startY}, ${endX - dx} ${endY}, ${endX} ${endY}`;
   }
 
+  private buildLinearSectionDataset(
+    sectorTitle: string,
+    lessons: Array<{
+      id: string;
+      code: string;
+      label: string;
+      subtitle: string;
+      variant: GraphNodeVariant;
+      iconType: GraphNodeIconType;
+      stars?: number;
+      maxStars?: number;
+      xp?: number;
+      statusText: string;
+    }>,
+    edgeColor = '#38BDF8',
+  ): GraphDataset {
+    const count = lessons.length;
+    const startX = 140;
+    const endX = 1040;
+    const stepX = (endX - startX) / (count - 1 || 1);
+
+    const nodes: GraphNode[] = lessons.map((l, i) => {
+      const x = Math.round(startX + i * stepX);
+      let y = 290;
+      if (i > 0 && i < count - 1) {
+        y = i % 2 === 1 ? 230 : 350;
+      }
+      return {
+        id: l.id,
+        code: l.code,
+        label: l.label,
+        subtitle: l.subtitle,
+        x,
+        y,
+        variant: l.variant,
+        iconType: l.iconType,
+        stars: l.stars ?? 0,
+        maxStars: l.maxStars ?? 3,
+        xp: l.xp ?? 150,
+        statusText: l.statusText,
+        isUnlocked: l.variant !== 'locked',
+      };
+    });
+
+    const connections: GraphConnection[] = [];
+    for (let i = 0; i < nodes.length - 1; i++) {
+      const n1 = nodes[i];
+      const n2 = nodes[i + 1];
+      const midX = Math.round((n1.x + n2.x) / 2);
+      connections.push({
+        id: `c-${n1.id}-to-${n2.id}`,
+        fromId: n1.id,
+        toId: n2.id,
+        color: edgeColor,
+        path: `M ${n1.x} ${n1.y} C ${midX} ${n1.y}, ${midX} ${n2.y}, ${n2.x} ${n2.y}`,
+        isDashed: !n2.isUnlocked,
+      });
+    }
+
+    return {
+      sectorTitle,
+      progressPercent: 0,
+      nodes,
+      connections,
+    };
+  }
+
   async getCoursesGraph(trackOrLangSlug: string, userId?: string): Promise<GraphDataset> {
     const slug = trackOrLangSlug.toLowerCase();
     let allCourses: CourseEntity[] = [];
@@ -160,37 +227,126 @@ export class GetRoadmapGraphUseCase {
     });
 
     let progressPercent = 0;
+    const completedCourseSlugs = new Set<string>();
+
+    const COURSE_APEX_SECTIONS: Record<string, string[]> = {
+      'python-1': ['py-apex-1', 'les-boss', 'funciones-fundamentales'],
+      'python-2': ['py2-boss', 'py2-m10', 'py2-m05', 'py2-10', 'testing-con-pytest'],
+      'python-3': ['py3-boss', 'py3-m10', 'py3-m05', 'py3-10', 'patrones-de-diseno'],
+      'fastapi-async': ['fa-05', 'fa-m05', 'fa-m04', 'fastapi-docker-deploy'],
+      'django-enterprise': ['dj-05', 'dj-m05', 'dj-m04', 'django-auth-security-deploy'],
+      'data-analytics': ['da-10', 'da-boss', 'streamlit-dashboards'],
+      'ai-agents': ['ia-10', 'ia-proyecto-agente-completo'],
+      'python-apex': ['apex-03', 'apex-master-gate'],
+    };
+
     if (userId && this.progressRepository) {
       try {
         const userStars = await this.progressRepository.findAllSectionStarsByUser(userId);
         if (userStars && userStars.length > 0) {
-          const totalEarnedStars = userStars.reduce((sum, s) => sum + s.starsEarned, 0);
-          nodes = nodes.map((node) => {
-            if (node.id === 'python-1' || node.targetCourseId === 'python-1' || node.id === 'py-level-1') {
-              const stars = Math.min(24, totalEarnedStars);
-              const isCompleted = stars >= 24;
-              return {
-                ...node,
-                stars,
-                maxStars: 24,
-                variant: isCompleted ? 'completed' : 'active',
-                statusText: isCompleted ? 'DOMINADO • 100%' : `EN PROGRESO • ${stars}/24 ★`,
-              };
+          const passedSections = new Set<string>();
+          userStars.forEach((s) => {
+            if (s.isPassed) {
+              passedSections.add(s.sectionId.toLowerCase());
+              passedSections.add(s.sectionId.toLowerCase().replace(/[^a-z0-9]/g, ''));
+              if (s.moduleId) {
+                passedSections.add(s.moduleId.toLowerCase());
+                passedSections.add(s.moduleId.toLowerCase().replace(/[^a-z0-9]/g, ''));
+              }
             }
-            return node;
           });
-          progressPercent = Math.min(100, Math.round((totalEarnedStars / 24) * 100));
+
+          displayCourses.forEach((c) => {
+            const apexCandidates = COURSE_APEX_SECTIONS[c.slug] || [];
+            const isApexPassed = apexCandidates.some(
+              (candidate) =>
+                passedSections.has(candidate.toLowerCase()) ||
+                passedSections.has(candidate.toLowerCase().replace(/[^a-z0-9]/g, '')),
+            );
+
+            const courseStars = userStars
+              .filter((s) => {
+                const sid = s.sectionId.toLowerCase();
+                if (c.slug === 'python-1') return sid.startsWith('py-') || sid.startsWith('les-');
+                if (c.slug === 'python-2') return sid.startsWith('py2-');
+                if (c.slug === 'python-3') return sid.startsWith('py3-');
+                if (c.slug === 'fastapi-async') return sid.startsWith('fa-');
+                if (c.slug === 'django-enterprise') return sid.startsWith('dj-');
+                if (c.slug === 'data-analytics') return sid.startsWith('da-');
+                if (c.slug === 'ai-agents') return sid.startsWith('ia-');
+                if (c.slug === 'python-apex') return sid.startsWith('apex-');
+                return false;
+              })
+              .reduce((sum, s) => sum + s.starsEarned, 0);
+
+            if (isApexPassed || (c.slug === 'python-1' && courseStars >= 24)) {
+              completedCourseSlugs.add(c.slug);
+            }
+          });
         }
       } catch {
-        // En caso de falla, retornar dataset estandar
+        // En caso de falla, retornar dataset base
       }
     }
+
+    let hasFoundFirstActive = false;
+
+    nodes = nodes.map((node) => {
+      const course = displayCourses.find((c) => c.slug === node.id);
+      const isCompleted = completedCourseSlugs.has(node.id);
+
+      if (isCompleted) {
+        return {
+          ...node,
+          stars: node.maxStars ?? 3,
+          variant: 'completed' as const,
+          isUnlocked: true,
+          statusText: 'DOMINADO • 100%',
+        };
+      }
+
+      const prereqs = course?.prerequisites ?? [];
+      const allPrereqsMet = prereqs.length === 0 || prereqs.every((p) => completedCourseSlugs.has(p));
+
+      if (allPrereqsMet) {
+        const shouldBeActive = !hasFoundFirstActive;
+        if (shouldBeActive) {
+          hasFoundFirstActive = true;
+        }
+
+        return {
+          ...node,
+          isUnlocked: true,
+          variant: (shouldBeActive ? 'active' : 'unlocked') as GraphNodeVariant,
+          statusText: shouldBeActive ? 'DISPONIBLE • EN PROGRESO' : 'DISPONIBLE',
+        };
+      }
+
+      return {
+        ...node,
+        isUnlocked: false,
+        variant: 'locked' as const,
+        statusText: 'BLOQUEADO',
+      };
+    });
+
+    const updatedConnections = connections.map((conn) => {
+      const fromIsCompleted = completedCourseSlugs.has(conn.fromId);
+      return {
+        ...conn,
+        isDashed: !fromIsCompleted,
+      };
+    });
+
+    progressPercent = Math.round(
+      (completedCourseSlugs.size / Math.max(1, displayCourses.length)) * 100,
+    );
 
     return {
       sectorTitle: `SECTOR: ${slug.toUpperCase()} ROADMAP (DAG)`,
       progressPercent,
       nodes,
-      connections,
+      connections: updatedConnections,
     };
   }
 
@@ -198,6 +354,10 @@ export class GetRoadmapGraphUseCase {
     let normalizedSlug = courseSlug.toLowerCase();
     if (normalizedSlug === 'py-basic' || normalizedSlug === 'python-basico' || normalizedSlug === 'python-core') {
       normalizedSlug = 'python-1';
+    } else if (normalizedSlug === 'py-intermediate') {
+      normalizedSlug = 'python-2';
+    } else if (normalizedSlug === 'py-advanced') {
+      normalizedSlug = 'python-3';
     }
 
     let dataset: GraphDataset;
@@ -264,70 +424,115 @@ export class GetRoadmapGraphUseCase {
         connections,
       };
     } else if (normalizedSlug === 'python-2' || normalizedSlug === 'py-level-2') {
-      const nodes: GraphNode[] = [
-        { id: 'py2-m01', code: '01', label: 'FUNCIONES', subtitle: 'PARÁMETROS, SCOPE & RETURN', x: 140, y: 290, variant: 'active', iconType: 'brackets', xp: 200, isUnlocked: true, statusText: 'ACTIVO' },
-        { id: 'py2-m02', code: '02', label: 'LISTAS & TUPLAS', subtitle: 'MÉTODOS & MUTABILIDAD', x: 340, y: 290, variant: 'locked', iconType: 'lock', xp: 200, isUnlocked: false, statusText: 'RQ FUNCIONES' },
-        { id: 'py2-m03', code: '03', label: 'DICTS & SETS', subtitle: 'CLAVE-VALOR & CONJUNTOS', x: 540, y: 290, variant: 'locked', iconType: 'lock', xp: 200, isUnlocked: false, statusText: 'RQ LISTAS' },
-        { id: 'py2-m04', code: '04', label: 'EXCEPCIONES & ARCHIVOS', subtitle: 'TRY/EXCEPT & WITH OPEN', x: 740, y: 290, variant: 'locked', iconType: 'lock', xp: 220, isUnlocked: false, statusText: 'RQ DICTS' },
-        { id: 'py2-m05', code: '05', label: 'POO: CLASES & OBJETOS', subtitle: 'ATRIBUTOS & CONSTRUCTOR __INIT__', x: 940, y: 290, variant: 'locked', iconType: 'lock', xp: 250, isUnlocked: false, statusText: 'RQ ARCHIVOS' },
-      ];
-      const connections: GraphConnection[] = [
-        { id: 'c-p2-1-2', fromId: 'py2-m01', toId: 'py2-m02', color: '#06B6D4', path: this.generateSvgPath(140, 290, 340, 290), isDashed: true },
-        { id: 'c-p2-2-3', fromId: 'py2-m02', toId: 'py2-m03', color: '#06B6D4', path: this.generateSvgPath(340, 290, 540, 290), isDashed: true },
-        { id: 'c-p2-3-4', fromId: 'py2-m03', toId: 'py2-m04', color: '#06B6D4', path: this.generateSvgPath(540, 290, 740, 290), isDashed: true },
-        { id: 'c-p2-4-5', fromId: 'py2-m04', toId: 'py2-m05', color: '#06B6D4', path: this.generateSvgPath(740, 290, 940, 290), isDashed: true },
-      ];
-      dataset = { sectorTitle: 'PYTHON 2: ESTRUCTURAS & POO', progressPercent: 0, nodes, connections };
-    } else if (normalizedSlug === 'python-3' || normalizedSlug === 'py-level-3') {
-      const nodes: GraphNode[] = [
-        { id: 'py3-m01', code: '01', label: 'POO AVANZADA', subtitle: 'HERENCIA & DUNDER METHODS', x: 140, y: 290, variant: 'active', iconType: 'brackets', xp: 250, isUnlocked: true, statusText: 'ACTIVO' },
-        { id: 'py3-m02', code: '02', label: 'GENERADORES', subtitle: 'ITERADORES & YIELD', x: 340, y: 290, variant: 'locked', iconType: 'lock', xp: 250, isUnlocked: false, statusText: 'RQ POO AV.' },
-        { id: 'py3-m03', code: '03', label: 'DECORADORES', subtitle: 'CLOSURES & WRAPPERS', x: 540, y: 290, variant: 'locked', iconType: 'lock', xp: 250, isUnlocked: false, statusText: 'RQ GENERADORES' },
-        { id: 'py3-m04', code: '04', label: 'TIPADO ESTÁTICO', subtitle: 'TYPE HINTS & TYPING MODULE', x: 740, y: 290, variant: 'locked', iconType: 'lock', xp: 250, isUnlocked: false, statusText: 'RQ DECORADORES' },
-        { id: 'py3-m05', code: '05', label: 'PAQUETES & VENV', subtitle: 'MODULARIDAD PROFESIONAL', x: 940, y: 290, variant: 'locked', iconType: 'lock', xp: 300, isUnlocked: false, statusText: 'RQ TIPADO' },
-      ];
-      const connections: GraphConnection[] = [
-        { id: 'c-p3-1-2', fromId: 'py3-m01', toId: 'py3-m02', color: '#F59E0B', path: this.generateSvgPath(140, 290, 340, 290), isDashed: true },
-        { id: 'c-p3-2-3', fromId: 'py3-m02', toId: 'py3-m03', color: '#F59E0B', path: this.generateSvgPath(340, 290, 540, 290), isDashed: true },
-        { id: 'c-p3-3-4', fromId: 'py3-m03', toId: 'py3-m04', color: '#F59E0B', path: this.generateSvgPath(540, 290, 740, 290), isDashed: true },
-        { id: 'c-p3-4-5', fromId: 'py3-m04', toId: 'py3-m05', color: '#F59E0B', path: this.generateSvgPath(740, 290, 940, 290), isDashed: true },
-      ];
-      dataset = { sectorTitle: 'PYTHON 3: AVANZADO & MODULAR', progressPercent: 0, nodes, connections };
-    } else if (normalizedSlug === 'fastapi-async' || normalizedSlug === 'py-fastapi') {
-      const nodes: GraphNode[] = [
-        { id: 'fa-m01', code: 'F1', label: 'ARQUITECTURA ASGI', subtitle: 'PRIMERA API REST CON FASTAPI', x: 140, y: 290, variant: 'active', iconType: 'server', xp: 250, isUnlocked: true, statusText: 'ACTIVO' },
-        { id: 'fa-m02', code: 'F2', label: 'PYDANTIC V2', subtitle: 'VALIDACIÓN & SCHEMAS', x: 370, y: 290, variant: 'locked', iconType: 'lock', xp: 250, isUnlocked: false, statusText: 'RQ ASGI' },
-        { id: 'fa-m03', code: 'F3', label: 'ROUTING AVANZADO', subtitle: 'PATH, QUERY & BODY PARAMS', x: 600, y: 290, variant: 'locked', iconType: 'lock', xp: 280, isUnlocked: false, statusText: 'RQ PYDANTIC' },
-        { id: 'fa-m04', code: 'F4', label: 'ASYNC / AWAIT', subtitle: 'CONCURRENCIA & DEPENDENCY INJECTION', x: 830, y: 290, variant: 'locked', iconType: 'lock', xp: 300, isUnlocked: false, statusText: 'RQ ROUTING' },
-      ];
-      const connections: GraphConnection[] = [
-        { id: 'c-fa-1-2', fromId: 'fa-m01', toId: 'fa-m02', color: '#8B5CF6', path: this.generateSvgPath(140, 290, 370, 290), isDashed: true },
-        { id: 'c-fa-2-3', fromId: 'fa-m02', toId: 'fa-m03', color: '#8B5CF6', path: this.generateSvgPath(370, 290, 600, 290), isDashed: true },
-        { id: 'c-fa-3-4', fromId: 'fa-m03', toId: 'fa-m04', color: '#8B5CF6', path: this.generateSvgPath(600, 290, 830, 290), isDashed: true },
-      ];
-      dataset = { sectorTitle: 'ESPECIALIZACIÓN FASTAPI', progressPercent: 0, nodes, connections };
-    } else if (normalizedSlug === 'django-enterprise' || normalizedSlug === 'py-django') {
-      const nodes: GraphNode[] = [
-        { id: 'dj-m01', code: 'D1', label: 'ARQUITECTURA MVT', subtitle: 'ESTRUCTURA DE PROYECTO DJANGO', x: 140, y: 290, variant: 'active', iconType: 'server', xp: 250, isUnlocked: true, statusText: 'ACTIVO' },
-        { id: 'dj-m02', code: 'D2', label: 'DJANGO ORM', subtitle: 'MODELOS, MIGRACIONES & QUERIES', x: 370, y: 290, variant: 'locked', iconType: 'lock', xp: 280, isUnlocked: false, statusText: 'RQ MVT' },
-        { id: 'dj-m03', code: 'D3', label: 'VISTAS Y TEMPLATES', subtitle: 'CLASS-BASED VIEWS & FORMULARIOS', x: 600, y: 290, variant: 'locked', iconType: 'lock', xp: 280, isUnlocked: false, statusText: 'RQ ORM' },
-        { id: 'dj-m04', code: 'D4', label: 'AUTH & DJANGO ADMIN', subtitle: 'SISTEMA DE AUTENTICACIÓN & GESTIÓN', x: 830, y: 290, variant: 'locked', iconType: 'lock', xp: 320, isUnlocked: false, statusText: 'RQ VIEWS' },
-      ];
-      const connections: GraphConnection[] = [
-        { id: 'c-dj-1-2', fromId: 'dj-m01', toId: 'dj-m02', color: '#10B981', path: this.generateSvgPath(140, 290, 370, 290), isDashed: true },
-        { id: 'c-dj-2-3', fromId: 'dj-m02', toId: 'dj-m03', color: '#10B981', path: this.generateSvgPath(370, 290, 600, 290), isDashed: true },
-        { id: 'c-dj-3-4', fromId: 'dj-m03', toId: 'dj-m04', color: '#10B981', path: this.generateSvgPath(600, 290, 830, 290), isDashed: true },
-      ];
-      dataset = { sectorTitle: 'ESPECIALIZACIÓN DJANGO', progressPercent: 0, nodes, connections };
-    } else {
-      dataset = {
-        sectorTitle: `CURSO: ${normalizedSlug.toUpperCase()}`,
-        progressPercent: 0,
-        nodes: [
-          { id: `${normalizedSlug}-s01`, code: '01', label: 'INTRODUCCIÓN', subtitle: 'CONCEPTOS INICIALES', x: 200, y: 290, variant: 'active', iconType: 'brackets', xp: 100, isUnlocked: true, statusText: 'DISPONIBLE' },
+      dataset = this.buildLinearSectionDataset(
+        'PYTHON 2: INTERMEDIO & PROGRAMACIÓN ORIENTADA A OBJETOS',
+        [
+          { id: 'py2-m01', code: '01', label: 'COMPRENSIONES', subtitle: 'LIST, DICT & SET COMPREHENSIONS', variant: 'active', iconType: 'brackets', xp: 200, statusText: 'DISPONIBLE • +200 XP' },
+          { id: 'py2-m02', code: '02', label: 'FUNCIONES AVANZADAS', subtitle: '*ARGS, **KWARGS & LAMBDAS', variant: 'locked', iconType: 'lock', xp: 220, statusText: 'RQ COMPRENSIONES' },
+          { id: 'py2-m03', code: '03', label: 'MÓDULOS & PAQUETES', subtitle: '__INIT__.PY & IMPORTACIONES', variant: 'locked', iconType: 'lock', xp: 220, statusText: 'RQ FUNCIONES AVANZADAS' },
+          { id: 'py2-m04', code: '04', label: 'MANEJO DE EXCEPCIONES', subtitle: 'TRY, EXCEPT, RAISE & FINALLY', variant: 'locked', iconType: 'lock', xp: 240, statusText: 'RQ MÓDULOS' },
+          { id: 'py2-miniboss', code: 'MB', label: 'CENTINELA MODULAR', subtitle: 'MINI-BOSS: RETO MÓDULOS 1-4', variant: 'branch', iconType: 'lock', xp: 300, statusText: 'RQ EXCEPCIONES' },
+          { id: 'py2-m05', code: '05', label: 'ARCHIVOS I/O', subtitle: 'TXT, CSV, JSON & WITH OPEN()', variant: 'locked', iconType: 'lock', xp: 250, statusText: 'RQ CENTINELA' },
+          { id: 'py2-m06', code: '06', label: 'POO I: CLASES & OBJETOS', subtitle: 'ATRIBUTOS, MÉTODOS & __INIT__', variant: 'locked', iconType: 'lock', xp: 260, statusText: 'RQ ARCHIVOS I/O' },
+          { id: 'py2-m07', code: '07', label: 'POO II: HERENCIA', subtitle: 'SUPER(), POLIMORFISMO & MRO', variant: 'locked', iconType: 'lock', xp: 260, statusText: 'RQ POO I' },
+          { id: 'py2-m08', code: '08', label: 'DATETIME & REGEX', subtitle: 'TIEMPO & EXPRESIONES REGULARES', variant: 'locked', iconType: 'lock', xp: 250, statusText: 'RQ HERENCIA' },
+          { id: 'py2-m09', code: '09', label: 'PIP, VENV & GIT', subtitle: 'DEPENDENCIAS & CONTROL DE VERSIONES', variant: 'locked', iconType: 'lock', xp: 250, statusText: 'RQ DATETIME' },
+          { id: 'py2-m10', code: '10', label: 'TESTING CON PYTEST', subtitle: 'ASSERTS, FIXTURES & TDD BÁSICO', variant: 'locked', iconType: 'lock', xp: 280, statusText: 'RQ PIP & GIT' },
+          { id: 'py2-boss', code: 'Ω', label: 'APEX BOSS GATE 2', subtitle: 'PROYECTO INTEGRADOR INTERMEDIO', variant: 'boss', iconType: 'skull', xp: 600, statusText: 'DESAFÍO FINAL INTERMEDIO' },
         ],
-        connections: [],
-      };
+        '#06B6D4',
+      );
+    } else if (normalizedSlug === 'python-3' || normalizedSlug === 'py-level-3') {
+      dataset = this.buildLinearSectionDataset(
+        'PYTHON 3: AVANZADO, CONCURRENCIA & PATRONES',
+        [
+          { id: 'py3-m01', code: '01', label: 'ITERADORES & GENERADORES', subtitle: '__ITER__, __NEXT__ & YIELD', variant: 'active', iconType: 'brackets', xp: 250, statusText: 'DISPONIBLE • +250 XP' },
+          { id: 'py3-m02', code: '02', label: 'DECORADORES', subtitle: 'CLOSURES, @WRAPS & DECORADORES', variant: 'locked', iconType: 'lock', xp: 260, statusText: 'RQ GENERADORES' },
+          { id: 'py3-m03', code: '03', label: 'CONTEXT MANAGERS', subtitle: '__ENTER__, __EXIT__ & CONTEXTLIB', variant: 'locked', iconType: 'lock', xp: 260, statusText: 'RQ DECORADORES' },
+          { id: 'py3-m04', code: '04', label: 'TYPE HINTS & DATACLASSES', subtitle: 'TYPING, PROTOCOLS & @DATACLASS', variant: 'locked', iconType: 'lock', xp: 270, statusText: 'RQ CONTEXT MANAGERS' },
+          { id: 'py3-miniboss', code: 'MB', label: 'GUARDIÁN DEL PATRÓN', subtitle: 'MINI-BOSS: RETO MÓDULOS 1-4', variant: 'branch', iconType: 'lock', xp: 350, statusText: 'RQ DATACLASSES' },
+          { id: 'py3-m05', code: '05', label: 'PROG. FUNCIONAL', subtitle: 'ITERTOOLS, FUNCTOOLS & PARTIAL', variant: 'locked', iconType: 'lock', xp: 280, statusText: 'RQ GUARDIÁN' },
+          { id: 'py3-m06', code: '06', label: 'CONCURRENCIA & ASYNCIO', subtitle: 'ASYNC, AWAIT, TASKS & GATHER', variant: 'locked', iconType: 'lock', xp: 320, statusText: 'RQ PROG. FUNCIONAL' },
+          { id: 'py3-m07', code: '07', label: 'PEP 8 & RUFF', subtitle: 'LINTERS, FORMATEADORES & DOCSTRINGS', variant: 'locked', iconType: 'lock', xp: 260, statusText: 'RQ ASYNCIO' },
+          { id: 'py3-m08', code: '08', label: 'LOGGING & EMPAQUETADO', subtitle: 'LOGGER PROFESIONAL & PYPROJECT', variant: 'locked', iconType: 'lock', xp: 270, statusText: 'RQ PEP 8' },
+          { id: 'py3-m09', code: '09', label: 'PROFILING & MEMORIA', subtitle: 'CPROFILE, TIMEIT & OPTIMIZACIÓN', variant: 'locked', iconType: 'lock', xp: 300, statusText: 'RQ LOGGING' },
+          { id: 'py3-m10', code: '10', label: 'PATRONES DE DISEÑO', subtitle: 'FACTORY, SINGLETON & OBSERVER', variant: 'locked', iconType: 'lock', xp: 320, statusText: 'RQ PROFILING' },
+          { id: 'py3-boss', code: 'Ω', label: 'APEX BOSS GATE 3', subtitle: 'EXAMEN INTEGRAL AVANZADO', variant: 'boss', iconType: 'skull', xp: 700, statusText: 'DESAFÍO FINAL AVANZADO' },
+        ],
+        '#F59E0B',
+      );
+    } else if (normalizedSlug === 'fastapi-async' || normalizedSlug === 'py-fastapi') {
+      dataset = this.buildLinearSectionDataset(
+        'RAMA BACKEND: FASTAPI ASÍNCRONO & MICROSERVICIOS',
+        [
+          { id: 'fa-m01', code: 'F1', label: 'HTTP & ASGI', subtitle: 'ARQUITECTURA FASTAPI & UVICORN', variant: 'active', iconType: 'server', xp: 250, statusText: 'DISPONIBLE • +250 XP' },
+          { id: 'fa-m02', code: 'F2', label: 'PYDANTIC V2', subtitle: 'VALIDACIÓN, SCHEMAS & TIPADO', variant: 'locked', iconType: 'lock', xp: 280, statusText: 'RQ HTTP & ASGI' },
+          { id: 'fa-m03', code: 'F3', label: 'SQLALCHEMY & ALEMBIC', subtitle: 'PERSISTENCIA ORM & MIGRACIONES', variant: 'locked', iconType: 'lock', xp: 300, statusText: 'RQ PYDANTIC' },
+          { id: 'fa-m04', code: 'F4', label: 'AUTENTICACIÓN JWT', subtitle: 'OAUTH2, PASSWORD HASH & DEPENDS', variant: 'locked', iconType: 'lock', xp: 320, statusText: 'RQ SQLALCHEMY' },
+          { id: 'fa-m05', code: 'F5', label: 'DOCKER & DESPLIEGUE', subtitle: 'CONTAINERIZACIÓN & TESTING APIS', variant: 'boss', iconType: 'skull', xp: 400, statusText: 'PROYECTO FINAL FASTAPI' },
+        ],
+        '#8B5CF6',
+      );
+    } else if (normalizedSlug === 'django-enterprise' || normalizedSlug === 'py-django') {
+      dataset = this.buildLinearSectionDataset(
+        'RAMA BACKEND: DJANGO ENTERPRISE & REST FRAMEWORK',
+        [
+          { id: 'dj-m01', code: 'D1', label: 'ARQUITECTURA MVT', subtitle: 'SETTINGS, URLS & VISTAS', variant: 'active', iconType: 'server', xp: 250, statusText: 'DISPONIBLE • +250 XP' },
+          { id: 'dj-m02', code: 'D2', label: 'DJANGO ORM', subtitle: 'MODELOS, RELACIONES & QUERIES', variant: 'locked', iconType: 'lock', xp: 280, statusText: 'RQ ARQUITECTURA MVT' },
+          { id: 'dj-m03', code: 'D3', label: 'FORMS & ADMIN', subtitle: 'PANEL ADMINISTRATIVO & FORMULARIOS', variant: 'locked', iconType: 'lock', xp: 300, statusText: 'RQ DJANGO ORM' },
+          { id: 'dj-m04', code: 'D4', label: 'DJANGO REST FRAMEWORK', subtitle: 'SERIALIZADORES, VIEWSETS & ROUTERS', variant: 'locked', iconType: 'lock', xp: 320, statusText: 'RQ FORMS & ADMIN' },
+          { id: 'dj-m05', code: 'D5', label: 'SEGURIDAD & DEPLOY', subtitle: 'AUTENTICACIÓN, CSRF & PRODUCCIÓN', variant: 'boss', iconType: 'skull', xp: 400, statusText: 'PROYECTO FINAL DJANGO' },
+        ],
+        '#10B981',
+      );
+    } else if (normalizedSlug === 'data-analytics' || normalizedSlug === 'py-data') {
+      dataset = this.buildLinearSectionDataset(
+        'RAMA ANÁLISIS DE DATOS: NUMPY, PANDAS, EDA & STREAMLIT',
+        [
+          { id: 'da-01', code: '01', label: 'NUMPY VECTORIZADO', subtitle: 'ARRAYS, INDEXING & OPERACIONES', variant: 'active', iconType: 'atom', xp: 250, statusText: 'DISPONIBLE • +250 XP' },
+          { id: 'da-02', code: '02', label: 'PANDAS SERIES & DF', subtitle: 'ESTRUCTURAS, CARGA CSV/PARQUET', variant: 'locked', iconType: 'lock', xp: 260, statusText: 'RQ NUMPY' },
+          { id: 'da-03', code: '03', label: 'LIMPIEZA DE DATOS', subtitle: 'DATOS NULOS, CASTING & DUPLICADOS', variant: 'locked', iconType: 'lock', xp: 280, statusText: 'RQ PANDAS SERIES' },
+          { id: 'da-04', code: '04', label: 'AGRUPACIONES & MERGES', subtitle: 'GROUPBY, AGG, MERGE & CONCAT', variant: 'locked', iconType: 'lock', xp: 290, statusText: 'RQ LIMPIEZA' },
+          { id: 'da-miniboss', code: 'MB', label: 'RETO WRANGLING', subtitle: 'MINI-BOSS: LIMPIEZA DE DATASET REAL', variant: 'branch', iconType: 'lock', xp: 350, statusText: 'RQ AGRUPACIONES' },
+          { id: 'da-05', code: '05', label: 'MATPLOTLIB & SEABORN', subtitle: 'DISTRIBUCIONES & CORRELACIONES', variant: 'locked', iconType: 'lock', xp: 280, statusText: 'RQ RETO WRANGLING' },
+          { id: 'da-06', code: '06', label: 'PLOTLY INTERACTIVO', subtitle: 'GRÁFICOS MODERNOS E INTERACTIVOS', variant: 'locked', iconType: 'lock', xp: 290, statusText: 'RQ MATPLOTLIB' },
+          { id: 'da-07', code: '07', label: 'EDA & ESTADÍSTICA', subtitle: 'ANÁLISIS EXPLORATORIO & OUTLIERS', variant: 'locked', iconType: 'lock', xp: 300, statusText: 'RQ PLOTLY' },
+          { id: 'da-08', code: '08', label: 'SQL CON PYTHON', subtitle: 'SQLITE3, DUCKDB & READ_SQL', variant: 'locked', iconType: 'lock', xp: 300, statusText: 'RQ EDA' },
+          { id: 'da-09', code: '09', label: 'SCIKIT-LEARN INTRO ML', subtitle: 'REGRESIÓN & CLASIFICACIÓN BASE', variant: 'locked', iconType: 'lock', xp: 320, statusText: 'RQ SQL' },
+          { id: 'da-10', code: '10', label: 'STREAMLIT DASHBOARDS', subtitle: 'APLICACIONES WEB CON DATOS EN VIVO', variant: 'boss', iconType: 'skull', xp: 450, statusText: 'PROYECTO FINAL DATOS' },
+        ],
+        '#06B6D4',
+      );
+    } else if (normalizedSlug === 'ai-agents' || normalizedSlug === 'py-ia') {
+      dataset = this.buildLinearSectionDataset(
+        'RAMA PYTHON + IA: ARQUITECTURA DE AGENTES AUTÓNOMOS',
+        [
+          { id: 'ia-01', code: '01', label: 'LLMS & PROMPTING', subtitle: 'ARQUITECTURA, TOKENS & SYSTEM PROMPTS', variant: 'active', iconType: 'matrix', xp: 260, statusText: 'DISPONIBLE • +260 XP' },
+          { id: 'ia-02', code: '02', label: 'APIS DE MODELOS', subtitle: 'SDK CLIENTS, STREAMING & TEMPERATURA', variant: 'locked', iconType: 'lock', xp: 280, statusText: 'RQ LLMS' },
+          { id: 'ia-03', code: '03', label: 'SALIDAS ESTRUCTURADAS', subtitle: 'JSON MODE & VALIDACIÓN CON PYDANTIC', variant: 'locked', iconType: 'lock', xp: 300, statusText: 'RQ APIS' },
+          { id: 'ia-04', code: '04', label: 'FUNCTION CALLING', subtitle: 'HERRAMIENTAS & DECLARACIÓN DE TOOLS', variant: 'locked', iconType: 'lock', xp: 320, statusText: 'RQ SALIDAS' },
+          { id: 'ia-miniboss', code: 'MB', label: 'TOOL CALLER MASTER', subtitle: 'MINI-BOSS: AGENTE DE CONSULTA AUTOMATIZADA', variant: 'branch', iconType: 'lock', xp: 380, statusText: 'RQ FUNCTION CALLING' },
+          { id: 'ia-05', code: '05', label: 'MEMORIA & CONTEXTO', subtitle: 'WINDOW BUFFERS, SUMMARY & ESTADO', variant: 'locked', iconType: 'lock', xp: 310, statusText: 'RQ TOOL CALLER' },
+          { id: 'ia-06', code: '06', label: 'EMBEDDINGS & VECTOR DBS', subtitle: 'CHROMADB, COSINE SIMILARITY & ÍNDICES', variant: 'locked', iconType: 'lock', xp: 330, statusText: 'RQ MEMORIA' },
+          { id: 'ia-07', code: '07', label: 'RAG DE PUNTA A PUNTA', subtitle: 'CHUNK, RETRIEVE & CONTEXT INJECTION', variant: 'locked', iconType: 'lock', xp: 350, statusText: 'RQ EMBEDDINGS' },
+          { id: 'ia-08', code: '08', label: 'BUCLE REACT AGENT', subtitle: 'THOUGHT, ACTION & OBSERVATION LOOP', variant: 'locked', iconType: 'lock', xp: 380, statusText: 'RQ RAG' },
+          { id: 'ia-09', code: '09', label: 'GUARDRAILS & SEGURIDAD', subtitle: 'PROMPT INJECTION & VALIDACIÓN OUTPUT', variant: 'locked', iconType: 'lock', xp: 340, statusText: 'RQ BUCLE REACT' },
+          { id: 'ia-10', code: '10', label: 'AGENTE AUTÓNOMO COMPLETO', subtitle: 'MULTI-TOOL AGENT CON INTERFAZ WEB', variant: 'boss', iconType: 'skull', xp: 500, statusText: 'PROYECTO FINAL AGENTE' },
+        ],
+        '#EC4899',
+      );
+    } else if (normalizedSlug === 'python-apex' || normalizedSlug === 'py-apex') {
+      dataset = this.buildLinearSectionDataset(
+        'APEX MASTER GATE: PROYECTO INTEGRADOR DE CERTIFICACIÓN',
+        [
+          { id: 'apex-01', code: '01', label: 'FASE 1: ARQUITECTURA', subtitle: 'DISEÑO DEL SISTEMA & CONCURRENCIA', variant: 'active', iconType: 'brackets', xp: 400, statusText: 'DISPONIBLE • +400 XP' },
+          { id: 'apex-02', code: '02', label: 'FASE 2: SERVICIOS & IA', subtitle: 'BACKEND, RAG & PROCESAMIENTO', variant: 'locked', iconType: 'lock', xp: 500, statusText: 'RQ FASE 1' },
+          { id: 'apex-03', code: '03', label: 'FASE 3: AUDITORÍA & DEPLOY', subtitle: 'TESTING INTEGRAL & CERTIFICACIÓN', variant: 'boss', iconType: 'skull', xp: 700, statusText: 'CERTIFICACIÓN PROFESIONAL' },
+        ],
+        '#F43F5E',
+      );
+    } else {
+      throw new NotFoundException(`Curso '${courseSlug}' no encontrado en la malla curricular.`);
     }
 
     if (userId && this.progressRepository) {
@@ -350,8 +555,39 @@ export class GetRoadmapGraphUseCase {
     const starsMap = new Map<string, number>();
     userStars.forEach((s) => {
       if (s.isPassed) {
-        starsMap.set(s.sectionId.toLowerCase(), s.starsEarned);
+        const sec = s.sectionId.toLowerCase();
+        starsMap.set(sec, s.starsEarned);
         starsMap.set(normalizeKey(s.sectionId), s.starsEarned);
+
+        if (s.moduleId) {
+          starsMap.set(s.moduleId.toLowerCase(), s.starsEarned);
+          starsMap.set(normalizeKey(s.moduleId), s.starsEarned);
+        }
+
+        // Mapeo bidireccional entre prefijos canónicos pyX-mYY, pyX-YY y les-YY
+        const pyMatch = /^py(\d*)-m0?(\d+)$/.exec(sec);
+        if (pyMatch) {
+          const num = pyMatch[2].padStart(2, '0');
+          if (pyMatch[1]) {
+            starsMap.set(`py${pyMatch[1]}-${num}`, s.starsEarned);
+          } else {
+            starsMap.set(`les-${num}`, s.starsEarned);
+          }
+        }
+        const pyShortMatch = /^py(\d*)-0?(\d+)$/.exec(sec);
+        if (pyShortMatch && pyShortMatch[1]) {
+          const num = pyShortMatch[2].padStart(2, '0');
+          starsMap.set(`py${pyShortMatch[1]}-m${num}`, s.starsEarned);
+        }
+        const lesMatch = /^les-0?(\d+)$/.exec(sec);
+        if (lesMatch) {
+          const num = lesMatch[1].padStart(2, '0');
+          starsMap.set(`py-m${num}`, s.starsEarned);
+        }
+        if (sec.includes('apex') || sec.includes('boss')) {
+          starsMap.set('py-apex-1', s.starsEarned);
+          starsMap.set('les-boss', s.starsEarned);
+        }
       }
     });
 

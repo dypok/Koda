@@ -84,7 +84,7 @@ export default function ExamPage(props: ExamPageProps) {
       if (attemptId) {
         router.push(`/evaluaciones/resumen/${attemptId}`);
       } else {
-        router.push('/dashboard');
+        router.push('/');
       }
     } catch (err: any) {
       console.error('Error al calificar el examen:', err);

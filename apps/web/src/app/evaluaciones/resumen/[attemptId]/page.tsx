@@ -85,7 +85,7 @@ export default function AttemptReviewScreen(props: AttemptReviewScreenProps) {
         <div className="text-red-500 font-semibold mb-3">Intento no encontrado</div>
         <p className="text-sm text-slate-500 mb-6">No se pudieron encontrar los datos para este intento de evaluación.</p>
         <button
-          onClick={() => router.push('/dashboard')}
+          onClick={() => router.push('/')}
           className="px-5 py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition font-medium text-sm"
         >
           Ir al Panel Principal
@@ -251,7 +251,7 @@ export default function AttemptReviewScreen(props: AttemptReviewScreenProps) {
       <div className="mt-10 flex justify-center pb-12">
         <button
           className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl font-semibold hover:bg-slate-800 transition shadow-sm"
-          onClick={() => router.push('/dashboard')}
+          onClick={() => router.push('/')}
         >
           <span>{passed ? 'Continuar al siguiente módulo' : 'Repasar conceptos clave'}</span>
           <ArrowRight className="w-4 h-4" />
