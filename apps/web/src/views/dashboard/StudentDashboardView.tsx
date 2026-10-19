@@ -52,7 +52,7 @@ export const StudentDashboardView: React.FC = () => {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pb-6 border-b border-slate-800/60">
           <div className="space-y-1">
             <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight">
-              ¡Bienvenido al Campus, {user?.fullName || 'Estudiante'}! 🦊
+              ¡Bienvenido al Campus, {user?.fullName || 'Estudiante'}!
             </h1>
             <p className="text-xs sm:text-sm text-slate-400">
               Tu ruta activa: <strong className="text-amber-400">Python 3.12</strong>. Continúa tu progreso.

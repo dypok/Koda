@@ -4,6 +4,7 @@ import React, { useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Flame, ShieldCheck, Trophy, Sparkle, X, Check, ArrowRight } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 
 interface RoadmapStreakPopoverProps {
   isOpen: boolean;
@@ -98,15 +99,13 @@ export const RoadmapStreakPopover: React.FC<RoadmapStreakPopoverProps> = ({
 
           {/* Encabezado con Fuego */}
           <div className="flex items-center gap-3.5 mb-4">
-            <div className="relative flex items-center justify-center h-12 w-12 rounded-2xl bg-gradient-to-br from-orange-500/20 to-amber-500/10 border border-orange-500/30 shadow-[0_0_20px_rgba(255,106,0,0.25)]">
-              <Flame
-                weight="fill"
-                className={cn(
-                  'h-7 w-7 transition-transform',
-                  isActiveToday
-                    ? 'text-orange-500 drop-shadow-[0_0_12px_rgba(255,106,0,0.85)] animate-pulse'
-                    : 'text-slate-500'
-                )}
+            <div className="relative flex items-center justify-center h-12 w-12 shrink-0">
+              <KodaMascot
+                state={isActiveToday ? 'streak_active' : streak > 0 ? 'idle' : 'streak_lost'}
+                size={48}
+                animate={isActiveToday ? 'bounce' : 'none'}
+                glow={isActiveToday}
+                className="h-12 w-12 object-contain"
               />
               {isActiveToday && (
                 <span className="absolute -top-1 -right-1 flex h-3 w-3">

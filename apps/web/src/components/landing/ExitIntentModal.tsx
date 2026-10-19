@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { X } from '@phosphor-icons/react';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 
 const SESSION_KEY = 'koda-exit-shown';
 
@@ -77,18 +77,17 @@ export const ExitIntentModal: React.FC = () => {
             >
               <X aria-hidden="true" className="h-4 w-4" />
             </button>
-            <Image
-              src="/brand/koda-mascot-cartoon-2d-transparent.png"
-              alt=""
-              width={96}
-              height={96}
-              className="mx-auto object-contain"
+            <KodaMascot
+              state="thinking"
+              size={96}
+              animate="float"
+              className="mx-auto"
             />
             <h3 id="exit-title" className="font-display text-2xl font-bold text-white">
               ¿Te vas sin tu primera lección?
             </h3>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Son 2 minutos, en tu navegador y sin registrarte: prueba la demo de arriba. 🦊
+              Son 2 minutos, en tu navegador y sin registrarte: prueba la demo de arriba.
             </p>
             <Link
               href="/register"
