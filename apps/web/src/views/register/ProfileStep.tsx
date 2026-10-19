@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 import { CheckCircle } from '@phosphor-icons/react';
 import { ProfileSummaryBadge } from './ProfileSummaryBadge';
 import { ProfileSocialAuth } from './ProfileSocialAuth';
@@ -55,12 +55,10 @@ export const ProfileStep: React.FC<ProfileStepProps> = ({
             transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
             className="w-12 h-12 sm:w-14 sm:h-14 relative drop-shadow-[0_0_12px_rgba(245,158,11,0.4)]"
           >
-            <Image
-              src="/brand/koda-mascot-cartoon-2d.svg"
-              alt="Koda"
-              width={56}
-              height={56}
-              className="w-full h-full object-contain select-none"
+            <KodaMascot
+              state="idle"
+              size={56}
+              className="w-full h-full"
             />
             {!reduceMotion && (
               <span

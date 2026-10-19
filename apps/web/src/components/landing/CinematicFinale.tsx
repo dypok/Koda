@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useLayoutEffect, useRef } from 'react';
-import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 import { TransitionLink } from '@/components/ui/transition-link';
 import { Magnetic } from '@/components/ui/magnetic';
 import { SplitText } from '@/components/ui/split-text';
@@ -61,12 +61,11 @@ export const CinematicFinale: React.FC = () => {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="flex justify-center"
         >
-          <Image
-            src="/brand/koda-mascot-cartoon-2d-transparent.png"
-            alt=""
-            width={168}
-            height={168}
-            className="object-contain animate-float select-none drop-shadow-[0_16px_40px_rgba(249,115,22,0.35)]"
+          <KodaMascot
+            state="streak_active"
+            size={168}
+            animate="float"
+            glow
           />
         </motion.div>
 

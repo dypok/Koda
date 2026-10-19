@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 
 export default function Error({
   reset,
@@ -11,12 +11,10 @@ export default function Error({
 }) {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-6 bg-slate-950 px-4 text-center text-slate-100">
-      <Image
-        src="/brand/koda-mascot-cartoon-2d-transparent.png"
-        alt="Koda pidiendo disculpas por el error"
-        width={160}
-        height={160}
-        className="object-contain select-none"
+      <KodaMascot
+        state="sad"
+        size={160}
+        glow
       />
       <div className="space-y-2">
         <p className="text-xs font-bold uppercase tracking-widest text-amber-400">Algo falló</p>

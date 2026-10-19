@@ -1,6 +1,6 @@
 import React from 'react';
-import Image from 'next/image';
 import { motion, useReducedMotion } from 'framer-motion';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 
 export const HeroMascot: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -18,14 +18,13 @@ export const HeroMascot: React.FC = () => {
           aria-hidden="true"
           className="absolute h-56 w-56 sm:h-64 sm:w-64 rounded-full bg-amber-500/15 blur-3xl"
         />
-        <Image
-          src="/brand/koda-mascot-cartoon-2d-transparent.png"
-          alt="Koda — Mascota Oficial KodaAcademy"
-          width={420}
-          height={420}
-          style={{ width: 'auto', height: 'auto' }}
-          className="relative z-10 max-h-[200px] sm:max-h-[280px] lg:max-h-[320px] object-contain animate-float select-none transform-gpu will-change-transform drop-shadow-[0_20px_45px_rgba(249,115,22,0.35)]"
+        <KodaMascot
+          state="idle"
+          size={320}
+          animate="float"
+          glow
           priority
+          className="relative z-10 max-h-[200px] sm:max-h-[280px] lg:max-h-[320px] transform-gpu will-change-transform"
         />
         <div aria-hidden="true" className="pointer-events-none absolute -left-1 top-6 font-mono text-[11px] font-bold uppercase tracking-widest text-emerald-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] sm:left-2">
           +10 XP

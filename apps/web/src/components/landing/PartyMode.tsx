@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Confetti, X } from '@phosphor-icons/react';
 import { sound } from '@/lib/sound';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 
 const KONAMI = [
   'ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
@@ -55,7 +56,7 @@ export const PartyMode: React.FC = () => {
           role="status"
           className="fixed bottom-20 right-4 z-50 flex items-center gap-3 rounded-2xl border border-amber-400/40 bg-slate-950/95 backdrop-blur px-4 py-3 shadow-2xl"
         >
-          <span aria-hidden="true" className="text-2xl">🦊😎</span>
+          <KodaMascot state="streak_active" size={32} animate="bounce" />
           <div>
             <p className="text-sm font-black text-amber-300">MODO FIESTA</p>
             <p className="text-xs text-slate-400">Koda celebra contigo · 30s</p>

@@ -8,6 +8,7 @@ import {
   IssueCertificateResponse,
 } from '@/services/learning/evaluation.service';
 import { CheckCircle, XCircle, ArrowRight, Certificate, DownloadSimple } from '@phosphor-icons/react';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 
 interface AttemptReviewScreenProps {
   params?: Promise<{ attemptId: string }> | { attemptId: string };
@@ -106,6 +107,14 @@ export default function AttemptReviewScreen(props: AttemptReviewScreenProps) {
   return (
     <div className="max-w-4xl mx-auto p-6 mt-8">
       <div className={`rounded-2xl p-8 text-center mb-8 text-white shadow-md ${passed ? 'bg-emerald-600' : 'bg-rose-500'}`}>
+        <div className="flex justify-center mb-3">
+          <KodaMascot
+            state={passed ? 'streak_active' : 'sad'}
+            size={96}
+            animate={passed ? 'bounce' : 'none'}
+            glow
+          />
+        </div>
         <h1 className="text-3xl font-extrabold mb-2">
           {passed ? '¡Evaluación Aprobada!' : 'Evaluación Reprobada'}
         </h1>

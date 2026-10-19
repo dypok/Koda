@@ -120,7 +120,8 @@
 - Integración perfecta con el estado global de la lección mediante Zustand: `setMascotMood('happy')`.
 
 **Subtasks:**
-- [ ] [FRONTEND] Diseñar los spritesheets optimizados de Koda 🦊 en formato WebP con resolución retina.
+- [x] [FRONTEND] Integracion de la mascota oficial vectorial con 5 estados emocionales (idle, sad, thinking, streak_lost, streak_active) y 8 avatares vectoriales normalizados en KodaMascot.
+- [ ] [FRONTEND] Diseñar los spritesheets optimizados de Koda en formato WebP con resolución retina.
 - [ ] [FRONTEND] Implementar `PixiMascotCanvas.tsx` con contenedor `PIXI.Application` y ciclo de vida React limpio.
 - [ ] [FRONTEND] Implementar sistema de partículas para confeti acelerado (`PixiParticlesEmitter`).
 - [ ] [FRONTEND] Conectar transiciones de estados anímicos controladas por el resultado de las respuestas en el Workspace.

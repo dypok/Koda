@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 import {
   ArrowClockwise,
   EnvelopeSimple,
@@ -195,12 +195,12 @@ export const RegisterOtpModal: React.FC<RegisterOtpModalProps> = ({
                 aria-hidden="true"
                 className="absolute inset-0 rounded-full bg-amber-500/20 blur-lg animate-pulse"
               />
-              <Image
-                src="/brand/koda-mascot-cartoon-2d.svg"
-                alt="Koda código OTP"
-                width={96}
-                height={96}
-                className="w-full h-full object-contain relative z-10 select-none"
+              <KodaMascot
+                state="thinking"
+                size={96}
+                priority
+                glow
+                className="w-full h-full relative z-10"
               />
             </div>
 
