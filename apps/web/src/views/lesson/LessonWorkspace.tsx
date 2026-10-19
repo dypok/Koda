@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key, Code, Shield, Lightbulb } from '@phosphor-icons/react';
+import { ArrowLeft, ArrowRight, Check, ArrowCounterClockwise, Trophy, Key, Code, Shield, Lightbulb, Target, WarningCircle } from '@phosphor-icons/react';
 import { ContentExercise, ContentLesson, ContentModule, isModuleAvailable, loadBank, loadModule, shuffled } from '@/lib/content';
 import { QuestionRenderer } from './QuestionRenderer';
 import { useLessonEngine } from './useLessonEngine';
@@ -449,7 +449,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   if (mode === 'done' && quizScore) {
     const passed = quizScore.ok / Math.max(1, quizScore.total) >= 0.7;
     return (
-      <div className="relative isolate min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-6 px-4 text-center">
+      <div className="relative isolate h-screen max-h-screen bg-slate-950 flex flex-col items-center justify-center gap-6 px-4 text-center overflow-hidden">
         <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
         {passed ? (
           <div className="relative">
@@ -494,12 +494,12 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   }
 
   return (
-    <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
+    <div className="relative isolate h-screen max-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-hidden font-sans">
       <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
 
-      {/* Header Fijo de Navegación HUD */}
-      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
-        <div className="mx-auto max-w-6xl space-y-2.5">
+      {/* Header Fijo de Navegación HUD Fullwidth */}
+      <header className="w-full shrink-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 sm:px-6 lg:px-8 py-2.5 shadow-2xl">
+        <div className="w-full space-y-2">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-3">
               <Link
@@ -556,7 +556,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center p-4 md:p-6 lg:p-8">
+      <main className="flex-1 min-h-0 w-full p-2.5 sm:p-4 lg:p-5 overflow-hidden flex flex-col">
         {lesson ? (
           <LessonView
             key={lesson.id}
@@ -572,7 +572,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             isLast={lessonIdx + 1 >= section.lessons.length}
           />
         ) : (
-          <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-8 flex flex-col items-center gap-4 text-center shadow-2xl">
+          <div className="w-full max-w-md mx-auto my-auto rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-8 flex flex-col items-center gap-4 text-center shadow-2xl">
             <p className="text-slate-300 text-sm">Esta sección no trae lecciones todavía.</p>
             <button
               type="button"
@@ -685,61 +685,117 @@ function LessonView({
     canSubmit: Boolean(!engine.result && engine.selected.length > 0),
   });
 
+  const isLongTitle = lesson.title.length > 40;
+  const isLongExplanation = (lesson.explanation?.length ?? 0) > 650;
+
   return (
-    <div className="w-full max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div className="w-full h-full min-h-0 grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
       {/* Columna Izquierda: Teoría & Terminal */}
-      <section aria-label="Teoría" className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col justify-between gap-6 shadow-2xl">
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-orange-500/10 border border-orange-500/20 text-[10px] font-mono font-bold text-orange-300 uppercase tracking-wider">
+      <section aria-label="Teoría" className="h-full min-h-0 flex flex-col rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-3.5 sm:p-5 lg:p-6 shadow-2xl overflow-hidden">
+        {/* Cabecera fija de la teoría */}
+        <div className="shrink-0 space-y-2 pb-3 border-b border-slate-800/80">
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-orange-500/10 border border-orange-500/20 text-[10px] font-mono font-bold text-orange-300 uppercase tracking-wider">
               <span>Lección 0{lesson.position ?? 1}</span>
             </div>
             {isCompleted ? (
-              <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
+              <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
                 <Check className="w-3 h-3 text-emerald-400" />
                 <span>Completada</span>
               </div>
             ) : null}
+            {lesson.objective ? (
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-mono font-medium text-cyan-300 truncate max-w-full">
+                <Target className="w-3 h-3 text-cyan-400 shrink-0" aria-hidden="true" />
+                <span className="truncate">{lesson.objective}</span>
+              </div>
+            ) : null}
           </div>
-          <h1 className="font-display text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">
+          <h1 className={cn(
+            'font-display font-black text-white tracking-tight leading-snug',
+            isLongTitle ? 'text-lg sm:text-xl lg:text-2xl' : 'text-xl sm:text-2xl lg:text-3xl'
+          )}>
             {lesson.title}
           </h1>
-          <div className="pt-1">
-            <MarkdownContent content={lesson.explanation} />
-          </div>
         </div>
 
-        {/* Terminal interactiva */}
-        <div className="space-y-3">
-          {lesson.examples.map((ex, i) => (
-            <div key={i} className="space-y-3">
-              <div className="rounded-xl border border-slate-800 bg-slate-950/80 p-4 font-mono text-sm leading-relaxed text-slate-200 shadow-inner">
-                <span className="text-slate-500 select-none"># Ejemplo interactivo</span>
-                <div className="text-amber-300 pt-1">
-                  <code>{ex.code}</code>
-                </div>
+        {/* Cuerpo scrolleable con teoría, errores comunes y ejemplos */}
+        <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 sm:space-y-4 pr-1 sm:pr-2 pt-3">
+          <div className={cn(
+            'leading-relaxed text-slate-200',
+            isLongExplanation ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
+          )}>
+            <MarkdownContent content={lesson.explanation} />
+          </div>
+
+          {lesson.common_errors ? (
+            <div className="rounded-xl border border-rose-500/30 bg-rose-950/20 p-3 space-y-1.5 text-xs text-rose-200">
+              <div className="flex items-center gap-1.5 font-bold font-mono text-rose-300 uppercase tracking-wider text-[10px]">
+                <WarningCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" aria-hidden="true" />
+                <span>Cuidado habitual</span>
               </div>
-              {ex.output ? (
-                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-950/30 border border-emerald-500/30 text-xs font-mono text-emerald-300">
-                  <span className="text-emerald-500 font-bold">$</span>
-                  <span>{ex.output}</span>
-                </div>
-              ) : null}
-              {ex.explanation ? (
-                <div className="text-[11px] text-slate-400 leading-normal pl-1">
-                  <MarkdownContent content={ex.explanation} inline />
-                </div>
-              ) : null}
+              <p className="leading-relaxed text-slate-300">
+                {lesson.common_errors}
+              </p>
             </div>
-          ))}
+          ) : null}
+
+          {/* Terminal interactiva y ejemplos de código */}
+          {lesson.examples.length > 0 ? (
+            <div className="space-y-3">
+              {lesson.examples.map((ex, i) => (
+                <div key={i} className="rounded-xl border border-slate-800 bg-slate-950/90 overflow-hidden shadow-inner">
+                  <div className="flex items-center justify-between px-3 py-1.5 border-b border-slate-800/80 bg-slate-900/60">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-2.5 h-2.5 rounded-full bg-rose-500/80" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80" />
+                      <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80" />
+                    </div>
+                    <span className="text-[10px] font-mono text-slate-400 select-none">
+                      {ex.title || '# Ejemplo interactivo'}
+                    </span>
+                  </div>
+                  <div className="p-3 font-mono text-xs sm:text-sm leading-relaxed text-slate-200">
+                    <div className="text-amber-300">
+                      <code>{ex.code}</code>
+                    </div>
+                  </div>
+                  {ex.output ? (
+                    <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-950/30 border-t border-slate-800/80 text-xs font-mono text-emerald-300">
+                      <span className="text-emerald-500 font-bold">$</span>
+                      <span>{ex.output}</span>
+                    </div>
+                  ) : null}
+                  {ex.explanation ? (
+                    <div className="px-3 py-1.5 border-t border-slate-800/60 bg-slate-900/30 text-[11px] text-slate-400 leading-normal">
+                      <MarkdownContent content={ex.explanation} inline />
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          ) : null}
+
+          {lesson.key_takeaways && lesson.key_takeaways.length > 0 ? (
+            <div className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-3 space-y-1.5">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-300">
+                Puntos Clave
+              </span>
+              <ul className="list-disc list-inside space-y-1 text-xs text-slate-300 leading-relaxed">
+                {lesson.key_takeaways.map((point, idx) => (
+                  <li key={idx}>{point}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
         </div>
       </section>
 
       {/* Columna Derecha: Práctica & Desafío de Comprensión */}
-      <section aria-label="Práctica" className="rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 flex flex-col justify-between gap-6 shadow-2xl">
+      <section aria-label="Práctica" className="h-full min-h-0 flex flex-col justify-between rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-3.5 sm:p-5 lg:p-6 shadow-2xl overflow-hidden">
         {!exercise ? (
-          <div className="space-y-6 flex flex-col justify-between h-full">
-            <div className="space-y-4">
+          <div className="space-y-4 flex flex-col justify-between h-full">
+            <div className="space-y-3">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-500/10 border border-amber-500/20 text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider">
                 <span>Lectura Conceptual</span>
               </div>
@@ -747,41 +803,69 @@ function LessonView({
                 Has completado los conceptos y ejemplos de esta lección. Cuando estés listo, presiona continuar para avanzar.
               </p>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                onComplete?.();
-                onNext();
-              }}
-              className={cn(
-                'group relative inline-flex min-h-[50px] w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.18em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none select-none',
-                pressedAction === 'next' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-amber-400'
-              )}
-            >
-              <span>{isLast ? 'IR AL QUIZ' : 'SIGUIENTE LECCIÓN'}</span>
-              <ArrowRight aria-hidden="true" className="w-4 h-4" />
-              <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-mono font-bold text-slate-950">
-                Enter ↵
-              </kbd>
-            </button>
+            <div className="space-y-3 pt-2">
+              <button
+                type="button"
+                onClick={() => {
+                  onComplete?.();
+                  onNext();
+                }}
+                className={cn(
+                  'group relative inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.18em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none select-none',
+                  pressedAction === 'next' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-amber-400'
+                )}
+              >
+                <span>{isLast ? 'IR AL QUIZ' : 'SIGUIENTE LECCIÓN'}</span>
+                <ArrowRight aria-hidden="true" className="w-4 h-4" />
+                <kbd className="hidden sm:inline-flex items-center justify-center px-1.5 py-0.5 rounded border border-slate-950/40 bg-slate-950/20 text-[10px] font-mono font-bold text-slate-950">
+                  Enter ↵
+                </kbd>
+              </button>
+
+              <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-xs font-mono text-slate-400">
+                <button
+                  type="button"
+                  onClick={onPrev}
+                  disabled={currentIndex === 0}
+                  className="hover:text-slate-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  ← Lección anterior
+                </button>
+                <span className="text-[11px] text-slate-500">
+                  0{currentIndex + 1} / 0{totalCount}
+                </span>
+                <button
+                  type="button"
+                  onClick={onNext}
+                  className="hover:text-orange-400 transition-colors cursor-pointer"
+                >
+                  {isLast ? 'Ir al Quiz →' : 'Saltar / Siguiente →'}
+                </button>
+              </div>
+            </div>
           </div>
         ) : (
-          <div className="space-y-5 flex flex-col justify-between h-full">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                  Desafío de Comprensión
-                </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-300 border border-orange-500/30">
-                  {exercise.type === 'multiple_choice' ? 'Opción múltiple' : 'Opción única'}
-                </span>
-              </div>
+          <div className="flex flex-col justify-between h-full min-h-0">
+            {/* Cabecera fija de la pregunta */}
+            <div className="shrink-0 flex items-center justify-between pb-2.5 border-b border-slate-800/80">
+              <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+                Desafío de Comprensión
+              </span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-300 border border-orange-500/30">
+                {exercise.type === 'multiple_choice' ? 'Opción múltiple' : 'Opción única'}
+              </span>
+            </div>
 
-              <div className="text-base sm:text-lg font-bold text-white leading-snug">
+            {/* Area de pregunta y opciones scrolleable */}
+            <div className="flex-1 min-h-0 overflow-y-auto space-y-3 py-3 pr-1 sm:pr-2">
+              <div className={cn(
+                'font-bold text-white leading-snug',
+                exercise.prompt.length > 180 ? 'text-sm sm:text-base' : 'text-base sm:text-lg'
+              )}>
                 <MarkdownContent content={exercise.prompt} inline />
               </div>
 
-              <div className="pt-2">
+              <div className="pt-1">
                 <QuestionRenderer
                   exercise={exercise}
                   selectedIds={engine.selected}
@@ -792,8 +876,8 @@ function LessonView({
               </div>
             </div>
 
-            {/* Acciones de Evaluación */}
-            <div className="pt-3">
+            {/* Acciones fijas en la parte inferior */}
+            <div className="shrink-0 pt-2.5 border-t border-slate-800/80 space-y-2.5">
               {!engine.result ? (
                 <button
                   type="button"
@@ -823,7 +907,7 @@ function LessonView({
                   }}
                   disabled={engine.selected.length === 0}
                   className={cn(
-                    'group relative inline-flex min-h-[50px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.25em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
+                    'group relative inline-flex min-h-[48px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.25em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
                     pressedAction === 'submit' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-amber-400'
                   )}
                 >
@@ -837,7 +921,7 @@ function LessonView({
                 <div
                   role={engine.result.correct ? 'status' : 'alert'}
                   className={cn(
-                    'rounded-xl border p-4 space-y-3 transition-all duration-300',
+                    'rounded-xl border p-3.5 space-y-2.5 transition-all duration-300',
                     engine.result.correct
                       ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.15)]'
                       : 'border-rose-500/40 bg-rose-500/10 text-rose-100'
@@ -849,12 +933,12 @@ function LessonView({
                       {engine.result.correct ? `¡Excelente! +${engine.result.xp} XP` : 'Respuesta incorrecta'}
                     </p>
                   </div>
-                  <div className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                  <div className="text-xs sm:text-sm text-slate-300 leading-relaxed max-h-24 overflow-y-auto pr-1">
                     <MarkdownContent content={engine.result.feedback} />
                   </div>
                   {engine.result.hint ? (
-                    <div className="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg flex items-start gap-2">
-                      <Lightbulb className="w-4 h-4 text-amber-300 shrink-0 mt-0.5" aria-hidden="true" />
+                    <div className="text-xs text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2 rounded-lg flex items-start gap-2">
+                      <Lightbulb className="w-3.5 h-3.5 text-amber-300 shrink-0 mt-0.5" aria-hidden="true" />
                       <div>
                         <strong className="font-bold text-amber-300 mr-1">Pista:</strong>
                         <MarkdownContent content={engine.result.hint} inline />
@@ -866,7 +950,7 @@ function LessonView({
                       <button
                         type="button"
                         onClick={engine.resetSelection}
-                        className="group inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl border-t border-slate-600 border-b-4 border-slate-950 bg-slate-800 px-4 text-xs font-mono font-bold text-slate-200 shadow-[0_4px_0_#020617] hover:border-slate-500 hover:bg-slate-750 hover:text-white active:border-b-0 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
+                        className="group inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border-t border-slate-600 border-b-4 border-slate-950 bg-slate-800 px-4 text-xs font-mono font-bold text-slate-200 shadow-[0_4px_0_#020617] hover:border-slate-500 hover:bg-slate-750 hover:text-white active:border-b-0 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
                       >
                         <ArrowCounterClockwise aria-hidden="true" className="w-4 h-4" />
                         <span>REINTENTAR</span>
@@ -880,7 +964,7 @@ function LessonView({
                       onClick={engine.result.correct ? onNext : () => {}}
                       disabled={!engine.result.correct}
                       className={cn(
-                        'group relative inline-flex min-h-[46px] flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-emerald-200 border-b-4 border-emerald-800 shadow-[0_4px_0_#065f46,0_8px_20px_rgba(16,185,129,0.45)] transition-all duration-200 cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
+                        'group relative inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-emerald-200 border-b-4 border-emerald-800 shadow-[0_4px_0_#065f46,0_8px_20px_rgba(16,185,129,0.45)] transition-all duration-200 cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
                         pressedAction === 'next' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-emerald-400'
                       )}
                     >
@@ -893,28 +977,28 @@ function LessonView({
                   </div>
                 </div>
               )}
-            </div>
 
-            {/* Pie de navegación libre entre lecciones independientes */}
-            <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-xs font-mono text-slate-400">
-              <button
-                type="button"
-                onClick={onPrev}
-                disabled={currentIndex === 0}
-                className="hover:text-slate-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-              >
-                ← Lección anterior
-              </button>
-              <span className="text-[11px] text-slate-500">
-                0{currentIndex + 1} / 0{totalCount}
-              </span>
-              <button
-                type="button"
-                onClick={onNext}
-                className="hover:text-orange-400 transition-colors cursor-pointer"
-              >
-                {isLast ? 'Ir al Quiz →' : 'Saltar / Siguiente →'}
-              </button>
+              {/* Pie de navegación libre entre lecciones independientes */}
+              <div className="flex items-center justify-between pt-1 text-xs font-mono text-slate-400">
+                <button
+                  type="button"
+                  onClick={onPrev}
+                  disabled={currentIndex === 0}
+                  className="hover:text-slate-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                >
+                  ← Lección anterior
+                </button>
+                <span className="text-[11px] text-slate-500">
+                  0{currentIndex + 1} / 0{totalCount}
+                </span>
+                <button
+                  type="button"
+                  onClick={onNext}
+                  className="hover:text-orange-400 transition-colors cursor-pointer"
+                >
+                  {isLast ? 'Ir al Quiz →' : 'Saltar / Siguiente →'}
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -985,7 +1069,7 @@ function QuizMode({
 
   if (questions.length === 0) {
     return (
-      <div className="relative isolate min-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4 px-4 text-center">
+      <div className="relative isolate h-screen max-h-screen bg-slate-950 flex flex-col items-center justify-center gap-4 px-4 text-center overflow-hidden">
         <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
         <p className="font-display text-2xl font-bold text-white">Quiz en camino</p>
         <p className="text-sm text-slate-400">Esta sección aún no tiene banco de preguntas.</p>
@@ -1000,11 +1084,11 @@ function QuizMode({
   }
 
   return (
-    <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
+    <div className="relative isolate h-screen max-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-hidden font-sans">
       <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
 
-      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
-        <div className="mx-auto max-w-4xl space-y-2.5">
+      <header className="w-full shrink-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 sm:px-6 lg:px-8 py-2.5 shadow-2xl">
+        <div className="w-full max-w-5xl mx-auto space-y-2">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 font-mono text-xs">
               <span className="text-slate-400">{courseTitle ?? 'Curso'}</span>
@@ -1033,10 +1117,10 @@ function QuizMode({
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center p-4 md:p-6 lg:p-8">
+      <main className="flex-1 min-h-0 w-full p-2.5 sm:p-4 lg:p-6 flex items-center justify-center overflow-hidden">
         {engine.current ? (
-          <div className="w-full max-w-3xl rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-2xl">
-            <div className="flex items-center justify-between">
+          <div className="w-full max-w-4xl h-full max-h-[86vh] rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-4 sm:p-6 lg:p-8 flex flex-col justify-between shadow-2xl overflow-hidden">
+            <div className="shrink-0 flex items-center justify-between pb-2.5 border-b border-slate-800/80">
               <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
                 Pregunta del Quiz
               </span>
@@ -1045,26 +1129,28 @@ function QuizMode({
               </span>
             </div>
 
-            <div className="text-lg sm:text-xl font-bold text-white leading-snug">
-              <MarkdownContent content={engine.current.prompt} inline />
+            <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 py-3 pr-1 sm:pr-2">
+              <div className="text-base sm:text-xl font-bold text-white leading-snug">
+                <MarkdownContent content={engine.current.prompt} inline />
+              </div>
+
+              <QuestionRenderer
+                exercise={engine.current}
+                selectedIds={engine.selected}
+                onToggle={engine.toggle}
+                disabled={Boolean(engine.result)}
+                pressedIndex={pressedIndex}
+              />
             </div>
 
-            <QuestionRenderer
-              exercise={engine.current}
-              selectedIds={engine.selected}
-              onToggle={engine.toggle}
-              disabled={Boolean(engine.result)}
-              pressedIndex={pressedIndex}
-            />
-
-            <div className="pt-2">
+            <div className="shrink-0 pt-2.5 border-t border-slate-800/80">
               {!engine.result ? (
                 <button
                   type="button"
                   onClick={() => engine.check()}
                   disabled={engine.selected.length === 0}
                   className={cn(
-                    'group relative inline-flex min-h-[50px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.25em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
+                    'group relative inline-flex min-h-[48px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.25em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
                     pressedAction === 'submit' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-amber-400'
                   )}
                 >
@@ -1078,7 +1164,7 @@ function QuizMode({
                 <div
                   role={engine.result.correct ? 'status' : 'alert'}
                   className={cn(
-                    'rounded-xl border p-4 space-y-3 transition-all duration-300',
+                    'rounded-xl border p-3.5 space-y-2.5 transition-all duration-300',
                     engine.result.correct
                       ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.15)]'
                       : 'border-rose-500/40 bg-rose-500/10 text-rose-100'
@@ -1100,7 +1186,7 @@ function QuizMode({
                       engine.next();
                     }}
                     className={cn(
-                      'group relative inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-emerald-200 border-b-4 border-emerald-800 shadow-[0_4px_0_#065f46,0_8px_20px_rgba(16,185,129,0.45)] transition-all duration-200 cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none select-none',
+                      'group relative inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-emerald-200 border-b-4 border-emerald-800 shadow-[0_4px_0_#065f46,0_8px_20px_rgba(16,185,129,0.45)] transition-all duration-200 cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none select-none',
                       pressedAction === 'next' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-emerald-400'
                     )}
                   >

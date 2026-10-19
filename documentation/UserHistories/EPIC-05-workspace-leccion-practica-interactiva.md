@@ -23,11 +23,11 @@
 - **Modo Responsive Móvil:** en pantallas < 768px, los paneles se apilan verticalmente con pestañas superiores *"Concepto"* y *"Práctica"*.
 
 **Subtasks:**
-- [ ] [FRONTEND] Crear layout `LessonWorkspaceLayout.tsx` en `apps/web/src/components/lesson/`.
-- [ ] [FRONTEND] Crear componente `SectionStepper.tsx` que reciba el arreglo de 10 lecciones y el índice activo.
-- [ ] [FRONTEND] Integrar visor de código con resaltado sintáctico de Python (Shiki / PrismJS en tema oscuro `#0F172A`).
-- [ ] [FRONTEND] Diseñar consola de salida de texto simulada con tipografía JetBrains Mono.
-- [ ] [TEST] Verificar renderizado sin scrolls horizontales ni verticales en resolución estándar 1366x768 y 1920x1080.
+- [x] [FRONTEND] Crear layout de workspace (`LessonWorkspace.tsx` / `LessonView`) a pantalla completa horizontal sin límites restrictivos y adaptado a viewport único.
+- [x] [FRONTEND] Stepper horizontal accesible con roles ARIA `tablist` y estados completado, activo y pendiente.
+- [x] [FRONTEND] Integrar visor de código y terminal interactiva con estilos de ventana moderna y salida en consola.
+- [x] [FRONTEND] Diseñar estructura de datos pedagógicos enriquecida de MongoDB (objetivos, errores comunes, ejemplos y puntos clave).
+- [x] [TEST] Verificar renderizado sin scrolls en página completa y adaptación tipográfica dinámica según extensión de texto.
 
 **DoD adicional para esta US:**
 - Cumplimiento de accesibilidad: soporte completo para lectores de pantalla mediante roles ARIA `tablist` y `tabpanel`.

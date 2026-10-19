@@ -1,0 +1,3 @@
+# Changelog: 19-10-2026
+
+- [Monday]-[19/10/2026]-[06:50]-[Dylan Gamero] : Refactor lesson workspace to full-width horizontal layout and single-viewport bounded container with NoSQL pedagogical data.
