@@ -5,29 +5,160 @@
   "questions": [
     {
       "id": "q_py3_02_01",
-      "type": "predict_output",
-      "difficulty": "medium",
-      "prompt": "¿Qué sintaxis equivale exactamente a @decorador sobre def funcion(): pass?",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿A qué equivalencia sintáctica exacta corresponde decorar una función con @mi_decorador?",
       "options": [
         {
           "id": "a",
-          "text": "funcion = decorador(funcion)"
+          "text": "funcion = mi_decorador(funcion)"
         },
         {
           "id": "b",
-          "text": "decorador = funcion(decorador)"
+          "text": "funcion = mi_decorador.clone()"
         },
         {
           "id": "c",
-          "text": "decorador(funcion())"
+          "text": "mi_decorador = funcion()"
         },
         {
           "id": "d",
-          "text": "funcion.decorar(decorador)"
+          "text": "import mi_decorador"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "El azúcar sintáctico @decorador reasigna el identificador de la función al resultado de llamar al decorador pasándole la función original."
+      "explanation": "El símbolo @ es azúcar sintáctico que pasa la función decorada como argumento a la función decoradora y reasigna el identificador al resultado."
+    },
+    {
+      "id": "q_py3_02_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la función del decorador @functools.wraps(func) al aplicarse sobre la función wrapper interna?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Copiar los metadatos de la función original (como __name__ y __doc__) al wrapper para preservar su identidad"
+        },
+        {
+          "id": "b",
+          "text": "Acelerar la función convirtiéndola en código C de bajo nivel"
+        },
+        {
+          "id": "c",
+          "text": "Bloquear la función para que no pueda recibir excepciones"
+        },
+        {
+          "id": "d",
+          "text": "Convertir los argumentos posicionales en un diccionario"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "@wraps(func) transfiere __name__, __doc__, __module__ y anotaciones desde la función original hacia la función wrapper interna."
+    },
+    {
+      "id": "q_py3_02_03",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué valor imprime la llamada a la función decorada si el wrapper omite la sentencia return?",
+      "prompt_code": "def dec(func):\n    def wrapper(*args, **kwargs):\n        func(*args, **kwargs)\n    return wrapper\n\n@dec\ndef dar_dato():\n    return 100\n\nprint(dar_dato())",
+      "options": [
+        {
+          "id": "a",
+          "text": "None"
+        },
+        {
+          "id": "b",
+          "text": "100"
+        },
+        {
+          "id": "c",
+          "text": "TypeError"
+        },
+        {
+          "id": "d",
+          "text": "0"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Como el wrapper invoca func pero no retorna su valor, la invocación de la función decorada devuelve None por omisión."
+    },
+    {
+      "id": "q_py3_02_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué es un 'Closure' en el contexto de funciones en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Una función anidada que recuerda y conserva el acceso a variables locales del ámbito léxico exterior incluso tras haber finalizado la función padre"
+        },
+        {
+          "id": "b",
+          "text": "Una función que se autodestruye al terminar"
+        },
+        {
+          "id": "c",
+          "text": "Un método que solo admite argumentos nombrados"
+        },
+        {
+          "id": "d",
+          "text": "Un bucle while cerrado"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Un closure empaqueta una función junto con su entorno léxico, permitiendo que conserve variables del ámbito exterior."
+    },
+    {
+      "id": "q_py3_02_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Por qué la función wrapper dentro de un decorador genérico debe definirse habitualmente como def wrapper(*args, **kwargs)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Para poder envolver y aceptar cualquier función objetivo sin importar la cantidad ni el tipo de argumentos que requiera"
+        },
+        {
+          "id": "b",
+          "text": "Porque es una exigencia de sintaxis de la máquina virtual de CPython"
+        },
+        {
+          "id": "c",
+          "text": "Para evitar que la función se ejecute más de una vez"
+        },
+        {
+          "id": "d",
+          "text": "Porque convierte los argumentos en tipos primitivos inmutables"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La firma (*args, **kwargs) permite que el wrapper sea un proxy transparente capaz de recibir y reenviar cualquier combinación de parámetros."
+    },
+    {
+      "id": "q_py3_02_06",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Al crear un decorador que recibe parámetros de configuración (por ejemplo: @reintentar(max_intentos=3)), ¿cuántos niveles de anidación de funciones se requieren?",
+      "options": [
+        {
+          "id": "a",
+          "text": "3 niveles: la fábrica que recibe los parámetros, el decorador que recibe la función y el wrapper que intercepta la llamada"
+        },
+        {
+          "id": "b",
+          "text": "1 solo nivel"
+        },
+        {
+          "id": "c",
+          "text": "2 niveles estándar"
+        },
+        {
+          "id": "d",
+          "text": "4 niveles obligatorios con metaclasses"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Se requiere una función fábrica de 3 niveles: fábrica(config) -> decorador(func) -> wrapper(*args, **kwargs)."
     }
   ]
 }

@@ -5,13 +5,13 @@
   "slug": "decoradores",
   "course_slug": "python-3",
   "title": "Decoradores, Closures y functools.wraps",
-  "objective": "Interceptar y extender el comportamiento de funciones mediante closures, el azúcar sintáctico @ y preservar metadatos con @functools.wraps.",
-  "description": "La herramienta definitiva de metaprogramación en Python: implementa sistemas de autenticación, medición de tiempos y registro de auditoría sin tocar el código original.",
-  "position": 22,
+  "objective": "Interceptar y extender funciones mediante closures, dominar el azúcar sintáctico @, preservar metadatos con @functools.wraps y construir fábricas de decoradores con argumentos.",
+  "description": "La herramienta definitiva de metaprogramación en Python: implementa logging, control de acceso, caché y métricas sin alterar una sola línea del código de negocio.",
+  "position": 2,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,233 @@
     {
       "id": "sec_py3_02_01",
       "code": "S01",
-      "title": "Closures y Creación de Decoradores",
-      "slug": "closures-decoradores",
+      "title": "Closures y Metaprogramación con Decoradores",
+      "slug": "closures-decoradores-python",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py3_02_01",
           "code": "L01",
-          "title": "Anatomía de un Decorador con @functools.wraps",
-          "slug": "anatomia-decorador",
+          "title": "Funciones de Primer Orden y Closures",
+          "slug": "funciones-primer-orden-closures",
           "position": 1,
-          "concept_id": "py3-decorators",
-          "objective": "Construir decoradores profesionales que admitan cualquier firma (*args, **kwargs) y preserven docstrings.",
-          "theory_markdown": "Un **decorador** es una función que recibe otra función como argumento, le añade superpoderes antes o después de ejecutarla, y devuelve una función modificada (wrapper).\n\nEl símbolo `@mi_decorador` es simplemente un atajo sintáctico de: `funcion_original = mi_decorador(funcion_original)`.\n\nPara que la función decorada no pierda su nombre original ni sus docstrings, siempre debemos usar `@functools.wraps(func)` en el wrapper interior.",
+          "concept_id": "py3-first-class-closures",
+          "objective": "Comprender que las funciones son objetos de primer orden y cómo una función interna atrapa variables de su ámbito externo (closure).",
+          "theory_markdown": "En Python, las funciones son **ciudadanos de primera clase**: pueden asignarse a variables, pasarse como argumentos a otras funciones y retornarse como valores de retorno.\n\n### ¿Qué es un Closure (Clausura)?\nUn **closure** ocurre cuando una función anidada interna recuerda y conserva el acceso a las variables locales del ámbito que la contiene, incluso después de que la función externa ha terminado su ejecución:\n\n```python\ndef crear_multiplicador(factor):\n    def multiplicar(x):\n        # 'factor' proviene del ambito externo y queda congelado en el closure\n        return x * factor\n    return multiplicar\n\ndoble = crear_multiplicador(2)\ntriple = crear_multiplicador(3)\nprint(doble(10))   # 20\nprint(triple(10))  # 30\n```",
           "examples": [
             {
-              "title": "Decorador medidor de tiempo de ejecución (benchmark)",
-              "code": "import time\nfrom functools import wraps\n\ndef cronometrar(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        inicio = time.perf_counter()\n        resultado = func(*args, **kwargs)\n        duracion = time.perf_counter() - inicio\n        print(f\"[{func.__name__}] tomó {duracion:.5f}s\")\n        return resultado\n    return wrapper\n\n@cronometrar\ndef tarea_pesada():\n    return sum(i * i for i in range(100_000))\n\nres = tarea_pesada()\nprint(\"Nombre preservado:\", tarea_pesada.__name__)",
-              "output": "[tarea_pesada] tomó 0.00512s\nNombre preservado: tarea_pesada",
-              "explanation": "@wraps preserva tarea_pesada.__name__ intacto en lugar de mostrar \"wrapper\"."
+              "title": "Generador de prefijos con closure",
+              "code": "def creador_saludo(prefijo):\n    def saludar(nombre):\n        return f\"{prefijo}, {nombre}!\"\n    return saludar\n\nhola = creador_saludo(\"Hola\")\nprint(hola(\"Koda\"))",
+              "output": "Hola, Koda!",
+              "explanation": "La función interna saludar retiene el valor 'Hola' en su tupla de celdas internas (__closure__)."
             }
           ],
-          "common_errors": "Olvidar el return en la función wrapper interior. Si olvidas `return func(*args, **kwargs)`, la función decorada retornará `None`.",
+          "common_errors": "Intentar reasignar una variable externa sin usar la palabra clave `nonlocal` si se desea mutarla dentro del closure.",
           "mini_exercise": {
-            "starter_code": "def mayusculas(func):\n    def wrapper():\n        return func().upper()\n    return wrapper\n\n@mayusculas\ndef saludo():\n    return \"hola koda\"\n\nprint(saludo())",
-            "instructions": "Observa cómo el decorador transforma la salida en \"HOLA KODA\".",
-            "solution": "def mayusculas(func):\n    def wrapper():\n        return func().upper()\n    return wrapper\n\n@mayusculas\ndef saludo():\n    return \"hola koda\"\n\nprint(saludo())"
+            "starter_code": "def crear_sumador(n):\n    def sumar(x):\n        return ...\n    return sumar\n\ns = crear_sumador(5)\nprint(s(10))  # Debe mostrar 15",
+            "instructions": "Retorna x + n dentro de sumar.",
+            "solution": "def crear_sumador(n):\n    def sumar(x):\n        return x + n\n    return sumar\n\ns = crear_sumador(5)\nprint(s(10))"
           },
           "key_takeaways": [
-            "Un decorador envuelve una función existente sin alterar su código fuente.",
-            "*args y **kwargs en el wrapper garantizan compatibilidad universal.",
-            "@wraps de functools conserva la identidad y metadatos de la función original."
+            "Las funciones pueden pasarse y retornarse libremente como cualquier otro objeto.",
+            "Un closure atrapa variables del ámbito superior permitiendo configurar comportamiento.",
+            "Los closures son el fundamento arquitectónico sobre el que operan los decoradores."
           ],
           "exercise": {
             "id": "ex_py3_02_01",
-            "type": "single_choice",
+            "type": "predict_output",
             "difficulty": "medium",
-            "prompt": "¿Por qué es indispensable usar @functools.wraps(func) al crear un decorador?",
+            "prompt": "¿Qué imprime este código al ejecutar el closure?",
+            "prompt_code": "def elevar_a(potencia):\n    def calc(base):\n        return base ** potencia\n    return calc\n\ncuadrado = elevar_a(2)\nprint(cuadrado(4))",
             "options": [
               {
                 "id": "a",
-                "text": "Para preservar el nombre original (__name__) y la documentación (__doc__) de la función decorada"
+                "text": "16"
               },
               {
                 "id": "b",
-                "text": "Para que el código se ejecute en múltiples hilos"
+                "text": "8"
               },
               {
                 "id": "c",
-                "text": "Para compilar la función a lenguaje ensamblador"
+                "text": "4"
               },
               {
                 "id": "d",
-                "text": "Es puramente estético y no tiene ningún efecto"
+                "text": "TypeError"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Sin @wraps, las herramientas de introspección, testing y depuración verán el nombre genérico \"wrapper\" en lugar del nombre real de la función."
+            "explanation": "cuadrado es un closure que preserva potencia=2. 4 ** 2 produce 16."
+          }
+        },
+        {
+          "id": "les_py3_02_02",
+          "code": "L02",
+          "title": "Anatomía de un Decorador y Azúcar Sintáctico @",
+          "slug": "anatomia-decorador-azucar-arroba",
+          "position": 2,
+          "concept_id": "py3-decorator-syntax",
+          "objective": "Escribir decoradores universales con la firma (*args, **kwargs) y comprender la equivalencia de @decorador.",
+          "theory_markdown": "Un **decorador** es un patrón de diseño que permite envolver una función existente para extender o modificar su comportamiento sin alterar su código fuente.\n\n### El desmitificado símbolo `@`\nEscribir:\n```python\n@mi_decorador\ndef saludo():\n    return \"Hola\"\n```\nEs exactamente idéntico a escribir:\n```python\ndef saludo():\n    return \"Hola\"\nsaludo = mi_decorador(saludo)\n```\n\n### El patrón universal con `*args` y `**kwargs`\nPara que un decorador funcione con cualquier función sin importar cuántos argumentos reciba:\n```python\ndef registrar_llamada(func):\n    def wrapper(*args, **kwargs):\n        print(f\"Ejecutando funcion: {func.__name__}\")\n        resultado = func(*args, **kwargs)  # Ejecuta la original\n        return resultado                  # Retorna su valor\n    return wrapper\n```",
+          "examples": [
+            {
+              "title": "Decorador para medir longitud de respuestas",
+              "code": "def auditar(func):\n    def wrapper(*args, **kwargs):\n        print(\"Antes de ejecutar\")\n        res = func(*args, **kwargs)\n        print(\"Despues de ejecutar\")\n        return res\n    return wrapper\n\n@auditar\ndef sumar(a, b):\n    return a + b\n\nprint(\"Resultado:\", sumar(10, 5))",
+              "output": "Antes de ejecutar\nDespues de ejecutar\nResultado: 15",
+              "explanation": "El wrapper envuelve la llamada a sumar ejecutando lógica previa y posterior de forma transparente."
+            }
+          ],
+          "common_errors": "Olvidar escribir `return resultado` en la función wrapper interior. Si no lo retornas, la función decorada siempre devolverá `None` al llamador.",
+          "mini_exercise": {
+            "starter_code": "def duplicador(func):\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs) * ...\n    return wrapper\n\n@duplicador\ndef obtener_diez():\n    return 10\n\nprint(obtener_diez())  # Debe dar 20",
+            "instructions": "Escribe 2 para duplicar el resultado.",
+            "solution": "def duplicador(func):\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs) * 2\n    return wrapper\n\n@duplicador\ndef obtener_diez():\n    return 10\n\nprint(obtener_diez())"
+          },
+          "key_takeaways": [
+            "@decorador es un atajo sintáctico de f = decorador(f).",
+            "El wrapper interior debe recibir *args y **kwargs para máxima compatibilidad.",
+            "Siempre debes retornar el resultado de la función envuelta dentro del wrapper."
+          ],
+          "exercise": {
+            "id": "ex_py3_02_02",
+            "type": "predict_output",
+            "difficulty": "medium",
+            "prompt": "¿Qué valor retorna una función decorada si el wrapper interior olvida la instrucción return?",
+            "prompt_code": "def decorador_mudo(func):\n    def wrapper(*args, **kwargs):\n        func(*args, **kwargs)\n        # Se omitio el return res\n    return wrapper\n\n@decorador_mudo\ndef obtener_numero():\n    return 42\n\nprint(obtener_numero())",
+            "options": [
+              {
+                "id": "a",
+                "text": "None"
+              },
+              {
+                "id": "b",
+                "text": "42"
+              },
+              {
+                "id": "c",
+                "text": "TypeError"
+              },
+              {
+                "id": "d",
+                "text": "0"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Al invocar obtener_numero(), se ejecuta el wrapper. Al no tener una instrucción return explícita, Python retorna None."
+          }
+        },
+        {
+          "id": "les_py3_02_03",
+          "code": "L03",
+          "title": "Preservación de Metadatos con functools.wraps",
+          "slug": "preservacion-metadatos-functools-wraps",
+          "position": 3,
+          "concept_id": "py3-functools-wraps",
+          "objective": "Conservar el nombre original (__name__), docstrings (__doc__) y firmas de tipo usando el decorador estándar @functools.wraps.",
+          "theory_markdown": "Cuando decoras una función, la variable que almacena la función es reemplazada por el objeto `wrapper`.\n\n### El problema del encubrimiento de identidad\n```python\ndef mi_decorador(func):\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs)\n    return wrapper\n\n@mi_decorador\ndef procesar_pagos():\n    \"\"\"Docstring de pagos.\"\"\"\n    pass\n\nprint(procesar_pagos.__name__)  # Imprime: 'wrapper' en vez de 'procesar_pagos'\nprint(procesar_pagos.__doc__)   # Imprime: None\n```\nEsto rompe generadores de documentación (Sphinx), frameworks web (Flask, FastAPI) y herramientas de depuración.\n\n### La solución oficial: `@functools.wraps`\nDecorar la función `wrapper` con `@wraps(func)` copia automáticamente todos los atributos de identidad originales (`__name__`, `__doc__`, `__module__`, `__annotations__`):",
+          "examples": [
+            {
+              "title": "Uso correcto de @wraps",
+              "code": "from functools import wraps\n\ndef auditable(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs)\n    return wrapper\n\n@auditable\ndef login_usuario():\n    \"\"\"Autentica las credenciales del usuario.\"\"\"\n    return True\n\nprint(\"Nombre:\", login_usuario.__name__)\nprint(\"Doc:\", login_usuario.__doc__)",
+              "output": "Nombre: login_usuario\nDoc: Autentica las credenciales del usuario.",
+              "explanation": "@wraps preserva la identidad original de login_usuario sin importar que esté envuelta en un wrapper."
+            }
+          ],
+          "common_errors": "Crear decoradores en librerías públicas sin @wraps, ocasionando que los usuarios de tu librería vean el nombre 'wrapper' en todos los tracebacks y reportes de error.",
+          "mini_exercise": {
+            "starter_code": "from functools import wraps\ndef mi_dec(func):\n    # Aplica wraps sobre wrapper pasando func\n    @wraps(...)\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs)\n    return wrapper",
+            "instructions": "Escribe func dentro de @wraps().",
+            "solution": "from functools import wraps\ndef mi_dec(func):\n    @wraps(func)\n    def wrapper(*args, **kwargs):\n        return func(*args, **kwargs)\n    return wrapper"
+          },
+          "key_takeaways": [
+            "Sin @wraps, la función decorada adopta el nombre 'wrapper' y pierde su docstring.",
+            "@wraps(func) de la librería functools clona todos los metadatos de la función original.",
+            "Es una práctica obligatoria según los estándares de ingeniería de software en Python."
+          ],
+          "exercise": {
+            "id": "ex_py3_02_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Qué consecuencia negativa ocurre si NO aplicas @functools.wraps(func) dentro de un decorador?",
+            "options": [
+              {
+                "id": "a",
+                "text": "La función decorada pierde su __name__ original y su docstring, adoptando el nombre 'wrapper', lo que dificulta la depuración y rompe linters"
+              },
+              {
+                "id": "b",
+                "text": "Python arroja un SyntaxError al iniciar"
+              },
+              {
+                "id": "c",
+                "text": "La función solo puede ser ejecutada una sola vez"
+              },
+              {
+                "id": "d",
+                "text": "El procesador desactiva la memoria caché"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El propósito de @wraps es garantizar la introspección transparente copiando los metadatos de la función original hacia el wrapper."
+          }
+        },
+        {
+          "id": "les_py3_02_04",
+          "code": "L04",
+          "title": "Decoradores con Argumentos (Fábricas de Decoradores)",
+          "slug": "decoradores-con-argumentos",
+          "position": 4,
+          "concept_id": "py3-decorator-factories",
+          "objective": "Diseñar decoradores parametrizados mediante un tercer nivel de anidación (función fábrica).",
+          "theory_markdown": "A menudo necesitas pasar parámetros a un decorador, por ejemplo para indicar cuántas veces reintentar una operación o qué rol se requiere: `@repetir(veces=3)`.\n\nPara lograr esto se requiere una **fábrica de decoradores**: una función externa que recibe los parámetros de configuración y retorna el decorador real.\n\n### Estructura canónica de 3 niveles\n```python\nfrom functools import wraps\n\n# Nivel 1: Fabrica externa que recibe los argumentos de configuracion\ndef repetir(veces):\n    # Nivel 2: El decorador real que recibe la funcion objetivo\n    def decorador(func):\n        # Nivel 3: El wrapper que intercepta la llamada\n        @wraps(func)\n        def wrapper(*args, **kwargs):\n            for _ in range(veces):\n                resultado = func(*args, **kwargs)\n            return resultado\n        return wrapper\n    return decorador\n```",
+          "examples": [
+            {
+              "title": "Decorador con argumento de prefijo de log",
+              "code": "from functools import wraps\n\ndef con_prefijo(tag):\n    def decorador(func):\n        @wraps(func)\n        def wrapper(*args, **kwargs):\n            print(f\"[{tag}] Iniciando...\")\n            return func(*args, **kwargs)\n        return wrapper\n    return decorador\n\n@con_prefijo(\"SEGURIDAD\")\ndef borrar_cuenta():\n    return \"Cuenta eliminada\"\n\nprint(borrar_cuenta())",
+              "output": "[SEGURIDAD] Iniciando...\nCuenta eliminada",
+              "explanation": "con_prefijo('SEGURIDAD') se evalúa primero y retorna el decorador enlazado a esa etiqueta."
+            }
+          ],
+          "common_errors": "Intentar usar solo 2 niveles de anidación cuando el decorador recibe argumentos. Con argumentos son estrictamente necesarios los 3 niveles: fábrica -> decorador -> wrapper.",
+          "mini_exercise": {
+            "starter_code": "# Estructura de 3 niveles para decorador con argumentos\ndef nivel1(param):\n    def nivel2(func):\n        def nivel3(*args, **kwargs):\n            return func(*args, **kwargs)\n        return nivel3\n    return nivel2",
+            "instructions": "Observa los 3 niveles: fábrica de configuración, decorador de función y wrapper de llamada.",
+            "solution": "def nivel1(param):\n    def nivel2(func):\n        def nivel3(*args, **kwargs):\n            return func(*args, **kwargs)\n        return nivel3\n    return nivel2"
+          },
+          "key_takeaways": [
+            "Un decorador que recibe argumentos requiere 3 niveles de anidación.",
+            "El nivel superior actúa como fábrica retornando el decorador real.",
+            "Permite crear utilidades de alto nivel altamente configurables y reutilizables."
+          ],
+          "exercise": {
+            "id": "ex_py3_02_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Por qué un decorador que recibe argumentos (como @permiso('admin')) requiere tres funciones anidadas en lugar de dos?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque la función exterior captura los argumentos del decorador, la intermedia recibe la función a decorar y la interior ejecuta el wrapper"
+              },
+              {
+                "id": "b",
+                "text": "Porque Python 3 no soporta menos de tres niveles en funciones de metaprogramación"
+              },
+              {
+                "id": "c",
+                "text": "Para evitar que la función se guarde en disco duro"
+              },
+              {
+                "id": "d",
+                "text": "Para cifrar el código fuente con hash SHA-256"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La fábrica exterior consume los parámetros de configuración y retorna el decorador real, el cual a su vez retorna el wrapper final."
           }
         }
       ]
