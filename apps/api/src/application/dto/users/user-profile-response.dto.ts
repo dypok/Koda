@@ -126,7 +126,7 @@ export class UserProfileResponseDto {
     if (user.lastStudyDate) {
       try {
         const todayStr = new Intl.DateTimeFormat('en-CA', { timeZone: userTz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(now);
-        const lastStudyStr = new Intl.DateTimeFormat('en-CA', { timeZone: userTz, year: 'numeric', month: '2-digit', day: '2-digit' }).format(user.lastStudyDate);
+        const lastStudyStr = user.lastStudyDate.toISOString().slice(0, 10);
         isActiveToday = todayStr === lastStudyStr;
       } catch {
         isActiveToday = user.lastStudyDate.toISOString().slice(0, 10) === now.toISOString().slice(0, 10);

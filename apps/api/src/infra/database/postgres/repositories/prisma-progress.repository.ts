@@ -141,22 +141,16 @@ export class PrismaProgressRepository implements IProgressRepository {
       const userTimezone = existingUser?.timezone || 'America/Bogota';
       const now = new Date();
 
-      const formatCalDate = (d: Date | null | undefined, tz: string): string | null => {
-        if (!d) return null;
-        try {
-          return new Intl.DateTimeFormat('en-CA', {
-            timeZone: tz,
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-          }).format(d);
-        } catch {
-          return d.toISOString().slice(0, 10);
-        }
-      };
+      const todayStr = new Intl.DateTimeFormat('en-CA', {
+        timeZone: userTimezone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).format(now);
 
-      const todayStr = formatCalDate(now, userTimezone);
-      const lastStudyStr = formatCalDate(existingUser?.lastStudyDate, userTimezone);
+      const lastStudyStr = existingUser?.lastStudyDate
+        ? existingUser.lastStudyDate.toISOString().slice(0, 10)
+        : null;
 
       let currentStreak = existingUser?.currentStreak ?? 0;
       let longestStreak = existingUser?.longestStreak ?? 0;
@@ -200,6 +194,8 @@ export class PrismaProgressRepository implements IProgressRepository {
         }
       }
 
+      const todayDateAtUtc = new Date(`${todayStr}T00:00:00.000Z`);
+
       const updatedUser = await tx.user.update({
         where: { id: userId },
         data: {
@@ -207,7 +203,7 @@ export class PrismaProgressRepository implements IProgressRepository {
           currentStreak,
           longestStreak,
           streakFreezeCount,
-          lastStudyDate: now,
+          lastStudyDate: todayDateAtUtc,
         },
         select: {
           totalXp: true,
@@ -219,7 +215,7 @@ export class PrismaProgressRepository implements IProgressRepository {
       });
 
       // Sincronizar tabla relacional streaks diaria
-      const todayDateOnly = new Date(now.toISOString().slice(0, 10));
+      const todayDateOnly = todayDateAtUtc;
       try {
         await tx.streak.upsert({
           where: {

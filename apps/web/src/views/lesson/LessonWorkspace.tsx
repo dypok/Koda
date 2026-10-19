@@ -276,9 +276,12 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       // Asegurar que el usuario tenga racha e isActiveToday activos localmente de forma inmediata
       const currentUser = useAuthStore.getState().user;
       if (currentUser) {
-        const curStreak = currentUser.streak > 0 ? currentUser.streak : 1;
+        const todayStr = new Date().toLocaleDateString('en-CA');
+        const lastStudyStr = currentUser.lastStudyDate ? currentUser.lastStudyDate.slice(0, 10) : null;
+        const isSameDay = lastStudyStr === todayStr;
+        const curStreak = isSameDay ? Math.max(1, currentUser.streak) : (currentUser.streak > 0 ? currentUser.streak : 1);
         useAuthStore.getState().updateUserProfile({
-          streak: Math.max(currentUser.streak, curStreak),
+          streak: curStreak,
           longestStreak: Math.max(currentUser.longestStreak ?? 1, curStreak),
           isActiveToday: true,
           lastStudyDate: new Date().toISOString(),
@@ -344,10 +347,15 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
               if (currentUser) {
                 const awardXp = res.xpAwarded ?? completionReward;
                 const newTotalXp = res.userTotalXp ?? (currentUser.totalXp + awardXp);
-                const newStreak = res.currentStreak ?? (currentUser.streak > 0 ? currentUser.streak : 1);
+                const todayStr = new Date().toLocaleDateString('en-CA');
+                const lastStudyStr = currentUser.lastStudyDate ? currentUser.lastStudyDate.slice(0, 10) : null;
+                const isSameDay = lastStudyStr === todayStr;
+                const newStreak = isSameDay
+                  ? Math.max(1, currentUser.streak)
+                  : (res.currentStreak ?? (currentUser.streak > 0 ? currentUser.streak : 1));
                 useAuthStore.getState().updateUserProfile({
                   totalXp: Math.max(currentUser.totalXp, newTotalXp),
-                  streak: Math.max(currentUser.streak, newStreak),
+                  streak: newStreak,
                   longestStreak: Math.max(currentUser.longestStreak ?? 1, res.longestStreak ?? newStreak),
                   streakFreezeCount: res.streakFreezeCount ?? currentUser.streakFreezeCount,
                   lastStudyDate: new Date().toISOString(),
@@ -359,10 +367,13 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
               console.warn('Sync quiz section completion offline fallback:', err?.message);
               const currentUser = useAuthStore.getState().user;
               if (currentUser) {
-                const curStreak = currentUser.streak > 0 ? currentUser.streak : 1;
+                const todayStr = new Date().toLocaleDateString('en-CA');
+                const lastStudyStr = currentUser.lastStudyDate ? currentUser.lastStudyDate.slice(0, 10) : null;
+                const isSameDay = lastStudyStr === todayStr;
+                const curStreak = isSameDay ? Math.max(1, currentUser.streak) : (currentUser.streak > 0 ? currentUser.streak : 1);
                 useAuthStore.getState().updateUserProfile({
                   totalXp: (currentUser.totalXp ?? 0) + completionReward,
-                  streak: Math.max(currentUser.streak, curStreak),
+                  streak: curStreak,
                   longestStreak: Math.max(currentUser.longestStreak ?? 1, curStreak),
                   lastStudyDate: new Date().toISOString(),
                   isActiveToday: true,
@@ -465,7 +476,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
           </h1>
           <p className="text-slate-400 text-sm sm:text-base max-w-md">
             Quiz: <span className="font-mono font-bold text-orange-400">{quizScore.ok}/{quizScore.total}</span> aciertos
-            {passed ? ` · +${currentNode?.xp ?? 250} XP de maestría` : ' · necesitas 70% de aciertos para avanzar'}
+            {passed ? ` · +${currentNode?.xp ?? 120} XP de maestría` : ' · necesitas 70% de aciertos para avanzar'}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
@@ -570,6 +581,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             currentIndex={lessonIdx}
             totalCount={section.lessons.length}
             isLast={lessonIdx + 1 >= section.lessons.length}
+            nodeTargetXp={currentNode?.xp ?? 120}
           />
         ) : (
           <div className="w-full max-w-md mx-auto my-auto rounded-2xl border border-slate-800 bg-slate-900/60 backdrop-blur-xl p-8 flex flex-col items-center gap-4 text-center shadow-2xl">
@@ -599,6 +611,7 @@ function LessonView({
   currentIndex = 0,
   totalCount = 1,
   isLast,
+  nodeTargetXp = 120,
 }: {
   lesson: ContentLesson;
   isCompleted?: boolean;
@@ -610,9 +623,15 @@ function LessonView({
   currentIndex?: number;
   totalCount?: number;
   isLast: boolean;
+  nodeTargetXp?: number;
 }) {
+  const totalSteps = totalCount + 1; // Las N lecciones de la sección + el Quiz de cierre
+  const baseStepXp = Math.max(5, Math.floor(nodeTargetXp / totalSteps));
+  const exerciseCount = Math.max(1, lesson.exercises?.length ?? 1);
+  const questionXp = Math.max(1, Math.round(baseStepXp / exerciseCount));
+
   const exercise = lesson.exercises[0] ?? null;
-  const engine = useLessonEngine(exercise ? [exercise] : [], lesson.position);
+  const engine = useLessonEngine(exercise ? [exercise] : [], lesson.position, questionXp);
 
   const onCompleteRef = useRef(onComplete);
   useEffect(() => {
@@ -646,10 +665,13 @@ function LessonView({
           onExerciseCorrect?.(checkRes.xp);
           const curUser = useAuthStore.getState().user;
           if (curUser) {
-            const curStreak = curUser.streak > 0 ? curUser.streak : 1;
+            const todayStr = new Date().toLocaleDateString('en-CA');
+            const lastStudyStr = curUser.lastStudyDate ? curUser.lastStudyDate.slice(0, 10) : null;
+            const isSameDay = lastStudyStr === todayStr;
+            const curStreak = isSameDay ? Math.max(1, curUser.streak) : (curUser.streak > 0 ? curUser.streak : 1);
             useAuthStore.getState().updateUserProfile({
               totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
-              streak: Math.max(curUser.streak, curStreak),
+              streak: curStreak,
               longestStreak: Math.max(curUser.longestStreak ?? 1, curStreak),
               isActiveToday: true,
               lastStudyDate: new Date().toISOString(),
@@ -887,10 +909,13 @@ function LessonView({
                       onExerciseCorrect?.(checkRes.xp);
                       const curUser = useAuthStore.getState().user;
                       if (curUser) {
-                        const curStreak = curUser.streak > 0 ? curUser.streak : 1;
+                        const todayStr = new Date().toLocaleDateString('en-CA');
+                        const lastStudyStr = curUser.lastStudyDate ? curUser.lastStudyDate.slice(0, 10) : null;
+                        const isSameDay = lastStudyStr === todayStr;
+                        const curStreak = isSameDay ? Math.max(1, curUser.streak) : (curUser.streak > 0 ? curUser.streak : 1);
                         useAuthStore.getState().updateUserProfile({
                           totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
-                          streak: Math.max(curUser.streak, curStreak),
+                          streak: curStreak,
                           longestStreak: Math.max(curUser.longestStreak ?? 1, curStreak),
                           isActiveToday: true,
                           lastStudyDate: new Date().toISOString(),
