@@ -66,6 +66,9 @@ Se presentaron los siguientes inconvenientes tecnicos:
   - `apps/web/src/views/landing/conversion/CertificateSection.tsx`
   - `apps/web/src/views/landing/preview/MiniLessonPreview.tsx`
 
+### 6. Eliminacion del Boton de Acceso sin Cuenta
+- Se elimino el boton "Entrar sin cuenta" (`handleGuest` / `loginAsGuest`) y su icono `UserCircle` de `apps/web/src/views/login/LoginForm.tsx`, requiriendo autenticacion formal (correo/clave o proveedor social OAuth) para acceder a la plataforma.
+
 ---
 
 ## Pruebas de Verificacion
