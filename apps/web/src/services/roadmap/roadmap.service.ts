@@ -67,12 +67,45 @@ function sanitizeGraphDataset(dataset: GraphDataset): GraphDataset {
   };
 }
 
+export const COURSE_MAX_STARS_MAP: Record<string, number> = {
+  'python-1': 30,
+  'py-basic': 30,
+  'py-level-1': 30,
+  'python-2': 30,
+  'py-intermediate': 30,
+  'py-level-2': 30,
+  'python-3': 30,
+  'py-advanced': 30,
+  'py-level-3': 30,
+  'fastapi-async': 15,
+  'py-fastapi': 15,
+  'django-enterprise': 15,
+  'py-django': 15,
+  'data-analytics': 30,
+  'py-data': 30,
+  'ai-agents': 30,
+  'py-ia': 30,
+  'python-apex': 3,
+  'py-apex': 3,
+};
+
 export class RoadmapService {
   public static async getCoursesGraph(langSlug: string): Promise<GraphDataset> {
     try {
       const data = await fetchWithFallback<{ dataset?: GraphDataset }>(`/roadmap/${langSlug}/courses`);
       if (data?.dataset && Array.isArray(data.dataset.nodes) && data.dataset.nodes.length > 0) {
-        return sanitizeGraphDataset(data.dataset);
+        const calibrated: GraphDataset = {
+          ...data.dataset,
+          nodes: data.dataset.nodes.map((n) => {
+            const courseKey = n.targetCourseId || n.id;
+            const canonicalMax = COURSE_MAX_STARS_MAP[courseKey];
+            return {
+              ...n,
+              maxStars: canonicalMax ?? (n.maxStars && n.maxStars > 3 ? n.maxStars : 30),
+            };
+          }),
+        };
+        return sanitizeGraphDataset(calibrated);
       }
       return { sectorTitle: `${langSlug.toUpperCase()} ROADMAP`, progressPercent: 0, nodes: [], connections: [] };
     } catch {

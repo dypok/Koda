@@ -10,3 +10,4 @@
 - [Monday]-[19/10/2026]-[21:23]-[Dylan Gamero] : Restore full-width bounded viewport layout, internal scrollbars and comprehensive markdown formatting across lesson workspace and review mode.
 - [Monday]-[19/10/2026]-[20:53]-[Dylan Gamero] : Integration of official Koda mascot with active streak in roadmap bottom-center dock, replacing generic flame icon with dynamic state resolution and amber glow.
 - [Monday]-[19/10/2026]-[21:08]-[Dylan Gamero] : Calibrate official vector avatars in profile selector, purge deprecated mock avatars, and fix guest avatar update persistence.
+- [Monday]-[19/10/2026]-[22:25]-[Dylan Gamero] : Visual rendering and reactive synchronization of course and lesson stars in PixiJS canvas, detail drawer, and roadmap store.
