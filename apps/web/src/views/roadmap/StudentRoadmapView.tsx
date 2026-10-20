@@ -40,7 +40,7 @@ export const StudentRoadmapView: React.FC = () => {
 
   React.useEffect(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('view=lessons')) {
-      openCourseLessons('py-basic');
+      openCourseLessons('python-1');
     }
   }, [openCourseLessons]);
 

@@ -28,7 +28,7 @@ export const KodaGuide: React.FC = () => {
             const c = idToCaption.get(entry.target.id);
             if (c) {
               setCaption(c);
-              setVisible(entry.target.id !== 'inicio');
+              setVisible(entry.target.id !== 'inicio' && entry.target.id !== 'finale');
             }
           }
         }

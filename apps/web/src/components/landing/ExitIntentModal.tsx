@@ -89,12 +89,20 @@ export const ExitIntentModal: React.FC = () => {
             <p className="text-sm text-slate-400 leading-relaxed">
               Son 2 minutos, en tu navegador y sin registrarte: prueba la demo de arriba.
             </p>
-            <Link
-              href="/register"
+            <a
+              href="#vista-previa"
+              onClick={(e) => {
+                e.preventDefault();
+                setOpen(false);
+                const el = document.getElementById('vista-previa') || document.getElementById('codigo-en-vivo');
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="flex min-h-[48px] items-center justify-center rounded-xl bg-amber-400 px-4 text-sm font-bold text-slate-950 hover:bg-amber-300"
             >
               Probar la demo gratis
-            </Link>
+            </a>
           </motion.div>
         </div>
       )}

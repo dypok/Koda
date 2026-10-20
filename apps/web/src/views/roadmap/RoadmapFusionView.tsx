@@ -363,7 +363,7 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
       >
         <div className="flex items-center gap-3">
           <span className="font-mono text-xs font-bold tabular-nums text-orange-400">
-            0{activeIndex + 1} / 0{nodes.length}
+            {String(activeIndex + 1).padStart(2, '0')} / {String(nodes.length).padStart(2, '0')}
           </span>
           <div className="flex items-center gap-1.5" role="list" aria-label={`Paso ${activeIndex + 1} de ${nodes.length}`}>
             {nodes.map((n, i) => (

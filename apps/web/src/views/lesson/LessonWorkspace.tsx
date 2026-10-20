@@ -714,7 +714,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
                 <span>1-4 · Enter</span>
               </div>
               <span className="font-mono text-xs font-bold text-orange-400 tabular-nums bg-orange-500/10 border border-orange-500/20 px-2.5 py-0.5 rounded-full">
-                {lesson ? `0${lessonIdx + 1}/0${section.lessons.length}` : ''}
+                {lesson ? `${String(lessonIdx + 1).padStart(2, '0')}/${String(section.lessons.length).padStart(2, '0')}` : ''}
               </span>
             </div>
           </div>
@@ -740,7 +740,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
                       ? 'bg-emerald-500 shadow-[0_0_6px_rgba(16,185,129,0.5)]'
                       : 'bg-slate-800/80 hover:bg-slate-700'
                   )}
-                  title={`0${i + 1}. ${l.title}${isDone ? ' (✓ Completada)' : ''}`}
+                  title={`${String(i + 1).padStart(2, '0')}. ${l.title}${isDone ? ' (✓ Completada)' : ''}`}
                 />
               );
             })}
@@ -964,7 +964,7 @@ function LessonView({
           <div className="shrink-0 space-y-2 pb-3 border-b border-slate-800/80">
             <div className="flex flex-wrap items-center gap-2">
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-orange-500/10 border border-orange-500/20 text-[10px] font-mono font-bold text-orange-300 uppercase tracking-wider">
-                <span>Lección 0{lesson.position ?? 1}</span>
+                <span>Lección {String(lesson.position ?? 1).padStart(2, '0')}</span>
               </div>
               {isCompleted ? (
                 <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
@@ -1255,7 +1255,7 @@ function LessonView({
                     ← Lección anterior
                   </button>
                   <span className="text-[11px] text-slate-500">
-                    0{currentIndex + 1} / 0{totalCount}
+                    {String(currentIndex + 1).padStart(2, '0')} / {String(totalCount).padStart(2, '0')}
                   </span>
                   <button
                     type="button"
@@ -1348,7 +1348,7 @@ function ReviewMode({
             </div>
             <div className="flex items-center gap-3">
               <span className="font-mono text-xs font-bold text-amber-300 tabular-nums bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
-                0{Math.min(answered + 1, total)}/0{total}
+                {String(Math.min(answered + 1, total)).padStart(2, '0')}/{String(total).padStart(2, '0')}
               </span>
             </div>
           </div>
@@ -1567,7 +1567,7 @@ function QuizMode({
                 <span>1-4 · Enter</span>
               </div>
               <span className="font-mono text-xs font-bold text-orange-400 tabular-nums bg-orange-500/10 border border-orange-500/20 px-2.5 py-0.5 rounded-full">
-                0{Math.min(answered + 1, total)}/0{total}
+                {String(Math.min(answered + 1, total)).padStart(2, '0')}/{String(total).padStart(2, '0')}
               </span>
             </div>
           </div>

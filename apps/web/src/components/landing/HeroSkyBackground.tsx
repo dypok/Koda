@@ -18,6 +18,7 @@ import {
   loadPixi,
   dprCap,
   saveDataMode,
+  isLowEndDevice,
   getGlowTexture,
   GLOW_TEXTURE_SIZE,
   useElementVisible,
@@ -48,11 +49,19 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
   const reduceMotion = useReducedMotion();
   const [mountRef, visible] = useElementVisible<HTMLDivElement>();
   const stageRef = useRef<HTMLDivElement>(null);
-  const [effectiveCount, setEffectiveCount] = useState(() => clamp(Math.round(starCount), 15, 350));
+  const boundsRef = useRef({ left: 0, top: 0, width: 1, height: 1 });
+  const [effectiveCount, setEffectiveCount] = useState(() => clamp(Math.round(starCount), 15, 90));
 
   useEffect(() => {
-    const isSaveData = saveDataMode();
-    setEffectiveCount(isSaveData ? Math.min(40, starCount) : clamp(Math.round(starCount), 15, 350));
+    const lowEnd = isLowEndDevice() || saveDataMode();
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if (lowEnd) {
+      setEffectiveCount(Math.min(35, starCount));
+    } else if (isMobile) {
+      setEffectiveCount(Math.min(50, starCount));
+    } else {
+      setEffectiveCount(clamp(Math.round(Math.min(85, starCount)), 15, 120));
+    }
   }, [starCount]);
 
   const { stars, realStar } = useMemo(() => generateStars(effectiveCount, seed), [effectiveCount, seed]);
@@ -75,14 +84,17 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
       const rect = mount.getBoundingClientRect();
       const W = Math.max(1, Math.round(rect.width));
       const H = Math.max(1, Math.round(rect.height));
+      boundsRef.current = { left: rect.left, top: rect.top, width: W, height: H };
 
       const app = new PIXI.Application({
         width: W,
         height: H,
         backgroundAlpha: 0,
-        antialias: true,
+        antialias: false,
+        powerPreference: 'low-power',
         resolution: dprCap(),
       });
+      app.ticker.maxFPS = isLowEndDevice() ? 24 : 30;
       if (cancelled) {
         try {
           app.destroy(true);
@@ -227,6 +239,7 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
         const r = mount.getBoundingClientRect();
         px.w = Math.max(1, Math.round(r.width));
         px.h = Math.max(1, Math.round(r.height));
+        boundsRef.current = { left: r.left, top: r.top, width: px.w, height: px.h };
         if (app.renderer) {
           app.renderer.resize(px.w, px.h);
         }
@@ -275,33 +288,17 @@ export const HeroSkyBackground: React.FC<HeroSkyBackgroundProps> = ({
     else entry.app.ticker.stop();
   }, [visible, reduceMotion]);
 
-  useEffect(() => {
-    if (!interactive || reduceMotion) return;
-    const toLocal = (clientX: number, clientY: number) => {
-      const el = mountRef.current;
-      if (!el) return;
-      const r = el.getBoundingClientRect();
-      const inside = clientX >= r.left && clientX <= r.left + r.width && clientY >= r.top && clientY <= r.top + r.height;
-      pointerRef.current = { x: (clientX - r.left) / Math.max(1, r.width), y: (clientY - r.top) / Math.max(1, r.height), inside };
-    };
-    const handleMove = (e: PointerEvent) => toLocal(e.clientX, e.clientY);
-    window.addEventListener('pointermove', handleMove, { passive: true });
-    return () => window.removeEventListener('pointermove', handleMove);
-  }, [interactive, reduceMotion, mountRef]);
-
   return (
     <div
       ref={mountRef}
       onPointerMove={
-        reduceMotion
+        reduceMotion || !interactive
           ? undefined
           : (e) => {
-              const el = mountRef.current;
-              if (!el) return;
-              const r = el.getBoundingClientRect();
+              const b = boundsRef.current;
               pointerRef.current = {
-                x: (e.clientX - r.left) / Math.max(1, r.width),
-                y: (e.clientY - r.top) / Math.max(1, r.height),
+                x: (e.clientX - b.left) / Math.max(1, b.width),
+                y: (e.clientY - b.top) / Math.max(1, b.height),
                 inside: true,
               };
             }

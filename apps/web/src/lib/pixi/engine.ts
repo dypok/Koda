@@ -17,11 +17,12 @@ export function loadPixi(): Promise<PixiModule> {
   return pixiPromise;
 }
 
-/** Tope de DPR: 1.5 en táctil, 2 en escritorio. */
+/** Tope de DPR: 1 en gama baja/táctil, 1.5 en escritorio estándar. */
 export function dprCap(): number {
   if (typeof window === 'undefined') return 1;
+  if (isLowEndDevice()) return 1;
   const coarse = window.matchMedia('(pointer: coarse)').matches;
-  return Math.min(window.devicePixelRatio || 1, coarse ? 1.5 : 2);
+  return Math.min(window.devicePixelRatio || 1, coarse ? 1 : 1.5);
 }
 
 export function saveDataMode(): boolean {
@@ -30,6 +31,27 @@ export function saveDataMode(): boolean {
     window.matchMedia('(prefers-reduced-data: reduce)').matches ||
     (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true
   );
+}
+
+let cachedLowEnd: boolean | null = null;
+
+/** Detecta equipos de bajos recursos (CPU <= 4 hilos, RAM <= 4GB, ahorro de datos o movimiento reducido). */
+export function isLowEndDevice(): boolean {
+  if (typeof window === 'undefined') return false;
+  if (cachedLowEnd !== null) return cachedLowEnd;
+  const nav = navigator as Navigator & {
+    deviceMemory?: number;
+    connection?: { saveData?: boolean; effectiveType?: string };
+  };
+  const lowCores = typeof nav.hardwareConcurrency === 'number' && nav.hardwareConcurrency <= 4;
+  const lowMem = typeof nav.deviceMemory === 'number' && nav.deviceMemory <= 4;
+  const slowNet =
+    nav.connection?.saveData === true ||
+    nav.connection?.effectiveType === 'slow-2g' ||
+    nav.connection?.effectiveType === '2g';
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  cachedLowEnd = lowCores || lowMem || slowNet || reducedMotion;
+  return cachedLowEnd;
 }
 
 const GLOW_SIZE = 64;

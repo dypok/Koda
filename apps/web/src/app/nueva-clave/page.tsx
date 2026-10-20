@@ -9,7 +9,7 @@ import { WipeButton } from '@/components/ui/wipe-button';
 import { AuthService } from '@/services/auth/auth.service';
 
 const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://sertfbduqivvjrmeblvh.supabase.co';
-const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlcnRmYmR1cWl2dmpybWVibHZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIwNDQ5ODUsImV4cCI6MjA1NzYyMDk4NX0.eWl1n5mCg1k5tGZ5Yx3Tz_6C3xI3k8qY3b7cW_7w_8E';
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlcnRmYmR1cWl2dmpybWVibHZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIyNDAxODIsImV4cCI6MjA1NzgxNjE4Mn0.jC5gwZVgxqs39jN7104c-G9B-2vB82F2H9z7a5t2H_M';
 
 export default function NuevaClavePage() {
   const router = useRouter();

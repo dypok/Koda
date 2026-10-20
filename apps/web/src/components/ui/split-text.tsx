@@ -35,7 +35,7 @@ export const SplitText: React.FC<SplitTextProps> = ({
       });
     }, ref);
     return () => ctx.revert();
-  }, [delay, stagger, mode]);
+  }, [text, delay, stagger, mode]);
 
   return (
     <span ref={ref} className={className} aria-label={text}>

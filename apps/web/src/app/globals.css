@@ -17,7 +17,6 @@
 
 :root {
   --koda-hue: 38;
-  transition: --koda-hue 2s ease;
 }
 
 /* Koda landing tokens: focus visible + solid surfaces (no purple/blue defaults) */
@@ -137,32 +136,9 @@ body[data-register-step='3'] .register-sky { filter: hue-rotate(16deg) brightnes
 body[data-register-step='4'] .register-sky { filter: hue-rotate(26deg) brightness(1.15) saturate(1.1); }
 body[data-register-step='5'] .register-sky { filter: hue-rotate(36deg) brightness(1.2) saturate(1.2); }
 
-/* Actos temáticos por tramo (F15): el grano y el hilo respiran con la historia */
-body[data-act='2'] .koda-grain { opacity: 0.07; }
-body[data-act='3'] .koda-grain { opacity: 0.04; }
-body[data-act='4'] .koda-grain { opacity: 0.08; }
-.koda-grain { transition: opacity 1.2s ease; }
-
-/* Grain cinematográfico global (landing) */
-@keyframes koda-grain {
-  0%, 100% { transform: translate(0, 0); }
-  12% { transform: translate(-4%, 3%); }
-  25% { transform: translate(3%, -4%); }
-  37% { transform: translate(-3%, -2%); }
-  50% { transform: translate(4%, 3%); }
-  62% { transform: translate(-2%, 4%); }
-  75% { transform: translate(3%, -3%); }
-  87% { transform: translate(-4%, -4%); }
-}
-
+/* Grain cinematográfico global (desactivado en runtime por rendimiento GPU) */
 .koda-grain {
-  position: fixed;
-  inset: -10%;
-  z-index: 40;
-  pointer-events: none;
-  opacity: 0.05;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
-  animation: koda-grain 1s steps(8) infinite;
+  display: none;
 }
 
 /* SkillTree vivo (SVG): flujo, órbitas, respiración y destellos */

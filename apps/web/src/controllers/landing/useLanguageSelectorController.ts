@@ -66,6 +66,7 @@ export function useLanguageSelectorController({
       setIsOpen(false);
       try {
         window.localStorage.setItem(STORAGE_KEY, lang.code);
+        window.dispatchEvent(new CustomEvent('koda-lang-change', { detail: lang.code }));
       } catch {
         // almacenamiento no disponible, se ignora
       }

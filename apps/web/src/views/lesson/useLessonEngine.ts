@@ -134,7 +134,12 @@ export function evaluateExercise(current: ContentExercise, selected: string[]): 
  * Motor local de lección: intentos, XP (+5 primer acierto, +2 recuperado),
  * cola de repaso sin spoilers y barajado determinista.
  */
-export function useLessonEngine(exercises: ContentExercise[], seed = 42, rewardXp = 5) {
+export function useLessonEngine(
+  exercises: ContentExercise[],
+  seed = 42,
+  rewardXp = 5,
+  requeueOnFail = false
+) {
   const queue = useMemo(() => shuffled(exercises.map((e) => e.id), seed), [exercises, seed]);
   const byId = useMemo(() => new Map(exercises.map((e) => [e.id, e])), [exercises]);
   const [order, setOrder] = useState<string[]>(queue);
@@ -197,8 +202,9 @@ export function useLessonEngine(exercises: ContentExercise[], seed = 42, rewardX
       return res;
     }
     setFailedFirst((p) => ({ ...p, [current.id]: true }));
-    // Sin spoilers: pista + reencola al final con opciones barajadas.
-    setOrder((o) => [...o, current.id]);
+    if (requeueOnFail) {
+      setOrder((o) => [...o, current.id]);
+    }
     const res: AnswerResult = {
       correct: false,
       recovered: false,
@@ -208,7 +214,7 @@ export function useLessonEngine(exercises: ContentExercise[], seed = 42, rewardX
     };
     setResult(res);
     return res;
-  }, [current, selected, result, attempts, failedFirst, rewardXp]);
+  }, [current, selected, result, attempts, failedFirst, rewardXp, requeueOnFail]);
 
   const next = useCallback(() => {
     setSelected([]);
