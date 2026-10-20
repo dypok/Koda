@@ -17,6 +17,7 @@ import {
   Lightbulb,
   Target,
   WarningCircle,
+  Sparkle,
 } from '@phosphor-icons/react';
 import { ContentExercise, ContentLesson, ContentModule, isModuleAvailable, loadBank, loadModule, shuffled } from '@/lib/content';
 import { QuestionRenderer, getExerciseTypeLabel } from './QuestionRenderer';
@@ -875,12 +876,12 @@ function LessonView({
   const isLongExplanation = (lesson.explanation?.length ?? 0) > 650;
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-4">
+    <div className="w-full h-full min-h-0 flex flex-col gap-2 sm:gap-3 overflow-hidden">
       {/* Tabs responsivos en móvil (< lg) para alternar entre Concepto y Práctica — LESS-01 */}
       <div
         role="tablist"
         aria-label="Secciones de la lección en móvil"
-        className="grid grid-cols-2 gap-2 rounded-xl border border-slate-800 bg-slate-900/80 p-1.5 lg:hidden"
+        className="grid grid-cols-2 gap-2 rounded-xl border border-slate-800 bg-slate-900/80 p-1.5 lg:hidden shrink-0"
       >
         <button
           type="button"
@@ -888,7 +889,7 @@ function LessonView({
           aria-selected={mobileTab === 'concept'}
           onClick={() => setMobileTab('concept')}
           className={cn(
-            'inline-flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-mono font-bold transition-all cursor-pointer',
+            'inline-flex items-center justify-center gap-2 rounded-lg py-2 text-xs font-mono font-bold transition-all cursor-pointer',
             mobileTab === 'concept'
               ? 'bg-orange-500 text-slate-950 shadow-[0_0_12px_rgba(255,106,0,0.4)]'
               : 'text-slate-400 hover:text-white'
@@ -903,7 +904,7 @@ function LessonView({
           aria-selected={mobileTab === 'practice'}
           onClick={() => setMobileTab('practice')}
           className={cn(
-            'inline-flex items-center justify-center gap-2 rounded-lg py-2.5 text-xs font-mono font-bold transition-all cursor-pointer',
+            'inline-flex items-center justify-center gap-2 rounded-lg py-2 text-xs font-mono font-bold transition-all cursor-pointer',
             mobileTab === 'practice'
               ? 'bg-orange-500 text-slate-950 shadow-[0_0_12px_rgba(255,106,0,0.4)]'
               : 'text-slate-400 hover:text-white'
@@ -914,48 +915,99 @@ function LessonView({
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="w-full h-full min-h-0 flex-1 grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-5 overflow-hidden">
         {/* Columna Izquierda: Teoría & Consola Interactiva Pyodide (LESS-01, LESS-06) */}
         <section
           role="tabpanel"
           aria-label="Teoría"
           className={cn(
             mobileTab === 'concept' ? 'flex' : 'hidden lg:flex',
-            'rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 flex-col justify-between gap-6 shadow-2xl'
+            'h-full min-h-0 flex-col rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-3.5 sm:p-5 lg:p-6 shadow-2xl overflow-hidden'
           )}
         >
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-orange-500/10 border border-orange-500/20 text-[10px] font-mono font-bold text-orange-300 uppercase tracking-wider">
+          {/* Cabecera fija de la teoría */}
+          <div className="shrink-0 space-y-2 pb-3 border-b border-slate-800/80">
+            <div className="flex flex-wrap items-center gap-2">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-orange-500/10 border border-orange-500/20 text-[10px] font-mono font-bold text-orange-300 uppercase tracking-wider">
                 <span>Lección 0{lesson.position ?? 1}</span>
               </div>
               {isCompleted ? (
-                <div className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
+                <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
                   <Check className="w-3 h-3 text-emerald-400" />
                   <span>Completada</span>
                 </div>
               ) : null}
+              {lesson.objective ? (
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-mono font-medium text-cyan-300 truncate max-w-full">
+                  <Target className="w-3 h-3 text-cyan-400 shrink-0" aria-hidden="true" />
+                  <span className="truncate">{lesson.objective}</span>
+                </div>
+              ) : null}
             </div>
-            <h1 className="font-display text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">
-              {lesson.title}
+            <h1
+              className={cn(
+                'font-display font-black text-white tracking-tight leading-snug',
+                isLongTitle ? 'text-lg sm:text-xl lg:text-2xl' : 'text-xl sm:text-2xl lg:text-3xl'
+              )}
+            >
+              <MarkdownContent content={lesson.title} inline />
             </h1>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              {lesson.explanation}
-            </p>
           </div>
 
-          {/* Consola Interactiva Pyodide / Sandbox en vivo */}
-          <div className="space-y-4">
-            {lesson.examples.map((ex, i) => (
-              <InteractiveCodeConsole
-                key={`${lesson.id}-${i}`}
-                initialCode={ex.code}
-                expectedOutput={ex.output}
-                explanation={ex.explanation}
-                title={ex.title}
-                language={ex.language || language}
-              />
-            ))}
+          {/* Cuerpo scrolleable con teoría, errores comunes y consola interactiva */}
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 sm:space-y-4 pr-1 sm:pr-2 pt-3">
+            <div
+              className={cn(
+                'leading-relaxed text-slate-200',
+                isLongExplanation ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
+              )}
+            >
+              <MarkdownContent content={lesson.explanation} />
+            </div>
+
+            {lesson.common_errors ? (
+              <div className="rounded-xl border border-rose-500/30 bg-rose-950/20 p-3 space-y-1.5 text-xs text-rose-200">
+                <div className="flex items-center gap-1.5 font-bold font-mono text-rose-300 uppercase tracking-wider text-[10px]">
+                  <WarningCircle className="w-3.5 h-3.5 text-rose-400 shrink-0" aria-hidden="true" />
+                  <span>Cuidado habitual</span>
+                </div>
+                <div className="leading-relaxed text-slate-300">
+                  <MarkdownContent content={lesson.common_errors} />
+                </div>
+              </div>
+            ) : null}
+
+            {/* Consola Interactiva Pyodide / Sandbox en vivo */}
+            {lesson.examples.length > 0 ? (
+              <div className="space-y-3">
+                {lesson.examples.map((ex, i) => (
+                  <InteractiveCodeConsole
+                    key={`${lesson.id}-${i}`}
+                    initialCode={ex.code}
+                    expectedOutput={ex.output}
+                    explanation={ex.explanation}
+                    title={ex.title}
+                    language={ex.language || language}
+                  />
+                ))}
+              </div>
+            ) : null}
+
+            {lesson.key_takeaways && lesson.key_takeaways.length > 0 ? (
+              <div className="rounded-xl border border-amber-500/25 bg-amber-500/5 p-3 space-y-2 text-xs">
+                <div className="flex items-center gap-1.5 font-bold font-mono text-amber-300 uppercase tracking-wider text-[10px]">
+                  <Sparkle className="w-3.5 h-3.5 text-amber-400 shrink-0" aria-hidden="true" />
+                  <span>Puntos Clave</span>
+                </div>
+                <ul className="space-y-1.5 text-slate-300 list-disc list-inside">
+                  {lesson.key_takeaways.map((point, idx) => (
+                    <li key={idx} className="leading-relaxed">
+                      <MarkdownContent content={point} inline />
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : null}
 
             {/* Botón de acceso rápido a Práctica sólo en pantallas móviles */}
             <button
@@ -975,11 +1027,11 @@ function LessonView({
           aria-label="Práctica"
           className={cn(
             mobileTab === 'practice' ? 'flex' : 'hidden lg:flex',
-            'rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-6 flex-col justify-between gap-6 shadow-2xl'
+            'h-full min-h-0 flex-col justify-between rounded-2xl border border-slate-800/80 bg-slate-900/40 backdrop-blur-xl p-3.5 sm:p-5 lg:p-6 shadow-2xl overflow-hidden'
           )}
         >
           {!exercise ? (
-            <div className="space-y-6 flex flex-col justify-between h-full">
+            <div className="flex flex-col justify-between h-full min-h-0">
               <div className="space-y-4">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-500/10 border border-amber-500/20 text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider">
                   <span>Lectura Conceptual</span>
@@ -1007,22 +1059,35 @@ function LessonView({
               </button>
             </div>
           ) : (
-            <div className="space-y-5 flex flex-col justify-between h-full">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                    Desafío de Comprensión
-                  </span>
-                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-300 border border-orange-500/30">
-                    {getExerciseTypeLabel(exercise.type)}
-                  </span>
+            <div className="flex flex-col justify-between h-full min-h-0">
+              {/* Cabecera fija de la pregunta */}
+              <div className="shrink-0 flex items-center justify-between pb-2.5 border-b border-slate-800/80">
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+                  Desafío de Comprensión
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-300 border border-orange-500/30">
+                  {getExerciseTypeLabel(exercise.type)}
+                </span>
+              </div>
+
+              {/* Area de pregunta y opciones scrolleable */}
+              <div className="flex-1 min-h-0 overflow-y-auto space-y-3 py-3 pr-1 sm:pr-2">
+                <div
+                  className={cn(
+                    'font-bold text-white leading-snug',
+                    exercise.prompt.length > 180 ? 'text-sm sm:text-base' : 'text-base sm:text-lg'
+                  )}
+                >
+                  <MarkdownContent content={exercise.prompt} inline />
                 </div>
 
-                <p className="text-base sm:text-lg font-bold text-white leading-snug">
-                  {exercise.prompt}
-                </p>
+                {exercise.prompt_code && (exercise.type === 'multiple_choice' || exercise.type === 'single_choice' || exercise.type === 'true_false') ? (
+                  <pre className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950 p-3 font-mono text-xs sm:text-sm leading-relaxed text-amber-200 shadow-inner max-h-36">
+                    <code>{exercise.prompt_code}</code>
+                  </pre>
+                ) : null}
 
-                <div className="pt-2">
+                <div className="pt-1">
                   <QuestionRenderer
                     exercise={exercise}
                     selectedIds={engine.selected}
@@ -1034,15 +1099,42 @@ function LessonView({
                 </div>
               </div>
 
-              {/* Acciones de Evaluación */}
-              <div className="pt-3">
+              {/* Acciones fijas en la parte inferior */}
+              <div className="shrink-0 pt-2 border-t border-slate-800/80 space-y-2">
                 {!engine.result ? (
                   <button
                     type="button"
-                    onClick={() => engine.check()}
+                    onClick={() => {
+                      const checkRes = engine.check();
+                      if (checkRes?.correct && checkRes.xp > 0) {
+                        onExerciseCorrect?.(checkRes.xp);
+                        const curUser = useAuthStore.getState().user;
+                        if (curUser) {
+                          const todayStr = new Date().toLocaleDateString('en-CA');
+                          const lastStudyStr = curUser.lastStudyDate ? curUser.lastStudyDate.slice(0, 10) : null;
+                          const isSameDay = lastStudyStr === todayStr;
+                          const curStreak = isSameDay ? Math.max(1, curUser.streak) : (curUser.streak > 0 ? curUser.streak : 1);
+                          useAuthStore.getState().updateUserProfile({
+                            totalXp: (curUser.totalXp ?? 0) + checkRes.xp,
+                            streak: curStreak,
+                            longestStreak: Math.max(curUser.longestStreak ?? 1, curStreak),
+                            isActiveToday: true,
+                            lastStudyDate: new Date().toISOString(),
+                          });
+                        }
+                      }
+                      if (lesson?.id) {
+                        EvaluationService.evaluateLessonAnswer(lesson.id, {
+                          selected_option_ids: engine.selected,
+                          xp_earned: checkRes?.xp,
+                        }).catch((err) => {
+                          console.warn('Backend lesson answer sync fallback:', err?.message);
+                        });
+                      }
+                    }}
                     disabled={engine.selected.length === 0}
                     className={cn(
-                      'group relative inline-flex min-h-[50px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.25em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
+                      'group relative inline-flex min-h-[48px] w-full items-center justify-center gap-2.5 rounded-xl bg-orange-500 px-6 font-mono text-xs font-black tracking-widest text-slate-950 border-t-2 border-amber-300 border-b-4 border-orange-800 shadow-[0_4px_0_#9a3412,0_8px_20px_rgba(255,106,0,0.4)] transition-all duration-200 cursor-pointer hover:tracking-[0.25em] hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
                       pressedAction === 'submit' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-amber-400'
                     )}
                   >
@@ -1056,7 +1148,7 @@ function LessonView({
                   <div
                     role={engine.result.correct ? 'status' : 'alert'}
                     className={cn(
-                      'rounded-xl border p-4 space-y-3 transition-all duration-300',
+                      'rounded-xl border p-3 space-y-2 transition-all duration-300',
                       engine.result.correct
                         ? 'border-emerald-500/40 bg-emerald-500/10 text-emerald-100 shadow-[0_0_18px_rgba(16,185,129,0.15)]'
                         : 'border-rose-500/40 bg-rose-500/10 text-rose-100'
@@ -1065,23 +1157,31 @@ function LessonView({
                     <div className="flex items-center justify-between">
                       <p className="text-sm font-bold flex items-center gap-2">
                         {engine.result.correct ? <Check aria-hidden="true" className="w-5 h-5 text-emerald-400" /> : null}
-                        {engine.result.correct ? `¡Excelente! +${engine.result.xp} XP` : 'Respuesta incorrecta'}
+                        {engine.result.correct
+                          ? isAlreadyCompleted
+                            ? '¡Excelente! +0 XP (Repaso)'
+                            : `¡Excelente! +${engine.result.xp} XP`
+                          : 'Respuesta incorrecta'}
                       </p>
                     </div>
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-                      {engine.result.feedback}
-                    </p>
+                    <div className="text-xs sm:text-sm text-slate-300 leading-relaxed max-h-20 overflow-y-auto pr-1">
+                      <MarkdownContent content={engine.result.feedback} />
+                    </div>
                     {engine.result.hint ? (
-                      <p className="text-xs sm:text-sm text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2.5 rounded-lg">
-                        💡 <strong>Pista:</strong> {engine.result.hint}
-                      </p>
+                      <div className="text-xs text-amber-200/90 leading-relaxed bg-amber-500/10 border border-amber-500/20 p-2 rounded-lg flex items-start gap-2">
+                        <Lightbulb className="w-3.5 h-3.5 text-amber-300 shrink-0 mt-0.5" aria-hidden="true" />
+                        <div>
+                          <strong className="font-bold text-amber-300 mr-1">Pista:</strong>
+                          <MarkdownContent content={engine.result.hint} inline />
+                        </div>
+                      </div>
                     ) : null}
-                    <div className="flex gap-2.5 pt-1">
+                    <div className="flex gap-2.5 pt-0.5">
                       {!engine.result.correct ? (
                         <button
                           type="button"
                           onClick={engine.resetSelection}
-                          className="group inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl border-t border-slate-600 border-b-4 border-slate-950 bg-slate-800 px-4 text-xs font-mono font-bold text-slate-200 shadow-[0_4px_0_#020617] hover:border-slate-500 hover:bg-slate-750 hover:text-white active:border-b-0 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
+                          className="group inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border-t border-slate-600 border-b-4 border-slate-950 bg-slate-800 px-4 text-xs font-mono font-bold text-slate-200 shadow-[0_4px_0_#020617] hover:border-slate-500 hover:bg-slate-750 hover:text-white active:border-b-0 active:translate-y-1 active:shadow-none transition-all cursor-pointer"
                         >
                           <ArrowCounterClockwise aria-hidden="true" className="w-4 h-4" />
                           <span>REINTENTAR</span>
@@ -1095,7 +1195,7 @@ function LessonView({
                         onClick={engine.result.correct ? onNext : () => {}}
                         disabled={!engine.result.correct}
                         className={cn(
-                          'group relative inline-flex min-h-[46px] flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-emerald-200 border-b-4 border-emerald-800 shadow-[0_4px_0_#065f46,0_8px_20px_rgba(16,185,129,0.45)] transition-all duration-200 cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
+                          'group relative inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-xl bg-emerald-500 px-4 font-mono text-xs font-black tracking-wider text-slate-950 border-t-2 border-emerald-200 border-b-4 border-emerald-800 shadow-[0_4px_0_#065f46,0_8px_20px_rgba(16,185,129,0.45)] transition-all duration-200 cursor-pointer hover:brightness-110 active:border-b-0 active:translate-y-1 active:shadow-none disabled:opacity-40 disabled:cursor-not-allowed select-none',
                           pressedAction === 'next' && 'translate-y-1 border-b-0 shadow-none ring-2 ring-emerald-400'
                         )}
                       >
@@ -1108,28 +1208,28 @@ function LessonView({
                     </div>
                   </div>
                 )}
-              </div>
 
-              {/* Pie de navegación libre entre lecciones independientes */}
-              <div className="flex items-center justify-between pt-2 border-t border-slate-800/80 text-xs font-mono text-slate-400">
-                <button
-                  type="button"
-                  onClick={onPrev}
-                  disabled={currentIndex === 0}
-                  className="hover:text-slate-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
-                >
-                  ← Lección anterior
-                </button>
-                <span className="text-[11px] text-slate-500">
-                  0{currentIndex + 1} / 0{totalCount}
-                </span>
-                <button
-                  type="button"
-                  onClick={onNext}
-                  className="hover:text-orange-400 transition-colors cursor-pointer"
-                >
-                  {isLast ? 'Ir al Quiz →' : 'Saltar / Siguiente →'}
-                </button>
+                {/* Pie de navegación libre entre lecciones independientes */}
+                <div className="flex items-center justify-between pt-1 border-t border-slate-800/80 text-xs font-mono text-slate-400">
+                  <button
+                    type="button"
+                    onClick={onPrev}
+                    disabled={currentIndex === 0}
+                    className="hover:text-slate-200 transition-colors disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    ← Lección anterior
+                  </button>
+                  <span className="text-[11px] text-slate-500">
+                    0{currentIndex + 1} / 0{totalCount}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={onNext}
+                    className="hover:text-orange-400 transition-colors cursor-pointer"
+                  >
+                    {isLast ? 'Ir al Quiz →' : 'Saltar / Siguiente →'}
+                  </button>
+                </div>
               </div>
             </div>
           )}
@@ -1197,68 +1297,75 @@ function ReviewMode({
   });
 
   return (
-    <div className="relative isolate min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-x-hidden font-sans">
+    <div className="relative isolate h-screen max-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500/30 selection:text-amber-200 overflow-hidden font-sans">
       <OrbitFieldBackground className="fixed inset-0 pointer-events-none -z-10 scale-[1.5]" />
 
-      <header className="sticky top-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 py-3 shadow-2xl">
-        <div className="mx-auto max-w-4xl space-y-2.5">
+      <header className="w-full shrink-0 z-50 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-2xl px-4 sm:px-6 lg:px-8 py-2.5 shadow-2xl">
+        <div className="w-full max-w-5xl mx-auto space-y-2">
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 font-mono text-xs">
               <span className="text-slate-400">{courseTitle ?? 'Curso'}</span>
               <span className="text-slate-600">›</span>
-              <span className="text-amber-400 font-bold uppercase tracking-wider">
-                Ronda de Repaso · {sectionTitle}
+              <span className="text-amber-400 font-bold uppercase tracking-wider inline-flex items-center gap-1.5">
+                <ArrowsClockwise className="w-3.5 h-3.5 text-amber-400 shrink-0" aria-hidden="true" />
+                <span>Ronda de Repaso · {sectionTitle}</span>
               </span>
             </div>
-            <span className="font-mono text-xs font-bold text-amber-300 tabular-nums bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
-              0{Math.min(answered + 1, total)}/0{total}
-            </span>
+            <div className="flex items-center gap-3">
+              <span className="font-mono text-xs font-bold text-amber-300 tabular-nums bg-amber-500/10 border border-amber-500/20 px-2.5 py-0.5 rounded-full">
+                0{Math.min(answered + 1, total)}/0{total}
+              </span>
+            </div>
           </div>
           <div className="h-1.5 rounded-full bg-slate-800/80 overflow-hidden">
             <div
-              className="h-full bg-gradient-to-r from-amber-500 to-orange-400 rounded-full transition-all duration-300"
+              className="h-full bg-gradient-to-r from-amber-500 to-orange-400 rounded-full transition-all duration-300 shadow-[0_0_10px_rgba(245,158,11,0.6)]"
               style={{ width: `${(answered / Math.max(1, total)) * 100}%` }}
             />
           </div>
         </div>
       </header>
 
-      <main className="flex-1 flex items-center justify-center p-4 md:p-6 lg:p-8">
+      <main className="flex-1 min-h-0 w-full p-2.5 sm:p-4 lg:p-6 flex items-center justify-center overflow-hidden">
         {engine.current ? (
-          <div className="w-full max-w-3xl rounded-2xl border border-amber-500/30 bg-slate-900/50 backdrop-blur-xl p-6 sm:p-8 space-y-6 shadow-2xl">
-            <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 p-3.5 flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2.5 text-xs sm:text-sm font-mono text-amber-200 font-semibold">
-                <ArrowsClockwise className="w-5 h-5 text-amber-400 shrink-0" />
-                <span>¡Casi listo! Vamos a repasar los conceptos que te desafiaron</span>
+          <div className="w-full max-w-4xl h-full max-h-[86vh] rounded-2xl border border-amber-500/30 bg-slate-900/50 backdrop-blur-xl p-4 sm:p-6 lg:p-8 flex flex-col justify-between shadow-2xl overflow-hidden">
+            <div className="shrink-0 space-y-3 pb-2.5 border-b border-slate-800/80">
+              <div className="rounded-xl border border-amber-500/25 bg-amber-500/10 p-2.5 sm:p-3 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 text-xs sm:text-sm font-mono text-amber-200 font-semibold">
+                  <ArrowsClockwise className="w-4 h-4 text-amber-400 shrink-0" />
+                  <span>¡Casi listo! Vamos a repasar los conceptos que te desafiaron</span>
+                </div>
+                <span className="shrink-0 text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-400/20 text-amber-300">
+                  +2 XP recuperación
+                </span>
               </div>
-              <span className="shrink-0 text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-400/20 text-amber-300">
-                +2 XP recuperación
-              </span>
+
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
+                  Repaso Focalizado · {getExerciseTypeLabel(engine.current.type)}
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                  Progreso {answered + 1} de {total}
+                </span>
+              </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
-                Repaso Focalizado
-              </span>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-300 border border-orange-500/30">
-                {getExerciseTypeLabel(engine.current.type)}
-              </span>
+            <div className="flex-1 min-h-0 overflow-y-auto space-y-3.5 py-3 pr-1 sm:pr-2">
+              <div className="text-base sm:text-xl font-bold text-white leading-snug">
+                <MarkdownContent content={engine.current.prompt} inline />
+              </div>
+
+              <QuestionRenderer
+                exercise={engine.current}
+                selectedIds={engine.selected}
+                onToggle={engine.toggle}
+                onCustomChange={engine.setCustomAnswer}
+                disabled={Boolean(engine.result)}
+                pressedIndex={pressedIndex}
+              />
             </div>
 
-            <p className="text-lg sm:text-xl font-bold text-white leading-snug">
-              {engine.current.prompt}
-            </p>
-
-            <QuestionRenderer
-              exercise={engine.current}
-              selectedIds={engine.selected}
-              onToggle={engine.toggle}
-              onCustomChange={engine.setCustomAnswer}
-              disabled={Boolean(engine.result)}
-              pressedIndex={pressedIndex}
-            />
-
-            <div className="pt-2">
+            <div className="shrink-0 pt-2 border-t border-slate-800/80">
               {!engine.result ? (
                 <button
                   type="button"

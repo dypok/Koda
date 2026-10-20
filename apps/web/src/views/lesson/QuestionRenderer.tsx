@@ -368,7 +368,7 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
                       : 'border-slate-800 bg-slate-950/70 text-slate-200 hover:border-orange-500/50 hover:bg-slate-900'
                   )}
                 >
-                  <span className="break-words">{p.left.body}</span>
+                  <span className="break-words">{renderMarkdownInline(p.left.body)}</span>
                   {isPaired ? (
                     <span className="shrink-0 rounded-full bg-slate-950/80 px-2 py-0.5 text-[10px] font-mono font-bold">
                       #{pIdx + 1}
@@ -405,7 +405,7 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
                       : 'border-slate-800 bg-slate-950/70 text-slate-200 hover:border-slate-700'
                   )}
                 >
-                  <span className="break-words">{rightItem.body}</span>
+                  <span className="break-words">{renderMarkdownInline(rightItem.body)}</span>
                   {isPaired ? (
                     <span className="shrink-0 rounded-full bg-slate-950/80 px-2 py-0.5 text-[10px] font-mono font-bold">
                       #{pIdx + 1}
@@ -531,7 +531,7 @@ export const QuestionRenderer: React.FC<QuestionRendererProps> = ({
                         : 'border-dashed border-slate-600 bg-slate-900 text-slate-400'
                     )}
                   >
-                    {filledText}
+                    {renderMarkdownInline(filledText)}
                   </span>
                 ) : null}
               </React.Fragment>
