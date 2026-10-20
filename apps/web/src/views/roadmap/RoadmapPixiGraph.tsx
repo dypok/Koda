@@ -511,10 +511,8 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
           holder.cursor = n.isUnlocked ? 'pointer' : 'default';
           holder.hitArea = new PIXI.Circle(0, 10, 48);
 
-          const frac =
-            typeof n.maxStars === 'number' && n.maxStars > 0
-              ? Math.max(0, Math.min(1, (n.stars ?? 0) / n.maxStars))
-              : 0;
+          const nodeMaxStars = typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3;
+          const frac = Math.max(0, Math.min(1, (n.stars ?? 0) / nodeMaxStars));
 
           if (nodeStyle === 'hex') {
             // =========================================================================
@@ -750,12 +748,12 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
           holder.addChild(label);
 
           // Badge visual de estrellas de maestría (cursos y lecciones)
-          if (typeof n.maxStars === 'number' && n.maxStars > 0 && st !== 'locked') {
+          if (st !== 'locked' && nodeMaxStars > 0) {
             const earned = Math.max(0, n.stars ?? 0);
-            const isLesson = n.maxStars <= 3;
+            const isLesson = nodeMaxStars <= 3;
             const starText = isLesson
-              ? `${'★'.repeat(earned)}${'☆'.repeat(Math.max(0, n.maxStars - earned))}`
-              : `★ ${earned}/${n.maxStars}`;
+              ? `${'★'.repeat(Math.min(3, earned))}${'☆'.repeat(Math.max(0, nodeMaxStars - earned))}`
+              : `★ ${earned}/${nodeMaxStars}`;
 
             const starsBadge = new PIXI.Text(starText, {
               fontFamily: '"JetBrains Mono", ui-monospace, monospace',

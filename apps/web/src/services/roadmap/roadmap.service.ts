@@ -58,6 +58,18 @@ function sanitizeGraphDataset(dataset: GraphDataset): GraphDataset {
       labelLower.includes('python 3.12') ||
       labelLower.includes('fundamentos de programación con python 3.12');
     return !isLegacySlug && !isLegacyLabel;
+  }).map((n) => {
+    const isCourse = Boolean(n.targetCourseId || COURSE_MAX_STARS_MAP[n.id]);
+    const courseKey = n.targetCourseId || n.id;
+    const maxStars = isCourse
+      ? (COURSE_MAX_STARS_MAP[courseKey] ?? (typeof n.maxStars === 'number' && n.maxStars > 3 ? n.maxStars : 30))
+      : (typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3);
+
+    return {
+      ...n,
+      stars: typeof n.stars === 'number' ? n.stars : 0,
+      maxStars,
+    };
   });
 
   const nodeMap = new Map(filteredNodes.map((n) => [n.id, n]));

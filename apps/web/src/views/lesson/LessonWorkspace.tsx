@@ -30,6 +30,7 @@ import { useRoadmapStore } from '@/stores/roadmap.store';
 import { cn } from '@/lib/utils';
 import { getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
 import type { GraphDataset, GraphNode } from '@/models/roadmap/roadmap-graph.types';
+import { getSectionAliases } from '@/models/roadmap/section-alias.helper';
 
 import { OrbitFieldBackground } from '@/components/landing/OrbitFieldBackground';
 import { EvaluationService } from '@/services/learning/evaluation.service';
@@ -385,8 +386,12 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       if (completedLessonsRef.current.has(lessonId)) return;
 
       setCompletedLessons((prev) => {
-        if (prev.has(lessonId)) return prev;
-        const next = new Set(prev).add(lessonId);
+        const next = new Set(prev);
+        next.add(lessonId);
+        if (sectionRef) {
+          next.add(sectionRef);
+          getSectionAliases(sectionRef).forEach((a) => next.add(a));
+        }
         try {
           window.localStorage.setItem('koda_completed_lessons', JSON.stringify(Array.from(next)));
         } catch {}

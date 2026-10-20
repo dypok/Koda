@@ -3,6 +3,11 @@ import { GraphViewMode, GraphDataset, NodeVariant, GraphNode } from '@/models/ro
 import { PYTHON_BASIC_LESSONS_DATASET, getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
 import { CareerBranchId, CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 import { RoadmapService, COURSE_MAX_STARS_MAP } from '@/services/roadmap/roadmap.service';
+import {
+  getSectionAliases,
+  getStoredStarForSection,
+  isSectionCompletedInSet,
+} from '@/models/roadmap/section-alias.helper';
 
 const PROGRESS_KEY = 'koda_roadmap_progress';
 const SECTION_STARS_KEY = 'koda_section_stars';
@@ -19,9 +24,13 @@ function getStoredSectionStars(): Record<string, number> {
 }
 
 function saveSectionStar(sectionId: string, stars: number) {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || !sectionId) return;
   try {
     const map = getStoredSectionStars();
+    const aliases = getSectionAliases(sectionId);
+    for (const a of aliases) {
+      map[a] = Math.max(map[a] ?? 0, stars);
+    }
     map[sectionId] = Math.max(map[sectionId] ?? 0, stars);
     window.localStorage.setItem(SECTION_STARS_KEY, JSON.stringify(map));
   } catch {}
@@ -35,6 +44,19 @@ function getStoredCompletedLessons(): Set<string> {
   } catch {
     return new Set();
   }
+}
+
+function markCompletedLesson(lessonId: string) {
+  if (typeof window === 'undefined' || !lessonId) return;
+  try {
+    const set = getStoredCompletedLessons();
+    const aliases = getSectionAliases(lessonId);
+    for (const a of aliases) {
+      set.add(a);
+    }
+    set.add(lessonId);
+    window.localStorage.setItem(COMPLETED_LESSONS_KEY, JSON.stringify(Array.from(set)));
+  } catch {}
 }
 
 const INITIAL_COURSES_DATASET: GraphDataset = {
@@ -378,18 +400,42 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     const completedLessonsSet = getStoredCompletedLessons();
 
     const enrichedNodes = dataset.nodes.map((l) => {
-      const earned = storedStars[l.id] ?? (completedLessonsSet.has(l.id) ? 3 : (l.stars ?? 0));
+      const stored = getStoredStarForSection(l.id, storedStars);
+      const isCompleted = isSectionCompletedInSet(l.id, completedLessonsSet);
+      const earned = Math.max(l.stars ?? 0, stored > 0 ? stored : isCompleted ? 3 : 0);
+      const maxStars = typeof l.maxStars === 'number' && l.maxStars > 0 ? l.maxStars : 3;
+
+      if (earned > 0) {
+        saveSectionStar(l.id, earned);
+        markCompletedLesson(l.id);
+      }
+
       return {
         ...l,
         stars: earned,
-        variant: earned > 0 || l.variant === 'completed' ? ('completed' as const) : l.variant,
+        maxStars,
+        variant: earned > 0 || l.variant === 'completed' || isCompleted ? ('completed' as const) : l.variant,
+        statusText: earned > 0 || l.variant === 'completed' || isCompleted ? 'COMPLETADO' : l.statusText,
       };
     });
     const enrichedDataset = { ...dataset, nodes: enrichedNodes };
     const activeLesson = enrichedNodes.find((n) => n.variant === 'active' || n.isUnlocked) || enrichedNodes[0];
 
+    const totalEarnedInCourse = enrichedNodes.reduce((sum, n) => sum + (n.stars ?? 0), 0);
+    const courses = get().coursesDataset;
+    const updatedCoursesNodes = courses.nodes.map((cn) => {
+      if (cn.id === courseId || cn.targetCourseId === courseId) {
+        return {
+          ...cn,
+          stars: Math.max(cn.stars ?? 0, totalEarnedInCourse),
+        };
+      }
+      return cn;
+    });
+
     set({
       lessonsDataset: enrichedDataset,
+      coursesDataset: { ...courses, nodes: updatedCoursesNodes },
       activeNodeId: activeLesson ? activeLesson.id : null,
       isLoading: false,
     });
@@ -467,15 +513,29 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
 
       if (lessonsData && lessonsData.nodes && lessonsData.nodes.length > 0) {
         lessonsData.nodes = lessonsData.nodes.map((l) => {
-          const earned = storedStars[l.id] ?? (completedLessonsSet.has(l.id) ? 3 : (l.stars ?? 0));
+          const stored = getStoredStarForSection(l.id, storedStars);
+          const isCompleted = isSectionCompletedInSet(l.id, completedLessonsSet);
+          const earned = Math.max(l.stars ?? 0, stored > 0 ? stored : isCompleted ? 3 : 0);
+          const maxStars = typeof l.maxStars === 'number' && l.maxStars > 0 ? l.maxStars : 3;
+
+          if (earned > 0) {
+            saveSectionStar(l.id, earned);
+            markCompletedLesson(l.id);
+          }
+
           return {
             ...l,
             stars: earned,
-            variant: earned > 0 || l.variant === 'completed' ? ('completed' as const) : l.variant,
+            maxStars,
+            variant: earned > 0 || l.variant === 'completed' || isCompleted ? ('completed' as const) : l.variant,
+            statusText: earned > 0 || l.variant === 'completed' || isCompleted ? 'COMPLETADO' : l.statusText,
           };
         });
         set({ lessonsDataset: lessonsData });
       }
+
+      const refreshedStars = getStoredSectionStars();
+      const refreshedCompletedSet = getStoredCompletedLessons();
 
       if (coursesData && coursesData.nodes && coursesData.nodes.length > 0) {
         // Garantizar eliminación de cualquier nodo residual python-core
@@ -488,15 +548,25 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
               COURSE_MAX_STARS_MAP[cId] ??
               (courseLessons?.nodes?.reduce((sum, l) => sum + (l.maxStars ?? 3), 0) || 30);
 
-            const earnedStars = (courseLessons?.nodes ?? []).reduce((sum, l) => {
-              const lEarned = storedStars[l.id] ?? (completedLessonsSet.has(l.id) ? 3 : (l.stars ?? 0));
+            const nodesToInspect = (cId === courseId && lessonsData?.nodes?.length)
+              ? lessonsData.nodes
+              : (courseLessons?.nodes ?? []);
+
+            const earnedStars = nodesToInspect.reduce((sum, l) => {
+              const stored = getStoredStarForSection(l.id, refreshedStars);
+              const isComp = isSectionCompletedInSet(l.id, refreshedCompletedSet);
+              const lEarned = Math.max(l.stars ?? 0, stored > 0 ? stored : isComp ? 3 : 0);
               return sum + lEarned;
             }, 0);
 
+            const effectiveStars = Math.max(c.stars ?? 0, earnedStars);
+
             return {
               ...c,
-              stars: Math.max(c.stars ?? 0, earnedStars),
+              stars: effectiveStars,
               maxStars,
+              variant: effectiveStars >= maxStars || c.variant === 'completed' ? ('completed' as const) : c.variant,
+              statusText: effectiveStars >= maxStars || c.variant === 'completed' ? 'DOMINADO • 100%' : c.statusText,
             };
           });
 
@@ -520,17 +590,27 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   },
   completeSectionNode: (nodeId: string, stars: number) => {
     saveSectionStar(nodeId, stars);
+    markCompletedLesson(nodeId);
     const dataset = get().lessonsDataset;
+    const aliases = getSectionAliases(nodeId);
     const norm = (id: string) =>
       id.toLowerCase().replace(/^py-m0?/, 'les-0').replace(/boss-logic|guardi[aá]n/, 'miniboss').replace(/apex.*|boss$/, 'apex');
     const targetNorm = norm(nodeId);
 
-    const idx = dataset.nodes.findIndex((n) => n.id === nodeId || norm(n.id) === targetNorm);
+    const idx = dataset.nodes.findIndex(
+      (n) => n.id === nodeId || aliases.includes(n.id) || norm(n.id) === targetNorm
+    );
     if (idx < 0) return;
 
     const nodes = dataset.nodes.map((n, i) => {
       if (i === idx) {
-        return { ...n, variant: 'completed' as const, stars: Math.max(n.stars ?? 0, stars), statusText: 'COMPLETADO' };
+        return {
+          ...n,
+          variant: 'completed' as const,
+          stars: Math.max(n.stars ?? 0, stars),
+          maxStars: typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3,
+          statusText: 'COMPLETADO',
+        };
       }
       if (i === idx + 1 && !n.isUnlocked) {
         return {
@@ -545,7 +625,7 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     });
 
     const connections = dataset.connections.map((c) => {
-      if (c.fromId === nodeId || norm(c.fromId) === targetNorm) {
+      if (c.fromId === nodeId || aliases.includes(c.fromId) || norm(c.fromId) === targetNorm) {
         return { ...c, isDashed: false };
       }
       return c;
