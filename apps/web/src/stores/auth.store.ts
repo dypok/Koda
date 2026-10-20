@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { BackendUserSession } from '@/services/auth/auth.service';
-
 import { AuthService } from '@/services/auth/auth.service';
+import { setSessionCookie } from '@/lib/domain';
 
 export interface AuthUser {
   id: string;
@@ -124,6 +124,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             hasEverLoggedIn: true,
             hasHydrated: true,
           });
+          setSessionCookie(true);
 
           // Verificar si el token ya expiró o vencerá en menos de 5 minutos
           const exp = parseJwtExp(storedToken);
@@ -211,6 +212,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       isAuthenticated: true,
       hasEverLoggedIn: true,
     });
+    setSessionCookie(true);
 
     scheduleBackgroundRefresh(accessToken, finalRefresh, (newToken, newRefresh) => {
       set({ token: newToken, refreshToken: newRefresh });
@@ -262,6 +264,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       isAuthenticated: true,
       hasEverLoggedIn: true,
     });
+    setSessionCookie(true);
   },
 
   login: () => {
@@ -283,6 +286,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
       localStorage.setItem(STORAGE_KEYS.HAS_LOGGED, 'true');
     }
+    setSessionCookie(false);
     set({ user: null, token: null, refreshToken: null, isAuthenticated: false, hasEverLoggedIn: true });
   },
 }));

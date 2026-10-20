@@ -7,9 +7,11 @@ import { LanguageSelector } from './LanguageSelector';
 import { KodaLogo } from './KodaLogo';
 import { WipeButton } from '@/components/ui/wipe-button';
 import { cn } from '@/lib/utils';
+import { getAppUrl, hasSessionCookie } from '@/lib/domain';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +19,8 @@ export const Navbar: React.FC = () => {
     };
 
     handleScroll();
+    setIsLoggedIn(hasSessionCookie());
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -67,13 +71,23 @@ export const Navbar: React.FC = () => {
 
         {/* Right: CTA + Selector de idioma desplegable */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <WipeButton
-            href="/register"
-            size="sm"
-            className="hidden sm:inline-flex px-4 font-bold"
-          >
-            Comenzar gratis
-          </WipeButton>
+          {isLoggedIn ? (
+            <WipeButton
+              href={getAppUrl('/')}
+              size="sm"
+              className="hidden sm:inline-flex px-4 font-bold"
+            >
+              Ir a mi Roadmap
+            </WipeButton>
+          ) : (
+            <WipeButton
+              href={getAppUrl('/register')}
+              size="sm"
+              className="hidden sm:inline-flex px-4 font-bold"
+            >
+              Comenzar gratis
+            </WipeButton>
+          )}
           <LanguageSelector />
         </div>
       </div>

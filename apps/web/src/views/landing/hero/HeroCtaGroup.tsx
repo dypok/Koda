@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { TransitionLink } from '@/components/ui/transition-link';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowRight, SignIn } from '@phosphor-icons/react';
+import { ArrowRight, SignIn, Sparkle } from '@phosphor-icons/react';
 import { WipeButton } from '@/components/ui/wipe-button';
 import { Magnetic } from '@/components/ui/magnetic';
 import { useHeroStrings } from '@/lib/i18n';
+import { getAppUrl, hasSessionCookie } from '@/lib/domain';
 
 export const HeroCtaGroup: React.FC = () => {
   const reduceMotion = useReducedMotion();
   const t = useHeroStrings();
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(hasSessionCookie());
+  }, []);
 
   return (
     <motion.div
@@ -19,25 +25,32 @@ export const HeroCtaGroup: React.FC = () => {
       className="pt-2 flex flex-col items-center lg:items-start gap-3.5 w-full sm:w-auto transform-gpu"
     >
       <Magnetic className="w-full sm:w-72 max-w-xs sm:max-w-none">
-      <WipeButton
-        href="/register"
-        LinkComponent={TransitionLink}
-        ariaLabel="Comenzar ahora gratis en Koda"
-        size="lg"
-        className="w-full gap-2.5 px-8 py-4 text-base justify-center group"
-      >
-        {t.ctaPrimary}
-        <ArrowRight
-          aria-hidden="true"
-          className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1.5"
-        />
-      </WipeButton>
+        <WipeButton
+          href={getAppUrl(isLoggedIn ? '/' : '/register')}
+          LinkComponent={TransitionLink}
+          ariaLabel={isLoggedIn ? 'Continuar mi aprendizaje en Koda' : 'Comenzar ahora gratis en Koda'}
+          size="lg"
+          className="w-full gap-2.5 px-8 py-4 text-base justify-center group"
+        >
+          {isLoggedIn ? 'Continuar aprendiendo' : t.ctaPrimary}
+          {isLoggedIn ? (
+            <Sparkle
+              aria-hidden="true"
+              className="w-5 h-5 transition-transform duration-300 group-hover:rotate-12 text-amber-300"
+            />
+          ) : (
+            <ArrowRight
+              aria-hidden="true"
+              className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1.5"
+            />
+          )}
+        </WipeButton>
       </Magnetic>
 
       <WipeButton
-        href="/login"
+        href={getAppUrl(isLoggedIn ? '/' : '/login')}
         LinkComponent={TransitionLink}
-        ariaLabel="Entrar a mi cuenta de Koda"
+        ariaLabel={isLoggedIn ? 'Ir a mi Roadmap interactivo' : 'Entrar a mi cuenta de Koda'}
         tone="ghost"
         size="md"
         className="w-full sm:w-72 max-w-xs sm:max-w-none gap-2.5 px-6 text-sm justify-center font-bold group"
@@ -46,7 +59,7 @@ export const HeroCtaGroup: React.FC = () => {
           aria-hidden="true"
           className="w-5 h-5 text-amber-400/90 transition-transform duration-300 group-hover:scale-110"
         />
-        {t.ctaSecondary}
+        {isLoggedIn ? 'Ir a mi Roadmap' : t.ctaSecondary}
       </WipeButton>
 
       <p className="text-xs sm:text-sm text-slate-300">
