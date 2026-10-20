@@ -49,14 +49,18 @@ export function proxy(request: NextRequest) {
     if (pathname === '/' || pathname === '/ruta') {
       const url = request.nextUrl.clone();
       url.pathname = '/app';
-      return NextResponse.rewrite(url);
+      const res = NextResponse.rewrite(url);
+      res.headers.set('Cache-Control', 'private, no-cache, no-store, max-age=0, must-revalidate');
+      return res;
     }
 
     // Reescribir rutas de perfil para que apunten a /app/perfil de forma limpia
     if (pathname === '/perfil' || pathname.startsWith('/perfil/')) {
       const url = request.nextUrl.clone();
       url.pathname = `/app${pathname}`;
-      return NextResponse.rewrite(url);
+      const res = NextResponse.rewrite(url);
+      res.headers.set('Cache-Control', 'private, no-cache, no-store, max-age=0, must-revalidate');
+      return res;
     }
 
     // Las rutas /curso, /login, /register, /onboarding, /evaluaciones se sirven directamente
