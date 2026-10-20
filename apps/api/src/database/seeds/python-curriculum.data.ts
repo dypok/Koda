@@ -51,10 +51,10 @@ export const INITIAL_TRACKS = [
  */
 export const PYTHON_COURSES = [
   {
-    slug: 'python-core',
+    slug: 'python-1',
     track_slug: 'python',
-    name: 'Fundamentos de Programación con Python 3.12',
-    description: 'Aprende los conceptos fundamentales de la programación con la sintaxis más limpia y amigable.',
+    name: 'Python 1: Fundamentos',
+    description: 'Entorno, variables, tipos, operadores, I/O, condicionales, bucles for/while, colecciones y funciones.',
     color: '#38BDF8',
     icon: 'IconBrandPython',
     topology: { tier: 0, lane: 0 },
@@ -89,7 +89,7 @@ export const PYTHON_COURSES = [
     color: '#10B981',
     icon: 'IconDeviceDesktop',
     topology: { tier: 1, lane: -1 },
-    prerequisites: ['python-core'],
+    prerequisites: ['python-1'],
     edges: [],
     is_active: true,
   },
@@ -101,7 +101,7 @@ export const PYTHON_COURSES = [
     color: '#8B5CF6',
     icon: 'IconServer',
     topology: { tier: 1, lane: 0 },
-    prerequisites: ['python-core'],
+    prerequisites: ['python-1'],
     edges: [
       {
         target_course_slug: 'fastapi-async',
@@ -126,7 +126,7 @@ export const PYTHON_COURSES = [
     color: '#F59E0B',
     icon: 'IconCloudComputing',
     topology: { tier: 1, lane: 1 },
-    prerequisites: ['python-core'],
+    prerequisites: ['python-1'],
     edges: [],
     is_active: true,
   },
@@ -162,7 +162,7 @@ export const PYTHON_COURSES = [
 export const PYTHON_MODULES = [
   {
     slug: 'fundamentos-de-python',
-    course_slug: 'python-core',
+    course_slug: 'python-1',
     title: 'Fundamentos de Python',
     objective: 'Dominar la función print(), cadenas de texto, números, indentación y comentarios.',
     position: 1,
@@ -172,7 +172,7 @@ export const PYTHON_MODULES = [
   },
   {
     slug: 'variables-y-tipos-de-datos',
-    course_slug: 'python-core',
+    course_slug: 'python-1',
     title: 'Variables y Tipos de Datos',
     objective: 'Almacenamiento en memoria, int, float, str, bool y función inspectora type().',
     position: 2,
@@ -182,7 +182,7 @@ export const PYTHON_MODULES = [
   },
   {
     slug: 'operadores-y-expresiones',
-    course_slug: 'python-core',
+    course_slug: 'python-1',
     title: 'Operadores y Expresiones',
     objective: 'Aritmética básica, comparadores y operadores lógicos and, or, not.',
     position: 3,
@@ -192,7 +192,7 @@ export const PYTHON_MODULES = [
   },
   {
     slug: 'condicionales-y-control-flujo',
-    course_slug: 'python-core',
+    course_slug: 'python-1',
     title: 'Condicionales y Control de Flujo',
     objective: 'Toma de decisiones lógicas con bloques if, elif y else sin anidación excesiva.',
     position: 4,
@@ -202,7 +202,7 @@ export const PYTHON_MODULES = [
   },
   {
     slug: 'bucles-e-iteracion',
-    course_slug: 'python-core',
+    course_slug: 'python-1',
     title: 'Bucles e Iteración',
     objective: 'Automatización de tareas repetitivas con for, while, range, break y continue.',
     position: 5,
@@ -212,7 +212,7 @@ export const PYTHON_MODULES = [
   },
   {
     slug: 'funciones-y-modularidad',
-    course_slug: 'python-core',
+    course_slug: 'python-1',
     title: 'Funciones y Modularidad',
     objective: 'Creación de bloques de código reutilizables con def, parámetros y valores de retorno.',
     position: 6,
@@ -222,7 +222,7 @@ export const PYTHON_MODULES = [
   },
   {
     slug: 'listas-y-tuplas',
-    course_slug: 'python-core',
+    course_slug: 'python-1',
     title: 'Estructuras de Datos: Listas y Tuplas',
     objective: 'Colecciones ordenadas, indexación por corchetes, slicing y mutabilidad.',
     position: 7,
@@ -232,7 +232,7 @@ export const PYTHON_MODULES = [
   },
   {
     slug: 'diccionarios-y-conjuntos',
-    course_slug: 'python-core',
+    course_slug: 'python-1',
     title: 'Diccionarios y Conjuntos',
     objective: 'Mapeo asociativo clave-valor, métodos get() y conjuntos únicos set().',
     position: 8,
@@ -242,7 +242,7 @@ export const PYTHON_MODULES = [
   },
   {
     slug: 'manejo-de-errores-excepciones',
-    course_slug: 'python-core',
+    course_slug: 'python-1',
     title: 'Manejo de Errores y Excepciones',
     objective: 'Prevención de caídas con bloques de control try, except, else y finally.',
     position: 9,
@@ -252,7 +252,7 @@ export const PYTHON_MODULES = [
   },
   {
     slug: 'modulos-paquetes-entornos',
-    course_slug: 'python-core',
+    course_slug: 'python-1',
     title: 'Módulos, Paquetes y Entornos',
     objective: 'Organización modular con import, bibliotecas nativas math/random y entornos venv.',
     position: 10,
@@ -262,7 +262,7 @@ export const PYTHON_MODULES = [
   },
   {
     slug: 'programacion-orientada-a-objetos',
-    course_slug: 'python-core',
+    course_slug: 'python-1',
     title: 'Programación Orientada a Objetos',
     objective: 'Modelado con clases, instancias, atributos, métodos y el constructor __init__.',
     position: 11,
@@ -272,7 +272,7 @@ export const PYTHON_MODULES = [
   },
   {
     slug: 'proyecto-final-integrador',
-    course_slug: 'python-core',
+    course_slug: 'python-1',
     title: 'Proyecto Final Integrador',
     objective: 'Aplicación integral de todos los conceptos y preparación para la certificación oficial Koda.',
     position: 12,

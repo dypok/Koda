@@ -131,6 +131,8 @@ const NODES: GraphNode[] = [
     y: 310,
     variant: 'boss',
     iconType: 'skull',
+    stars: 0,
+    maxStars: 3,
     xp: 800,
     statusText: 'DESAFÍO FINAL • CERTIFICACIÓN',
     targetCourseId: 'python-apex',

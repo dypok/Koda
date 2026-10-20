@@ -298,14 +298,12 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
                 +{activeNode.xp} XP
               </span>
             )}
-            {!isBoss && (
-              <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-slate-300 bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-700/60">
-                <Star className="w-3 h-3 fill-amber-400 text-amber-300" />
-                <span className="tabular-nums">
-                  {activeNode.stars ?? 0}/{activeNode.maxStars ?? 9}
-                </span>
+            <span className="flex items-center gap-1 text-[10px] font-mono font-bold text-slate-300 bg-slate-800/60 px-2 py-0.5 rounded-full border border-slate-700/60">
+              <Star className="w-3 h-3 fill-amber-400 text-amber-300" />
+              <span className="tabular-nums">
+                {activeNode.stars ?? 0}/{activeNode.maxStars ?? (inLessons ? 3 : 24)}
               </span>
-            )}
+            </span>
           </div>
 
           <div className="pt-3 border-t border-slate-700/50">

@@ -1,10 +1,98 @@
 import { create } from 'zustand';
 import { GraphViewMode, GraphDataset, NodeVariant, GraphNode } from '@/models/roadmap/roadmap-graph.types';
-import { PYTHON_BASIC_LESSONS_DATASET } from '@/models/roadmap/python-lessons-graph.mock';
+import { PYTHON_BASIC_LESSONS_DATASET, getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
 import { CareerBranchId, CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
-import { RoadmapService } from '@/services/roadmap/roadmap.service';
+import { RoadmapService, COURSE_MAX_STARS_MAP, getDynamicMaxStarsForCourse } from '@/services/roadmap/roadmap.service';
+import {
+  getSectionAliases,
+  getStoredStarForSection,
+  isSectionCompletedInSet,
+  sanitizeStoredStarsCache,
+} from '@/models/roadmap/section-alias.helper';
 
 const PROGRESS_KEY = 'koda_roadmap_progress';
+const SECTION_STARS_KEY = 'koda_section_stars';
+const COMPLETED_LESSONS_KEY = 'koda_completed_lessons';
+
+function getStoredSectionStars(): Record<string, number> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = window.localStorage.getItem(SECTION_STARS_KEY);
+    const parsed = raw ? JSON.parse(raw) : {};
+    const sanitized = sanitizeStoredStarsCache(parsed);
+    if (raw && Object.keys(parsed).length !== Object.keys(sanitized).length) {
+      window.localStorage.setItem(SECTION_STARS_KEY, JSON.stringify(sanitized));
+    }
+    return sanitized;
+  } catch {
+    return {};
+  }
+}
+
+function saveSectionStar(sectionId: string, stars: number) {
+  if (typeof window === 'undefined' || !sectionId) return;
+  try {
+    const map = getStoredSectionStars();
+    const aliases = getSectionAliases(sectionId);
+    for (const a of aliases) {
+      map[a] = Math.max(map[a] ?? 0, stars);
+    }
+    map[sectionId] = Math.max(map[sectionId] ?? 0, stars);
+    window.localStorage.setItem(SECTION_STARS_KEY, JSON.stringify(map));
+  } catch {}
+}
+
+function getStoredCompletedLessons(): Set<string> {
+  if (typeof window === 'undefined') return new Set();
+  try {
+    const raw = window.localStorage.getItem(COMPLETED_LESSONS_KEY);
+    if (!raw) return new Set();
+    const arr: string[] = JSON.parse(raw);
+    const hasDaInitial = arr.some((k) => k === 'da-01' || k === 'da-m01' || k === 'da-02');
+    const hasIaInitial = arr.some((k) => k === 'ia-01' || k === 'ia-m01' || k === 'ia-02');
+    const hasFaInitial = arr.some((k) => k === 'fa-01' || k === 'fa-m01');
+    const hasDjInitial = arr.some((k) => k === 'dj-01' || k === 'dj-m01');
+
+    const sanitized = arr.filter((k) => {
+      const lower = k.trim().toLowerCase();
+      if (/^\d+$/.test(lower) || lower === 'miniboss' || lower === 'boss' || lower === 'apex' || lower === 'mb') {
+        return false;
+      }
+      if (!hasDaInitial && (lower.includes('wrangling') || lower.startsWith('da-miniboss') || lower === 'da-mb' || lower.startsWith('da-boss') || lower === 'streamlit-dashboards')) {
+        return false;
+      }
+      if (!hasIaInitial && (lower.includes('tool-caller') || lower.startsWith('ia-miniboss') || lower === 'ia-mb' || lower.startsWith('ia-boss') || lower.includes('agente-completo'))) {
+        return false;
+      }
+      if (!hasFaInitial && (lower === 'fa-boss' || lower === 'fastapi-docker-deploy')) {
+        return false;
+      }
+      if (!hasDjInitial && (lower === 'dj-boss' || lower === 'django-auth-security-deploy')) {
+        return false;
+      }
+      return true;
+    });
+    if (sanitized.length !== arr.length) {
+      window.localStorage.setItem(COMPLETED_LESSONS_KEY, JSON.stringify(sanitized));
+    }
+    return new Set(sanitized);
+  } catch {
+    return new Set();
+  }
+}
+
+function markCompletedLesson(lessonId: string) {
+  if (typeof window === 'undefined' || !lessonId) return;
+  try {
+    const set = getStoredCompletedLessons();
+    const aliases = getSectionAliases(lessonId);
+    for (const a of aliases) {
+      set.add(a);
+    }
+    set.add(lessonId);
+    window.localStorage.setItem(COMPLETED_LESSONS_KEY, JSON.stringify(Array.from(set)));
+  } catch {}
+}
 
 const INITIAL_COURSES_DATASET: GraphDataset = CAREER_BRANCHES[0]?.dataset ?? {
   sectorTitle: 'PYTHON SPECIALIST: DE FUNDAMENTOS A AGENTES AUTÓNOMOS',
@@ -14,11 +102,16 @@ const INITIAL_COURSES_DATASET: GraphDataset = CAREER_BRANCHES[0]?.dataset ?? {
 };
 
 function persistProgress(dataset: GraphDataset) {
+  if (typeof window === 'undefined') return;
   try {
     const unlockedIds = dataset.nodes.filter((n) => n.isUnlocked).map((n) => n.id);
+    const nodeStarsMap: Record<string, { stars?: number; maxStars?: number }> = {};
+    dataset.nodes.forEach((n) => {
+      nodeStarsMap[n.id] = { stars: n.stars, maxStars: n.maxStars };
+    });
     window.localStorage.setItem(
       PROGRESS_KEY,
-      JSON.stringify({ progressPercent: dataset.progressPercent, unlockedIds })
+      JSON.stringify({ progressPercent: dataset.progressPercent, unlockedIds, nodeStarsMap })
     );
   } catch {
     // sin almacenamiento, el avance vive solo en memoria
@@ -26,20 +119,54 @@ function persistProgress(dataset: GraphDataset) {
 }
 
 function restoreProgress(dataset: GraphDataset): GraphDataset {
+  if (typeof window === 'undefined') return dataset;
   try {
     const raw = window.localStorage.getItem(PROGRESS_KEY);
     if (!raw) return dataset;
-    const saved = JSON.parse(raw) as { progressPercent?: number; unlockedIds?: string[] };
-    if (!Array.isArray(saved.unlockedIds)) return dataset;
-    const unlocked = new Set(saved.unlockedIds);
+    const saved = JSON.parse(raw) as {
+      progressPercent?: number;
+      unlockedIds?: string[];
+      nodeStarsMap?: Record<string, { stars?: number; maxStars?: number }>;
+    };
+
+    // Purgar python-core si persistió en el almacenamiento local
+    if (saved.unlockedIds?.includes('python-core') || saved.nodeStarsMap?.['python-core']) {
+      const cleanedUnlockedIds = saved.unlockedIds?.filter((id) => id !== 'python-core');
+      const cleanedMap = { ...(saved.nodeStarsMap || {}) };
+      delete cleanedMap['python-core'];
+      window.localStorage.setItem(
+        PROGRESS_KEY,
+        JSON.stringify({
+          ...saved,
+          unlockedIds: cleanedUnlockedIds,
+          nodeStarsMap: cleanedMap,
+        })
+      );
+    }
+
+    const unlocked = Array.isArray(saved.unlockedIds)
+      ? new Set(saved.unlockedIds.filter((id) => id !== 'python-core'))
+      : null;
+    const nodeStarsMap = saved.nodeStarsMap || {};
+
+    const cleanNodes = dataset.nodes.filter(
+      (n) => n.id !== 'python-core' && n.targetCourseId !== 'python-core'
+    );
+
     return {
       ...dataset,
       progressPercent: typeof saved.progressPercent === 'number' ? saved.progressPercent : dataset.progressPercent,
-      nodes: dataset.nodes.map((n) =>
-        unlocked.has(n.id) && !n.isUnlocked
-          ? { ...n, isUnlocked: true, variant: (n.variant === 'locked' ? 'unlocked' : n.variant) as NodeVariant }
-          : n
-      ),
+      nodes: cleanNodes.map((n) => {
+        const isUnlocked = unlocked ? (unlocked.has(n.id) || n.isUnlocked) : n.isUnlocked;
+        const savedStarInfo = nodeStarsMap[n.id];
+        return {
+          ...n,
+          isUnlocked,
+          variant: (unlocked?.has(n.id) && n.variant === 'locked' ? 'unlocked' : n.variant) as NodeVariant,
+          stars: savedStarInfo?.stars ?? n.stars,
+          maxStars: savedStarInfo?.maxStars ?? n.maxStars,
+        };
+      }),
     };
   } catch {
     return dataset;
@@ -304,23 +431,81 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     if (courseNode && !courseNode.isUnlocked) return;
     set({ viewMode: 'lessons', selectedCourseId: courseId, isLoading: true, panOffset: { x: 0, y: 0 } });
     const dataset = await RoadmapService.getCourseLessonsGraph(courseId);
-    const activeLesson = dataset.nodes.find((n) => n.variant === 'active' || n.isUnlocked) || dataset.nodes[0];
+    const storedStars = getStoredSectionStars();
+    const completedLessonsSet = getStoredCompletedLessons();
+
+    const enrichedNodes = dataset.nodes.map((l) => {
+      const stored = getStoredStarForSection(l.id, storedStars);
+      const isCompleted = isSectionCompletedInSet(l.id, completedLessonsSet);
+      const earned = Math.max(l.stars ?? 0, stored > 0 ? stored : isCompleted ? 3 : 0);
+      const maxStars = typeof l.maxStars === 'number' && l.maxStars > 0 ? l.maxStars : 3;
+
+      if (earned > 0) {
+        saveSectionStar(l.id, earned);
+        markCompletedLesson(l.id);
+      }
+
+      return {
+        ...l,
+        stars: earned,
+        maxStars,
+        variant: earned > 0 || l.variant === 'completed' || isCompleted ? ('completed' as const) : l.variant,
+        statusText: earned > 0 || l.variant === 'completed' || isCompleted ? 'COMPLETADO' : l.statusText,
+      };
+    });
+    const enrichedDataset = { ...dataset, nodes: enrichedNodes };
+    const activeLesson = enrichedNodes.find((n) => n.variant === 'active' || n.isUnlocked) || enrichedNodes[0];
+
+    const totalEarnedInCourse = enrichedNodes.reduce((sum, n) => sum + (n.stars ?? 0), 0);
+    const dynamicCourseMax = enrichedNodes.reduce((sum, n) => sum + (typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3), 0);
+    const courses = get().coursesDataset;
+    const updatedCoursesNodes = courses.nodes.map((cn) => {
+      if (cn.id === courseId || cn.targetCourseId === courseId) {
+        return {
+          ...cn,
+          stars: Math.max(cn.stars ?? 0, totalEarnedInCourse),
+          maxStars: dynamicCourseMax || cn.maxStars,
+        };
+      }
+      return cn;
+    });
+
     set({
-      lessonsDataset: dataset,
+      lessonsDataset: enrichedDataset,
+      coursesDataset: { ...courses, nodes: updatedCoursesNodes },
       activeNodeId: activeLesson ? activeLesson.id : null,
       isLoading: false,
     });
   },
   returnToCourses: () => {
     const courses = get().coursesDataset;
+    const lessons = get().lessonsDataset;
     const currentCourseId = get().selectedCourseId;
-    const matchingCourse = courses.nodes.find((n) => n.targetCourseId === currentCourseId || n.id === currentCourseId);
-    const activeCourse = matchingCourse || courses.nodes.find((n) => n.variant === 'active' || n.isUnlocked) || courses.nodes[0];
+    const totalEarnedInCourse = lessons.nodes.reduce((sum, n) => sum + (n.stars ?? 0), 0);
+    const dynamicCourseMax = lessons.nodes.reduce((sum, n) => sum + (typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3), 0);
+
+    const updatedNodes = courses.nodes.map((cn) => {
+      if (cn.id === currentCourseId || cn.targetCourseId === currentCourseId) {
+        return {
+          ...cn,
+          stars: Math.max(cn.stars ?? 0, totalEarnedInCourse),
+          maxStars: dynamicCourseMax || cn.maxStars,
+        };
+      }
+      return cn;
+    });
+
+    const matchingCourse = updatedNodes.find((n) => n.targetCourseId === currentCourseId || n.id === currentCourseId);
+    const activeCourse = matchingCourse || updatedNodes.find((n) => n.variant === 'active' || n.isUnlocked) || updatedNodes[0];
+
+    const nextCourses = { ...courses, nodes: updatedNodes };
     set({
       viewMode: 'courses',
+      coursesDataset: nextCourses,
       panOffset: { x: 0, y: 0 },
       activeNodeId: activeCourse ? activeCourse.id : null,
     });
+    persistProgress(nextCourses);
   },
   setActiveNode: (id) => set({ activeNodeId: id }),
   setBranch: async (branchId) => {
@@ -361,36 +546,112 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
         RoadmapService.getCoursesGraph(branchId),
         RoadmapService.getCourseLessonsGraph(courseId),
       ]);
+
+      const storedStars = getStoredSectionStars();
+      const completedLessonsSet = getStoredCompletedLessons();
+
+      if (lessonsData && lessonsData.nodes && lessonsData.nodes.length > 0) {
+        lessonsData.nodes = lessonsData.nodes.map((l) => {
+          const stored = getStoredStarForSection(l.id, storedStars);
+          const isCompleted = isSectionCompletedInSet(l.id, completedLessonsSet);
+          const maxStars = typeof l.maxStars === 'number' && l.maxStars > 0 ? l.maxStars : 3;
+          const earned = Math.min(maxStars, Math.max(l.stars ?? 0, stored > 0 ? stored : isCompleted ? maxStars : 0));
+
+          if (earned > 0) {
+            saveSectionStar(l.id, earned);
+            markCompletedLesson(l.id);
+          }
+
+          return {
+            ...l,
+            stars: earned,
+            maxStars,
+            variant: earned > 0 || l.variant === 'completed' || isCompleted ? ('completed' as const) : l.variant,
+            statusText: earned > 0 || l.variant === 'completed' || isCompleted ? 'COMPLETADO' : l.statusText,
+          };
+        });
+        set({ lessonsDataset: lessonsData });
+      }
+
+      const refreshedStars = getStoredSectionStars();
+      const refreshedCompletedSet = getStoredCompletedLessons();
+
       if (coursesData && coursesData.nodes && coursesData.nodes.length > 0) {
+        // Garantizar eliminación de cualquier nodo residual python-core
+        coursesData.nodes = coursesData.nodes
+          .filter((c) => c.id !== 'python-core' && c.targetCourseId !== 'python-core')
+          .map((c) => {
+            const cId = c.targetCourseId || c.id;
+            const courseLessons = getLessonsDatasetForCourse(cId);
+            const nodesToInspect = (cId === courseId && lessonsData?.nodes?.length)
+              ? lessonsData.nodes
+              : (courseLessons?.nodes ?? []);
+
+            const maxStars =
+              nodesToInspect.length > 0
+                ? nodesToInspect.reduce((sum, l) => sum + (typeof l.maxStars === 'number' && l.maxStars > 0 ? l.maxStars : 3), 0)
+                : getDynamicMaxStarsForCourse(cId);
+
+            const earnedStars = nodesToInspect.reduce((sum, l) => {
+              const stored = getStoredStarForSection(l.id, refreshedStars);
+              const isComp = isSectionCompletedInSet(l.id, refreshedCompletedSet);
+              const lMax = typeof l.maxStars === 'number' && l.maxStars > 0 ? l.maxStars : 3;
+              const lEarned = Math.min(lMax, Math.max(l.stars ?? 0, stored > 0 ? stored : isComp ? lMax : 0));
+              return sum + lEarned;
+            }, 0);
+
+            const effectiveStars = Math.max(c.stars ?? 0, earnedStars);
+
+            return {
+              ...c,
+              stars: effectiveStars,
+              maxStars,
+              variant: effectiveStars >= maxStars || c.variant === 'completed' ? ('completed' as const) : c.variant,
+              statusText: effectiveStars >= maxStars || c.variant === 'completed' ? 'DOMINADO • 100%' : c.statusText,
+            };
+          });
+
+        const currentActiveId = get().activeNodeId === 'python-core' ? 'python-1' : get().activeNodeId;
+        const currentSelectedCourseId = get().selectedCourseId === 'python-core' ? 'python-1' : get().selectedCourseId;
+
         const activeCourse =
-          coursesData.nodes.find((n) => n.id === get().activeNodeId || n.targetCourseId === get().selectedCourseId) ||
+          coursesData.nodes.find((n) => n.id === currentActiveId || n.targetCourseId === currentSelectedCourseId) ||
           coursesData.nodes.find((n) => n.variant === 'active' || n.isUnlocked) ||
           coursesData.nodes[0];
         set({
           coursesDataset: coursesData,
-          activeNodeId: activeCourse ? activeCourse.id : get().activeNodeId,
+          selectedCourseId: currentSelectedCourseId,
+          activeNodeId: activeCourse ? activeCourse.id : (currentActiveId || 'python-1'),
         });
         persistProgress(coursesData);
-      }
-      if (lessonsData && lessonsData.nodes && lessonsData.nodes.length > 0) {
-        set({ lessonsDataset: lessonsData });
       }
     } catch {
       // Silencioso en caso de falla de red o modo offline
     }
   },
   completeSectionNode: (nodeId: string, stars: number) => {
+    saveSectionStar(nodeId, stars);
+    markCompletedLesson(nodeId);
     const dataset = get().lessonsDataset;
+    const aliases = getSectionAliases(nodeId);
     const norm = (id: string) =>
       id.toLowerCase().replace(/^py-m0?/, 'les-0').replace(/boss-logic|guardi[aá]n/, 'miniboss').replace(/apex.*|boss$/, 'apex');
     const targetNorm = norm(nodeId);
 
-    const idx = dataset.nodes.findIndex((n) => n.id === nodeId || norm(n.id) === targetNorm);
+    const idx = dataset.nodes.findIndex(
+      (n) => n.id === nodeId || aliases.includes(n.id) || norm(n.id) === targetNorm
+    );
     if (idx < 0) return;
 
     const nodes = dataset.nodes.map((n, i) => {
       if (i === idx) {
-        return { ...n, variant: 'completed' as const, stars: Math.max(n.stars ?? 0, stars), statusText: 'COMPLETADO' };
+        return {
+          ...n,
+          variant: 'completed' as const,
+          stars: Math.max(n.stars ?? 0, stars),
+          maxStars: typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3,
+          statusText: 'COMPLETADO',
+        };
       }
       if (i === idx + 1 && !n.isUnlocked) {
         return {
@@ -405,7 +666,7 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     });
 
     const connections = dataset.connections.map((c) => {
-      if (c.fromId === nodeId || norm(c.fromId) === targetNorm) {
+      if (c.fromId === nodeId || aliases.includes(c.fromId) || norm(c.fromId) === targetNorm) {
         return { ...c, isDashed: false };
       }
       return c;
@@ -414,20 +675,36 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     const completedCount = nodes.filter((n) => n.variant === 'completed').length;
     const progressPercent = Math.round((completedCount / Math.max(1, nodes.length)) * 100);
 
-    set({ lessonsDataset: { ...dataset, progressPercent, nodes, connections } });
+    const currentCourseId = get().selectedCourseId || 'python-1';
+    const coursesDataset = get().coursesDataset;
+
+    // Calcular suma total de estrellas en el curso actual
+    const totalEarnedInCourse = nodes.reduce((sum, n) => sum + (n.stars ?? 0), 0);
+    const dynamicCourseMax = nodes.reduce((sum, n) => sum + (typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3), 0);
+
+    const updatedCourseNodes = coursesDataset.nodes.map((cn) => {
+      if (cn.id === currentCourseId || cn.targetCourseId === currentCourseId) {
+        return {
+          ...cn,
+          stars: totalEarnedInCourse,
+          maxStars: dynamicCourseMax || cn.maxStars,
+        };
+      }
+      return cn;
+    });
 
     // Si se completó el examen final (Apex o Boss), desbloquear el siguiente curso en coursesDataset
     const isApexOrFinal = idx === dataset.nodes.length - 1 || targetNorm.includes('apex') || targetNorm.includes('boss');
-    if (isApexOrFinal) {
-      const currentCourseId = get().selectedCourseId || 'python-1';
-      const coursesDataset = get().coursesDataset;
+    let nextCourseNodes = updatedCourseNodes;
+    let nextCourseConns = coursesDataset.connections;
 
-      const updatedCourseNodes = coursesDataset.nodes.map((cn) => {
+    if (isApexOrFinal) {
+      nextCourseNodes = nextCourseNodes.map((cn) => {
         if (cn.id === currentCourseId || cn.targetCourseId === currentCourseId) {
           return {
             ...cn,
             variant: 'completed' as const,
-            stars: cn.maxStars ?? 3,
+            stars: cn.maxStars ?? totalEarnedInCourse,
             statusText: 'DOMINADO • 100%',
           };
         }
@@ -439,7 +716,7 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
       );
       const targetCourseIds = new Set(outgoingConns.map((c) => c.toId));
 
-      const finalCourseNodes = updatedCourseNodes.map((cn) => {
+      nextCourseNodes = nextCourseNodes.map((cn) => {
         if (targetCourseIds.has(cn.id) || (cn.targetCourseId && targetCourseIds.has(cn.targetCourseId))) {
           return {
             ...cn,
@@ -451,26 +728,29 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
         return cn;
       });
 
-      const updatedCourseConns = coursesDataset.connections.map((c) => {
+      nextCourseConns = coursesDataset.connections.map((c) => {
         if (c.fromId === currentCourseId || c.fromId.includes(currentCourseId)) {
           return { ...c, isDashed: false };
         }
         return c;
       });
-
-      const completedCourses = finalCourseNodes.filter((cn) => cn.variant === 'completed').length;
-      const coursesPercent = Math.round((completedCourses / Math.max(1, finalCourseNodes.length)) * 100);
-
-      const nextCoursesDataset = {
-        ...coursesDataset,
-        progressPercent: coursesPercent,
-        nodes: finalCourseNodes,
-        connections: updatedCourseConns,
-      };
-
-      set({ coursesDataset: nextCoursesDataset });
-      persistProgress(nextCoursesDataset);
     }
+
+    const completedCourses = nextCourseNodes.filter((cn) => cn.variant === 'completed').length;
+    const coursesPercent = Math.round((completedCourses / Math.max(1, nextCourseNodes.length)) * 100);
+
+    const nextCoursesDataset = {
+      ...coursesDataset,
+      progressPercent: coursesPercent,
+      nodes: nextCourseNodes,
+      connections: nextCourseConns,
+    };
+
+    set({
+      lessonsDataset: { ...dataset, progressPercent, nodes, connections },
+      coursesDataset: nextCoursesDataset,
+    });
+    persistProgress(nextCoursesDataset);
   },
   setZoomLevel: (zoom) =>
     set((s) => ({

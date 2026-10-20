@@ -2,6 +2,7 @@ import { GetRoadmapGraphUseCase } from './get-roadmap-graph.use-case';
 import { ICurriculumRepository } from '../../../domain/repositories/curriculum.repository';
 import { IProgressRepository } from '../../../domain/repositories/progress.repository';
 import { SectionStarsEntity } from '../../../domain/entities/section-stars.entity';
+import { CourseEntity } from '../../../domain/entities/curriculum';
 
 describe('GetRoadmapGraphUseCase', () => {
   let useCase: GetRoadmapGraphUseCase;
@@ -135,5 +136,41 @@ describe('GetRoadmapGraphUseCase', () => {
     await expect(useCase.getLessonsGraph('curso-inexistente-123')).rejects.toThrow(
       'Curso \'curso-inexistente-123\' no encontrado',
     );
+  });
+
+  it('debe filtrar y purgar python-core o cursos obsoletos con nombre Python 3.12 en getCoursesGraph', async () => {
+    const mockCourses = [
+      new CourseEntity({
+        slug: 'python-core',
+        trackSlug: 'python',
+        name: 'Fundamentos de Programación con Python 3.12',
+        description: 'Legacy course',
+        color: '#38BDF8',
+        icon: 'IconBrandPython',
+        topology: { tier: 0, lane: 0 },
+        prerequisites: [],
+        edges: [],
+        isActive: true,
+      }),
+      new CourseEntity({
+        slug: 'python-1',
+        trackSlug: 'python',
+        name: 'Python 1: Fundamentos',
+        description: 'Canonical course',
+        color: '#38BDF8',
+        icon: 'IconBrandPython',
+        topology: { tier: 0, lane: 0 },
+        prerequisites: [],
+        edges: [],
+        isActive: true,
+      }),
+    ];
+    curriculumRepository.findAllCourses.mockResolvedValue(mockCourses);
+
+    const dataset = await useCase.getCoursesGraph('python');
+
+    expect(dataset.nodes.some((n) => n.id === 'python-core')).toBe(false);
+    expect(dataset.nodes.some((n) => n.label.includes('Python 3.12'))).toBe(false);
+    expect(dataset.nodes.find((n) => n.id === 'python-1')).toBeDefined();
   });
 });

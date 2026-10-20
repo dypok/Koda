@@ -111,7 +111,7 @@ describe('LearningService (Hybrid Progress Fusion)', () => {
     it('debe retornar roadmap base para usuario anónimo sin consultar PostgreSQL', async () => {
       const result = await service.getRoadmap('python');
 
-      expect(mockCurriculumRepo.findModulesByCourse).toHaveBeenCalledWith('python-core');
+      expect(mockCurriculumRepo.findModulesByCourse).toHaveBeenCalledWith('python-1');
       expect(mockProgressRepo.findAllSectionStarsByUser).not.toHaveBeenCalled();
       expect(mockProgressRepo.findAllModuleProgressByUser).not.toHaveBeenCalled();
 

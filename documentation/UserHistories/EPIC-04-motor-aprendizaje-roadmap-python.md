@@ -105,7 +105,7 @@
 **Subtasks:**
 - [x] [BD] Tabla `user_section_stars (user_id, section_slug, stars_earned, best_score, attempts_count)` en Supabase PostgreSQL.
 - [x] [BACKEND] Algoritmo en `ProgressService` (NestJS) que calcule las estrellas y persista la marca histórica.
-- [ ] [FRONTEND] Componente `StarRatingDisplay.tsx` con animación escalonada de estrellas doradas en resumen de lección.
+- [x] [FRONTEND] Componente `StarRatingDisplay.tsx` y visualización de estrellas de lección y curso en roadmap/PixiJS.
 
 ---
 
