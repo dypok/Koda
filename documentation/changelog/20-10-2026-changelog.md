@@ -8,3 +8,5 @@
 - [Tuesday]-[20/10/2026]-[11:02]-[Dylan Gamero] : Fix login and roadmap routing on app subdomain by delegating root route client-side transitions to AppPage, repairing cross-origin links with getAppUrl, adding login button in navbar, removing invalid cookie domain, and permitting subdomain preflight in NestJS CORS.
 - [Tuesday]-[20/10/2026]-[12:39]-[Dylan Gamero] : Transfer OAuth hash tokens from root domain to app subdomain login, provision session in app origin local storage, and sanitize marketing CTA links with getAppUrl.
 - [Tuesday]-[20/10/2026]-[12:42]-[Dylan Gamero] : Remove guest login button (entrar sin cuenta) and associated store handlers from LoginForm.
+- [Tuesday]-[20/10/2026]-[12:26]-[Dylan Gamero] : Fix React SSR hydration mismatch by mounting WeatherLayer particles post-hydration, preserving identical DOM wrapper trees, and replacing JavaScript early-returns with CSS motion-reduce across ambient landing background components.
+

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useReducedMotion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { isLowEndDevice, saveDataMode } from '@/lib/pixi/engine';
@@ -29,9 +29,15 @@ export const WeatherLayer: React.FC<{ type: WeatherType; count?: number; classNa
   className,
 }) => {
   const reduceMotion = useReducedMotion();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const particles = useMemo<Particle[]>(() => {
-    if (typeof window !== 'undefined' && (isLowEndDevice() || saveDataMode())) return [];
+    if (!mounted) return [];
+    if (isLowEndDevice() || saveDataMode() || reduceMotion) return [];
     const safeCount = Math.min(8, count);
     return Array.from({ length: safeCount }).map((_, i) => ({
       id: i,
@@ -41,16 +47,17 @@ export const WeatherLayer: React.FC<{ type: WeatherType; count?: number; classNa
       delay: `${(i * 0.7).toFixed(1)}s`,
       duration: `${5 + (i % 4)}s`,
     }));
-  }, [count]);
-
-  if (reduceMotion || particles.length === 0) return null;
+  }, [count, mounted, reduceMotion]);
 
   const preset = PRESETS[type];
 
   return (
     <div
       aria-hidden="true"
-      className={cn('pointer-events-none absolute inset-0 overflow-hidden select-none contain-strict', className)}
+      className={cn(
+        'pointer-events-none absolute inset-0 overflow-hidden select-none contain-strict motion-reduce:hidden',
+        className
+      )}
     >
       {particles.map((p) => (
         <span

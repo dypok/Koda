@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { KodaMascot } from '@/components/brand/KodaMascot';
 
 const CAPTIONS: { caption: string; ids: string[] }[] = [
@@ -13,7 +13,6 @@ const CAPTIONS: { caption: string; ids: string[] }[] = [
 
 /** Koda guía fija (solo desktop): narra el viaje según la sección visible. */
 export const KodaGuide: React.FC = () => {
-  const reduceMotion = useReducedMotion();
   const [caption, setCaption] = useState(CAPTIONS[0].caption);
   const [visible, setVisible] = useState(false);
 
@@ -47,8 +46,6 @@ export const KodaGuide: React.FC = () => {
     return () => observer.disconnect();
   }, []);
 
-  if (reduceMotion) return null;
-
   return (
     <AnimatePresence>
       {visible && (
@@ -58,7 +55,7 @@ export const KodaGuide: React.FC = () => {
           exit={{ opacity: 0, x: 24, scale: 0.9 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
           aria-hidden="true"
-          className="pointer-events-none fixed right-5 bottom-24 z-30 hidden xl:flex flex-col items-center gap-1.5 select-none"
+          className="pointer-events-none fixed right-5 bottom-24 z-30 hidden xl:flex flex-col items-center gap-1.5 select-none motion-reduce:!hidden"
         >
           <span className="rounded-[6px] border border-amber-400/40 border-l-2 border-l-amber-400 bg-slate-950/90 backdrop-blur px-3 py-1.5 font-mono text-[11px] font-bold uppercase tracking-widest text-amber-200 whitespace-nowrap">
             {caption}
