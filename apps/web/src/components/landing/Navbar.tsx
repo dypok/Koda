@@ -80,13 +80,23 @@ export const Navbar: React.FC = () => {
               Ir a mi Roadmap
             </WipeButton>
           ) : (
-            <WipeButton
-              href={getAppUrl('/register')}
-              size="sm"
-              className="hidden sm:inline-flex px-4 font-bold"
-            >
-              Comenzar gratis
-            </WipeButton>
+            <div className="hidden sm:flex items-center gap-2">
+              <WipeButton
+                href={getAppUrl('/login')}
+                tone="ghost"
+                size="sm"
+                className="px-3 font-semibold text-slate-300 hover:text-white"
+              >
+                Iniciar sesión
+              </WipeButton>
+              <WipeButton
+                href={getAppUrl('/register')}
+                size="sm"
+                className="px-4 font-bold"
+              >
+                Comenzar gratis
+              </WipeButton>
+            </div>
           )}
           <LanguageSelector />
         </div>
