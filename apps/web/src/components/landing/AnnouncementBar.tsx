@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { X, Sparkle } from '@phosphor-icons/react';
+import { getAppUrl } from '@/lib/domain';
 
 const STORAGE_KEY = 'koda-announce-dismissed';
 
@@ -33,7 +34,7 @@ export const AnnouncementBar: React.FC = () => {
       <Sparkle aria-hidden="true" className="h-4 w-4 shrink-0" />
       <p>
         Módulo 02 · Variables y Tipos ya disponible.{' '}
-        <Link href="/register" className="underline underline-offset-2 hover:opacity-80">
+        <Link href={getAppUrl('/register')} className="underline underline-offset-2 hover:opacity-80">
           Empezar gratis
         </Link>
       </p>

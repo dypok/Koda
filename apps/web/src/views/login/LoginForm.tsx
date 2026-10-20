@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Envelope, Lock, Eye, EyeSlash, CircleNotch, ArrowRight, CheckCircle, UserCircle } from '@phosphor-icons/react';
+import { Envelope, Lock, Eye, EyeSlash, CircleNotch, ArrowRight, CheckCircle } from '@phosphor-icons/react';
 import { WipeButton } from '@/components/ui/wipe-button';
 import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
 import { useAuthStore } from '@/stores/auth.store';
@@ -13,12 +13,16 @@ import { LoginSocialButtons } from './LoginSocialButtons';
 export const LoginForm: React.FC = () => {
   const router = useRouter();
   const setUserSession = useAuthStore((s) => s.setUserSession);
-  const loginAsGuest = useAuthStore((s) => s.loginAsGuest);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.location.hash.includes('access_token=');
+    }
+    return false;
+  });
   const [isResetting, setIsResetting] = useState(false);
   const [error, setError] = useState('');
   const [resetSent, setResetSent] = useState(false);
@@ -34,12 +38,44 @@ export const LoginForm: React.FC = () => {
     const params = new URLSearchParams(hash);
     const accessToken = params.get('access_token');
     const refreshToken = params.get('refresh_token');
+    const errorDescription = params.get('error_description') || params.get('error');
+
+    if (errorDescription) {
+      setError(decodeURIComponent(errorDescription.replace(/\+/g, ' ')));
+      window.history.replaceState(null, '', window.location.pathname);
+      setIsSubmitting(false);
+      return;
+    }
 
     if (accessToken) {
       setIsSubmitting(true);
       setError('');
-      AuthService.verifySession(accessToken)
-        .then((session) => {
+
+      const syncOAuth = async () => {
+        try {
+          const pendingRaw = localStorage.getItem('koda_pending_onboarding');
+          if (pendingRaw) {
+            try {
+              const pending = JSON.parse(pendingRaw);
+              if (pending) {
+                await AuthService.completeOnboarding(
+                  {
+                    initialLanguageSlug: pending.initialLanguageSlug || 'python',
+                    experienceLevel: pending.experienceLevel || 'beginner',
+                    learningStyle: pending.learningStyle || 'hands-on',
+                    dailyGoalId: pending.dailyGoalId || 'regular',
+                    dailyGoalMinutes: Number(pending.dailyGoalMinutes) || 10,
+                  },
+                  accessToken
+                );
+                localStorage.removeItem('koda_pending_onboarding');
+              }
+            } catch {
+              // Si falla el onboarding previo, continuar con la verificacion de sesion
+            }
+          }
+
+          const session = await AuthService.verifySession(accessToken);
           setUserSession(session, accessToken, refreshToken || undefined);
           // Limpiar hash de la barra de direcciones
           window.history.replaceState(null, '', window.location.pathname);
@@ -49,11 +85,13 @@ export const LoginForm: React.FC = () => {
           } else {
             router.replace('/');
           }
-        })
-        .catch((err: any) => {
+        } catch (err: any) {
           setError(err.message || 'No fue posible validar la sesión del proveedor externo.');
           setIsSubmitting(false);
-        });
+        }
+      };
+
+      void syncOAuth();
     }
   }, [router, setUserSession]);
 
@@ -90,12 +128,6 @@ export const LoginForm: React.FC = () => {
       setError(err.message || 'Error al conectar con proveedor social.');
       setIsSubmitting(false);
     }
-  };
-
-  const handleGuest = () => {
-    setError('');
-    loginAsGuest();
-    router.replace('/');
   };
 
   const handleForgotPassword = async () => {
@@ -217,18 +249,6 @@ export const LoginForm: React.FC = () => {
         <Link href="/register" className="text-amber-400 font-bold hover:underline">
           Regístrate gratis
         </Link>
-      </div>
-
-      <div className="flex justify-end pt-1">
-        <button
-          type="button"
-          onClick={handleGuest}
-          disabled={isSubmitting}
-          className="group inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-400 hover:text-amber-300 transition-colors disabled:opacity-50 cursor-pointer"
-        >
-          <UserCircle className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
-          <span>Entrar sin cuenta</span>
-        </button>
       </div>
     </div>
   );

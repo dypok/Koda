@@ -1,3 +1,5 @@
+import { getAppUrl } from '@/lib/domain';
+
 export interface RegisterOtpPayload {
   fullName: string;
   email: string;
@@ -156,8 +158,7 @@ export class AuthService {
    * Obtiene la URL de redirección para autenticación OAuth (Google / GitHub).
    */
   public static getOAuthRedirectUrl(provider: 'google' | 'github', redirectTo?: string): string {
-    const redirectOrigin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:3000';
-    const target = redirectTo || `${redirectOrigin}/login`;
+    const target = redirectTo || getAppUrl('/login');
     return `${SUPABASE_URL}/auth/v1/authorize?provider=${provider}&redirect_to=${encodeURIComponent(target)}`;
   }
 

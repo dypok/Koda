@@ -21,11 +21,17 @@ import { useRegisterStepperController } from '@/controllers/register/useRegister
 import { useRegisterProfileController } from '@/controllers/register/useRegisterProfileController';
 import { AuthService } from '@/services/auth/auth.service';
 import { useAuthStore } from '@/stores/auth.store';
+import { getAppUrl } from '@/lib/domain';
 
 export default function RegisterPage() {
   const router = useRouter();
   const { user, token, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
-  const [isOAuthProcessing, setIsOAuthProcessing] = useState(false);
+  const [isOAuthProcessing, setIsOAuthProcessing] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.location.hash.includes('access_token=');
+    }
+    return false;
+  });
   const [isCompletingAndRedirecting, setIsCompletingAndRedirecting] = useState(false);
   const [isDiagnosticModalOpen, setIsDiagnosticModalOpen] = useState(false);
   const [diagnosticResult, setDiagnosticResult] = useState<DiagnosticResultResponse | null>(null);
@@ -124,7 +130,7 @@ export default function RegisterPage() {
   const handleSocial = (provider: 'google' | 'github') => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('koda_pending_onboarding', JSON.stringify(onboardingData));
-      window.location.href = AuthService.getOAuthRedirectUrl(provider, `${window.location.origin}/register`);
+      window.location.href = AuthService.getOAuthRedirectUrl(provider, getAppUrl('/register'));
     }
   };
 

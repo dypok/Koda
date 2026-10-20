@@ -22,7 +22,12 @@ export default function AppPage() {
     if (!hasHydrated) return;
 
     if (!isAuthenticated) {
-      router.replace('/login');
+      const hash = typeof window !== 'undefined' ? window.location.hash : '';
+      if (hash && (hash.includes('access_token=') || hash.includes('error='))) {
+        router.replace(`/login${hash}`);
+      } else {
+        router.replace('/login');
+      }
     } else if (user && user.onboardingCompleted === false) {
       router.replace('/register');
     }

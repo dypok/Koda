@@ -6,6 +6,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { SealCheck, QrCode, ShieldCheck } from '@phosphor-icons/react';
 import { Highlight } from '@/components/ui/highlight';
 import { WeatherLayer } from '@/components/landing/WeatherLayer';
+import { getAppUrl } from '@/lib/domain';
 
 export const CertificateSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -90,7 +91,7 @@ export const CertificateSection: React.FC = () => {
                 <p className="font-mono text-sm font-bold text-amber-300 pt-2">KODA-PY-000001</p>
               </div>
               <Link
-                href="/register"
+                href={getAppUrl('/register')}
                 className="flex min-h-[48px] items-center justify-center rounded-xl bg-emerald-400 px-4 text-sm font-bold text-slate-950 transition-all hover:bg-emerald-300"
               >
                 Quiero el mío
