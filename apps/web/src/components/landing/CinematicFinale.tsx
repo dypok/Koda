@@ -21,23 +21,16 @@ export const CinematicFinale: React.FC = () => {
     if (prefersReducedMotion()) return;
     const { gsap, ScrollTrigger } = getGsap();
     const ctx = gsap.context(() => {
-      // Una sola timeline y un solo ScrollTrigger: antes dos tweens con scrub
-      // peleaban por el mismo `scale` en rangos solapados y el anillo saltaba.
       const tl = gsap.timeline({
         defaults: { ease: 'none' },
-        scrollTrigger: { trigger: sectionRef.current, start: 'top 80%', end: 'bottom 25%', scrub: 0.6 },
+        scrollTrigger: { trigger: sectionRef.current, start: 'top 80%', end: 'bottom bottom', scrub: 0.6 },
       });
       tl.fromTo(
         ringRef.current,
-        { scale: 0.55, opacity: 0.25, transformOrigin: '50% 50%' },
-        { scale: 1, opacity: 1, duration: 1 }
+        { scale: 0.65, opacity: 0.3, transformOrigin: '50% 50%' },
+        { scale: 1.08, opacity: 1, duration: 1 }
       );
-      // Salida: el eclipse crece tapando todo y el contenido se funde; el footer emerge del brillo.
-      tl.to(ringRef.current, { scale: 3.2, duration: 1.2 }, '>10%');
-      tl.to(contentRef.current, { opacity: 0.15, y: -60, duration: 1.2 }, '<');
     }, sectionRef);
-    // Las imágenes y fuentes mueven el layout tras medir los triggers:
-    // recalcula al terminar la carga para que el anillo siga al scroll.
     const refresh = () => ScrollTrigger.refresh();
     if (document.readyState === 'complete') refresh();
     else window.addEventListener('load', refresh);
@@ -49,29 +42,36 @@ export const CinematicFinale: React.FC = () => {
 
   return (
     <section ref={sectionRef} id="finale" aria-labelledby="finale-title" className="relative overflow-hidden bg-black py-28 md:py-40 border-t border-slate-900 scroll-mt-20">
-      <div aria-hidden="true" data-glow="8" className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[720px] h-[420px] bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.10)_0%,transparent_70%)] pointer-events-none" />
-      <div aria-hidden="true" className="absolute left-1/2 top-24 -ml-[7.5rem] pointer-events-none">
-        <div ref={ringRef} className="st-eclipse-ring relative h-60 w-60 rounded-full bg-black border border-amber-400/70 shadow-[0_0_80px_10px_rgba(245,158,11,0.25)] will-change-transform" />
-      </div>
+      <div
+        aria-hidden="true"
+        data-glow="8"
+        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[360px] sm:w-[720px] h-[320px] sm:h-[420px] bg-[radial-gradient(ellipse_at_center,rgba(245,158,11,0.12)_0%,transparent_70%)] pointer-events-none"
+      />
       <div ref={contentRef} className="mx-auto max-w-4xl px-4 sm:px-6 text-center space-y-8 relative z-10 will-change-transform">
         <motion.div
           initial={reduceMotion ? false : { opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="flex justify-center"
+          className="relative mx-auto flex h-56 w-56 sm:h-64 sm:w-64 items-center justify-center"
         >
+          <div
+            ref={ringRef}
+            aria-hidden="true"
+            className="st-eclipse-ring pointer-events-none absolute inset-0 m-auto h-52 w-52 sm:h-60 sm:w-60 rounded-full bg-black border border-amber-400/70 shadow-[0_0_80px_10px_rgba(245,158,11,0.25)] will-change-transform"
+          />
           <KodaMascot
             state="streak_active"
-            size={168}
-            animate="float"
+            size={156}
+            animate="none"
             glow
+            className="relative z-10 h-36 w-36 sm:h-44 sm:w-44"
           />
         </motion.div>
 
         <h2
           id="finale-title"
-          className="font-display text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.08]"
+          className="font-display text-3xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.08]"
         >
           <SplitText text="Tu racha empieza hoy." mode="words" stagger={0.06} />
         </h2>

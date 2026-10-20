@@ -6,7 +6,7 @@ import { RoadmapService } from '@/services/roadmap/roadmap.service';
 
 const PROGRESS_KEY = 'koda_roadmap_progress';
 
-const INITIAL_COURSES_DATASET: GraphDataset = {
+const INITIAL_COURSES_DATASET: GraphDataset = CAREER_BRANCHES[0]?.dataset ?? {
   sectorTitle: 'PYTHON SPECIALIST: DE FUNDAMENTOS A AGENTES AUTÓNOMOS',
   progressPercent: 0,
   nodes: [],

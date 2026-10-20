@@ -2,14 +2,22 @@
 
 import { useLayoutEffect } from 'react';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
+import { isLowEndDevice } from '@/lib/pixi/engine';
 
 /**
  * Da vida a los glows decorativos: cada `[data-glow]` se mueve
  * a su propio ritmo con scrub mientras el contenido va al 100%.
+ * En dispositivos táctiles o de bajos recursos se mantienen estáticos para ahorrar fill-rate.
  */
 export const GlowParallax: React.FC = () => {
   useLayoutEffect(() => {
-    if (prefersReducedMotion()) return;
+    if (
+      prefersReducedMotion() ||
+      isLowEndDevice() ||
+      window.matchMedia('(pointer: coarse)').matches
+    ) {
+      return;
+    }
     const { gsap } = getGsap();
     const ctx = gsap.context(() => {
       gsap.utils.toArray<HTMLElement>('[data-glow]').forEach((el) => {

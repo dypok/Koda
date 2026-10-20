@@ -58,11 +58,14 @@ export function useHeroStrings(): HeroStrings {
     const onStorage = (e: StorageEvent) => {
       if (e.key === STORAGE_KEY) setLang(readLang());
     };
+    const onLangChange = () => setLang(readLang());
     const onFocus = () => setLang(readLang());
     window.addEventListener('storage', onStorage);
+    window.addEventListener('koda-lang-change', onLangChange);
     window.addEventListener('focus', onFocus);
     return () => {
       window.removeEventListener('storage', onStorage);
+      window.removeEventListener('koda-lang-change', onLangChange);
       window.removeEventListener('focus', onFocus);
     };
   }, []);

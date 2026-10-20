@@ -21,39 +21,71 @@ function Row({ hidden }: { hidden?: boolean }) {
   );
 }
 
-/** Banda tipográfica gigante que acelera con la velocidad del scroll. */
+/** Banda tipográfica gigante que acelera con la velocidad del scroll. Pausa su rAF fuera de pantalla. */
 export const GiantMarquee: React.FC = () => {
   const reduceMotion = useReducedMotion();
+  const wrapRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const xRef = useRef(0);
   const skewRef = useRef(0);
 
   useEffect(() => {
-    if (reduceMotion || !trackRef.current) return;
+    const wrap = wrapRef.current;
+    const track = trackRef.current;
+    if (reduceMotion || !wrap || !track) return;
     let raf = 0;
+    let visible = true;
     let last = performance.now();
+    let half = track.scrollWidth / 2;
+
+    const ro = new ResizeObserver(() => {
+      if (trackRef.current) half = trackRef.current.scrollWidth / 2;
+    });
+    ro.observe(track);
+
     const loop = (now: number) => {
+      if (!visible) return;
       const dt = Math.min(0.05, (now - last) / 1000);
       last = now;
-      const velocity = Math.abs(getLenisInstance()?.velocity ?? 0);
+      const vel = getLenisInstance()?.velocity ?? 0;
+      const velocity = Math.abs(vel);
       const boost = Math.min(6, velocity * 0.35);
       xRef.current -= (30 + boost * 60) * dt;
-      const half = (trackRef.current?.scrollWidth ?? 0) / 2;
       if (half > 0 && -xRef.current >= half) xRef.current += half;
-      // Inclina el texto con la velocidad (suavizado) para dinamismo.
-      const targetSkew = Math.max(-6, Math.min(6, (getLenisInstance()?.velocity ?? 0) * 0.25));
+      const targetSkew = Math.max(-6, Math.min(6, vel * 0.25));
       skewRef.current += (targetSkew - skewRef.current) * 0.08;
       if (trackRef.current) {
         trackRef.current.style.transform = `translate3d(${xRef.current}px, 0, 0) skewX(${skewRef.current}deg)`;
       }
       raf = requestAnimationFrame(loop);
     };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        const isNowVisible = entry?.isIntersecting ?? false;
+        if (isNowVisible && !visible) {
+          visible = true;
+          last = performance.now();
+          raf = requestAnimationFrame(loop);
+        } else if (!isNowVisible) {
+          visible = false;
+          cancelAnimationFrame(raf);
+        }
+      },
+      { threshold: 0 }
+    );
+    io.observe(wrap);
     raf = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(raf);
+
+    return () => {
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      ro.disconnect();
+    };
   }, [reduceMotion]);
 
   return (
-    <div aria-label="Aprende, practica, domina" className="relative overflow-hidden border-y border-slate-900/80 bg-slate-950 py-6 sm:py-8 select-none">
+    <div ref={wrapRef} aria-label="Aprende, practica, domina" className="relative overflow-hidden border-y border-slate-900/80 bg-slate-950 py-6 sm:py-8 select-none contain-paint">
       <div ref={trackRef} className="flex w-max will-change-transform">
         <Row />
         <Row hidden />

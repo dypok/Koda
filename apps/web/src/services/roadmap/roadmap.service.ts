@@ -1,5 +1,6 @@
 import { GraphDataset } from '@/models/roadmap/roadmap-graph.types';
 import { PYTHON_BASIC_LESSONS_DATASET, getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
+import { CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 import { useAuthStore } from '@/stores/auth.store';
 
 const RAW_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000/api/v1';
@@ -69,14 +70,15 @@ function sanitizeGraphDataset(dataset: GraphDataset): GraphDataset {
 
 export class RoadmapService {
   public static async getCoursesGraph(langSlug: string): Promise<GraphDataset> {
+    const fallbackBranch = CAREER_BRANCHES.find((b) => b.id === langSlug) ?? CAREER_BRANCHES[0];
     try {
       const data = await fetchWithFallback<{ dataset?: GraphDataset }>(`/roadmap/${langSlug}/courses`);
       if (data?.dataset && Array.isArray(data.dataset.nodes) && data.dataset.nodes.length > 0) {
         return sanitizeGraphDataset(data.dataset);
       }
-      return { sectorTitle: `${langSlug.toUpperCase()} ROADMAP`, progressPercent: 0, nodes: [], connections: [] };
+      return sanitizeGraphDataset(fallbackBranch.dataset);
     } catch {
-      return { sectorTitle: `${langSlug.toUpperCase()} ROADMAP`, progressPercent: 0, nodes: [], connections: [] };
+      return sanitizeGraphDataset(fallbackBranch.dataset);
     }
   }
 

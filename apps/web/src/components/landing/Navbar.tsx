@@ -40,16 +40,16 @@ export const Navbar: React.FC = () => {
         {/* Center: Desktop nav */}
         <nav aria-label="Principal" className="hidden md:flex items-center gap-1 text-sm font-medium text-slate-300">
           <Link
-            href="#metodologia"
-            className="rounded-lg px-3 py-2 transition-colors hover:text-white hover:bg-slate-800/60"
-          >
-            Metodología
-          </Link>
-          <Link
             href="#vista-previa"
             className="rounded-lg px-3 py-2 transition-colors hover:text-white hover:bg-slate-800/60"
           >
             Vista previa
+          </Link>
+          <Link
+            href="#metodologia"
+            className="rounded-lg px-3 py-2 transition-colors hover:text-white hover:bg-slate-800/60"
+          >
+            Metodología
           </Link>
           <Link
             href="#testimonios"
