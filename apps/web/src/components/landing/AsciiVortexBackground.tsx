@@ -260,10 +260,12 @@ export const AsciiVortexBackground: React.FC<{ className?: string; density?: num
     else app.ticker.stop();
   }, [visible]);
 
-  if (reduceMotion) return null;
-
   return (
-    <div ref={mountRef} aria-hidden="true" className={cn('pointer-events-none absolute inset-0 overflow-hidden', className)}>
+    <div
+      ref={mountRef}
+      aria-hidden="true"
+      className={cn('pointer-events-none absolute inset-0 overflow-hidden motion-reduce:hidden', className)}
+    >
       <div
         aria-hidden="true"
         className="absolute left-1/2 top-[46%] h-[min(460px,60%)] w-[min(680px,85%)] -translate-x-1/2 -translate-y-1/2 rounded-full"
