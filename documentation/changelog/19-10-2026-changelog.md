@@ -12,3 +12,4 @@
 - [Monday]-[19/10/2026]-[21:08]-[Dylan Gamero] : Calibrate official vector avatars in profile selector, purge deprecated mock avatars, and fix guest avatar update persistence.
 - [Monday]-[19/10/2026]-[22:25]-[Dylan Gamero] : Visual rendering and reactive synchronization of course and lesson stars in PixiJS canvas, detail drawer, and roadmap store.
 - [Monday]-[19/10/2026]-[22:54]-[Dylan Gamero] : Eradicate legacy phantom course python-core ("Fundamentos de Programación con Python 3.12") across MongoDB, curriculum seeds, use cases, frontend store and graph sanitization.
+- [Monday]-[19/10/2026]-[23:02]-[Dylan Gamero] : Ergonomic keyboard navigation: enable Enter key shortcut on section completion and evaluation review screens to immediately return to roadmap.

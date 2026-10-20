@@ -57,6 +57,20 @@ export default function AttemptReviewScreen(props: AttemptReviewScreenProps) {
     loadSummary();
   }, [resolvedAttemptId]);
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const activeTag = document.activeElement?.tagName?.toLowerCase();
+      if (activeTag === 'input' || activeTag === 'textarea') return;
+
+      if (e.key === 'Enter' || e.code === 'Enter' || e.code === 'NumpadEnter') {
+        e.preventDefault();
+        router.push('/');
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [router]);
+
   const handleIssueCertificate = async () => {
     setIsIssuingCert(true);
     try {
@@ -254,6 +268,7 @@ export default function AttemptReviewScreen(props: AttemptReviewScreenProps) {
           onClick={() => router.push('/')}
         >
           <span>{passed ? 'Continuar al siguiente módulo' : 'Repasar conceptos clave'}</span>
+          <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] rounded bg-slate-800 border border-slate-700 text-slate-300 font-mono">↵ Enter</kbd>
           <ArrowRight className="w-4 h-4" />
         </button>
       </div>

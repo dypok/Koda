@@ -2,6 +2,7 @@
 
 import React, { useEffect, useMemo, useState, useCallback, useRef } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   ArrowRight,
@@ -307,6 +308,31 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   const [quizScore, setQuizScore] = useState<{ ok: number; total: number } | null>(null);
   const [failedExercises, setFailedExercises] = useState<ContentExercise[]>([]);
   const completeSectionNode = useRoadmapStore((s) => s.completeSectionNode);
+  const router = useRouter();
+
+  // Atajo ergonómico de teclado para la pantalla de sección completada (Enter -> volver a la ruta)
+  useEffect(() => {
+    if (mode !== 'done') return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const activeTag = document.activeElement?.tagName?.toLowerCase();
+      if (activeTag === 'input' || activeTag === 'textarea') return;
+
+      if (e.key === 'Enter' || e.code === 'Enter' || e.code === 'NumpadEnter') {
+        e.preventDefault();
+        const passed = quizScore ? quizScore.ok / Math.max(1, quizScore.total) >= 0.7 : true;
+        if (passed) {
+          router.push('/');
+        } else {
+          setQuizScore(null);
+          setMode('quiz');
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mode, quizScore, router]);
 
   const lessonsDataset = useRoadmapStore((s) => s.lessonsDataset);
   const courseDataset = useMemo(() => getLessonsDatasetForCourse(courseId), [courseId]);
@@ -637,13 +663,17 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             >
               <ArrowCounterClockwise aria-hidden="true" className="w-4 h-4" />
               <span>REINTENTAR QUIZ</span>
+              <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] rounded bg-orange-600/70 border border-orange-400 text-slate-950 font-bold">↵ Enter</kbd>
             </button>
           ) : null}
           <Link
             href="/"
-            className="inline-flex min-h-[48px] items-center justify-center rounded-xl border border-slate-700 bg-slate-900/80 px-6 font-mono text-xs font-bold text-slate-200 hover:border-orange-500/50 hover:bg-slate-800 transition-colors shadow-lg"
+            className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-slate-700 bg-slate-900/80 px-6 font-mono text-xs font-bold text-slate-200 hover:border-orange-500/50 hover:bg-slate-800 transition-colors shadow-lg"
           >
-            Volver a la ruta
+            <span>Volver a la ruta</span>
+            {passed && (
+              <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] rounded bg-slate-800 border border-slate-700 text-slate-400 font-mono">↵ Enter</kbd>
+            )}
           </Link>
         </div>
       </div>
