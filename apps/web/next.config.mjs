@@ -2,14 +2,21 @@
 const nextConfig = {
   transpilePackages: ['@koda/types'],
   reactStrictMode: true,
+  experimental: {
+    optimizePackageImports: ['@phosphor-icons/react', 'framer-motion'],
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
   },
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/((?!api|_next/static|_next/image|favicon.ico|icon.svg|icon.png).*)',
         headers: [
+          {
+            key: 'Cache-Control',
+            value: 'private, no-cache, no-store, max-age=0, must-revalidate',
+          },
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
