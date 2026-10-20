@@ -71,6 +71,12 @@ El usuario reportó dos inconsistencias críticas en el cálculo y visualizació
 ### D. Adaptabilidad en Vistas y Drawer (`RoadmapFusionView.tsx`)
 - Se reemplazó el fallback estático `?? 30` en el Drawer por el valor dinámico `activeNode.maxStars ?? (inLessons ? 3 : 24)`.
 
+### E. Aislamiento Estricto de Mini-Bosses y Bosses por Rama (Corrección Reto Wrangling)
+- **Causa Raíz:** En `section-alias.helper.ts`, la condición para mini-bosses tenía un `else` por defecto que asumía que cualquier nodo con `miniboss` pertenecía a Python 1 (`py-boss-logic`). Al tener completado `py-boss-logic`, nodos como `da-miniboss` (**Reto Wrangling** de Data Analytics) e `ia-miniboss` heredaban indebidamente las 3 estrellas de Python 1 y aparecían como completados.
+- **Solución:**
+  - Se particionó explícitamente cada mini-boss por prefijo y slug (`da-miniboss` / `reto-wrangling`, `ia-miniboss` / `tool-caller-master`, `py2-miniboss`, `py3-miniboss`, `py-boss-logic`), eliminando cualquier fallback por defecto a Python 1.
+  - Se actualizó `sanitizeStoredStarsCache()` y `getStoredCompletedLessons()` para purgar automáticamente cualquier registro huérfano de ramas avanzadas si no existe avance inicial en esa especialidad.
+
 ---
 
 ## 4. Verificación y Resultados
@@ -79,8 +85,10 @@ El usuario reportó dos inconsistencias críticas en el cálculo y visualizació
    - Verificado mediante suite de pruebas automatizadas:
      - 8 secciones completadas de Python 1 $\rightarrow$ Python 2 reporta exactamente **0 estrellas** (cero colisiones).
      - Al completar `py2-miniboss` (3⭐) y `py2-boss` (3⭐), Python 2 reporta exactamente **6/32 estrellas**.
-     - La purga de cache elimina de inmediato claves residuales desnudas sin afectar claves legítimas.
+     - `da-miniboss` (**Reto Wrangling**) y `ia-miniboss` reportan **0 estrellas** y estado **no completado**.
+     - La purga de cache elimina de inmediato claves residuales desnudas o bosses huérfanos sin afectar claves legítimas.
 2. **TypeScript Typecheck:**
    - `pnpm --filter web exec tsc --noEmit` completado exitosamente con **0 errores**.
 3. **Compilación de Producción:**
    - `pnpm --filter web build` exitoso en Turbopack (15/15 rutas generadas correctamente).
+

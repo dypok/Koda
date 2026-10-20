@@ -166,17 +166,33 @@ export function getSectionAliases(id: string): string[] {
     }
   }
 
-  // Mini-boss estrictamente particionado por curso
+  // Mini-boss estrictamente particionado por curso / track
   if (isMiniboss) {
-    if (normalized.includes('2') || normalized.includes('centinela')) {
+    if (normalized.includes('da') || normalized.includes('wrangling')) {
+      aliases.add('da-miniboss');
+      aliases.add('da-mb');
+      aliases.add('reto-wrangling');
+    } else if (normalized.includes('ia') || normalized.includes('tool-caller') || normalized.includes('agente')) {
+      aliases.add('ia-miniboss');
+      aliases.add('ia-mb');
+      aliases.add('tool-caller-master');
+    } else if (normalized.includes('py2') || normalized.includes('centinela')) {
       aliases.add('py2-miniboss');
       aliases.add('py2-mb');
       aliases.add('centinela-modular');
-    } else if (normalized.includes('3') || normalized.includes('patron')) {
+    } else if (normalized.includes('py3') || normalized.includes('patron')) {
       aliases.add('py3-miniboss');
       aliases.add('py3-mb');
       aliases.add('guardian-del-patron');
-    } else {
+    } else if (
+      normalized.includes('boss-logic') ||
+      normalized.includes('guardi') ||
+      normalized.includes('py-miniboss') ||
+      normalized.includes('py1') ||
+      normalized.startsWith('py-') ||
+      normalized === 'mb' ||
+      normalized === 'les-miniboss'
+    ) {
       aliases.add('py-boss-logic');
       aliases.add('py1-miniboss');
       aliases.add('les-miniboss');
@@ -185,7 +201,7 @@ export function getSectionAliases(id: string): string[] {
     }
   }
 
-  // Apex / Boss final (sólo si no es un mini-boss)
+  // Apex / Boss final estrictamente particionado por curso / track (sólo si no es un mini-boss)
   const isFinalBoss =
     !isMiniboss &&
     (normalized.includes('apex') ||
@@ -195,15 +211,45 @@ export function getSectionAliases(id: string): string[] {
       normalized.includes('master-gate'));
 
   if (isFinalBoss) {
-    if (normalized.includes('2') || normalized.includes('intermedio')) {
+    if (normalized.includes('da') || normalized.includes('analytics') || normalized.includes('streamlit')) {
+      aliases.add('da-boss');
+      aliases.add('da-10');
+      aliases.add('streamlit-dashboards');
+    } else if (normalized.includes('ia') || normalized.includes('agente')) {
+      aliases.add('ia-boss');
+      aliases.add('ia-10');
+      aliases.add('ia-proyecto-agente-completo');
+    } else if (normalized.includes('fa') || normalized.includes('fastapi')) {
+      aliases.add('fa-boss');
+      aliases.add('fa-05');
+      aliases.add('fa-m05');
+      aliases.add('fastapi-docker-deploy');
+    } else if (normalized.includes('dj') || normalized.includes('django')) {
+      aliases.add('dj-boss');
+      aliases.add('dj-05');
+      aliases.add('dj-m05');
+      aliases.add('django-auth-security-deploy');
+    } else if (normalized.includes('py2') || normalized.includes('intermedio') || normalized.includes('pytest')) {
       aliases.add('py2-boss');
       aliases.add('py2-apex');
       aliases.add('py2-apex-gate');
-    } else if (normalized.includes('3') || normalized.includes('avanzado')) {
+      aliases.add('testing-con-pytest');
+    } else if (normalized.includes('py3') || normalized.includes('avanzado') || normalized.includes('patrones')) {
       aliases.add('py3-boss');
       aliases.add('py3-apex');
       aliases.add('py3-apex-gate');
-    } else {
+      aliases.add('patrones-de-diseno');
+    } else if (
+      normalized.includes('apex-1') ||
+      normalized.includes('fundamentales') ||
+      normalized.includes('py1') ||
+      normalized === 'py-apex-1' ||
+      normalized === 'les-boss' ||
+      normalized === 'py-boss' ||
+      normalized === 'py-apex' ||
+      normalized === 'omega' ||
+      normalized === 'ω'
+    ) {
       aliases.add('py-apex-1');
       aliases.add('py1-apex');
       aliases.add('les-boss');
@@ -271,15 +317,41 @@ export function isSectionCompletedInSet(
 /**
  * Sanea el mapa de estrellas almacenadas eliminando cualquier clave desnuda
  * o residual que cause colisiones entre módulos (ej. '01', '02', 'miniboss', 'apex').
+ * También descarta bosses huérfanos de ramas avanzadas si no existe progreso
+ * inicial registrado en esa rama (ej. reto-wrangling o da-miniboss sin da-01).
  */
 export function sanitizeStoredStarsCache(stored: Record<string, number>): Record<string, number> {
   if (!stored || typeof stored !== 'object') return {};
   const clean: Record<string, number> = {};
+
+  const hasDaInitial = Boolean(stored['da-01'] || stored['da-m01'] || stored['da-02']);
+  const hasIaInitial = Boolean(stored['ia-01'] || stored['ia-m01'] || stored['ia-02']);
+  const hasFaInitial = Boolean(stored['fa-01'] || stored['fa-m01']);
+  const hasDjInitial = Boolean(stored['dj-01'] || stored['dj-m01']);
+
   for (const [key, val] of Object.entries(stored)) {
     const k = key.trim().toLowerCase();
+    // 1. Purgar claves numéricas desnudas o genéricas globales
     if (/^\d+$/.test(k) || k === 'miniboss' || k === 'boss' || k === 'apex' || k === 'mb') {
       continue;
     }
+    // 2. Purgar leaks fantasma de Data Analytics (Reto Wrangling, etc.)
+    if (!hasDaInitial && (k.includes('wrangling') || k.startsWith('da-miniboss') || k === 'da-mb' || k.startsWith('da-boss') || k === 'streamlit-dashboards')) {
+      continue;
+    }
+    // 3. Purgar leaks fantasma de AI & Agents (Tool Caller, etc.)
+    if (!hasIaInitial && (k.includes('tool-caller') || k.startsWith('ia-miniboss') || k === 'ia-mb' || k.startsWith('ia-boss') || k.includes('agente-completo'))) {
+      continue;
+    }
+    // 4. Purgar leaks fantasma de FastAPI
+    if (!hasFaInitial && (k === 'fa-boss' || k === 'fastapi-docker-deploy')) {
+      continue;
+    }
+    // 5. Purgar leaks fantasma de Django
+    if (!hasDjInitial && (k === 'dj-boss' || k === 'django-auth-security-deploy')) {
+      continue;
+    }
+
     clean[key] = val;
   }
   return clean;

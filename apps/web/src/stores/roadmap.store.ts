@@ -48,9 +48,29 @@ function getStoredCompletedLessons(): Set<string> {
     const raw = window.localStorage.getItem(COMPLETED_LESSONS_KEY);
     if (!raw) return new Set();
     const arr: string[] = JSON.parse(raw);
+    const hasDaInitial = arr.some((k) => k === 'da-01' || k === 'da-m01' || k === 'da-02');
+    const hasIaInitial = arr.some((k) => k === 'ia-01' || k === 'ia-m01' || k === 'ia-02');
+    const hasFaInitial = arr.some((k) => k === 'fa-01' || k === 'fa-m01');
+    const hasDjInitial = arr.some((k) => k === 'dj-01' || k === 'dj-m01');
+
     const sanitized = arr.filter((k) => {
       const lower = k.trim().toLowerCase();
-      return !/^\d+$/.test(lower) && lower !== 'miniboss' && lower !== 'boss' && lower !== 'apex' && lower !== 'mb';
+      if (/^\d+$/.test(lower) || lower === 'miniboss' || lower === 'boss' || lower === 'apex' || lower === 'mb') {
+        return false;
+      }
+      if (!hasDaInitial && (lower.includes('wrangling') || lower.startsWith('da-miniboss') || lower === 'da-mb' || lower.startsWith('da-boss') || lower === 'streamlit-dashboards')) {
+        return false;
+      }
+      if (!hasIaInitial && (lower.includes('tool-caller') || lower.startsWith('ia-miniboss') || lower === 'ia-mb' || lower.startsWith('ia-boss') || lower.includes('agente-completo'))) {
+        return false;
+      }
+      if (!hasFaInitial && (lower === 'fa-boss' || lower === 'fastapi-docker-deploy')) {
+        return false;
+      }
+      if (!hasDjInitial && (lower === 'dj-boss' || lower === 'django-auth-security-deploy')) {
+        return false;
+      }
+      return true;
     });
     if (sanitized.length !== arr.length) {
       window.localStorage.setItem(COMPLETED_LESSONS_KEY, JSON.stringify(sanitized));
