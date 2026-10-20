@@ -8,3 +8,5 @@
 - [Monday]-[19/10/2026]-[13:32]-[Dylan Gamero] : Fix mascot aspect ratio height overflow and layout spacing in loading screen.
 - [Monday]-[19/10/2026]-[14:22]-[Dylan Gamero] : Eliminate hardcoded courses fallback, implement dynamic DAG course unlocking upon Apex completion, and remove dummy introduction lesson fallback.
 - [Monday]-[19/10/2026]-[21:23]-[Dylan Gamero] : Restore full-width bounded viewport layout, internal scrollbars and comprehensive markdown formatting across lesson workspace and review mode.
+- [Monday]-[19/10/2026]-[20:53]-[Dylan Gamero] : Integration of official Koda mascot with active streak in roadmap bottom-center dock, replacing generic flame icon with dynamic state resolution and amber glow.
+- [Monday]-[19/10/2026]-[21:08]-[Dylan Gamero] : Calibrate official vector avatars in profile selector, purge deprecated mock avatars, and fix guest avatar update persistence.

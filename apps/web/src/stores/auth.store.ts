@@ -237,7 +237,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       id: 'koda-guest',
       email: 'invitado@koda.academy',
       fullName: 'Invitado',
-      avatarUrl: '/brand/koda-mascot-cartoon-2d.svg',
+      avatarUrl: '/avatars/koda-classic.svg',
       totalXp: 0,
       level: 1,
       streak: 0,

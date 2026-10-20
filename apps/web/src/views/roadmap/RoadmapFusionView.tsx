@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { ArrowRight, Flame, Lock, Sidebar, SidebarSimple, Star } from '@phosphor-icons/react';
+import { ArrowRight, Lock, Sidebar, SidebarSimple, Star } from '@phosphor-icons/react';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 import { GraphDataset, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 import { useAuthStore } from '@/stores/auth.store';
@@ -393,19 +394,22 @@ export const RoadmapFusionView: React.FC<RoadmapFusionViewProps> = ({ dataset, o
           aria-label="Ver estado de racha y experiencia"
           className="group flex items-center gap-2 rounded-xl px-2 py-1 -my-1 transition-all hover:bg-slate-800/60 cursor-pointer"
         >
-          <div className="relative flex items-center justify-center">
-            <Flame
-              aria-hidden="true"
-              weight="fill"
+          <div className="relative flex items-center justify-center h-7 w-7 shrink-0">
+            <KodaMascot
+              state={isActiveToday ? 'streak_active' : streak > 0 ? 'idle' : 'streak_lost'}
+              size={28}
+              glow={isActiveToday}
+              animate={isActiveToday ? 'bounce' : 'none'}
               className={cn(
-                'h-4 w-4 transition-transform group-hover:scale-110',
-                isActiveToday
-                  ? 'text-orange-500 drop-shadow-[0_0_8px_rgba(255,106,0,0.85)] animate-pulse'
-                  : 'text-slate-500 group-hover:text-slate-400'
+                'h-7 w-7 object-contain transition-transform group-hover:scale-110',
+                !isActiveToday && 'opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100'
               )}
             />
             {isActiveToday && (
-              <span className="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-emerald-400 ring-1 ring-slate-950" />
+              <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500 ring-1 ring-slate-950" />
+              </span>
             )}
           </div>
           <span className="flex flex-col items-start leading-none">

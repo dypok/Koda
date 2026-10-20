@@ -63,6 +63,7 @@
 - [x] [BD] Tabla `user_streaks` / `streaks` con `current_streak`, `longest_streak`, `freeze_count`, `last_activity_date`.
 - [x] [BACKEND] Cálculo y actualización atómica de racha y freeze en `saveSectionCompletion` con manejo de zona horaria y retorno en DTO.
 - [x] [FRONTEND] Widget y dock de racha interactivo con Popover explicativo del estado del día, protectores y desglose semanal (L-D).
+- [x] [FRONTEND] Mascota oficial Koda con racha activa/encendida (streak_active) y reposo (streak_lost/idle) en dock inferior del roadmap.
 - [ ] [FRONTEND] Modal de rescate de racha si se consumió un Freeze: *"¡Tu protector de racha te ha salvado ayer! Continúa hoy para mantener el fuego encendido 🛡️"*.
 
 **DoD adicional para esta US:**
