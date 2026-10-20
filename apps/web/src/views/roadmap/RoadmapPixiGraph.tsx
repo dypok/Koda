@@ -509,12 +509,10 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
           holder.position.set(n.x, n.y);
           holder.eventMode = 'static';
           holder.cursor = n.isUnlocked ? 'pointer' : 'default';
-          holder.hitArea = new PIXI.Circle(0, 0, 32);
+          holder.hitArea = new PIXI.Circle(0, 10, 48);
 
-          const frac =
-            typeof n.maxStars === 'number' && n.maxStars > 0
-              ? Math.max(0, Math.min(1, (n.stars ?? 0) / n.maxStars))
-              : 0;
+          const nodeMaxStars = typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3;
+          const frac = Math.max(0, Math.min(1, (n.stars ?? 0) / nodeMaxStars));
 
           if (nodeStyle === 'hex') {
             // =========================================================================
@@ -748,6 +746,26 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
           const bottomOffset = nodeStyle === 'hex' ? 40 : R + 14;
           label.position.set(0, bottomOffset);
           holder.addChild(label);
+
+          // Badge visual de estrellas de maestría (cursos y lecciones)
+          if (st !== 'locked' && nodeMaxStars > 0) {
+            const earned = Math.max(0, n.stars ?? 0);
+            const isLesson = nodeMaxStars <= 3;
+            const starText = isLesson
+              ? `${'★'.repeat(Math.min(3, earned))}${'☆'.repeat(Math.max(0, nodeMaxStars - earned))}`
+              : `★ ${earned}/${nodeMaxStars}`;
+
+            const starsBadge = new PIXI.Text(starText, {
+              fontFamily: '"JetBrains Mono", ui-monospace, monospace',
+              fontSize: 9.5,
+              fontWeight: '700',
+              fill: earned > 0 ? '#fbbf24' : '#64748b',
+              letterSpacing: isLesson ? 2 : 0.5,
+            });
+            starsBadge.anchor.set(0.5, 0);
+            starsBadge.position.set(0, bottomOffset + 15);
+            holder.addChild(starsBadge);
+          }
 
           holder.on('pointertap', (e) => {
             const ev = e as unknown as { nativeEvent?: MouseEvent | TouchEvent; client?: { x: number; y: number } };

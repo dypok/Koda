@@ -172,12 +172,16 @@ export class GetRoadmapGraphUseCase {
       throw new NotFoundException(`No hay cursos registrados para '${trackOrLangSlug}'.`);
     }
 
-    // Filtrar por track si se solicita específicamente
-    const filteredCourses = slug === 'python'
-      ? allCourses.filter((c) => c.trackSlug === 'python')
-      : allCourses;
+    // Filtrar por track si se solicita específicamente y purgar cursos obsoletos/fallbacks
+    const activeCourses = allCourses.filter(
+      (c) => c.slug !== 'python-core' && !c.name.toLowerCase().includes('python 3.12'),
+    );
 
-    const displayCourses = filteredCourses.length > 0 ? filteredCourses : allCourses;
+    const filteredCourses = slug === 'python'
+      ? activeCourses.filter((c) => c.trackSlug === 'python')
+      : activeCourses;
+
+    const displayCourses = filteredCourses.length > 0 ? filteredCourses : activeCourses;
 
     // Coordenadas calculadas según topología DAG
     let nodes: GraphNode[] = displayCourses.map((c: CourseEntity) => {
