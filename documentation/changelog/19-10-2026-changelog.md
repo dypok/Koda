@@ -7,3 +7,4 @@
 - [Monday]-[19/10/2026]-[13:25]-[Dylan Gamero] : Integration of official Koda vector mascot with 5 emotional states and 8 normalized user avatars.
 - [Monday]-[19/10/2026]-[13:32]-[Dylan Gamero] : Fix mascot aspect ratio height overflow and layout spacing in loading screen.
 - [Monday]-[19/10/2026]-[14:22]-[Dylan Gamero] : Eliminate hardcoded courses fallback, implement dynamic DAG course unlocking upon Apex completion, and remove dummy introduction lesson fallback.
+- [Monday]-[19/10/2026]-[21:23]-[Dylan Gamero] : Restore full-width bounded viewport layout, internal scrollbars and comprehensive markdown formatting across lesson workspace and review mode.
