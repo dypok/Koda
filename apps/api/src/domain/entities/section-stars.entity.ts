@@ -79,7 +79,10 @@ export class SectionStarsEntity {
    * Registra un nuevo intento de la sección.
    * La marca histórica de estrellas está blindada: nunca disminuye ante reintentos.
    */
-  public recordAttempt(accuracyPercentage: number): {
+  public recordAttempt(
+    accuracyPercentage: number,
+    targetXp?: number,
+  ): {
     attemptStars: number;
     starsEarnedOverall: number;
     isNewBest: boolean;
@@ -109,15 +112,22 @@ export class SectionStarsEntity {
       this._completedAt = new Date();
     }
 
-    // Regla de XP:
-    // +30 XP por aprobar por primera vez (al menos 1 estrella)
-    // +10 XP bono si alcanza la perfección (3 estrellas)
+    // Regla de XP determinista:
+    // Si la seccion es recien aprobada (primera vez), se otorga el bono calibrado (targetXp) o la regla base.
+    // En reintentos de una seccion ya aprobada, se bloquea estrictamente a +0 XP.
     let xpAwarded = 0;
     if (isNewlyPassed) {
-      xpAwarded += 30;
-    }
-    if (attemptStars === 3 && previousStars < 3) {
-      xpAwarded += 10;
+      if (typeof targetXp === 'number' && targetXp > 0) {
+        xpAwarded += targetXp;
+      } else {
+        xpAwarded += 30;
+      }
+      if (attemptStars === 3 && previousStars < 3 && (!targetXp || targetXp <= 30)) {
+        xpAwarded += 10;
+      }
+    } else {
+      // Reintentos o practica de una seccion ya aprobada: 0 XP adicional
+      xpAwarded = 0;
     }
 
     return {

@@ -2,9 +2,9 @@
 
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { X } from '@phosphor-icons/react';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 
 const SESSION_KEY = 'koda-exit-shown';
 
@@ -77,25 +77,32 @@ export const ExitIntentModal: React.FC = () => {
             >
               <X aria-hidden="true" className="h-4 w-4" />
             </button>
-            <Image
-              src="/brand/koda-mascot-cartoon-2d-transparent.png"
-              alt=""
-              width={96}
-              height={96}
-              className="mx-auto object-contain"
+            <KodaMascot
+              state="thinking"
+              size={96}
+              animate="float"
+              className="mx-auto"
             />
             <h3 id="exit-title" className="font-display text-2xl font-bold text-white">
               ¿Te vas sin tu primera lección?
             </h3>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Son 2 minutos, en tu navegador y sin registrarte: prueba la demo de arriba. 🦊
+              Son 2 minutos, en tu navegador y sin registrarte: prueba la demo de arriba.
             </p>
-            <Link
-              href="/register"
+            <a
+              href="#vista-previa"
+              onClick={(e) => {
+                e.preventDefault();
+                setOpen(false);
+                const el = document.getElementById('vista-previa') || document.getElementById('codigo-en-vivo');
+                if (el) {
+                  el.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="flex min-h-[48px] items-center justify-center rounded-xl bg-amber-400 px-4 text-sm font-bold text-slate-950 hover:bg-amber-300"
             >
               Probar la demo gratis
-            </Link>
+            </a>
           </motion.div>
         </div>
       )}

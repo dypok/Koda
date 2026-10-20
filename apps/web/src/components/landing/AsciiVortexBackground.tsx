@@ -7,6 +7,7 @@ import {
   loadPixi,
   dprCap,
   saveDataMode,
+  isLowEndDevice,
   useElementVisible,
   type PixiApp,
   type PixiSprite,
@@ -47,15 +48,15 @@ export const AsciiVortexBackground: React.FC<{ className?: string; density?: num
   const appRef = React.useRef<PixiApp | null>(null);
 
   const targetCount = useMemo(() => {
-    if (density) return Math.max(40, Math.min(480, Math.round(density)));
-    if (typeof window === 'undefined') return 200;
-    if (saveDataMode()) return 80;
-    return window.matchMedia('(max-width: 640px)').matches ? 140 : 260;
+    if (typeof window === 'undefined') return 110;
+    if (isLowEndDevice() || saveDataMode()) return 0;
+    if (density) return Math.max(40, Math.min(180, Math.round(density)));
+    return window.matchMedia('(max-width: 640px)').matches ? 65 : 120;
   }, [density]);
 
   useEffect(() => {
     const mount = mountRef.current;
-    if (!mount || reduceMotion) return;
+    if (!mount || reduceMotion || targetCount <= 0) return;
     let cancelled = false;
     let ro: ResizeObserver | null = null;
 
@@ -79,9 +80,11 @@ export const AsciiVortexBackground: React.FC<{ className?: string; density?: num
         width: W,
         height: H,
         backgroundAlpha: 0,
-        antialias: true,
+        antialias: false,
+        powerPreference: 'low-power',
         resolution: dprCap(),
       });
+      app.ticker.maxFPS = 30;
       if (cancelled) {
         try {
           app.destroy(true);
@@ -257,10 +260,12 @@ export const AsciiVortexBackground: React.FC<{ className?: string; density?: num
     else app.ticker.stop();
   }, [visible]);
 
-  if (reduceMotion) return null;
-
   return (
-    <div ref={mountRef} aria-hidden="true" className={cn('pointer-events-none absolute inset-0 overflow-hidden', className)}>
+    <div
+      ref={mountRef}
+      aria-hidden="true"
+      className={cn('pointer-events-none absolute inset-0 overflow-hidden motion-reduce:hidden', className)}
+    >
       <div
         aria-hidden="true"
         className="absolute left-1/2 top-[46%] h-[min(460px,60%)] w-[min(680px,85%)] -translate-x-1/2 -translate-y-1/2 rounded-full"

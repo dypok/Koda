@@ -7,9 +7,11 @@ import { LanguageSelector } from './LanguageSelector';
 import { KodaLogo } from './KodaLogo';
 import { WipeButton } from '@/components/ui/wipe-button';
 import { cn } from '@/lib/utils';
+import { getAppUrl, hasSessionCookie } from '@/lib/domain';
 
 export const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -17,6 +19,8 @@ export const Navbar: React.FC = () => {
     };
 
     handleScroll();
+    setIsLoggedIn(hasSessionCookie());
+
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -40,16 +44,16 @@ export const Navbar: React.FC = () => {
         {/* Center: Desktop nav */}
         <nav aria-label="Principal" className="hidden md:flex items-center gap-1 text-sm font-medium text-slate-300">
           <Link
-            href="#metodologia"
-            className="rounded-lg px-3 py-2 transition-colors hover:text-white hover:bg-slate-800/60"
-          >
-            Metodología
-          </Link>
-          <Link
             href="#vista-previa"
             className="rounded-lg px-3 py-2 transition-colors hover:text-white hover:bg-slate-800/60"
           >
             Vista previa
+          </Link>
+          <Link
+            href="#metodologia"
+            className="rounded-lg px-3 py-2 transition-colors hover:text-white hover:bg-slate-800/60"
+          >
+            Metodología
           </Link>
           <Link
             href="#testimonios"
@@ -67,13 +71,33 @@ export const Navbar: React.FC = () => {
 
         {/* Right: CTA + Selector de idioma desplegable */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <WipeButton
-            href="/register"
-            size="sm"
-            className="hidden sm:inline-flex px-4 font-bold"
-          >
-            Comenzar gratis
-          </WipeButton>
+          {isLoggedIn ? (
+            <WipeButton
+              href={getAppUrl('/')}
+              size="sm"
+              className="hidden sm:inline-flex px-4 font-bold"
+            >
+              Ir a mi Roadmap
+            </WipeButton>
+          ) : (
+            <div className="hidden sm:flex items-center gap-2">
+              <WipeButton
+                href={getAppUrl('/login')}
+                tone="ghost"
+                size="sm"
+                className="px-3 font-semibold text-slate-300 hover:text-white"
+              >
+                Iniciar sesión
+              </WipeButton>
+              <WipeButton
+                href={getAppUrl('/register')}
+                size="sm"
+                className="px-4 font-bold"
+              >
+                Comenzar gratis
+              </WipeButton>
+            </div>
+          )}
           <LanguageSelector />
         </div>
       </div>

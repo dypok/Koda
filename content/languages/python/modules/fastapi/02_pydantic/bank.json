@@ -6,28 +6,158 @@
     {
       "id": "q_fa_02_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Para qué sirve el parámetro response_model en un decorador de FastAPI (ej: @app.get(..., response_model=UsuarioPublico))?",
+      "difficulty": "easy",
+      "prompt": "Cual es el rol principal de Pydantic v2 dentro de FastAPI?",
       "options": [
         {
           "id": "a",
-          "text": "Filtra y restringe los datos enviados al cliente, protegiendo campos confidenciales como contraseñas"
+          "text": "Parsear, validar y serializar estructuras de datos mediante anotaciones de tipos de Python con alto rendimiento."
         },
         {
           "id": "b",
-          "text": "Para conectarse a la base de datos"
+          "text": "Administrar las conexiones TCP del servidor Uvicorn."
         },
         {
           "id": "c",
-          "text": "Para redirigir la página"
+          "text": "Ejecutar consultas SQL directas contra bases de datos relacionales."
         },
         {
           "id": "d",
-          "text": "Es un parámetro decorativo sin efecto"
+          "text": "Compilar plantillas HTML dinámicas en el servidor."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "response_model garantiza que solo los campos definidos en ese modelo público salgan al cliente, previniendo fugas de contraseñas o datos sensibles."
+      "explanation": "Pydantic se encarga de la validacion exhaustiva, coercion de tipos y serializacion de datos de entrada y salida en FastAPI."
+    },
+    {
+      "id": "q_fa_02_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Como se define en Pydantic un atributo numerico 'stock' que deba ser mayor o igual a cero y menor o igual a 1000?",
+      "options": [
+        {
+          "id": "a",
+          "text": "stock: int = Field(ge=0, le=1000)"
+        },
+        {
+          "id": "b",
+          "text": "stock: int = Field(gt=0, lt=1000)"
+        },
+        {
+          "id": "c",
+          "text": "stock: int = Range(0, 1000)"
+        },
+        {
+          "id": "d",
+          "text": "stock: int = Check(0 <= x <= 1000)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "ge es 'greater or equal' (mayor o igual) y le es 'less or equal' (menor o igual)."
+    },
+    {
+      "id": "q_fa_02_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que decorador de Pydantic v2 se debe emplear para validar o normalizar un atributo especifico de forma aislada?",
+      "options": [
+        {
+          "id": "a",
+          "text": "@field_validator('nombre_campo')"
+        },
+        {
+          "id": "b",
+          "text": "@model_validator(mode='field')"
+        },
+        {
+          "id": "c",
+          "text": "@validator_field('nombre_campo')"
+        },
+        {
+          "id": "d",
+          "text": "@check_property('nombre_campo')"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "En Pydantic v2, @field_validator es el decorador oficial para metodos que validan o transforman un campo individual."
+    },
+    {
+      "id": "q_fa_02_04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Cual es la ventaja principal de utilizar el decorador @model_validator(mode='after') frente a @field_validator?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Permite acceder a la instancia completa (self) y comparar o validar reglas de negocio entre multiples campos simultaneamente."
+        },
+        {
+          "id": "b",
+          "text": "Se ejecuta de forma asincrona en un proceso secundario."
+        },
+        {
+          "id": "c",
+          "text": "Impide que el modelo se serialice a formato JSON."
+        },
+        {
+          "id": "d",
+          "text": "Convierte los campos en tipos inmutables de C."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "@model_validator(mode='after') recibe la instancia una vez validados los campos individuales, permitiendo validaciones cruzadas entre ellos."
+    },
+    {
+      "id": "q_fa_02_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Por que es una practica de seguridad esencial utilizar response_model en los endpoints de FastAPI que manejan entidades de usuario?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque filtra la respuesta impidiendo que datos internos o sensibles como password_hash lleguen al cliente."
+        },
+        {
+          "id": "b",
+          "text": "Porque encripta toda la conexion HTTP con HTTPS automaticamente."
+        },
+        {
+          "id": "c",
+          "text": "Porque obliga al cliente a reenviar sus credenciales en cada solicitud."
+        },
+        {
+          "id": "d",
+          "text": "Porque deshabilita la cache del navegador del cliente."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "response_model asegura que unicamente los atributos definidos en el modelo de salida sean enviados en el JSON final, filtrando secretos."
+    },
+    {
+      "id": "q_fa_02_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "Dado el modelo Usuario(nombre='Koda', edad=25), que devuelve invocar usuario.model_dump()?",
+      "options": [
+        {
+          "id": "a",
+          "text": "{'nombre': 'Koda', 'edad': 25}"
+        },
+        {
+          "id": "b",
+          "text": "'{\"nombre\": \"Koda\", \"edad\": 25}' (como cadena de texto)"
+        },
+        {
+          "id": "c",
+          "text": "('Koda', 25) (como tupla)"
+        },
+        {
+          "id": "d",
+          "text": "['Koda', 25] (como lista)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "model_dump() exporta la instancia del modelo Pydantic a un diccionario nativo de Python."
     }
   ]
 }

@@ -6,28 +6,159 @@
     {
       "id": "q_py3_09_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Qué módulo nativo de Python se utiliza para realizar profiling determinista detallado de todas las funciones de un programa?",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es la principal ventaja de utilizar '__slots__' en una clase de Python que se instanciará millones de veces?",
       "options": [
         {
           "id": "a",
-          "text": "cProfile"
+          "text": "Reduce significativamente el consumo de memoria RAM al eliminar el diccionario dinámico (__dict__) por instancia"
         },
         {
           "id": "b",
-          "text": "benchmark"
+          "text": "Permite herencia múltiple infinita sin conflictos"
         },
         {
           "id": "c",
-          "text": "valgrind"
+          "text": "Convierte la clase en una base de datos relacional"
         },
         {
           "id": "d",
-          "text": "speedup"
+          "text": "Hace que todos los métodos se ejecuten en GPU"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "cProfile es el analizador de rendimiento integrado en C estándar de Python."
+      "explanation": "__slots__ asigna un espacio estático y compacto para los atributos autorizados, ahorrando hasta un 60% de RAM al suprimir el __dict__ de cada objeto."
+    },
+    {
+      "id": "q_py3_09_02",
+      "type": "find_error",
+      "difficulty": "medium",
+      "prompt": "¿Qué excepción arroja Python si intentas asignar un nuevo atributo no declarado a una instancia de una clase que define __slots__ = ('x', 'y')?",
+      "prompt_code": "class Punto:\n    __slots__ = (\"x\", \"y\")\n\np = Punto()\np.x = 10\np.z = 20",
+      "options": [
+        {
+          "id": "a",
+          "text": "AttributeError: 'Punto' object has no attribute 'z'"
+        },
+        {
+          "id": "b",
+          "text": "TypeError: cannot set attribute"
+        },
+        {
+          "id": "c",
+          "text": "ValueError: slot limit reached"
+        },
+        {
+          "id": "d",
+          "text": "IndexError: tuple index out of range"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Al no existir __dict__, la clase rechaza cualquier atributo dinámico que no haya sido listado explícitamente en __slots__, lanzando AttributeError."
+    },
+    {
+      "id": "q_py3_09_03",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Por qué se utiliza el módulo 'timeit' para realizar micro-benchmarks en lugar de restar marcas de tiempo con 'time.time()'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Porque ejecuta la prueba miles de veces para calcular un promedio robusto, neutralizando el ruido momentáneo del sistema operativo"
+        },
+        {
+          "id": "b",
+          "text": "Porque timeit es un compilador JIT que reescribe el código"
+        },
+        {
+          "id": "c",
+          "text": "Porque time.time() solo funciona una vez por día"
+        },
+        {
+          "id": "d",
+          "text": "Porque timeit no consume ciclos de procesador"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "timeit ofrece rigor estadístico al promediar miles de ejecuciones continuas bajo condiciones controladas."
+    },
+    {
+      "id": "q_py3_09_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "En el reporte de profiling generado por cProfile, ¿cuál es la diferencia entre 'tottime' y 'cumtime'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "tottime mide el tiempo exclusivo gastado en el cuerpo de la función sin incluir subllamadas, mientras que cumtime mide el tiempo acumulado total incluyendo todas las funciones llamadas internamente"
+        },
+        {
+          "id": "b",
+          "text": "tottime es en segundos y cumtime es en microsegundos"
+        },
+        {
+          "id": "c",
+          "text": "cumtime mide solo el tiempo del recolector de basura"
+        },
+        {
+          "id": "d",
+          "text": "No hay diferencia, tienen el mismo valor en todas las filas"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "tottime aísla el tiempo de la función pura, mientras que cumtime permite evaluar el impacto de toda la cadena de llamadas hijas."
+    },
+    {
+      "id": "q_py3_09_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué herramienta estándar de Python permite rastrear la asignación de bloques de memoria y comparar snapshots para localizar fugas de memoria (memory leaks)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "tracemalloc"
+        },
+        {
+          "id": "b",
+          "text": "cProfile"
+        },
+        {
+          "id": "c",
+          "text": "timeit"
+        },
+        {
+          "id": "d",
+          "text": "sys.exit"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "tracemalloc registra qué líneas de código específicas reservan memoria RAM y permite comparar instantáneas cronológicas."
+    },
+    {
+      "id": "q_py3_09_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué principio fundamental de ingeniería de software enunciado por Donald Knuth debe recordarse antes de intentar optimizar cualquier código en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "La optimización prematura es la raíz de todos los males; primero se debe perfilar con métricas para identificar los verdaderos cuellos de botella"
+        },
+        {
+          "id": "b",
+          "text": "Todo el código de Python debe reemplazarse por llamadas en lenguaje C"
+        },
+        {
+          "id": "c",
+          "text": "Las funciones nunca deben tener más de dos líneas"
+        },
+        {
+          "id": "d",
+          "text": "La memoria RAM siempre es ilimitada en la nube"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Optimizar a ciegas suele oscurecer el código sin aportar ganancias reales. El profiling empírico previo es el paso obligatorio antes de optimizar."
     }
   ]
 }

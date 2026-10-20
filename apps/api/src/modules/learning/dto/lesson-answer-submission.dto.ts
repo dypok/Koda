@@ -1,4 +1,4 @@
-import { IsString, IsArray, IsOptional } from 'class-validator';
+import { IsString, IsArray, IsOptional, IsNumber } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import type { LessonAnswerSubmission } from '@koda/types';
 
@@ -35,4 +35,13 @@ export class LessonAnswerSubmissionDto implements LessonAnswerSubmission {
   @IsArray()
   @IsString({ each: true })
   ordered_block_ids?: string[];
+
+  @ApiPropertyOptional({
+    description: 'XP dinámico obtenido para la lección específica',
+    example: 40,
+    type: Number,
+  })
+  @IsOptional()
+  @IsNumber()
+  xp_earned?: number;
 }

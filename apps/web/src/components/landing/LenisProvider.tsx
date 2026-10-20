@@ -4,15 +4,22 @@ import React, { useEffect } from 'react';
 import Lenis from 'lenis';
 import { setLenisInstance } from '@/lib/scroll';
 import { getGsap } from '@/lib/gsap';
+import { isLowEndDevice } from '@/lib/pixi/engine';
 
 /**
- * Smooth scroll solo para la landing. No se inicializa con
- * prefers-reduced-motion. Lenis vive en el ticker de GSAP para
- * sincronizar ScrollTrigger (S2).
+ * Smooth scroll solo para la landing en equipos de escritorio capaces.
+ * En gama baja, pantallas táctiles o prefers-reduced-motion usa el scroll nativo
+ * acelerado por hardware (compositor thread) sin sobrecargar el hilo principal.
  */
 export const LenisProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      window.matchMedia('(pointer: coarse)').matches ||
+      isLowEndDevice()
+    ) {
+      return;
+    }
 
     const lenis = new Lenis({
       duration: 0.7,

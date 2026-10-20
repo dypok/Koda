@@ -6,6 +6,7 @@ import { ArrowCounterClockwise, Heart } from '@phosphor-icons/react';
 import { TransitionLink } from '@/components/ui/transition-link';
 import { KodaPeek } from '@/components/landing/KodaPeek';
 import { cn } from '@/lib/utils';
+import { getAppUrl } from '@/lib/domain';
 
 const FREE = [
   'Temario completo de Python y Lua',
@@ -98,7 +99,7 @@ export const PricingSection: React.FC = () => {
               </div>
               <div className="mt-8 pt-2">
                 <TransitionLink
-                  href="/register"
+                  href={getAppUrl('/register')}
                   aria-label="Empezar gratis en Koda"
                   className="flex min-h-[48px] w-full items-center justify-center rounded-xl px-6 py-3.5 text-sm font-semibold text-slate-200 bg-slate-800/60 border border-slate-700/80 transition-all duration-200 hover:bg-slate-700/60 hover:text-white hover:border-slate-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400/30"
                 >
@@ -157,7 +158,7 @@ export const PricingSection: React.FC = () => {
               </div>
               <div className="mt-8 pt-2 relative z-10">
                 <TransitionLink
-                  href="/register"
+                  href={getAppUrl('/register')}
                   aria-label="Probar premium en Koda"
                   className="btn-shimmer flex min-h-[48px] w-full items-center justify-center rounded-xl px-6 py-3.5 text-sm font-bold text-slate-950 bg-gradient-to-r from-amber-400 to-amber-500 transition-all duration-200 hover:from-amber-300 hover:to-amber-400 shadow-[0_4px_22px_rgba(245,158,11,0.38)] hover:shadow-[0_6px_28px_rgba(245,158,11,0.55)] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400/50"
                 >

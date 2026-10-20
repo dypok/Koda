@@ -2,14 +2,21 @@
 const nextConfig = {
   transpilePackages: ['@koda/types'],
   reactStrictMode: true,
+  experimental: {
+    optimizePackageImports: ['@phosphor-icons/react', 'framer-motion'],
+  },
   images: {
     formats: ['image/avif', 'image/webp'],
   },
   async headers() {
     return [
       {
-        source: '/(.*)',
+        source: '/((?!api|_next/static|_next/image|favicon.ico|icon.svg|icon.png).*)',
         headers: [
+          {
+            key: 'Cache-Control',
+            value: 'private, no-cache, no-store, max-age=0, must-revalidate',
+          },
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
@@ -40,6 +47,30 @@ const nextConfig = {
       {
         source: '/api/v1/:path*',
         destination: `${apiTarget}/api/v1/:path*`,
+      },
+      {
+        source: '/curso/:course/seccion/:section',
+        destination: '/app/curso/:course/seccion/:section',
+      },
+      {
+        source: '/curso/:course',
+        destination: '/app/curso/:course',
+      },
+      {
+        source: '/modulo/:section',
+        destination: '/app/curso/python-1/seccion/:section',
+      },
+      {
+        source: '/modulos/:section',
+        destination: '/app/curso/python-1/seccion/:section',
+      },
+      {
+        source: '/app/modulo/:section',
+        destination: '/app/curso/python-1/seccion/:section',
+      },
+      {
+        source: '/app/modulos/:section',
+        destination: '/app/curso/python-1/seccion/:section',
       },
     ];
   },

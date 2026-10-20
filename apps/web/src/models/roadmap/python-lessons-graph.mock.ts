@@ -71,28 +71,24 @@ function buildSectionDataset(
   };
 }
 
-// 1. Python 1: Fundamentos
+// 1. Python 1: Fundamentos (8 secciones canónicas = 24 estrellas)
 export const PYTHON_1_LESSONS_DATASET = buildSectionDataset(
   'PYTHON 1: FUNDAMENTOS & SINTAXIS',
-  45,
+  0,
   [
-    { id: 'les-01', code: '01', label: 'ENTORNO & SINTAXIS', subtitle: 'VS CODE, VENV & PRINT', variant: 'completed', iconType: 'brackets', stars: 3, maxStars: 3, xp: 120, statusText: 'DOMINADO • +120 XP' },
-    { id: 'les-02', code: '02', label: 'VARIABLES & TIPOS', subtitle: 'INT, FLOAT, STR, BOOL & TYPE', variant: 'completed', iconType: 'flow', stars: 3, maxStars: 3, xp: 150, statusText: 'DOMINADO • +150 XP' },
-    { id: 'les-03', code: '03', label: 'OPERADORES & LÓGICA', subtitle: 'ARITMÉTICA & BOOLEANOS', variant: 'completed', iconType: 'atom', stars: 3, maxStars: 3, xp: 180, statusText: 'DOMINADO • +180 XP' },
-    { id: 'les-04', code: '04', label: 'ENTRADA/SALIDA & STRINGS', subtitle: 'INPUT(), PRINT() & F-STRINGS', variant: 'completed', iconType: 'matrix', stars: 3, maxStars: 3, xp: 180, statusText: 'DOMINADO • +180 XP' },
-    { id: 'les-05', code: '05', label: 'CONDICIONALES', subtitle: 'IF, ELIF, ELSE & DECISIONES', variant: 'active', iconType: 'code', stars: 1, maxStars: 3, xp: 200, statusText: 'EN PROGRESO • +200 XP' },
-    { id: 'les-miniboss', code: 'MB', label: 'GUARDIÁN DE LA LÓGICA', subtitle: 'MINI-BOSS: RETO MÓDULOS 1-5', variant: 'branch', iconType: 'code', stars: 0, maxStars: 3, xp: 250, statusText: 'MINI-BOSS • REQUIERE M05' },
-    { id: 'les-06', code: '06', label: 'BUCLE FOR', subtitle: 'ITERACIÓN CON FOR & RANGE()', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 220, statusText: 'RQ GUARDIÁN' },
-    { id: 'les-07', code: '07', label: 'BUCLE WHILE', subtitle: 'REPETICIÓN CONDICIONAL & FLAGS', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 220, statusText: 'RQ BUCLE FOR' },
-    { id: 'les-08', code: '08', label: 'LISTAS & TUPLAS', subtitle: 'COLECCIONES & MUTABILIDAD', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 240, statusText: 'RQ BUCLE WHILE' },
-    { id: 'les-09', code: '09', label: 'DICCIONARIOS & SETS', subtitle: 'CLAVE-VALOR & UNICIDAD', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 240, statusText: 'RQ LISTAS & TUPLAS' },
-    { id: 'les-10', code: '10', label: 'FUNCIONES & ERRORES', subtitle: 'DEF, RETURN & DEBUGGING', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 260, statusText: 'RQ DICCIONARIOS' },
-    { id: 'les-boss', code: 'Ω', label: 'APEX BOSS GATE 1', subtitle: 'EXAMEN DE CERTIFICACIÓN M01-M10', variant: 'boss', iconType: 'skull', stars: 0, maxStars: 3, xp: 500, statusText: 'DESAFÍO FINAL FUNDAMENTOS' },
+    { id: 'py-m01', code: '01', label: 'ENTORNO & SINTAXIS', subtitle: 'VS CODE, VENV & PRINT', variant: 'active', iconType: 'brackets', stars: 0, maxStars: 3, xp: 120, statusText: 'DISPONIBLE • +120 XP' },
+    { id: 'py-m02', code: '02', label: 'VARIABLES & TIPOS', subtitle: 'INT, FLOAT, STR, BOOL & TYPE', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 150, statusText: 'RQ M01' },
+    { id: 'py-m03', code: '03', label: 'OPERADORES & LÓGICA', subtitle: 'ARITMÉTICA & BOOLEANOS', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 180, statusText: 'RQ M02' },
+    { id: 'py-m04', code: '04', label: 'CONDICIONALES', subtitle: 'IF, ELIF, ELSE & DECISIONES', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 200, statusText: 'RQ M03' },
+    { id: 'py-boss-logic', code: 'MB', label: 'GUARDIÁN DE LA LÓGICA', subtitle: 'MINI-BOSS: RETO MÓDULOS 1-4', variant: 'branch', iconType: 'lock', stars: 0, maxStars: 3, xp: 250, statusText: 'MINI-BOSS • REQUIERE M04' },
+    { id: 'py-m05', code: '05', label: 'BUCLE FOR', subtitle: 'ITERACIÓN CON FOR & RANGE()', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 220, statusText: 'RQ GUARDIÁN' },
+    { id: 'py-m06', code: '06', label: 'BUCLE WHILE', subtitle: 'REPETICIÓN POR CONDICIÓN & FLAGS', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 220, statusText: 'RQ BUCLE FOR' },
+    { id: 'py-apex-1', code: 'Ω', label: 'APEX MASTER GATE 1', subtitle: 'CERTIFICACIÓN FUNDAMENTOS PYTHON', variant: 'boss', iconType: 'skull', stars: 0, maxStars: 3, xp: 500, statusText: 'DESAFÍO FINAL FUNDAMENTOS' },
   ],
   '#38BDF8'
 );
 
-// 2. Python 2: Intermedio
+// 2. Python 2: Intermedio (12 secciones calibradas = 32 estrellas)
 export const PYTHON_2_LESSONS_DATASET = buildSectionDataset(
   'PYTHON 2: INTERMEDIO & PROGRAMACIÓN ORIENTADA A OBJETOS',
   0,
@@ -104,10 +100,10 @@ export const PYTHON_2_LESSONS_DATASET = buildSectionDataset(
     { id: 'py2-miniboss', code: 'MB', label: 'CENTINELA MODULAR', subtitle: 'MINI-BOSS: RETO MÓDULOS 1-4', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 300, statusText: 'RQ EXCEPCIONES' },
     { id: 'py2-05', code: '05', label: 'ARCHIVOS I/O', subtitle: 'TXT, CSV, JSON & WITH OPEN()', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 250, statusText: 'RQ CENTINELA' },
     { id: 'py2-06', code: '06', label: 'POO I: CLASES & OBJETOS', subtitle: 'ATRIBUTOS, MÉTODOS & __INIT__', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 260, statusText: 'RQ ARCHIVOS I/O' },
-    { id: 'py2-07', code: '07', label: 'POO II: HERENCIA', subtitle: 'SUPER(), POLIMORFISMO & MRO', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 260, statusText: 'RQ POO I' },
-    { id: 'py2-08', code: '08', label: 'DATETIME & REGEX', subtitle: 'TIEMPO & EXPRESIONES REGULARES', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 250, statusText: 'RQ HERENCIA' },
-    { id: 'py2-09', code: '09', label: 'PIP, VENV & GIT', subtitle: 'DEPENDENCIAS & CONTROL DE VERSIONES', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 250, statusText: 'RQ DATETIME' },
-    { id: 'py2-10', code: '10', label: 'TESTING CON PYTEST', subtitle: 'ASSERTS, FIXTURES & TDD BÁSICO', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 3, xp: 280, statusText: 'RQ PIP & GIT' },
+    { id: 'py2-07', code: '07', label: 'POO II: HERENCIA', subtitle: 'SUPER(), POLIMORFISMO & MRO', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 2, xp: 260, statusText: 'RQ POO I' },
+    { id: 'py2-08', code: '08', label: 'DATETIME & REGEX', subtitle: 'TIEMPO & EXPRESIONES REGULARES', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 2, xp: 250, statusText: 'RQ HERENCIA' },
+    { id: 'py2-09', code: '09', label: 'PIP, VENV & GIT', subtitle: 'DEPENDENCIAS & CONTROL DE VERSIONES', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 2, xp: 250, statusText: 'RQ DATETIME' },
+    { id: 'py2-10', code: '10', label: 'TESTING CON PYTEST', subtitle: 'ASSERTS, FIXTURES & TDD BÁSICO', variant: 'locked', iconType: 'lock', stars: 0, maxStars: 2, xp: 280, statusText: 'RQ PIP & GIT' },
     { id: 'py2-boss', code: 'Ω', label: 'APEX BOSS GATE 2', subtitle: 'PROYECTO INTEGRADOR INTERMEDIO', variant: 'locked', iconType: 'skull', stars: 0, maxStars: 3, xp: 600, statusText: 'DESAFÍO FINAL INTERMEDIO' },
   ],
   '#06B6D4'

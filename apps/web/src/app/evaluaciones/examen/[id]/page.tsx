@@ -84,7 +84,7 @@ export default function ExamPage(props: ExamPageProps) {
       if (attemptId) {
         router.push(`/evaluaciones/resumen/${attemptId}`);
       } else {
-        router.push('/dashboard');
+        router.push('/');
       }
     } catch (err: any) {
       console.error('Error al calificar el examen:', err);
@@ -93,14 +93,16 @@ export default function ExamPage(props: ExamPageProps) {
     }
   };
 
+  const handleSubmitRef = useRef(handleSubmit);
+  handleSubmitRef.current = handleSubmit;
+
   useEffect(() => {
     if (loading || submitting || !questions.length) return;
 
     const timer = setInterval(() => {
-      setTimeLeft(prev => {
+      setTimeLeft((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          handleSubmit(true);
           return 0;
         }
         return prev - 1;
@@ -110,25 +112,33 @@ export default function ExamPage(props: ExamPageProps) {
     return () => clearInterval(timer);
   }, [loading, submitting, questions.length]);
 
+  useEffect(() => {
+    if (timeLeft === 0 && !loading && !submitting && questions.length > 0) {
+      void handleSubmitRef.current(true);
+    }
+  }, [timeLeft, loading, submitting, questions.length]);
+
   if (loading) {
     return (
-      <div className="flex min-h-[60vh] items-center justify-center p-8">
-        <div className="text-center font-medium text-slate-600 animate-pulse">Cargando Examen Final...</div>
+      <div className="flex min-h-screen bg-slate-950 items-center justify-center p-8">
+        <div className="text-center font-mono text-sm text-amber-400 animate-pulse">CARGANDO EXAMEN FINAL...</div>
       </div>
     );
   }
 
   if (error || !questions.length) {
     return (
-      <div className="max-w-md mx-auto p-8 mt-16 text-center bg-white border border-slate-200 rounded-2xl shadow-sm">
-        <div className="text-red-500 font-semibold mb-3">{error || 'No hay preguntas disponibles'}</div>
-        <p className="text-sm text-slate-500 mb-6">No se pudo iniciar la sesión de examen para este módulo.</p>
-        <button
-          onClick={() => router.back()}
-          className="px-5 py-2.5 bg-slate-900 text-white rounded-xl hover:bg-slate-800 transition font-medium text-sm"
-        >
-          Volver
-        </button>
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center p-6">
+        <div className="max-w-md w-full p-8 text-center bg-slate-900 border border-slate-800 rounded-2xl shadow-xl">
+          <div className="text-rose-400 font-semibold mb-3">{error || 'No hay preguntas disponibles'}</div>
+          <p className="text-sm text-slate-400 mb-6">No se pudo iniciar la sesión de examen para este módulo.</p>
+          <button
+            onClick={() => router.back()}
+            className="px-5 py-2.5 bg-orange-500 text-slate-950 rounded-xl hover:brightness-110 transition font-bold text-sm cursor-pointer"
+          >
+            Volver
+          </button>
+        </div>
       </div>
     );
   }
@@ -136,7 +146,7 @@ export default function ExamPage(props: ExamPageProps) {
   const currentQ = questions[currentIndex];
 
   const handleSelectOption = (optionId: string) => {
-    setAnswers(prev => ({ ...prev, [currentQ.id]: optionId }));
+    setAnswers((prev) => ({ ...prev, [currentQ.id]: optionId }));
   };
 
   const formatTime = (seconds: number) => {
@@ -146,91 +156,97 @@ export default function ExamPage(props: ExamPageProps) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 mt-10">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">Certificación Oficial</span>
-          <h1 className="text-2xl font-bold text-indigo-900">Examen Final de Módulo</h1>
-        </div>
-        <div className="flex items-center gap-4">
-          <div className={`font-mono text-base font-bold px-3 py-1.5 rounded-full border ${
-            timeLeft < 300
-              ? 'bg-red-50 border-red-300 text-red-600 animate-pulse'
-              : 'bg-slate-50 border-slate-200 text-slate-700'
-          }`}>
-            ⏳ {formatTime(timeLeft)}
+    <div className="min-h-screen bg-slate-950 text-slate-100 py-10 px-4 sm:px-6">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
+          <div>
+            <span className="text-xs font-mono font-bold uppercase tracking-wider text-amber-400">Certificación Oficial</span>
+            <h1 className="text-2xl font-display font-bold text-white">Examen Final de Módulo</h1>
           </div>
-          <div className="text-sm font-semibold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full">
-            {currentIndex + 1} / {questions.length}
+          <div className="flex items-center gap-3">
+            <div
+              className={`font-mono text-sm font-bold px-3 py-1.5 rounded-full border ${
+                timeLeft < 300
+                  ? 'bg-rose-950/60 border-rose-500/50 text-rose-300 animate-pulse'
+                  : 'bg-slate-900 border-slate-700 text-amber-300'
+              }`}
+            >
+              ⏳ {formatTime(timeLeft)}
+            </div>
+            <div className="text-xs font-mono font-bold text-orange-400 bg-orange-500/10 border border-orange-500/20 px-3 py-1.5 rounded-full">
+              {String(currentIndex + 1).padStart(2, '0')} / {String(questions.length).padStart(2, '0')}
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="w-full bg-slate-200 h-2.5 rounded-full mb-8 overflow-hidden">
-        <div
-          className="bg-indigo-600 h-full rounded-full transition-all duration-300"
-          style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
-        />
-      </div>
-
-      <div className="p-8 bg-white border border-slate-200 border-t-4 border-t-indigo-600 rounded-2xl shadow-sm">
-        <h2 className="text-xl font-semibold text-slate-800 mb-6">{currentQ.prompt}</h2>
-        {currentQ.code_snippet && (
-          <pre className="bg-slate-900 text-green-400 p-4 rounded-xl mb-6 overflow-x-auto text-sm font-mono leading-relaxed shadow-inner">
-            {currentQ.code_snippet}
-          </pre>
-        )}
-
-        <div className="space-y-3">
-          {currentQ.options?.map(opt => {
-            const isSelected = answers[currentQ.id] === opt.id;
-            return (
-              <button
-                key={opt.id}
-                onClick={() => handleSelectOption(opt.id)}
-                className={`w-full text-left p-4 rounded-xl border-2 transition-all font-medium text-sm flex items-center justify-between ${
-                  isSelected
-                    ? 'border-indigo-600 bg-indigo-50/50 text-indigo-900 shadow-sm'
-                    : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-700'
-                }`}
-              >
-                <span>{opt.text}</span>
-                <span className={`w-5 h-5 rounded-full border flex items-center justify-center text-xs ${
-                  isSelected ? 'border-indigo-600 bg-indigo-600 text-white' : 'border-slate-300'
-                }`}>
-                  {isSelected ? '✓' : ''}
-                </span>
-              </button>
-            );
-          })}
+        <div className="w-full bg-slate-800 h-2 rounded-full mb-8 overflow-hidden">
+          <div
+            className="bg-gradient-to-r from-orange-500 to-amber-400 h-full rounded-full transition-all duration-300"
+            style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
+          />
         </div>
-      </div>
 
-      <div className="flex justify-between mt-8">
-        <button
-          className="px-5 py-2.5 bg-slate-100 text-slate-700 font-medium rounded-xl hover:bg-slate-200 transition disabled:opacity-40 disabled:cursor-not-allowed"
-          onClick={() => setCurrentIndex(prev => Math.max(0, prev - 1))}
-          disabled={currentIndex === 0}
-        >
-          Anterior
-        </button>
+        <div className="p-6 sm:p-8 bg-slate-900/70 border border-slate-800 border-t-4 border-t-orange-500 rounded-2xl shadow-2xl backdrop-blur-xl">
+          <h2 className="text-lg sm:text-xl font-bold text-white mb-6">{currentQ.prompt}</h2>
+          {currentQ.code_snippet && (
+            <pre className="bg-slate-950 border border-slate-800 text-amber-300 p-4 rounded-xl mb-6 overflow-x-auto text-sm font-mono leading-relaxed shadow-inner">
+              {currentQ.code_snippet}
+            </pre>
+          )}
 
-        {currentIndex === questions.length - 1 ? (
+          <div className="space-y-3">
+            {currentQ.options?.map((opt) => {
+              const isSelected = answers[currentQ.id] === opt.id;
+              return (
+                <button
+                  key={opt.id}
+                  onClick={() => handleSelectOption(opt.id)}
+                  className={`w-full text-left p-4 rounded-xl border transition-all font-medium text-sm flex items-center justify-between cursor-pointer ${
+                    isSelected
+                      ? 'border-orange-500 bg-orange-500/15 text-amber-200 shadow-[0_0_15px_rgba(255,106,0,0.15)]'
+                      : 'border-slate-800 bg-slate-950/60 hover:border-slate-700 hover:bg-slate-900 text-slate-200'
+                  }`}
+                >
+                  <span>{opt.text}</span>
+                  <span
+                    className={`w-5 h-5 rounded-full border flex items-center justify-center text-xs shrink-0 ml-3 ${
+                      isSelected ? 'border-orange-500 bg-orange-500 text-slate-950 font-bold' : 'border-slate-600'
+                    }`}
+                  >
+                    {isSelected ? '✓' : ''}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="flex justify-between mt-8">
           <button
-            onClick={() => handleSubmit(false)}
-            disabled={submitting}
-            className="px-6 py-2.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 transition shadow-sm disabled:opacity-50"
+            className="px-5 py-2.5 bg-slate-900 border border-slate-700 text-slate-200 font-mono text-xs font-bold rounded-xl hover:bg-slate-800 transition disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+            onClick={() => setCurrentIndex((prev) => Math.max(0, prev - 1))}
+            disabled={currentIndex === 0}
           >
-            {submitting ? 'Evaluando...' : 'Finalizar Examen'}
+            ← ANTERIOR
           </button>
-        ) : (
-          <button
-            onClick={() => setCurrentIndex(prev => Math.min(questions.length - 1, prev + 1))}
-            className="px-6 py-2.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 transition shadow-sm"
-          >
-            Siguiente
-          </button>
-        )}
+
+          {currentIndex === questions.length - 1 ? (
+            <button
+              onClick={() => handleSubmit(false)}
+              disabled={submitting}
+              className="px-6 py-2.5 bg-orange-500 text-slate-950 font-mono text-xs font-black tracking-wider rounded-xl hover:brightness-110 transition shadow-lg disabled:opacity-50 cursor-pointer"
+            >
+              {submitting ? 'EVALUANDO...' : 'FINALIZAR EXAMEN'}
+            </button>
+          ) : (
+            <button
+              onClick={() => setCurrentIndex((prev) => Math.min(questions.length - 1, prev + 1))}
+              className="px-6 py-2.5 bg-orange-500 text-slate-950 font-mono text-xs font-black tracking-wider rounded-xl hover:brightness-110 transition shadow-lg cursor-pointer"
+            >
+              SIGUIENTE →
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

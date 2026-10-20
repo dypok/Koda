@@ -7,7 +7,7 @@
       "id": "apex-q01",
       "type": "single_choice",
       "difficulty": "hard",
-      "prompt": "En una arquitectura limpia en Python, ¿cuál capa NO debe tener ninguna referencia o import a librerías de infraestructura como bases de datos o frameworks web?",
+      "prompt": "En una arquitectura limpia en Python, cual capa NO debe contener ninguna referencia ni importacion de librerias de infraestructura como bases de datos, ORMs o frameworks web?",
       "options": [
         {
           "id": "a",
@@ -15,25 +15,25 @@
         },
         {
           "id": "b",
-          "text": "La capa de Controladores"
+          "text": "La capa de Controladores / Routers"
         },
         {
           "id": "c",
-          "text": "La capa de Repositorios"
+          "text": "La capa de Repositorios de Infraestructura"
         },
         {
           "id": "d",
-          "text": "El archivo de configuración de Docker"
+          "text": "El archivo de configuracion del servidor web"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "El dominio es el núcleo del negocio y debe permanecer agnóstico de frameworks externos."
+      "explanation": "El dominio es el nucleo del negocio y debe mantenerse desacoplado y agnostico de frameworks o librerias externas."
     },
     {
       "id": "apex-q02",
       "type": "predict_output",
       "difficulty": "hard",
-      "prompt": "¿Cuál es el resultado de ejecutar la siguiente rutina asíncrona?",
+      "prompt": "Cual es la salida exacta de la siguiente rutina asincrona al ejecutarse?",
       "prompt_code": "import asyncio\n\nasync def compute():\n    await asyncio.sleep(0.01)\n    return \"APEX_CERTIFIED\"\n\nasync def main():\n    res = await asyncio.gather(compute())\n    print(res)\n\nasyncio.run(main())",
       "options": [
         {
@@ -50,44 +50,17 @@
         },
         {
           "id": "d",
-          "text": "Error: compute() must be called with parentheses"
+          "text": "Error de ejecucion: gather requiere una lista obligatoria"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "asyncio.gather empaqueta los resultados de todas las corutinas recibidas en una lista."
+      "explanation": "asyncio.gather empaqueta los resultados de todas las corutinas recibidas en una lista ordenada."
     },
     {
       "id": "apex-q03",
-      "type": "find_error",
-      "difficulty": "hard",
-      "prompt": "Identifica la vulnerabilidad o mala práctica en la siguiente instrucción de Dockerfile de producción:",
-      "prompt_code": "FROM python:3.12\nWORKDIR /root\nCOPY . .\nENV API_SECRET_KEY=\"super_secret_production_key_123\"\nCMD [\"python\", \"server.py\"]",
-      "options": [
-        {
-          "id": "a",
-          "text": "Hardcodear secretos de producción en variables de entorno del Dockerfile y ejecutar como root en /root."
-        },
-        {
-          "id": "b",
-          "text": "El nombre del archivo CMD no puede ser server.py."
-        },
-        {
-          "id": "c",
-          "text": "La imagen FROM no especifica la versión exacta de Linux."
-        },
-        {
-          "id": "d",
-          "text": "WORKDIR debe ser siempre /home."
-        }
-      ],
-      "correct_option_id": "a",
-      "explanation": "Los secretos nunca deben quedar grabados en las capas del contenedor y las aplicaciones no deben correr como el usuario root."
-    },
-    {
-      "id": "apex-q04",
       "type": "fill_blank",
       "difficulty": "hard",
-      "prompt": "Completa la línea para definir una fixture de pytest que se ejecute de forma asíncrona:",
+      "prompt": "Completa el decorador estandar de pytest-asyncio para definir una fixture asincrona que ejecute operaciones con context manager:",
       "prompt_code": "import pytest_asyncio\n\n___\nasync def db_connection():\n    conn = await connect()\n    yield conn\n    await conn.close()",
       "options": [
         {
@@ -96,25 +69,78 @@
         },
         {
           "id": "b",
-          "text": "@pytest.async"
+          "text": "@pytest.async_fixture"
         },
         {
           "id": "c",
-          "text": "@fixture.asyncio"
+          "text": "@asyncio.fixture"
         },
         {
           "id": "d",
-          "text": "@test.fixture"
+          "text": "@test.coroutine_fixture"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "pytest_asyncio.fixture es el decorador oficial para fixtures asíncronas con setup y teardown en pytest."
+      "explanation": "pytest_asyncio.fixture es el decorador oficial de la biblioteca pytest-asyncio para fixtures asincronas con setup y teardown."
+    },
+    {
+      "id": "apex-q04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Que comportamiento exhibe asyncio.gather(*tareas, return_exceptions=True) si una de las corutinas lanza una excepcion durante su ejecucion?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Captura la excepcion y la incluye como un elemento en la lista de resultados devueltos, permitiendo que las demas tareas continuen su ejecucion normal."
+        },
+        {
+          "id": "b",
+          "text": "Cancela inmediatamente todas las demas corutinas activas y propaga el error."
+        },
+        {
+          "id": "c",
+          "text": "Omite la tarea fallida y devuelve una lista reducida que contiene unicamente los valores validos."
+        },
+        {
+          "id": "d",
+          "text": "Reinicia el Event Loop desde el inicio de la aplicacion."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Con return_exceptions=True, los errores no interrumpen el lote; se retornan como objetos de excepcion dentro de la lista para inspeccion controlada."
     },
     {
       "id": "apex-q05",
+      "type": "find_error",
+      "difficulty": "hard",
+      "prompt": "Identifica la falla critica de seguridad en el siguiente Dockerfile destinado a despliegue en produccion:",
+      "prompt_code": "FROM python:3.12-slim\nWORKDIR /root\nCOPY . .\nENV DATABASE_PASSWORD=\"prod_super_secret_master_password\"\nCMD [\"python\", \"server.py\"]",
+      "options": [
+        {
+          "id": "a",
+          "text": "Hardcodear contrasenas de produccion en directivas ENV de la imagen y ejecutar en el directorio de root sin usuario sin privilegios."
+        },
+        {
+          "id": "b",
+          "text": "La instruccion CMD debe usar obligatoriamente comillas simples."
+        },
+        {
+          "id": "c",
+          "text": "WORKDIR nunca puede apuntar a directorios del sistema."
+        },
+        {
+          "id": "d",
+          "text": "python:3.12-slim no permite ejecutar archivos llamados server.py."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Los secretos quedan grabados de forma permanente en las capas de la imagen y ejecutar como root expone el host si el contenedor es comprometido."
+    },
+    {
+      "id": "apex-q06",
       "type": "single_choice",
       "difficulty": "hard",
-      "prompt": "¿Qué herramienta del ecosistema moderno de Python se encarga de analizar tipos estáticos antes de la ejecución para garantizar que se cumplan los contratos de interfaces y protocols?",
+      "prompt": "Cual de las siguientes herramientas de la cadena de integracion continua de Python se encarga de auditar contratos de tipado y adherencia a interfaces estaticas sin ejecutar el codigo?",
       "options": [
         {
           "id": "a",
@@ -122,19 +148,19 @@
         },
         {
           "id": "b",
-          "text": "PyPI"
+          "text": "Uvicorn"
         },
         {
           "id": "c",
-          "text": "Gunicorn"
+          "text": "Celery"
         },
         {
           "id": "d",
-          "text": "Pipenv"
+          "text": "Gunicorn"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Mypy y Pyright son los comprobadores estáticos de tipos estándar en Python."
+      "explanation": "Mypy y Pyright son comprobadores estaticos de tipos (type checkers) que garantizan el cumplimiento de los contratos definidos con Protocol y Type Hints."
     }
   ]
 }

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { TransitionLink } from '@/components/ui/transition-link';
 import { WipeButton } from '@/components/ui/wipe-button';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import { getAppUrl } from '@/lib/domain';
 
 /** CTA pegajoso solo móvil, aparece tras pasar el hero. */
 export const StickyMobileCta: React.FC = () => {
@@ -28,7 +29,7 @@ export const StickyMobileCta: React.FC = () => {
           className="fixed bottom-0 inset-x-0 z-40 md:hidden border-t border-slate-800/80 bg-slate-950/90 backdrop-blur-md px-4 py-3"
         >
           <WipeButton
-            href="/register"
+            href={getAppUrl('/register')}
             LinkComponent={TransitionLink}
             className="flex w-full"
           >

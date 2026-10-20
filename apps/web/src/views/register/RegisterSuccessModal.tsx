@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Sparkle, ArrowRight, Flame } from '@phosphor-icons/react';
+import { KodaMascot } from '@/components/brand/KodaMascot';
 import { WipeButton } from '@/components/ui/wipe-button';
 import { TransitionLink } from '@/components/ui/transition-link';
 import { CodeConfetti } from '@/views/landing/preview/CodeConfetti';
@@ -77,14 +77,13 @@ export const RegisterSuccessModal: React.FC<RegisterSuccessModalProps> = ({
             className="relative w-full max-w-md rounded-3xl border border-amber-500/40 bg-gradient-to-b from-slate-900 to-slate-950 p-6 sm:p-8 shadow-[0_0_50px_rgba(245,158,11,0.25)] text-center space-y-5 overflow-hidden"
           >
             <CodeConfetti burstKey={1} />
-            <div className="relative mx-auto w-24 h-24 sm:w-28 sm:h-28">
+            <div className="relative mx-auto w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center">
               <div aria-hidden="true" className="absolute inset-0 rounded-full bg-amber-500/20 blur-xl animate-pulse" />
-              <Image
-                src="/brand/koda-mascot-cartoon-2d.svg"
-                alt="Koda celebrando"
-                width={120}
-                height={120}
-                className="w-full h-full object-contain relative z-10 select-none"
+              <KodaMascot
+                state="streak_active"
+                size={112}
+                glow
+                className="max-h-full max-w-full object-contain relative z-10"
               />
             </div>
 
@@ -137,12 +136,10 @@ export const RegisterSuccessModal: React.FC<RegisterSuccessModalProps> = ({
                   animate={{ scale: 1.4, y: -20 }}
                   transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 >
-                  <Image
-                    src="/brand/koda-mascot-cartoon-2d.svg"
-                    alt=""
-                    width={120}
-                    height={120}
-                    className="object-contain select-none"
+                  <KodaMascot
+                    state="streak_active"
+                    size={120}
+                    glow
                   />
                 </motion.div>
                 <p className="font-display font-black text-amber-300">{'> ruta_desbloqueada'}</p>

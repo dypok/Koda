@@ -6,28 +6,158 @@
     {
       "id": "q_py3_04_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Cómo se debe definir un atributo de lista con valor por defecto vacío en una @dataclass?",
+      "difficulty": "easy",
+      "prompt": "¿El intérprete estándar de Python (CPython) detiene la ejecución si pasas un argumento de tipo erróneo a una función anotada con Type Hints?",
       "options": [
         {
           "id": "a",
-          "text": "tags: list[str] = field(default_factory=list)"
+          "text": "No, los Type Hints son ignorados en tiempo de ejecución por CPython; su función es servir a herramientas de análisis estático (mypy) y al autocompletado del IDE"
         },
         {
           "id": "b",
-          "text": "tags: list[str] = []"
+          "text": "Sí, lanza TypeError de forma inmediata antes de ejecutar el cuerpo de la función"
         },
         {
           "id": "c",
-          "text": "tags: list[str] = list()"
+          "text": "Sí, produce un SyntaxError al compilar el script"
         },
         {
           "id": "d",
-          "text": "tags: list[str] = None"
+          "text": "Convierte silenciosamente el argumento al tipo declarado"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Las listas por defecto en dataclasses requieren field(default_factory=list) para evitar compartir la misma instancia entre objetos."
+      "explanation": "Python mantiene su tipado dinámico en tiempo de ejecución. Los Type Hints son metadatos utilizados por analizadores estáticos y linters."
+    },
+    {
+      "id": "q_py3_04_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "En Python moderno (3.10+), ¿cuál es la sintaxis recomendada para indicar que una variable puede ser de tipo entero o cadena de texto?",
+      "options": [
+        {
+          "id": "a",
+          "text": "int | str"
+        },
+        {
+          "id": "b",
+          "text": "Union(int, str)"
+        },
+        {
+          "id": "c",
+          "text": "int or str"
+        },
+        {
+          "id": "d",
+          "text": "[int, str]"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El operador de tubería '|' es el estándar moderno de unión de tipos en Python 3.10+ que reemplaza la necesidad de importar Union."
+    },
+    {
+      "id": "q_py3_04_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué ocurre si intentas modificar un atributo de una instancia creada a partir de una dataclass con '@dataclass(frozen=True)'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Python lanza una excepción FrozenInstanceError, impidiendo la mutación del objeto"
+        },
+        {
+          "id": "b",
+          "text": "El objeto se clona automáticamente en una nueva variable"
+        },
+        {
+          "id": "c",
+          "text": "La modificación ocurre en silencio sin error"
+        },
+        {
+          "id": "d",
+          "text": "Se borran todos los demás atributos"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "frozen=True emula inmutabilidad estricta bloqueando la reasignación de atributos con FrozenInstanceError."
+    },
+    {
+      "id": "q_py3_04_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cómo se debe declarar una lista vacía como valor por defecto en un campo de una dataclass para evitar el error de default mutable?",
+      "options": [
+        {
+          "id": "a",
+          "text": "items: list[str] = field(default_factory=list)"
+        },
+        {
+          "id": "b",
+          "text": "items: list[str] = []"
+        },
+        {
+          "id": "c",
+          "text": "items: list[str] = list()"
+        },
+        {
+          "id": "d",
+          "text": "items: list[str] = None"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "field(default_factory=list) invoca la fábrica callable para generar una nueva lista independiente en cada instancia instanciada."
+    },
+    {
+      "id": "q_py3_04_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué métodos especiales genera automáticamente el decorador @dataclass?",
+      "options": [
+        {
+          "id": "a",
+          "text": "__init__, __repr__ y __eq__"
+        },
+        {
+          "id": "b",
+          "text": "__str__, __hash__ y __call__"
+        },
+        {
+          "id": "c",
+          "text": "__enter__, __exit__ y __del__"
+        },
+        {
+          "id": "d",
+          "text": "__add__, __sub__ y __mul__"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Por defecto, @dataclass construye el constructor (__init__), la representación amigable (__repr__) y la igualdad por contenido (__eq__)."
+    },
+    {
+      "id": "q_py3_04_06",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Qué indica el Type Hint 'Callable[[str], int]' sobre un argumento de función?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Que el argumento debe ser una función u objeto invocable que reciba un string y devuelva un entero"
+        },
+        {
+          "id": "b",
+          "text": "Que convierte una cadena en un entero usando int()"
+        },
+        {
+          "id": "c",
+          "text": "Que es una lista con un texto y un número"
+        },
+        {
+          "id": "d",
+          "text": "Que la función solo puede llamarse una vez"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Callable[[str], int] documenta formalmente la signatura de funciones o métodos que se reciben como callbacks."
     }
   ]
 }

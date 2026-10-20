@@ -5,84 +5,249 @@
   "slug": "ia-llms-y-prompts",
   "course_slug": "ai-agents",
   "title": "Arquitectura de LLMs, Tokens y Prompt Engineering",
-  "objective": "Comprender el funcionamiento interno de los Modelos de Lenguaje (tokens, temperatura, ventana de contexto) y dominar técnicas de prompting (Few-Shot, Chain-of-Thought).",
-  "description": "El punto de partida de la Inteligencia Artificial moderna: cómo predicen los LLMs el siguiente token y cómo instruirlos con máxima precisión.",
+  "objective": "Comprender la generacion autorregresiva de texto, tokenizacion BPE, parametros de muestreo y tecnicas de prompting avanzado.",
+  "description": "Los fundamentos cientificos de los Modelos de Lenguaje Grande: atencion, calculo de tokens, muestreo estocastico y prompts estructurados.",
   "position": 51,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 260
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_ia_01_01",
       "code": "S01",
-      "title": "Modelos de Lenguaje y Técnicas de Prompting",
-      "slug": "llms-y-prompting",
+      "title": "Mecanica de LLMs, Tokens y Prompting",
+      "slug": "mecanica-llms-tokens-prompting",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 45,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_ia_01_01",
           "code": "L01",
-          "title": "Tokens, Hiperparámetros y Chain-of-Thought",
-          "slug": "tokens-parametros-cot",
+          "title": "Arquitectura Transformer y Modelos Autorregresivos",
+          "slug": "arquitectura-transformer-autorregresiva",
           "position": 1,
-          "concept_id": "ia-foundations",
-          "objective": "Dominar la relación entre tokens, temperatura (creatividad vs determinismo) y razonamiento paso a paso.",
-          "theory_markdown": "Un **LLM (Large Language Model)** no procesa letras ni palabras directamente; procesa **tokens** (fragmentos de ~4 caracteres en inglés o sílabas en español).\n\nParámetros clave:\n- **Temperature (0.0 a 2.0)**: Controla la aleatoriedad. Para código, JSON y agentes usamos `0.0` (determinista y exacto). Para redacción creativa usamos `0.7 - 1.0`.\n- **Top_p (Nucleus Sampling)**: Limita la selección a los tokens que acumulan el porcentaje de probabilidad más alto.\n\nTécnicas avanzadas de Prompt Engineering:\n1. **Role Prompting**: Definir el rol, contexto y restricciones explícitas.\n2. **Few-Shot**: Proporcionar 2 o 3 ejemplos claros de `Entrada -> Salida` deseada.\n3. **Chain-of-Thought (CoT)**: Pedir al modelo que \"piense paso a paso antes de emitir la conclusión final\", lo cual reduce los errores lógicos en más de un 60%.",
+          "concept_id": "ia-transformer-autoregressive",
+          "objective": "Comprender el mecanismo de atencion y el proceso de generacion probabilistica token a token de los LLMs modernos.",
+          "theory_markdown": "Los **Modelos de Lenguaje Grande (LLMs)** modernos (como GPT-4, Claude 3.5 o Gemini 1.5) se basan en la arquitectura **Transformer** (Vaswani et al., 2017), concretamente en su variante *Decoder-Only*.\n\n### Generacion Autorregresiva\nUn LLM es un modelo probabilistico autorregresivo: **genera texto prediciendo iterativamente un token a la vez**.\n\nEn cada paso de inferencia:\n1. El modelo recibe la secuencia completa de tokens acumulada hasta el momento.\n2. El mecanismo de **Auto-Atencion (Self-Attention)** calcula la relevancia contextual entre todos los pares de tokens de la secuencia.\n3. La capa de salida produce una distribucion de probabilidad (logits procesados con Softmax) sobre todo el vocabulario disponible.\n4. Se selecciona un token segun la estrategia de muestreo y se anade a la secuencia, repitiendo el ciclo hasta emitir el token de fin de secuencia (`<|endoftext|>`).",
           "examples": [
             {
-              "title": "Estructura de un prompt robusto para agentes",
-              "code": "system_prompt = \"\"\"\nEres un asistente senior de auditoría de código en Python.\n\nReglas:\n1. Analiza el código proporcionado línea por línea.\n2. Identifica posibles vulnerabilidades de seguridad (SQLi, XSS).\n3. Responde estrictamente en formato Markdown con sugerencias concretas.\n\"\"\"\nprint(system_prompt.strip())",
-              "output": "Eres un asistente senior de auditoría de código en Python.\n...",
-              "explanation": "Un buen system prompt establece rol, reglas inviolables y formato de salida esperado."
+              "title": "Ciclo autorregresivo conceptual",
+              "code": "# Secuencia inicial: \"El lenguaje de programacion es\"\n# Paso 1: P(Python | contexto) = 0.85 -> Emite \"Python\"\n# Paso 2: Nuevo contexto: \"El lenguaje de programacion es Python\"\n# Paso 3: P(versatil | contexto) = 0.72 -> Emite \"versatil\"\n# Continua hasta alcanzar el token final de parada.",
+              "output": "Generacion token por token condicionada por todo el historial precedente.",
+              "explanation": "El modelo no planifica el parrafo completo en un solo bloque; evalua probabilidades condicionales en cada paso."
             }
           ],
-          "common_errors": "Usar temperature=1.0 cuando se espera que el modelo devuelva un JSON estructurado o código ejecutable (aumenta el riesgo de alucinaciones sintácticas).",
+          "common_errors": "Creer que los LLMs consultan una base de datos estatica de respuestas predefinidas, cuando en realidad calculan distribuciones estadisticas de probabilidad sobre tokens.",
           "mini_exercise": {
-            "starter_code": "# Para tareas de código y extracción de datos, ¿qué temperatura es la óptima?\ntemperatura_optima = ...  # 0.0 o 1.5?",
-            "instructions": "Asigna 0.0 a temperatura_optima.",
-            "solution": "temperatura_optima = 0.0"
+            "instructions": "Escribe un breve texto explicando que significa que un modelo sea autorregresivo.",
+            "starter_code": "# Que significa autorregresivo?\nconcepto = ...",
+            "solution": "concepto = \"Significa que predice el siguiente token condicionandose en los tokens previamente generados.\""
           },
           "key_takeaways": [
-            "Los LLMs predicen el siguiente token estadísticamente.",
-            "Temperature=0.0 garantiza respuestas reproducibles y precisas.",
-            "Chain-of-Thought (pensar paso a paso) aumenta la precisión en tareas complejas."
+            "Los LLMs modernos son modelos autorregresivos basados en Transformers Decoder-Only.",
+            "El mecanismo de auto-atencion evalua relaciones entre todos los tokens del contexto.",
+            "La generacion opera token a token hasta encontrar un token delimitador de parada."
           ],
           "exercise": {
             "id": "ex_ia_01_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Por qué para tareas de generación de código o extracción estructurada se recomienda configurar temperature=0.0?",
+            "prompt": "Cual es el principio operativo basico de un modelo de lenguaje autorregresivo como GPT o Gemini?",
             "options": [
               {
                 "id": "a",
-                "text": "Porque minimiza la aleatoriedad y hace que las respuestas sean deterministas y precisas"
+                "text": "Predecir de forma iterativa el siguiente token mas probable condicionado en la secuencia de tokens anteriores."
               },
               {
                 "id": "b",
-                "text": "Porque hace que el modelo responda en mayúsculas"
+                "text": "Consultar tablas SQL de respuestas exactas almacenadas en un servidor."
               },
               {
                 "id": "c",
-                "text": "Porque apaga los servidores del modelo"
+                "text": "Compilar codigo Python directamente a codigo ensamblador."
               },
               {
                 "id": "d",
-                "text": "Porque elimina la necesidad de tokens"
+                "text": "Buscar coincidencias literales de texto en la web en cada milisegundo."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Temperature 0.0 selecciona siempre el token más probable, ideal para tareas lógicas y formatos estrictos."
+            "explanation": "El proceso autorregresivo predice secuencialmente el proximo token calculando probabilidades sobre el vocabulario segun el contexto acumulado."
+          }
+        },
+        {
+          "id": "les_ia_01_02",
+          "code": "L02",
+          "title": "Tokenizacion BPE y la Ventana de Contexto",
+          "slug": "tokenizacion-bpe-context-window",
+          "position": 2,
+          "concept_id": "ia-tokenization-context",
+          "objective": "Analizar la codificacion Byte-Pair Encoding (BPE), estimar el consumo de tokens y comprender los limites del Context Window.",
+          "theory_markdown": "Los modelos de lenguaje no procesan caracteres ni palabras enteras directamente; procesan **tokens** mediante algoritmos como **BPE (Byte-Pair Encoding)**.\n\n### Metricas de Conversion de Tokens\n- En ingles: 1 token equivale aproximadamente a 0.75 palabras (o 4 caracteres).\n- En espanol y otros idiomas con acentos o caracteres especiales, una palabra puede fragmentarse en multiples subtokens, aumentando el costo y la latencia.\n- En Python se usa la libreria `tiktoken` para calcular el conteo exacto de tokens antes de invocar la API.\n\n### La Ventana de Contexto (Context Window)\nEs la cantidad maxima de tokens (entrada + salida) que el modelo puede retener en su memoria de atencion activa simultaneamente (ej. 128k en GPT-4o, 1M+ en Gemini 1.5 Pro). Exceder este limite produce un error de API o truncamiento abrupto.",
+          "examples": [
+            {
+              "title": "Conteo exacto de tokens con tiktoken",
+              "code": "import tiktoken\n\nencoder = tiktoken.get_encoding(\"cl100k_base\")\ntexto = \"Python es un lenguaje interpretado y potente.\"\ntokens = encoder.encode(texto)\nprint(\"Conteo de tokens:\", len(tokens))\nprint(\"IDs de tokens:\", tokens[:5])",
+              "output": "Conteo de tokens: 9\nIDs de tokens: [31318, 374, 513, 21257, 362]",
+              "explanation": "El texto se descompone en enteros numericos que representan los subtokens en el vocabulario."
+            }
+          ],
+          "common_errors": "Calcular costos o limites de API basandose en el conteo de palabras en lugar del conteo de tokens de BPE.",
+          "mini_exercise": {
+            "instructions": "Usa encoder.encode(texto) para obtener la lista de tokens numericos de la variable 'frase'.",
+            "starter_code": "import tiktoken\nencoder = tiktoken.get_encoding(\"cl100k_base\")\nfrase = \"Hola Koda\"\n\n# Obtiene tokens\ntokens = ...",
+            "solution": "tokens = encoder.encode(frase)"
+          },
+          "key_takeaways": [
+            "Los LLMs procesan subtokens numericos generados por BPE, no palabras directas.",
+            "tiktoken permite auditar y presupuestar el consumo de tokens en Python.",
+            "El Context Window impone un limite estricto a la suma de tokens de entrada y salida."
+          ],
+          "exercise": {
+            "id": "ex_ia_01_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Por que un texto escrito en espanol suele consumir mas tokens que el mismo texto en ingles en un tokenizador estandar como BPE?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque los vocabularios de BPE se entrenaron predominantemente con corpus en ingles, provocando que palabras y acentos en espanol se dividan en multiples subtokens mas pequenos."
+              },
+              {
+                "id": "b",
+                "text": "Porque el espanol utiliza mas letras por palabra que el ingles."
+              },
+              {
+                "id": "c",
+                "text": "Porque los modelos de lenguaje no admiten caracteres latinos."
+              },
+              {
+                "id": "d",
+                "text": "Porque las APIs cobran un recargo geografico automatico."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La distribucion de frecuencia del vocabulario BPE fragmenta vocablos y signos diacriticos de idiomas con menor representacion en el corpus de entrenamiento en varios fragmentos."
+          }
+        },
+        {
+          "id": "les_ia_01_03",
+          "code": "L03",
+          "title": "Parametros de Muestreo: Temperature, Top-p y Top-k",
+          "slug": "parametros-muestreo-temperature-topp",
+          "position": 3,
+          "concept_id": "ia-sampling-parameters",
+          "objective": "Ajustar Temperature, Top-p y Top-k para calibrar el balance entre determinismo rigido y creatividad controlada.",
+          "theory_markdown": "Al finalizar la pasada hacia adelante, el modelo genera un vector de logits. Los parametros de muestreo determinan como se transforma ese vector en la eleccion del siguiente token:\n\n1. **Temperature ($T$):** Escala los logits antes de aplicar la funcion Softmax.\n   - $T = 0.0$ (o cercano a 0): **Greedy Search**. Siempre elige el token con mayor probabilidad. Maximo determinismo, ideal para extraccion de datos, codigo y analisis logico.\n   - $T = 1.0$: Muestreo estandar segun las probabilidades naturales aprendidas.\n   - $T > 1.2$: Aplana la distribucion, otorgando mayor probabilidad a tokens raros. Mayor creatividad pero alto riesgo de alucinacion y perdida de coherencia.\n\n2. **Top-p (Nucleus Sampling):**\n   Restringe la seleccion al conjunto acumulado de tokens cuya suma de probabilidades alcanza el valor $p$ (ej. $p = 0.90$). Descarta la 'cola larga' de tokens inverosimiles.\n\n3. **Regla de Diseno:** Ajusta Temperature O Top-p, pero no ambos simultaneamente de forma agresiva.",
+          "examples": [
+            {
+              "title": "Configuracion de parametros segun el caso de uso",
+              "code": "# Caso 1: Generacion de SQL o parsing de JSON estructurado (Determinista)\nparams_sql = {\"temperature\": 0.0, \"top_p\": 1.0}\n\n# Caso 2: Brainstorming de marketing o generacion narrativa (Creativo)\nparams_creativo = {\"temperature\": 0.8, \"top_p\": 0.9}",
+              "output": "Configuraciones calibradas segun la tolerancia a varianza de la tarea.",
+              "explanation": "Tareas estructuradas requieren temperature=0.0 para garantizar que el modelo no invente sintaxis."
+            }
+          ],
+          "common_errors": "Configurar temperature=1.5 para tareas que requieren retornar JSON estricto, provocando llaves rotas, campos faltantes y errores de sintaxis.",
+          "mini_exercise": {
+            "instructions": "Define un diccionario con temperature=0.0 para una tarea que exige maxima precision y reproducibilidad.",
+            "starter_code": "# Define config_determinista\nconfig_determinista = ...",
+            "solution": "config_determinista = {\"temperature\": 0.0}"
+          },
+          "key_takeaways": [
+            "Temperature controla la dispersion probabilistica (0 = determinista, >1 = creativo).",
+            "Top-p limita la seleccion al nucleo acumulado mas probable descartando la cola infrecuente.",
+            "Para extraccion estructurada, codigo y matematicas se debe usar temperature=0.0."
+          ],
+          "exercise": {
+            "id": "ex_ia_01_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Que valor de Temperature se debe configurar en una llamada a un LLM si el objetivo es extraer datos en formato JSON de un contrato legal con la maxima consistencia y reproducibilidad?",
+            "options": [
+              {
+                "id": "a",
+                "text": "0.0"
+              },
+              {
+                "id": "b",
+                "text": "1.0"
+              },
+              {
+                "id": "c",
+                "text": "1.8"
+              },
+              {
+                "id": "d",
+                "text": "-1.0"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Temperature 0.0 activa la seleccion codiciosa (greedy), seleccionando siempre el token con maxima probabilidad y garantizando reproducibilidad en tareas formales."
+          }
+        },
+        {
+          "id": "les_ia_01_04",
+          "code": "L04",
+          "title": "Tecnicas de Prompt Engineering: Few-Shot y Chain-of-Thought",
+          "slug": "few-shot-chain-of-thought",
+          "position": 4,
+          "concept_id": "da-prompt-engineering-cot",
+          "objective": "Disenar prompts profesionales aplicando Zero-shot, Few-shot prompting y Chain-of-Thought (CoT) para tareas complejas.",
+          "theory_markdown": "El **Prompt Engineering** es la disciplina de formular entradas estructuradas para guiar el espacio latente del modelo hacia respuestas optimas:\n\n1. **Zero-Shot Prompting:** Se solicita la tarea directamente sin proporcionar ejemplos previos.\n2. **Few-Shot Prompting (In-Context Learning):** Se proporcionan entre 2 y 5 pares de ejemplos de `Entrada -> Salida` antes de solicitar el caso real. Calibra el formato y estilo exacto esperado sin re-entrenar pesos.\n3. **Chain-of-Thought (CoT) / Razonamiento Paso a Paso:**\n   Obligar al modelo a descomponer el problema ('Piensa paso a paso antes de dar tu veredicto final') aumenta dramaticamente el desempeno en logica y aritmetica, ya que cada paso intermedio generado se convierte en contexto autorregresivo para los pasos subsiguientes.\n4. **Delimitadores Claros:** Uso de etiquetas Markdown (```) o XML (`<contexto>...</contexto>`) para separar instrucciones de datos de entrada.",
+          "examples": [
+            {
+              "title": "Prompt Few-Shot con delimitadores XML",
+              "code": "prompt = \"\"\"\nClasifica el sentimiento del texto en Positivo, Negativo o Neutro.\n\nEjemplos:\nEntrada: El servicio fue rapido y eficiente.\nSalida: Positivo\n\nEntrada: El producto llego danado y tarde.\nSalida: Negativo\n\nAnaliza la siguiente entrada:\n<texto>\nLa entrega tardo pero la comida estaba deliciosa.\n</texto>\nRazonamiento: Evalua la queja vs el elogio.\nSalida:\n\"\"\"",
+              "output": "Salida: Positivo",
+              "explanation": "Los ejemplos acondicionan al modelo para imitar exactamente la taxonomia solicitada."
+            }
+          ],
+          "common_errors": "Pedirle a un LLM que resuelva un problema matematico o de logica complejo directamente sin permitirle generar pasos de razonamiento intermedios (CoT).",
+          "mini_exercise": {
+            "instructions": "Escribe la instruccion estandar de Chain-of-Thought para obligar al modelo a razonar antes de responder.",
+            "starter_code": "# Instruccion CoT\ninstruccion_cot = ...",
+            "solution": "instruccion_cot = \"Piensa paso a paso y justifica tu respuesta antes de dar el veredicto final.\""
+          },
+          "key_takeaways": [
+            "Few-Shot prompting acondiciona el formato mediante ejemplos representativos.",
+            "Chain-of-Thought (CoT) permite calcular tokens de razonamiento intermedio mejorando la precision logica.",
+            "Los delimitadores XML o Markdown previenen inyecciones y confunden menos al modelo."
+          ],
+          "exercise": {
+            "id": "ex_ia_01_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Por que la tecnica Chain-of-Thought ('Piensa paso a paso') mejora sustancialmente la precision de los LLMs en problemas logicos o matematicos?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque al generar tokens de razonamiento intermedio, cada paso se convierte en parte del contexto previo disponible para calcular los siguientes pasos probabilisticos de la solucion."
+              },
+              {
+                "id": "b",
+                "text": "Porque reinicia los pesos de la red neuronal durante la peticion."
+              },
+              {
+                "id": "c",
+                "text": "Porque desactiva la tokenizacion BPE."
+              },
+              {
+                "id": "d",
+                "text": "Porque conecta al modelo con una calculadora externa automaticamente."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Debido a la naturaleza autorregresiva del modelo, verbalizar los pasos intermedios expande el contexto con la secuencia logica requerida para deducir la conclusion correcta."
           }
         }
       ]

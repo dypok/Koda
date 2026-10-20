@@ -7,6 +7,7 @@ export interface SaveSectionCompletionParams {
   moduleId: string;
   courseId: string;
   accuracyPercentage: number;
+  targetXp?: number;
 }
 
 export interface SaveSectionCompletionResult {
@@ -15,6 +16,10 @@ export interface SaveSectionCompletionResult {
   isNewlyPassed: boolean;
   isNewBest: boolean;
   userTotalXp: number;
+  currentStreak?: number;
+  longestStreak?: number;
+  streakFreezeCount?: number;
+  isActiveToday?: boolean;
 }
 
 export interface IProgressRepository {

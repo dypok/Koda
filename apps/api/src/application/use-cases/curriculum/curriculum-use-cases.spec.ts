@@ -32,7 +32,7 @@ describe('Curriculum Use Cases (MongoDB)', () => {
   });
 
   const mockCourse = new CourseEntity({
-    slug: 'python-core',
+    slug: 'python-1',
     trackSlug: 'python',
     name: 'Fundamentos de Python',
     description: 'Sintaxis básica',
@@ -53,7 +53,7 @@ describe('Curriculum Use Cases (MongoDB)', () => {
 
   const mockModule = new ModuleEntity({
     slug: 'fundamentos-de-python',
-    courseSlug: 'python-core',
+    courseSlug: 'python-1',
     title: 'Módulo 1',
     objective: 'Aprender print',
     position: 1,
@@ -127,7 +127,7 @@ describe('Curriculum Use Cases (MongoDB)', () => {
       findTracks: jest.fn().mockResolvedValue([mockTrack]),
       findTrackBySlug: jest.fn().mockImplementation(async (slug) => (slug === 'python' ? mockTrack : null)),
       findCoursesByTrack: jest.fn().mockResolvedValue([mockCourse]),
-      findCourseBySlug: jest.fn().mockImplementation(async (slug) => (slug === 'python-core' ? mockCourse : null)),
+      findCourseBySlug: jest.fn().mockImplementation(async (slug) => (slug === 'python-1' ? mockCourse : null)),
       findAllCourses: jest.fn().mockResolvedValue([mockCourse]),
       findModulesByCourse: jest.fn().mockResolvedValue([mockModule]),
       findModuleBySlug: jest.fn().mockImplementation(async (slug) => (slug === 'fundamentos-de-python' ? mockModule : null)),
@@ -161,8 +161,8 @@ describe('Curriculum Use Cases (MongoDB)', () => {
 
   it('GetCourseDetailUseCase retorna curso con módulos y secciones', async () => {
     const useCase = new GetCourseDetailUseCase(mockRepo);
-    const result = await useCase.execute('python-core');
-    expect(result.course.slug).toBe('python-core');
+    const result = await useCase.execute('python-1');
+    expect(result.course.slug).toBe('python-1');
     expect(result.modules).toHaveLength(1);
     expect(result.modules[0].sections).toHaveLength(1);
   });
@@ -198,7 +198,7 @@ describe('Curriculum Use Cases (MongoDB)', () => {
     expect(coursesGraph.nodes).toHaveLength(1);
     expect(coursesGraph.nodes[0].isUnlocked).toBe(true);
 
-    const lessonsGraph = await useCase.getLessonsGraph('python-core');
+    const lessonsGraph = await useCase.getLessonsGraph('python-1');
     expect(lessonsGraph.nodes).toHaveLength(8);
     expect(lessonsGraph.nodes[0].id).toBe('py-m01');
   });

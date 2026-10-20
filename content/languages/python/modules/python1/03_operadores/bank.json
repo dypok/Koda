@@ -7,33 +7,34 @@
       "id": "q_py1_03_01",
       "type": "predict_output",
       "difficulty": "easy",
-      "prompt": "¿Qué devuelve print(2 ** 3 ** 2)? (Nota: la potencia en Python asocia de derecha a izquierda)",
+      "prompt": "¿Qué valor produce la siguiente expresión siguiendo la precedencia de operadores?",
+      "prompt_code": "print(10 + 5 * 2)",
       "options": [
         {
           "id": "a",
-          "text": "512"
+          "text": "20"
         },
         {
           "id": "b",
-          "text": "64"
+          "text": "30"
         },
         {
           "id": "c",
-          "text": "36"
+          "text": "20.0"
         },
         {
           "id": "d",
-          "text": "18"
+          "text": "100"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Las potencias se evalúan de derecha a izquierda: 3 ** 2 = 9, y luego 2 ** 9 = 512."
+      "explanation": "Por reglas de precedencia (PEMDAS), la multiplicación (5 * 2 = 10) se ejecuta antes que la suma, resultando en 10 + 10 = 20."
     },
     {
       "id": "q_py1_03_02",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "¿Cuál es la forma correcta y pythónica de verificar si una variable num está entre 10 y 20 (inclusive)?",
+      "prompt": "¿Cuál es la forma correcta y pythónica de verificar si una variable num está entre 10 y 20 (ambos inclusive)?",
       "options": [
         {
           "id": "a",
@@ -53,39 +54,13 @@
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Python soporta comparación encadenada 10 <= num <= 20, siendo la sintaxis más limpia y pythónica."
+      "explanation": "Python soporta comparaciones encadenadas como 10 <= num <= 20, siendo la forma más limpia y estándar en el lenguaje."
     },
     {
       "id": "q_py1_03_03",
-      "type": "find_error",
-      "difficulty": "medium",
-      "prompt": "¿Qué error hay en: `if x = 10:`?",
-      "options": [
-        {
-          "id": "a",
-          "text": "Se usó el operador de asignación (=) en vez del de comparación (==)"
-        },
-        {
-          "id": "b",
-          "text": "Falta un punto y coma al final"
-        },
-        {
-          "id": "c",
-          "text": "El número 10 debe ir entre comillas"
-        },
-        {
-          "id": "d",
-          "text": "No se puede usar la palabra if en Python"
-        }
-      ],
-      "correct_option_id": "a",
-      "explanation": "= asigna un valor a una variable. Para verificar si x es igual a 10 se debe usar el comparador de igualdad ==."
-    },
-    {
-      "id": "q_py1_03_04",
       "type": "predict_output",
       "difficulty": "easy",
-      "prompt": "¿Qué valor produce 16 % 5?",
+      "prompt": "¿Qué valor produce la operación 16 % 5?",
       "options": [
         {
           "id": "a",
@@ -105,7 +80,87 @@
         }
       ],
       "correct_option_id": "a",
-      "explanation": "16 dividido entre 5 cabe a 3 con residuo 1 (5 * 3 = 15; 16 - 15 = 1)."
+      "explanation": "El operador % devuelve el residuo de la división. 16 dividido entre 5 cabe 3 veces (15) y sobra 1 de residuo."
+    },
+    {
+      "id": "q_py1_03_04",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué valor imprimirá la siguiente expresión?",
+      "prompt_code": "print(10 // 3 + 10 % 3)",
+      "options": [
+        {
+          "id": "a",
+          "text": "4"
+        },
+        {
+          "id": "b",
+          "text": "3.33"
+        },
+        {
+          "id": "c",
+          "text": "3"
+        },
+        {
+          "id": "d",
+          "text": "1"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "10 // 3 calcula la división entera (3) y 10 % 3 calcula el residuo (1). Sumando ambos valores: 3 + 1 = 4."
+    },
+    {
+      "id": "q_py1_03_05",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es la diferencia fundamental entre el operador = y el operador == en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "= asigna un valor a una variable y == compara si dos valores son iguales"
+        },
+        {
+          "id": "b",
+          "text": "= compara si dos valores son iguales y == asigna un valor a una variable"
+        },
+        {
+          "id": "c",
+          "text": "Son exactamente equivalentes e intercambiables"
+        },
+        {
+          "id": "d",
+          "text": "== solo se puede utilizar con cadenas de texto"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "En Python, un solo igual (=) es el operador de asignación, mientras que el doble igual (==) es el operador de comparación relacional de igualdad."
+    },
+    {
+      "id": "q_py1_03_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué valor se mostrará en la consola tras ejecutar la siguiente instrucción?",
+      "prompt_code": "print(not (5 > 10))",
+      "options": [
+        {
+          "id": "a",
+          "text": "True"
+        },
+        {
+          "id": "b",
+          "text": "False"
+        },
+        {
+          "id": "c",
+          "text": "None"
+        },
+        {
+          "id": "d",
+          "text": "Error de tipo"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La comparación 5 > 10 se evalúa como False. El operador not invierte ese valor de verdad, resultando en True."
     }
   ]
 }

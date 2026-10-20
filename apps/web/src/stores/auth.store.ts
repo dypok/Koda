@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { BackendUserSession } from '@/services/auth/auth.service';
-
 import { AuthService } from '@/services/auth/auth.service';
+import { setSessionCookie } from '@/lib/domain';
 
 export interface AuthUser {
   id: string;
@@ -12,6 +12,10 @@ export interface AuthUser {
   level: number;
   streak: number;
   role?: string;
+  longestStreak?: number;
+  streakFreezeCount?: number;
+  lastStudyDate?: string | null;
+  isActiveToday?: boolean;
   initialLanguageSlug?: string;
   experienceLevel?: string;
   learningStyle?: string;
@@ -30,6 +34,7 @@ interface AuthState {
   setUserSession: (session: BackendUserSession, accessToken: string, refreshToken?: string) => void;
   loginAsAdmin: (override?: Partial<AuthUser>) => void;
   updateUserProfile: (partial: Partial<AuthUser>) => void;
+  loginAsGuest: () => void;
   login: (email: string, fullName?: string) => void;
   loginSocial: (provider: 'google' | 'github') => void;
   logout: () => void;
@@ -41,6 +46,9 @@ const STORAGE_KEYS = {
   REFRESH_TOKEN: 'koda_auth_refresh_token',
   HAS_LOGGED: 'koda_has_ever_logged_in',
 };
+
+/** Token centinela para la sesión de invitado (modo demo, sin backend). */
+const GUEST_TOKEN = 'koda-guest-session';
 
 function parseJwtExp(token: string): number | null {
   try {
@@ -107,6 +115,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       if (storedUser && storedToken && !isMockUser) {
         try {
           const user = JSON.parse(storedUser);
+          if (!user.avatarUrl || user.avatarUrl.includes('koda-mascot-cartoon-2d')) {
+            user.avatarUrl = '/avatars/koda-classic.svg';
+          }
           set({
             user,
             token: storedToken,
@@ -115,6 +126,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
             hasEverLoggedIn: true,
             hasHydrated: true,
           });
+          setSessionCookie(true);
 
           // Verificar si el token ya expiró o vencerá en menos de 5 minutos
           const exp = parseJwtExp(storedToken);
@@ -168,11 +180,17 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       id: session.id,
       email: session.email,
       fullName: session.displayName || session.email.split('@')[0] || 'Estudiante Koda',
-      avatarUrl: session.avatarUrl || '/brand/koda-mascot-cartoon-2d.svg',
+      avatarUrl: (session.avatarUrl && !session.avatarUrl.includes('koda-mascot-cartoon-2d'))
+        ? session.avatarUrl
+        : '/avatars/koda-classic.svg',
       totalXp: session.totalXp ?? 0,
       level: session.currentLevel ?? 1,
       streak: session.currentStreak ?? 0,
       role,
+      longestStreak: session.longestStreak ?? session.currentStreak ?? 0,
+      streakFreezeCount: session.streakFreezeCount ?? 1,
+      lastStudyDate: session.lastStudyDate ?? null,
+      isActiveToday: session.isActiveToday,
       initialLanguageSlug: session.initialLanguageSlug,
       experienceLevel: session.experienceLevel,
       learningStyle: session.learningStyle,
@@ -198,6 +216,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       isAuthenticated: true,
       hasEverLoggedIn: true,
     });
+    setSessionCookie(true);
 
     scheduleBackgroundRefresh(accessToken, finalRefresh, (newToken, newRefresh) => {
       set({ token: newToken, refreshToken: newRefresh });
@@ -250,6 +269,43 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     });
   },
 
+  /**
+   * Inicia una sesión de invitado (modo demo) sin backend ni Supabase Auth.
+   * Permite recorrer la app (roadmap y lecciones) con datos locales.
+   */
+  loginAsGuest: () => {
+    const guestUser: AuthUser = {
+      id: 'koda-guest',
+      email: 'invitado@koda.academy',
+      fullName: 'Invitado',
+      avatarUrl: '/avatars/koda-classic.svg',
+      totalXp: 0,
+      level: 1,
+      streak: 0,
+      initialLanguageSlug: 'python',
+      experienceLevel: 'beginner',
+      learningStyle: 'hands-on',
+      dailyGoalMinutes: 10,
+      onboardingCompleted: true,
+    };
+
+    if (typeof window !== 'undefined') {
+      localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(guestUser));
+      localStorage.setItem(STORAGE_KEYS.TOKEN, GUEST_TOKEN);
+      localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+      localStorage.setItem(STORAGE_KEYS.HAS_LOGGED, 'true');
+    }
+
+    set({
+      user: guestUser,
+      token: GUEST_TOKEN,
+      refreshToken: null,
+      isAuthenticated: true,
+      hasEverLoggedIn: true,
+    });
+    setSessionCookie(true);
+  },
+
   login: () => {
     // Deprecated
   },
@@ -269,6 +325,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
       localStorage.setItem(STORAGE_KEYS.HAS_LOGGED, 'true');
     }
+    setSessionCookie(false);
     set({ user: null, token: null, refreshToken: null, isAuthenticated: false, hasEverLoggedIn: true });
   },
 }));

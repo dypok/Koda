@@ -1,83 +1,65 @@
 'use client';
 
-import React, { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuthStore } from '@/stores/auth.store';
-import { StudentRoadmapView } from '@/views/roadmap/StudentRoadmapView';
+import React, { useEffect, useState } from 'react';
+import { isAppHost, getAppUrl } from '@/lib/domain';
 import { LandingPageView } from '@/views/landing/LandingPageView';
+import AppPage from '@/app/app/page';
 import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
 
+/**
+ * Pagina Principal (/):
+ * - Si se ejecuta en el subdominio de la app (app.localhost / app.koda.academy):
+ *   Delega a AppPage (Roadmap del estudiante o redireccion a /login),
+ *   asegurando que las navegaciones client-side (router.replace('/')) funcionen de forma instantanea.
+ * - Si contiene fragmento OAuth (#access_token= o #error=):
+ *   Redirige inmediatamente al subdominio app (/login#...) para procesar y persistir la sesion en el origen correspondiente.
+ * - Si se ejecuta en el dominio raiz (localhost:3000 / koda.academy):
+ *   Sirve exclusivamente la Landing Page de Koda sin bloqueos ni secuestro de sesion.
+ */
 export default function HomePage() {
-  const router = useRouter();
-  const { user, isAuthenticated, hasEverLoggedIn, hasHydrated, initAuth } = useAuthStore();
-
-  useEffect(() => {
-    initAuth();
-  }, [initAuth]);
-
-  useEffect(() => {
-    if (!hasHydrated) return;
-
-    // Si el usuario llega explicitamente solicitando la landing (ej. desde 404, error o login)
-    const isExplicitLanding = typeof window !== 'undefined' && window.location.search.includes('landing=true');
-    if (isExplicitLanding) {
-      return;
+  const [isRedirectingOAuth, setIsRedirectingOAuth] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const hash = window.location.hash;
+      return Boolean(hash && (hash.includes('access_token=') || hash.includes('error=')));
     }
-
-    if (isAuthenticated) {
-      if (user && user.onboardingCompleted === false && user?.role !== 'admin') {
-        router.replace('/register');
-      }
-    } else if (hasEverLoggedIn) {
-      // Un usuario que ya ha iniciado sesión antes va al login por defecto
-      router.replace('/login');
-    }
-  }, [hasHydrated, isAuthenticated, hasEverLoggedIn, user, router]);
+    return false;
+  });
 
   const isExplicitLanding = typeof window !== 'undefined' && window.location.search.includes('landing=true');
+  const isApp = typeof window !== 'undefined' ? isAppHost(window.location.host) : false;
 
-  if (!hasHydrated) {
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const hash = window.location.hash;
+    if (hash && (hash.includes('access_token=') || hash.includes('error='))) {
+      setIsRedirectingOAuth(true);
+      const isAppSubdomain = isAppHost(window.location.host);
+      if (!isAppSubdomain) {
+        window.location.replace(getAppUrl(`/login${hash}`));
+      } else {
+        window.location.replace(`/login${hash}`);
+      }
+    }
+  }, []);
+
+  if (isRedirectingOAuth) {
     return (
       <KodaLoadingScreen
-        title="Cargando Koda..."
-        subtitle="Verificando tu sesión de aprendizaje..."
-        terminalHint="> auth :: verificando sesion"
+        title="Iniciando sesión..."
+        subtitle="Transfiriendo credenciales a la plataforma de aprendizaje..."
+        terminalHint="> auth :: redirigiendo a plataforma app"
       />
     );
   }
 
-  // Si se solicita expresamente ver la landing page
-  if (isExplicitLanding && !isAuthenticated) {
+  // Si se solicita expresamente ver la landing page en cualquier host
+  if (isExplicitLanding) {
     return <LandingPageView />;
   }
 
-  // Si ya inició sesión alguna vez pero no está autenticado, está siendo redirigido a /login
-  if (!isAuthenticated && hasEverLoggedIn) {
-    return (
-      <KodaLoadingScreen
-        title="Redirigiendo al inicio de sesión..."
-        subtitle="Sesión no iniciada. Acceso directo a Koda..."
-        terminalHint="> auth :: redirigiendo a /login"
-      />
-    );
+  if (isApp) {
+    return <AppPage />;
   }
 
-  // Si el usuario está autenticado y tiene pendiente el onboarding, se está redirigiendo a /register
-  if (isAuthenticated && user?.onboardingCompleted === false) {
-    return (
-      <KodaLoadingScreen
-        title="Completando registro..."
-        subtitle="Te estamos redirigiendo para finalizar tu configuración..."
-        terminalHint="> onboarding :: redirigiendo"
-      />
-    );
-  }
-
-  // Usuario autenticado: el Roadmap vive directamente en la raíz (/)
-  if (isAuthenticated) {
-    return <StudentRoadmapView />;
-  }
-
-  // Visitante primerizo que nunca se ha logueado en la plataforma
   return <LandingPageView />;
 }

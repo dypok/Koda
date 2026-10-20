@@ -4,14 +4,14 @@
   "code": "PY2_M10",
   "slug": "testing-con-pytest",
   "course_slug": "python-2",
-  "title": "Testing Automatizado con Pytest y Proyecto Intermedio",
-  "objective": "Escribir pruebas unitarias automatizadas con pytest, asserts idiomáticos, fixtures y parametrización de pruebas.",
-  "description": "El sello de los desarrolladores profesionales: escribe código verificado con pruebas unitarias que garanticen cero regresiones.",
-  "position": 20,
+  "title": "Testing Automatizado con Pytest y Prácticas Profesionales",
+  "objective": "Escribir suites de pruebas automatizadas con pytest, dominar asserts idiomáticos, validar excepciones con pytest.raises, inyectar fixtures y parametrizar tests.",
+  "description": "El sello de calidad del ingeniero de software: escribe código verificado con pruebas unitarias que garanticen cero regresiones en producción.",
+  "position": 10,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,231 @@
     {
       "id": "sec_py2_10_01",
       "code": "S01",
-      "title": "Pruebas Unitarias con pytest y asserts",
-      "slug": "pytest-asserts",
+      "title": "Pruebas Unitarias con Pytest",
+      "slug": "pruebas-unitarias-pytest",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 25,
+      "xp_on_complete": 60,
       "lessons": [
         {
           "id": "les_py2_10_01",
           "code": "L01",
           "title": "Filosofía de Pytest y la Sentencia assert",
-          "slug": "pytest-base",
+          "slug": "filosofia-pytest-assert",
           "position": 1,
-          "concept_id": "py2-pytest",
-          "objective": "Escribir funciones de prueba que validen la lógica de tu aplicación sin librerías complejas.",
-          "theory_markdown": "En Python, el framework estándar de la industria para pruebas es **pytest**.\n\nA diferencia de otros lenguajes con métodos extensos como `assertEquals()`, en pytest solo usas la palabra nativa de Python `assert`:\n\n```python\n# test_calculadora.py\ndef test_suma_basica():\n    assert 2 + 2 == 4\n```\n\nReglas clave de pytest:\n1. Los archivos deben llamarse `test_*.py` o `*_test.py`.\n2. Las funciones de prueba deben iniciar con `def test_...()`.",
+          "concept_id": "py2-pytest-asserts",
+          "objective": "Crear archivos de prueba con auto-descubrimiento y validar condiciones usando la sentencia nativa assert.",
+          "theory_markdown": "**`pytest`** es el estándar indiscutible para pruebas unitarias en el ecosistema moderno de Python.\n\n### Convenciones de auto-descubrimiento\nAl escribir `pytest` en la terminal, la herramienta escanea tu proyecto buscando pruebas automáticamente según estas reglas:\n1. Archivos que comiencen por `test_*.py` o terminen en `*_test.py`.\n2. Funciones que inicien por `def test_...()`.\n\n### El poder del `assert` nativo\nA diferencia de frameworks antiguos que exigían métodos complejos como `self.assertEqual(a, b)`, en pytest utilizas la instrucción estándar de Python `assert`:\n```python\ndef test_calculo_descuento():\n    precio = 100\n    descuento = 0.20\n    assert precio * (1 - descuento) == 80.0\n```\nSi la condición es falsa, pytest reescribe el bytecode para mostrarte exactamente qué variables tenían qué valor en el instante del fallo.",
           "examples": [
             {
-              "title": "Suite de pruebas con validación de excepciones",
-              "code": "import pytest\n\ndef dividir(a, b):\n    if b == 0:\n        raise ValueError(\"Divisor no puede ser 0\")\n    return a / b\n\ndef test_division_correcta():\n    assert dividir(10, 2) == 5.0\n\ndef test_division_por_cero():\n    with pytest.raises(ValueError):\n        dividir(10, 0)",
-              "output": "PASSED test_division_correcta\nPASSED test_division_por_cero",
-              "explanation": "pytest.raises verifica que la función lance exactamente la excepción esperada ante datos inválidos."
+              "title": "Archivo de prueba canónico",
+              "code": "# test_matematicas.py\ndef sumar(a, b):\n    return a + b\n\ndef test_suma_enteros():\n    assert sumar(2, 3) == 5\n\ndef test_suma_negativos():\n    assert sumar(-1, 1) == 0",
+              "output": "PASSED test_suma_enteros\nPASSED test_suma_negativos",
+              "explanation": "pytest ejecuta cada función de prueba de forma aislada reportando el resultado en verde si todos los asserts pasan."
             }
           ],
-          "common_errors": "Nombrar las funciones sin el prefijo `test_`, lo cual provoca que pytest no las descubra automáticamente al ejecutar `pytest` en la terminal.",
+          "common_errors": "Nombrar las funciones sin el prefijo `test_` (por ejemplo `def prueba_suma():`). pytest omitirá la función por completo sin ejecutarla.",
           "mini_exercise": {
-            "starter_code": "# Completa la prueba con assert para validar que len(\"koda\") es 4\ndef test_longitud():\n    assert ...",
-            "instructions": "Escribe: assert len(\"koda\") == 4",
-            "solution": "def test_longitud():\n    assert len(\"koda\") == 4"
+            "starter_code": "# Corrige el nombre de la funcion para que pytest la detecte\ndef ..._multiplicacion():\n    assert 3 * 3 == 9",
+            "instructions": "Escribe test para que inicie como test_multiplicacion.",
+            "solution": "def test_multiplicacion():\n    assert 3 * 3 == 9"
           },
           "key_takeaways": [
-            "pytest descubre automáticamente archivos test_*.py y funciones test_*().",
-            "assert valida condiciones booleanas con mensajes de error ricos.",
-            "pytest.raises(Error) comprueba el lanzamiento de excepciones esperadas."
+            "Los archivos y funciones de prueba deben iniciar con el prefijo test_.",
+            "assert evalúa expresiones booleanas y dispara un fallo detallado si son falsas.",
+            "pytest no requiere clases ni métodos heredados para pruebas unitarias básicas."
           ],
           "exercise": {
             "id": "ex_py2_10_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Cómo debe llamarse una función para que pytest la ejecute como prueba de forma automática?",
+            "prompt": "¿Cómo debe llamarse una función para que el comando 'pytest' la ejecute de forma automática?",
             "options": [
               {
                 "id": "a",
-                "text": "Debe iniciar con el prefijo test_ (ej: def test_calcular():)"
+                "text": "Debe comenzar obligatoriamente con el prefijo test_ (por ejemplo: def test_login():)"
               },
               {
                 "id": "b",
-                "text": "Debe llamarse obligatoriamente main()"
+                "text": "Debe llamarse exclusivamente check()"
               },
               {
                 "id": "c",
-                "text": "Debe tener el decorador @run_now"
+                "text": "Debe llamarse main()"
               },
               {
                 "id": "d",
-                "text": "No importa el nombre mientras termine en _check"
+                "text": "Debe finalizar con _run"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Por convención de auto-descubrimiento, pytest busca funciones que comiencen con test_."
+            "explanation": "La convención de auto-descubrimiento de pytest busca funciones cuyo identificador inicie con test_."
+          }
+        },
+        {
+          "id": "les_py2_10_02",
+          "code": "L02",
+          "title": "Validación de Excepciones con pytest.raises",
+          "slug": "validacion-excepciones-raises",
+          "position": 2,
+          "concept_id": "py2-pytest-raises",
+          "objective": "Verificar que funciones lancen excepciones específicas ante entradas erróneas usando el context manager pytest.raises.",
+          "theory_markdown": "Una prueba completa no solo valida el 'camino feliz' (cuando todo sale bien), sino también que tu sistema **falle controladamente** ante situaciones inválidas.\n\nPara comprobar que una función arroja la excepción esperada se utiliza el context manager `pytest.raises`:\n\n```python\nimport pytest\n\ndef retirar_fondos(saldo, monto):\n    if monto > saldo:\n        raise ValueError(\"Saldo insuficiente\")\n    return saldo - monto\n\ndef test_error_saldo_insuficiente():\n    # La prueba PASA si ocurre ValueError; si NO ocurre, la prueba FALLA\n    with pytest.raises(ValueError):\n        retirar_fondos(50, 100)\n```\n\nPuedes capturar la información del error para inspeccionar el mensaje exacto:\n```python\nwith pytest.raises(ValueError) as exc_info:\n    retirar_fondos(50, 100)\nassert \"Saldo insuficiente\" in str(exc_info.value)\n```",
+          "examples": [
+            {
+              "title": "Verificación de división por cero",
+              "code": "import pytest\n\ndef dividir(a, b):\n    return a / b\n\ndef test_division_cero():\n    with pytest.raises(ZeroDivisionError):\n        dividir(10, 0)",
+              "output": "PASSED test_division_cero",
+              "explanation": "dividir(10, 0) lanza ZeroDivisionError, que es interceptado con éxito por pytest.raises marcando la prueba como aprobada."
+            }
+          ],
+          "common_errors": "Poner código después de la línea que lanza el error dentro del bloque with pytest.raises. En cuanto se lanza el error, el bloque with termina inmediatamente.",
+          "mini_exercise": {
+            "starter_code": "import pytest\ndef test_conversion():\n    # Verifica que int(\"abc\") lance ValueError\n    with pytest.raises(...):\n        int(\"abc\")",
+            "instructions": "Escribe ValueError dentro de pytest.raises.",
+            "solution": "import pytest\ndef test_conversion():\n    with pytest.raises(ValueError):\n        int(\"abc\")"
+          },
+          "key_takeaways": [
+            "with pytest.raises(Excepcion): comprueba que el código lance un error esperado.",
+            "Si el código no lanza la excepción esperada, la prueba se marca como fallida.",
+            "exc_info.value permite validar el mensaje descriptivo del error."
+          ],
+          "exercise": {
+            "id": "ex_py2_10_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Si dentro de 'with pytest.raises(TypeError):' ejecutas un código que NO produce ninguna excepción, ¿cuál es el resultado de la prueba?",
+            "options": [
+              {
+                "id": "a",
+                "text": "La prueba FALLA (FAILED) porque se esperaba una excepción TypeError que nunca ocurrió"
+              },
+              {
+                "id": "b",
+                "text": "La prueba PASA porque no hubo errores"
+              },
+              {
+                "id": "c",
+                "text": "Python lanza un SyntaxError"
+              },
+              {
+                "id": "d",
+                "text": "pytest se bloquea indefinidamente"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "pytest.raises tiene como contrato garantizar que el error ocurra; si el código se ejecuta con éxito, la aserción falla."
+          }
+        },
+        {
+          "id": "les_py2_10_03",
+          "code": "L03",
+          "title": "Inyección de Dependencias y Estado con Fixtures",
+          "slug": "fixtures-pytest-inyeccion",
+          "position": 3,
+          "concept_id": "py2-pytest-fixtures",
+          "objective": "Modularizar la preparación y limpieza de datos de prueba mediante el decorador @pytest.fixture.",
+          "theory_markdown": "Cuando múltiples pruebas necesitan los mismos datos base (un usuario de prueba, una base de datos en memoria o un cliente HTTP), duplicar esa inicialización viola el principio DRY.\n\nEn pytest, esto se resuelve con **`fixtures`** usando el decorador `@pytest.fixture`:\n\n```python\nimport pytest\n\n@pytest.fixture\ndef usuario_base():\n    return {\"id\": 1, \"nombre\": \"Elena\", \"rol\": \"admin\", \"activo\": True}\n\n# La prueba recibe la fixture pasando su nombre exacto como parámetro\ndef test_usuario_activo(usuario_base):\n    assert usuario_base[\"activo\"] is True\n\ndef test_usuario_rol(usuario_base):\n    assert usuario_base[\"rol\"] == \"admin\"\n```\n\npytest analiza los argumentos de la función de prueba e inyecta automáticamente el valor de retorno de la fixture correspondiente.",
+          "examples": [
+            {
+              "title": "Fixture que prepara una lista de productos",
+              "code": "import pytest\n\n@pytest.fixture\ndef catalogo():\n    return [{\"sku\": \"A1\", \"precio\": 10}, {\"sku\": \"B2\", \"precio\": 20}]\n\ndef test_longitud_catalogo(catalogo):\n    assert len(catalogo) == 2\n\ndef test_total_catalogo(catalogo):\n    total = sum(p[\"precio\"] for p in catalogo)\n    assert total == 30",
+              "output": "PASSED test_longitud_catalogo\nPASSED test_total_catalogo",
+              "explanation": "Ambas pruebas reutilizan la fixture catalogo sin duplicar la creación de los diccionarios."
+            }
+          ],
+          "common_errors": "Llamar a la fixture con paréntesis en los parámetros de la prueba: `def test_algo(mi_fixture()):`. Debe pasarse el nombre sin paréntesis como parámetro.",
+          "mini_exercise": {
+            "starter_code": "import pytest\n# Decora la funcion datos_demo con pytest.fixture\n@pytest....\ndef datos_demo():\n    return [1, 2, 3]",
+            "instructions": "Escribe fixture para completar el decorador @pytest.fixture.",
+            "solution": "import pytest\n@pytest.fixture\ndef datos_demo():\n    return [1, 2, 3]"
+          },
+          "key_takeaways": [
+            "@pytest.fixture define generadores reutilizables de datos o configuración.",
+            "Se inyectan pasando su nombre como parámetro de la función de prueba.",
+            "Cada test recibe una copia fresca asegurando aislamiento entre pruebas."
+          ],
+          "exercise": {
+            "id": "ex_py2_10_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Cómo se suministra una fixture llamada 'db_temporal' a una función de prueba en pytest?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Incluyendo 'db_temporal' como parámetro en la definición de la función: def test_registro(db_temporal):"
+              },
+              {
+                "id": "b",
+                "text": "Importando la fixture dentro del cuerpo del test"
+              },
+              {
+                "id": "c",
+                "text": "Escribiendo @use(db_temporal) antes del test"
+              },
+              {
+                "id": "d",
+                "text": "Creando una variable global con ese nombre"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El sistema de inyección de dependencias de pytest empareja los nombres de los parámetros de la prueba con las fixtures registradas."
+          }
+        },
+        {
+          "id": "les_py2_10_04",
+          "code": "L04",
+          "title": "Pruebas Parametrizadas con @pytest.mark.parametrize",
+          "slug": "pruebas-parametrizadas-parametrize",
+          "position": 4,
+          "concept_id": "py2-pytest-parametrize",
+          "objective": "Ejecutar la misma lógica de prueba sobre múltiples juegos de datos de entrada y salida esperada sin duplicar código.",
+          "theory_markdown": "Cuando necesitas verificar una función con múltiples casos de prueba (ej: valores positivos, negativos, ceros, cadenas vacías), escribir 10 funciones `def test_...` casi idénticas ensucia tu suite.\n\nPara esto se utiliza **`@pytest.mark.parametrize`**:\n\n```python\nimport pytest\n\ndef es_par(n):\n    return n % 2 == 0\n\n@pytest.mark.parametrize(\"numero, esperado\", [\n    (2, True),\n    (4, True),\n    (3, False),\n    (0, True),\n    (-2, True)\n])\ndef test_es_par(numero, esperado):\n    assert es_par(numero) == esperado\n```\n\n### Ejecución independiente\npytest ejecutará la función `test_es_par` **5 veces independientes**, una por cada tupla de la lista. Si el caso `(3, False)` fallara, los otros 4 seguirán corriendo y reportándose individualmente en la terminal.",
+          "examples": [
+            {
+              "title": "Validación de longitud con parametrización",
+              "code": "import pytest\n\n@pytest.mark.parametrize(\"texto, longitud_esperada\", [\n    (\"koda\", 4),\n    (\"python\", 6),\n    (\"\", 0)\n])\ndef test_longitudes(texto, longitud_esperada):\n    assert len(texto) == longitud_esperada",
+              "output": "PASSED test_longitudes[koda-4]\nPASSED test_longitudes[python-6]\nPASSED test_longitudes[-0]",
+              "explanation": "pytest crea 3 pruebas individuales a partir de un solo bloque de código."
+            }
+          ],
+          "common_errors": "Escribir mal los nombres de las variables entre comillas en el primer argumento de parametrize (deben coincidir exactamente con los parámetros de la función).",
+          "mini_exercise": {
+            "starter_code": "import pytest\n# Parametriza la prueba con dos pares de datos (entrada, esperado)\n@pytest.mark.parametrize(\"entrada, esperado\", [(2, 4), (3, 6)])\ndef test_doble(entrada, esperado):\n    assert entrada * 2 == esperado",
+            "instructions": "Observa cómo se asocian entrada y esperado en cada tupla.",
+            "solution": "import pytest\n@pytest.mark.parametrize(\"entrada, esperado\", [(2, 4), (3, 6)])\ndef test_doble(entrada, esperado):\n    assert entrada * 2 == esperado"
+          },
+          "key_takeaways": [
+            "@pytest.mark.parametrize ejecuta una misma prueba sobre una tabla de datos.",
+            "Cada fila de la tabla genera un test unitario independiente.",
+            "Elimina código duplicado y facilita la cobertura exhaustiva de casos borde."
+          ],
+          "exercise": {
+            "id": "ex_py2_10_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "¿Cuántas pruebas independientes reportará pytest si una función decorada con @pytest.mark.parametrize recibe una lista de 4 tuplas?",
+            "options": [
+              {
+                "id": "a",
+                "text": "4 pruebas independientes, ejecutadas y evaluadas por separado"
+              },
+              {
+                "id": "b",
+                "text": "1 sola prueba combinada"
+              },
+              {
+                "id": "c",
+                "text": "Depende de cuántos núcleos tenga la CPU"
+              },
+              {
+                "id": "d",
+                "text": "0, porque los decoradores deshabilitan el test"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "pytest trata cada combinación de parámetros como un caso de prueba individual con su propio reporte de éxito o fracaso."
           }
         }
       ]

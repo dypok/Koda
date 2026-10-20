@@ -7,27 +7,158 @@
       "id": "q_py2_05_01",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "¿Qué modo de apertura debes usar en open(\"log.txt\", modo) para añadir nuevas líneas al final sin borrar el contenido existente?",
+      "prompt": "¿Cuál es la principal ventaja de utilizar la sentencia 'with open(...) as f:' en lugar de asignar 'f = open(...)'?",
       "options": [
         {
           "id": "a",
-          "text": "\"a\" (append)"
+          "text": "Garantiza que el archivo se cierre automáticamente al terminar el bloque, incluso si ocurre una excepción en su interior"
         },
         {
           "id": "b",
-          "text": "\"w\" (write)"
+          "text": "Obliga al sistema operativo a encriptar el contenido del archivo"
         },
         {
           "id": "c",
-          "text": "\"r\" (read)"
+          "text": "Elimina la necesidad de pasar el parámetro de modo ('r', 'w', 'a')"
         },
         {
           "id": "d",
-          "text": "\"x\" (exclusive)"
+          "text": "Convierte los archivos automáticamente a formato PDF"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "El modo \"a\" (append) añade al final del archivo existente; \"w\" sobrescribe y borra el contenido previo."
+      "explanation": "El context manager with invoca internamente el método __exit__, cerrando y liberando el descriptor de archivo sin importar cómo finalice el bloque."
+    },
+    {
+      "id": "q_py2_05_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué diferencia existe entre abrir un archivo con modo 'w' y con modo 'a'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "'w' sobrescribe el archivo borrando su contenido previo, mientras que 'a' conserva el contenido existente y escribe al final"
+        },
+        {
+          "id": "b",
+          "text": "'w' es solo para lectura y 'a' es para escritura binaria"
+        },
+        {
+          "id": "c",
+          "text": "'a' borra el archivo y 'w' añade al final"
+        },
+        {
+          "id": "d",
+          "text": "No existe ninguna diferencia, son alias idénticos"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "'w' (write) trunca el archivo a 0 bytes al abrirse. 'a' (append) posiciona el cursor al final para añadir información sin borrar."
+    },
+    {
+      "id": "q_py2_05_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la diferencia entre json.loads() y json.load() en la biblioteca estándar de Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "json.loads() toma una cadena de texto (string) en memoria, mientras que json.load() toma un objeto archivo (file descriptor)"
+        },
+        {
+          "id": "b",
+          "text": "json.loads() solo funciona con listas y json.load() con diccionarios"
+        },
+        {
+          "id": "c",
+          "text": "json.loads() es una función obsoleta en Python 3"
+        },
+        {
+          "id": "d",
+          "text": "json.load() convierte un objeto Python a formato XML"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La 's' en 'loads' significa 'string'. json.loads lee desde una cadena de texto; json.load lee directamente de un archivo abierto."
+    },
+    {
+      "id": "q_py2_05_04",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿En qué se transforma el valor booleano True de Python al serializarse con json.dumps()?",
+      "prompt_code": "import json\ndata = {\"activo\": True}\nprint(json.dumps(data))",
+      "options": [
+        {
+          "id": "a",
+          "text": "{\"activo\": true}"
+        },
+        {
+          "id": "b",
+          "text": "{\"activo\": True}"
+        },
+        {
+          "id": "c",
+          "text": "{\"activo\": 1}"
+        },
+        {
+          "id": "d",
+          "text": "{\"activo\": \"True\"}"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El estándar JSON define los valores booleanos en minúsculas (true y false). Python realiza la traducción automáticamente."
+    },
+    {
+      "id": "q_py2_05_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Por qué es importante incluir newline='' al abrir un archivo para escritura con el módulo csv en Windows?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Para evitar que el intérprete inserte líneas en blanco extra entre cada fila de datos generada"
+        },
+        {
+          "id": "b",
+          "text": "Porque de lo contrario el archivo no se puede guardar en el disco"
+        },
+        {
+          "id": "c",
+          "text": "Para forzar a que todas las letras se guarden en mayúsculas"
+        },
+        {
+          "id": "d",
+          "text": "Para cifrar el delimitador de coma"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "En Windows, la traducción automática de fin de línea puede duplicar el retorno de carro (\\r\\r\\n), causando líneas vacías adicionales si no se pasa newline=''."
+    },
+    {
+      "id": "q_py2_05_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué método del objeto archivo devuelve todas las líneas como una lista de strings?",
+      "options": [
+        {
+          "id": "a",
+          "text": "readlines()"
+        },
+        {
+          "id": "b",
+          "text": "read()"
+        },
+        {
+          "id": "c",
+          "text": "readline()"
+        },
+        {
+          "id": "d",
+          "text": "tolist()"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "f.readlines() lee el archivo completo y retorna una lista de Python donde cada elemento es una línea individual."
     }
   ]
 }

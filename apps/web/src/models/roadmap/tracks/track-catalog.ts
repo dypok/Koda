@@ -1,9 +1,15 @@
 import { CodeSimple } from '@phosphor-icons/react';
 import React from 'react';
 import { GraphDataset } from '../roadmap-graph.types';
-import { PYTHON_COURSES_DATASET } from './python-track.mock';
 
 export type CareerBranchId = string;
+
+const EMPTY_BRANCH_DATASET: GraphDataset = {
+  sectorTitle: 'PYTHON SPECIALIST: DE FUNDAMENTOS A AGENTES AUTÓNOMOS',
+  progressPercent: 0,
+  nodes: [],
+  connections: [],
+};
 
 export interface CareerBranchInfo {
   id: CareerBranchId;
@@ -28,11 +34,11 @@ export const CAREER_BRANCHES: CareerBranchInfo[] = [
     technologies: 'Python 3.12, FastAPI, Django, Pandas, IA & Agentes',
     icon: CodeSimple,
     color: '#F59E0B',
-    progressPercent: 28,
-    earnedStars: 10,
+    progressPercent: 0,
+    earnedStars: 0,
     totalStars: 60,
-    completedCourses: 1,
+    completedCourses: 0,
     totalCourses: 7,
-    dataset: PYTHON_COURSES_DATASET,
+    dataset: EMPTY_BRANCH_DATASET,
   },
 ];

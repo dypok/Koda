@@ -9,9 +9,13 @@ import { ProfileSettingsModal, SettingsTab } from '@/components/profile/ProfileS
 
 export default function ProfilePage() {
   const router = useRouter();
-  const { user, isAuthenticated, hasHydrated } = useAuthStore();
+  const { isAuthenticated, hasHydrated, initAuth } = useAuthStore();
   const [modalOpen, setModalOpen] = useState(true);
-  const [tab, setTab] = useState<SettingsTab>('profile');
+  const [tab] = useState<SettingsTab>('profile');
+
+  useEffect(() => {
+    initAuth();
+  }, [initAuth]);
 
   useEffect(() => {
     if (hasHydrated && !isAuthenticated) {

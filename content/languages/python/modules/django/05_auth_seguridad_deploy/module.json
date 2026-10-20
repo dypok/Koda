@@ -4,85 +4,250 @@
   "code": "DJ_M05",
   "slug": "django-auth-security-deploy",
   "course_slug": "django-enterprise",
-  "title": "Seguridad Web, Permisos y Despliegue en Producción",
-  "objective": "Blindar la aplicación contra CSRF, XSS, SQLi, gestionar grupos/permisos y configurar Gunicorn con WhiteNoise para despliegue.",
-  "description": "Pon tu aplicación Django en producción: checklist de seguridad, gestión estática con WhiteNoise y servidores WSGI.",
+  "title": "Seguridad Web, Permisos y Despliegue en Produccion",
+  "objective": "Blindar la aplicacion contra CSRF, XSS, SQLi, gestionar grupos/permisos y configurar Gunicorn con WhiteNoise para despliegue.",
+  "description": "Pon tu aplicacion Django en produccion: checklist de seguridad, gestion estatica con WhiteNoise y servidores WSGI.",
   "position": 40,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 400
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_dj_05_01",
       "code": "S01",
-      "title": "Checklist de Producción y Gunicorn",
-      "slug": "seguridad-y-produccion",
+      "title": "Seguridad Empresarial, Archivos Estaticos y Despliegue",
+      "slug": "seguridad-estaticos-despliegue",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 55,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_dj_05_01",
           "code": "L01",
-          "title": "Checklist de Seguridad (DEBUG=False) y Servidor Gunicorn",
-          "slug": "produccion-gunicorn-base",
+          "title": "Modelo de Usuario Personalizado y Permisos",
+          "slug": "modelo-usuario-personalizado",
           "position": 1,
-          "concept_id": "dj-deploy",
-          "objective": "Configurar settings para producción y servir archivos estáticos con WhiteNoise.",
-          "theory_markdown": "Antes de poner un proyecto Django en Internet, la regla número 1 absoluta es:\n```python\nDEBUG = False\nALLOWED_HOSTS = [\"midominio.com\", \"api.midominio.com\"]\nSECRET_KEY = os.environ[\"DJANGO_SECRET_KEY\"]\n```\n\nSi dejas `DEBUG = True` en producción, cualquier fallo revelará tu código fuente, variables de entorno y contraseñas de base de datos a los usuarios.\n\nPara servir la app usamos **Gunicorn** como servidor WSGI detrás de un reverse proxy (como Nginx o Cloudflare), y **WhiteNoise** para servir archivos estáticos eficientemente sin necesidad de un servidor web separado.",
+          "concept_id": "dj-auth-custom-user",
+          "objective": "Implementar un modelo de usuario personalizado extendiendo AbstractUser y configurar AUTH_USER_MODEL.",
+          "theory_markdown": "La documentacion oficial de Django estipula como **regla de oro** definir un modelo de usuario personalizado al iniciar cualquier proyecto nuevo, incluso si el modelo predeterminado parece suficiente inicialmente.\n\n### AbstractUser vs AbstractBaseUser\n- **`AbstractUser`:** Mantiene todos los campos estandar (`first_name`, `last_name`, `is_staff`, `groups`) permitiendo anadir campos nuevos (ej. `avatar`, `biografia`, `rol`) o cambiar el login a `email`.\n- **`AbstractBaseUser`:** Solo contiene el campo `password` y `last_login`, exigiendo implementar todo el sistema de autenticacion desde cero.\n\n### Configuracion en settings.py\n```python\n# En usuarios/models.py:\nfrom django.contrib.auth.models import AbstractUser\nfrom django.db import models\n\nclass Usuario(AbstractUser):\n    email = models.EmailField(unique=True)\n    telefono = models.CharField(max_length=20, blank=True)\n\n# En settings.py:\nAUTH_USER_MODEL = 'usuarios.Usuario'\n```\nEsto debe realizarse **antes** de ejecutar la primera migracion en el proyecto.",
           "examples": [
             {
-              "title": "Comando de ejecución de producción",
-              "code": "# Comando típico en Procfile o Docker\n# gunicorn mi_proyecto.wsgi:application --workers 4 --bind 0.0.0.0:8000",
-              "output": "[INFO] Starting gunicorn 22.0.0\n[INFO] Listening at: http://0.0.0.0:8000 (4 workers)",
-              "explanation": "Gunicorn distribuye la carga en 4 procesos trabajadores paralelos para alta disponibilidad."
+              "title": "Verificacion de permisos en vistas",
+              "code": "from django.contrib.auth.decorators import login_required, permission_required\n\n@login_required\n@permission_required(\"cursos.puede_publicar\", raise_exception=True)\ndef publicar_curso(request):\n    return HttpResponse(\"Curso publicado con exito\")",
+              "output": "Si el usuario no tiene el permiso, Django lanza PermissionDenied (HTTP 403).",
+              "explanation": "El sistema de permisos integrado permite controlar el acceso declarativamente por accion."
             }
           ],
-          "common_errors": "Subir la `SECRET_KEY` quemada en el código a GitHub. Debe cargarse obligatoriamente desde variables de entorno.",
+          "common_errors": "Intentar cambiar AUTH_USER_MODEL a mitad de un proyecto que ya tiene migraciones aplicadas y relaciones de claves foraneas existentes, lo que suele requerir migraciones complejas.",
           "mini_exercise": {
-            "starter_code": "# Verifica la configuración del proyecto antes de desplegar con:\n# python manage.py check --deploy",
-            "instructions": "Recuerda usar check --deploy para auditoría de seguridad automática.",
-            "solution": "# python manage.py check --deploy"
+            "instructions": "Escribe la linea de configuracion en settings.py para indicar que el modelo de usuario es 'cuentas.Usuario'.",
+            "starter_code": "# Configura AUTH_USER_MODEL\n",
+            "solution": "AUTH_USER_MODEL = \"cuentas.Usuario\""
           },
           "key_takeaways": [
-            "DEBUG=False es obligatorio en producción.",
-            "ALLOWED_HOSTS previene ataques de envenenamiento de cabecera Host.",
-            "python manage.py check --deploy audita la configuración de seguridad."
+            "Siempre se debe heredar de AbstractUser al iniciar un proyecto nuevo.",
+            "AUTH_USER_MODEL debe configurarse antes de ejecutar la primera migracion.",
+            "login_required y permission_required protegen vistas basadas en funciones."
           ],
           "exercise": {
             "id": "ex_dj_05_01",
             "type": "single_choice",
-            "difficulty": "easy",
-            "prompt": "¿Por qué es extremadamente peligroso dejar `DEBUG = True` en un entorno de producción accesible en Internet?",
+            "difficulty": "medium",
+            "prompt": "Por que la documentacion oficial de Django aconseja configurar un modelo de usuario personalizado con AbstractUser al comenzar un proyecto?",
             "options": [
               {
                 "id": "a",
-                "text": "Porque ante cualquier error expone trazas de código, configuraciones y credenciales sensibles a los usuarios"
+                "text": "Porque permite personalizar campos futuros (como usar email en vez de username) sin quebrar migraciones ya aplicadas a lo largo del proyecto."
               },
               {
                 "id": "b",
-                "text": "Porque hace que el servidor no acepte más de 2 visitas"
+                "text": "Porque el modelo por defecto de Django no puede almacenar contraseñas."
               },
               {
                 "id": "c",
-                "text": "Porque borra la base de datos automáticamente cada 24 horas"
+                "text": "Porque es obligatorio para que funcione el motor de plantillas DTL."
               },
               {
                 "id": "d",
-                "text": "Porque bloquea el puerto 80"
+                "text": "Porque duplica la velocidad de las consultas SQL."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "La pantalla de depuración interactiva de Django revela variables de entorno, consultas SQL y secretos si DEBUG está habilitado."
+            "explanation": "Cambiar el modelo de usuario despues de haber creado tablas y relaciones foraneas es extremadamente complejo; iniciar con AbstractUser previene ese obstaculo."
+          }
+        },
+        {
+          "id": "les_dj_05_02",
+          "code": "L02",
+          "title": "Seguridad Web: Prevencion de SQLi, XSS y CSRF",
+          "slug": "seguridad-sqli-xss-csrf",
+          "position": 2,
+          "concept_id": "dj-security-practices",
+          "objective": "Comprender como Django protege por defecto contra inyeccion SQL, XSS y CSRF, y evitar malas practicas comunes.",
+          "theory_markdown": "Django fue disenado con seguridad defensiva activa:\n\n1. **Inyeccion SQL (SQL Injection):**\n   El ORM de Django parametriza todas las consultas por defecto. El usuario nunca debe concatenar cadenas crudas en sentencias SQL como `Articulo.objects.raw(f'SELECT * WHERE id={id}')`.\n\n2. **Cross-Site Scripting (XSS):**\n   El motor de plantillas DTL escapa automaticamente cualquier variable HTML (`<` se convierte en `&lt;`).\n   Solo se debe usar el filtro `|safe` cuando el contenido provenga de una fuente de absoluta confianza.\n\n3. **Clickjacking:**\n   El middleware `XFrameOptionsMiddleware` incluye la cabecera `X-Frame-Options: DENY` evitando que el sitio sea incrustado dentro de un `<iframe>` malicioso.",
+          "examples": [
+            {
+              "title": "Parametrizacion segura vs concatenacion insegura",
+              "code": "# INSEGURO (Vulnerable a SQLi):\n# query = f\"SELECT * FROM articulos WHERE titulo = '{input_usuario}'\"\n\n# SEGURO (El ORM parametriza automaticamente):\narticulos = Articulo.objects.filter(titulo=input_usuario)",
+              "output": "La consulta se compila como SQL con marcadores de posicion ($1 o ?) inmune a SQLi.",
+              "explanation": "El ORM separa la estructura SQL de los datos proporcionados por el usuario."
+            }
+          ],
+          "common_errors": "Utilizar el filtro |safe en plantillas sobre texto introducido por usuarios desconocidos, abriendo una vulnerabilidad de XSS.",
+          "mini_exercise": {
+            "instructions": "Usa el metodo filter del ORM para buscar un usuario por email sin usar SQL crudo.",
+            "starter_code": "# Busca usuario de forma segura con filter\n",
+            "solution": "usuario = Usuario.objects.filter(email=email_recibido).first()"
+          },
+          "key_takeaways": [
+            "El ORM parametriza consultas automaticamente protegiendo contra inyeccion SQL.",
+            "DTL escapa variables HTML por defecto para prevenir XSS.",
+            "X-Frame-Options previene ataques de Clickjacking impidiendo iframes no autorizados."
+          ],
+          "exercise": {
+            "id": "ex_dj_05_02",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "Como protege el motor de plantillas de Django (DTL) contra ataques de Cross-Site Scripting (XSS) por defecto?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Escapa automaticamente todos los caracteres HTML peligrosos como <, > y & en las variables renderizadas."
+              },
+              {
+                "id": "b",
+                "text": "Elimina todos los archivos JavaScript del servidor."
+              },
+              {
+                "id": "c",
+                "text": "Exige que el usuario escriba su clave antes de ver cada pagina."
+              },
+              {
+                "id": "d",
+                "text": "Convierte todas las paginas web en imagenes PNG."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "DTL escapa los caracteres especiales HTML a sus entidades correspondientes de forma transparente, neutralizando scripts maliciosos inyectados."
+          }
+        },
+        {
+          "id": "les_dj_05_03",
+          "code": "L03",
+          "title": "Gestion de Archivos Estaticos con WhiteNoise",
+          "slug": "archivos-estaticos-whitenoise",
+          "position": 3,
+          "concept_id": "dj-deploy-whitenoise",
+          "objective": "Configurar STATIC_ROOT, collectstatic y el middleware WhiteNoise para servir CSS/JS en produccion.",
+          "theory_markdown": "En desarrollo local, el servidor de Django sirve archivos estaticos (`CSS`, `JS`, imagenes) de forma automatica. Sin embargo, en produccion (`DEBUG = False`), Django deshabilita esta funcion por rendimiento.\n\nPara servir archivos estaticos de forma eficiente sin requerir configurar Nginx exclusivamente para ello, se utiliza **WhiteNoise**:\n\n1. Instalar `whitenoise` y agregarlo a `MIDDLEWARE` justo despues de `SecurityMiddleware`:\n   ```python\n   MIDDLEWARE = [\n       \"django.middleware.security.SecurityMiddleware\",\n       \"whitenoise.middleware.WhiteNoiseMiddleware\",\n       ...\n   ]\n   ```\n2. Definir rutas en `settings.py`:\n   ```python\n   STATIC_URL = '/static/'\n   STATIC_ROOT = BASE_DIR / 'staticfiles'\n   STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'\n   ```\n3. Recolectar todos los estaticos antes de desplegar:\n   ```bash\n   python manage.py collectstatic --no-input\n   ```\nWhiteNoise comprime (gzip/brotli) y genera hashes unicos para invalidar la cache de navegadores de forma optima.",
+          "examples": [
+            {
+              "title": "Recoleccion de estaticos en el proceso de construccion",
+              "code": "# En terminal o Dockerfile:\n# python manage.py collectstatic --no-input\n# 125 static files copied to '/app/staticfiles', 125 post-processed.",
+              "output": "Archivos listos con nombres versionados (ej. estilo.a1b2c3d4.css) y compresion.",
+              "explanation": "CompressedManifestStaticFilesStorage garantiza cache infinita y previene que el navegador use archivos CSS desactualizados."
+            }
+          ],
+          "common_errors": "Desplegar a produccion con DEBUG = False sin haber ejecutado collectstatic ni configurado WhiteNoise, haciendo que la aplicacion se muestre sin estilos ni JavaScript.",
+          "mini_exercise": {
+            "instructions": "Escribe el comando de Django para recolectar todos los archivos estaticos sin solicitar confirmacion interactiva.",
+            "starter_code": "# Comando collectstatic\n",
+            "solution": "python manage.py collectstatic --no-input"
+          },
+          "key_takeaways": [
+            "Django no sirve estaticos en produccion con DEBUG = False de forma predeterminada.",
+            "WhiteNoise permite que la aplicacion WSGI sirva sus propios estaticos con alto rendimiento.",
+            "collectstatic reune todos los recursos de las apps en STATIC_ROOT."
+          ],
+          "exercise": {
+            "id": "ex_dj_05_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es el proposito del comando python manage.py collectstatic en Django?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Reunir todos los archivos estaticos (CSS, JS, imagenes) de todas las aplicaciones instaladas en la carpeta definida por STATIC_ROOT para produccion."
+              },
+              {
+                "id": "b",
+                "text": "Comprobar que no haya errores de tipado en el codigo Python."
+              },
+              {
+                "id": "c",
+                "text": "Eliminar las imagenes que tengan mas de un ano de antiguedad."
+              },
+              {
+                "id": "d",
+                "text": "Descargar las dependencias desde PyPI."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "collectstatic centraliza todos los activos estaticos dispersos en las aplicaciones dentro de un unico directorio unificado (STATIC_ROOT) para ser servidos en produccion."
+          }
+        },
+        {
+          "id": "les_dj_05_04",
+          "code": "L04",
+          "title": "Checklist de Despliegue, Gunicorn y Auditoria de Seguridad",
+          "slug": "checklist-despliegue-gunicorn-auditoria",
+          "position": 4,
+          "concept_id": "dj-deploy-checklist-gunicorn",
+          "objective": "Ejecutar la auditoria de seguridad con manage.py check --deploy y configurar Gunicorn para servir Django en produccion.",
+          "theory_markdown": "Antes de publicar un proyecto Django en un servidor de produccion, se debe verificar el cumplimiento del **Deployment Checklist**:\n\n### 1. Auditoria automatica\nDjango incluye un comando de auditoria integrado que verifica todas las variables de seguridad:\n```bash\npython manage.py check --deploy\n```\n\n### 2. Variables criticas para produccion\n- `DEBUG = False`\n- `ALLOWED_HOSTS = ['midominio.com']`\n- `SECURE_SSL_REDIRECT = True` (redirige todo el trafico HTTP a HTTPS)\n- `SESSION_COOKIE_SECURE = True` (cookies de sesion solo viajan por HTTPS)\n- `CSRF_COOKIE_SECURE = True` (cookies CSRF solo viajan por HTTPS)\n\n### 3. Servidor de aplicaciones WSGI con Gunicorn\nEn produccion no se usa `runserver`. Se utiliza un servidor WSGI de grado industrial como **Gunicorn**:\n```bash\ngunicorn mi_proyecto.wsgi:application --workers 3 --bind 0.0.0.0:8000\n```",
+          "examples": [
+            {
+              "title": "Ejecucion del chequeo de despliegue",
+              "code": "# python manage.py check --deploy\n# System check identified no issues (0 silenced).",
+              "output": "Si falta alguna configuracion de seguridad HTTPS, Django muestra advertencias 'security.W008', 'security.W012'.",
+              "explanation": "El chequeo garantiza que no existan puertas abiertas de seguridad antes de recibir trafico real."
+            }
+          ],
+          "common_errors": "Ejecutar python manage.py runserver en un servidor de produccion en lugar de usar Gunicorn o uWSGI.",
+          "mini_exercise": {
+            "instructions": "Escribe el comando de Django para ejecutar la comprobacion de seguridad de despliegue.",
+            "starter_code": "# Comando check deploy\n",
+            "solution": "python manage.py check --deploy"
+          },
+          "key_takeaways": [
+            "python manage.py check --deploy audita la configuracion de seguridad de settings.py.",
+            "SECURE_SSL_REDIRECT y cookies seguras garantizan el uso exclusivo de HTTPS.",
+            "Gunicorn ejecuta la aplicacion WSGI con un pool de workers en produccion."
+          ],
+          "exercise": {
+            "id": "ex_dj_05_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual comando de Django analiza el archivo settings.py y reporta advertencias sobre configuraciones inseguras antes de ir a produccion?",
+            "options": [
+              {
+                "id": "a",
+                "text": "python manage.py check --deploy"
+              },
+              {
+                "id": "b",
+                "text": "python manage.py audit --strict"
+              },
+              {
+                "id": "c",
+                "text": "python manage.py security_scan"
+              },
+              {
+                "id": "d",
+                "text": "django-admin verify"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "check --deploy inspecciona parametros criticos como SECRET_KEY, DEBUG, SSL y cookies de sesion reportando cualquier vulnerabilidad detectada."
           }
         }
       ]

@@ -7,6 +7,7 @@ import { cn } from '@/lib/utils';
 import { sound } from '@/lib/sound';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 import { CodeConfetti } from './CodeConfetti';
+import { getAppUrl } from '@/lib/domain';
 
 const OPTIONS = [
   { key: 'A', label: 'Hola, Koda', correct: true },
@@ -188,7 +189,7 @@ export const MiniLessonPreview: React.FC<{ demo?: DemoId }> = ({ demo }) => {
                 lección: una idea corta, código real y práctica inmediata.
               </p>
               <Link
-                href="/register"
+                href={getAppUrl('/register')}
                 className="inline-flex min-h-[44px] items-center gap-1.5 rounded-xl bg-amber-400 px-4 py-2 text-sm font-bold text-slate-950 transition-all hover:bg-amber-300"
               >
                 Seguir ganando XP

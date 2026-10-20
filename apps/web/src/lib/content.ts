@@ -5,6 +5,9 @@ export interface ContentAnswer {
   label?: string;
   body: string;
   is_correct: boolean;
+  language?: string;
+  position?: number;
+  explanation?: string | null;
 }
 
 export interface ContentExercise {
@@ -18,6 +21,16 @@ export interface ContentExercise {
   explanation?: string;
   hints?: string[];
   score?: number;
+  accepted_answers?: string[];
+  aliases?: string[];
+  case_sensitive?: boolean;
+  line_number?: number;
+  blocks?: Array<{ id: string; body: string; position?: number }>;
+  correct_order?: string[];
+  pairs?: Array<{ left: { id: string; body: string }; right: { id: string; body: string } }>;
+  epsilon?: number;
+  starter_code?: string;
+  accepted_tokens?: string[];
 }
 
 export interface ContentExample {
@@ -34,8 +47,16 @@ export interface ContentLesson {
   slug: string;
   position: number;
   concept_id: string;
+  objective?: string;
   explanation: string;
   is_required: boolean;
+  common_errors?: string;
+  key_takeaways?: string[];
+  mini_exercise?: {
+    starter_code?: string;
+    instructions?: string;
+    solution?: string;
+  };
   examples: ContentExample[];
   exercises: ContentExercise[];
 }
@@ -191,38 +212,85 @@ const BANKS: Record<string, BankImporter> = {
   'python/apex-master-gate': () => import('../../../../content/languages/python/modules/apex/01_apex_master_gate/bank.json'),
 };
 
+function normalizeExercise(rawEx: any, fallbackSuffix: string | number): ContentExercise {
+  const answers: ContentAnswer[] = Array.isArray(rawEx.answers)
+    ? rawEx.answers.map((a: any, idx: number) => ({
+        id: a.id || `ans_${idx + 1}`,
+        label: a.label || (typeof a.id === 'string' && a.id.length === 1 ? a.id.toUpperCase() : String.fromCharCode(65 + idx)),
+        body: a.body ?? a.text ?? '',
+        is_correct: Boolean(a.is_correct) || (rawEx.correct_option_id ? a.id === rawEx.correct_option_id : false),
+        language: a.language,
+        position: a.position ?? idx + 1,
+        explanation: a.explanation ?? null,
+      }))
+    : Array.isArray(rawEx.options)
+    ? rawEx.options.map((opt: any, idx: number) => ({
+        id: opt.id || `ans_${idx + 1}`,
+        label: opt.label || (typeof opt.id === 'string' && opt.id.length === 1 ? opt.id.toUpperCase() : String.fromCharCode(65 + idx)),
+        body: opt.text ?? opt.body ?? '',
+        is_correct: opt.id === rawEx.correct_option_id || Boolean(opt.is_correct),
+        language: opt.language,
+        position: opt.position ?? idx + 1,
+        explanation: opt.explanation ?? null,
+      }))
+    : [];
+
+  const derivedCorrectIds = answers.filter((a) => a.is_correct).map((a) => a.id);
+  const correct_answer_ids: string[] =
+    Array.isArray(rawEx.correct_answer_ids) && rawEx.correct_answer_ids.length > 0
+      ? rawEx.correct_answer_ids
+      : rawEx.correct_option_id
+      ? [rawEx.correct_option_id]
+      : derivedCorrectIds;
+
+  return {
+    id: rawEx.id || `ex-${fallbackSuffix}`,
+    type: rawEx.type || 'single_choice',
+    difficulty: rawEx.difficulty || 'medium',
+    prompt: rawEx.prompt || '',
+    prompt_code: rawEx.prompt_code ?? rawEx.code_snippet ?? null,
+    answers,
+    correct_answer_ids,
+    explanation: rawEx.explanation || rawEx.feedback || '',
+    hints: Array.isArray(rawEx.hints) ? rawEx.hints : rawEx.hint ? [rawEx.hint] : [],
+    score: typeof rawEx.score === 'number' ? rawEx.score : undefined,
+    accepted_answers: Array.isArray(rawEx.accepted_answers) ? rawEx.accepted_answers : undefined,
+    aliases: Array.isArray(rawEx.aliases) ? rawEx.aliases : undefined,
+    case_sensitive: typeof rawEx.case_sensitive === 'boolean' ? rawEx.case_sensitive : undefined,
+    line_number: typeof rawEx.line_number === 'number' ? rawEx.line_number : undefined,
+    blocks: Array.isArray(rawEx.blocks) ? rawEx.blocks : undefined,
+    correct_order: Array.isArray(rawEx.correct_order) ? rawEx.correct_order : undefined,
+    pairs: Array.isArray(rawEx.pairs) ? rawEx.pairs : undefined,
+    epsilon: typeof rawEx.epsilon === 'number' ? rawEx.epsilon : undefined,
+    starter_code: typeof rawEx.starter_code === 'string' ? rawEx.starter_code : undefined,
+    accepted_tokens: Array.isArray(rawEx.accepted_tokens) ? rawEx.accepted_tokens : undefined,
+  };
+}
+
 function normalizeLesson(raw: any, index: number): ContentLesson {
-  const examples: ContentExample[] = Array.isArray(raw.examples)
+  const examples: ContentExample[] = Array.isArray(raw.examples) && raw.examples.length > 0
     ? raw.examples
     : raw.code_example
     ? [{ code: raw.code_example, output: raw.expected_output, explanation: raw.tip_markdown }]
+    : raw.theory?.code_snippet
+    ? [{ code: raw.theory.code_snippet }]
     : [];
 
-  const rawEx = raw.exercises?.[0] || raw.exercise;
-  const exercises: ContentExercise[] = Array.isArray(raw.exercises)
-    ? raw.exercises
+  const rawEx = raw.exercises?.[0] || raw.exercise || raw.item_2_quiz || raw.item_1_console;
+  const contextCode = raw.item_4_prediction?.code_snippet;
+  const withContext = (ex: any) =>
+    ex && !ex.prompt_code && contextCode ? { ...ex, prompt_code: ex.code_snippet || contextCode } : ex;
+  const exercises: ContentExercise[] = Array.isArray(raw.exercises) && raw.exercises.length > 0
+    ? raw.exercises.map((ex: any, exIdx: number) => normalizeExercise(withContext(ex), `${raw.id || index}-${exIdx}`))
     : rawEx
-    ? [{
-        id: rawEx.id || `ex-${raw.id || index}`,
-        type: rawEx.type || 'single_choice',
-        difficulty: rawEx.difficulty || 'medium',
-        prompt: rawEx.prompt || '',
-        prompt_code: rawEx.prompt_code || null,
-        answers: Array.isArray(rawEx.answers)
-          ? rawEx.answers
-          : Array.isArray(rawEx.options)
-          ? rawEx.options.map((opt: any) => ({
-              id: opt.id,
-              label: opt.label || opt.id?.toUpperCase(),
-              body: opt.text || opt.body || '',
-              is_correct: opt.id === rawEx.correct_option_id || Boolean(opt.is_correct),
-            }))
-          : [],
-        correct_answer_ids: rawEx.correct_answer_ids || (rawEx.correct_option_id ? [rawEx.correct_option_id] : []),
-        explanation: rawEx.explanation || '',
-        hints: rawEx.hints || (rawEx.hint ? [rawEx.hint] : []),
-      }]
+    ? [normalizeExercise(withContext(rawEx), raw.id || index)]
     : [];
+
+  const explanation = raw.explanation || raw.theory_markdown || (
+    raw.theory
+      ? [raw.theory.step1, raw.theory.step2, raw.theory.step3].filter(Boolean).join('\n\n')
+      : ''
+  );
 
   return {
     id: raw.id || raw.slug || `les-${index + 1}`,
@@ -230,8 +298,12 @@ function normalizeLesson(raw: any, index: number): ContentLesson {
     slug: raw.slug || raw.id || `les-${index + 1}`,
     position: raw.position || index + 1,
     concept_id: raw.concept_id || '',
-    explanation: raw.explanation || raw.theory_markdown || '',
+    objective: raw.objective || raw.pedagogical_objective || '',
+    explanation,
     is_required: raw.is_required ?? true,
+    common_errors: raw.common_errors || '',
+    key_takeaways: Array.isArray(raw.key_takeaways) ? raw.key_takeaways : [],
+    mini_exercise: raw.mini_exercise || undefined,
     examples,
     exercises,
   };
@@ -280,27 +352,7 @@ export async function loadBank(lang: string, moduleSlug: string): Promise<Conten
     const data = mod.default as any;
     const rawList = Array.isArray(data) ? data : Array.isArray(data?.questions) ? data.questions : [];
 
-    return rawList.map((q: any) => {
-      if (q.answers && q.correct_answer_ids) return q as ContentExercise;
-      return {
-        id: q.id,
-        type: q.type || 'single_choice',
-        difficulty: q.difficulty || 'medium',
-        prompt: q.prompt || '',
-        prompt_code: q.prompt_code || null,
-        answers: Array.isArray(q.options)
-          ? q.options.map((o: any) => ({
-              id: o.id,
-              label: o.label || o.id?.toUpperCase(),
-              body: o.text || o.body || '',
-              is_correct: o.id === q.correct_option_id || Boolean(o.is_correct),
-            }))
-          : [],
-        correct_answer_ids: q.correct_option_id ? [q.correct_option_id] : (q.correct_answer_ids || []),
-        explanation: q.explanation || '',
-        hints: q.hint ? [q.hint] : (q.hints || []),
-      };
-    });
+    return rawList.map((q: any, idx: number) => normalizeExercise(q, `bank-${idx + 1}`));
   } catch {
     return [];
   }

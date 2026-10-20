@@ -4,14 +4,14 @@
   "code": "PY1_M05",
   "slug": "condicionales",
   "course_slug": "python-1",
-  "title": "Estructuras de Control: Condicionales",
-  "objective": "Bifurcar la ejecución de programas mediante if, elif, else, operadores ternarios y anidamientos limpios.",
-  "description": "Aprende a dotar a tus programas de inteligencia lógica: toma decisiones condicionales según el estado de las variables y evita anidamientos profundos.",
+  "title": "Estructuras de Control: Condicionales (if, elif, else)",
+  "objective": "Aprender a tomar decisiones en código con la estructura if y la regla de indentación de 4 espacios, ejecutar alternativas con else, encadenar opciones excluyentes con elif, y dominar condiciones compuestas y valores falsy (0, \"\").",
+  "description": "Dota a tus programas de inteligencia lógica: bifurca el flujo de ejecución según el estado de las variables y toma decisiones limpias y profesionales.",
   "position": 5,
   "status": "published",
-  "content_version": 1,
+  "content_version": 2,
   "total_sections": 1,
-  "total_lessons": 2,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,46 +23,158 @@
     {
       "id": "sec_py1_05_01",
       "code": "S01",
-      "title": "Toma de Decisiones con if, elif y else",
-      "slug": "if-elif-else",
+      "title": "Toma de Decisiones y Bifurcación",
+      "slug": "toma-de-decisiones",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 18,
-      "xp_on_complete": 40,
+      "estimated_minutes": 25,
+      "xp_on_complete": 50,
       "lessons": [
         {
           "id": "les_py1_05_01",
           "code": "L01",
-          "title": "La Estructura if-elif-else y la Sangría (Indentación)",
-          "slug": "estructura-if-elif-else",
+          "title": "Tomando Decisiones: La Estructura if y la Sangría (4 Espacios)",
+          "slug": "estructura-if-y-sangria",
           "position": 1,
-          "concept_id": "py-conditionals",
-          "objective": "Dominar la sintaxis de bifurcación y la regla de indentación de 4 espacios de Python.",
-          "theory_markdown": "En la mayoría de los lenguajes se usan llaves `{ }` para agrupar bloques de código. En Python, **la sangría (indentación) es obligatoria y define la estructura** del programa (estándar PEP 8: 4 espacios).\n\nEl flujo de decisión condicional opera así:\n1. `if condicion:`: Se evalúa primero. Si es `True`, ejecuta su bloque indentado y salta el resto.\n2. `elif otra_condicion:` (else if): Si el `if` anterior fue `False`, evalúa esta alternativa.\n3. `else:`: Si ninguna condición previa fue verdadera, se ejecuta este bloque por defecto.",
+          "concept_id": "py-if-syntax-indentation",
+          "objective": "Comprender la bifurcación condicional con if y dominar la regla obligatoria de indentación de 4 espacios de Python.",
+          "theory_markdown": "Hasta ahora, tus programas se ejecutaban en línea recta de arriba hacia abajo. Pero en la vida real tomamos decisiones constantemente: *\"Si llueve, llevo paraguas\"*.\n\nEn Python usamos la palabra clave `if` (si condicional):\n```python\nif condicion:\n    # Bloque de codigo indentado\n```\n\n**Reglas obligatorias de sintaxis:**\n1. **Los dos puntos (`:`):** Toda línea de `if` debe terminar obligatoriamente con dos puntos `:`. Le indica a Python que a continuación viene un bloque de instrucciones.\n2. **La sangría o indentación (4 espacios):** A diferencia de otros lenguajes que usan llaves `{ }`, Python utiliza la sangría hacia la derecha para saber qué instrucciones pertenecen al `if`. El estándar oficial (PEP 8) es de **4 espacios**. Si olvidas sangrar, Python lanzará un `IndentationError`.",
           "examples": [
             {
-              "title": "Clasificador de notas de estudiantes",
-              "code": "nota = 85\n\nif nota >= 90:\n    print(\"Calificación: A (Excelente)\")\nelif nota >= 80:\n    print(\"Calificación: B (Notable)\")\nelif nota >= 70:\n    print(\"Calificación: C (Aprobado)\")\nelse:\n    print(\"Calificación: F (Reprobado)\")",
-              "output": "Calificación: B (Notable)",
-              "explanation": "Como 85 no es >= 90, salta el primer if. Luego 85 >= 80 es True, ejecuta ese bloque y finaliza la estructura."
+              "title": "Condición simple con if",
+              "code": "vidas = 0\n\nif vidas == 0:\n    print(\"Alerta: Fin de la partida\")\n    print(\"Por favor reinicia el nivel\")\n\nprint(\"Fin del reporte\")",
+              "output": "Alerta: Fin de la partida\nPor favor reinicia el nivel\nFin del reporte",
+              "explanation": "Las líneas con 4 espacios de sangría solo se ejecutan porque vidas == 0 es True. La última línea no tiene sangría, por lo que siempre se ejecuta."
             }
           ],
-          "common_errors": "Mezclar tabulaciones y espacios (TabError), olvidar los dos puntos (:) al final de la línea del if/elif/else, o no indentar el bloque interior (IndentationError).",
+          "common_errors": "Olvidar los dos puntos (:) al final de la línea del if o mezclar tabulaciones con espacios. Usa siempre 4 espacios de sangría.",
           "mini_exercise": {
-            "starter_code": "temperatura = 32\n# Si temperatura > 30 imprime \"Calor\", sino \"Agradable\"\nif ...:\n    ...\nelse:\n    ...",
-            "instructions": "Completa la condición if-else respetando los 4 espacios de sangría.",
-            "solution": "temperatura = 32\nif temperatura > 30:\n    print(\"Calor\")\nelse:\n    print(\"Agradable\")"
+            "starter_code": "puntos = 100\n# Si puntos es mayor o igual a 100, imprime \"Nivel superado\"\nif ...:\n    ...",
+            "instructions": "Escribe el if con dos puntos y sangría de 4 espacios.",
+            "solution": "puntos = 100\nif puntos >= 100:\n    print(\"Nivel superado\")"
           },
           "key_takeaways": [
-            "La indentación de 4 espacios es obligatoria y define qué pertenece al bloque.",
-            "Toda sentencia condicional finaliza con dos puntos (:).",
-            "Tan pronto una condición es True, las siguientes ramas elif/else son ignoradas."
+            "if evalúa una condición booleana; si es True, ejecuta su bloque subordinado.",
+            "La cabecera del if debe terminar obligatoriamente con dos puntos (:).",
+            "La indentación de 4 espacios define qué líneas pertenecen al bloque condicional."
           ],
           "exercise": {
             "id": "ex_py1_05_01",
+            "type": "find_error",
+            "difficulty": "easy",
+            "prompt": "¿Cuál es el error de sintaxis en el siguiente bloque de código?",
+            "prompt_code": "if edad >= 18\n    print(\"Mayor de edad\")",
+            "options": [
+              {
+                "id": "a",
+                "text": "Faltan los dos puntos (:) al final de la línea del if"
+              },
+              {
+                "id": "b",
+                "text": "La palabra print debe ir sin sangría"
+              },
+              {
+                "id": "c",
+                "text": "La condición debe ir obligatoriamente entre paréntesis"
+              },
+              {
+                "id": "d",
+                "text": "El número 18 debe ser un flotante"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "En Python, toda cabecera de control de flujo (if, elif, else) debe terminar obligatoriamente con dos puntos (:)."
+          }
+        },
+        {
+          "id": "les_py1_05_02",
+          "code": "L02",
+          "title": "El Camino Alternativo: Uso de else para Respuestas por Defecto",
+          "slug": "camino-alternativo-else",
+          "position": 2,
+          "concept_id": "py-if-else",
+          "objective": "Ejecutar un bloque alternativo de código cuando la condición del if sea False.",
+          "theory_markdown": "A menudo no solo queremos actuar si algo se cumple, sino también realizar una acción distinta si **no** se cumple: *\"Si el usuario ingresa la clave correcta, entra; si no, deniega el acceso\"*.\n\nPara esto añadimos la cláusula `else:` (de lo contrario):\n```python\nif condicion:\n    # Se ejecuta si condicion es True\nelse:\n    # Se ejecuta si condicion es False\n```\n\n**Reglas indispensables de `else`:**\n- `else:` **nunca lleva una condición**. Es una red de seguridad que atrapa cualquier caso donde el `if` fue `False`.\n- Debe alinearse exactamente a la misma altura que su `if` correspondiente y también termina con dos puntos `:`.\n- El bloque interior de `else` también lleva 4 espacios de sangría.",
+          "examples": [
+            {
+              "title": "Evaluación con alternativa else",
+              "code": "saldo = 30\n\nif saldo >= 50:\n    print(\"Compra aprobada\")\nelse:\n    print(\"Saldo insuficiente\")",
+              "output": "Saldo insuficiente",
+              "explanation": "Como 30 >= 50 es False, Python salta el bloque del if y ejecuta el bloque del else."
+            }
+          ],
+          "common_errors": "Intentar escribir una condición después del else (como else saldo < 50:). else nunca lleva condición; se escribe simplemente else:.",
+          "mini_exercise": {
+            "starter_code": "energia = 0\nif energia > 0:\n    print(\"En combate\")\n# Agrega el else para mostrar \"Derrotado\"\n...:\n    print(\"Derrotado\")",
+            "instructions": "Escribe else: en la misma columna del if.",
+            "solution": "energia = 0\nif energia > 0:\n    print(\"En combate\")\nelse:\n    print(\"Derrotado\")"
+          },
+          "key_takeaways": [
+            "else se ejecuta únicamente cuando la condición del if previo fue False.",
+            "else nunca lleva una condición escrita; siempre finaliza en else:.",
+            "Garantiza que el programa tome un camino seguro en todos los casos posibles."
+          ],
+          "exercise": {
+            "id": "ex_py1_05_02",
             "type": "predict_output",
             "difficulty": "easy",
-            "prompt": "¿Qué imprimirá el siguiente código?",
+            "prompt": "¿Qué se imprimirá tras ejecutar el siguiente código?",
+            "prompt_code": "saldo = 30\nif saldo >= 50:\n    print(\"Compra aprobada\")\nelse:\n    print(\"Saldo insuficiente\")",
+            "options": [
+              {
+                "id": "a",
+                "text": "Saldo insuficiente"
+              },
+              {
+                "id": "b",
+                "text": "Compra aprobada"
+              },
+              {
+                "id": "c",
+                "text": "Compra aprobada\nSaldo insuficiente"
+              },
+              {
+                "id": "d",
+                "text": "Error de sintaxis"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "La condición 30 >= 50 resulta en False, por lo que Python descarta el if y ejecuta el bloque else mostrando 'Saldo insuficiente'."
+          }
+        },
+        {
+          "id": "les_py1_05_03",
+          "code": "L03",
+          "title": "Múltiples Opciones Excluyentes: Encadenando con elif",
+          "slug": "multiples-opciones-elif",
+          "position": 3,
+          "concept_id": "py-if-elif-else-chain",
+          "objective": "Evaluar múltiples alternativas secuenciales y mutuamente excluyentes con if, elif y else.",
+          "theory_markdown": "¿Qué ocurre si tienes más de dos opciones posibles? Por ejemplo: evaluar un semáforo (verde, amarillo, rojo) o calificar una nota de estudiante.\n\nPara no amontonar condiciones confusas, Python ofrece `elif` (abreviatura de *else if*):\n```python\nif condicion_1:\n    # Se ejecuta si condicion_1 es True\nelif condicion_2:\n    # Se ejecuta si condicion_1 fue False Y condicion_2 es True\nelse:\n    # Se ejecuta si ninguna anterior fue True\n```\n\n**El comportamiento en cadena:**\nPython revisa de arriba hacia abajo. **Tan pronto una condición es `True`, ejecuta su bloque y descarta inmediatamente todo el resto de la estructura (`elif` y `else`)**. Nunca se ejecutarán dos bloques de una misma cadena `if-elif-else`.",
+          "examples": [
+            {
+              "title": "Control de semáforo con elif",
+              "code": "color = \"amarillo\"\n\nif color == \"verde\":\n    print(\"Avanzar\")\nelif color == \"amarillo\":\n    print(\"Precaucion\")\nelif color == \"rojo\":\n    print(\"Detenerse\")\nelse:\n    print(\"Color no reconocido\")",
+              "output": "Precaucion",
+              "explanation": "El if es False. El primer elif (color == 'amarillo') es True: ejecuta 'Precaucion' y finaliza la estructura sin mirar 'rojo' ni 'else'."
+            }
+          ],
+          "common_errors": "Usar múltiples sentencias 'if' independientes cuando las opciones son excluyentes, lo que puede provocar que se ejecuten varios bloques al mismo tiempo.",
+          "mini_exercise": {
+            "starter_code": "nota = 85\nif nota >= 90:\n    print(\"Excelente\")\n# Agrega un elif para nota >= 80 que imprima \"Notable\"\n...:\n    ...",
+            "instructions": "Escribe elif nota >= 80: e indenta print(\"Notable\").",
+            "solution": "nota = 85\nif nota >= 90:\n    print(\"Excelente\")\nelif nota >= 80:\n    print(\"Notable\")"
+          },
+          "key_takeaways": [
+            "elif evalúa una alternativa secundaria solo si las condiciones anteriores fueron False.",
+            "Puedes usar tantos elif como opciones requiera tu programa.",
+            "Tan pronto un elif resulta True, se ejecuta su código y se descarta el resto de la cadena."
+          ],
+          "exercise": {
+            "id": "ex_py1_05_03",
+            "type": "predict_output",
+            "difficulty": "easy",
+            "prompt": "¿Qué imprimirá la consola al ejecutar el siguiente fragmento?",
             "prompt_code": "x = 10\nif x > 20:\n    print(\"Mayor a 20\")\nelif x == 10:\n    print(\"Es diez\")\nelse:\n    print(\"Otro\")",
             "options": [
               {
@@ -83,63 +195,63 @@
               }
             ],
             "correct_option_id": "a",
-            "explanation": "x > 20 es False. elif x == 10 es True, por lo que imprime \"Es diez\" y el else no se evalúa."
+            "explanation": "x > 20 es False. elif x == 10 es True: imprime 'Es diez' y el bloque else queda completamente omitido."
           }
         },
         {
-          "id": "les_py1_05_02",
-          "code": "L02",
-          "title": "Operador Ternario y Condiciones Concensadas",
-          "slug": "operador-ternario",
-          "position": 2,
-          "concept_id": "py-ternary-operator",
-          "objective": "Asignar valores basados en condiciones en una sola línea elegante.",
-          "theory_markdown": "Cuando necesitas asignar una variable dependiendo de una condición simple, escribir 4 líneas de `if-else` puede resultar repetitivo. Python ofrece la **expresión condicional (operador ternario)**:\n\n`valor_si_verdadero if condicion else valor_si_falso`\n\n> **Ejemplo cotidiano:** `estado = \"Adulto\" if edad >= 18 else \"Menor\"`. Lee casi como lenguaje natural en inglés.",
+          "id": "les_py1_05_04",
+          "code": "L04",
+          "title": "Condiciones Compuestas (and, or) y Valores Evaluados como Falsy",
+          "slug": "condiciones-compuestas-y-falsy",
+          "position": 4,
+          "concept_id": "py-conditionals-compound-falsy",
+          "objective": "Evaluar condiciones complejas con and y or dentro de if, y comprender qué valores se consideran falsy (0, \"\").",
+          "theory_markdown": "**1. Condiciones compuestas con `and` y `or`:**\nPuedes combinar varias condiciones lógicas dentro del mismo `if` usando `and` y `or`:\n```python\nedad = 20\ntiene_pase = True\nif edad >= 18 and tiene_pase:\n    print(\"Acceso permitido\")\n```\n\n**2. ¿Qué es un valor \"Falsy\" en Python?**\nEn Python, no solamente el booleano `False` evalúa como falso. Existen ciertos valores que el lenguaje considera automáticamente equivalentes a falso en un contexto condicional:\n- El número cero: `0` y `0.0`.\n- El texto vacío: `\"\"` (sin caracteres).\n- El valor nulo: `None`.\n\nCualquier número diferente de cero (como `1`, `42` o `-5`) y cualquier texto que contenga caracteres (como `\"Koda\"`) se evalúa como verdadero (**truthy**).\n\nPor eso, si tienes `x = 0` y ejecutas `if x:`, Python irá a la rama `else` porque el número 0 evalúa como falso.",
           "examples": [
             {
-              "title": "Asignación compacta y pythónica",
-              "code": "puntos = 120\nresultado = \"Aprobado\" if puntos >= 100 else \"Reintentar\"\nprint(resultado)",
-              "output": "Aprobado",
-              "explanation": "Como puntos (120) es >= 100, la variable resultado recibe \"Aprobado\" en una sola línea."
+              "title": "Condiciones compuestas y valores falsy",
+              "code": "usuario = \"\"  # Texto vacio (falsy)\nvidas = 3      # Numero mayor que cero (truthy)\n\nif usuario:\n    print(\"Usuario autenticado\")\nelse:\n    print(\"Por favor ingresa un nombre\")\n\nif vidas > 0 and not usuario:\n    print(\"Partida activa pero sin nombre registrado\")",
+              "output": "Por favor ingresa un nombre\nPartida activa pero sin nombre registrado",
+              "explanation": "usuario es un string vacio \"\" (falsy), por lo que salta al else. Luego not usuario se vuelve True, cumpliendo la segunda condicion compuesta."
             }
           ],
-          "common_errors": "Abusar del operador ternario anidando varios ternarios en una línea, lo cual destruye la legibilidad del código (regla del Zen de Python: \"Legible es mejor que complejo\").",
+          "common_errors": "Olvidar que 0 evalúa a False en un if condicional (por ejemplo: if vidas: se irá al else si vidas es 0).",
           "mini_exercise": {
-            "starter_code": "stock = 0\n# Usa ternario: \"Disponible\" si stock > 0 sino \"Agotado\"\nestado = ...\nprint(estado)",
-            "instructions": "Escribe la expresión ternaria en una sola línea.",
-            "solution": "stock = 0\nestado = \"Disponible\" if stock > 0 else \"Agotado\"\nprint(estado)"
+            "starter_code": "x = 0\nif x:\n    print(\"Verdadero\")\nelse:\n    print(\"Falso\")",
+            "instructions": "Ejecuta el código para verificar cómo evalúa el número 0.",
+            "solution": "x = 0\nif x:\n    print(\"Verdadero\")\nelse:\n    print(\"Falso\")"
           },
           "key_takeaways": [
-            "El operador ternario asigna en formato: A if condicion else B.",
-            "Debe reservarse para decisiones directas y legibles.",
-            "Siempre requiere una cláusula else obligatoria."
+            "and y or permiten conectar múltiples reglas en una sola línea de if.",
+            "El número 0 y el texto vacío \"\" son evaluados como False (valores falsy).",
+            "Cualquier número distinto de cero y cadenas con texto evalúan como True (truthy)."
           ],
           "exercise": {
-            "id": "ex_py1_05_02",
+            "id": "ex_py1_05_04",
             "type": "predict_output",
             "difficulty": "easy",
-            "prompt": "¿Cuál es el valor final de etiqueta?",
-            "prompt_code": "es_admin = False\netiqueta = \"Root\" if es_admin else \"Guest\"\nprint(etiqueta)",
+            "prompt": "¿Qué se imprimirá tras ejecutar el siguiente código?",
+            "prompt_code": "x = 0\nif x:\n    print(\"Verdadero\")\nelse:\n    print(\"Falso\")",
             "options": [
               {
                 "id": "a",
-                "text": "Guest"
+                "text": "Falso"
               },
               {
                 "id": "b",
-                "text": "Root"
+                "text": "Verdadero"
               },
               {
                 "id": "c",
-                "text": "False"
+                "text": "0"
               },
               {
                 "id": "d",
-                "text": "Error"
+                "text": "TypeError"
               }
             ],
             "correct_option_id": "a",
-            "explanation": "Como es_admin es False, el operador ternario toma la rama del else (\"Guest\")."
+            "explanation": "En Python, el número 0 se evalúa como falso (falsy) en un contexto condicional, por lo que se ejecuta la rama else mostrando 'Falso'."
           }
         }
       ]

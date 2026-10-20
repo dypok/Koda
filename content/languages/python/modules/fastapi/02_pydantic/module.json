@@ -4,85 +4,250 @@
   "code": "FA_M02",
   "slug": "fastapi-pydantic",
   "course_slug": "fastapi-async",
-  "title": "Modelado, Validación y Serialización con Pydantic v2",
-  "objective": "Validar payloads JSON entrantes con BaseModel, Field, tipos de datos estrictos y contratos response_model.",
-  "description": "Garantiza que ningún dato corrupto ingrese a tu sistema: validación en tiempo de compilación/ejecución con Pydantic Core.",
+  "title": "Validacion de Datos y Esquemas con Pydantic v2",
+  "objective": "Dominar la definicion de esquemas con Pydantic v2, validadores personalizados y serializacion segura de datos.",
+  "description": "Modelado de datos tipado en Python: validacion estricta en el Request Body, serializacion y aislamiento de datos sensibles.",
   "position": 32,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 280
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_fa_02_01",
       "code": "S01",
-      "title": "Esquemas Pydantic y Reglas de Validación",
-      "slug": "pydantic-schemas",
+      "title": "Modelos, Validaciones y Serializacion en Pydantic",
+      "slug": "modelos-pydantic-validacion",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 45,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_fa_02_01",
           "code": "L01",
-          "title": "BaseModel, Field y Validación Automática de Pydantic v2",
-          "slug": "pydantic-base",
+          "title": "Modelos BaseModel y Tipado de Request Body",
+          "slug": "basemodel-request-body",
           "position": 1,
-          "concept_id": "fa-pydantic",
-          "objective": "Declarar contratos de datos que validen tipos, longitudes y rangos numéricos automáticamente.",
-          "theory_markdown": "En FastAPI, los modelos de datos se definen heredando de `pydantic.BaseModel`.\n\nCuando un cliente envía una petición POST:\n1. FastAPI lee el cuerpo JSON.\n2. Lo pasa por el esquema Pydantic.\n3. Si algún campo tiene un tipo incorrecto o falta un campo requerido, FastAPI responde automáticamente con un **HTTP 422 Unprocessable Entity** detallando exactamente qué campo falló, sin que tengas que escribir un solo `if` de validación manual.",
+          "concept_id": "fa-pydantic-basemodel",
+          "objective": "Definir modelos de datos heredando de BaseModel y utilizarlos para validar el cuerpo de peticiones HTTP en FastAPI.",
+          "theory_markdown": "**Pydantic v2** es la biblioteca de analisis y validacion de datos sobre la que se fundamenta FastAPI. Su motor interno esta implementado en **Rust** (pydantic-core), ofreciendo una velocidad de validacion hasta 20 veces superior a versiones anteriores.\n\nPara definir la estructura esperada de un Request Body (cuerpo JSON en peticiones POST, PUT o PATCH), se crea una clase que hereda de `pydantic.BaseModel` con atributos tipados.\n\nCuando un endpoint declara un parametro con un tipo derivado de `BaseModel`, FastAPI:\n1. Lee el cuerpo de la peticion HTTP como JSON.\n2. Valida los tipos de cada campo y realiza coerción segura cuando es factible.\n3. Si los datos son validos, inyecta la instancia en la funcion; si son invalidos, responde automaticamente con 422 Unprocessable Entity indicando el campo y motivo exacto.",
           "examples": [
             {
-              "title": "Esquema de creación de producto con validaciones",
-              "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel, Field, EmailStr\n\nclass UsuarioRegistro(BaseModel):\n    username: str = Field(min_length=3, max_length=20)\n    edad: int = Field(ge=18, le=120, description=\"Mayor de edad\")\n    activo: bool = True\n\napp = FastAPI()\n\n@app.post(\"/usuarios\", status_code=201)\ndef crear_usuario(payload: UsuarioRegistro):\n    # payload es una instancia validada de UsuarioRegistro\n    return {\"mensaje\": f\"Usuario {payload.username} creado\", \"edad\": payload.edad}",
-              "output": "HTTP 201 Created\n{\"mensaje\": \"Usuario koda_dev creado\", \"edad\": 25}",
-              "explanation": "Si el cliente envía edad: 16, Pydantic rechaza la petición con HTTP 422 automáticamente."
+              "title": "Declaracion de esquema y recepcion en endpoint POST",
+              "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel\n\nclass ProductoCreate(BaseModel):\n    nombre: str\n    precio: float\n    en_oferta: bool = False\n\napp = FastAPI()\n\n@app.post(\"/productos\", status_code=201)\nasync def crear_producto(producto: ProductoCreate) -> dict[str, object]:\n    return {\"id\": 1, \"producto\": producto.model_dump()}",
+              "output": "POST /productos con {\"nombre\": \"Teclado\", \"precio\": 49.99} -> 201 Created",
+              "explanation": "en_oferta asume su valor predeterminado False porque no fue enviado en la carga util JSON."
             }
           ],
-          "common_errors": "No tipar los argumentos del endpoint con el esquema BaseModel, lo que hace que FastAPI los interprete como query parameters en lugar de JSON body.",
+          "common_errors": "Definir un modelo de Pydantic usando @dataclass en lugar de heredar de BaseModel, perdiendo las capacidades de validacion estricta y conversion de Pydantic v2.",
           "mini_exercise": {
-            "starter_code": "from pydantic import BaseModel\n# Crea un modelo Item con titulo: str y precio: float\nclass Item(BaseModel):\n    ...\n\ni = Item(titulo=\"Teclado\", precio=89.99)\nprint(i.titulo)",
-            "instructions": "Declara Item(BaseModel) con titulo y precio.",
-            "solution": "from pydantic import BaseModel\nclass Item(BaseModel):\n    titulo: str\n    precio: float\n\ni = Item(titulo=\"Teclado\", precio=89.99)\nprint(i.titulo)"
+            "instructions": "Crea una clase Usuario con los campos 'username: str' y 'edad: int' usando BaseModel.",
+            "starter_code": "from pydantic import BaseModel\n\n# Define la clase Usuario\n",
+            "solution": "from pydantic import BaseModel\n\nclass Usuario(BaseModel):\n    username: str\n    edad: int"
           },
           "key_takeaways": [
-            "Pydantic v2 está escrito en Rust y valida a máxima velocidad.",
-            "Field(ge=..., min_length=...) añade restricciones semánticas.",
-            "FastAPI genera HTTP 422 con errores detallados ante entradas no válidas."
+            "BaseModel es la clase base para declarar estructuras de datos validadas en Pydantic.",
+            "FastAPI parsea y valida el JSON entrante contra el esquema de BaseModel automaticamente.",
+            "Peticiones con datos ausentes o tipos incompatibles reciben respuesta 422 con detalles JSON."
           ],
           "exercise": {
             "id": "ex_fa_02_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Qué código de estado HTTP devuelve FastAPI automáticamente si un cliente envía un JSON que no cumple con el esquema Pydantic?",
+            "prompt": "Que ocurre cuando un cliente envia un JSON con 'precio': 'gratis' a un endpoint que espera un modelo con 'precio: float'?",
             "options": [
               {
                 "id": "a",
-                "text": "422 Unprocessable Entity"
+                "text": "FastAPI rechaza la solicitud de inmediato con codigo HTTP 422 indicando que 'gratis' no es un float valido."
               },
               {
                 "id": "b",
-                "text": "500 Internal Server Error"
+                "text": "Convierte la palabra 'gratis' en el numero 0.0 sin alertar."
               },
               {
                 "id": "c",
-                "text": "404 Not Found"
+                "text": "Guarda el valor como texto ignorando el tipo float."
               },
               {
                 "id": "d",
-                "text": "200 OK con mensaje de error"
+                "text": "El servidor se apaga con un error critico de memoria."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "FastAPI sigue los estándares de la Web retornando 422 Unprocessable Entity con la lista exacta de campos erróneos."
+            "explanation": "Pydantic intenta coercionar el valor; como 'gratis' no representa un numero flotante, falla la validacion y FastAPI retorna 422."
+          }
+        },
+        {
+          "id": "les_fa_02_02",
+          "code": "L02",
+          "title": "Restricciones de Campo con Field",
+          "slug": "restricciones-campo-field",
+          "position": 2,
+          "concept_id": "fa-pydantic-field",
+          "objective": "Aplicar restricciones numericas, de longitud y metadatos a los campos de un modelo mediante Field().",
+          "theory_markdown": "La funcion `Field()` de Pydantic permite anadir restricciones adicionales de validacion y metadatos documentales a los atributos de un modelo:\n\n- **Restricciones numericas:**\n  - `gt` (greater than): estrictamente mayor que.\n  - `ge` (greater or equal): mayor o igual que.\n  - `lt` (less than): estrictamente menor que.\n  - `le` (less or equal): menor o igual que.\n- **Restricciones de cadenas:**\n  - `min_length` y `max_length`: longitud minima y maxima.\n  - `pattern`: expresion regular que debe cumplir el texto.\n- **Metadatos:**\n  - `description`: texto explicativo que aparece en la documentacion Swagger.\n  - `examples`: lista de valores de ejemplo para la documentacion interactiva.",
+          "examples": [
+            {
+              "title": "Modelo con restricciones numericas y de texto",
+              "code": "from pydantic import BaseModel, Field\n\nclass Pedido(BaseModel):\n    codigo: str = Field(min_length=3, max_length=10, description=\"Codigo unico del pedido\")\n    cantidad: int = Field(gt=0, le=100, description=\"Cantidad de unidades entre 1 y 100\")\n    descuento: float = Field(default=0.0, ge=0.0, le=1.0)",
+              "output": "Pedido(codigo='ABC-01', cantidad=5, descuento=0.1)",
+              "explanation": "Si se envia cantidad=0 o cantidad=101, Pydantic genera un error de validacion automatico."
+            }
+          ],
+          "common_errors": "Confundir gt (mayor estricto) con ge (mayor o igual), permitiendo valores limite no deseados como cantidad 0.",
+          "mini_exercise": {
+            "instructions": "Define un modelo Calificacion con un campo 'nota: float' con valor minimo 0.0 y maximo 10.0 usando Field.",
+            "starter_code": "from pydantic import BaseModel, Field\n\nclass Calificacion(BaseModel):\n    # Define nota entre 0.0 y 10.0\n    pass",
+            "solution": "from pydantic import BaseModel, Field\n\nclass Calificacion(BaseModel):\n    nota: float = Field(ge=0.0, le=10.0)"
+          },
+          "key_takeaways": [
+            "Field() permite configurar limites numericos con gt, ge, lt, le.",
+            "Las cadenas se pueden acotar con min_length, max_length y pattern.",
+            "Las restricciones de Field se integran automaticamente en la documentacion OpenAPI / Swagger."
+          ],
+          "exercise": {
+            "id": "ex_fa_02_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual argumento de Field() se debe utilizar si se desea que un numero sea estrictamente mayor que cero (es decir, no permitiendo el cero)?",
+            "options": [
+              {
+                "id": "a",
+                "text": "gt=0"
+              },
+              {
+                "id": "b",
+                "text": "ge=0"
+              },
+              {
+                "id": "c",
+                "text": "min_value=0"
+              },
+              {
+                "id": "d",
+                "text": "above=0"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "gt significa 'greater than' (estrictamente mayor que). Para mayor o igual se utiliza ge ('greater or equal')."
+          }
+        },
+        {
+          "id": "les_fa_02_03",
+          "code": "L03",
+          "title": "Validadores Personalizados en Pydantic v2",
+          "slug": "validadores-personalizados-v2",
+          "position": 3,
+          "concept_id": "fa-pydantic-validators",
+          "objective": "Implementar validadores de campo y validadores cruzados de modelo con @field_validator y @model_validator.",
+          "theory_markdown": "En situaciones donde las restricciones basicas de `Field()` no bastan para la logica de negocio, Pydantic v2 ofrece dos decoradores fundamentales:\n\n1. `@field_validator('campo')`:\n   Valida o transforma el valor de un campo individual. Por defecto se ejecuta en modo `'after'` (despues de la coercion basica de tipos).\n   Debe ser un metodo de clase (`@classmethod`).\n\n2. `@model_validator(mode='after')`:\n   Valida relaciones entre multiples campos del modelo (cross-field validation). Recibe la instancia completa (`self`) tras validar los campos individuales.",
+          "examples": [
+            {
+              "title": "Validacion individual y validacion entre campos",
+              "code": "from pydantic import BaseModel, field_validator, model_validator\n\nclass RegistroEvento(BaseModel):\n    nombre: str\n    capacidad_minima: int\n    capacidad_maxima: int\n\n    @field_validator(\"nombre\")\n    @classmethod\n    def nombre_no_vacio(cls, v: str) -> str:\n        if not v.strip():\n            raise ValueError(\"El nombre no puede consistir unicamente en espacios en blanco\")\n        return v.strip().title()\n\n    @model_validator(mode=\"after\")\n    def verificar_capacidades(self) -> \"RegistroEvento\":\n        if self.capacidad_minima > self.capacidad_maxima:\n            raise ValueError(\"capacidad_minima no puede ser mayor que capacidad_maxima\")\n        return self",
+              "output": "RegistroEvento(nombre='  python conf  ', capacidad_minima=10, capacidad_maxima=50)\n-> nombre='Python Conf'",
+              "explanation": "field_validator limpia y transforma el nombre, y model_validator valida que el rango de capacidad sea consistente."
+            }
+          ],
+          "common_errors": "Olvidar retornar el valor validado en un @field_validator o retornar None, lo cual sobreescribe el atributo con None.",
+          "mini_exercise": {
+            "instructions": "Escribe un @field_validator para 'email' que verifique que contenga un caracter '@' o eleve un ValueError.",
+            "starter_code": "from pydantic import BaseModel, field_validator\n\nclass Contacto(BaseModel):\n    email: str\n    \n    # Implementa el validador\n",
+            "solution": "from pydantic import BaseModel, field_validator\n\nclass Contacto(BaseModel):\n    email: str\n\n    @field_validator(\"email\")\n    @classmethod\n    def validar_arroba(cls, v: str) -> str:\n        if \"@\" not in v:\n            raise ValueError(\"El email debe contener @\")\n        return v"
+          },
+          "key_takeaways": [
+            "@field_validator se utiliza para validar o transformar un campo concreto y debe retornar el valor.",
+            "@model_validator(mode='after') permite validar reglas de negocio que involucran multiples atributos.",
+            "Lanzar un ValueError dentro de un validador produce un error 422 estructurado en FastAPI."
+          ],
+          "exercise": {
+            "id": "ex_fa_02_03",
+            "type": "single_choice",
+            "difficulty": "hard",
+            "prompt": "Que regla fundamental debe cumplir un metodo decorado con @field_validator en Pydantic v2?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Debe ser un @classmethod y retornar obligatoriamente el valor validado (o transformado)."
+              },
+              {
+                "id": "b",
+                "text": "Debe ser una funcion asincrona async def obligatoriamente."
+              },
+              {
+                "id": "c",
+                "text": "Debe retornar un booleano True o False en lugar del valor."
+              },
+              {
+                "id": "d",
+                "text": "Solo puede recibir tipos primitivos int y str."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "En Pydantic v2, los field_validators son metodos de clase que reciben el valor a inspeccionar y deben retornarlo para que se asigne al atributo."
+          }
+        },
+        {
+          "id": "les_fa_02_04",
+          "code": "L04",
+          "title": "Serializacion y Proteccion con response_model",
+          "slug": "serializacion-response-model",
+          "position": 4,
+          "concept_id": "fa-pydantic-response-model",
+          "objective": "Aislar datos sensibles mediante response_model y dominar los metodos de exportacion model_dump() y model_dump_json().",
+          "theory_markdown": "En Pydantic v2, los metodos de exportacion son:\n- `modelo.model_dump()`: Retorna un diccionario nativo de Python.\n- `modelo.model_dump_json()`: Retorna una cadena serializada en JSON.\n\n### La importancia de response_model\nUn principio critico de seguridad en APIs es **nunca exponer datos sensibles** (tales como hashes de contraseñas, tokens internos o datos privados). \n\nFastAPI ofrece el parametro `response_model` en los decoradores de ruta:\n```python\n@app.post(\"/usuarios\", response_model=UsuarioPublico)\nasync def crear_usuario(usuario: UsuarioInDB):\n    ...\n    return usuario  # FastAPI filtra automaticamente los campos que no esten en UsuarioPublico\n```\nAl aplicar `response_model`, FastAPI:\n1. Filtra y descarta todos los campos que no pertenezcan al modelo de respuesta.\n2. Valida los datos de salida antes de emitirlos.\n3. Documenta en Swagger el esquema exacto que recibira el cliente.",
+          "examples": [
+            {
+              "title": "Aislamiento de hash de contrasena en la respuesta",
+              "code": "from fastapi import FastAPI\nfrom pydantic import BaseModel\n\nclass UserCreate(BaseModel):\n    username: str\n    password: str\n\nclass UserResponse(BaseModel):\n    id: int\n    username: str\n\napp = FastAPI()\n\n@app.post(\"/usuarios\", response_model=UserResponse, status_code=201)\nasync def registrar(user: UserCreate) -> dict[str, object]:\n    # Simulamos guardado en BD con hash\n    db_record = {\"id\": 1, \"username\": user.username, \"password_hash\": \"argon2$hashed_secret\"}\n    return db_record",
+              "output": "Respuesta enviada al cliente: {\"id\": 1, \"username\": \"usuario1\"}",
+              "explanation": "El campo password_hash fue excluido automaticamente porque UserResponse no lo declara."
+            }
+          ],
+          "common_errors": "Retornar un diccionario que contiene password_hash sin usar response_model, provocando una fuga involuntaria de credenciales sensibles al cliente.",
+          "mini_exercise": {
+            "instructions": "Usa model_dump() para convertir la instancia del producto en un diccionario ordinario.",
+            "starter_code": "from pydantic import BaseModel\n\nclass Item(BaseModel):\n    nombre: str\n\nitem = Item(nombre=\"Mesa\")\n# Convierte item a dict\nresultado = ...",
+            "solution": "from pydantic import BaseModel\n\nclass Item(BaseModel):\n    nombre: str\n\nitem = Item(nombre=\"Mesa\")\nresultado = item.model_dump()"
+          },
+          "key_takeaways": [
+            "model_dump() exporta a diccionario de Python y model_dump_json() a cadena JSON en Pydantic v2.",
+            "response_model filtra de forma segura cualquier dato no declarado en el esquema de salida.",
+            "response_model genera la documentacion exacta del contrato de respuesta en OpenAPI / Swagger."
+          ],
+          "exercise": {
+            "id": "ex_fa_02_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es el metodo estandar en Pydantic v2 para convertir una instancia de BaseModel en un diccionario nativo de Python?",
+            "options": [
+              {
+                "id": "a",
+                "text": "model.model_dump()"
+              },
+              {
+                "id": "b",
+                "text": "model.dict()"
+              },
+              {
+                "id": "c",
+                "text": "model.to_dict()"
+              },
+              {
+                "id": "d",
+                "text": "model.as_json()"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "En Pydantic v2, .dict() quedo obsoleto y fue reemplazado formalmente por .model_dump() (y .model_dump_json() para cadenas JSON)."
           }
         }
       ]

@@ -78,10 +78,12 @@ export const OrbitFieldBackground: React.FC<{ className?: string; engineKey?: Bg
     };
   }, [reduceMotion, mountRef, engineKey]);
 
-  if (reduceMotion) return null;
-
   return (
-    <div ref={mountRef} aria-hidden="true" className={cn('pointer-events-none absolute inset-0 overflow-hidden', className)} />
+    <div
+      ref={mountRef}
+      aria-hidden="true"
+      className={cn('pointer-events-none absolute inset-0 overflow-hidden motion-reduce:hidden', className)}
+    />
   );
 };
 

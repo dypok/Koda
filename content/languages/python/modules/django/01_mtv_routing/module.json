@@ -5,13 +5,13 @@
   "slug": "django-mtv-routing",
   "course_slug": "django-enterprise",
   "title": "Arquitectura MTV, Settings y Routing en Django",
-  "objective": "Comprender la filosofía \"baterías incluidas\" de Django, la arquitectura Modelo-Template-Vista (MTV) y configurar el enrutamiento.",
-  "description": "El framework web empresarial por excelencia: crea proyectos robustos, desacoplados en apps modulares con configuración segura.",
+  "objective": "Comprender la filosofia 'baterias incluidas' de Django, la arquitectura Modelo-Template-Vista (MTV) y configurar el enrutamiento.",
+  "description": "El framework web empresarial por excelencia: crea proyectos robustos, desacoplados en apps modulares con configuracion segura.",
   "position": 36,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
@@ -23,66 +23,232 @@
     {
       "id": "sec_dj_01_01",
       "code": "S01",
-      "title": "Estructura de un Proyecto Django",
-      "slug": "estructura-django",
+      "title": "Arquitectura, Configuracion y Enrutamiento en Django",
+      "slug": "arquitectura-mtv-enrutamiento",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 45,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_dj_01_01",
           "code": "L01",
-          "title": "Filosofía Batteries Included y el Patrón MTV",
-          "slug": "filosofia-mtv",
+          "title": "Filosofia Batteries Included y Arquitectura MTV",
+          "slug": "filosofia-mtv-apps",
           "position": 1,
-          "concept_id": "dj-intro",
-          "objective": "Diferenciar entre Proyecto Django y Aplicaciones (apps) individuales.",
-          "theory_markdown": "Django promueve la filosofía de **\"baterías incluidas\"**: incluye de serie autenticación, panel administrativo, ORM y protección CSRF sin configurar librerías externas.\n\nSu arquitectura se basa en **MTV (Model - Template - View)**:\n- **Model**: Capa de datos y reglas de negocio (ORM).\n- **Template**: Capa de presentación (HTML con motor de plantillas de Django DTL).\n- **View**: Capa de control que recibe la petición HTTP, consulta los modelos y renderiza el template o respuesta JSON.",
+          "concept_id": "dj-intro-mtv",
+          "objective": "Comprender la filosofia de Django, la diferencia entre Proyecto y Apps modulares, y el ciclo MTV.",
+          "theory_markdown": "Django adopta la filosofia **'batteries included'** (baterias incluidas): proporciona de forma nativa autenticacion de usuarios, panel de administracion, proteccion de seguridad (CSRF, XSS, Clickjacking) y un potente ORM relacional.\n\n### Estructura: Proyecto vs Aplicaciones (Apps)\n- **Proyecto:** Es la instancia global de configuracion (`settings.py`, `urls.py` raiz, `wsgi.py`/`asgi.py`). Se crea con `django-admin startproject mi_proyecto`.\n- **Aplicacion (App):** Es un paquete de Python autocontenido y reutilizable enfocado en un dominio especifico (por ejemplo `usuarios`, `blog`, `pagos`). Se crea con `python manage.py startapp mi_app`.\n\n### Arquitectura MTV (Model - Template - View)\n- **Model (Modelo):** Capa de acceso y reglas de negocio sobre la base de datos a traves del ORM.\n- **Template (Plantilla):** Capa de presentacion que genera la interfaz grafica (HTML con DTL).\n- **View (Vista):** Capa logica intermediaria que recibe el `HttpRequest`, consulta los Modelos y entrega la respuesta mediante un `HttpResponse` o template renderizado.",
           "examples": [
             {
-              "title": "Vista básica basada en función",
-              "code": "from django.http import JsonResponse\n\ndef estado_sistema(request):\n    datos = {\"plataforma\": \"Koda Academy\", \"version\": \"5.1\", \"online\": True}\n    return JsonResponse(datos)",
-              "output": "HTTP 200 OK\n{\"plataforma\": \"Koda Academy\", \"version\": \"5.1\", \"online\": true}",
-              "explanation": "JsonResponse serializa diccionarios con la cabecera application/json automáticamente."
+              "title": "Estructura basica de una vista en Django",
+              "code": "from django.http import HttpResponse, HttpRequest\n\ndef inicio(request: HttpRequest) -> HttpResponse:\n    return HttpResponse(\"Bienvenido a Koda Academy sobre Django\")",
+              "output": "Peticion GET / -> HTTP 200 con cuerpo de texto plano.",
+              "explanation": "Toda vista en Django debe recibir una instancia de HttpRequest como primer argumento y retornar un HttpResponse valido."
             }
           ],
-          "common_errors": "Olvidar registrar una nueva app creada con `django-admin startapp` dentro de la lista `INSTALLED_APPS` en `settings.py`.",
+          "common_errors": "Crear una nueva aplicacion con startapp y olvidar agregarla a la lista INSTALLED_APPS en settings.py, impidiendo que Django reconozca sus modelos o rutas.",
           "mini_exercise": {
-            "starter_code": "# settings.py\n# INSTALLED_APPS = [\n#     ...\n#     \"mi_app\",\n# ]",
-            "instructions": "Recuerda que toda app modular debe añadirse a INSTALLED_APPS.",
-            "solution": "# app registrada en INSTALLED_APPS"
+            "instructions": "Escribe una vista en Django llamada 'saludo' que reciba 'request' y retorne un HttpResponse con el texto 'Hola Django'.",
+            "starter_code": "from django.http import HttpResponse\n\n# Define la vista saludo\n",
+            "solution": "from django.http import HttpResponse\n\ndef saludo(request):\n    return HttpResponse(\"Hola Django\")"
           },
           "key_takeaways": [
-            "Django es batteries-included: trae seguridad, auth y admin integrados.",
-            "Un proyecto contiene una o varias apps modulares reutilizables.",
-            "MTV mapea datos (Model), lógica (View) y visualización (Template)."
+            "Django incluye herramientas de administracion, autenticacion y ORM integradas.",
+            "Un proyecto coordina configuraciones globales; las apps agrupan logica de dominio reutilizable.",
+            "MTV mapea Modelo (datos), Template (presentacion) y Vista (logica de negocio)."
           ],
           "exercise": {
             "id": "ex_dj_01_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "En la arquitectura MTV de Django, ¿cuál capa es la encargada de procesar la lógica de la petición y devolver una respuesta?",
+            "prompt": "Cual es la relacion fundamental entre un Proyecto Django y sus Aplicaciones (Apps)?",
             "options": [
               {
                 "id": "a",
-                "text": "View (Vista)"
+                "text": "Un proyecto es la configuracion global que coordina una o mas aplicaciones modulares e independientes."
               },
               {
                 "id": "b",
-                "text": "Template (Plantilla)"
+                "text": "Un proyecto solo puede tener exactamente una unica aplicacion."
               },
               {
                 "id": "c",
-                "text": "Model (Modelo)"
+                "text": "Las aplicaciones contienen el servidor web y el proyecto almacena la base de datos SQLite."
               },
               {
                 "id": "d",
-                "text": "Settings"
+                "text": "Son sinonimos exactos generados con el comando manage.py."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "La View (en views.py) recibe el request, ejecuta la lógica y devuelve la HttpResponse correspondiente."
+            "explanation": "En Django, el proyecto es el contenedor de configuracion que integra diversas aplicaciones modulares y reutilizables."
+          }
+        },
+        {
+          "id": "les_dj_01_02",
+          "code": "L02",
+          "title": "Configuracion de settings.py y Variables de Entorno",
+          "slug": "settings-variables-entorno",
+          "position": 2,
+          "concept_id": "dj-settings-config",
+          "objective": "Aprender el proposito de las configuraciones criticas en settings.py y gestionar credenciales de forma segura.",
+          "theory_markdown": "El archivo `settings.py` contiene todas las variables de configuracion del proyecto Django:\n\n- `SECRET_KEY`: Cadena criptografica utilizada para firmar cookies de sesion, tokens CSRF y contraseñas. Nunca debe versionarse en Git.\n- `DEBUG`: Booleano que activa paginas de traza detalladas de error en desarrollo. **Debe ser False en produccion** para evitar fugas de informacion.\n- `ALLOWED_HOSTS`: Lista de nombres de dominio o direcciones IP autorizadas para servir la aplicacion cuando `DEBUG = False`.\n- `INSTALLED_APPS`: Lista de aplicaciones habilitadas en el proyecto (tanto modulos integrados de Django como apps propias y de terceros).\n- `DATABASES`: Diccionario de configuracion para conectar motores relacionales (SQLite por defecto, PostgreSQL, MySQL en produccion).",
+          "examples": [
+            {
+              "title": "Registro de app y configuracion de ALLOWED_HOSTS",
+              "code": "# settings.py\nDEBUG = False\nALLOWED_HOSTS = [\"koda.academy\", \"www.koda.academy\", \"127.0.0.1\"]\n\nINSTALLED_APPS = [\n    \"django.contrib.admin\",\n    \"django.contrib.auth\",\n    \"django.contrib.contenttypes\",\n    \"django.contrib.sessions\",\n    \"django.contrib.messages\",\n    \"django.contrib.staticfiles\",\n    # Apps locales del proyecto:\n    \"cursos\",\n    \"estudiantes\",\n]",
+              "output": "Django inicia de forma segura admitiendo solicitudes solo desde los hosts autorizados.",
+              "explanation": "ALLOWED_HOSTS previene ataques de envenenamiento de cabecera HTTP Host (HTTP Host Header attacks)."
+            }
+          ],
+          "common_errors": "Publicar el archivo settings.py en GitHub con la clave SECRET_KEY hardcodeada y DEBUG = True.",
+          "mini_exercise": {
+            "instructions": "Registra una app llamada 'inventario' en la lista INSTALLED_APPS.",
+            "starter_code": "INSTALLED_APPS = [\n    \"django.contrib.auth\",\n    # Agrega inventario\n]",
+            "solution": "INSTALLED_APPS = [\n    \"django.contrib.auth\",\n    \"inventario\",\n]"
+          },
+          "key_takeaways": [
+            "SECRET_KEY debe mantenerse secreta y cargarse mediante variables de entorno.",
+            "DEBUG = False es obligatorio en produccion para no exponer trazas internas.",
+            "ALLOWED_HOSTS define que dominios pueden acceder a la aplicacion."
+          ],
+          "exercise": {
+            "id": "ex_dj_01_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Que consecuencia de seguridad se produce si se deja DEBUG = True en un servidor Django en produccion?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Cualquier excepcion no controlada expondra al usuario variables de entorno, configuraciones internas, fragmentos de codigo y la SECRET_KEY."
+              },
+              {
+                "id": "b",
+                "text": "La base de datos se borra automaticamente cada 24 horas."
+              },
+              {
+                "id": "c",
+                "text": "Django no permitira el inicio de sesion de ningun usuario administrador."
+              },
+              {
+                "id": "d",
+                "text": "El servidor rechaza todas las conexiones HTTPS entrantes."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Las paginas de error de depuracion de Django muestran la traza de ejecucion, configuraciones y variables locales de las funciones, lo cual es critico en produccion."
+          }
+        },
+        {
+          "id": "les_dj_01_03",
+          "code": "L03",
+          "title": "Enrutamiento URL con path() e include()",
+          "slug": "enrutamiento-url-path-include",
+          "position": 3,
+          "concept_id": "dj-routing-urls",
+          "objective": "Disenar estructuras de URL jerarquicas mediante path(), convertidores de ruta e include().",
+          "theory_markdown": "El archivo `urls.py` mapea rutas solicitadas por el cliente a las funciones o clases de vista correspondientes.\n\n### Sintaxis de path()\n```python\nfrom django.urls import path\nfrom . import views\n\nurlpatterns = [\n    path(\"articulos/\", views.lista_articulos, name=\"articulos-lista\"),\n    path(\"articulos/<int:pk>/\", views.detalle_articulo, name=\"articulo-detalle\"),\n    path(\"usuarios/<str:username>/\", views.perfil_usuario, name=\"usuario-perfil\"),\n]\n```\nLos **convertidores de ruta** (`<int:pk>`, `<str:slug>`, `<uuid:id>`) validan el patron y pasan el valor con su tipo nativo como argumento a la vista.\n\n### Enrutamiento modular con include()\nPara evitar centralizar cientos de URLs en el archivo raiz del proyecto, se delega el enrutamiento a cada aplicacion:\n```python\n# urls.py raiz del proyecto\nfrom django.urls import path, include\n\nurlpatterns = [\n    path(\"cursos/\", include(\"cursos.urls\")),\n]\n```",
+          "examples": [
+            {
+              "title": "Resolucion inversa de URLs con reverse",
+              "code": "from django.urls import reverse\n\n# En codigo Python o pruebas:\nurl = reverse(\"articulo-detalle\", kwargs={\"pk\": 42})\nprint(url)",
+              "output": "/articulos/42/",
+              "explanation": "reverse busca la URL usando el parametro 'name', desacoplando el codigo de rutas hardcodeadas."
+            }
+          ],
+          "common_errors": "Omitir la barra diagonal al final de las rutas ('articulos' en vez de 'articulos/'), lo que puede romper el mecanismo de redireccion automatica APPEND_SLASH de Django.",
+          "mini_exercise": {
+            "instructions": "Escribe una entrada path que capture un parametro entero 'id' en la ruta 'detalle/<int:id>/' asignado a views.detalle.",
+            "starter_code": "from django.urls import path\nfrom . import views\n\n# Define la ruta\nurlpatterns = [\n    ...\n]",
+            "solution": "from django.urls import path\nfrom . import views\n\nurlpatterns = [\n    path(\"detalle/<int:id>/\", views.detalle, name=\"detalle\"),\n]"
+          },
+          "key_takeaways": [
+            "path() mapea patrones de URL a funciones o clases de vista.",
+            "Los convertidores como <int:pk> y <str:slug> tipan los parametros capturados.",
+            "include() permite delegar y modularizar las rutas en cada app.",
+            "El parametro 'name' permite la resolucion inversa de URLs mediante reverse()."
+          ],
+          "exercise": {
+            "id": "ex_dj_01_03",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Cual es la funcion principal del argumento name='...' en una definicion de path() de Django?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Permite realizar resolucion inversa de URLs (mediante reverse() o {% url %}), desacoplando el codigo de paths hardcodeados."
+              },
+              {
+                "id": "b",
+                "text": "Fija el titulo de la pestana en el navegador del cliente."
+              },
+              {
+                "id": "c",
+                "text": "Es el nombre de la tabla SQL donde se guardara la ruta."
+              },
+              {
+                "id": "d",
+                "text": "Especifica el nombre del metodo HTTP permitido (GET, POST)."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "name le otorga un identificador unico a la ruta para referenciarla dinamicamente en templates y vistas sin depender de strings fijos."
+          }
+        },
+        {
+          "id": "les_dj_01_04",
+          "code": "L04",
+          "title": "Vistas Basadas en Funciones y en Clases (FBV vs CBV)",
+          "slug": "vistas-fbv-cbv-render",
+          "position": 4,
+          "concept_id": "dj-views-fbv-cbv",
+          "objective": "Comparar vistas basadas en funciones con vistas genericas basadas en clases y renderizar respuestas.",
+          "theory_markdown": "Django ofrece dos paradigmas para construir vistas:\n\n1. **Function-Based Views (FBV):**\n   Funciones explicitas que reciben `request` y controlan manualmente el flujo con sentencias condicionales `if request.method == 'POST'`.\n   - Ideales para logica simple o muy personalizada.\n   - Se utiliza la funcion auxiliar `render(request, 'template.html', contexto)` o `JsonResponse(datos)`.\n\n2. **Class-Based Views (CBV):**\n   Clases que heredan de vistas genericas de Django (`View`, `TemplateView`, `ListView`, `DetailView`, `CreateView`).\n   - Promueven la reutilizacion mediante herencia orientada a objetos.\n   - Separan los verbos HTTP en metodos especificos (`def get()`, `def post()`).\n   - Para registrarlas en `urls.py` se invoca el metodo de clase `.as_view()`: `path('lista/', MiVista.as_view())`.",
+          "examples": [
+            {
+              "title": "Comparacion practica entre FBV y CBV",
+              "code": "from django.shortcuts import render\nfrom django.views import View\nfrom django.http import HttpResponse\n\n# 1. FBV:\ndef vista_funcion(request):\n    return render(request, \"inicio.html\", {\"titulo\": \"Koda\"})\n\n# 2. CBV:\nclass VistaClase(View):\n    def get(self, request):\n        return HttpResponse(\"Respuesta desde metodo GET de CBV\")",
+              "output": "Ambas procesan solicitudes HTTP pero organizan el codigo bajo paradigmas distintos.",
+              "explanation": "as_view() convierte la clase en una funcion de vista ejecutable por el enrutador de Django."
+            }
+          ],
+          "common_errors": "Registrar una Class-Based View en urls.py directamente como `path('ruta/', MiVista)` sin invocar `.as_view()`, provocando un TypeError.",
+          "mini_exercise": {
+            "instructions": "Escribe una vista basada en clase llamada 'AcercaDe' que herede de View e implemente el metodo get retornando HttpResponse('Acerca de').",
+            "starter_code": "from django.views import View\nfrom django.http import HttpResponse\n\n# Define la clase AcercaDe\n",
+            "solution": "from django.views import View\nfrom django.http import HttpResponse\n\nclass AcercaDe(View):\n    def get(self, request):\n        return HttpResponse(\"Acerca de\")"
+          },
+          "key_takeaways": [
+            "render(request, template, context) es el helper estandar para compilar plantillas HTML.",
+            "Las FBV son directas y lineales; las CBV aprovechan la herencia y polimorfismo de POO.",
+            "Toda CBV debe registrarse en urls.py mediante el metodo .as_view()."
+          ],
+          "exercise": {
+            "id": "ex_dj_01_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Como debe registrarse una vista basada en clase llamada 'CatalogoView' en la lista urlpatterns de urls.py?",
+            "options": [
+              {
+                "id": "a",
+                "text": "path('catalogo/', CatalogoView.as_view(), name='catalogo')"
+              },
+              {
+                "id": "b",
+                "text": "path('catalogo/', CatalogoView(), name='catalogo')"
+              },
+              {
+                "id": "c",
+                "text": "path('catalogo/', CatalogoView.render(), name='catalogo')"
+              },
+              {
+                "id": "d",
+                "text": "path('catalogo/', CatalogoView, name='catalogo')"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "El metodo de clase .as_view() instancia la vista por peticion y despacha la solicitud al metodo adecuado (get, post, etc.)."
           }
         }
       ]

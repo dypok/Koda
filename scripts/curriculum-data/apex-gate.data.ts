@@ -22,7 +22,7 @@ export const APEX_MODULES: RawModule[] = [
         title: 'Fase 1: Arquitectura y Modelado del Dominio',
         slug: 'fase-1-arquitectura',
         position: 1,
-        type: 'project',
+        type: 'exercise',
         estimated_minutes: 60,
         xp_on_complete: 400,
         lessons: [
@@ -32,7 +32,7 @@ export const APEX_MODULES: RawModule[] = [
             title: 'Fase 1: Arquitectura Hexagonal y Contratos de Datos',
             slug: 'fase-1-arquitectura-contratos',
             position: 1,
-            concept_id: 'apex_clean_architecture',
+            concept_id: 'apex-clean-architecture',
             objective: 'Estructurar una solución Python profesional desacoplando la lógica de negocio de la infraestructura mediante arquitectura limpia y tipado estricto.',
             theory_markdown: `El Apex Master Gate simula un encargo del mundo real: diseñar una plataforma de análisis y automatización empresarial.
 
@@ -137,7 +137,7 @@ class DocumentEngine(Protocol):
         title: 'Fase 2: Motor de Servicios y Capacidades Inteligentes',
         slug: 'fase-2-servicios-ia',
         position: 2,
-        type: 'project',
+        type: 'exercise',
         estimated_minutes: 90,
         xp_on_complete: 500,
         lessons: [
@@ -147,7 +147,7 @@ class DocumentEngine(Protocol):
             title: 'Fase 2: Orquestación Asíncrona y Agentes de Decisión',
             slug: 'fase-2-orquestacion-agentes',
             position: 1,
-            concept_id: 'apex_async_orchestration',
+            concept_id: 'apex-async-orchestration',
             objective: 'Implementar el motor asíncrono central combinando procesamiento concurrente seguro y toma de decisiones guiada por herramientas.',
             theory_markdown: `En la Fase 2, conectamos los adaptadores de infraestructura para dar vida al sistema.
 
@@ -215,7 +215,7 @@ async def execute_tasks(tasks: list):
         title: 'Fase 3: Auditoría, Testing y Despliegue en Producción',
         slug: 'fase-3-auditoria-deploy',
         position: 3,
-        type: 'exam',
+        type: 'quiz',
         estimated_minutes: 120,
         xp_on_complete: 700,
         lessons: [
@@ -225,7 +225,7 @@ async def execute_tasks(tasks: list):
             title: 'Fase 3: Pruebas Automatizadas, Dockerfile Multi-Stage y Certificación',
             slug: 'fase-3-pruebas-docker-certificacion',
             position: 1,
-            concept_id: 'apex_testing_deployment',
+            concept_id: 'apex-testing-deployment',
             objective: 'Auditar la calidad del código con cobertura de pruebas, empaquetar la solución en contenedores seguros y obtener la certificación Python Specialist.',
             theory_markdown: `La última fase evalúa la madurez ingenieril de la solución.
 

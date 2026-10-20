@@ -4,85 +4,250 @@
   "code": "DA_M03",
   "slug": "pandas-limpieza-transformacion",
   "course_slug": "data-analytics",
-  "title": "Limpieza de Datos (Data Wrangling) y Transformación",
-  "objective": "Tratar valores nulos (isnull, dropna, fillna), corregir tipos de datos con astype/to_datetime y sanear cadenas de texto.",
-  "description": "El 80% del tiempo de un científico de datos: convierte datasets desordenados y corruptos en fuentes analíticas confiables.",
+  "title": "Limpieza de Datos (Data Wrangling) y Transformacion",
+  "objective": "Tratar valores nulos, corregir dtypes, eliminar duplicados y transformar texto mediante metodos vectorizados.",
+  "description": "El 80% del trabajo en analitica: tecnicas profesionales para limpiar datos sucios, imputar missing values y sanear registros.",
   "position": 43,
   "status": "published",
   "content_version": 1,
   "total_sections": 1,
-  "total_lessons": 1,
+  "total_lessons": 4,
   "thresholds": {
     "quiz": 70,
     "exam": 80
   },
   "xp": {
-    "on_pass": 300
+    "on_pass": 250
   },
   "sections": [
     {
       "id": "sec_da_03_01",
       "code": "S01",
-      "title": "Manejo de Nulos y Transformación de Tipos",
-      "slug": "nulos-y-tipos",
+      "title": "Tratamiento de Nulos, Tipos y Manipulacion de Cadenas",
+      "slug": "tratamiento-nulos-tipos-cadenas",
       "position": 1,
       "type": "theory",
-      "estimated_minutes": 20,
-      "xp_on_complete": 50,
+      "estimated_minutes": 50,
+      "xp_on_complete": 100,
       "lessons": [
         {
           "id": "les_da_03_01",
           "code": "L01",
-          "title": "Detección e Imputación de NaN y Tipado con astype",
-          "slug": "nulos-fillna-base",
+          "title": "Deteccion y Tratamiento de Valores Nulos",
+          "slug": "deteccion-tratamiento-nulos",
           "position": 1,
-          "concept_id": "da-wrangling",
-          "objective": "Detectar valores faltantes (NaN) e imputarlos con la media/mediana o eliminarlos con dropna.",
-          "theory_markdown": "En el mundo real, los datos vienen incompletos (`NaN` = Not a Number):\n- `df.isnull().sum()`: Cuenta cuántos nulos tiene cada columna.\n- `df.dropna()`: Descarta filas que contengan algún nulo (usar con precaución para no perder datos valiosos).\n- `df[\"edad\"].fillna(df[\"edad\"].median(), inplace=True)`: Imputa los nulos con la mediana para no distorsionar la distribución.\n- `pd.to_datetime(df[\"fecha\"])`: Convierte cadenas de texto de fechas a objetos Timestamp de Pandas.",
+          "concept_id": "da-pandas-missing-values",
+          "objective": "Detectar valores faltantes (NaN) y aplicar estrategias de eliminacion e imputacion estadistica.",
+          "theory_markdown": "En Pandas, los datos ausentes se representan con `np.nan` (Not a Number) para valores flotantes o `pd.NA` para tipos ampliados.\n\n### Diagnostico de Nulos\n```python\ndf.isna().sum()          # Conteo de nulos por columna\ndf.isna().mean() * 100   # Porcentaje de nulos por columna\n```\n\n### Estrategias de Tratamiento\n1. **Eliminacion con `dropna()`:**\n   - `df.dropna(how='any')`: Elimina cualquier fila que tenga al menos un nulo.\n   - `df.dropna(subset=['columna_clave'])`: Elimina filas solo si la columna indicada es nula.\n2. **Imputacion con `fillna()`:**\n   - Imputacion por constante: `df['categoria'].fillna('Sin Especificar')`.\n   - Imputacion estadistica (media o mediana): `df['edad'].fillna(df['edad'].median())`.",
           "examples": [
             {
-              "title": "Limpieza de dataset con imputación estratégica",
-              "code": "import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({\n    \"usuario\": [\"A\", \"B\", \"C\"],\n    \"edad\": [25, np.nan, 35],\n    \"sueldo\": [\"1000\", \"1500\", \"2000\"]\n})\n# 1. Imputar edad con la media\ndf[\"edad\"] = df[\"edad\"].fillna(df[\"edad\"].mean())\n# 2. Convertir sueldo a entero numérico\ndf[\"sueldo\"] = df[\"sueldo\"].astype(int)\nprint(df)",
-              "output": "  usuario  edad  sueldo\n0       A  25.0    1000\n1       B  30.0    1500\n2       C  35.0    2000",
-              "explanation": "La edad faltante de B se reemplazó por 30.0 (media de 25 y 35) y sueldo se convirtió de string a int."
+              "title": "Deteccion e imputacion con la mediana",
+              "code": "import pandas as pd\nimport numpy as np\n\ndf = pd.DataFrame({\"ingreso\": [1000, np.nan, 3000, 4000, np.nan]})\nmediana = df[\"ingreso\"].median() # 3000.0\ndf[\"ingreso_limpio\"] = df[\"ingreso\"].fillna(mediana)\nprint(df[\"ingreso_limpio\"].tolist())",
+              "output": "[1000.0, 3000.0, 3000.0, 4000.0, 3000.0]",
+              "explanation": "Los dos valores faltantes fueron imputados con la mediana de los valores validos observados."
             }
           ],
-          "common_errors": "Hacer operaciones matemáticas en columnas numéricas que se leyeron como tipo `object` (string) porque contenían símbolos como \"$\" o comas. Debes limpiar el string antes de hacer `.astype(float)`.",
+          "common_errors": "Ejecutar df.dropna() global sin especificar subset, eliminando involuntariamente el 80% de las filas de un dataset grande por nulos en columnas irrelevantes.",
           "mini_exercise": {
-            "starter_code": "import pandas as pd\ns = pd.Series([10, None, 30])\n# Reemplaza el nulo con 0 usando fillna\ns_limpia = ...\nprint(s_limpia.tolist())",
-            "instructions": "Usa s.fillna(0).",
-            "solution": "import pandas as pd\ns = pd.Series([10, None, 30])\ns_limpia = s.fillna(0)\nprint(s_limpia.tolist())"
+            "instructions": "Usa fillna para reemplazar todos los valores nulos en df['ciudad'] por 'Desconocido'.",
+            "starter_code": "import pandas as pd\nimport numpy as np\ndf = pd.DataFrame({\"ciudad\": [\"Cali\", np.nan, \"Medellin\"]})\n\n# Imputa con 'Desconocido'\ndf[\"ciudad\"] = ...",
+            "solution": "df[\"ciudad\"] = df[\"ciudad\"].fillna(\"Desconocido\")"
           },
           "key_takeaways": [
-            ".isnull().sum() revela la calidad de los datos.",
-            "fillna(valor) reemplaza nulos; dropna() los elimina.",
-            "astype() y pd.to_datetime() garantizan los tipos correctos para el análisis."
+            "df.isna().sum() detecta la cantidad de valores nulos por columna.",
+            "dropna(subset=[...]) descarta filas solo cuando faltan campos criticos.",
+            "fillna() permite imputar constantes o metricas estadisticas como media o mediana."
           ],
           "exercise": {
             "id": "ex_da_03_01",
             "type": "single_choice",
             "difficulty": "easy",
-            "prompt": "¿Qué método de Pandas se utiliza para convertir una columna de texto con fechas (ej: \"2026-03-15\") a formato fecha nativo?",
+            "prompt": "Cual es la ventaja de imputar valores numericos ausentes con la mediana en lugar de la media aritmetica?",
             "options": [
               {
                 "id": "a",
-                "text": "pd.to_datetime(df[\"columna\"])"
+                "text": "La mediana es robusta frente a valores atipicos (outliers) y distribuciones sesgadas, mientras que la media se ve fuertemente distorsionada por extremos."
               },
               {
                 "id": "b",
-                "text": "df[\"columna\"].as_date()"
+                "text": "La mediana siempre es igual a cero."
               },
               {
                 "id": "c",
-                "text": "df[\"columna\"].format_time()"
+                "text": "Pandas no permite calcular la media de un DataFrame."
               },
               {
                 "id": "d",
-                "text": "pd.cast_calendar()"
+                "text": "La mediana convierte los datos en enteros automaticamente."
               }
             ],
             "correct_option_id": "a",
-            "explanation": "pd.to_datetime es la función vectorizada de Pandas que parsea inteligentemente múltiples formatos de fecha a Timestamp."
+            "explanation": "La mediana representa el percentil 50 y no se desvia por valores extremadamente altos o bajos, haciendola ideal para imputar variables como ingresos o precios."
+          }
+        },
+        {
+          "id": "les_da_03_02",
+          "code": "L02",
+          "title": "Conversion y Coercion Segura de Tipos",
+          "slug": "conversion-coercion-tipos",
+          "position": 2,
+          "concept_id": "da-pandas-type-casting",
+          "objective": "Convertir columnas a tipos adecuados usando astype(), pd.to_numeric() con coercion y pd.to_datetime().",
+          "theory_markdown": "Es comun que columnas numericas o de fechas queden cargadas como texto (`object`) debido a caracteres corruptos (ej. `'100'`, `'N/A'`, `'?'`).\n\n### Metodos de Conversion\n1. **`astype()`:** Conversion directa cuando todos los datos son validos (`df['edad'] = df['edad'].astype(int)`). Si encuentra un texto invalido arroja `ValueError`.\n2. **`pd.to_numeric()` con `errors='coerce'`:**\n   Si encuentra un valor que no puede convertirse a numero (ej. `'desconocido'`), **lo transforma de forma segura en `np.nan`** en lugar de romper el programa.\n   ```python\n   df['precio'] = pd.to_numeric(df['precio'], errors='coerce')\n   ```\n3. **`pd.to_datetime()` con `errors='coerce'`:**\n   Parsea fechas en multiples formatos convirtiendo valores corruptos en `pd.NaT` (Not a Time).",
+          "examples": [
+            {
+              "title": "Coercion de columna sucia con texto no numerico",
+              "code": "import pandas as pd\n\ncolumna_sucia = pd.Series([\"10.5\", \"20.0\", \"invalido\", \"40.2\"])\ncolumna_limpia = pd.to_numeric(columna_sucia, errors=\"coerce\")\nprint(columna_limpia)",
+              "output": "0    10.5\n1    20.0\n2     NaN\n3    40.2\ndtype: float64",
+              "explanation": "El valor 'invalido' fue transformado en NaN permitiendo que la columna sea ahora de tipo float64."
+            }
+          ],
+          "common_errors": "Usar astype(float) sobre una columna que contiene cadenas no numericas, provocando un ValueError que aborta el script de procesamiento.",
+          "mini_exercise": {
+            "instructions": "Convierte la serie 'datos' a tipo numerico forzando errores a NaN con pd.to_numeric(..., errors='coerce').",
+            "starter_code": "import pandas as pd\ndatos = pd.Series([\"1\", \"2\", \"error\", \"4\"])\n\n# Convierte con coercion\nlimpio = ...",
+            "solution": "limpio = pd.to_numeric(datos, errors=\"coerce\")"
+          },
+          "key_takeaways": [
+            "astype() realiza conversiones directas pero falla si hay valores invalidos.",
+            "pd.to_numeric(errors='coerce') reemplaza textos invalidos por NaN de forma segura.",
+            "pd.to_datetime() unifica formatos temporales y genera NaT en datos corruptos."
+          ],
+          "exercise": {
+            "id": "ex_da_03_02",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Que efecto tiene el parametro errors='coerce' en la funcion pd.to_numeric(df['columna'], errors='coerce')?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Convierte cualquier valor no convertible a numero en un valor nulo NaN sin arrojar excepciones."
+              },
+              {
+                "id": "b",
+                "text": "Asigna el valor cero a los errores de forma silenciosa."
+              },
+              {
+                "id": "c",
+                "text": "Elimina la columna completa del DataFrame."
+              },
+              {
+                "id": "d",
+                "text": "Lanza una alerta por consola pero detiene la ejecucion."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "errors='coerce' es el mecanismo defensivo estandar de Pandas para transformar datos corruptos en NaN e impedir caidas del programa."
+          }
+        },
+        {
+          "id": "les_da_03_03",
+          "code": "L03",
+          "title": "Duplicados y Saneamiento Vectorizado de Texto",
+          "slug": "duplicados-saneamiento-texto",
+          "position": 3,
+          "concept_id": "da-pandas-duplicates-strings",
+          "objective": "Identificar y descartar duplicados y sanear texto sucio mediante el accesor vectorizado .str.",
+          "theory_markdown": "### Gestion de Duplicados\n- `df.duplicated(subset=['id'])`: Retorna una mascara booleana marcando `True` en filas duplicadas.\n- `df.drop_duplicates(subset=['id'], keep='first')`: Conserva la primera aparicion y descarta las repetidas (`keep='last'` conserva la ultima).\n\n### El accesor `.str` para Cadenas de Texto\nPandas incluye el accesor vectorizado `.str` para operar sobre Series de texto sin usar bucles `for`:\n- `df['nombre'].str.strip()`: Elimina espacios en blanco iniciales y finales.\n- `df['nombre'].str.lower()` / `.str.upper()`: Normaliza a minusculas o mayusculas.\n- `df['codigo'].str.replace('-', '_', regex=False)`: Reemplazo de caracteres.\n- `df['email'].str.contains('@')`: Mascara booleana para busquedas de texto.",
+          "examples": [
+            {
+              "title": "Limpieza de texto y descarte de duplicados",
+              "code": "import pandas as pd\n\ndf = pd.DataFrame({\n    \"email\": [\"  ANA@koda.com \", \"ana@koda.com\", \"luis@koda.com\"],\n    \"rol\": [\"admin\", \"admin\", \"user\"]\n})\n# 1. Normalizar texto:\ndf[\"email\"] = df[\"email\"].str.strip().str.lower()\n# 2. Descartar duplicados:\ndf_sin_duplicados = df.drop_duplicates(subset=[\"email\"])\nprint(df_sin_duplicados)",
+              "output": "            email    rol\n0    ana@koda.com  admin\n2   luis@koda.com   user",
+              "explanation": "Tras normalizar espacios y mayusculas, el duplicado de Ana fue detectado y eliminado con exito."
+            }
+          ],
+          "common_errors": "Intentar usar metodos de string directos como df['nombre'].strip() sin el accesor .str (debe ser df['nombre'].str.strip()), provocando un AttributeError.",
+          "mini_exercise": {
+            "instructions": "Usa el accesor .str para convertir a mayusculas la columna 'categoria' de un DataFrame.",
+            "starter_code": "import pandas as pd\ndf = pd.DataFrame({\"categoria\": [\"ropa\", \"hogar\"]})\n\n# Convierte a mayusculas\ndf[\"categoria\"] = ...",
+            "solution": "df[\"categoria\"] = df[\"categoria\"].str.upper()"
+          },
+          "key_takeaways": [
+            "drop_duplicates elimina registros redundantes controlando con keep='first' o 'last'.",
+            "El accesor .str expone metodos vectorizados de cadenas de texto (strip, lower, replace).",
+            "Normalizar el texto previo a eliminar duplicados evita inconsistencias por mayusculas y espacios."
+          ],
+          "exercise": {
+            "id": "ex_da_03_03",
+            "type": "single_choice",
+            "difficulty": "easy",
+            "prompt": "Cual es la sintaxis correcta en Pandas para eliminar los espacios en blanco iniciales y finales de una columna de texto llamada 'nombres'?",
+            "options": [
+              {
+                "id": "a",
+                "text": "df['nombres'] = df['nombres'].str.strip()"
+              },
+              {
+                "id": "b",
+                "text": "df['nombres'] = df['nombres'].strip()"
+              },
+              {
+                "id": "c",
+                "text": "df['nombres'] = strip(df['nombres'])"
+              },
+              {
+                "id": "d",
+                "text": "df['nombres'] = df['nombres'].clean_spaces()"
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "Las operaciones de cadenas sobre Series requieren el accesor vectorizado '.str' seguido del metodo correspondiente (.str.strip())."
+          }
+        },
+        {
+          "id": "les_da_03_04",
+          "code": "L04",
+          "title": "Transformaciones con .apply(), .map() y Vectorizacion",
+          "slug": "transformaciones-apply-map-vectorizacion",
+          "position": 4,
+          "concept_id": "da-pandas-apply-map",
+          "objective": "Aplicar funciones personalizadas con .apply() y .map(), entendiendo las implicaciones de rendimiento frente a la vectorizacion.",
+          "theory_markdown": "Cuando una transformacion compleja no puede realizarse con operadores nativos de Pandas, se recurre a funciones de mapeo:\n\n1. **`Series.map(diccionario | funcion)`:**\n   Ideal para sustituciones de clave a valor:\n   `df['codigo'] = df['pais'].map({'CO': 'Colombia', 'MX': 'Mexico'})`.\n\n2. **`Series.apply(funcion_lambda)`:**\n   Aplica una funcion personalizada elemento a elemento sobre una Serie.\n\n3. **`DataFrame.apply(funcion, axis=1)`:**\n   Aplica una funcion fila por fila (evaluando multiples columnas simultaneamente).\n\n### Regla de Rendimiento\n`apply()` es internamente un bucle de Python. Siempre que sea posible, **prefiere operaciones vectorizadas nativas** (hasta 100 veces mas rapidas que `apply`).",
+          "examples": [
+            {
+              "title": "Calculo de comision con apply fila a fila",
+              "code": "import pandas as pd\n\ndf = pd.DataFrame({\n    \"ventas\": [1000, 5000, 800],\n    \"antiguedad_anos\": [1, 5, 2]\n})\n\ndef calcular_bono(fila):\n    if fila[\"ventas\"] > 2000 and fila[\"antiguedad_anos\"] >= 3:\n        return fila[\"ventas\"] * 0.10\n    return 50.0\n\ndf[\"bono\"] = df.apply(calcular_bono, axis=1)\nprint(df[\"bono\"].tolist())",
+              "output": "[50.0, 500.0, 50.0]",
+              "explanation": "axis=1 entrega cada fila completa como una Serie a la funcion calcular_bono."
+            }
+          ],
+          "common_errors": "Usar df.apply(..., axis=1) para operaciones matematicas sencillas como sumas de dos columnas (df['a'] + df['b']), desperdiciando el rendimiento de las operaciones vectorizadas de NumPy.",
+          "mini_exercise": {
+            "instructions": "Usa .map() para transformar la columna 'estado' usando el diccionario {'A': 'Activo', 'I': 'Inactivo'}.",
+            "starter_code": "import pandas as pd\ndf = pd.DataFrame({\"estado\": [\"A\", \"I\", \"A\"]})\nmapeo = {\"A\": \"Activo\", \"I\": \"Inactivo\"}\n\n# Aplica .map\ndf[\"estado_largo\"] = ...",
+            "solution": "df[\"estado_largo\"] = df[\"estado\"].map(mapeo)"
+          },
+          "key_takeaways": [
+            ".map() sustituye valores segun diccionarios de equivalencias eficientemente.",
+            ".apply(axis=1) permite evaluar logica condicional compleja que involucra multiples columnas.",
+            "Las operaciones vectorizadas nativas deben preferirse siempre sobre apply por velocidad."
+          ],
+          "exercise": {
+            "id": "ex_da_03_04",
+            "type": "single_choice",
+            "difficulty": "medium",
+            "prompt": "Por que se recomienda evitar df.apply() cuando existe una alternativa vectorizada nativa en Pandas o NumPy?",
+            "options": [
+              {
+                "id": "a",
+                "text": "Porque .apply() itera fila por fila a nivel de interprete de Python, perdiendo la optimizacion en lenguaje C y resultando significativamente mas lento."
+              },
+              {
+                "id": "b",
+                "text": "Porque .apply() no funciona con numeros flotantes."
+              },
+              {
+                "id": "c",
+                "text": "Porque .apply() borra el indice del DataFrame."
+              },
+              {
+                "id": "d",
+                "text": "Porque .apply() solo funciona en entornos Linux."
+              }
+            ],
+            "correct_option_id": "a",
+            "explanation": "apply() recurre a un bucle a nivel de Python sobre cada fila, mientras que los operadores nativos ejecutan bucles en C compilado sobre arrays contiguos."
           }
         }
       ]

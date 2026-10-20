@@ -27,6 +27,7 @@
 - [x] [FRONTEND] Integrar aceleración `transform` y discriminador de arrastre vs. clic en `RoadmapCanvas.tsx`.
 - [x] [FRONTEND] Implementar controles de zoom y botón de recentrado focal en `RoadmapCanvasControls.tsx`.
 - [x] [FRONTEND] Optimizar flujos láser SVG vectoriales orientados hacia adelante en `RoadmapSvgPaths.tsx`.
+- [x] [FRONTEND] Anclaje matemático y resolución de desfasaje de conexiones en `RoadmapPixiGraph.tsx` y `RoadmapService`.
 - [x] [FRONTEND] Modularizar canvas de estrellas ambientales y partículas a 120 FPS en `RoadmapAmbientStars.tsx`.
 
 ---
@@ -104,7 +105,7 @@
 **Subtasks:**
 - [x] [BD] Tabla `user_section_stars (user_id, section_slug, stars_earned, best_score, attempts_count)` en Supabase PostgreSQL.
 - [x] [BACKEND] Algoritmo en `ProgressService` (NestJS) que calcule las estrellas y persista la marca histórica.
-- [ ] [FRONTEND] Componente `StarRatingDisplay.tsx` con animación escalonada de estrellas doradas en resumen de lección.
+- [x] [FRONTEND] Componente `StarRatingDisplay.tsx` y visualización de estrellas de lección y curso en roadmap/PixiJS.
 
 ---
 

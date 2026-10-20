@@ -6,8 +6,36 @@
     {
       "id": "q_py1_08_01",
       "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué imprime este código al acceder con un índice negativo?",
+      "prompt_code": "numeros = [5, 10, 15, 20]\nprint(numeros[-1])",
+      "options": [
+        {
+          "id": "a",
+          "text": "20"
+        },
+        {
+          "id": "b",
+          "text": "5"
+        },
+        {
+          "id": "c",
+          "text": "15"
+        },
+        {
+          "id": "d",
+          "text": "IndexError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El índice -1 en Python accede siempre al último elemento de la colección, en este caso 20."
+    },
+    {
+      "id": "q_py1_08_02",
+      "type": "predict_output",
       "difficulty": "medium",
       "prompt": "¿Qué produce el slicing lista[1:3] sobre lista = [\"a\", \"b\", \"c\", \"d\"]?",
+      "prompt_code": "lista = [\"a\", \"b\", \"c\", \"d\"]\nprint(lista[1:3])",
       "options": [
         {
           "id": "a",
@@ -27,18 +55,18 @@
         }
       ],
       "correct_option_id": "a",
-      "explanation": "El slicing [1:3] toma desde el índice 1 (\"b\") hasta antes del índice 3 (\"c\"), produciendo [\"b\", \"c\"]."
+      "explanation": "El slicing [1:3] toma desde el índice 1 ('b') hasta antes del índice 3 ('c'), produciendo ['b', 'c']."
     },
     {
-      "id": "q_py1_08_02",
+      "id": "q_py1_08_03",
       "type": "find_error",
       "difficulty": "medium",
-      "prompt": "¿Por qué fallará este código?",
+      "prompt": "¿Por qué fallará este código al intentar modificar la tupla?",
       "prompt_code": "t = (1, 2, 3)\nt[0] = 99",
       "options": [
         {
           "id": "a",
-          "text": "TypeError: las tuplas son inmutables y no admiten asignación de elementos"
+          "text": "TypeError: las tuplas son inmutables y no permiten reasignar sus elementos"
         },
         {
           "id": "b",
@@ -50,11 +78,91 @@
         },
         {
           "id": "d",
-          "text": "Las tuplas solo pueden contener texto"
+          "text": "ValueError: el tipo numérico 99 no es compatible"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Las tuplas son inmutables en Python. Intentar mutar un elemento lanza TypeError."
+      "explanation": "Las tuplas son colecciones inmutables en Python. Intentar modificar un elemento indexado genera un TypeError."
+    },
+    {
+      "id": "q_py1_08_04",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué imprime este código tras usar append() y pop()?",
+      "prompt_code": "letras = [\"A\", \"B\"]\nletras.append(\"C\")\nletras.pop()\nprint(letras)",
+      "options": [
+        {
+          "id": "a",
+          "text": "['A', 'B']"
+        },
+        {
+          "id": "b",
+          "text": "['A', 'B', 'C']"
+        },
+        {
+          "id": "c",
+          "text": "['B']"
+        },
+        {
+          "id": "d",
+          "text": "['C']"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "append('C') agrega 'C' al final (['A', 'B', 'C']) y pop() elimina y remueve el último elemento, dejando ['A', 'B']."
+    },
+    {
+      "id": "q_py1_08_05",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué resultado imprime el desempaquetado de tuplas?",
+      "prompt_code": "punto = (10, 20)\nx, y = punto\nprint(x + y)",
+      "options": [
+        {
+          "id": "a",
+          "text": "30"
+        },
+        {
+          "id": "b",
+          "text": "(10, 20)"
+        },
+        {
+          "id": "c",
+          "text": "1020"
+        },
+        {
+          "id": "d",
+          "text": "TypeError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "El desempaquetado asigna x=10 e y=20. La suma 10 + 20 produce 30."
+    },
+    {
+      "id": "q_py1_08_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Cuál es la diferencia fundamental en memoria entre una lista y una tupla en Python?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Las listas son mutables (pueden cambiar sus elementos) y las tuplas son inmutables (no pueden modificarse tras crearse)"
+        },
+        {
+          "id": "b",
+          "text": "Las tuplas solo aceptan números enteros mientras que las listas aceptan cualquier tipo"
+        },
+        {
+          "id": "c",
+          "text": "Las listas usan paréntesis () y las tuplas usan corchetes []"
+        },
+        {
+          "id": "d",
+          "text": "No hay diferencia, son dos nombres para la misma estructura"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La mutabilidad es la diferencia clave: las listas permiten agregar, quitar y modificar elementos, mientras que las tuplas protegen la integridad fija de los datos."
     }
   ]
 }

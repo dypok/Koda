@@ -6,28 +6,158 @@
     {
       "id": "q_da_10_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Cómo reacciona Streamlit cuando un usuario interactúa con un widget (como mover un slider o elegir una opción)?",
+      "difficulty": "easy",
+      "prompt": "Que comando de consola se ejecuta para levantar una aplicacion web interactiva desarrollada con Streamlit?",
       "options": [
         {
           "id": "a",
-          "text": "Re-ejecuta todo el script de Python de arriba hacia abajo con el nuevo valor del widget"
+          "text": "streamlit run app.py"
         },
         {
           "id": "b",
-          "text": "Recarga la página completa del navegador con F5"
+          "text": "python start app.py"
         },
         {
           "id": "c",
-          "text": "Envía un correo al administrador"
+          "text": "streamlit serve app.py"
         },
         {
           "id": "d",
-          "text": "Detiene el servidor"
+          "text": "npm start app.py"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "El modelo de ejecución reactivo de Streamlit re-ejecuta el script completo aplicando el nuevo estado del widget de forma transparente."
+      "explanation": "streamlit run es el comando de linea de comandos que inicializa el servidor Tornado/WebSocket local y abre el navegador."
+    },
+    {
+      "id": "q_da_10_02",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Como se ubica un widget (por ejemplo un slider) dentro del panel lateral retractil izquierdo en Streamlit?",
+      "options": [
+        {
+          "id": "a",
+          "text": "st.sidebar.slider('Etiqueta', 0, 100)"
+        },
+        {
+          "id": "b",
+          "text": "st.slider('Etiqueta', 0, 100, position='sidebar')"
+        },
+        {
+          "id": "c",
+          "text": "sidebar(st.slider('Etiqueta'))"
+        },
+        {
+          "id": "d",
+          "text": "st.left_panel.slider('Etiqueta')"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "st.sidebar expone los mismos metodos que st, renderizandolos en el contenedor lateral izquierdo."
+    },
+    {
+      "id": "q_da_10_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que funcion cumple el decorador @st.cache_data en una aplicacion de Streamlit?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Memorizar el valor devuelto por la funcion para evitar re-ejecutar calculos pesados o descargas de datos si los argumentos no han cambiado."
+        },
+        {
+          "id": "b",
+          "text": "Guardar la pagina web en el historial del navegador del usuario."
+        },
+        {
+          "id": "c",
+          "text": "Encriptar los datos con contraseña de acceso."
+        },
+        {
+          "id": "d",
+          "text": "Exportar automaticamente el DataFrame a Google Sheets."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "@st.cache_data implementa memoizacion inteligente para datasets, evitando que las re-ejecuciones reactivas vuelvan a leer disco innecesariamente."
+    },
+    {
+      "id": "q_da_10_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Cual decorador se utiliza en Streamlit para cachear recursos no serializables globales como conexiones de bases de datos o modelos de Machine Learning cargados en memoria?",
+      "options": [
+        {
+          "id": "a",
+          "text": "@st.cache_resource"
+        },
+        {
+          "id": "b",
+          "text": "@st.cache_data"
+        },
+        {
+          "id": "c",
+          "text": "@st.singleton"
+        },
+        {
+          "id": "d",
+          "text": "@st.memo"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "@st.cache_resource gestiona objetos con estado que no pueden ser serializados en bytes, como conexiones de red y sesiones de base de datos."
+    },
+    {
+      "id": "q_da_10_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Como se integran graficos interactivos construidos con Plotly dentro de una aplicacion de Streamlit?",
+      "options": [
+        {
+          "id": "a",
+          "text": "st.plotly_chart(fig, use_container_width=True)"
+        },
+        {
+          "id": "b",
+          "text": "st.plot(fig)"
+        },
+        {
+          "id": "c",
+          "text": "st.render_html(fig.to_html())"
+        },
+        {
+          "id": "d",
+          "text": "st.display_chart(fig)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "st.plotly_chart() es el componente nativo disenado para renderizar figuras de Plotly con interactividad completa y adaptabilidad responsiva."
+    },
+    {
+      "id": "q_da_10_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "Cual metodo de Streamlit se utiliza para dividir horizontalmente el espacio de la pagina en 3 columnas comparativas independientes?",
+      "options": [
+        {
+          "id": "a",
+          "text": "col1, col2, col3 = st.columns(3)"
+        },
+        {
+          "id": "b",
+          "text": "st.split_horizontal(3)"
+        },
+        {
+          "id": "c",
+          "text": "st.grid(rows=1, cols=3)"
+        },
+        {
+          "id": "d",
+          "text": "st.make_columns(3)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "st.columns(3) desempaqueta tres contenedores de columna para renderizar elementos en paralelo horizontal."
     }
   ]
 }

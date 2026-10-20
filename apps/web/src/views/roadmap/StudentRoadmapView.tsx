@@ -11,6 +11,7 @@ import { RoadmapFusionView } from './RoadmapFusionView';
 import { GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth.store';
+import { UserProfileService } from '@/services/user/user-profile.service';
 import { AdminRoadmapToolbar } from '@/components/admin/AdminRoadmapToolbar';
 import { AddSelectorModal } from '@/components/admin/AddSelectorModal';
 import { DeleteSelectorModal } from '@/components/admin/DeleteSelectorModal';
@@ -46,11 +47,28 @@ export const StudentRoadmapView: React.FC = () => {
 
   React.useEffect(() => {
     hydrateProgress();
+    if (typeof window !== 'undefined') {
+      UserProfileService.getProfile()
+        .then((profile) => {
+          if (profile) {
+            const currentStoreUser = useAuthStore.getState().user;
+            useAuthStore.getState().updateUserProfile({
+              totalXp: Math.max(profile.totalXp ?? 0, currentStoreUser?.totalXp ?? 0),
+              streak: Math.max(profile.currentStreak ?? 0, currentStoreUser?.streak ?? 0),
+              longestStreak: Math.max(profile.longestStreak ?? 0, currentStoreUser?.longestStreak ?? 0),
+              streakFreezeCount: profile.streakFreezeCount ?? currentStoreUser?.streakFreezeCount ?? 1,
+              lastStudyDate: profile.lastStudyDate ?? currentStoreUser?.lastStudyDate ?? null,
+              isActiveToday: profile.isActiveToday ?? currentStoreUser?.isActiveToday,
+            });
+          }
+        })
+        .catch(() => {});
+    }
   }, [hydrateProgress]);
 
   React.useEffect(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('view=lessons')) {
-      openCourseLessons('py-basic');
+      openCourseLessons('python-1');
     }
   }, [openCourseLessons]);
 
@@ -75,9 +93,8 @@ export const StudentRoadmapView: React.FC = () => {
       void openCourseLessons(node.targetCourseId ?? node.id, isAdmin);
       return;
     }
-    const currentCourse = selectedCourseId || node.targetCourseId || useRoadmapStore.getState().activeBranchId || 'fe-html';
-    const tail = node.id.split('-').pop() ?? '';
-    const sectionRef = /^s\d+$/.test(tail) ? tail : node.id;
+    const currentCourse = selectedCourseId || node.targetCourseId || useRoadmapStore.getState().activeBranchId || 'python-1';
+    const sectionRef = node.id;
     router.push(`/app/curso/${currentCourse}/seccion/${sectionRef}`);
   };
 

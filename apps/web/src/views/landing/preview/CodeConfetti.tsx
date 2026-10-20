@@ -145,9 +145,13 @@ export const CodeConfetti: React.FC<{ burstKey: number }> = ({ burstKey }) => {
     };
   }, [burstKey, parts, reduceMotion]);
 
-  if (reduceMotion) return null;
-
-  return <div ref={mountRef} aria-hidden="true" className="pointer-events-none absolute inset-0 z-20" />;
+  return (
+    <div
+      ref={mountRef}
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 z-20 motion-reduce:hidden"
+    />
+  );
 };
 
 export default CodeConfetti;

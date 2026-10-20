@@ -15,6 +15,9 @@ export const TransitionLink: React.FC<TransitionLinkProps> = ({ href, onClick, c
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     onClick?.(e);
     if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+    if (href.startsWith('http://') || href.startsWith('https://') || href.startsWith('//')) {
+      return;
+    }
     const doc = document as Document & {
       startViewTransition?: (cb: () => void) => void;
     };

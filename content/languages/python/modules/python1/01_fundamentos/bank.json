@@ -7,27 +7,27 @@
       "id": "q_py1_01_01",
       "type": "single_choice",
       "difficulty": "easy",
-      "prompt": "¿Cuál de las siguientes afirmaciones sobre Python es CORRECTA?",
+      "prompt": "¿Cómo lee y ejecuta el intérprete de Python las instrucciones de un programa?",
       "options": [
         {
           "id": "a",
-          "text": "Es un lenguaje interpretado que prioriza la legibilidad del código"
+          "text": "Línea por línea de arriba hacia abajo de forma secuencial"
         },
         {
           "id": "b",
-          "text": "Requiere obligatoriamente punto y coma (;) al final de cada línea"
+          "text": "En orden aleatorio según la velocidad del procesador"
         },
         {
           "id": "c",
-          "text": "No distingue entre mayúsculas y minúsculas en nombres de funciones"
+          "text": "De abajo hacia arriba comenzando por el final"
         },
         {
           "id": "d",
-          "text": "Solo puede ejecutarse dentro de un navegador web"
+          "text": "Todas las líneas al mismo tiempo de forma simultánea"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Python es interpretado, altamente legible y no exige puntos y coma al final de las sentencias."
+      "explanation": "Python es un lenguaje interpretado: lee y ejecuta tu código instrucción por instrucción, en estricto orden secuencial de arriba a abajo."
     },
     {
       "id": "q_py1_01_02",
@@ -54,12 +54,12 @@
         }
       ],
       "correct_option_id": "a",
-      "explanation": "El parámetro nombrado sep=\"-\" en print() define el separador entre los argumentos impresos."
+      "explanation": "El parámetro nombrado sep=\"-\" en print() reemplaza el espacio por defecto por un guion entre los argumentos impresos."
     },
     {
       "id": "q_py1_01_03",
       "type": "find_error",
-      "difficulty": "medium",
+      "difficulty": "easy",
       "prompt": "¿Por qué la siguiente línea de código fallará al ejecutarse?",
       "prompt_code": "print(\"Aprender Python es genial)",
       "options": [
@@ -73,21 +73,21 @@
         },
         {
           "id": "c",
-          "text": "Los textos deben escribirse con comillas triples únicamente"
+          "text": "No se pueden imprimir frases con espacios"
         },
         {
           "id": "d",
-          "text": "No se puede imprimir texto en español con tildes"
+          "text": "Los textos deben terminar obligatoriamente con punto y coma (;)"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Toda cadena iniciada con comillas dobles debe cerrarse con comillas dobles antes de cerrar el paréntesis."
+      "explanation": "Toda cadena de texto abierta con comillas dobles debe cerrarse con comillas dobles antes de cerrar el paréntesis del print()."
     },
     {
       "id": "q_py1_01_04",
       "type": "fill_blank",
       "difficulty": "easy",
-      "prompt": "Para escribir un comentario de una sola línea en Python se utiliza el carácter: _____",
+      "prompt": "Para escribir un comentario de una sola línea en Python que sea ignorado por el intérprete se utiliza el carácter: _____",
       "options": [
         {
           "id": "a",
@@ -107,25 +107,52 @@
         }
       ],
       "correct_option_id": "a",
-      "explanation": "En Python, el carácter # se utiliza para comentarios de una línea."
+      "explanation": "En Python, cualquier texto escrito después del símbolo numeral (#) es considerado un comentario y es ignorado por el intérprete."
     },
     {
       "id": "q_py1_01_05",
       "type": "true_false",
       "difficulty": "easy",
-      "prompt": "En Python, las instrucciones PRINT(\"hola\") y print(\"hola\") son idénticas para el intérprete.",
+      "prompt": "En Python, las instrucciones PRINT(\"hola\") y print(\"hola\") son equivalentes para el intérprete.",
       "options": [
         {
           "id": "a",
-          "text": "Falso, Python es sensible a mayúsculas y PRINT generará un NameError"
+          "text": "Falso, Python es sensible a mayúsculas (case-sensitive) y PRINT generará un NameError"
         },
         {
           "id": "b",
-          "text": "Verdadero, Python ignora las mayúsculas en funciones nativas"
+          "text": "Verdadero, Python ignora las mayúsculas en todas las funciones nativas"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Python es estricto con las mayúsculas y minúsculas (case-sensitive). La función nativa se llama print en minúsculas."
+      "explanation": "Python distingue estrictamente entre mayúsculas y minúsculas. La función nativa para imprimir se llama exclusivamente 'print' en minúsculas."
+    },
+    {
+      "id": "q_py1_01_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "¿Qué mostrará la consola tras ejecutar este código?",
+      "prompt_code": "print(\"Cargando\", end=\"...\")\nprint(\"Listo\")",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cargando...Listo"
+        },
+        {
+          "id": "b",
+          "text": "Cargando...\nListo"
+        },
+        {
+          "id": "c",
+          "text": "Cargando Listo"
+        },
+        {
+          "id": "d",
+          "text": "Cargando... Listo"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Al configurar end=\"...\" en el primer print(), Python no salta de línea al terminar, permitiendo que el siguiente print(\"Listo\") continúe pegado en el mismo renglón."
     }
   ]
 }

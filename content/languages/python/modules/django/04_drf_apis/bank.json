@@ -6,28 +6,158 @@
     {
       "id": "q_dj_04_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Cuál es el rol principal de un Serializer en Django REST Framework?",
+      "difficulty": "easy",
+      "prompt": "Cual es la diferencia principal entre un Form de Django y un Serializer de Django REST Framework?",
       "options": [
         {
           "id": "a",
-          "text": "Convertir tipos de datos complejos como QuerySets y modelos a JSON nativo y validar datos entrantes"
+          "text": "Los Forms generan y procesan HTML para navegadores web; los Serializers gestionan datos estructurados (como JSON) para APIs REST."
         },
         {
           "id": "b",
-          "text": "Encriptar el disco duro del servidor"
+          "text": "Los Serializers solo funcionan con bases de datos MongoDB."
         },
         {
           "id": "c",
-          "text": "Generar archivos CSS"
+          "text": "Los Forms no admiten validaciones de campos."
         },
         {
           "id": "d",
-          "text": "Ejecutar pruebas unitarias"
+          "text": "No existe diferencia, son exactamente iguales."
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Los serializers permiten que los datos de modelos de Django se rendericen a JSON y deserializan datos JSON entrantes validándolos antes de guardar."
+      "explanation": "Los Forms se orientan al ciclo clasico de navegadores con HTML/POST; los Serializers estan disenados para serializar y validar payloads JSON en arquitecturas de APIs."
+    },
+    {
+      "id": "q_dj_04_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que argumento se debe pasar al instanciar un ModelSerializer si se desea serializar una lista de multiples objetos (QuerySet)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "many=True"
+        },
+        {
+          "id": "b",
+          "text": "multiple=True"
+        },
+        {
+          "id": "c",
+          "text": "is_list=True"
+        },
+        {
+          "id": "d",
+          "text": "batch=True"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "many=True le indica al serializador que reciba un iterable de instancias y serialize cada una en una lista JSON."
+    },
+    {
+      "id": "q_dj_04_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que clase de respuesta debe retornar una vista desarrollada con DRF para admitir negociacion de contenido y Browsable API?",
+      "options": [
+        {
+          "id": "a",
+          "text": "rest_framework.response.Response"
+        },
+        {
+          "id": "b",
+          "text": "django.http.HttpResponse"
+        },
+        {
+          "id": "c",
+          "text": "json.dumps()"
+        },
+        {
+          "id": "d",
+          "text": "sys.stdout.write()"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Response es la clase especializada de DRF que negocia si devuelve JSON o la interfaz grafica navegable segun las cabeceras del cliente."
+    },
+    {
+      "id": "q_dj_04_04",
+      "type": "single_choice",
+      "difficulty": "hard",
+      "prompt": "Cual componente de DRF genera automaticamente las rutas de URL estandar para todas las acciones de un ModelViewSet?",
+      "options": [
+        {
+          "id": "a",
+          "text": "DefaultRouter"
+        },
+        {
+          "id": "b",
+          "text": "AutoUrlGenerator"
+        },
+        {
+          "id": "c",
+          "text": "PathResolver"
+        },
+        {
+          "id": "d",
+          "text": "UrlMapper"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "DefaultRouter registra ViewSets y produce el conjunto completo de URLs RESTful con soporte para sufijos de formato y vistas raiz de API."
+    },
+    {
+      "id": "q_dj_04_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que codigo de estado HTTP responde DRF cuando un usuario anonimo intenta acceder a un endpoint protegido con permission_classes = [IsAuthenticated]?",
+      "options": [
+        {
+          "id": "a",
+          "text": "401 Unauthorized (o 403 si las credenciales fueron enviadas pero son invalidas)"
+        },
+        {
+          "id": "b",
+          "text": "200 OK"
+        },
+        {
+          "id": "c",
+          "text": "500 Internal Server Error"
+        },
+        {
+          "id": "d",
+          "text": "404 Not Found"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "DRF responde con 401 Unauthorized cuando la peticion no posee credenciales de autenticacion validas."
+    },
+    {
+      "id": "q_dj_04_06",
+      "type": "predict_output",
+      "difficulty": "easy",
+      "prompt": "Cual clase de paginacion de DRF divide los resultados por numero de pagina (ej. ?page=2)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "PageNumberPagination"
+        },
+        {
+          "id": "b",
+          "text": "LimitOffsetPagination"
+        },
+        {
+          "id": "c",
+          "text": "CursorPagination"
+        },
+        {
+          "id": "d",
+          "text": "NoPagination"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "PageNumberPagination utiliza el parametro ?page= para fragmentar los resultados con estilo clasico numerado."
     }
   ]
 }

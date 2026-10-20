@@ -5,29 +5,161 @@
   "questions": [
     {
       "id": "q_py2_04_01",
-      "type": "find_error",
-      "difficulty": "medium",
-      "prompt": "¿Por qué la comunidad de Python desaconseja fuertemente `except: pass`?",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿En qué momento se ejecuta el bloque finally de una estructura de excepciones?",
       "options": [
         {
           "id": "a",
-          "text": "Oculta bugs críticos y excepciones del sistema como KeyboardInterrupt o MemoryError"
+          "text": "Se ejecuta invariablemente siempre, ocurra o no una excepción en el bloque try"
         },
         {
           "id": "b",
-          "text": "Porque hace que el programa consuma 100% de CPU"
+          "text": "Solo se ejecuta cuando una excepción es capturada con éxito"
         },
         {
           "id": "c",
-          "text": "Porque la palabra pass es ilegal dentro de un except"
+          "text": "Solo se ejecuta cuando el bloque try finaliza sin ningún error"
         },
         {
           "id": "d",
-          "text": "No está desaconsejado, es la mejor práctica de PEP 8"
+          "text": "Únicamente si la función finaliza con return None"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "Un except desnudo silencia cualquier error sin informar, haciendo imposible la depuración."
+      "explanation": "El bloque finally garantiza su ejecución bajo cualquier circunstancia, incluso si hay retornos anticipados o excepciones no manejadas."
+    },
+    {
+      "id": "q_py2_04_02",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué imprime este código al ejecutarse?",
+      "prompt_code": "res = 0\ntry:\n    res = 10 / 2\nexcept ZeroDivisionError:\n    res = -1\nelse:\n    res += 5\nprint(res)",
+      "options": [
+        {
+          "id": "a",
+          "text": "10.0"
+        },
+        {
+          "id": "b",
+          "text": "5.0"
+        },
+        {
+          "id": "c",
+          "text": "-1"
+        },
+        {
+          "id": "d",
+          "text": "0"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "10 / 2 da 5.0 sin lanzar excepción. Por lo tanto el bloque else se ejecuta sumando 5, dando 10.0."
+    },
+    {
+      "id": "q_py2_04_03",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿De qué clase estándar deben heredar las excepciones personalizadas creadas por un desarrollador?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Exception"
+        },
+        {
+          "id": "b",
+          "text": "BaseException"
+        },
+        {
+          "id": "c",
+          "text": "object"
+        },
+        {
+          "id": "d",
+          "text": "Error"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La convención y diseño estándar de Python dictan que las excepciones de usuario y aplicación deben heredar directamente de Exception."
+    },
+    {
+      "id": "q_py2_04_04",
+      "type": "predict_output",
+      "difficulty": "medium",
+      "prompt": "¿Qué mensaje imprime la captura de la excepción personalizada?",
+      "prompt_code": "class StockError(Exception):\n    pass\n\ntry:\n    raise StockError(\"Sin inventario\")\nexcept StockError as e:\n    print(f\"Alerta: {e}\")",
+      "options": [
+        {
+          "id": "a",
+          "text": "Alerta: Sin inventario"
+        },
+        {
+          "id": "b",
+          "text": "Alerta: StockError"
+        },
+        {
+          "id": "c",
+          "text": "Sin inventario"
+        },
+        {
+          "id": "d",
+          "text": "TypeError"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Al capturar la excepción en la variable 'e', su representación en string entrega el mensaje con el que fue instanciada: 'Sin inventario'."
+    },
+    {
+      "id": "q_py2_04_05",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "¿Cuál es la forma correcta de ordenar múltiples bloques except según la jerarquía de excepciones?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Colocar primero las excepciones más específicas (subclases) y al final las más generales (superclases)"
+        },
+        {
+          "id": "b",
+          "text": "Colocar siempre Exception al principio de todo"
+        },
+        {
+          "id": "c",
+          "text": "El orden no importa, Python evalúa todas las ramas en paralelo"
+        },
+        {
+          "id": "d",
+          "text": "Solo se permite un único bloque except por cada try"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Python evalúa los bloques except en orden secuencial. Si colocas una superclase primero, atrapará todas las hijas antes de que puedan ser evaluadas."
+    },
+    {
+      "id": "q_py2_04_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "¿Qué palabra clave se utiliza en Python para disparar intencionalmente una excepción en el código?",
+      "options": [
+        {
+          "id": "a",
+          "text": "raise"
+        },
+        {
+          "id": "b",
+          "text": "throw"
+        },
+        {
+          "id": "c",
+          "text": "fire"
+        },
+        {
+          "id": "d",
+          "text": "emit"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "La instrucción nativa de Python para lanzar excepciones es 'raise'."
     }
   ]
 }

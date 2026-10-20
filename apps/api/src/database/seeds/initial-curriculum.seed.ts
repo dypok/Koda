@@ -42,32 +42,20 @@ export const INITIAL_TRACKS = [
 ];
 
 export const INITIAL_PYTHON_COURSE = {
-  slug: 'python-core',
+  slug: 'python-1',
   track_slug: 'python',
-  name: 'Fundamentos de Programación con Python 3.12',
-  description: 'Aprende los conceptos fundamentales de la programación con la sintaxis más limpia y amigable.',
+  name: 'Python 1: Fundamentos',
+  description: 'Entorno, variables, tipos, operadores, I/O, condicionales, bucles for/while, colecciones y funciones.',
   color: '#38BDF8',
   icon: 'IconBrandPython',
   topology: { tier: 0, lane: 0 },
   prerequisites: [],
   edges: [
     {
-      target_course_slug: 'frontend-core',
+      target_course_slug: 'python-2',
       connection_type: 'unlocks',
       visual_effect_code: 'energy_beam_solid',
-      edge_color: '#10B981',
-    },
-    {
-      target_course_slug: 'backend-core',
-      connection_type: 'unlocks',
-      visual_effect_code: 'laser_flow_fast',
-      edge_color: '#8B5CF6',
-    },
-    {
-      target_course_slug: 'devops-core',
-      connection_type: 'unlocks',
-      visual_effect_code: 'dotted_amber_pulse',
-      edge_color: '#F59E0B',
+      edge_color: '#38BDF8',
     },
   ],
   is_active: true,

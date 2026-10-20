@@ -6,28 +6,158 @@
     {
       "id": "q_da_06_01",
       "type": "single_choice",
-      "difficulty": "medium",
-      "prompt": "¿Qué método de un objeto Figure de Plotly permite guardar la gráfica como un archivo HTML interactivo completo?",
+      "difficulty": "easy",
+      "prompt": "Cual libreria de visualizacion de Python permite generar graficos nativamente interactivos (con zoom, pan y tooltips en navegador)?",
       "options": [
         {
           "id": "a",
-          "text": "fig.write_html(\"nombre.html\")"
+          "text": "Plotly Express"
         },
         {
           "id": "b",
-          "text": "fig.save_web()"
+          "text": "Matplotlib sin backends interactivos"
         },
         {
           "id": "c",
-          "text": "fig.export_dom()"
+          "text": "Seaborn clasico"
         },
         {
           "id": "d",
-          "text": "fig.to_browser()"
+          "text": "Pillow"
         }
       ],
       "correct_option_id": "a",
-      "explanation": "write_html exporta la visualización lista para abrirse en cualquier navegador sin dependencias de Python."
+      "explanation": "Plotly Express renderiza graficos basados en D3.js y WebGL disenados especificamente para interactividad web."
+    },
+    {
+      "id": "q_da_06_02",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "En Plotly Express, como se divide una visualizacion en subgraficos organizados por columnas segun una variable categorica?",
+      "options": [
+        {
+          "id": "a",
+          "text": "facet_col='nombre_columna'"
+        },
+        {
+          "id": "b",
+          "text": "split_by='nombre_columna'"
+        },
+        {
+          "id": "c",
+          "text": "grid_x='nombre_columna'"
+        },
+        {
+          "id": "d",
+          "text": "columns='nombre_columna'"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "facet_col crea subplots en columnas independientes para cada categoria preservando la alineacion de ejes."
+    },
+    {
+      "id": "q_da_06_03",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que argumento de px.scatter permite anadir columnas adicionales de informacion al cuadro emergente que se muestra al pasar el cursor (tooltip)?",
+      "options": [
+        {
+          "id": "a",
+          "text": "hover_data=['col1', 'col2']"
+        },
+        {
+          "id": "b",
+          "text": "tooltip_info=['col1', 'col2']"
+        },
+        {
+          "id": "c",
+          "text": "popup_fields=['col1', 'col2']"
+        },
+        {
+          "id": "d",
+          "text": "show_data=['col1', 'col2']"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "hover_data especifica la lista de columnas complementarias que seran inyectadas en la ventana flotante de inspeccion."
+    },
+    {
+      "id": "q_da_06_04",
+      "type": "single_choice",
+      "difficulty": "medium",
+      "prompt": "Que parametro de fig.write_html() reduce drasticamente el peso del archivo resultante cargando la biblioteca JavaScript desde internet?",
+      "options": [
+        {
+          "id": "a",
+          "text": "include_plotlyjs='cdn'"
+        },
+        {
+          "id": "b",
+          "text": "compress=True"
+        },
+        {
+          "id": "c",
+          "text": "minify=True"
+        },
+        {
+          "id": "d",
+          "text": "light_mode=True"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "include_plotlyjs='cdn' evita incrustar los ~3MB del codigo fuente JS de Plotly directamente en el HTML, usando un enlace a CDN."
+    },
+    {
+      "id": "q_da_06_05",
+      "type": "predict_output",
+      "difficulty": "hard",
+      "prompt": "Como se exporta una figura de Plotly a una cadena de texto en formato JSON para ser consumida por un frontend web?",
+      "options": [
+        {
+          "id": "a",
+          "text": "fig.to_json()"
+        },
+        {
+          "id": "b",
+          "text": "json.dump(fig)"
+        },
+        {
+          "id": "c",
+          "text": "fig.export_json_string()"
+        },
+        {
+          "id": "d",
+          "text": "str(fig)"
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "to_json() serializa la especificacion declarativa completa de la figura (data + layout) a un string JSON estandar."
+    },
+    {
+      "id": "q_da_06_06",
+      "type": "single_choice",
+      "difficulty": "easy",
+      "prompt": "Que comportamiento interactivo ofrece la leyenda de un grafico de Plotly en un navegador por defecto?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Hacer clic en una serie de la leyenda la oculta o muestra dinamicamente en el grafico."
+        },
+        {
+          "id": "b",
+          "text": "Elimina los datos de la memoria RAM del servidor."
+        },
+        {
+          "id": "c",
+          "text": "Redirige al usuario al sitio web de Plotly."
+        },
+        {
+          "id": "d",
+          "text": "Es una imagen estatica que no responde a clics."
+        }
+      ],
+      "correct_option_id": "a",
+      "explanation": "Las leyendas en Plotly son interactivas: un solo clic oculta la serie y un doble clic aisla exclusivamente esa serie en pantalla."
     }
   ]
 }

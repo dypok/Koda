@@ -82,9 +82,11 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   );
 
   // Avatar Selection State
-  const [selectedAvatarUrl, setSelectedAvatarUrl] = useState(
-    user?.avatarUrl || '/avatars/koda-classic.svg'
-  );
+  const rawUserAvatar = user?.avatarUrl;
+  const initialAvatarUrl = (!rawUserAvatar || rawUserAvatar.includes('koda-mascot-cartoon-2d'))
+    ? '/avatars/koda-classic.svg'
+    : rawUserAvatar;
+  const [selectedAvatarUrl, setSelectedAvatarUrl] = useState(initialAvatarUrl);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const showToast = (type: 'success' | 'error' | 'info', text: string) => {
@@ -98,7 +100,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   // Cargar datos reales desde el backend
   const fetchProfile = useCallback(async () => {
     const effectiveToken = token || (typeof window !== 'undefined' ? localStorage.getItem('koda_auth_token') : null);
-    if (!effectiveToken) return;
+    if (!effectiveToken || effectiveToken === 'koda-guest-session') return;
     setLoading(true);
     try {
       const data = await UserProfileService.getProfile(effectiveToken);
@@ -120,8 +122,11 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         setLearningStyle(data.learningStyle as any);
       }
       if (data.avatarUrl) {
-        setSelectedAvatarUrl(data.avatarUrl);
-        updateUserProfile({ avatarUrl: data.avatarUrl });
+        const norm = data.avatarUrl.includes('koda-mascot-cartoon-2d')
+          ? '/avatars/koda-classic.svg'
+          : data.avatarUrl;
+        setSelectedAvatarUrl(norm);
+        updateUserProfile({ avatarUrl: norm });
       }
     } catch (err: any) {
       // eslint-disable-next-line no-console
@@ -177,7 +182,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const handleSelectAvatar = async (avatar: KodaAvatarItem) => {
     setSelectedAvatarUrl(avatar.avatarUrl);
     const effectiveToken = token || (typeof window !== 'undefined' ? localStorage.getItem('koda_auth_token') : null);
-    if (!effectiveToken) {
+    if (!effectiveToken || effectiveToken === 'koda-guest-session') {
       updateUserProfile({ avatarUrl: avatar.avatarUrl });
       showToast('success', `Avatar cambiado a ${avatar.name}`);
       return;
@@ -297,11 +302,11 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
         <aside className="flex flex-shrink-0 flex-row border-b border-slate-800 bg-slate-950/50 p-3 md:w-64 md:flex-col md:border-b-0 md:border-r md:p-4">
           {/* Header perfil en sidebar */}
           <div className="hidden items-center gap-3 pb-4 md:flex">
-            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-amber-500/50 bg-slate-800 p-0.5 shadow-md">
+            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-full border border-amber-500/50 bg-slate-800 shadow-md flex items-center justify-center">
               <img
                 src={selectedAvatarUrl}
                 alt={displayName}
-                className="h-full w-full object-contain"
+                className="h-full w-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/avatars/koda-classic.svg';
                 }}
@@ -510,11 +515,11 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
 
               {/* Preview Avatar Activo */}
               <div className="flex items-center gap-4 rounded-2xl border border-slate-800 bg-slate-950/50 p-4">
-                <div className="relative h-16 w-16 flex-shrink-0 rounded-2xl border border-amber-400 bg-slate-800 p-1 shadow-lg overflow-hidden">
+                <div className="relative h-16 w-16 flex-shrink-0 rounded-2xl border border-amber-400 bg-slate-800 p-0.5 shadow-lg overflow-hidden flex items-center justify-center">
                   <img
                     src={currentAvatar.avatarUrl}
                     alt={currentAvatar.name}
-                    className="h-full w-full object-contain"
+                    className="h-full w-full rounded-xl object-cover"
                   />
                 </div>
                 <div>
@@ -550,12 +555,12 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                 </div>
               </div>
 
-              {/* Grid de 8 Avatares Oficiales */}
+              {/* Grid de 6 Avatares Oficiales */}
               <div className="space-y-2">
                 <span className="text-xs font-mono font-medium text-slate-300 block">
                   Avatares Oficiales de Koda
                 </span>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {KODA_AVATARS.map((avatar) => {
                     const isSelected = selectedAvatarUrl === avatar.avatarUrl;
                     return (

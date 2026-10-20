@@ -26,7 +26,7 @@ export const AuroraToggle: React.FC = () => {
       // sin almacenamiento, solo sesión
     }
     if (next) document.documentElement.style.setProperty('--koda-hue', '38');
-    else window.location.reload();
+    window.dispatchEvent(new CustomEvent('koda-aurora-change', { detail: { off: next } }));
   };
 
   return (
