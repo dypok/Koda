@@ -157,9 +157,6 @@ export function setSessionCookie(active: boolean): void {
     const parts = hostname.split('.');
     const rootDomain = parts.slice(-2).join('.');
     document.cookie = `koda_session=1; path=/; max-age=${maxAge}; domain=.${rootDomain}; SameSite=Lax`;
-  } else if (hostname.endsWith('localhost')) {
-    document.cookie = `koda_session=1; path=/; max-age=${maxAge}; domain=.localhost; SameSite=Lax`;
-    document.cookie = `koda_session=1; path=/; max-age=${maxAge}; SameSite=Lax`;
   } else {
     document.cookie = `koda_session=1; path=/; max-age=${maxAge}; SameSite=Lax`;
   }

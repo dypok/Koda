@@ -9,6 +9,7 @@ import { SplitText } from '@/components/ui/split-text';
 import { WipeButton } from '@/components/ui/wipe-button';
 import { ArrowRight, Check, SignIn } from '@phosphor-icons/react';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
+import { getAppUrl } from '@/lib/domain';
 
 /** Cierre de película: negro total, frase letra por letra, Koda y un solo CTA. */
 export const CinematicFinale: React.FC = () => {
@@ -85,7 +86,7 @@ export const CinematicFinale: React.FC = () => {
         >
           <Magnetic className="w-full sm:w-auto">
             <WipeButton
-              href="/register"
+              href={getAppUrl('/register')}
               LinkComponent={TransitionLink}
               ariaLabel="Empezar mi racha gratis en Koda"
               size="lg"
@@ -105,7 +106,7 @@ export const CinematicFinale: React.FC = () => {
           className="flex flex-col items-center gap-4 pt-2"
         >
           <WipeButton
-            href="/login"
+            href={getAppUrl('/login')}
             LinkComponent={TransitionLink}
             tone="ghost"
             size="sm"

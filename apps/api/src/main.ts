@@ -22,17 +22,27 @@ async function bootstrap() {
   // 3. CORS seguro: orígenes explícitos y soporte de desarrollo local
   const allowedOrigins = process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',').map((o) => o.trim())
-    : ['http://localhost:3000', 'http://127.0.0.1:3000'];
+    : [
+        'http://localhost:3000',
+        'http://127.0.0.1:3000',
+        'http://app.localhost:3000',
+        'https://koda.academy',
+        'https://app.koda.academy',
+      ];
 
   app.enableCors({
     origin: (origin, callback) => {
       // Permitir solicitudes sin origin (como cURL, herramientas internas o SSR)
       if (!origin) return callback(null, true);
-      // Permitir cualquier puerto en localhost o 127.0.0.1 durante desarrollo
+      // Permitir cualquier subdominio en localhost o 127.0.0.1 durante desarrollo
       if (
         process.env.NODE_ENV !== 'production' &&
-        /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+        /^http:\/\/(?:[a-zA-Z0-9-]+\.)?(?:localhost|127\.0\.0\.1)(?::\d+)?$/.test(origin)
       ) {
+        return callback(null, true);
+      }
+      // Permitir dominios y subdominios oficiales de Koda en producción
+      if (/^https:\/\/(?:[a-zA-Z0-9-]+\.)?(?:koda\.academy|koda\.app|koda\.com)$/.test(origin)) {
         return callback(null, true);
       }
       if (allowedOrigins.includes(origin)) {
