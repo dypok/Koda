@@ -100,7 +100,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   // Cargar datos reales desde el backend
   const fetchProfile = useCallback(async () => {
     const effectiveToken = token || (typeof window !== 'undefined' ? localStorage.getItem('koda_auth_token') : null);
-    if (!effectiveToken) return;
+    if (!effectiveToken || effectiveToken === 'koda-guest-session') return;
     setLoading(true);
     try {
       const data = await UserProfileService.getProfile(effectiveToken);
@@ -182,7 +182,7 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   const handleSelectAvatar = async (avatar: KodaAvatarItem) => {
     setSelectedAvatarUrl(avatar.avatarUrl);
     const effectiveToken = token || (typeof window !== 'undefined' ? localStorage.getItem('koda_auth_token') : null);
-    if (!effectiveToken) {
+    if (!effectiveToken || effectiveToken === 'koda-guest-session') {
       updateUserProfile({ avatarUrl: avatar.avatarUrl });
       showToast('success', `Avatar cambiado a ${avatar.name}`);
       return;
@@ -555,12 +555,12 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                 </div>
               </div>
 
-              {/* Grid de 8 Avatares Oficiales */}
+              {/* Grid de 6 Avatares Oficiales */}
               <div className="space-y-2">
                 <span className="text-xs font-mono font-medium text-slate-300 block">
                   Avatares Oficiales de Koda
                 </span>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {KODA_AVATARS.map((avatar) => {
                     const isSelected = selectedAvatarUrl === avatar.avatarUrl;
                     return (
