@@ -5,5 +5,5 @@
 - [Tuesday]-[20/10/2026]-[07:17]-[Dylan Gamero] : Fix cross-track boss alias leakage that marked Reto Wrangling (Data Analytics) and other mini-bosses as completed from Python 1 Guardian de la Logica, and purge leaked keys from cache.
 - [Tuesday]-[20/10/2026]-[08:20]-[Dylan Gamero] : Decouple Landing Page on root domain and interactive Roadmap learning platform on app subdomain using Next.js 16 proxy rewrites, with shared session cookie detection and cross-origin link support.
 - [Tuesday]-[20/10/2026]-[10:40]-[Dylan Gamero] : Stabilize Turbopack runtime by purging stale 16.4.0 dev process, scoping security headers away from Next.js internal chunks, injecting revalidation Cache-Control on dynamic rewrites, and optimizing package imports.
-
+- [Tuesday]-[20/10/2026]-[11:02]-[Dylan Gamero] : Fix login and roadmap routing on app subdomain by delegating root route client-side transitions to AppPage, repairing cross-origin links with getAppUrl, adding login button in navbar, removing invalid cookie domain, and permitting subdomain preflight in NestJS CORS.
 
