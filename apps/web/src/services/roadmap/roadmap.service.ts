@@ -50,19 +50,31 @@ function sanitizeGraphDataset(dataset: GraphDataset): GraphDataset {
   if (!dataset || !Array.isArray(dataset.nodes) || !Array.isArray(dataset.connections)) {
     return dataset;
   }
-  const nodeMap = new Map(dataset.nodes.map((n) => [n.id, n]));
-  const connections = dataset.connections.map((c) => {
-    const a = nodeMap.get(c.fromId);
-    const b = nodeMap.get(c.toId);
-    if (!a || !b) return c;
-    const dx = Math.abs(b.x - a.x) * 0.5;
-    return {
-      ...c,
-      path: `M ${a.x} ${a.y} C ${a.x + dx} ${a.y}, ${b.x - dx} ${b.y}, ${b.x} ${b.y}`,
-    };
+  // Excluir terminantemente nodos fantasma o fallbacks obsoletos como python-core
+  const filteredNodes = dataset.nodes.filter((n) => {
+    const isLegacySlug = n.id === 'python-core' || n.targetCourseId === 'python-core';
+    const labelLower = typeof n.label === 'string' ? n.label.toLowerCase() : '';
+    const isLegacyLabel =
+      labelLower.includes('python 3.12') ||
+      labelLower.includes('fundamentos de programación con python 3.12');
+    return !isLegacySlug && !isLegacyLabel;
   });
+
+  const nodeMap = new Map(filteredNodes.map((n) => [n.id, n]));
+  const connections = dataset.connections
+    .filter((c) => nodeMap.has(c.fromId) && nodeMap.has(c.toId))
+    .map((c) => {
+      const a = nodeMap.get(c.fromId)!;
+      const b = nodeMap.get(c.toId)!;
+      const dx = Math.abs(b.x - a.x) * 0.5;
+      return {
+        ...c,
+        path: `M ${a.x} ${a.y} C ${a.x + dx} ${a.y}, ${b.x - dx} ${b.y}, ${b.x} ${b.y}`,
+      };
+    });
   return {
     ...dataset,
+    nodes: filteredNodes,
     connections,
   };
 }

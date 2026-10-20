@@ -71,13 +71,35 @@ function restoreProgress(dataset: GraphDataset): GraphDataset {
       unlockedIds?: string[];
       nodeStarsMap?: Record<string, { stars?: number; maxStars?: number }>;
     };
-    const unlocked = Array.isArray(saved.unlockedIds) ? new Set(saved.unlockedIds) : null;
+
+    // Purgar python-core si persistió en el almacenamiento local
+    if (saved.unlockedIds?.includes('python-core') || saved.nodeStarsMap?.['python-core']) {
+      const cleanedUnlockedIds = saved.unlockedIds?.filter((id) => id !== 'python-core');
+      const cleanedMap = { ...(saved.nodeStarsMap || {}) };
+      delete cleanedMap['python-core'];
+      window.localStorage.setItem(
+        PROGRESS_KEY,
+        JSON.stringify({
+          ...saved,
+          unlockedIds: cleanedUnlockedIds,
+          nodeStarsMap: cleanedMap,
+        })
+      );
+    }
+
+    const unlocked = Array.isArray(saved.unlockedIds)
+      ? new Set(saved.unlockedIds.filter((id) => id !== 'python-core'))
+      : null;
     const nodeStarsMap = saved.nodeStarsMap || {};
+
+    const cleanNodes = dataset.nodes.filter(
+      (n) => n.id !== 'python-core' && n.targetCourseId !== 'python-core'
+    );
 
     return {
       ...dataset,
       progressPercent: typeof saved.progressPercent === 'number' ? saved.progressPercent : dataset.progressPercent,
-      nodes: dataset.nodes.map((n) => {
+      nodes: cleanNodes.map((n) => {
         const isUnlocked = unlocked ? (unlocked.has(n.id) || n.isUnlocked) : n.isUnlocked;
         const savedStarInfo = nodeStarsMap[n.id];
         return {
@@ -456,32 +478,39 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
       }
 
       if (coursesData && coursesData.nodes && coursesData.nodes.length > 0) {
-        coursesData.nodes = coursesData.nodes.map((c) => {
-          const cId = c.targetCourseId || c.id;
-          const courseLessons = getLessonsDatasetForCourse(cId);
-          const maxStars =
-            COURSE_MAX_STARS_MAP[cId] ??
-            (courseLessons?.nodes?.reduce((sum, l) => sum + (l.maxStars ?? 3), 0) || 30);
+        // Garantizar eliminación de cualquier nodo residual python-core
+        coursesData.nodes = coursesData.nodes
+          .filter((c) => c.id !== 'python-core' && c.targetCourseId !== 'python-core')
+          .map((c) => {
+            const cId = c.targetCourseId || c.id;
+            const courseLessons = getLessonsDatasetForCourse(cId);
+            const maxStars =
+              COURSE_MAX_STARS_MAP[cId] ??
+              (courseLessons?.nodes?.reduce((sum, l) => sum + (l.maxStars ?? 3), 0) || 30);
 
-          const earnedStars = (courseLessons?.nodes ?? []).reduce((sum, l) => {
-            const lEarned = storedStars[l.id] ?? (completedLessonsSet.has(l.id) ? 3 : (l.stars ?? 0));
-            return sum + lEarned;
-          }, 0);
+            const earnedStars = (courseLessons?.nodes ?? []).reduce((sum, l) => {
+              const lEarned = storedStars[l.id] ?? (completedLessonsSet.has(l.id) ? 3 : (l.stars ?? 0));
+              return sum + lEarned;
+            }, 0);
 
-          return {
-            ...c,
-            stars: Math.max(c.stars ?? 0, earnedStars),
-            maxStars,
-          };
-        });
+            return {
+              ...c,
+              stars: Math.max(c.stars ?? 0, earnedStars),
+              maxStars,
+            };
+          });
+
+        const currentActiveId = get().activeNodeId === 'python-core' ? 'python-1' : get().activeNodeId;
+        const currentSelectedCourseId = get().selectedCourseId === 'python-core' ? 'python-1' : get().selectedCourseId;
 
         const activeCourse =
-          coursesData.nodes.find((n) => n.id === get().activeNodeId || n.targetCourseId === get().selectedCourseId) ||
+          coursesData.nodes.find((n) => n.id === currentActiveId || n.targetCourseId === currentSelectedCourseId) ||
           coursesData.nodes.find((n) => n.variant === 'active' || n.isUnlocked) ||
           coursesData.nodes[0];
         set({
           coursesDataset: coursesData,
-          activeNodeId: activeCourse ? activeCourse.id : get().activeNodeId,
+          selectedCourseId: currentSelectedCourseId,
+          activeNodeId: activeCourse ? activeCourse.id : (currentActiveId || 'python-1'),
         });
         persistProgress(coursesData);
       }

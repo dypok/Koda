@@ -39,8 +39,11 @@ export class LearningService {
 
     try {
       const track = await this.curriculumRepository.findTrackBySlug(slug);
-      const targetCourseSlug = slug === 'python' ? 'python-core' : `${slug}-core`;
-      const modules = await this.curriculumRepository.findModulesByCourse(targetCourseSlug);
+      const targetCourseSlug = slug === 'python' ? 'python-1' : `${slug}-core`;
+      let modules = await this.curriculumRepository.findModulesByCourse(targetCourseSlug);
+      if (modules.length === 0 && slug === 'python') {
+        modules = await this.curriculumRepository.findModulesByCourse('python-core');
+      }
 
       if (modules.length === 0) {
         if (this.contentLoaderService) {
