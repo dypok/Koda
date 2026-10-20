@@ -51,16 +51,6 @@ export const KODA_AVATARS: KodaAvatarItem[] = [
     badgeLabel: 'CYBER',
   },
   {
-    id: 'koda-sensei',
-    name: 'Koda Sensei',
-    subtitle: 'Sabio de la arquitectura y la disciplina',
-    description: 'Enseña la elegancia de los principios SOLID y la calma zen al depurar.',
-    avatarUrl: '/avatars/koda-sensei.svg',
-    rarity: 'epic',
-    accentColor: '#f97316',
-    badgeLabel: 'MAESTRO',
-  },
-  {
     id: 'koda-cyberpunk',
     name: 'Koda Cyberpunk',
     subtitle: 'Visor neón y reflejos cuánticos',
@@ -69,16 +59,6 @@ export const KODA_AVATARS: KodaAvatarItem[] = [
     rarity: 'legendary',
     accentColor: '#a855f7',
     badgeLabel: 'NEÓN',
-  },
-  {
-    id: 'koda-alchemist',
-    name: 'Koda Alquimista',
-    subtitle: 'Transmutador de datos y pipelines',
-    description: 'Transforma datos crudos y matrices en soluciones mágicas.',
-    avatarUrl: '/avatars/koda-alchemist.svg',
-    rarity: 'rare',
-    accentColor: '#ec4899',
-    badgeLabel: 'CIENTÍFICO',
   },
   {
     id: 'koda-gamer',
