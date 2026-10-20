@@ -46,6 +46,14 @@ async function fetchWithFallback<T>(endpoint: string): Promise<T> {
   return (await res.json()) as T;
 }
 
+export function getDynamicMaxStarsForCourse(courseSlug: string): number {
+  const lessons = getLessonsDatasetForCourse(courseSlug);
+  if (lessons?.nodes && lessons.nodes.length > 0) {
+    return lessons.nodes.reduce((sum, l) => sum + (typeof l.maxStars === 'number' && l.maxStars > 0 ? l.maxStars : 3), 0);
+  }
+  return COURSE_MAX_STARS_MAP[courseSlug] ?? 24;
+}
+
 function sanitizeGraphDataset(dataset: GraphDataset): GraphDataset {
   if (!dataset || !Array.isArray(dataset.nodes) || !Array.isArray(dataset.connections)) {
     return dataset;
@@ -62,7 +70,7 @@ function sanitizeGraphDataset(dataset: GraphDataset): GraphDataset {
     const isCourse = Boolean(n.targetCourseId || COURSE_MAX_STARS_MAP[n.id]);
     const courseKey = n.targetCourseId || n.id;
     const maxStars = isCourse
-      ? (COURSE_MAX_STARS_MAP[courseKey] ?? (typeof n.maxStars === 'number' && n.maxStars > 3 ? n.maxStars : 30))
+      ? getDynamicMaxStarsForCourse(courseKey)
       : (typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3);
 
     return {
@@ -92,15 +100,15 @@ function sanitizeGraphDataset(dataset: GraphDataset): GraphDataset {
 }
 
 export const COURSE_MAX_STARS_MAP: Record<string, number> = {
-  'python-1': 30,
-  'py-basic': 30,
-  'py-level-1': 30,
-  'python-2': 30,
-  'py-intermediate': 30,
-  'py-level-2': 30,
-  'python-3': 30,
-  'py-advanced': 30,
-  'py-level-3': 30,
+  'python-1': 24,
+  'py-basic': 24,
+  'py-level-1': 24,
+  'python-2': 32,
+  'py-intermediate': 32,
+  'py-level-2': 32,
+  'python-3': 36,
+  'py-advanced': 36,
+  'py-level-3': 36,
   'fastapi-async': 15,
   'py-fastapi': 15,
   'django-enterprise': 15,
@@ -109,8 +117,8 @@ export const COURSE_MAX_STARS_MAP: Record<string, number> = {
   'py-data': 30,
   'ai-agents': 30,
   'py-ia': 30,
-  'python-apex': 3,
-  'py-apex': 3,
+  'python-apex': 9,
+  'py-apex': 9,
 };
 
 export class RoadmapService {
@@ -122,10 +130,10 @@ export class RoadmapService {
           ...data.dataset,
           nodes: data.dataset.nodes.map((n) => {
             const courseKey = n.targetCourseId || n.id;
-            const canonicalMax = COURSE_MAX_STARS_MAP[courseKey];
+            const dynamicMax = getDynamicMaxStarsForCourse(courseKey);
             return {
               ...n,
-              maxStars: canonicalMax ?? (n.maxStars && n.maxStars > 3 ? n.maxStars : 30),
+              maxStars: dynamicMax,
             };
           }),
         };
@@ -140,7 +148,18 @@ export class RoadmapService {
   public static async getCourseLessonsGraph(courseId: string): Promise<GraphDataset> {
     try {
       const data = await fetchWithFallback<{ dataset?: GraphDataset }>(`/roadmap/courses/${courseId}/lessons`);
-      return sanitizeGraphDataset(data?.dataset || getLessonsDatasetForCourse(courseId));
+      const baseDataset = data?.dataset || getLessonsDatasetForCourse(courseId);
+      // Calibrar maxStars de cada nodo con el mock de referencia si el backend no trae maxStars específico
+      const localSeed = getLessonsDatasetForCourse(courseId);
+      const localMap = new Map(localSeed.nodes.map((n) => [n.id, n]));
+      const calibratedNodes = baseDataset.nodes.map((node) => {
+        const local = localMap.get(node.id);
+        return {
+          ...node,
+          maxStars: typeof local?.maxStars === 'number' ? local.maxStars : (node.maxStars ?? 3),
+        };
+      });
+      return sanitizeGraphDataset({ ...baseDataset, nodes: calibratedNodes });
     } catch {
       // Graceful offline-first fallback to canonical seed
       return sanitizeGraphDataset(getLessonsDatasetForCourse(courseId));

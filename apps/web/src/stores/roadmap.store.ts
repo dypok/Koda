@@ -2,11 +2,12 @@ import { create } from 'zustand';
 import { GraphViewMode, GraphDataset, NodeVariant, GraphNode } from '@/models/roadmap/roadmap-graph.types';
 import { PYTHON_BASIC_LESSONS_DATASET, getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
 import { CareerBranchId, CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
-import { RoadmapService, COURSE_MAX_STARS_MAP } from '@/services/roadmap/roadmap.service';
+import { RoadmapService, COURSE_MAX_STARS_MAP, getDynamicMaxStarsForCourse } from '@/services/roadmap/roadmap.service';
 import {
   getSectionAliases,
   getStoredStarForSection,
   isSectionCompletedInSet,
+  sanitizeStoredStarsCache,
 } from '@/models/roadmap/section-alias.helper';
 
 const PROGRESS_KEY = 'koda_roadmap_progress';
@@ -17,7 +18,12 @@ function getStoredSectionStars(): Record<string, number> {
   if (typeof window === 'undefined') return {};
   try {
     const raw = window.localStorage.getItem(SECTION_STARS_KEY);
-    return raw ? JSON.parse(raw) : {};
+    const parsed = raw ? JSON.parse(raw) : {};
+    const sanitized = sanitizeStoredStarsCache(parsed);
+    if (raw && Object.keys(parsed).length !== Object.keys(sanitized).length) {
+      window.localStorage.setItem(SECTION_STARS_KEY, JSON.stringify(sanitized));
+    }
+    return sanitized;
   } catch {
     return {};
   }
@@ -40,7 +46,16 @@ function getStoredCompletedLessons(): Set<string> {
   if (typeof window === 'undefined') return new Set();
   try {
     const raw = window.localStorage.getItem(COMPLETED_LESSONS_KEY);
-    return raw ? new Set(JSON.parse(raw)) : new Set();
+    if (!raw) return new Set();
+    const arr: string[] = JSON.parse(raw);
+    const sanitized = arr.filter((k) => {
+      const lower = k.trim().toLowerCase();
+      return !/^\d+$/.test(lower) && lower !== 'miniboss' && lower !== 'boss' && lower !== 'apex' && lower !== 'mb';
+    });
+    if (sanitized.length !== arr.length) {
+      window.localStorage.setItem(COMPLETED_LESSONS_KEY, JSON.stringify(sanitized));
+    }
+    return new Set(sanitized);
   } catch {
     return new Set();
   }
@@ -422,12 +437,14 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     const activeLesson = enrichedNodes.find((n) => n.variant === 'active' || n.isUnlocked) || enrichedNodes[0];
 
     const totalEarnedInCourse = enrichedNodes.reduce((sum, n) => sum + (n.stars ?? 0), 0);
+    const dynamicCourseMax = enrichedNodes.reduce((sum, n) => sum + (typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3), 0);
     const courses = get().coursesDataset;
     const updatedCoursesNodes = courses.nodes.map((cn) => {
       if (cn.id === courseId || cn.targetCourseId === courseId) {
         return {
           ...cn,
           stars: Math.max(cn.stars ?? 0, totalEarnedInCourse),
+          maxStars: dynamicCourseMax || cn.maxStars,
         };
       }
       return cn;
@@ -445,12 +462,14 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     const lessons = get().lessonsDataset;
     const currentCourseId = get().selectedCourseId;
     const totalEarnedInCourse = lessons.nodes.reduce((sum, n) => sum + (n.stars ?? 0), 0);
+    const dynamicCourseMax = lessons.nodes.reduce((sum, n) => sum + (typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3), 0);
 
     const updatedNodes = courses.nodes.map((cn) => {
       if (cn.id === currentCourseId || cn.targetCourseId === currentCourseId) {
         return {
           ...cn,
           stars: Math.max(cn.stars ?? 0, totalEarnedInCourse),
+          maxStars: dynamicCourseMax || cn.maxStars,
         };
       }
       return cn;
@@ -515,8 +534,8 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
         lessonsData.nodes = lessonsData.nodes.map((l) => {
           const stored = getStoredStarForSection(l.id, storedStars);
           const isCompleted = isSectionCompletedInSet(l.id, completedLessonsSet);
-          const earned = Math.max(l.stars ?? 0, stored > 0 ? stored : isCompleted ? 3 : 0);
           const maxStars = typeof l.maxStars === 'number' && l.maxStars > 0 ? l.maxStars : 3;
+          const earned = Math.min(maxStars, Math.max(l.stars ?? 0, stored > 0 ? stored : isCompleted ? maxStars : 0));
 
           if (earned > 0) {
             saveSectionStar(l.id, earned);
@@ -544,18 +563,20 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
           .map((c) => {
             const cId = c.targetCourseId || c.id;
             const courseLessons = getLessonsDatasetForCourse(cId);
-            const maxStars =
-              COURSE_MAX_STARS_MAP[cId] ??
-              (courseLessons?.nodes?.reduce((sum, l) => sum + (l.maxStars ?? 3), 0) || 30);
-
             const nodesToInspect = (cId === courseId && lessonsData?.nodes?.length)
               ? lessonsData.nodes
               : (courseLessons?.nodes ?? []);
 
+            const maxStars =
+              nodesToInspect.length > 0
+                ? nodesToInspect.reduce((sum, l) => sum + (typeof l.maxStars === 'number' && l.maxStars > 0 ? l.maxStars : 3), 0)
+                : getDynamicMaxStarsForCourse(cId);
+
             const earnedStars = nodesToInspect.reduce((sum, l) => {
               const stored = getStoredStarForSection(l.id, refreshedStars);
               const isComp = isSectionCompletedInSet(l.id, refreshedCompletedSet);
-              const lEarned = Math.max(l.stars ?? 0, stored > 0 ? stored : isComp ? 3 : 0);
+              const lMax = typeof l.maxStars === 'number' && l.maxStars > 0 ? l.maxStars : 3;
+              const lEarned = Math.min(lMax, Math.max(l.stars ?? 0, stored > 0 ? stored : isComp ? lMax : 0));
               return sum + lEarned;
             }, 0);
 
@@ -639,12 +660,14 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
 
     // Calcular suma total de estrellas en el curso actual
     const totalEarnedInCourse = nodes.reduce((sum, n) => sum + (n.stars ?? 0), 0);
+    const dynamicCourseMax = nodes.reduce((sum, n) => sum + (typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3), 0);
 
     const updatedCourseNodes = coursesDataset.nodes.map((cn) => {
       if (cn.id === currentCourseId || cn.targetCourseId === currentCourseId) {
         return {
           ...cn,
           stars: totalEarnedInCourse,
+          maxStars: dynamicCourseMax || cn.maxStars,
         };
       }
       return cn;
