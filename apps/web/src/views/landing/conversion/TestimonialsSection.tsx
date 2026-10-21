@@ -5,6 +5,7 @@ import { motion, useReducedMotion } from 'framer-motion';
 import { Quotes, Flame, CaretLeft, CaretRight } from '@phosphor-icons/react';
 import { Highlight } from '@/components/ui/highlight';
 import { cn } from '@/lib/utils';
+import { reveal } from '@/lib/reveal';
 
 const TESTIMONIALS = [
   {
@@ -58,10 +59,7 @@ export const TestimonialsSection: React.FC = () => {
     <section id="testimonios" aria-labelledby="testimonios-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          {...reveal(reduceMotion)}
           className="text-center space-y-4 max-w-2xl mx-auto mb-10"
         >
           <h2 id="testimonios-title" className="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight leading-[1.12]">
@@ -86,11 +84,11 @@ export const TestimonialsSection: React.FC = () => {
             {TESTIMONIALS.map((t, i) => (
               <motion.figure
                 key={t.name}
-                initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 animate={reduceMotion ? {} : i === index ? { y: -8, scale: 1.02 } : { y: 0, scale: 1 }}
-                transition={{ duration: 0.7, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: reduceMotion ? 0 : 0.35, delay: reduceMotion ? 0 : i * 0.06, ease: [0.16, 1, 0.3, 1] }}
                 aria-hidden={i !== index || undefined}
                 className={cn(
                   'rounded-2xl border bg-slate-900/60 p-6 flex flex-col gap-4 transition-all duration-300',

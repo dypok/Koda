@@ -3,6 +3,7 @@
 import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
+import { reveal } from '@/lib/reveal';
 
 // Elipses aproximadas de masa continental en grid 60x30 (x: 0-60, y: 0-30)
 const LAND = [
@@ -106,10 +107,7 @@ export const WorldMap: React.FC = () => {
     <section ref={sectionRef} id="mapa" aria-labelledby="mapa-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
       <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10 text-center">
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          {...reveal(reduceMotion)}
           className="space-y-4 max-w-2xl mx-auto mb-10"
         >
           <h2 id="mapa-title" className="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight leading-[1.12]">
@@ -122,10 +120,7 @@ export const WorldMap: React.FC = () => {
         </motion.div>
 
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, scale: 0.96 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+          {...reveal(reduceMotion, { variant: 'scale', delay: 0.06, distance: 4 })}
           role="img"
           aria-label="Mapa mundial de puntos con focos de estudiantes activos en América, Europa, África, Asia y Oceanía"
           className="mx-auto max-w-4xl rounded-2xl border border-slate-800 bg-slate-900/40 p-4 sm:p-6"

@@ -18,10 +18,10 @@ export const HeroCtaGroup: React.FC = () => {
 
   return (
     <motion.div
-      initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+      initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: reduceMotion ? 0 : 0.85, delay: reduceMotion ? 0 : 0.15, ease: [0.16, 1, 0.3, 1] }}
       className="pt-2 flex flex-col items-center lg:items-start gap-3.5 w-full sm:w-auto transform-gpu"
     >
       <Magnetic className="w-full sm:w-72 max-w-xs sm:max-w-none">

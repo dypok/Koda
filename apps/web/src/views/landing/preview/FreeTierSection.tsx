@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Highlight } from '@/components/ui/highlight';
+import { reveal } from '@/lib/reveal';
 
 export const FreeTierSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -16,10 +17,7 @@ export const FreeTierSection: React.FC = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, x: -35 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            {...reveal(reduceMotion, { variant: 'left' })}
             className="lg:col-span-7 space-y-5 text-left"
           >
             <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] text-balance">
@@ -36,10 +34,7 @@ export const FreeTierSection: React.FC = () => {
           </motion.div>
 
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.9, y: 20 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            {...reveal(reduceMotion, { variant: 'scale', delay: 0.08, distance: 3 })}
             className="lg:col-span-5 flex flex-col items-start lg:items-end justify-center text-left lg:text-right space-y-3 w-full"
           >
             <div className="relative">

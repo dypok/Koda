@@ -7,6 +7,7 @@ import { SealCheck, QrCode, ShieldCheck } from '@phosphor-icons/react';
 import { Highlight } from '@/components/ui/highlight';
 import { WeatherLayer } from '@/components/landing/WeatherLayer';
 import { getAppUrl } from '@/lib/domain';
+import { reveal } from '@/lib/reveal';
 
 export const CertificateSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
@@ -18,10 +19,7 @@ export const CertificateSection: React.FC = () => {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, x: -35 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            {...reveal(reduceMotion, { variant: 'left' })}
             className="lg:col-span-7 space-y-5 text-left"
           >
             <p className="text-xs sm:text-sm font-bold uppercase tracking-widest text-emerald-400">
@@ -45,10 +43,7 @@ export const CertificateSection: React.FC = () => {
               ].map((item, i) => (
                 <motion.li
                   key={item.text}
-                  initial={reduceMotion ? false : { opacity: 0.35, x: -12 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ duration: 0.5, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] }}
+                  {...reveal(reduceMotion, { variant: 'left', delay: i * 0.06, distance: 8 })}
                   className="flex items-start gap-2.5"
                 >
                   <item.icon aria-hidden="true" className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
@@ -59,23 +54,18 @@ export const CertificateSection: React.FC = () => {
           </motion.div>
 
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, scale: 0.94, y: 20 }}
-            whileInView={{ opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+            {...reveal(reduceMotion, { variant: 'scale', delay: 0.06, distance: 3 })}
             className="lg:col-span-5 w-full max-w-md mx-auto lg:mx-0 lg:sticky lg:top-24 self-start"
           >
             <div className="rounded-2xl border border-emerald-400/25 bg-gradient-to-b from-slate-900 to-slate-950 p-6 space-y-4 shadow-[0_20px_60px_-20px_rgba(16,185,129,0.35)] relative overflow-hidden">
-              {!reduceMotion && (
-                <motion.span
-                  aria-hidden="true"
-                  initial={{ x: '-180%', skewX: -18 }}
-                  whileInView={{ x: '280%' }}
-                  viewport={{ once: true, margin: '-60px' }}
-                  transition={{ duration: 1.1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                  className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.14),transparent)] will-change-transform"
-                />
-              )}
+              <motion.span
+                aria-hidden="true"
+                initial={{ x: '-180%', skewX: -18 }}
+                whileInView={{ x: '280%' }}
+                viewport={{ once: true, margin: '-60px' }}
+                transition={{ duration: reduceMotion ? 0 : 0.7, delay: reduceMotion ? 0 : 0.2, ease: [0.16, 1, 0.3, 1] }}
+                className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-[linear-gradient(to_right,transparent,rgba(255,255,255,0.14),transparent)] will-change-transform"
+              />
               <div className="flex items-center justify-between">
                 <p className="text-[11px] font-bold uppercase tracking-widest text-slate-400">
                   Certificado de ejemplo

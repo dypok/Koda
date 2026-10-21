@@ -7,6 +7,7 @@ import { TransitionLink } from '@/components/ui/transition-link';
 import { KodaPeek } from '@/components/landing/KodaPeek';
 import { cn } from '@/lib/utils';
 import { getAppUrl } from '@/lib/domain';
+import { reveal } from '@/lib/reveal';
 
 const FREE = [
   'Temario completo de Python y Lua',
@@ -40,10 +41,10 @@ const FeatureCheck: React.FC<{ color: string; index: number; runId: number; redu
     >
       <motion.polyline
         points="20 6 9 17 4 12"
-        initial={reduceMotion ? false : { pathLength: 0 }}
+        initial={{ pathLength: 0 }}
         whileInView={{ pathLength: 1 }}
         viewport={{ once: true, margin: '-40px' }}
-        transition={{ duration: 0.6, delay: 0.2 + index * 0.12, ease: [0.16, 1, 0.3, 1] }}
+        transition={{ duration: reduceMotion ? 0 : 0.3, delay: reduceMotion ? 0 : 0.05 + index * 0.04, ease: [0.16, 1, 0.3, 1] }}
       />
     </motion.svg>
   </span>
@@ -58,10 +59,7 @@ export const PricingSection: React.FC = () => {
       <KodaPeek align="left" size={64} />
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10">
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+          {...reveal(reduceMotion)}
           className="text-center space-y-4 max-w-2xl mx-auto mb-12"
         >
           <h2 id="planes-title" className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
@@ -77,10 +75,7 @@ export const PricingSection: React.FC = () => {
           <div className="relative grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 items-stretch">
             <motion.section
               aria-label="Plan gratuito"
-              initial={reduceMotion ? false : { opacity: 0, x: -24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              {...reveal(reduceMotion, { variant: 'left', distance: 12 })}
               className="relative flex flex-col justify-between rounded-3xl p-8 sm:p-9 border border-white/[0.08] bg-gradient-to-b from-slate-900/90 to-slate-950 transition-colors duration-300 hover:border-slate-600/50"
             >
               <div>
@@ -110,10 +105,7 @@ export const PricingSection: React.FC = () => {
 
             <motion.section
               aria-label="Plan premium"
-              initial={reduceMotion ? false : { opacity: 0, x: 24 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              {...reveal(reduceMotion, { variant: 'right', delay: 0.06, distance: 12 })}
               className="relative flex flex-col justify-between rounded-3xl p-8 sm:p-9 bg-gradient-to-b from-slate-900/95 to-slate-950"
             >
               <div
@@ -129,10 +121,7 @@ export const PricingSection: React.FC = () => {
               <div className="absolute -top-3.5 left-8 z-30">
                 <motion.span
                   key={`badge-${runId}`}
-                  initial={reduceMotion ? false : { scale: 0.88, opacity: 0 }}
-                  whileInView={{ scale: 1, opacity: 1 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                  {...reveal(reduceMotion, { variant: 'scale', delay: 0.1, distance: 3 })}
                   className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 text-slate-950 shadow-[0_2px_15px_rgba(245,158,11,0.5)] ring-2 ring-amber-300/40"
                 >
                   <Heart aria-hidden="true" className="w-3 h-3 animate-pulse" weight="fill" />

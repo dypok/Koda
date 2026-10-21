@@ -4,6 +4,7 @@ import { CaretDown } from '@phosphor-icons/react';
 import { Pillar } from '@/models/landing/methodology.model';
 import { AsciiVortexBackground } from '@/components/landing/AsciiVortexBackground';
 import { cn } from '@/lib/utils';
+import { reveal } from '@/lib/reveal';
 
 interface MethodologyHubProps {
   pillars: Pillar[];
@@ -25,10 +26,7 @@ export const MethodologyHub: React.FC<MethodologyHubProps> = ({ pillars, activeI
 
     <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-12">
       <motion.div
-        initial={reduceMotion ? false : { opacity: 0, y: 28 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-40px' }}
-        transition={{ duration: 0.75, ease: [0.16, 1, 0.3, 1] }}
+        {...reveal(reduceMotion)}
         className="space-y-4 max-w-3xl mx-auto"
       >
         <h2 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.12] text-balance drop-shadow-[0_4px_24px_rgba(0,0,0,0.8)]">
@@ -44,10 +42,7 @@ export const MethodologyHub: React.FC<MethodologyHubProps> = ({ pillars, activeI
       </motion.div>
 
       <motion.div
-        initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-30px' }}
-        transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+        {...reveal(reduceMotion, { delay: 0.06 })}
         className="relative max-w-4xl mx-auto"
       >
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
@@ -82,10 +77,7 @@ export const MethodologyHub: React.FC<MethodologyHubProps> = ({ pillars, activeI
       </motion.div>
 
       <motion.div
-        initial={reduceMotion ? false : { opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6, delay: 0.2 }}
+        {...reveal(reduceMotion, { variant: 'fade', delay: 0.1 })}
         className="flex flex-col items-center pt-4"
       >
         <button

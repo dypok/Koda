@@ -43,11 +43,7 @@ export const LandingPageView: React.FC = () => {
         <AnnouncementBar />
         <Navbar />
         <main className="flex-1">
-          <div className="relative h-[200vh]">
-            <div className="sticky top-0 h-screen overflow-hidden">
-              <HeroSection />
-            </div>
-          </div>
+          <HeroSection />
           <div className="relative z-10 bg-slate-950 shadow-[0_-24px_60px_rgba(0,0,0,0.6)]">
             <GiantMarquee />
             <InteractivePreview />
