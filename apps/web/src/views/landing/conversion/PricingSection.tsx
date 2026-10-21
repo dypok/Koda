@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import { ArrowCounterClockwise, Heart } from '@phosphor-icons/react';
+import { Heart } from '@phosphor-icons/react';
 import { TransitionLink } from '@/components/ui/transition-link';
 import { KodaPeek } from '@/components/landing/KodaPeek';
 import { cn } from '@/lib/utils';
@@ -22,15 +22,13 @@ const PREMIUM = [
   'Mismo contenido, cero interrupciones',
 ];
 
-const FeatureCheck: React.FC<{ color: string; index: number; runId: number; reduceMotion: boolean | null }> = ({
+const FeatureCheck: React.FC<{ color: string; index: number; reduceMotion: boolean | null }> = ({
   color,
   index,
-  runId,
   reduceMotion,
 }) => (
   <span aria-hidden="true" className={cn('flex-shrink-0 mt-0.5', color)}>
     <motion.svg
-      key={`check-${runId}-${index}`}
       className="w-4 h-4"
       fill="none"
       stroke="currentColor"
@@ -52,7 +50,6 @@ const FeatureCheck: React.FC<{ color: string; index: number; runId: number; redu
 
 export const PricingSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
-  const [runId, setRunId] = useState(0);
 
   return (
     <section id="planes" aria-labelledby="planes-title" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20">
@@ -86,7 +83,7 @@ export const PricingSection: React.FC = () => {
                 <ul className="space-y-4 text-sm font-medium text-slate-300">
                   {FREE.map((f, i) => (
                     <li key={f} className="flex items-start gap-3.5">
-                      <FeatureCheck color="text-emerald-400" index={i} runId={runId} reduceMotion={reduceMotion} />
+                      <FeatureCheck color="text-emerald-400" index={i} reduceMotion={reduceMotion} />
                       <span className="leading-snug text-slate-200">{f}</span>
                     </li>
                   ))}
@@ -120,7 +117,6 @@ export const PricingSection: React.FC = () => {
               </svg>
               <div className="absolute -top-3.5 left-8 z-30">
                 <motion.span
-                  key={`badge-${runId}`}
                   {...reveal(reduceMotion, { variant: 'scale', delay: 0.1, distance: 3 })}
                   className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 text-slate-950 shadow-[0_2px_15px_rgba(245,158,11,0.5)] ring-2 ring-amber-300/40"
                 >
@@ -139,7 +135,7 @@ export const PricingSection: React.FC = () => {
                 <ul className="space-y-4 text-sm font-medium text-slate-200">
                   {PREMIUM.map((f, i) => (
                     <li key={f} className="flex items-start gap-3.5">
-                      <FeatureCheck color="text-amber-400" index={i} runId={runId} reduceMotion={reduceMotion} />
+                      <FeatureCheck color="text-amber-400" index={i} reduceMotion={reduceMotion} />
                       <span className="leading-snug">{f}</span>
                     </li>
                   ))}
@@ -155,18 +151,6 @@ export const PricingSection: React.FC = () => {
                 </TransitionLink>
               </div>
             </motion.section>
-          </div>
-
-          <div className="mt-8 flex justify-center">
-            <button
-              type="button"
-              onClick={() => setRunId((n) => n + 1)}
-              title="Reiniciar la animación de los trazos"
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-mono font-medium rounded-lg text-slate-400 hover:text-amber-400 bg-slate-900/60 hover:bg-slate-800/80 border border-slate-800 hover:border-amber-500/30 transition-colors duration-200"
-            >
-              <ArrowCounterClockwise aria-hidden="true" className="w-3.5 h-3.5" />
-              Replay animación
-            </button>
           </div>
         </div>
       </div>
