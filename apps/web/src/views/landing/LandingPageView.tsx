@@ -22,7 +22,6 @@ import { CinematicFinale } from '@/components/landing/CinematicFinale';
 import { Preloader } from '@/components/landing/Preloader';
 import { AuroraProvider } from '@/components/landing/AuroraProvider';
 import { GlowParallax } from '@/components/landing/GlowParallax';
-import { RouteThread } from '@/components/landing/RouteThread';
 import { ActTheme } from '@/components/landing/ActTheme';
 import { KodaGuide } from '@/components/landing/KodaGuide';
 import { PartyMode } from '@/components/landing/PartyMode';
@@ -35,7 +34,6 @@ export const LandingPageView: React.FC = () => {
       <Preloader />
       <AuroraProvider />
       <GlowParallax />
-      <RouteThread />
       <ActTheme />
       <KodaGuide />
       <div aria-hidden="true" className="koda-grain" />
@@ -43,11 +41,7 @@ export const LandingPageView: React.FC = () => {
         <AnnouncementBar />
         <Navbar />
         <main className="flex-1">
-          <div className="relative h-[200vh]">
-            <div className="sticky top-0 h-screen overflow-hidden">
-              <HeroSection />
-            </div>
-          </div>
+          <HeroSection />
           <div className="relative z-10 bg-slate-950 shadow-[0_-24px_60px_rgba(0,0,0,0.6)]">
             <GiantMarquee />
             <InteractivePreview />

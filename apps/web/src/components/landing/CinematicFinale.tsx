@@ -10,6 +10,7 @@ import { WipeButton } from '@/components/ui/wipe-button';
 import { ArrowRight, Check, SignIn } from '@phosphor-icons/react';
 import { getGsap, prefersReducedMotion } from '@/lib/gsap';
 import { getAppUrl } from '@/lib/domain';
+import { reveal } from '@/lib/reveal';
 
 /** Cierre de película: negro total, frase letra por letra, Koda y un solo CTA. */
 export const CinematicFinale: React.FC = () => {
@@ -50,10 +51,7 @@ export const CinematicFinale: React.FC = () => {
       />
       <div ref={contentRef} className="mx-auto max-w-4xl px-4 sm:px-6 text-center space-y-8 relative z-10 will-change-transform">
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, scale: 0.9 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          {...reveal(reduceMotion, { variant: 'scale', distance: 3 })}
           className="relative mx-auto flex h-56 w-56 sm:h-64 sm:w-64 items-center justify-center"
         >
           <div
@@ -78,10 +76,7 @@ export const CinematicFinale: React.FC = () => {
         </h2>
 
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.7, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          {...reveal(reduceMotion, { delay: 0.12 })}
           className="flex justify-center pt-2"
         >
           <Magnetic className="w-full sm:w-auto">
@@ -99,10 +94,7 @@ export const CinematicFinale: React.FC = () => {
         </motion.div>
 
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-80px' }}
-          transition={{ duration: 0.6, delay: 0.7 }}
+          {...reveal(reduceMotion, { variant: 'fade', delay: 0.18 })}
           className="flex flex-col items-center gap-4 pt-2"
         >
           <WipeButton

@@ -1,16 +1,18 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { InfoModal, InfoModalTab } from './InfoModal';
 import { FooterColumns } from '@/views/landing/FooterColumns';
 import { KodaLogo } from './KodaLogo';
 import { GlareHover } from '@/components/ui/glare-hover';
 import { SoundToggle } from './SoundToggle';
 import { AuroraToggle } from './AuroraToggle';
+import { reveal } from '@/lib/reveal';
 
 export const Footer: React.FC = () => {
   const [modalTab, setModalTab] = useState<InfoModalTab | null>(null);
+  const reduceMotion = useReducedMotion();
 
   return (
     <footer className="relative border-t border-slate-800/80 bg-slate-950 text-slate-400 text-xs sm:text-sm overflow-hidden">
@@ -24,10 +26,7 @@ export const Footer: React.FC = () => {
         className="relative z-10"
       >
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.1 }}
-        transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+        {...reveal(reduceMotion)}
         className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-14 md:py-16 relative z-10"
       >
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 mb-12">

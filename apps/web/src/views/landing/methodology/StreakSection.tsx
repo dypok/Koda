@@ -6,6 +6,7 @@ import { AnimatedCounter } from '@/components/ui/animated-counter';
 import { AsciiVortexBackground } from '@/components/landing/AsciiVortexBackground';
 import { CodeConfetti } from '@/views/landing/preview/CodeConfetti';
 import { ArrowCounterClockwise, Flame, Gift, Shield } from '@phosphor-icons/react';
+import { reveal } from '@/lib/reveal';
 
 const DAYS = [
   { short: 'LUN', full: 'Lunes', mins: 18 },
@@ -67,7 +68,7 @@ export const StreakSection: React.FC = () => {
   return (
     <section
       id="rachas"
-      className="py-12 md:py-16 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20 sticky top-[128px] z-[10] rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.5)]"
+      className="py-12 md:py-16 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20 rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.5)]"
     >
       <AsciiVortexBackground />
       <div
@@ -83,10 +84,7 @@ export const StreakSection: React.FC = () => {
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center mb-8 lg:mb-12">
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            {...reveal(reduceMotion)}
             className="lg:col-span-7 space-y-5"
           >
             <h3 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.12] tracking-tight text-white text-balance">
@@ -100,10 +98,7 @@ export const StreakSection: React.FC = () => {
           </motion.div>
 
           <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-40px' }}
-            transition={{ duration: 0.7, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            {...reveal(reduceMotion, { delay: 0.06 })}
             className="lg:col-span-5 flex flex-col lg:items-end justify-center text-left lg:text-right gap-5"
           >
             <div className="flex flex-col lg:items-end">
@@ -137,10 +132,7 @@ export const StreakSection: React.FC = () => {
         </div>
 
         <motion.div
-          initial={reduceMotion ? false : { opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: '-40px' }}
-          transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          {...reveal(reduceMotion, { delay: 0.1 })}
           className="relative overflow-hidden rounded-3xl bg-[#0b0e14]/95 border border-white/10 p-6 sm:p-9 shadow-2xl shadow-black/80 transition-colors duration-300 hover:border-amber-500/40"
         >
           <div
@@ -203,10 +195,10 @@ export const StreakSection: React.FC = () => {
                   strokeWidth="3.5"
                   strokeLinecap="round"
                   strokeDasharray="100"
-                  initial={reduceMotion ? false : { strokeDashoffset: 100 }}
+                  initial={{ strokeDashoffset: 100 }}
                   whileInView={{ strokeDashoffset: 0 }}
                   viewport={{ once: true, margin: '-40px' }}
-                  transition={{ delay: IGNITE_BASE + i * IGNITE_STEP, duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ delay: reduceMotion ? 0 : IGNITE_BASE + i * IGNITE_STEP, duration: reduceMotion ? 0 : 0.28, ease: [0.16, 1, 0.3, 1] }}
                 />
               ))}
             </svg>
@@ -217,32 +209,28 @@ export const StreakSection: React.FC = () => {
                   type="button"
                   onClick={() => inspect(d.full, d.mins)}
                   aria-label={`${d.full}, ${d.mins} minutos, inspeccionar commit`}
-                  initial={
-                    reduceMotion
-                      ? false
-                      : {
-                          borderColor: 'rgba(51,65,85,0.6)',
-                          backgroundColor: 'rgba(20,24,36,0.9)',
-                          boxShadow: 'none',
-                        }
-                  }
+                  initial={{
+                    borderColor: 'rgba(51,65,85,0.6)',
+                    backgroundColor: 'rgba(20,24,36,0.9)',
+                    boxShadow: 'none',
+                  }}
                   whileInView={{
                     borderColor: 'rgba(245,158,11,0.6)',
                     backgroundColor: 'rgba(27,23,21,0.85)',
                     boxShadow: '0 0 20px rgba(245,158,11,0.35)',
                   }}
                   viewport={{ once: true, margin: '-40px' }}
-                  transition={{ delay: IGNITE_BASE + i * IGNITE_STEP, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                  transition={{ delay: reduceMotion ? 0 : IGNITE_BASE + i * IGNITE_STEP, duration: reduceMotion ? 0 : 0.35, ease: [0.16, 1, 0.3, 1] }}
                   className="group flex flex-col items-center rounded-2xl border py-2 px-1 transition-transform duration-300 hover:-translate-y-1"
                 >
                   <span className="text-[10px] sm:text-xs font-mono text-slate-400 group-hover:text-amber-400 transition-colors mb-2 font-bold">
                     {d.short}
                   </span>
                   <motion.span
-                    initial={reduceMotion ? false : { color: '#475569' }}
+                    initial={{ color: '#475569' }}
                     whileInView={{ color: '#fbbf24' }}
                     viewport={{ once: true, margin: '-40px' }}
-                    transition={{ delay: IGNITE_BASE + i * IGNITE_STEP, duration: 0.3 }}
+                    transition={{ delay: reduceMotion ? 0 : IGNITE_BASE + i * IGNITE_STEP, duration: reduceMotion ? 0 : 0.3 }}
                     className="flex items-center justify-center"
                   >
                     <Flame aria-hidden="true" className="w-5 h-5" weight="fill" />
@@ -258,10 +246,10 @@ export const StreakSection: React.FC = () => {
                 type="button"
                 onClick={claim}
                 aria-label="Domingo, cofre bonus, reclamar freeze"
-                initial={reduceMotion ? false : { opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, margin: '-40px' }}
-                transition={{ delay: IGNITE_BASE + DAYS.length * IGNITE_STEP, duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ delay: reduceMotion ? 0 : IGNITE_BASE + DAYS.length * IGNITE_STEP, duration: reduceMotion ? 0 : 0.35, ease: [0.16, 1, 0.3, 1] }}
                 className="group flex flex-col items-center rounded-2xl border-2 border-amber-400 bg-gradient-to-b from-amber-500/20 to-amber-500/5 py-2 px-1 shadow-[0_0_35px_rgba(245,158,11,0.35)] transition-transform duration-300 hover:-translate-y-1"
               >
                 <span className="text-[10px] sm:text-xs font-mono text-amber-400 font-extrabold mb-2">DOM</span>

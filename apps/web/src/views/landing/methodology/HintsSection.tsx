@@ -2,12 +2,13 @@ import React from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
 import { Highlight } from '@/components/ui/highlight';
 import { WeatherLayer } from '@/components/landing/WeatherLayer';
+import { reveal } from '@/lib/reveal';
 
 export const HintsSection: React.FC = () => {
   const reduceMotion = useReducedMotion();
 
   return (
-  <section id="pistas" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20 sticky top-[188px] z-[25] rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.5)]">
+  <section id="pistas" className="py-24 md:py-32 relative overflow-hidden border-t border-slate-900/80 bg-slate-950 scroll-mt-20 rounded-t-3xl shadow-[0_-20px_60px_rgba(0,0,0,0.5)]">
     <WeatherLayer type="fireflies" count={12} />
     <div aria-hidden="true" data-glow="10" className="absolute -top-16 left-1/2 -translate-x-1/2 w-[720px] h-[400px] bg-[radial-gradient(ellipse_at_top,rgba(251,191,36,0.10)_0%,transparent_70%)] pointer-events-none transform-gpu contain-paint" />
 
@@ -31,12 +32,9 @@ export const HintsSection: React.FC = () => {
     </div>
 
       <motion.div
-        initial={reduceMotion ? false : { opacity: 0, y: 32 }}
-        whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-      className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-6 relative"
-    >
+        {...reveal(reduceMotion)}
+        className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center space-y-6 relative"
+      >
       <h3 className="font-display text-3xl sm:text-5xl lg:text-6xl font-bold text-white tracking-tight leading-[1.1] max-w-3xl mx-auto">
         Pistas que te enseñan a{' '}
         <Highlight>

@@ -7,10 +7,10 @@ export const HeroMascot: React.FC = () => {
 
   return (
     <motion.div
-      initial={reduceMotion ? false : { opacity: 0, scale: 0.88, y: 25 }}
+      initial={{ opacity: 0, scale: 0.88, y: 25 }}
       whileInView={{ opacity: 1, scale: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.9, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: reduceMotion ? 0 : 0.9, delay: reduceMotion ? 0 : 0.25, ease: [0.16, 1, 0.3, 1] }}
       className="flex flex-col items-center justify-center transform-gpu"
     >
       <div className="relative w-full max-w-sm sm:max-w-md flex items-center justify-center">

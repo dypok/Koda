@@ -1,8 +1,9 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import { getLenisInstance } from '@/lib/scroll';
+import { reveal } from '@/lib/reveal';
 
 const WORDS = ['APRENDE', 'PRACTICA', 'DOMINA'];
 
@@ -85,12 +86,17 @@ export const GiantMarquee: React.FC = () => {
   }, [reduceMotion]);
 
   return (
-    <div ref={wrapRef} aria-label="Aprende, practica, domina" className="relative overflow-hidden border-y border-slate-900/80 bg-slate-950 py-6 sm:py-8 select-none contain-paint">
+    <motion.div
+      ref={wrapRef}
+      {...reveal(reduceMotion, { variant: 'fade' })}
+      aria-label="Aprende, practica, domina"
+      className="relative overflow-hidden border-y border-slate-900/80 bg-slate-950 py-6 sm:py-8 select-none contain-paint"
+    >
       <div ref={trackRef} className="flex w-max will-change-transform">
         <Row />
         <Row hidden />
       </div>
-    </div>
+    </motion.div>
   );
 };
 
