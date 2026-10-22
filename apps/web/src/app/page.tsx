@@ -25,6 +25,7 @@ export default function HomePage() {
     return false;
   });
 
+  const isExplicitLanding = typeof window !== 'undefined' && window.location.search.includes('landing=true');
   const isApp = typeof window !== 'undefined' ? isAppHost(window.location.host) : false;
 
   useEffect(() => {
@@ -51,10 +52,14 @@ export default function HomePage() {
     );
   }
 
+  // Si se solicita expresamente ver la landing page en cualquier host
+  if (isExplicitLanding) {
+    return <LandingPageView />;
+  }
+
   if (isApp) {
     return <AppPage />;
   }
 
   return <LandingPageView />;
 }
-

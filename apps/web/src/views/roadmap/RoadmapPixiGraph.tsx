@@ -39,6 +39,8 @@ interface RoadmapPixiGraphProps {
   unlockingNodeId?: string | null;
   /** Estética de la cinemática de desbloqueo. */
   unlockStyle?: UnlockStyle;
+  /** Si está en modo administrador, todos los nodos se muestran desbloqueados. */
+  isAdminMode?: boolean;
 }
 
 type Cubic = [number, number, number, number, number, number, number, number];
@@ -245,6 +247,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
   edgeDesign = 'curve',
   unlockingNodeId = null,
   unlockStyle = 'shockwave',
+  isAdminMode = false,
 }) => {
   const reduceMotion = useReducedMotion();
   const [mountRef, visible] = useElementVisible<HTMLDivElement>();
@@ -253,8 +256,8 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
   const edgeRef = useRef<{ style: EdgeStyle; curves: EdgeCurve[] }>({ style: 'static', curves: [] });
   const fxRef = useRef<{ pending: Omit<FxBurst, 't'> | null; live: FxBurst[] }>({ pending: null, live: [] });
   const stateRef = useRef({ panX: 0, panY: 0, zoom: 100, travelX: 0, travelY: 0, tTravelX: 0, tTravelY: 0 });
-  const propsRef = useRef({ dataset, branchColor, activeNodeId, onSelect, edgeStyle, nodeStyle, edgeDesign });
-  propsRef.current = { dataset, branchColor, activeNodeId, onSelect, edgeStyle, nodeStyle, edgeDesign };
+  const propsRef = useRef({ dataset, branchColor, activeNodeId, onSelect, edgeStyle, nodeStyle, edgeDesign, isAdminMode });
+  propsRef.current = { dataset, branchColor, activeNodeId, onSelect, edgeStyle, nodeStyle, edgeDesign, isAdminMode };
   const downRef = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
@@ -467,7 +470,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
       };
 
       const buildNodes = (animateIn: boolean) => {
-        const { dataset: ds, branchColor: bc, activeNodeId: activeId, onSelect: select, nodeStyle } = propsRef.current;
+        const { dataset: ds, branchColor: bc, activeNodeId: activeId, onSelect: select, nodeStyle, isAdminMode: isAdm } = propsRef.current;
         gsap.killTweensOf(nodeLayer.children);
         Object.values(animRef.current.irisNodes).forEach((iris) => {
           if (iris) {
@@ -482,7 +485,10 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
         const accentNum = hexToNumber(bc, 0x38bdf8);
 
         ds.nodes.forEach((n, idx) => {
-          const st = nodeStateOf(n);
+          let st = nodeStateOf(n);
+          if (isAdm && st === 'locked') {
+            st = 'open';
+          }
           const boss = n.variant === 'boss';
           const active = n.id === activeId;
           const R = active ? 14 : 12;
@@ -508,7 +514,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
           const holder = new PIXI.Container();
           holder.position.set(n.x, n.y);
           holder.eventMode = 'static';
-          holder.cursor = n.isUnlocked ? 'pointer' : 'default';
+          holder.cursor = (isAdm || n.isUnlocked) ? 'pointer' : 'default';
           holder.hitArea = new PIXI.Circle(0, 10, 48);
 
           const nodeMaxStars = typeof n.maxStars === 'number' && n.maxStars > 0 ? n.maxStars : 3;
@@ -784,7 +790,7 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
             }
             select(n);
           });
-          if (n.isUnlocked && !reduced) {
+          if ((isAdm || n.isUnlocked) && !reduced) {
             holder.on('pointerover', () => gsap.to(holder.scale, { x: 1.1, y: 1.1, duration: 0.25, ease: 'power2.out', overwrite: 'auto' }));
             holder.on('pointerout', () => gsap.to(holder.scale, { x: 1, y: 1, duration: 0.3, ease: 'power2.out', overwrite: 'auto' }));
           }
@@ -829,8 +835,23 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
         const fit = Math.min(W / VIEW_W, H / VIEW_H);
         const scale = fit * (s.zoom / 100);
         world.scale.set(scale);
-        world.position.set((W - VIEW_W * scale) / 2 + s.panX + s.travelX, (H - VIEW_H * scale) / 2 + s.panY + s.travelY);
+        // Desplazamiento vertical positivo para dar margen y centrar el grafo debajo del widget superior
+        const topClearance = 32;
+        world.position.set(
+          (W - VIEW_W * scale) / 2 + s.panX + s.travelX,
+          (H - VIEW_H * scale) / 2 + s.panY + s.travelY + topClearance
+        );
       };
+
+      if (typeof window !== 'undefined') {
+        (window as unknown as {
+          __kodaGetNodeScreenPos?: (x: number, y: number) => { x: number; y: number };
+        }).__kodaGetNodeScreenPos = (nodeX: number, nodeY: number) => {
+          const rect = mount.getBoundingClientRect();
+          const p = world.toGlobal(new PIXI.Point(nodeX, nodeY));
+          return { x: rect.left + p.x, y: rect.top + p.y };
+        };
+      }
 
       const refresh = (animateIn: boolean) => {
         const { dataset: ds, edgeStyle: style } = propsRef.current;
@@ -1066,6 +1087,9 @@ export const RoadmapPixiGraph: React.FC<RoadmapPixiGraphProps> = ({
 
     void boot();
     return () => {
+      if (typeof window !== 'undefined') {
+        delete (window as unknown as { __kodaGetNodeScreenPos?: unknown }).__kodaGetNodeScreenPos;
+      }
       cancelled = true;
       if (ro) {
         ro.disconnect();

@@ -2,7 +2,7 @@ import { CodeSimple } from '@phosphor-icons/react';
 import React from 'react';
 import { GraphDataset } from '../roadmap-graph.types';
 
-export type CareerBranchId = 'python';
+export type CareerBranchId = string;
 
 const EMPTY_BRANCH_DATASET: GraphDataset = {
   sectorTitle: 'PYTHON SPECIALIST: DE FUNDAMENTOS A AGENTES AUTÓNOMOS',

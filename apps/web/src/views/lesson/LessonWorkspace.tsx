@@ -11,11 +11,18 @@ import {
   Trophy,
   Key,
   Code,
+  PencilSimple,
+  Plus,
+  FloppyDisk,
+  Eye,
+  EyeSlash,
+  ShieldCheck,
+  CheckCircle as PhosphorCheckCircle,
+  Lightbulb,
   BookOpen,
   Lightning,
   ArrowsClockwise,
   Shield,
-  Lightbulb,
   Target,
   WarningCircle,
   Sparkle,
@@ -27,6 +34,9 @@ import { useLessonKeyboardShortcuts } from '@/hooks/useLessonKeyboardShortcuts';
 import { InteractiveCodeConsole } from '@/components/lesson/InteractiveCodeConsole';
 import { StarRatingDisplay, calculateStarsFromAccuracy } from '@/components/lesson/StarRatingDisplay';
 import { useRoadmapStore } from '@/stores/roadmap.store';
+import { useAuthStore } from '@/stores/auth.store';
+import { useAdminCurriculumStore } from '@/stores/admin-curriculum.store';
+import { LessonInSituInspectorModal, EditableBlockType, EditableLessonData } from '@/components/admin/LessonInSituInspectorModal';
 import { cn } from '@/lib/utils';
 import { getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
 import type { GraphDataset, GraphNode } from '@/models/roadmap/roadmap-graph.types';
@@ -34,7 +44,6 @@ import { getSectionAliases } from '@/models/roadmap/section-alias.helper';
 
 import { OrbitFieldBackground } from '@/components/landing/OrbitFieldBackground';
 import { EvaluationService } from '@/services/learning/evaluation.service';
-import { useAuthStore } from '@/stores/auth.store';
 import { MarkdownContent, renderMarkdownInline } from '@/components/ui/markdown-content';
 
 interface LessonWorkspaceProps {
@@ -448,9 +457,109 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
         loadBank(parsed.lang, parsed.moduleSlug),
       ]);
       if (alive) {
-        setModule(mod);
-        setBank(questions);
-        setFailedExercises([]);
+        if (mod) {
+          setModule(mod);
+          setBank(questions);
+          setFailedExercises([]);
+        } else {
+          // Fallback dinamico para modulos o secciones creadas por el administrador
+          const adminStore = useAdminCurriculumStore.getState();
+          const draftMod = adminStore.draftModules.find((m) => m.slug === parsed.moduleSlug || m.slug === courseId);
+          const draftSecs = adminStore.draftSections.filter((s) => s.module_slug === parsed.moduleSlug || s.module_slug === courseId);
+          const currentDraftSec = draftSecs.find((s) => s.slug === sectionRef) || draftSecs[0];
+          const draftLessons = currentDraftSec
+            ? adminStore.draftLessons.filter((l) => l.section_slug === currentDraftSec.slug)
+            : [];
+
+          const fallbackTitle = draftMod?.title || (courseId.startsWith('mod-') ? 'Modulo Personalizado' : 'Modulo en Edicion');
+          const fallbackSectionTitle = currentDraftSec?.title || (sectionRef.startsWith('sec-') || sectionRef.startsWith('les-') ? 'Seccion 01' : 'Nueva Seccion');
+
+          const initialLesson: ContentLesson = draftLessons[0]
+            ? {
+                id: draftLessons[0].slug,
+                title: draftLessons[0].title,
+                slug: draftLessons[0].slug,
+                position: 1,
+                concept_id: 'concept-init',
+                explanation: `${draftLessons[0].theory.step1}\n\n${draftLessons[0].theory.step2}\n\n${draftLessons[0].theory.step3}`,
+                is_required: true,
+                examples: [
+                  {
+                    title: 'Codigo Demostrativo',
+                    code: draftLessons[0].theory.code_snippet,
+                    output: 'Listo para programar',
+                  },
+                ],
+                exercises: [
+                  {
+                    id: `ex_${draftLessons[0].slug}`,
+                    type: 'single_choice',
+                    difficulty: 'easy',
+                    prompt: draftLessons[0].item_2_quiz.prompt,
+                    answers: draftLessons[0].item_2_quiz.options.map((o) => ({
+                      id: o.id,
+                      body: o.text,
+                      is_correct: o.is_correct,
+                    })),
+                    correct_answer_ids: draftLessons[0].item_2_quiz.options.filter((o) => o.is_correct).map((o) => o.id),
+                    explanation: draftLessons[0].item_2_quiz.options.find((o) => o.is_correct)?.feedback,
+                  },
+                ],
+              }
+            : {
+                id: `les_${sectionRef}_01`,
+                title: 'Leccion 01: Introduccion y Concepto Clave',
+                slug: `${sectionRef}-l01`,
+                position: 1,
+                concept_id: 'concept-1',
+                explanation: 'Paso 1: Frase de anclaje inicial.\n\nPaso 2: Mecanica conceptual explicada con claridad.\n\nPaso 3: Regla practica obligatoria para evitar errores.',
+                is_required: true,
+                examples: [
+                  {
+                    title: 'Codigo Demostrativo',
+                    code: '# Escribe tu codigo aqui\nprint("Listo para programar")',
+                    output: 'Listo para programar',
+                  },
+                ],
+                exercises: [
+                  {
+                    id: `ex_${sectionRef}`,
+                    type: 'single_choice',
+                    difficulty: 'easy',
+                    prompt: 'Cual es el principio central de esta leccion?',
+                    answers: [
+                      { id: 'a', body: 'Permite estructurar instrucciones claras y reproducibles.', is_correct: true },
+                      { id: 'b', body: 'Omitir las reglas sintacticas obligatorias.', is_correct: false },
+                      { id: 'c', body: 'Escribir bloques de codigo sin verificacion.', is_correct: false },
+                      { id: 'd', body: 'Ninguna de las anteriores.', is_correct: false },
+                    ],
+                    correct_answer_ids: ['a'],
+                    explanation: 'La opcion A es la correcta.',
+                  },
+                ],
+              };
+
+          const syntheticModule: ContentModule = {
+            id: parsed.moduleSlug,
+            code: '01',
+            slug: parsed.moduleSlug,
+            title: fallbackTitle,
+            sections: [
+              {
+                id: sectionRef,
+                slug: sectionRef,
+                title: fallbackSectionTitle,
+                position: 1,
+                type: 'standard',
+                lessons: [initialLesson],
+              },
+            ],
+          };
+
+          setModule(syntheticModule);
+          setBank(questions);
+          setFailedExercises([]);
+        }
         setMode(parsed.initialMode);
         setLoading(false);
       }
@@ -458,7 +567,7 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     return () => {
       alive = false;
     };
-  }, [parsed]);
+  }, [parsed, courseId, sectionRef]);
 
   const section = useMemo(() => {
     if (!module) return null;
@@ -469,7 +578,165 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
     return module.sections[0] ?? null;
   }, [module, sectionRef]);
 
+  const { user } = useAuthStore();
+  const isAdmin = Boolean(user?.role === 'admin' || user?.email?.toLowerCase().includes('admin'));
+  const [isEditMode, setIsEditMode] = useState(isAdmin);
+  const { isDirty, pendingChangesCount, saveChanges } = useAdminCurriculumStore();
+
+  const [inspectorOpen, setInspectorOpen] = useState(false);
+  const [inspectorBlock, setInspectorBlock] = useState<EditableBlockType>('theory');
+  const [adminNotification, setAdminNotification] = useState<string | null>(null);
+
   const lesson = section?.lessons?.[lessonIdx] ?? null;
+
+  const editableLessonData: EditableLessonData = useMemo(() => {
+    if (!lesson) {
+      return {
+        id: '',
+        title: '',
+        step1: '',
+        step2: '',
+        step3: '',
+        code_snippet: '',
+        quiz_prompt: '',
+        quiz_options: [],
+      };
+    }
+
+    const lines = (lesson.explanation || '').split('\n\n');
+    const exercise = lesson.exercises[0];
+    const quizOptions = exercise?.answers?.map((a) => ({
+      id: a.id,
+      text: a.body,
+      is_correct: Boolean(exercise.correct_answer_ids?.includes(a.id)),
+      feedback: a.is_correct ? (exercise.explanation || 'Respuesta correcta.') : 'Opcion incorrecta.',
+    })) || [
+      { id: 'a', text: 'Opcion A (Correcta)', is_correct: true, feedback: 'Excelente respuesta.' },
+      { id: 'b', text: 'Opcion B', is_correct: false, feedback: 'Incorrecto.' },
+      { id: 'c', text: 'Opcion C', is_correct: false, feedback: 'Incorrecto.' },
+      { id: 'd', text: 'Opcion D', is_correct: false, feedback: 'Incorrecto.' },
+    ];
+
+    return {
+      id: lesson.id,
+      title: lesson.title,
+      step1: lines[0] || lesson.explanation || 'Paso 1: Frase de anclaje inicial.',
+      step2: lines[1] || 'Paso 2: Mecanica conceptual explicada con claridad.',
+      step3: lines[2] || 'Paso 3: Regla practica obligatoria para evitar errores.',
+      code_snippet: lesson.examples[0]?.code || 'print("Hola, Koda")',
+      console_prompt: exercise?.prompt || 'Ejecuta la instruccion print solicitada.',
+      initial_code: '# Codigo inicial\n',
+      solution_code: lesson.examples[0]?.code || 'print("Hola, Koda")',
+      test_cases: [
+        {
+          input: '',
+          expected_output: (lesson.examples[0]?.output || 'Hola, Koda') + '\n',
+          description: 'Salida esperada',
+        },
+      ],
+      quiz_prompt: exercise?.prompt || 'Cual es el principio central de esta sesion?',
+      quiz_options: quizOptions,
+      prediction_prompt: 'Que mostrara en consola este comando?',
+      prediction_code: lesson.examples[0]?.code || 'print("Koda")',
+      prediction_answer: lesson.examples[0]?.output || 'Koda',
+      prediction_hint: 'Observa la salida exacta sin comillas.',
+    };
+  }, [lesson]);
+
+  const handleOpenInspector = useCallback((block: EditableBlockType) => {
+    setInspectorBlock(block);
+    setInspectorOpen(true);
+  }, []);
+
+  const handleApplyInspectorUpdate = useCallback((updated: EditableLessonData) => {
+    if (!lesson) return;
+    lesson.title = updated.title;
+    lesson.explanation = `${updated.step1}\n\n${updated.step2}\n\n${updated.step3}`;
+    if (lesson.examples[0]) {
+      lesson.examples[0].code = updated.code_snippet;
+    } else {
+      lesson.examples.push({
+        title: 'Codigo Demostrativo',
+        code: updated.code_snippet,
+        output: 'OK',
+      });
+    }
+
+    if (lesson.exercises[0]) {
+      lesson.exercises[0].prompt = updated.quiz_prompt;
+      lesson.exercises[0].answers = updated.quiz_options.map((o) => ({
+        id: o.id,
+        body: o.text,
+        is_correct: o.is_correct,
+      }));
+      lesson.exercises[0].correct_answer_ids = updated.quiz_options
+        .filter((o) => o.is_correct)
+        .map((o) => o.id);
+      lesson.exercises[0].explanation = updated.quiz_options.find((o) => o.is_correct)?.feedback;
+    }
+
+    useAdminCurriculumStore.setState((s) => ({
+      isDirty: true,
+      pendingChangesCount: s.pendingChangesCount + 1,
+    }));
+  }, [lesson]);
+
+  const handleAddNewSession = useCallback(() => {
+    if (!section) return;
+    const nextIdx = section.lessons.length + 1;
+    const newLessonId = `les_custom_${Date.now()}`;
+    const newLesson: ContentLesson = {
+      id: newLessonId,
+      title: `Sesion 0${nextIdx}: Nuevo Concepto Clave`,
+      slug: `sesion-${nextIdx}`,
+      position: nextIdx,
+      concept_id: `concept-${nextIdx}`,
+      explanation: `Paso 1: Frase de anclaje explicando el concepto nuevo.\n\nPaso 2: Mecanica conceptual explicada paso a paso sin jerga.\n\nPaso 3: Regla practica obligatoria de sintaxis.`,
+      is_required: true,
+      examples: [
+        {
+          title: 'Codigo Demostrativo',
+          code: '# Demostracion en Python\nresultado = "Listo"\nprint(resultado)',
+          language: 'python',
+          output: 'Listo',
+          explanation: 'La instruccion print muestra el texto en consola.',
+        },
+      ],
+      exercises: [
+        {
+          id: `ex_${newLessonId}`,
+          type: 'single_choice',
+          difficulty: 'easy',
+          prompt: 'Cual es la forma correcta de aplicar esta instruccion?',
+          answers: [
+            { id: 'a', body: 'Declarar la instruccion respetando la regla oficial.', is_correct: true },
+            { id: 'b', body: 'Omitir las comillas en cadenas de texto.', is_correct: false },
+            { id: 'c', body: 'Escribir las palabras reservadas con mayusculas.', is_correct: false },
+            { id: 'd', body: 'Eliminar la indentacion del bloque.', is_correct: false },
+          ],
+          correct_answer_ids: ['a'],
+          explanation: 'La opcion A es la correcta porque sigue el estandar del lenguaje.',
+        },
+      ],
+    };
+
+    section.lessons.push(newLesson);
+    setLessonIdx(section.lessons.length - 1);
+
+    useAdminCurriculumStore.setState((s) => ({
+      isDirty: true,
+      pendingChangesCount: s.pendingChangesCount + 1,
+    }));
+
+    setAdminNotification('Nueva sesion agregada al stepper siguiendo el orden didactico canonico.');
+    setTimeout(() => setAdminNotification(null), 3000);
+  }, [section]);
+
+  const handleSaveAll = useCallback(() => {
+    const res = saveChanges();
+    setAdminNotification(res.message || 'Cambios guardados con exito.');
+    setTimeout(() => setAdminNotification(null), 3500);
+  }, [saveChanges]);
 
   const handleQuizFinish = useCallback(
     (ok: number, total: number) => {
@@ -709,6 +976,42 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             </div>
 
             <div className="flex items-center gap-3 ml-auto">
+              {/* Controles de Administrador In-Situ en el Header */}
+              {isAdmin && (
+                <div className="flex items-center gap-2">
+                  <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 font-mono text-xs font-bold">
+                    <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                    <span>MODO EDITOR</span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setIsEditMode(!isEditMode)}
+                    className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full font-mono text-xs font-bold transition-all cursor-pointer border ${
+                      isEditMode
+                        ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
+                        : 'bg-slate-900 border-slate-700 text-slate-400'
+                    }`}
+                    title={isEditMode ? 'Alternar a vista alumno para resolver' : 'Activar edicion in-situ'}
+                  >
+                    {isEditMode ? <PencilSimple className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                    <span>{isEditMode ? 'Editando' : 'Vista Alumno'}</span>
+                  </button>
+
+                  {isDirty && (
+                    <button
+                      type="button"
+                      onClick={handleSaveAll}
+                      className="flex items-center gap-1.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold px-3 py-1 rounded-full text-xs font-mono transition-all shadow-md shadow-amber-500/20 cursor-pointer animate-fadeIn"
+                      title="Guardar modificaciones"
+                    >
+                      <FloppyDisk className="w-3.5 h-3.5" />
+                      <span>Guardar ({pendingChangesCount})</span>
+                    </button>
+                  )}
+                </div>
+              )}
+
               <div className="flex items-center gap-1 font-mono text-[11px] text-slate-400 bg-slate-800/60 px-2.5 py-1 rounded-full border border-slate-700/50">
                 <Key className="w-3.5 h-3.5 text-amber-400" />
                 <span>1-4 · Enter</span>
@@ -744,9 +1047,30 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
                 />
               );
             })}
+
+            {/* Botón para añadir sesión siguiendo el orden pedagógico */}
+            {isAdmin && isEditMode && (
+              <button
+                type="button"
+                onClick={handleAddNewSession}
+                className="flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-mono text-[10px] font-bold transition-all shrink-0 cursor-pointer"
+                title="Añadir nueva sesion con el mismo orden didactico de las anteriores"
+              >
+                <Plus className="w-3 h-3" />
+                <span>Añadir Sesion</span>
+              </button>
+            )}
           </div>
         </div>
       </header>
+
+      {/* Toast de Notificación de Administrador */}
+      {adminNotification && (
+        <div className="fixed top-20 right-6 z-50 p-3 rounded-xl bg-slate-900/95 border border-amber-500/40 text-amber-300 text-xs font-mono flex items-center gap-2 shadow-2xl animate-fadeIn">
+          <PhosphorCheckCircle className="w-4 h-4 text-amber-400" />
+          <span>{adminNotification}</span>
+        </div>
+      )}
 
       <main className="flex-1 min-h-0 w-full p-2.5 sm:p-4 lg:p-5 overflow-hidden flex flex-col">
         {lesson ? (
@@ -765,6 +1089,8 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
             currentIndex={lessonIdx}
             totalCount={section.lessons.length}
             isLast={lessonIdx + 1 >= section.lessons.length}
+            isEditMode={isAdmin && isEditMode}
+            onOpenInspector={handleOpenInspector}
             nodeTargetXp={nodeTargetXp}
           />
         ) : (
@@ -780,6 +1106,17 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
           </div>
         )}
       </main>
+
+      {/* Modal Inspector In-Situ */}
+      {lesson && (
+        <LessonInSituInspectorModal
+          isOpen={inspectorOpen}
+          onClose={() => setInspectorOpen(false)}
+          blockType={inspectorBlock}
+          lessonData={editableLessonData}
+          onUpdate={handleApplyInspectorUpdate}
+        />
+      )}
     </div>
   );
 };
@@ -798,6 +1135,8 @@ function LessonView({
   currentIndex = 0,
   totalCount = 1,
   isLast,
+  isEditMode,
+  onOpenInspector,
   nodeTargetXp = 120,
 }: {
   lesson: ContentLesson;
@@ -813,6 +1152,8 @@ function LessonView({
   currentIndex?: number;
   totalCount?: number;
   isLast: boolean;
+  isEditMode?: boolean;
+  onOpenInspector?: (block: EditableBlockType) => void;
   nodeTargetXp?: number;
 }) {
   const totalSteps = totalCount + 1; // Las N lecciones de la sección + el Quiz de cierre
@@ -962,22 +1303,47 @@ function LessonView({
         >
           {/* Cabecera fija de la teoría */}
           <div className="shrink-0 space-y-2 pb-3 border-b border-slate-800/80">
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-orange-500/10 border border-orange-500/20 text-[10px] font-mono font-bold text-orange-300 uppercase tracking-wider">
-                <span>Lección {String(lesson.position ?? 1).padStart(2, '0')}</span>
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-orange-500/10 border border-orange-500/20 text-[10px] font-mono font-bold text-orange-300 uppercase tracking-wider">
+                  <span>Lección {String(lesson.position ?? 1).padStart(2, '0')}</span>
+                </div>
+                {isCompleted ? (
+                  <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
+                    <Check className="w-3 h-3 text-emerald-400" />
+                    <span>Completada</span>
+                  </div>
+                ) : null}
+                {lesson.objective ? (
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-mono font-medium text-cyan-300 truncate max-w-full">
+                    <Target className="w-3 h-3 text-cyan-400 shrink-0" aria-hidden="true" />
+                    <span className="truncate">{lesson.objective}</span>
+                  </div>
+                ) : null}
               </div>
-              {isCompleted ? (
-                <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
-                  <Check className="w-3 h-3 text-emerald-400" />
-                  <span>Completada</span>
+
+              {isEditMode && (
+                <div className="flex items-center gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => onOpenInspector?.('theory')}
+                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 font-mono text-xs font-bold transition-all cursor-pointer shadow-sm hover:scale-[1.02]"
+                    title="Modificar Enunciado y Teoria en 3 pasos"
+                  >
+                    <PencilSimple className="w-3.5 h-3.5 text-amber-400" />
+                    <span>Modificar Enunciado</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => onOpenInspector?.('code')}
+                    className="flex items-center gap-1 px-2 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 font-mono text-xs font-semibold transition-all cursor-pointer shadow-sm hover:scale-[1.02]"
+                    title="Modificar codigo demostrativo"
+                  >
+                    <PencilSimple className="w-3 h-3 text-amber-400" />
+                    <span>Modificar Codigo</span>
+                  </button>
                 </div>
-              ) : null}
-              {lesson.objective ? (
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-mono font-medium text-cyan-300 truncate max-w-full">
-                  <Target className="w-3 h-3 text-cyan-400 shrink-0" aria-hidden="true" />
-                  <span className="truncate">{lesson.objective}</span>
-                </div>
-              ) : null}
+              )}
             </div>
             <h1
               className={cn(
@@ -1100,9 +1466,22 @@ function LessonView({
                 <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-400">
                   Desafío de Comprensión
                 </span>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-300 border border-orange-500/30">
-                  {getExerciseTypeLabel(exercise.type)}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-orange-500/10 text-orange-300 border border-orange-500/30">
+                    {getExerciseTypeLabel(exercise.type)}
+                  </span>
+                  {isEditMode && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenInspector?.('quiz')}
+                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/15 hover:bg-amber-500/25 border border-amber-500/40 text-amber-300 font-mono text-xs font-bold transition-all cursor-pointer shadow-sm hover:scale-[1.02]"
+                      title="Modificar pregunta y opciones A/B/C/D con feedback"
+                    >
+                      <PencilSimple className="w-3.5 h-3.5 text-amber-400" />
+                      <span>Modificar Pregunta</span>
+                    </button>
+                  )}
+                </div>
               </div>
 
               {/* Area de pregunta y opciones scrolleable */}

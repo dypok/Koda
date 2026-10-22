@@ -21,7 +21,7 @@ export default function NotFound() {
       </div>
       <div className="flex flex-col sm:flex-row items-center gap-3">
         <Link
-          href="/"
+          href="/?landing=true"
           className="inline-flex min-h-[48px] items-center rounded-xl bg-amber-400 px-6 text-sm font-bold text-slate-950 hover:bg-amber-300"
         >
           Volver a la landing

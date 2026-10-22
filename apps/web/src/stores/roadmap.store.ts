@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { GraphViewMode, GraphDataset, NodeVariant, GraphNode } from '@/models/roadmap/roadmap-graph.types';
+import { GraphViewMode, GraphDataset, NodeVariant, GraphNode, GraphConnection } from '@/models/roadmap/roadmap-graph.types';
 import { PYTHON_BASIC_LESSONS_DATASET, getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
 import { CareerBranchId, CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 import { RoadmapService, COURSE_MAX_STARS_MAP, getDynamicMaxStarsForCourse } from '@/services/roadmap/roadmap.service';
@@ -173,6 +173,50 @@ function restoreProgress(dataset: GraphDataset): GraphDataset {
   }
 }
 
+const CUSTOM_LESSONS_STORAGE_KEY = 'koda_custom_module_lessons';
+
+function getStoredCustomLessons(): Record<string, GraphDataset> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = window.localStorage.getItem(CUSTOM_LESSONS_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveStoredCustomLessons(dict: Record<string, GraphDataset>) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(CUSTOM_LESSONS_STORAGE_KEY, JSON.stringify(dict));
+  } catch {}
+}
+
+export function buildDefaultSingleLessonDataset(moduleTitle: string, initialLessonId = 'les-01'): GraphDataset {
+  const node: GraphNode = {
+    id: initialLessonId,
+    code: '01',
+    label: 'LECCION 01',
+    subtitle: 'CAMPOS LISTOS PARA EDITAR',
+    x: 575,
+    y: 310,
+    variant: 'active',
+    iconType: 'code',
+    stars: 0,
+    maxStars: 3,
+    xp: 50,
+    statusText: 'DISPONIBLE • LISTA PARA EDITAR',
+    isUnlocked: true,
+  };
+
+  return {
+    sectorTitle: moduleTitle.toUpperCase(),
+    progressPercent: 0,
+    nodes: [node],
+    connections: [],
+  };
+}
+
 interface RoadmapStoreState {
   viewMode: GraphViewMode;
   activeBranchId: CareerBranchId;
@@ -183,6 +227,8 @@ interface RoadmapStoreState {
   isLoading: boolean;
   coursesDataset: GraphDataset;
   lessonsDataset: GraphDataset;
+  customModuleLessonsMap: Record<string, GraphDataset>;
+  customTrackDatasetsMap: Record<string, GraphDataset>;
   retreatTrigger: number;
   triggerRetreatToCourses: () => void;
   animatingConnectionId: string | null;
@@ -190,10 +236,11 @@ interface RoadmapStoreState {
   simulateCompleteAndUnlockNext: () => void;
   toggleNodeLock: (nodeId: string) => void;
   unlockNodeWithCinematic: (nodeId: string) => void;
-  openCourseLessons: (courseId: string) => Promise<void>;
+  openCourseLessons: (courseId: string, bypassUnlocked?: boolean) => Promise<void>;
   returnToCourses: () => void;
   setActiveNode: (id: string | null) => void;
   setBranch: (branchId: CareerBranchId) => Promise<void> | void;
+  registerTrack: (track: { slug: string; name: string; color?: string; description?: string }) => void;
   setPanOffset: (pan: { x: number; y: number }) => void;
   setZoomLevel: (zoom: number | ((prev: number) => number)) => void;
   hydrateProgress: () => Promise<void> | void;
@@ -202,6 +249,53 @@ interface RoadmapStoreState {
   zoomOut: () => void;
   resetZoom: () => void;
   getCurrentDataset: () => GraphDataset;
+  insertModuleNode: (nodeData: Partial<GraphNode>, targetIndex?: number) => void;
+  insertSectionNode: (nodeData: Partial<GraphNode>, targetIndex?: number) => void;
+}
+
+const CUSTOM_TRACKS_STORAGE_KEY = 'koda_custom_tracks_datasets';
+
+function getStoredCustomTracks(): Record<string, GraphDataset> {
+  if (typeof window === 'undefined') return {};
+  try {
+    const raw = window.localStorage.getItem(CUSTOM_TRACKS_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    return {};
+  }
+}
+
+function saveStoredCustomTracks(dict: Record<string, GraphDataset>) {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.setItem(CUSTOM_TRACKS_STORAGE_KEY, JSON.stringify(dict));
+  } catch {}
+}
+
+export function buildDefaultTrackDataset(trackTitle: string, initialModuleSlug = 'mod-01'): GraphDataset {
+  const node: GraphNode = {
+    id: initialModuleSlug,
+    code: '01',
+    label: `${trackTitle.toUpperCase()} - MODULO 01`,
+    subtitle: 'FUNDAMENTOS Y ESTRUCTURA BASE',
+    x: 575,
+    y: 310,
+    variant: 'active',
+    iconType: 'brackets',
+    stars: 0,
+    maxStars: 30,
+    xp: 300,
+    statusText: 'DISPONIBLE • LISTO PARA EDITAR',
+    targetCourseId: initialModuleSlug,
+    isUnlocked: true,
+  };
+
+  return {
+    sectorTitle: trackTitle.toUpperCase(),
+    progressPercent: 0,
+    nodes: [node],
+    connections: [],
+  };
 }
 
 export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
@@ -214,6 +308,8 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   isLoading: false,
   coursesDataset: INITIAL_COURSES_DATASET,
   lessonsDataset: PYTHON_BASIC_LESSONS_DATASET,
+  customModuleLessonsMap: getStoredCustomLessons(),
+  customTrackDatasetsMap: getStoredCustomTracks(),
   retreatTrigger: 0,
   triggerRetreatToCourses: () => set((s) => ({ retreatTrigger: s.retreatTrigger + 1 })),
   animatingConnectionId: null,
@@ -426,10 +522,59 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
       }
     }, 1400);
   },
-  openCourseLessons: async (courseId) => {
+  openCourseLessons: async (courseId, bypassUnlocked = false) => {
     const courseNode = get().coursesDataset.nodes.find((n) => n.targetCourseId === courseId || n.id === courseId);
-    if (courseNode && !courseNode.isUnlocked) return;
+    if (!bypassUnlocked && courseNode && !courseNode.isUnlocked) return;
     set({ viewMode: 'lessons', selectedCourseId: courseId, isLoading: true, panOffset: { x: 0, y: 0 } });
+
+    // 1. Revisar si ya existe un dataset de lecciones registrado para este módulo
+    const customMap = get().customModuleLessonsMap;
+    if (customMap[courseId]) {
+      const dataset = customMap[courseId];
+      const activeLesson = dataset.nodes.find((n) => n.variant === 'active' || n.isUnlocked) || dataset.nodes[0];
+      set({
+        lessonsDataset: dataset,
+        activeNodeId: activeLesson ? activeLesson.id : null,
+        isLoading: false,
+      });
+      return;
+    }
+
+    // 2. Verificar si es un curso canónico conocido
+    const canonicalCourseIds = [
+      'python-1',
+      'py-basic',
+      'python-2',
+      'py-intermediate',
+      'python-3',
+      'py-advanced',
+      'fastapi-async',
+      'py-fastapi',
+      'django-enterprise',
+      'py-django',
+      'data-analytics',
+      'py-data',
+      'ai-agents',
+      'py-ia',
+      'python-apex',
+      'py-apex',
+    ];
+
+    if (!canonicalCourseIds.includes(courseId)) {
+      // Es un nuevo módulo creado por el usuario: inicializar con 1 única lección predeterminada
+      const title = courseNode?.label || 'NUEVO MODULO';
+      const singleLessonDataset = buildDefaultSingleLessonDataset(title);
+      const nextMap = { ...customMap, [courseId]: singleLessonDataset };
+      saveStoredCustomLessons(nextMap);
+      set({
+        customModuleLessonsMap: nextMap,
+        lessonsDataset: singleLessonDataset,
+        activeNodeId: singleLessonDataset.nodes[0].id,
+        isLoading: false,
+      });
+      return;
+    }
+
     const dataset = await RoadmapService.getCourseLessonsGraph(courseId);
     const storedStars = getStoredSectionStars();
     const completedLessonsSet = getStoredCompletedLessons();
@@ -509,7 +654,33 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   },
   setActiveNode: (id) => set({ activeNodeId: id }),
   setBranch: async (branchId) => {
-    const branch = CAREER_BRANCHES.find((b) => b.id === branchId) || CAREER_BRANCHES[0];
+    const canonicalBranch = CAREER_BRANCHES.find((b) => b.id === branchId);
+
+    if (!canonicalBranch) {
+      // Rama personalizada del administrador
+      const customTracks = get().customTrackDatasetsMap;
+      let dataset: GraphDataset;
+      if (customTracks[branchId]) {
+        dataset = customTracks[branchId];
+      } else {
+        dataset = buildDefaultTrackDataset(branchId);
+        const nextMap = { ...customTracks, [branchId]: dataset };
+        saveStoredCustomTracks(nextMap);
+        set({ customTrackDatasetsMap: nextMap });
+      }
+
+      set({
+        activeBranchId: branchId,
+        coursesDataset: dataset,
+        viewMode: 'courses',
+        panOffset: { x: 0, y: 0 },
+        selectedCourseId: dataset.nodes[0]?.targetCourseId || dataset.nodes[0]?.id || '',
+        activeNodeId: dataset.nodes[0]?.id || null,
+        isLoading: false,
+      });
+      return;
+    }
+
     set({
       activeBranchId: branchId,
       viewMode: 'courses',
@@ -528,17 +699,46 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
       persistProgress(coursesData);
     } catch {
       set({
-        coursesDataset: branch.dataset,
+        coursesDataset: canonicalBranch.dataset,
         selectedCourseId: 'python-1',
         activeNodeId: 'python-1',
         isLoading: false,
       });
     }
   },
+  registerTrack: (track) => {
+    const customTracks = get().customTrackDatasetsMap;
+    const existing = customTracks[track.slug];
+    if (!existing) {
+      const dataset = buildDefaultTrackDataset(track.name);
+      const nextMap = { ...customTracks, [track.slug]: dataset };
+      saveStoredCustomTracks(nextMap);
+      set({
+        customTrackDatasetsMap: nextMap,
+        activeBranchId: track.slug,
+        coursesDataset: dataset,
+        viewMode: 'courses',
+        selectedCourseId: dataset.nodes[0]?.targetCourseId || dataset.nodes[0]?.id || '',
+        activeNodeId: dataset.nodes[0]?.id || null,
+      });
+    } else {
+      set({
+        activeBranchId: track.slug,
+        coursesDataset: existing,
+        viewMode: 'courses',
+        selectedCourseId: existing.nodes[0]?.targetCourseId || existing.nodes[0]?.id || '',
+        activeNodeId: existing.nodes[0]?.id || null,
+      });
+    }
+  },
   setPanOffset: (pan) => set({ panOffset: pan }),
   hydrateProgress: async () => {
     if (typeof window === 'undefined') return;
-    set({ coursesDataset: restoreProgress(get().coursesDataset) });
+    set({
+      coursesDataset: restoreProgress(get().coursesDataset),
+      customModuleLessonsMap: getStoredCustomLessons(),
+      customTrackDatasetsMap: getStoredCustomTracks(),
+    });
     try {
       const branchId = get().activeBranchId || 'python';
       const courseId = get().selectedCourseId || 'python-1';
@@ -746,10 +946,17 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
       connections: nextCourseConns,
     };
 
-    set({
-      lessonsDataset: { ...dataset, progressPercent, nodes, connections },
-      coursesDataset: nextCoursesDataset,
-    });
+    const nextLessonsDataset = { ...dataset, progressPercent, nodes, connections };
+
+    // Sincronizar cache de lecciones personalizadas si aplica
+    const customMap = { ...get().customModuleLessonsMap };
+    if (currentCourseId && customMap[currentCourseId]) {
+      customMap[currentCourseId] = nextLessonsDataset;
+      saveStoredCustomLessons(customMap);
+      set({ lessonsDataset: nextLessonsDataset, coursesDataset: nextCoursesDataset, customModuleLessonsMap: customMap });
+    } else {
+      set({ lessonsDataset: nextLessonsDataset, coursesDataset: nextCoursesDataset });
+    }
     persistProgress(nextCoursesDataset);
   },
   setZoomLevel: (zoom) =>
@@ -760,4 +967,125 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
   zoomOut: () => set((s) => ({ zoomLevel: Math.max(50, s.zoomLevel - 15) })),
   resetZoom: () => set({ zoomLevel: 100, panOffset: { x: 0, y: 0 } }),
   getCurrentDataset: () => (get().viewMode === 'courses' ? get().coursesDataset : get().lessonsDataset),
+  insertModuleNode: (nodeData, targetIndex) => {
+    const ds = get().coursesDataset;
+    const nodes = [...ds.nodes];
+    const newId = nodeData.id || `module-${Date.now()}`;
+    const targetCourseId = nodeData.targetCourseId || newId;
+    const insertIdx = targetIndex !== undefined ? Math.max(0, Math.min(nodes.length, targetIndex)) : nodes.length;
+
+    const newNode: GraphNode = {
+      id: newId,
+      code: String(insertIdx + 1).padStart(2, '0'),
+      label: nodeData.label || 'NUEVO MODULO',
+      subtitle: nodeData.subtitle || 'OBJETIVO PEDAGOGICO',
+      x: 0,
+      y: 310,
+      variant: 'unlocked',
+      iconType: 'brackets',
+      stars: 0,
+      maxStars: 30,
+      xp: nodeData.xp || 300,
+      statusText: 'DISPONIBLE • ADMIN',
+      targetCourseId,
+      isUnlocked: true,
+      ...nodeData,
+    };
+
+    nodes.splice(insertIdx, 0, newNode);
+
+    // Re-espaciar posiciones x armónicamente
+    const startX = 120;
+    const endX = Math.max(900, nodes.length * 180);
+    const stepX = (endX - startX) / (Math.max(1, nodes.length - 1));
+    nodes.forEach((n, idx) => {
+      n.x = Math.round(startX + idx * stepX);
+      n.code = String(idx + 1).padStart(2, '0');
+    });
+
+    // Reconstruir conexiones lineales secuenciales
+    const connections: GraphConnection[] = [];
+    for (let i = 0; i < nodes.length - 1; i++) {
+      const n1 = nodes[i];
+      const n2 = nodes[i + 1];
+      const midX = Math.round((n1.x + n2.x) / 2);
+      connections.push({
+        id: `conn-${n1.id}-${n2.id}`,
+        fromId: n1.id,
+        toId: n2.id,
+        color: '#38BDF8',
+        path: `M ${n1.x} ${n1.y} C ${midX} ${n1.y}, ${midX} ${n2.y}, ${n2.x} ${n2.y}`,
+      });
+    }
+
+    // Inicializar para este módulo un dataset con únicamente 1 lección inicial predeterminada
+    const singleLessonDataset = buildDefaultSingleLessonDataset(newNode.label);
+    const customMap = { ...get().customModuleLessonsMap, [targetCourseId]: singleLessonDataset };
+    saveStoredCustomLessons(customMap);
+
+    const nextDataset = { ...ds, nodes, connections };
+    set({ coursesDataset: nextDataset, customModuleLessonsMap: customMap });
+  },
+  insertSectionNode: (nodeData, targetIndex) => {
+    const ds = get().lessonsDataset;
+    const nodes = [...ds.nodes];
+    const newId = nodeData.id || `les-${Date.now()}`;
+    const insertIdx = targetIndex !== undefined ? Math.max(0, Math.min(nodes.length, targetIndex)) : nodes.length;
+
+    const newNode: GraphNode = {
+      id: newId,
+      code: String(insertIdx + 1).padStart(2, '0'),
+      label: nodeData.label || 'NUEVA SECCION',
+      subtitle: nodeData.subtitle || 'COMPETENCIA CLAVE',
+      x: 0,
+      y: 310,
+      variant: 'unlocked',
+      iconType: 'code',
+      stars: 0,
+      maxStars: 3,
+      xp: nodeData.xp || 50,
+      statusText: 'DISPONIBLE • ADMIN',
+      isUnlocked: true,
+      ...nodeData,
+    };
+
+    nodes.splice(insertIdx, 0, newNode);
+
+    // Re-espaciar y alternar altura suavemente (230 / 390 / 310)
+    const startX = 110;
+    const endX = Math.max(900, nodes.length * 160);
+    const stepX = (endX - startX) / (Math.max(1, nodes.length - 1));
+    nodes.forEach((n, idx) => {
+      n.x = Math.round(startX + idx * stepX);
+      n.code = String(idx + 1).padStart(2, '0');
+      if (idx === 0 || idx === nodes.length - 1) {
+        n.y = 310;
+      } else {
+        n.y = idx % 2 === 1 ? 230 : 390;
+      }
+    });
+
+    const connections: GraphConnection[] = [];
+    for (let i = 0; i < nodes.length - 1; i++) {
+      const n1 = nodes[i];
+      const n2 = nodes[i + 1];
+      const midX = Math.round((n1.x + n2.x) / 2);
+      connections.push({
+        id: `conn-${n1.id}-${n2.id}`,
+        fromId: n1.id,
+        toId: n2.id,
+        color: '#38BDF8',
+        path: `M ${n1.x} ${n1.y} C ${midX} ${n1.y}, ${midX} ${n2.y}, ${n2.x} ${n2.y}`,
+      });
+    }
+
+    const nextDataset = { ...ds, nodes, connections };
+    const currentCourseId = get().selectedCourseId;
+    const customMap = { ...get().customModuleLessonsMap };
+    if (currentCourseId) {
+      customMap[currentCourseId] = nextDataset;
+      saveStoredCustomLessons(customMap);
+    }
+    set({ lessonsDataset: nextDataset, customModuleLessonsMap: customMap });
+  },
 }));
