@@ -1,5 +1,4 @@
 import { GraphDataset } from '@/models/roadmap/roadmap-graph.types';
-import { PYTHON_COURSES_DATASET } from '@/models/roadmap/tracks/python-track.mock';
 import { PYTHON_BASIC_LESSONS_DATASET, getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
 import { CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 import { useAuthStore } from '@/stores/auth.store';
@@ -126,11 +125,6 @@ export const COURSE_MAX_STARS_MAP: Record<string, number> = {
 export class RoadmapService {
   public static async getCoursesGraph(langSlug: string): Promise<GraphDataset> {
     const fallbackBranch = CAREER_BRANCHES.find((b) => b.id === langSlug) ?? CAREER_BRANCHES[0];
-    const defaultDataset =
-      fallbackBranch?.dataset && fallbackBranch.dataset.nodes.length > 0
-        ? fallbackBranch.dataset
-        : PYTHON_COURSES_DATASET;
-
     try {
       const data = await fetchWithFallback<{ dataset?: GraphDataset }>(`/roadmap/${langSlug}/courses`);
       if (data?.dataset && Array.isArray(data.dataset.nodes) && data.dataset.nodes.length > 0) {
@@ -147,9 +141,9 @@ export class RoadmapService {
         };
         return sanitizeGraphDataset(calibrated);
       }
-      return sanitizeGraphDataset(defaultDataset);
+      return sanitizeGraphDataset(fallbackBranch.dataset);
     } catch {
-      return sanitizeGraphDataset(defaultDataset);
+      return sanitizeGraphDataset(fallbackBranch.dataset);
     }
   }
 

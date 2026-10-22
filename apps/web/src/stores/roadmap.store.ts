@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { GraphViewMode, GraphDataset, NodeVariant, GraphNode, GraphConnection } from '@/models/roadmap/roadmap-graph.types';
 import { PYTHON_BASIC_LESSONS_DATASET, getLessonsDatasetForCourse } from '@/models/roadmap/python-lessons-graph.mock';
-import { PYTHON_COURSES_DATASET } from '@/models/roadmap/tracks/python-track.mock';
 import { CareerBranchId, CAREER_BRANCHES } from '@/models/roadmap/tracks/track-catalog';
 import { RoadmapService, COURSE_MAX_STARS_MAP, getDynamicMaxStarsForCourse } from '@/services/roadmap/roadmap.service';
 import {
@@ -95,10 +94,12 @@ function markCompletedLesson(lessonId: string) {
   } catch {}
 }
 
-const INITIAL_COURSES_DATASET: GraphDataset =
-  CAREER_BRANCHES[0]?.dataset && CAREER_BRANCHES[0].dataset.nodes.length > 0
-    ? CAREER_BRANCHES[0].dataset
-    : PYTHON_COURSES_DATASET;
+const INITIAL_COURSES_DATASET: GraphDataset = CAREER_BRANCHES[0]?.dataset ?? {
+  sectorTitle: 'PYTHON SPECIALIST: DE FUNDAMENTOS A AGENTES AUTÓNOMOS',
+  progressPercent: 0,
+  nodes: [],
+  connections: [],
+};
 
 function persistProgress(dataset: GraphDataset) {
   if (typeof window === 'undefined') return;
