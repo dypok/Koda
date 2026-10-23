@@ -17,13 +17,7 @@ import { KodaLoadingScreen } from '@/components/ui/koda-loading-screen';
  *   Sirve exclusivamente la Landing Page de Koda sin bloqueos ni secuestro de sesion.
  */
 export default function HomePage() {
-  const [isRedirectingOAuth, setIsRedirectingOAuth] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const hash = window.location.hash;
-      return Boolean(hash && (hash.includes('access_token=') || hash.includes('error=')));
-    }
-    return false;
-  });
+  const [isRedirectingOAuth, setIsRedirectingOAuth] = useState(false);
 
   const isExplicitLanding = typeof window !== 'undefined' && window.location.search.includes('landing=true');
   const isApp = typeof window !== 'undefined' ? isAppHost(window.location.host) : false;

@@ -23,7 +23,6 @@ import {
   Lightning,
   ArrowsClockwise,
   Shield,
-  Target,
   WarningCircle,
   Sparkle,
 } from '@phosphor-icons/react';
@@ -33,7 +32,7 @@ import { useLessonEngine } from './useLessonEngine';
 import { useLessonKeyboardShortcuts } from '@/hooks/useLessonKeyboardShortcuts';
 import { InteractiveCodeConsole } from '@/components/lesson/InteractiveCodeConsole';
 import { StarRatingDisplay, calculateStarsFromAccuracy } from '@/components/lesson/StarRatingDisplay';
-import { useRoadmapStore } from '@/stores/roadmap.store';
+import { useRoadmapStore, getStoredCompletedLessons, markCompletedLesson } from '@/stores/roadmap.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { useAdminCurriculumStore } from '@/stores/admin-curriculum.store';
 import { LessonInSituInspectorModal, EditableBlockType, EditableLessonData } from '@/components/admin/LessonInSituInspectorModal';
@@ -373,14 +372,13 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   }, []);
 
   // Registro atomico de lecciones completadas
-  const [completedLessons, setCompletedLessons] = useState<Set<string>>(() => {
-    try {
-      const saved = window.localStorage.getItem('koda_completed_lessons');
-      return saved ? new Set(JSON.parse(saved)) : new Set();
-    } catch {
-      return new Set();
-    }
-  });
+  const [completedLessons, setCompletedLessons] = useState<Set<string>>(() => new Set());
+
+  // Cargar lecciones completadas aisladas por usuario tras la hidratación
+  useEffect(() => {
+    const currentUserId = useAuthStore.getState().user?.id;
+    setCompletedLessons(getStoredCompletedLessons(currentUserId));
+  }, []);
 
   const completedLessonsRef = useRef(completedLessons);
   useEffect(() => {
@@ -394,6 +392,12 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       // Si la lección ya fue registrada como completada, evitar re-renders en bucle
       if (completedLessonsRef.current.has(lessonId)) return;
 
+      const currentUserId = useAuthStore.getState().user?.id;
+      markCompletedLesson(lessonId, currentUserId);
+      if (sectionRef) {
+        markCompletedLesson(sectionRef, currentUserId);
+      }
+
       setCompletedLessons((prev) => {
         const next = new Set(prev);
         next.add(lessonId);
@@ -401,9 +405,6 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
           next.add(sectionRef);
           getSectionAliases(sectionRef).forEach((a) => next.add(a));
         }
-        try {
-          window.localStorage.setItem('koda_completed_lessons', JSON.stringify(Array.from(next)));
-        } catch {}
         return next;
       });
 
@@ -1312,12 +1313,6 @@ function LessonView({
                   <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
                     <Check className="w-3 h-3 text-emerald-400" />
                     <span>Completada</span>
-                  </div>
-                ) : null}
-                {lesson.objective ? (
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-mono font-medium text-cyan-300 truncate max-w-full">
-                    <Target className="w-3 h-3 text-cyan-400 shrink-0" aria-hidden="true" />
-                    <span className="truncate">{lesson.objective}</span>
                   </div>
                 ) : null}
               </div>

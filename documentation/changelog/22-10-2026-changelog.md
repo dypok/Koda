@@ -11,3 +11,5 @@
   - Soporte de cookies seguras HttpOnly para refresco de sesiones anti-robo de tokens.
   - Blindaje anti-IDOR en NotebookResolver vinculando la identidad únicamente al token JWT verificado.
   - Creación de scripts/security-audit.js para prevención y escaneo de secretos y llaves privadas en el repositorio.
+- [Thursday]-[22/10/2026]-[19:20]-[Dylan Gamero] : Fix cross-account roadmap progress contamination via scoped localStorage keys and eliminate SSR hydration mismatch in login/register flows.
+- [Thursday]-[22/10/2026]-[19:31]-[Dylan Gamero] : Remove verbose pedagogical objective badge in LessonWorkspace theory header to eliminate visual clutter and text truncation.

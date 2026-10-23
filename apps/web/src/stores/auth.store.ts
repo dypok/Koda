@@ -200,6 +200,18 @@ export const useAuthStore = create<AuthState>((set, get) => ({
 
     const finalRefresh = refreshToken || (typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN) : null);
 
+    const prevUser = get().user;
+    if (prevUser && prevUser.id !== session.id) {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('koda_completed_lessons');
+        localStorage.removeItem('koda_section_stars');
+        localStorage.removeItem('koda_roadmap_progress');
+        window.dispatchEvent(
+          new CustomEvent('koda:session-change', { detail: { prevUserId: prevUser.id, newUserId: session.id } })
+        );
+      }
+    }
+
     if (typeof window !== 'undefined') {
       localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
       localStorage.setItem(STORAGE_KEYS.TOKEN, accessToken);
@@ -324,6 +336,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       localStorage.removeItem(STORAGE_KEYS.TOKEN);
       localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
       localStorage.setItem(STORAGE_KEYS.HAS_LOGGED, 'true');
+      localStorage.removeItem('koda_completed_lessons');
+      localStorage.removeItem('koda_section_stars');
+      localStorage.removeItem('koda_roadmap_progress');
+      window.dispatchEvent(new CustomEvent('koda:logout'));
     }
     setSessionCookie(false);
     set({ user: null, token: null, refreshToken: null, isAuthenticated: false, hasEverLoggedIn: true });
