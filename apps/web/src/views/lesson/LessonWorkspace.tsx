@@ -23,7 +23,6 @@ import {
   Lightning,
   ArrowsClockwise,
   Shield,
-  Target,
   WarningCircle,
   Sparkle,
 } from '@phosphor-icons/react';
@@ -1314,12 +1313,6 @@ function LessonView({
                   <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-md bg-emerald-500/10 border border-emerald-500/30 text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">
                     <Check className="w-3 h-3 text-emerald-400" />
                     <span>Completada</span>
-                  </div>
-                ) : null}
-                {lesson.objective ? (
-                  <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-cyan-500/10 border border-cyan-500/20 text-[10px] font-mono font-medium text-cyan-300 truncate max-w-full">
-                    <Target className="w-3 h-3 text-cyan-400 shrink-0" aria-hidden="true" />
-                    <span className="truncate">{lesson.objective}</span>
                   </div>
                 ) : null}
               </div>
