@@ -26,12 +26,7 @@ import { getAppUrl } from '@/lib/domain';
 export default function RegisterPage() {
   const router = useRouter();
   const { user, token, isAuthenticated, hasHydrated, initAuth } = useAuthStore();
-  const [isOAuthProcessing, setIsOAuthProcessing] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.location.hash.includes('access_token=');
-    }
-    return false;
-  });
+  const [isOAuthProcessing, setIsOAuthProcessing] = useState(false);
   const [isCompletingAndRedirecting, setIsCompletingAndRedirecting] = useState(false);
   const [isDiagnosticModalOpen, setIsDiagnosticModalOpen] = useState(false);
   const [diagnosticResult, setDiagnosticResult] = useState<DiagnosticResultResponse | null>(null);

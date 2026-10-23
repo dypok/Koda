@@ -33,7 +33,7 @@ import { useLessonEngine } from './useLessonEngine';
 import { useLessonKeyboardShortcuts } from '@/hooks/useLessonKeyboardShortcuts';
 import { InteractiveCodeConsole } from '@/components/lesson/InteractiveCodeConsole';
 import { StarRatingDisplay, calculateStarsFromAccuracy } from '@/components/lesson/StarRatingDisplay';
-import { useRoadmapStore } from '@/stores/roadmap.store';
+import { useRoadmapStore, getStoredCompletedLessons, markCompletedLesson } from '@/stores/roadmap.store';
 import { useAuthStore } from '@/stores/auth.store';
 import { useAdminCurriculumStore } from '@/stores/admin-curriculum.store';
 import { LessonInSituInspectorModal, EditableBlockType, EditableLessonData } from '@/components/admin/LessonInSituInspectorModal';
@@ -373,14 +373,13 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
   }, []);
 
   // Registro atomico de lecciones completadas
-  const [completedLessons, setCompletedLessons] = useState<Set<string>>(() => {
-    try {
-      const saved = window.localStorage.getItem('koda_completed_lessons');
-      return saved ? new Set(JSON.parse(saved)) : new Set();
-    } catch {
-      return new Set();
-    }
-  });
+  const [completedLessons, setCompletedLessons] = useState<Set<string>>(() => new Set());
+
+  // Cargar lecciones completadas aisladas por usuario tras la hidratación
+  useEffect(() => {
+    const currentUserId = useAuthStore.getState().user?.id;
+    setCompletedLessons(getStoredCompletedLessons(currentUserId));
+  }, []);
 
   const completedLessonsRef = useRef(completedLessons);
   useEffect(() => {
@@ -394,6 +393,12 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
       // Si la lección ya fue registrada como completada, evitar re-renders en bucle
       if (completedLessonsRef.current.has(lessonId)) return;
 
+      const currentUserId = useAuthStore.getState().user?.id;
+      markCompletedLesson(lessonId, currentUserId);
+      if (sectionRef) {
+        markCompletedLesson(sectionRef, currentUserId);
+      }
+
       setCompletedLessons((prev) => {
         const next = new Set(prev);
         next.add(lessonId);
@@ -401,9 +406,6 @@ export const LessonWorkspace: React.FC<LessonWorkspaceProps> = ({ courseId, sect
           next.add(sectionRef);
           getSectionAliases(sectionRef).forEach((a) => next.add(a));
         }
-        try {
-          window.localStorage.setItem('koda_completed_lessons', JSON.stringify(Array.from(next)));
-        } catch {}
         return next;
       });
 

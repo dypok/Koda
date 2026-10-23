@@ -18,12 +18,7 @@ export const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return window.location.hash.includes('access_token=');
-    }
-    return false;
-  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isResetting, setIsResetting] = useState(false);
   const [error, setError] = useState('');
   const [resetSent, setResetSent] = useState(false);

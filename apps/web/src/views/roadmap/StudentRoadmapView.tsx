@@ -45,7 +45,13 @@ export const StudentRoadmapView: React.FC = () => {
     registerTrack,
   } = useRoadmapStore();
 
+  const prevUserIdRef = React.useRef(user?.id);
+
   React.useEffect(() => {
+    if (prevUserIdRef.current !== user?.id) {
+      prevUserIdRef.current = user?.id;
+      useRoadmapStore.getState().resetProgress();
+    }
     hydrateProgress();
     if (typeof window !== 'undefined') {
       UserProfileService.getProfile()
@@ -53,6 +59,7 @@ export const StudentRoadmapView: React.FC = () => {
           if (profile) {
             const currentStoreUser = useAuthStore.getState().user;
             useAuthStore.getState().updateUserProfile({
+              role: profile.role ?? currentStoreUser?.role ?? 'user',
               totalXp: Math.max(profile.totalXp ?? 0, currentStoreUser?.totalXp ?? 0),
               streak: Math.max(profile.currentStreak ?? 0, currentStoreUser?.streak ?? 0),
               longestStreak: Math.max(profile.longestStreak ?? 0, currentStoreUser?.longestStreak ?? 0),
@@ -64,7 +71,7 @@ export const StudentRoadmapView: React.FC = () => {
         })
         .catch(() => {});
     }
-  }, [hydrateProgress]);
+  }, [user?.id, hydrateProgress]);
 
   React.useEffect(() => {
     if (typeof window !== 'undefined' && window.location.search.includes('view=lessons')) {

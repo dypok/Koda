@@ -9,19 +9,36 @@ import {
   isSectionCompletedInSet,
   sanitizeStoredStarsCache,
 } from '@/models/roadmap/section-alias.helper';
+import { useAuthStore } from '@/stores/auth.store';
 
-const PROGRESS_KEY = 'koda_roadmap_progress';
-const SECTION_STARS_KEY = 'koda_section_stars';
-const COMPLETED_LESSONS_KEY = 'koda_completed_lessons';
+export const PROGRESS_KEY = 'koda_roadmap_progress';
+export const SECTION_STARS_KEY = 'koda_section_stars';
+export const COMPLETED_LESSONS_KEY = 'koda_completed_lessons';
 
-function getStoredSectionStars(): Record<string, number> {
+export function getScopedKey(baseKey: string, explicitUserId?: string | null): string {
+  const userId = explicitUserId ?? (typeof window !== 'undefined' ? useAuthStore.getState().user?.id : null);
+  return userId ? `${baseKey}_${userId}` : `${baseKey}_guest`;
+}
+
+export function purgeLegacyUnscopedRoadmapKeys() {
+  if (typeof window === 'undefined') return;
+  try {
+    window.localStorage.removeItem(PROGRESS_KEY);
+    window.localStorage.removeItem(SECTION_STARS_KEY);
+    window.localStorage.removeItem(COMPLETED_LESSONS_KEY);
+  } catch {}
+}
+
+export function getStoredSectionStars(userId?: string | null): Record<string, number> {
   if (typeof window === 'undefined') return {};
   try {
-    const raw = window.localStorage.getItem(SECTION_STARS_KEY);
+    purgeLegacyUnscopedRoadmapKeys();
+    const key = getScopedKey(SECTION_STARS_KEY, userId);
+    const raw = window.localStorage.getItem(key);
     const parsed = raw ? JSON.parse(raw) : {};
     const sanitized = sanitizeStoredStarsCache(parsed);
     if (raw && Object.keys(parsed).length !== Object.keys(sanitized).length) {
-      window.localStorage.setItem(SECTION_STARS_KEY, JSON.stringify(sanitized));
+      window.localStorage.setItem(key, JSON.stringify(sanitized));
     }
     return sanitized;
   } catch {
@@ -29,23 +46,26 @@ function getStoredSectionStars(): Record<string, number> {
   }
 }
 
-function saveSectionStar(sectionId: string, stars: number) {
+export function saveSectionStar(sectionId: string, stars: number, userId?: string | null) {
   if (typeof window === 'undefined' || !sectionId) return;
   try {
-    const map = getStoredSectionStars();
+    const key = getScopedKey(SECTION_STARS_KEY, userId);
+    const map = getStoredSectionStars(userId);
     const aliases = getSectionAliases(sectionId);
     for (const a of aliases) {
       map[a] = Math.max(map[a] ?? 0, stars);
     }
     map[sectionId] = Math.max(map[sectionId] ?? 0, stars);
-    window.localStorage.setItem(SECTION_STARS_KEY, JSON.stringify(map));
+    window.localStorage.setItem(key, JSON.stringify(map));
   } catch {}
 }
 
-function getStoredCompletedLessons(): Set<string> {
+export function getStoredCompletedLessons(userId?: string | null): Set<string> {
   if (typeof window === 'undefined') return new Set();
   try {
-    const raw = window.localStorage.getItem(COMPLETED_LESSONS_KEY);
+    purgeLegacyUnscopedRoadmapKeys();
+    const key = getScopedKey(COMPLETED_LESSONS_KEY, userId);
+    const raw = window.localStorage.getItem(key);
     if (!raw) return new Set();
     const arr: string[] = JSON.parse(raw);
     const hasDaInitial = arr.some((k) => k === 'da-01' || k === 'da-m01' || k === 'da-02');
@@ -73,7 +93,7 @@ function getStoredCompletedLessons(): Set<string> {
       return true;
     });
     if (sanitized.length !== arr.length) {
-      window.localStorage.setItem(COMPLETED_LESSONS_KEY, JSON.stringify(sanitized));
+      window.localStorage.setItem(key, JSON.stringify(sanitized));
     }
     return new Set(sanitized);
   } catch {
@@ -81,16 +101,17 @@ function getStoredCompletedLessons(): Set<string> {
   }
 }
 
-function markCompletedLesson(lessonId: string) {
+export function markCompletedLesson(lessonId: string, userId?: string | null) {
   if (typeof window === 'undefined' || !lessonId) return;
   try {
-    const set = getStoredCompletedLessons();
+    const key = getScopedKey(COMPLETED_LESSONS_KEY, userId);
+    const set = getStoredCompletedLessons(userId);
     const aliases = getSectionAliases(lessonId);
     for (const a of aliases) {
       set.add(a);
     }
     set.add(lessonId);
-    window.localStorage.setItem(COMPLETED_LESSONS_KEY, JSON.stringify(Array.from(set)));
+    window.localStorage.setItem(key, JSON.stringify(Array.from(set)));
   } catch {}
 }
 
@@ -101,16 +122,17 @@ const INITIAL_COURSES_DATASET: GraphDataset = CAREER_BRANCHES[0]?.dataset ?? {
   connections: [],
 };
 
-function persistProgress(dataset: GraphDataset) {
+function persistProgress(dataset: GraphDataset, userId?: string | null) {
   if (typeof window === 'undefined') return;
   try {
+    const key = getScopedKey(PROGRESS_KEY, userId);
     const unlockedIds = dataset.nodes.filter((n) => n.isUnlocked).map((n) => n.id);
     const nodeStarsMap: Record<string, { stars?: number; maxStars?: number }> = {};
     dataset.nodes.forEach((n) => {
       nodeStarsMap[n.id] = { stars: n.stars, maxStars: n.maxStars };
     });
     window.localStorage.setItem(
-      PROGRESS_KEY,
+      key,
       JSON.stringify({ progressPercent: dataset.progressPercent, unlockedIds, nodeStarsMap })
     );
   } catch {
@@ -118,10 +140,12 @@ function persistProgress(dataset: GraphDataset) {
   }
 }
 
-function restoreProgress(dataset: GraphDataset): GraphDataset {
+function restoreProgress(dataset: GraphDataset, userId?: string | null): GraphDataset {
   if (typeof window === 'undefined') return dataset;
   try {
-    const raw = window.localStorage.getItem(PROGRESS_KEY);
+    purgeLegacyUnscopedRoadmapKeys();
+    const key = getScopedKey(PROGRESS_KEY, userId);
+    const raw = window.localStorage.getItem(key);
     if (!raw) return dataset;
     const saved = JSON.parse(raw) as {
       progressPercent?: number;
@@ -135,7 +159,7 @@ function restoreProgress(dataset: GraphDataset): GraphDataset {
       const cleanedMap = { ...(saved.nodeStarsMap || {}) };
       delete cleanedMap['python-core'];
       window.localStorage.setItem(
-        PROGRESS_KEY,
+        key,
         JSON.stringify({
           ...saved,
           unlockedIds: cleanedUnlockedIds,
@@ -244,6 +268,7 @@ interface RoadmapStoreState {
   setPanOffset: (pan: { x: number; y: number }) => void;
   setZoomLevel: (zoom: number | ((prev: number) => number)) => void;
   hydrateProgress: () => Promise<void> | void;
+  resetProgress: () => void;
   completeSectionNode: (nodeId: string, stars: number) => void;
   zoomIn: () => void;
   zoomOut: () => void;
@@ -732,10 +757,22 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
     }
   },
   setPanOffset: (pan) => set({ panOffset: pan }),
+  resetProgress: () => {
+    const defaultCourses = CAREER_BRANCHES[0]?.dataset ?? INITIAL_COURSES_DATASET;
+    const defaultLessons = getLessonsDatasetForCourse('python-1');
+    set({
+      coursesDataset: defaultCourses,
+      lessonsDataset: defaultLessons,
+      selectedCourseId: 'python-1',
+      activeNodeId: defaultCourses.nodes[0]?.id || 'python-1',
+      viewMode: 'courses',
+    });
+  },
   hydrateProgress: async () => {
     if (typeof window === 'undefined') return;
+    const currentUserId = useAuthStore.getState().user?.id;
     set({
-      coursesDataset: restoreProgress(get().coursesDataset),
+      coursesDataset: restoreProgress(get().coursesDataset, currentUserId),
       customModuleLessonsMap: getStoredCustomLessons(),
       customTrackDatasetsMap: getStoredCustomTracks(),
     });
@@ -747,8 +784,8 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
         RoadmapService.getCourseLessonsGraph(courseId),
       ]);
 
-      const storedStars = getStoredSectionStars();
-      const completedLessonsSet = getStoredCompletedLessons();
+      const storedStars = getStoredSectionStars(currentUserId);
+      const completedLessonsSet = getStoredCompletedLessons(currentUserId);
 
       if (lessonsData && lessonsData.nodes && lessonsData.nodes.length > 0) {
         lessonsData.nodes = lessonsData.nodes.map((l) => {
@@ -758,8 +795,8 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
           const earned = Math.min(maxStars, Math.max(l.stars ?? 0, stored > 0 ? stored : isCompleted ? maxStars : 0));
 
           if (earned > 0) {
-            saveSectionStar(l.id, earned);
-            markCompletedLesson(l.id);
+            saveSectionStar(l.id, earned, currentUserId);
+            markCompletedLesson(l.id, currentUserId);
           }
 
           return {
@@ -773,8 +810,8 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
         set({ lessonsDataset: lessonsData });
       }
 
-      const refreshedStars = getStoredSectionStars();
-      const refreshedCompletedSet = getStoredCompletedLessons();
+      const refreshedStars = getStoredSectionStars(currentUserId);
+      const refreshedCompletedSet = getStoredCompletedLessons(currentUserId);
 
       if (coursesData && coursesData.nodes && coursesData.nodes.length > 0) {
         // Garantizar eliminación de cualquier nodo residual python-core
@@ -823,15 +860,16 @@ export const useRoadmapStore = create<RoadmapStoreState>((set, get) => ({
           selectedCourseId: currentSelectedCourseId,
           activeNodeId: activeCourse ? activeCourse.id : (currentActiveId || 'python-1'),
         });
-        persistProgress(coursesData);
+        persistProgress(coursesData, currentUserId);
       }
     } catch {
       // Silencioso en caso de falla de red o modo offline
     }
   },
   completeSectionNode: (nodeId: string, stars: number) => {
-    saveSectionStar(nodeId, stars);
-    markCompletedLesson(nodeId);
+    const currentUserId = useAuthStore.getState().user?.id;
+    saveSectionStar(nodeId, stars, currentUserId);
+    markCompletedLesson(nodeId, currentUserId);
     const dataset = get().lessonsDataset;
     const aliases = getSectionAliases(nodeId);
     const norm = (id: string) =>
