@@ -26,8 +26,8 @@
   - [x] Soporte de fijación de Refresh Token en Cookie segura (`HttpOnly; Secure; SameSite=Lax; Path=/api/v1/auth`) para inmunizar contra robo por XSS en `/auth/verify-otp` y `/auth/refresh-session`.
 - [x] **Fase 4: Control de Acceso Estricto & Prevención de IDOR**
   - [x] Blindaje de `notebook.resolver.ts` y use cases: eliminación de `userId` manipulable desde el cliente y forzado de `@CurrentUser()` / `SupabaseAuthGuard` para que la identidad provenga exclusivamente del token verificado.
-- [ ] **Fase 5: Prevención de Fuga de Secretos & Auditoría CI**
-  - [ ] Auditoría de vulnerabilidades con `pnpm audit` y script para prevenir commit de secretos/llaves privadas al repositorio.
+- [x] **Fase 5: Prevención de Fuga de Secretos & Auditoría CI**
+  - [x] Creado script `scripts/security-audit.js` para detección preventiva de secretos (llaves privadas, tokens Supabase/JWT y archivos `.env`) y ejecución de auditoría de paquetes.
 
 ---
 
