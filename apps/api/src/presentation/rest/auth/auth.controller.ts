@@ -1,4 +1,5 @@
-import { Controller, Post, Get, Body, Headers, UseGuards, HttpCode, HttpStatus, UnauthorizedException } from '@nestjs/common';
+import { Controller, Post, Get, Body, Headers, Req, Res, UseGuards, HttpCode, HttpStatus, UnauthorizedException } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 import type { User as SupabaseAuthUser } from '@supabase/supabase-js';
@@ -59,12 +60,32 @@ export class AuthController {
   })
   @ApiResponse({ status: 200, description: 'Sesión renovada exitosamente.' })
   @ApiResponse({ status: 401, description: 'Sesión inválida o expirada. Por favor, inicia sesión nuevamente.' })
-  async refreshSession(@Body() dto: RefreshSessionDto) {
+  async refreshSession(
+    @Body() dto: Partial<RefreshSessionDto>,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     try {
-      const data = await this.supabaseService.refreshAuthSession(dto.refreshToken);
+      const refreshToken = dto.refreshToken || req.cookies?.['koda_refresh_token'];
+      if (!refreshToken) {
+        throw new UnauthorizedException('Sesión inválida o expirada. Por favor, inicia sesión nuevamente.');
+      }
+
+      const data = await this.supabaseService.refreshAuthSession(refreshToken);
       if (!data?.session || !data?.user) {
         throw new UnauthorizedException('Sesión inválida o expirada. Por favor, inicia sesión nuevamente.');
       }
+
+      // Fijar refresh_token en cookie HttpOnly segura (inmune a XSS)
+      const isProduction = process.env.NODE_ENV === 'production';
+      res.cookie('koda_refresh_token', data.session.refresh_token, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: 'lax',
+        path: '/api/v1/auth',
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 días
+      });
+
       const userProfile = await this.validateUserSessionUseCase.execute(data.session.access_token);
       return {
         session: userProfile,
@@ -117,8 +138,22 @@ export class AuthController {
   })
   @ApiResponse({ status: 200, description: 'Código OTP verificado correctamente.' })
   @ApiResponse({ status: 401, description: 'Código OTP inválido o expirado.' })
-  async verifyOtp(@Body() dto: VerifyOtpDto): Promise<VerifyOtpResponse> {
-    return this.verifyOtpUseCase.execute(dto);
+  async verifyOtp(
+    @Body() dto: VerifyOtpDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<VerifyOtpResponse> {
+    const result = await this.verifyOtpUseCase.execute(dto);
+    if (result?.refreshToken) {
+      const isProduction = process.env.NODE_ENV === 'production';
+      res.cookie('koda_refresh_token', result.refreshToken, {
+        httpOnly: true,
+        secure: isProduction,
+        sameSite: 'lax',
+        path: '/api/v1/auth',
+        maxAge: 30 * 24 * 60 * 60 * 1000,
+      });
+    }
+    return result;
   }
 
   @Post('onboarding')

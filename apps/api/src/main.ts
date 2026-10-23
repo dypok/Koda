@@ -3,6 +3,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { json, urlencoded } from 'express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { SecurityExceptionFilter } from './common/filters/security-exception.filter';
 import { PiiMaskingLoggerInterceptor } from './common/interceptors/pii-masking-logger.interceptor';
@@ -44,6 +45,7 @@ async function bootstrap() {
   // 1.1 Límites de tamaño de payload contra ataques de agotamiento de memoria (DoS)
   app.use(json({ limit: '100kb' }));
   app.use(urlencoded({ extended: true, limit: '100kb' }));
+  app.use(cookieParser());
 
   // 1.2 Filtro global de excepciones sin fuga de stack traces ni internals
   app.useGlobalFilters(new SecurityExceptionFilter());

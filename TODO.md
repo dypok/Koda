@@ -22,8 +22,8 @@
 - [x] **Fase 2: Frontend XSS Shield & Content Security Policy (CSP)**
   - [x] Implementar CSP estricto en cabeceras de Next.js (`apps/web/next.config.mjs`).
   - [x] Sanitización activa contra enlaces maliciosos (`javascript:`, etc.) en renderers de Markdown (`markdown-content.tsx`).
-- [ ] **Fase 3: Almacenamiento Seguro de Sesiones (Cookies HttpOnly)**
-  - [ ] Soporte de fijación de Refresh Token en Cookie segura (`HttpOnly; Secure; SameSite=Lax; Path=/api/v1/auth`) para inmunizar contra robo por XSS.
+- [x] **Fase 3: Almacenamiento Seguro de Sesiones (Cookies HttpOnly)**
+  - [x] Soporte de fijación de Refresh Token en Cookie segura (`HttpOnly; Secure; SameSite=Lax; Path=/api/v1/auth`) para inmunizar contra robo por XSS en `/auth/verify-otp` y `/auth/refresh-session`.
 - [ ] **Fase 4: Control de Acceso Estricto & Prevención de IDOR**
   - [ ] Auditoría de use cases para garantizar que el `user_id` provenga únicamente del token JWT verificado en backend y nunca de parámetros o body de la petición.
 - [ ] **Fase 5: Prevención de Fuga de Secretos & Auditoría CI**
