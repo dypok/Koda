@@ -35,6 +35,7 @@ export class AuthController {
 
   @Post('verify-session')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 15, ttl: 60000 } })
   @ApiOperation({
     summary: 'Verificar y sincronizar sesión activa',
     description: 'Valida la autenticidad del token JWT de sesión, aprovisiona la cuenta en el sistema si es necesario y entrega el perfil completo con métricas de estudio.',
@@ -51,6 +52,7 @@ export class AuthController {
 
   @Post('refresh-session')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 20, ttl: 60000 } })
   @ApiOperation({
     summary: 'Renovar sesión y tokens de acceso',
     description: 'Intercambia un refresh token válido por una nueva sesión activa con access token y refresh token actualizados.',
@@ -94,6 +96,7 @@ export class AuthController {
 
   @Post('register-otp')
   @HttpCode(HttpStatus.CREATED)
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @ApiOperation({
     summary: 'Registrar usuario tradicional con validación OTP',
     description: 'Crea el usuario en el sistema de autenticación y despacha un código OTP de 6 dígitos a su correo electrónico.',
@@ -107,6 +110,7 @@ export class AuthController {
 
   @Post('verify-otp')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
   @ApiOperation({
     summary: 'Verificar código OTP y emitir sesión',
     description: 'Valida el código numérico de 6 dígitos, aprovisiona la cuenta en el sistema y retorna la sesión con tokens.',
@@ -172,6 +176,7 @@ export class AuthController {
 
   @Post('reset-password')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @ApiOperation({
     summary: 'Restablecer contraseña con token de recuperación de un solo uso',
     description:
