@@ -1,20 +1,57 @@
 import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
+import { json, urlencoded } from 'express';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import helmet from 'helmet';
+import cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
+import { SecurityExceptionFilter } from './common/filters/security-exception.filter';
+import { PiiMaskingLoggerInterceptor } from './common/interceptors/pii-masking-logger.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // 1. Headers de seguridad HTTP con Helmet
+    // 1. Headers de seguridad HTTP con Helmet reforzado (OWASP / Zero-Leakage)
   app.use(
     helmet({
-      contentSecurityPolicy: false,
+      contentSecurityPolicy: process.env.NODE_ENV === 'production' ? {
+        directives: {
+          defaultSrc: ["'self'"],
+          scriptSrc: ["'self'"],
+          styleSrc: ["'self'", "'unsafe-inline'"],
+          imgSrc: ["'self'", 'data:', 'blob:', 'https:'],
+          connectSrc: ["'self'", 'https:', 'wss:'],
+          fontSrc: ["'self'", 'https:', 'data:'],
+          objectSrc: ["'none'"],
+          frameAncestors: ["'none'"],
+          upgradeInsecureRequests: [],
+        },
+      } : false,
+      frameguard: { action: 'deny' },
+      hidePoweredBy: true,
+      hsts: {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true,
+      },
+      noSniff: true,
+      xssFilter: true,
       crossOriginEmbedderPolicy: false,
       crossOriginResourcePolicy: { policy: 'cross-origin' },
     }),
   );
+
+  // 1.1 Límites de tamaño de payload contra ataques de agotamiento de memoria (DoS)
+  app.use(json({ limit: '100kb' }));
+  app.use(urlencoded({ extended: true, limit: '100kb' }));
+  app.use(cookieParser());
+
+  // 1.2 Filtro global de excepciones sin fuga de stack traces ni internals
+  app.useGlobalFilters(new SecurityExceptionFilter());
+
+  // 1.3 Interceptor para ofuscación de PII y credenciales en logs de observabilidad
+  app.useGlobalInterceptors(new PiiMaskingLoggerInterceptor());
 
   // 2. Prefijo global para la API REST v1
   app.setGlobalPrefix('api/v1');
@@ -32,8 +69,9 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      // Permitir solicitudes sin origin (como cURL, herramientas internas o SSR)
+      // Permitir solicitudes sin origin (como cURL, SSR o herramientas internas de confianza)
       if (!origin) return callback(null, true);
+
       // Permitir cualquier subdominio en localhost o 127.0.0.1 durante desarrollo
       if (
         process.env.NODE_ENV !== 'production' &&
@@ -41,13 +79,21 @@ async function bootstrap() {
       ) {
         return callback(null, true);
       }
-      // Permitir dominios y subdominios oficiales de Koda en producción
+
+      // Permitir dominios y subdominios oficiales de Koda
       if (/^https:\/\/(?:[a-zA-Z0-9-]+\.)?(?:koda\.academy|koda\.app|koda\.com)$/.test(origin)) {
         return callback(null, true);
       }
+
       if (allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
+
+      // En producción: Bloqueo explícito de orígenes no reconocidos
+      if (isProduction) {
+        return callback(new Error('CORS access denied: origin not allowed by Koda security policy'), false);
+      }
+
       return callback(null, true);
     },
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],

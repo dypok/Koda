@@ -10,6 +10,27 @@
 
 ---
 
+## 🛡️ P1 — Ciberseguridad Integral & Hardening Transversal
+
+- [x] **Fase 1: Hardening de API, Anti-Leakage y Rate Limiting** (`feat/security-hardening`)
+  - [x] `SecurityExceptionFilter`: Supresión de stack traces, errores de BD/Prisma y paths internos en producción (`500 Internal server error`).
+  - [x] `PiiMaskingLoggerInterceptor`: Ofuscación activa de contraseñas, tokens JWT, números de documento y secretos en observabilidad y consola.
+  - [x] Throttling severo anti-fuerza bruta en `/auth/*` (5 req/min en registro y reseteo, 10 en OTP, 15 en verificación de sesión).
+  - [x] Blindaje HTTP con Helmet (HSTS preload 1 año, X-Frame-Options DENY, noSniff, xssFilter) y CORS cerrado en producción.
+  - [x] Restricción de payload a 100 KB contra DoS por memoria.
+  - [x] Desactivación automática de Swagger e Introspección GraphQL en producción.
+- [x] **Fase 2: Frontend XSS Shield & Content Security Policy (CSP)**
+  - [x] Implementar CSP estricto en cabeceras de Next.js (`apps/web/next.config.mjs`).
+  - [x] Sanitización activa contra enlaces maliciosos (`javascript:`, etc.) en renderers de Markdown (`markdown-content.tsx`).
+- [x] **Fase 3: Almacenamiento Seguro de Sesiones (Cookies HttpOnly)**
+  - [x] Soporte de fijación de Refresh Token en Cookie segura (`HttpOnly; Secure; SameSite=Lax; Path=/api/v1/auth`) para inmunizar contra robo por XSS en `/auth/verify-otp` y `/auth/refresh-session`.
+- [x] **Fase 4: Control de Acceso Estricto & Prevención de IDOR**
+  - [x] Blindaje de `notebook.resolver.ts` y use cases: eliminación de `userId` manipulable desde el cliente y forzado de `@CurrentUser()` / `SupabaseAuthGuard` para que la identidad provenga exclusivamente del token verificado.
+- [x] **Fase 5: Prevención de Fuga de Secretos & Auditoría CI**
+  - [x] Creado script `scripts/security-audit.js` para detección preventiva de secretos (llaves privadas, tokens Supabase/JWT y archivos `.env`) y ejecución de auditoría de paquetes.
+
+---
+
 ## 🗂️ P1 — Gobernanza y Jira
 
 - [ ] **Transicionar `KA-89` (EPIC-3) a `Done`** (ID de transición `4`) tras verificar compilación, tests y entrega funcional del flujo de autenticación. En Jira figura `En curso` pese a tener **4/4** hijas `Done` (AUTH-01…AUTH-04).

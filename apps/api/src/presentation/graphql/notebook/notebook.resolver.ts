@@ -1,4 +1,8 @@
-import { Resolver, Query, Mutation, Args, Context } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { UseGuards } from '@nestjs/common';
+import type { User as SupabaseAuthUser } from '@supabase/supabase-js';
+import { SupabaseAuthGuard } from '@common/guards/supabase-auth.guard';
+import { CurrentUser } from '@common/decorators/current-user.decorator';
 import { NotebookService } from '../../../modules/notebook/notebook.service';
 import {
   MistakesNotebookItemType,
@@ -11,26 +15,26 @@ export class NotebookResolver {
 
   @Query(() => [MistakesNotebookItemType], {
     name: 'mistakesNotebook',
-    description: 'Obtener lista de errores persistentes pendientes para práctica (SM-2)',
+    description: 'Obtener lista de errores persistentes pendientes para práctica (SM-2) aislados por usuario autenticado',
   })
+  @UseGuards(SupabaseAuthGuard)
   async getMistakes(
-    @Args('userId', { type: () => String, nullable: true }) userId?: string,
-    @Context() context?: any,
+    @CurrentUser() authUser: SupabaseAuthUser,
   ): Promise<MistakesNotebookItemType[]> {
-    const resolvedUserId = userId || context?.req?.user?.id || 'demo-user-id';
-    return this.notebookService.getMistakes(resolvedUserId);
+    // Blindaje anti-IDOR: el userId proviene estrictamente del JWT verificado
+    return this.notebookService.getMistakes(authUser.id);
   }
 
   @Mutation(() => ResolveMistakeResponseType, {
     name: 'resolveMistake',
-    description: 'Remediar un error del cuaderno y recibir bonificación de +5 XP (SM-2)',
+    description: 'Remediar un error del cuaderno y recibir bonificación de +5 XP (SM-2) validando la identidad del estudiante',
   })
+  @UseGuards(SupabaseAuthGuard)
   async resolveMistake(
     @Args('questionId', { type: () => String }) questionId: string,
-    @Args('userId', { type: () => String, nullable: true }) userId?: string,
-    @Context() context?: any,
+    @CurrentUser() authUser: SupabaseAuthUser,
   ): Promise<ResolveMistakeResponseType> {
-    const resolvedUserId = userId || context?.req?.user?.id || 'demo-user-id';
-    return this.notebookService.resolveMistake(resolvedUserId, questionId);
+    // Blindaje anti-IDOR: el userId proviene estrictamente del JWT verificado
+    return this.notebookService.resolveMistake(authUser.id, questionId);
   }
 }
