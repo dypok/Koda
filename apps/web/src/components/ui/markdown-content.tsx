@@ -107,18 +107,22 @@ export function renderMarkdownInline(text: string): React.ReactNode {
             {token.value}
           </em>
         );
-      case 'link':
+      case 'link': {
+        const rawUrl = (token.url || '').trim();
+        const safeUrl = /^(https?:\/\/|\/|#|mailto:)/i.test(rawUrl) ? rawUrl : '#';
+        const isExternal = safeUrl.startsWith('http');
         return (
           <a
             key={idx}
-            href={token.url}
-            target="_blank"
-            rel="noopener noreferrer"
+            href={safeUrl}
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noopener noreferrer' : undefined}
             className="text-orange-400 underline hover:text-orange-300 transition-colors"
           >
             {token.value}
           </a>
         );
+      }
       case 'text':
       default:
         return <React.Fragment key={idx}>{token.value}</React.Fragment>;

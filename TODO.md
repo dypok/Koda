@@ -10,6 +10,27 @@
 
 ---
 
+## 🛡️ P1 — Ciberseguridad Integral & Hardening Transversal
+
+- [x] **Fase 1: Hardening de API, Anti-Leakage y Rate Limiting** (`feat/security-hardening`)
+  - [x] `SecurityExceptionFilter`: Supresión de stack traces, errores de BD/Prisma y paths internos en producción (`500 Internal server error`).
+  - [x] `PiiMaskingLoggerInterceptor`: Ofuscación activa de contraseñas, tokens JWT, números de documento y secretos en observabilidad y consola.
+  - [x] Throttling severo anti-fuerza bruta en `/auth/*` (5 req/min en registro y reseteo, 10 en OTP, 15 en verificación de sesión).
+  - [x] Blindaje HTTP con Helmet (HSTS preload 1 año, X-Frame-Options DENY, noSniff, xssFilter) y CORS cerrado en producción.
+  - [x] Restricción de payload a 100 KB contra DoS por memoria.
+  - [x] Desactivación automática de Swagger e Introspección GraphQL en producción.
+- [x] **Fase 2: Frontend XSS Shield & Content Security Policy (CSP)**
+  - [x] Implementar CSP estricto en cabeceras de Next.js (`apps/web/next.config.mjs`).
+  - [x] Sanitización activa contra enlaces maliciosos (`javascript:`, etc.) en renderers de Markdown (`markdown-content.tsx`).
+- [ ] **Fase 3: Almacenamiento Seguro de Sesiones (Cookies HttpOnly)**
+  - [ ] Soporte de fijación de Refresh Token en Cookie segura (`HttpOnly; Secure; SameSite=Lax; Path=/api/v1/auth`) para inmunizar contra robo por XSS.
+- [ ] **Fase 4: Control de Acceso Estricto & Prevención de IDOR**
+  - [ ] Auditoría de use cases para garantizar que el `user_id` provenga únicamente del token JWT verificado en backend y nunca de parámetros o body de la petición.
+- [ ] **Fase 5: Prevención de Fuga de Secretos & Auditoría CI**
+  - [ ] Auditoría de vulnerabilidades con `pnpm audit` y script para prevenir commit de secretos/llaves privadas al repositorio.
+
+---
+
 ## 🗂️ P1 — Gobernanza y Jira
 
 - [ ] **Transicionar `KA-89` (EPIC-3) a `Done`** (ID de transición `4`) tras verificar compilación, tests y entrega funcional del flujo de autenticación. En Jira figura `En curso` pese a tener **4/4** hijas `Done` (AUTH-01…AUTH-04).
