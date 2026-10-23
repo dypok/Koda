@@ -24,8 +24,8 @@
   - [x] Sanitización activa contra enlaces maliciosos (`javascript:`, etc.) en renderers de Markdown (`markdown-content.tsx`).
 - [x] **Fase 3: Almacenamiento Seguro de Sesiones (Cookies HttpOnly)**
   - [x] Soporte de fijación de Refresh Token en Cookie segura (`HttpOnly; Secure; SameSite=Lax; Path=/api/v1/auth`) para inmunizar contra robo por XSS en `/auth/verify-otp` y `/auth/refresh-session`.
-- [ ] **Fase 4: Control de Acceso Estricto & Prevención de IDOR**
-  - [ ] Auditoría de use cases para garantizar que el `user_id` provenga únicamente del token JWT verificado en backend y nunca de parámetros o body de la petición.
+- [x] **Fase 4: Control de Acceso Estricto & Prevención de IDOR**
+  - [x] Blindaje de `notebook.resolver.ts` y use cases: eliminación de `userId` manipulable desde el cliente y forzado de `@CurrentUser()` / `SupabaseAuthGuard` para que la identidad provenga exclusivamente del token verificado.
 - [ ] **Fase 5: Prevención de Fuga de Secretos & Auditoría CI**
   - [ ] Auditoría de vulnerabilidades con `pnpm audit` y script para prevenir commit de secretos/llaves privadas al repositorio.
 
