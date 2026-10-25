@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Gear,
@@ -10,9 +11,11 @@ import {
   SignOut,
   CaretRight,
   ShieldCheck,
+  BookOpen,
 } from '@phosphor-icons/react';
 import type { AuthUser } from '@/stores/auth.store';
 import { useAppearanceStore, ACCENT_PALETTES } from '@/stores/appearance.store';
+import { useNotebookStore } from '@/stores/notebook.store';
 import type { SettingsTab } from './ProfileSettingsModal';
 
 interface ProfileDropdownMenuProps {
@@ -30,10 +33,19 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
   onOpenSettings,
   onLogout,
 }) => {
+  const router = useRouter();
   const menuRef = useRef<HTMLDivElement>(null);
   const { accentTheme } = useAppearanceStore();
+  const { mistakes, fetchMistakes } = useNotebookStore();
+  const pendingErrorsCount = mistakes.filter((m) => !m.is_resolved).length;
   const palette = ACCENT_PALETTES[accentTheme] || ACCENT_PALETTES.amber;
   const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchMistakes();
+    }
+  }, [user?.id, fetchMistakes]);
 
   const rawAvatar = user?.avatarUrl;
   const avatarSrc = (!rawAvatar || rawAvatar.includes('koda-mascot-cartoon-2d'))
@@ -159,6 +171,28 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
                 <span>Fondo y Temas</span>
               </div>
               <CaretRight className="h-3 w-3 text-slate-500 group-hover:text-amber-300 transition-colors" />
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                router.push('/app/cuaderno');
+              }}
+              className="group flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-medium text-slate-200 transition-colors hover:bg-amber-500/15 hover:text-amber-300 cursor-pointer"
+            >
+              <div className="flex items-center gap-2.5">
+                <BookOpen className="h-4 w-4 text-slate-400 group-hover:text-amber-300 transition-colors" />
+                <span>Cuaderno de Errores</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                {pendingErrorsCount > 0 ? (
+                  <span className="inline-flex items-center justify-center px-1.5 py-0.5 rounded-full bg-rose-500/20 text-rose-300 font-mono text-[10px] font-bold">
+                    {pendingErrorsCount}
+                  </span>
+                ) : null}
+                <CaretRight className="h-3 w-3 text-slate-500 group-hover:text-amber-300 transition-colors" />
+              </div>
             </button>
 
             <button

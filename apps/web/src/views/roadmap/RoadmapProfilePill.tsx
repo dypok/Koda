@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { CaretDown } from '@phosphor-icons/react';
+import { CaretDown, BookOpen } from '@phosphor-icons/react';
 import { useAuthStore } from '@/stores/auth.store';
 import { useAppearanceStore, ACCENT_PALETTES } from '@/stores/appearance.store';
+import { useNotebookStore } from '@/stores/notebook.store';
 import { ProfileDropdownMenu } from '@/components/profile/ProfileDropdownMenu';
 import { ProfileSettingsModal, SettingsTab } from '@/components/profile/ProfileSettingsModal';
 
@@ -23,8 +25,15 @@ export const RoadmapProfilePill: React.FC = () => {
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [settingsTab, setSettingsTab] = useState<SettingsTab>('profile');
   const [imgError, setImgError] = useState(false);
-
   const containerRef = useRef<HTMLDivElement>(null);
+  const { mistakes, fetchMistakes } = useNotebookStore();
+  const pendingCount = mistakes.filter((m) => !m.is_resolved).length;
+
+  useEffect(() => {
+    if (user?.id) {
+      fetchMistakes();
+    }
+  }, [user?.id, fetchMistakes]);
 
   const rawAvatar = user?.avatarUrl;
   const avatarSrc = (!rawAvatar || rawAvatar.includes('koda-mascot-cartoon-2d'))
@@ -82,7 +91,24 @@ export const RoadmapProfilePill: React.FC = () => {
 
   return (
     <>
-      <div ref={containerRef} className="absolute right-2 sm:right-4 top-2 sm:top-4 z-40">
+      <div ref={containerRef} className="absolute right-2 sm:right-4 top-2 sm:top-4 z-40 flex items-center gap-2">
+        {/* Acceso Directo al Cuaderno de Errores */}
+        <Link
+          href="/cuaderno"
+          className="group flex items-center gap-1.5 rounded-full border border-slate-700/60 bg-slate-900/60 py-1.5 px-3 backdrop-blur-xl shadow-xl transition-all hover:border-amber-500/50 hover:bg-slate-800/80 cursor-pointer"
+          title="Abrir Cuaderno de Errores (SM-2)"
+        >
+          <BookOpen className="w-4 h-4 text-slate-400 group-hover:text-amber-300 transition-colors" />
+          <span className="hidden sm:inline font-mono text-[11px] font-bold text-slate-300 group-hover:text-amber-300 transition-colors">
+            Cuaderno
+          </span>
+          {pendingCount > 0 ? (
+            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500/20 border border-rose-500/30 text-rose-300 font-mono text-[10px] font-black animate-pulse">
+              {pendingCount}
+            </span>
+          ) : null}
+        </Link>
+
         {/* Trigger de la Píldora de Perfil */}
         <button
           type="button"
