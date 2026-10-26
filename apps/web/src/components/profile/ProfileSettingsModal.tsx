@@ -17,8 +17,12 @@ import {
   ArrowsClockwise,
   UploadSimple,
   ShieldCheck,
+  Medal,
+  ArrowRight,
 } from '@phosphor-icons/react';
+import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth.store';
+import { useAchievementStore } from '@/stores/achievement.store';
 import {
   useAppearanceStore,
   BackgroundPreset,
@@ -48,6 +52,9 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
   initialTab = 'profile',
 }) => {
   const { user, token, updateUserProfile } = useAuthStore();
+  const router = useRouter();
+  const achievementStats = useAchievementStore((s) => s.stats);
+  const fetchAchievements = useAchievementStore((s) => s.fetchAchievements);
   const {
     backgroundPreset,
     starDensity,
@@ -140,8 +147,9 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
     if (isOpen) {
       setActiveTab(initialTab);
       void fetchProfile();
+      void fetchAchievements();
     }
-  }, [isOpen, initialTab, fetchProfile]);
+  }, [isOpen, initialTab, fetchProfile, fetchAchievements]);
 
   // Guardar datos generales de perfil
   const handleSaveGeneral = async (e: React.FormEvent) => {
@@ -957,6 +965,34 @@ export const ProfileSettingsModal: React.FC<ProfileSettingsModalProps> = ({
                   </div>
                   <p className="text-[10px] text-slate-400 mt-1">Ruta sincronizada</p>
                 </div>
+              </div>
+
+              {/* Banner de Vitrina de Logros */}
+              <div className="rounded-2xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 via-slate-900/60 to-orange-500/10 p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40">
+                    <Medal className="h-5 w-5" weight="fill" />
+                  </div>
+                  <div>
+                    <h4 className="text-sm font-bold text-slate-100">Vitrina de Logros y Medallas</h4>
+                    <p className="text-xs text-slate-400">
+                      {achievementStats
+                        ? `${achievementStats.unlocked_count} de ${achievementStats.total} medallas desbloqueadas (+${achievementStats.total_xp_earned} XP)`
+                        : 'Explora tus hitos pedagógicos y medallas de honor'}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    router.push('/app/logros');
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 px-3.5 py-2 text-xs font-semibold transition-colors cursor-pointer"
+                >
+                  <span>Ver vitrina completa</span>
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
               </div>
             </div>
           )}

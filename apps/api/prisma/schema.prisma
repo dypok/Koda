@@ -301,18 +301,19 @@ model XpTransaction {
 // 8. LOGROS Y CERTIFICADOS
 // ------------------------------------------------------------------------------
 model Achievement {
-  id          String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  code        String            @unique @db.VarChar(50)
-  title       String            @db.VarChar(100)
-  description String            @db.Text
-  category    String            @db.VarChar(30)
-  xpReward    Int               @default(50) @map("xp_reward")
-  iconUrl     String?           @map("icon_url") @db.VarChar(512)
-  rarity      String            @default("common") @db.VarChar(20)
-  isActive    Boolean           @default(true) @map("is_active")
-  createdAt   DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
+  id             String            @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code           String            @unique @db.VarChar(50)
+  title          String            @db.VarChar(100)
+  description    String            @db.Text
+  iconName       String?           @map("icon_name") @db.VarChar(50)
+  xpReward       Int               @default(50) @map("xp_reward")
+  category       String            @db.VarChar(30)
+  conditionType  String?           @map("condition_type") @db.VarChar(50)
+  conditionValue Int?              @map("condition_value")
+  isActive       Boolean           @default(true) @map("is_active")
+  createdAt      DateTime          @default(now()) @map("created_at") @db.Timestamptz(6)
 
-  users       UserAchievement[]
+  users          UserAchievement[]
 
   @@map("achievements")
 }
@@ -322,7 +323,8 @@ model UserAchievement {
   userId        String      @map("user_id") @db.Uuid
   achievementId String      @map("achievement_id") @db.Uuid
   unlockedAt    DateTime    @default(now()) @map("unlocked_at") @db.Timestamptz(6)
-  notifySeen    Boolean     @default(false) @map("notify_seen")
+  metadata      Json?
+  createdAt     DateTime    @default(now()) @map("created_at") @db.Timestamptz(6)
 
   user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)

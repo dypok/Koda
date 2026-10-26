@@ -2,6 +2,7 @@ import React from 'react';
 import type { Metadata, Viewport } from 'next';
 import { Rajdhani, Inter, Fira_Code, JetBrains_Mono } from 'next/font/google';
 import { siteViewport, siteMetadata } from '@/models/landing/site-metadata.model';
+import { AchievementToast } from '@/components/gamification/AchievementToast';
 import './globals.css';
 
 const inter = Inter({
@@ -45,6 +46,7 @@ export default function RootLayout({
     >
       <body className="font-sans bg-slate-950 text-slate-100 min-h-screen antialiased overflow-x-hidden selection:bg-amber-500/30 selection:text-amber-200">
         {children}
+        <AchievementToast />
       </body>
     </html>
   );

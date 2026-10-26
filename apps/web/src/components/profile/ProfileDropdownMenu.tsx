@@ -12,6 +12,7 @@ import {
   CaretRight,
   ShieldCheck,
   BookOpen,
+  Medal,
 } from '@phosphor-icons/react';
 import type { AuthUser } from '@/stores/auth.store';
 import { useAppearanceStore, ACCENT_PALETTES } from '@/stores/appearance.store';
@@ -193,6 +194,21 @@ export const ProfileDropdownMenu: React.FC<ProfileDropdownMenuProps> = ({
                 ) : null}
                 <CaretRight className="h-3 w-3 text-slate-500 group-hover:text-amber-300 transition-colors" />
               </div>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                router.push('/app/logros');
+              }}
+              className="group flex w-full items-center justify-between rounded-xl px-3 py-2 text-xs font-medium text-slate-200 transition-colors hover:bg-amber-500/15 hover:text-amber-300 cursor-pointer"
+            >
+              <div className="flex items-center gap-2.5">
+                <Medal className="h-4 w-4 text-slate-400 group-hover:text-amber-300 transition-colors" />
+                <span>Logros y Medallas</span>
+              </div>
+              <CaretRight className="h-3 w-3 text-slate-500 group-hover:text-amber-300 transition-colors" />
             </button>
 
             <button
