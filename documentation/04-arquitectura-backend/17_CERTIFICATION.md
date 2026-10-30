@@ -273,7 +273,7 @@ stateDiagram-v2
 | Origen | Evento | Guarda | Destino | Efecto colateral |
 |---|---|---|---|---|
 | `NO_ELEGIBLE` | `cumplir C-01..C-04` | `∀ módulo APROBADO + email verificado` | `ELEGIBLE` | CTA "Generar certificado" habilitado |
-| `ELEGIBLE` | `issue` | `Idempotency-Key` único + `certificate_sequences` lock | `VALIDO` | `code` asignado, `issued_at=now()`, `language_content_version` congelada, `qr_payload` y `google_drive_file_id` generados |
+| `ELEGIBLE` | `issue` | `Idempotency-Key` único + `certificate_sequences` lock | `VALIDO` | `code` asignado, `issued_at=now()`, `language_content_version` congelada, `qr_payload` y `storage_path` generados |
 | `VALIDO` | `revoke` | Solo `admin` (`RF-ADM-007`), motivo obligatorio, auditado (`RF-ADM-008`) | `REVOCADO` | `revoked_at=now()`, PDF marcado, verificación responde REVOCADO |
 | `VALIDO` | `content_major_bump` | `languages.content_version` incrementa por cambio significativo (ver §9.4) | `OBSOLETO` | `revoked_at=now()`, se notifica al titular, CTA revalidación |
 | `OBSOLETO` | `revalidate` | Usuario aprueba exámenes delta del nuevo contenido | `EMITIENDO→VALIDO` | Nuevo `code` con siguiente `SEQ`, `language_content_version` nueva, anterior permanece `obsolete` |
@@ -286,7 +286,7 @@ stateDiagram-v2
 
 ---
 
-## 10. Generación de PDF y Almacenamiento en Google Drive
+## 10. Generación de PDF y Almacenamiento en Supabase Storage CDN
 
 ### 10.1 Pipeline 100% Backend (NestJS CertificationModule, RF-PDF-001–004)
 
@@ -301,17 +301,17 @@ Por motivos de seguridad e integridad criptográfica, **el frontend NUNCA genera
                                              ▼
                            ┌───────────────────────────────────┐
                            │ ¿Ya existe certificado 'valid'    │
-                           │ con google_drive_file_id en BD?   │
+                           │ con storage_path en BD?   │
                            └─────────────────┬─────────────────┘
                                              │
                        ┌─────────────────────┴─────────────────────┐
                        ▼ SÍ (Caché / Pre-existente)                ▼ NO (Primera emisión)
        ┌───────────────────────────────────────┐   ┌───────────────────────────────────────┐
-       │ 1. Descargar stream de Google Drive   │   │ 1. Validar C-01..C-07 en Supabase     │
+       │ 1. Descargar stream de Supabase Storage CDN   │   │ 1. Validar C-01..C-07 en Supabase     │
        │    (drive.files.get alt='media')      │           │ 2. Reservar SEQ atómico (KODA-PY-000001)
        │ 2. Pipe directo a HTTP Response       │   │ 3. Renderizar PDF + QR en Node.js     │
-       │    (Descarga inmediata en <200 ms)    │   │ 4. Subir a Google Drive (Service Acc) │
-       └───────────────────────────────────────┘   │ 5. Guardar google_drive_file_id y SHA │
+       │    (Descarga inmediata en <200 ms)    │   │ 4. Subir a Supabase Storage CDN (Service Acc) │
+       └───────────────────────────────────────┘   │ 5. Guardar storage_path y SHA │
                                                    │ 6. Pipe del binario a HTTP Response   │
                                                    └───────────────────────────────────────┘
 ```
@@ -320,19 +320,19 @@ Por motivos de seguridad e integridad criptográfica, **el frontend NUNCA genera
 
 1. **Detección Previa de PDF:** Antes de renderizar cualquier PDF, el servicio `CertificationService` consulta en Supabase:
    ```sql
-   SELECT id, code, google_drive_file_id, status 
+   SELECT id, code, storage_path, status 
    FROM certificates 
    WHERE id = $1 AND user_id = $2 AND status = 'valid';
    ```
-2. **Reutilización Inmediata:** Si el registro ya posee un `google_drive_file_id` válido, se omite por completo el proceso de renderizado con `@react-pdf/renderer` o `pdfkit` y la llamada de subida a Drive. El backend únicamente solicita el stream de lectura a Google Drive API v3 y lo transmite al cliente.
-3. **Ahorro de Recursos:** Garantiza 0 duplicados de archivos en Google Drive y latencia de respuesta mínima ($< 200\text{ ms}$).
+2. **Reutilización Inmediata:** Si el registro ya posee un `storage_path` válido, se omite por completo el proceso de renderizado con `@react-pdf/renderer` o `pdfkit` y la llamada de subida a Drive. El backend únicamente solicita el stream de lectura a Supabase Storage / MinIO (ADR-003) y lo transmite al cliente.
+3. **Ahorro de Recursos:** Garantiza 0 duplicados de archivos en Supabase Storage CDN y latencia de respuesta mínima ($< 200\text{ ms}$).
 
-### 10.3 Integración con Google Drive API v3 (Service Account)
+### 10.3 Integración con Supabase Storage / MinIO (ADR-003) (Service Account)
 
 - **Autenticación del Servidor:** Se utiliza una Cuenta de Servicio (*Google Cloud Service Account*) con permisos limitados sobre una carpeta raíz designada (`GOOGLE_DRIVE_ROOT_FOLDER_ID`).
 - **Estructura de Carpetas:**
   ```
-  Google Drive: Koda_Certificados/
+  Supabase Storage CDN: Koda_Certificados/
   ├── python/
   │   ├── KODA-PY-000001_v1.pdf
   │   └── KODA-PY-000002_v1.pdf
@@ -340,8 +340,8 @@ Por motivos de seguridad e integridad criptográfica, **el frontend NUNCA genera
       ├── KODA-PY-000001_v1.pdf
       └── KODA-PY-000002_v1.pdf
   ```
-- **Metadatos en Supabase:** Se almacena `google_drive_file_id`, el hash `pdf_sha256` y `storage_provider = 'google_drive'`.
-- **Descarga Autenticada:** El endpoint `GET /api/v1/certificates/{id}/pdf` exige `Authorization: Bearer <token>` y valida que `user_id == req.user.id` (salvo administradores). No se expone ningún enlace público de Google Drive al cliente.
+- **Metadatos en Supabase:** Se almacena `storage_path`, el hash `pdf_sha256` y `storage_provider = 'google_drive'`.
+- **Descarga Autenticada:** El endpoint `GET /api/v1/certificates/{id}/pdf` exige `Authorization: Bearer <token>` y valida que `user_id == req.user.id` (salvo administradores). No se expone ningún enlace público de Supabase Storage CDN al cliente.
 
 ### 10.4 Contenido del PDF
 
@@ -489,7 +489,7 @@ Un QR que no resuelve a un `code` con regex `^KODA-[A-Z0-9_]+-[0-9]{6}$` se rech
 | QR verificable solo por plataforma | QR contiene URL de la plataforma; cualquier copia del PDF sin registro en BD responde `CERT_NOT_FOUND` al verificar | `05` RF-CERT-004/006 |
 | Inmutabilidad de intentos | `attempts` inmutable tras `graded` (`12` §6.12); no se puede fabricar un examen aprobado editando historial | `06` RNF-033–035 |
 | Versionado y auditoría | `certificates.language_content_version`, `pdf_version`, `issued_at`, `revoked_at`, `audit_log` con quién/qué/cuándo (`05` RF-ADM-008) | `12` §6.17, `05` RF-ADM-008 |
-| Storage no enumerable | `google_drive_file_id` no adivinable sin `code`; enlace firmado de Drive con TTL; descarga exige ser titular | `05` RF-PDF-002/004 |
+| Storage no enumerable | `storage_path` no adivinable sin `code`; enlace firmado de Drive con TTL; descarga exige ser titular | `05` RF-PDF-002/004 |
 | Rate limit y no enumeración | Verificación con rate limit por IP, sin listar certificados de terceros, mensajes `404` genéricos | `06` RNF-009, `05` RF-AUTH-006 patrón |
 | Revocación visible | `revoked`/`obsolete` se muestran como no válidos en verificación; el PDF de un revocado sigue existiendo pero la verificación lo marca | `05` RF-CERT-005 |
 
@@ -527,7 +527,7 @@ Aprendizaje → Exámenes aprobados → ELEGIBLE → EMITIENDO → VALIDO
 | `POST` | `/v1/certificates:issue` | JWT (titular) | Emite si C-01..C-07; body `{ language_id }` + `Idempotency-Key` | RF-CERT-001, RNF-042 |
 | `GET` | `/v1/users/me/certificates` | JWT | Lista certificados del titular con `code, language, issued_at, status, pdf_url` | RF-PROF-005 |
 | `GET` | `/v1/certificates/{code}` | JWT (titular/admin) | Detalle completo del certificado | RF-CERT-002 |
-| `GET` | `/v1/certificates/{code}/pdf` | JWT (titular/admin) | Redirect a enlace firmado de Google Drive del PDF | RF-PDF-002 |
+| `GET` | `/v1/certificates/{code}/pdf` | JWT (titular/admin) | Redirect a enlace firmado de Supabase Storage CDN del PDF | RF-PDF-002 |
 | `GET` | `/v1/certificates/verify/{code}` | No | Verificación interna (§11.1) | RF-CERT-006 |
 | `GET` | `/verificar/{code}` | No | Página/redirect de QR (§12.2) | RF-CERT-004 |
 | `POST` | `/v1/admin/certificates/{code}:revoke` | RBAC admin | Revoca con `{ reason }` | RF-CERT-005 |
@@ -559,7 +559,7 @@ certificates (
   language_content_version INTEGER NOT NULL,
   issued_at TIMESTAMPTZ NOT NULL DEFAULT now(),
   revoked_at TIMESTAMPTZ NULL,
-  google_drive_file_id VARCHAR(512) NULL,
+  storage_path VARCHAR(512) NULL,
   pdf_version INTEGER NOT NULL DEFAULT 1,
   qr_payload VARCHAR(512) NOT NULL,
   metadata JSONB NOT NULL DEFAULT '{}',
@@ -635,7 +635,7 @@ Cambios versionados y auditados (`05` RF-ADM-005/008).
 | PDF desincronizado del registro | `RF-PDF-003` + test `sha256`; plantilla versionada |
 | Falsificación por edición de PDF | Verificación por `code`/QR contra BD es la única verdad; PDF sin registro no verifica |
 | Enumeración de certificados | Verificación sin listado, `rate limit`, `404` genérico, `holder_document_masked` |
-| Pérdida de PDFs | Storage Google Drive con copias de seguridad (`06` RNF-043); `google_drive_file_id` recuperable |
+| Pérdida de PDFs | Storage Supabase Storage CDN con copias de seguridad (`06` RNF-043); `storage_path` recuperable |
 
 ---
 
