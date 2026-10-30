@@ -29,27 +29,84 @@ services:
       timeout: 5s
       retries: 5
 
-  minio:
+  siigo:
     image: cgr.dev/chainguard/minio:latest
-    container_name: koda-minio
+    container_name: koda-siigo
     restart: unless-stopped
     command: server /data --console-address ":9001"
     ports:
       - "9000:9000"
       - "9001:9001"
     environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-koda_admin}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-koda_secret_key_2026}
+      MINIO_ROOT_USER: ${SIIGO_ACCESS_KEY:-koda_admin}
+      MINIO_ROOT_PASSWORD: ${SIIGO_SECRET_KEY:-koda_secret_key_2026}
     volumes:
-      - koda_minio_data:/data
+      - koda_siigo_data:/data
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      test: ["CMD", "mc", "ready", "local"]
       interval: 10s
       timeout: 5s
       retries: 5
 
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: koda-api
+    restart: unless-stopped
+    ports:
+      - "4000:4000"
+    environment:
+      NODE_ENV: production
+      PORT: 4000
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:Prismavent#248@db.sertfbduqivvjrmeblvh.supabase.co:5432/postgres}
+      MONGODB_URI: ${DOCKER_MONGODB_URI:-mongodb://mongo:27017/koda}
+      REDIS_URL: ${DOCKER_REDIS_URL:-redis://redis:6379}
+      JWT_SECRET: ${JWT_SECRET:-koda_dev_access_secret_key_minimum_32_characters_random}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-15m}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-koda_dev_refresh_secret_key_minimum_32_characters_random}
+      JWT_REFRESH_EXPIRES_IN: ${JWT_REFRESH_EXPIRES_IN:-7d}
+      STORAGE_DRIVER: siigo
+      SIIGO_ENDPOINT: ${DOCKER_SIIGO_ENDPOINT:-http://siigo:9000}
+      SIIGO_PORT: ${SIIGO_PORT:-9000}
+      SIIGO_ACCESS_KEY: ${SIIGO_ACCESS_KEY:-koda_admin}
+      SIIGO_SECRET_KEY: ${SIIGO_SECRET_KEY:-koda_secret_key_2026}
+      SIIGO_REGION: ${SIIGO_REGION:-us-east-1}
+      SIIGO_BUCKET_CERTIFICATES: ${SIIGO_BUCKET_CERTIFICATES:-certificates}
+      SIIGO_BUCKET_AVATARS: ${SIIGO_BUCKET_AVATARS:-avatars}
+    depends_on:
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      siigo:
+        condition: service_healthy
+
+  web:
+    build:
+      context: .
+      dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000/api/v1}
+        NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+        NEXT_PUBLIC_SUPABASE_URL: ${NEXT_PUBLIC_SUPABASE_URL:-https://sertfbduqivvjrmeblvh.supabase.co}
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlcnRmYmR1cWl2dmpybWVibHZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkzNDY3MjcsImV4cCI6MjEwNDkyMjcyN30.jC5gwZVgxqsA_VFbS6OAHOFKsmVdcpNhuH175KZ3Q3E}
+    container_name: koda-web
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOSTNAME: "0.0.0.0"
+      API_PROXY_TARGET: http://api:4000
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:4000/api/v1}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+    depends_on:
+      api:
+        condition: service_started
+
 volumes:
   koda_mongo_data:
   koda_redis_data:
-  koda_minio_data:
-
+  koda_siigo_data:

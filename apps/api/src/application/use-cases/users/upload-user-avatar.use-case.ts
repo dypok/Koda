@@ -7,6 +7,10 @@ import {
 } from '@nestjs/common';
 import { IUserRepository, USER_REPOSITORY_TOKEN } from '@domain/repositories/user.repository';
 import { SupabaseService } from '../../../database/supabase.service';
+import {
+  IObjectStorageService,
+  OBJECT_STORAGE_SERVICE_TOKEN,
+} from '../../../infrastructure/storage/object-storage.interface';
 import { UserProfileResponseDto } from '../../dto/users/user-profile-response.dto';
 
 export interface UploadedAvatarFile {
@@ -34,6 +38,8 @@ export class UploadUserAvatarUseCase {
   constructor(
     @Inject(USER_REPOSITORY_TOKEN)
     private readonly userRepository: IUserRepository,
+    @Inject(OBJECT_STORAGE_SERVICE_TOKEN)
+    private readonly objectStorageService: IObjectStorageService,
     private readonly supabaseService: SupabaseService,
   ) {}
 
@@ -59,23 +65,26 @@ export class UploadUserAvatarUseCase {
     }
 
     const fileName = `avatar-${Date.now()}.${ext}`;
-    const { path, publicUrl } = await this.supabaseService.uploadAvatar(
-      userId,
-      fileName,
-      file.buffer,
-      file.mimetype,
-    );
+    const key = `users/${userId}/${fileName}`;
+    const bucket = process.env.SIIGO_BUCKET_AVATARS || 'avatars';
+
+    const result = await this.objectStorageService.uploadFile({
+      bucket,
+      key,
+      buffer: file.buffer,
+      mimeType: file.mimetype,
+    });
 
     user.updateProfile({
-      avatarUrl: publicUrl,
-      avatarObjectKey: path,
+      avatarUrl: result.storageUrl,
+      avatarObjectKey: result.storagePath,
     });
 
     const updatedUser = await this.userRepository.update(user);
 
     try {
       await this.supabaseService.updateUserMetadata(userId, {
-        avatar_url: publicUrl,
+        avatar_url: result.storageUrl,
       });
       this.logger.log(`Avatar sincronizado en Supabase Auth para usuario ${userId}`);
     } catch (error: any) {

@@ -6,8 +6,6 @@ import { createClient, SupabaseClient } from '@supabase/supabase-js';
 export class SupabaseService {
   private readonly logger = new Logger(SupabaseService.name);
   private readonly client: SupabaseClient;
-  private readonly certificatesBucket: string;
-  private readonly avatarsBucket: string;
 
   constructor(private readonly configService: ConfigService) {
     const supabaseUrl = this.configService.get<string>('SUPABASE_URL');
@@ -28,14 +26,6 @@ export class SupabaseService {
       );
     }
 
-    this.certificatesBucket =
-      this.configService.get<string>('SUPABASE_STORAGE_CERTIFICATES_BUCKET') ||
-      'certificates';
-
-    this.avatarsBucket =
-      this.configService.get<string>('SUPABASE_STORAGE_AVATARS_BUCKET') ||
-      'avatars';
-
     this.client = createClient(supabaseUrl, supabaseKey, {
       auth: {
         persistSession: false,
@@ -48,87 +38,6 @@ export class SupabaseService {
 
   getClient(): SupabaseClient {
     return this.client;
-  }
-
-  // ---------------------------------------------------------------------------
-  // Supabase Storage Operations
-  // ---------------------------------------------------------------------------
-
-  async uploadAvatar(
-    userId: string,
-    fileName: string,
-    fileBuffer: Buffer,
-    contentType: string,
-  ): Promise<{ path: string; publicUrl: string }> {
-    const filePath = `users/${userId}/${fileName}`;
-
-    const { data, error } = await this.client.storage
-      .from(this.avatarsBucket)
-      .upload(filePath, fileBuffer, {
-        contentType,
-        upsert: true,
-      });
-
-    if (error) {
-      this.logger.error(`Error uploading avatar to Supabase Storage: ${error.message}`);
-      throw error;
-    }
-
-    const { data: publicUrlData } = this.client.storage
-      .from(this.avatarsBucket)
-      .getPublicUrl(data.path);
-
-    return {
-      path: data.path,
-      publicUrl: publicUrlData.publicUrl,
-    };
-  }
-
-  async uploadCertificate(
-    fileName: string,
-    fileBuffer: Buffer,
-    contentType = 'application/pdf',
-  ): Promise<{ path: string; publicUrl: string }> {
-    const filePath = `certificates/${fileName}`;
-
-    const { data, error } = await this.client.storage
-      .from(this.certificatesBucket)
-      .upload(filePath, fileBuffer, {
-        contentType,
-        upsert: true,
-      });
-
-    if (error) {
-      this.logger.error(`Error uploading certificate to Supabase Storage: ${error.message}`);
-      throw error;
-    }
-
-    const { data: publicUrlData } = this.client.storage
-      .from(this.certificatesBucket)
-      .getPublicUrl(data.path);
-
-    return {
-      path: data.path,
-      publicUrl: publicUrlData.publicUrl,
-    };
-  }
-
-  getCertificatePublicUrl(filePath: string): string {
-    const { data } = this.client.storage
-      .from(this.certificatesBucket)
-      .getPublicUrl(filePath);
-    return data.publicUrl;
-  }
-
-  async deleteCertificate(filePath: string): Promise<void> {
-    const { error } = await this.client.storage
-      .from(this.certificatesBucket)
-      .remove([filePath]);
-
-    if (error) {
-      this.logger.error(`Error deleting certificate: ${error.message}`);
-      throw error;
-    }
   }
 
   // ---------------------------------------------------------------------------

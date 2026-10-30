@@ -1,0 +1,43 @@
+# ==============================================================================
+# KODA PLATFORM — DOCKERIGNORE
+# Comprehensive exclusion patterns for fast, lightweight Docker build contexts
+# ==============================================================================
+
+# Dependencies
+**/node_modules
+**/.pnpm-store
+
+# Build & Runtime Outputs
+**/.next
+**/dist
+**/out
+**/.turbo
+
+# Git & Version Control
+**/.git
+**/.gitignore
+
+# Logs
+**/*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment files
+**/.env
+**/.env*.local
+**/*.env
+
+# Test & Coverage
+**/coverage
+**/.nyc_output
+**/*.spec.ts
+**/*.test.ts
+
+# Documentation & Scratch Files
+documentation
+.gemini
+.agents
+tmp
+scratch

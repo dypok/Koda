@@ -159,8 +159,8 @@ export class CertificationService {
       verificationUrl,
     });
 
-    // 5. Almacenar en MinIO / Object Storage
-    const bucket = process.env.MINIO_BUCKET_CERTIFICATES || 'certificates';
+    // 5. Almacenar en Siigo / Object Storage
+    const bucket = process.env.SIIGO_BUCKET_CERTIFICATES || process.env.MINIO_BUCKET_CERTIFICATES || 'certificates';
     const fileKey = `${verificationCode}.pdf`;
 
     const uploadResult = await this.storageService.uploadFile({
@@ -224,7 +224,7 @@ export class CertificationService {
       throw new NotFoundException(`Certificado '${idOrCode}' no encontrado.`);
     }
 
-    const bucket = process.env.MINIO_BUCKET_CERTIFICATES || 'certificates';
+    const bucket = process.env.SIIGO_BUCKET_CERTIFICATES || process.env.MINIO_BUCKET_CERTIFICATES || 'certificates';
     const fileKey = `${cert.code}.pdf`;
 
     try {

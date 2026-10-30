@@ -7,10 +7,12 @@ import {
 import { IUserRepository } from '@domain/repositories/user.repository';
 import { UserEntity } from '@domain/entities/user.entity';
 import { SupabaseService } from '../../../database/supabase.service';
+import { IObjectStorageService } from '../../../infrastructure/storage/object-storage.interface';
 
 describe('UploadUserAvatarUseCase', () => {
   let useCase: UploadUserAvatarUseCase;
   let userRepository: jest.Mocked<IUserRepository>;
+  let objectStorageService: jest.Mocked<IObjectStorageService>;
   let supabaseService: jest.Mocked<SupabaseService>;
 
   const createMockUserEntity = () =>
@@ -61,42 +63,55 @@ describe('UploadUserAvatarUseCase', () => {
       updateGamification: jest.fn(),
     };
 
+    objectStorageService = {
+      uploadFile: jest.fn(),
+      getPublicUrl: jest.fn(),
+      getFileStream: jest.fn(),
+      deleteFile: jest.fn(),
+      ensureBucketExists: jest.fn(),
+    };
+
     supabaseService = {
-      uploadAvatar: jest.fn(),
       updateUserMetadata: jest.fn(),
       verifyAuthToken: jest.fn(),
       getClient: jest.fn(),
     } as unknown as jest.Mocked<SupabaseService>;
 
-    useCase = new UploadUserAvatarUseCase(userRepository, supabaseService);
+    useCase = new UploadUserAvatarUseCase(
+      userRepository,
+      objectStorageService,
+      supabaseService,
+    );
   });
 
-  it('debe subir el avatar a Supabase Storage, actualizar PostgreSQL y sincronizar Supabase Auth', async () => {
+  it('debe subir el avatar a Siigo Storage, actualizar PostgreSQL y sincronizar Supabase Auth', async () => {
     const user = createMockUserEntity();
     userRepository.findById.mockResolvedValue(user);
     userRepository.update.mockImplementation(async (entity) => entity);
 
     const mockStorageResult = {
-      path: 'users/user-uuid-123/avatar-1700000000.png',
-      publicUrl:
-        'https://sertfbduqivvjrmeblvh.supabase.co/storage/v1/object/public/avatars/users/user-uuid-123/avatar-1700000000.png',
+      storagePath: 'avatars/users/user-uuid-123/avatar-1700000000.png',
+      storageUrl:
+        'http://localhost:9000/avatars/users/user-uuid-123/avatar-1700000000.png',
+      fileSizeBytes: validFile.size,
+      sha256Hash: 'dummyhash',
     };
-    supabaseService.uploadAvatar.mockResolvedValue(mockStorageResult);
+    objectStorageService.uploadFile.mockResolvedValue(mockStorageResult);
     supabaseService.updateUserMetadata.mockResolvedValue({} as any);
 
     const result = await useCase.execute('user-uuid-123', validFile);
 
-    expect(result.avatarUrl).toBe(mockStorageResult.publicUrl);
-    expect(result.avatarObjectKey).toBe(mockStorageResult.path);
-    expect(supabaseService.uploadAvatar).toHaveBeenCalledWith(
-      'user-uuid-123',
-      expect.stringMatching(/^avatar-\d+\.png$/),
-      validFile.buffer,
-      'image/png',
-    );
+    expect(result.avatarUrl).toBe(mockStorageResult.storageUrl);
+    expect(result.avatarObjectKey).toBe(mockStorageResult.storagePath);
+    expect(objectStorageService.uploadFile).toHaveBeenCalledWith({
+      bucket: 'avatars',
+      key: expect.stringMatching(/^users\/user-uuid-123\/avatar-\d+\.png$/),
+      buffer: validFile.buffer,
+      mimeType: 'image/png',
+    });
     expect(userRepository.update).toHaveBeenCalledTimes(1);
     expect(supabaseService.updateUserMetadata).toHaveBeenCalledWith('user-uuid-123', {
-      avatar_url: mockStorageResult.publicUrl,
+      avatar_url: mockStorageResult.storageUrl,
     });
   });
 
@@ -115,7 +130,7 @@ describe('UploadUserAvatarUseCase', () => {
     await expect(useCase.execute('user-uuid-123', oversizedFile)).rejects.toThrow(
       BadRequestException,
     );
-    expect(supabaseService.uploadAvatar).not.toHaveBeenCalled();
+    expect(objectStorageService.uploadFile).not.toHaveBeenCalled();
   });
 
   it('debe lanzar BadRequestException si el MIME type no es una imagen permitida', async () => {
@@ -128,7 +143,7 @@ describe('UploadUserAvatarUseCase', () => {
     await expect(useCase.execute('user-uuid-123', invalidMimeFile)).rejects.toThrow(
       BadRequestException,
     );
-    expect(supabaseService.uploadAvatar).not.toHaveBeenCalled();
+    expect(objectStorageService.uploadFile).not.toHaveBeenCalled();
   });
 
   it('debe lanzar NotFoundException si el usuario no existe', async () => {
@@ -137,16 +152,18 @@ describe('UploadUserAvatarUseCase', () => {
     await expect(useCase.execute('non-existent', validFile)).rejects.toThrow(
       NotFoundException,
     );
-    expect(supabaseService.uploadAvatar).not.toHaveBeenCalled();
+    expect(objectStorageService.uploadFile).not.toHaveBeenCalled();
   });
 
   it('debe tolerar fallos en la sincronización de metadata con Supabase Auth sin arrojar error fatal', async () => {
     const user = createMockUserEntity();
     userRepository.findById.mockResolvedValue(user);
     userRepository.update.mockImplementation(async (entity) => entity);
-    supabaseService.uploadAvatar.mockResolvedValue({
-      path: 'users/user-uuid-123/avatar.webp',
-      publicUrl: 'https://supabase.co/storage/v1/object/public/avatars/users/user-uuid-123/avatar.webp',
+    objectStorageService.uploadFile.mockResolvedValue({
+      storagePath: 'avatars/users/user-uuid-123/avatar.webp',
+      storageUrl: 'http://localhost:9000/avatars/users/user-uuid-123/avatar.webp',
+      fileSizeBytes: validFile.size,
+      sha256Hash: 'dummyhash',
     });
     supabaseService.updateUserMetadata.mockRejectedValue(new Error('Auth timeout'));
 

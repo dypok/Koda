@@ -17,16 +17,28 @@ import {
 } from './object-storage.interface';
 
 @Injectable()
-export class MinioStorageService implements IObjectStorageService, OnModuleInit {
-  private readonly logger = new Logger(MinioStorageService.name);
+export class SiigoStorageService implements IObjectStorageService, OnModuleInit {
+  private readonly logger = new Logger(SiigoStorageService.name);
   private readonly s3Client: S3Client;
   private readonly endpoint: string;
 
   constructor() {
-    this.endpoint = process.env.MINIO_ENDPOINT || 'http://localhost:9000';
-    const accessKeyId = process.env.MINIO_ACCESS_KEY || 'koda_admin';
-    const secretAccessKey = process.env.MINIO_SECRET_KEY || 'koda_secret_key_2026';
-    const region = process.env.MINIO_REGION || 'us-east-1';
+    this.endpoint =
+      process.env.SIIGO_ENDPOINT ||
+      process.env.MINIO_ENDPOINT ||
+      'http://localhost:9000';
+    const accessKeyId =
+      process.env.SIIGO_ACCESS_KEY ||
+      process.env.MINIO_ACCESS_KEY ||
+      'koda_admin';
+    const secretAccessKey =
+      process.env.SIIGO_SECRET_KEY ||
+      process.env.MINIO_SECRET_KEY ||
+      'koda_secret_key_2026';
+    const region =
+      process.env.SIIGO_REGION ||
+      process.env.MINIO_REGION ||
+      'us-east-1';
 
     this.s3Client = new S3Client({
       endpoint: this.endpoint,
@@ -35,17 +47,29 @@ export class MinioStorageService implements IObjectStorageService, OnModuleInit 
         accessKeyId,
         secretAccessKey,
       },
-      forcePathStyle: true, // Requerido para direccionamiento por ruta en MinIO
+      forcePathStyle: true,
     });
   }
 
   async onModuleInit() {
-    const bucket = process.env.MINIO_BUCKET_CERTIFICATES || 'certificates';
-    try {
-      await this.ensureBucketExists(bucket);
-      this.logger.log(`Bucket de MinIO '${bucket}' verificado y listo.`);
-    } catch (err: any) {
-      this.logger.warn(`No se pudo inicializar bucket '${bucket}' en MinIO: ${err.message}`);
+    const certBucket =
+      process.env.SIIGO_BUCKET_CERTIFICATES ||
+      process.env.MINIO_BUCKET_CERTIFICATES ||
+      'certificates';
+    const avatarsBucket =
+      process.env.SIIGO_BUCKET_AVATARS || 'avatars';
+
+    const buckets = [certBucket, avatarsBucket];
+
+    for (const bucket of buckets) {
+      try {
+        await this.ensureBucketExists(bucket);
+        this.logger.log(`Bucket de Siigo Storage '${bucket}' verificado y listo.`);
+      } catch (err: any) {
+        this.logger.warn(
+          `No se pudo inicializar bucket '${bucket}' en Siigo Storage: ${err.message}`,
+        );
+      }
     }
   }
 
@@ -53,11 +77,11 @@ export class MinioStorageService implements IObjectStorageService, OnModuleInit 
     try {
       await this.s3Client.send(new HeadBucketCommand({ Bucket: bucket }));
     } catch {
-      this.logger.log(`Creando bucket '${bucket}' en MinIO...`);
+      this.logger.log(`Creando bucket '${bucket}' en Siigo Storage...`);
       try {
         await this.s3Client.send(new CreateBucketCommand({ Bucket: bucket }));
 
-        // Política de lectura pública para certificados
+        // Política de lectura pública para assets y certificados
         const policy = {
           Version: '2012-10-17',
           Statement: [
@@ -119,7 +143,10 @@ export class MinioStorageService implements IObjectStorageService, OnModuleInit 
     return `${this.endpoint.replace(/\/$/, '')}/${bucket}/${key}`;
   }
 
-  async getFileStream(bucket: string, key: string): Promise<{ stream: Readable; mimeType: string; size?: number }> {
+  async getFileStream(
+    bucket: string,
+    key: string,
+  ): Promise<{ stream: Readable; mimeType: string; size?: number }> {
     const response = await this.s3Client.send(
       new GetObjectCommand({
         Bucket: bucket,
