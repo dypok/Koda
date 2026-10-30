@@ -156,6 +156,7 @@ model UserSectionStars {
   user            User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, courseSlug, moduleSlug, sectionSlug], map: "uq_user_section_stars")
+  @@index([userId, sectionSlug], map: "idx_user_section_stars_user_section")
   @@map("user_section_stars")
 }
 
@@ -222,6 +223,7 @@ model ReviewQueueItem {
   user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, questionId], map: "uq_user_review_question")
+  @@index([userId, nextReviewDue], map: "idx_review_queue_user_due")
   @@map("review_queue_items")
 }
 
@@ -252,6 +254,7 @@ model UserMistakesNotebook {
   user                User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, questionId], map: "uq_user_mistakes_user_question")
+  @@index([userId, isResolved], map: "idx_user_mistakes_notebook_user_resolved")
   @@map("user_mistakes_notebook")
 }
 

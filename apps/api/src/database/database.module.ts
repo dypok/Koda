@@ -25,6 +25,10 @@ import { SupabaseService } from './supabase.service';
         return {
           uri,
           serverSelectionTimeoutMS: 5000,
+          maxPoolSize: 50,
+          minPoolSize: 5,
+          socketTimeoutMS: 30000,
+          connectTimeoutMS: 10000,
           connectionFactory: (connection) => {
             connection.on('connected', () => logger.log(`MongoDB conectado (${uri})`));
             connection.on('error', (err: Error) =>

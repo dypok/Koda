@@ -22,6 +22,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   async onModuleInit() {
     try {
       await this.$connect();
+      const dbUrl = process.env.DATABASE_URL || '';
+      const poolMatch = dbUrl.match(/connection_limit=(\d+)/);
+      const poolSize = poolMatch ? poolMatch[1] : 'default';
+      this.logger.log(`[Prisma Pool] Configured pool size: ${poolSize}`);
       this.logger.log(' Connected to PostgreSQL (Supabase) via Prisma ORM');
     } catch (error: any) {
       this.logger.error(` Error connecting to PostgreSQL: ${error?.message || error}`);
