@@ -33,7 +33,7 @@ def run_stage(host: str, users: int, spawn_rate: int, run_time: str, prefix: str
     ]
     
     print(f"\n=======================================================")
-    print(f"🚀 Ejecutando Benchmark: {users} VUs (Spawn: {spawn_rate}/s, Duración: {run_time})")
+    print(f"[LOAD TEST] Ejecutando Benchmark: {users} VUs (Spawn: {spawn_rate}/s, Duración: {run_time})")
     print(f"=======================================================")
     
     start = time.time()
@@ -75,7 +75,7 @@ def main():
         time.sleep(2)
         
     print("\n\n" + "=" * 80)
-    print(f"📊 RESUMEN EMPÍRICO DE CAPACIDAD ({prefix.upper()})")
+    print(f"[SUMMARY] RESUMEN EMPÍRICO DE CAPACIDAD ({prefix.upper()})")
     print("=" * 80)
     print(f"{'Escenario':<25} | {'VUs':<5} | {'RPS':<8} | {'P50 (ms)':<9} | {'P95 (ms)':<9} | {'P99 (ms)':<9} | {'Error %':<8}")
     print("-" * 80)

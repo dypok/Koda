@@ -37,6 +37,16 @@ export class LearningService {
   async getRoadmap(languageSlug: string, userId?: string): Promise<RoadmapResponse> {
     const slug = languageSlug.toLowerCase();
 
+    // SRE Failover: Si MongoDB no está listo, servir inmediatamente desde ContentLoaderService en memoria (<2ms)
+    if (
+      this.contentLoaderService &&
+      typeof (this.curriculumRepository as any).isConnected === 'function' &&
+      !(this.curriculumRepository as any).isConnected()
+    ) {
+      const fallback = this.contentLoaderService.getCourseRoadmap(slug);
+      if (fallback) return fallback;
+    }
+
     try {
       const track = await this.curriculumRepository.findTrackBySlug(slug);
       const targetCourseSlug = slug === 'python' ? 'python-1' : `${slug}-core`;
@@ -197,6 +207,15 @@ export class LearningService {
   }
 
   async getLesson(lessonId: string): Promise<LessonDetail> {
+    if (
+      this.contentLoaderService &&
+      typeof (this.curriculumRepository as any).isConnected === 'function' &&
+      !(this.curriculumRepository as any).isConnected()
+    ) {
+      const fallback = this.contentLoaderService.getLesson(lessonId);
+      if (fallback) return fallback;
+    }
+
     try {
       const lesson = await this.curriculumRepository.findLessonBySlug(lessonId);
       if (lesson) {
@@ -263,6 +282,41 @@ export class LearningService {
   }
 
   async evaluateAnswer(userId: string, submission: LessonAnswerSubmission): Promise<LessonAnswerFeedback> {
+    if (
+      this.contentLoaderService &&
+      typeof (this.curriculumRepository as any).isConnected === 'function' &&
+      !(this.curriculumRepository as any).isConnected()
+    ) {
+      const fallbackFeedback = this.contentLoaderService.evaluateAnswer(submission);
+      const finalFallbackXp = fallbackFeedback.is_correct
+        ? (typeof submission.xp_earned === 'number' && submission.xp_earned > 0
+            ? submission.xp_earned
+            : fallbackFeedback.xp_earned)
+        : 0;
+
+      if (this.eventEmitter) {
+        this.eventEmitter.emit(
+          'lesson.answered',
+          new LessonAnsweredEvent({
+            userId,
+            lessonId: submission.lesson_id,
+            sectionSlug: '',
+            moduleSlug: '',
+            courseSlug: '',
+            languageSlug: '',
+            prompt: 'Ejercicio de leccin',
+            selectedOptionIds: submission.selected_option_ids,
+            correctOptionId: fallbackFeedback.correct_option_ids?.[0],
+            isCorrect: fallbackFeedback.is_correct,
+            xpEarned: finalFallbackXp,
+            timeSpentSeconds: submission.time_spent_seconds ?? 0,
+            feedbackText: fallbackFeedback.feedback_message,
+          }),
+        );
+      }
+      return fallbackFeedback;
+    }
+
     try {
       const lesson = await this.curriculumRepository.findLessonBySlug(submission.lesson_id);
       if (lesson) {

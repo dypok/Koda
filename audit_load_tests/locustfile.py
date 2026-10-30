@@ -70,10 +70,10 @@ class KodaStudentUser(HttpUser):
     def load_lesson(self):
         """Paso 3: Carga de lección pedagógica y tríada evaluativa."""
         lesson_id = random.choice([
-            "py-m01-sec01-les01",
-            "py-m01-sec01-les02",
-            "py-m01-sec02-les01",
-            "py-m02-sec01-les01",
+            "les_py1_01_01",
+            "les_py1_01_02",
+            "les_py1_01_03",
+            "les_py1_01_04",
         ])
         with self.client.get(
             f"/api/v1/learning/lessons/{lesson_id}",
@@ -98,7 +98,7 @@ class KodaStudentUser(HttpUser):
             "xp_earned": 15,
         }
         with self.client.post(
-            "/api/v1/learning/lessons/py-m01-sec01-les01/answer",
+            "/api/v1/learning/lessons/les_py1_01_01/answer",
             json=payload,
             headers=self.default_headers,
             name="/learning/lessons/[lessonId]/answer",
