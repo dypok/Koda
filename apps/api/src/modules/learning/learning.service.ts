@@ -71,10 +71,30 @@ export class LearningService {
       let foundCurrentModule = false;
       let prevModuleCompleted = true;
 
-      const mappedModules = await Promise.all(
-        modules.map(async (mod, modIndex) => {
-          const sections = await this.curriculumRepository.findSectionsByModule(mod.slug);
-          const moduleProgress = modulesProgressMap.get(mod.slug);
+      // Batch fetch all sections across all modules in 1 single MongoDB query ($in)
+      const moduleSlugs = modules.map((m) => m.slug);
+      const sectionsByModule = new Map<string, any[]>();
+
+      if (typeof this.curriculumRepository.findSectionsByModuleSlugs === 'function') {
+        const allSections = await this.curriculumRepository.findSectionsByModuleSlugs(moduleSlugs);
+        for (const sec of allSections) {
+          const mSlug = sec.moduleSlug || (sec as any).module_slug;
+          const list = sectionsByModule.get(mSlug) || [];
+          list.push(sec);
+          sectionsByModule.set(mSlug, list);
+        }
+      } else {
+        const sectionsNested = await Promise.all(
+          modules.map((mod) => this.curriculumRepository.findSectionsByModule(mod.slug)),
+        );
+        modules.forEach((mod, idx) => {
+          sectionsByModule.set(mod.slug, sectionsNested[idx] || []);
+        });
+      }
+
+      const mappedModules = modules.map((mod, modIndex) => {
+        const sections = sectionsByModule.get(mod.slug) || [];
+        const moduleProgress = modulesProgressMap.get(mod.slug);
 
           const isModuleUnlocked =
             modIndex === 0 ||
@@ -142,8 +162,7 @@ export class LearningService {
             mastery_percentage: masteryPercentage,
             sections: mappedSections,
           };
-        }),
-      );
+        });
 
       const maxPossibleStars = totalSectionsAcrossAll * 3;
       const overallProgressPercentage =

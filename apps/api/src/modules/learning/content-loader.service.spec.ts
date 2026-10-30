@@ -62,6 +62,7 @@ describe('ContentLoaderService', () => {
     let watchCallback: ((event: string, filename: string) => void) | undefined;
     const closeMock = jest.fn();
 
+    jest.spyOn(fs, 'existsSync').mockReturnValue(true);
     jest.spyOn(fs, 'watch').mockImplementation(((_path: any, _opts: any, cb: any) => {
       watchCallback = typeof _opts === 'function' ? _opts : cb;
       return { close: closeMock } as any;
