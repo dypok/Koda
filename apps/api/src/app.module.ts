@@ -12,6 +12,7 @@ import { CertificationModule } from './modules/certification/certification.modul
 import { EvaluationModule } from './modules/evaluation/evaluation.module';
 import { NotebookModule } from './modules/notebook/notebook.module';
 import { RoadmapModule } from './modules/roadmap/roadmap.module';
+import { AchievementsModule } from './modules/achievements/achievements.module';
 import { DatabaseModule } from './database/database.module';
 import { PrismaModule } from '@infra/database/postgres/prisma.module';
 import { StorageModule } from './infrastructure/storage/storage.module';
@@ -71,6 +72,7 @@ import { EvaluationGraphQLModule } from './presentation/graphql/evaluation/evalu
     CertificationModule,
     NotebookModule,
     RoadmapModule,
+    AchievementsModule,
     // Adaptadores primarios GraphQL (/graphql)
     CurriculumGraphQLModule,
     RoadmapGraphQLModule,

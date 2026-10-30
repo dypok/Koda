@@ -8,6 +8,7 @@ const APP_ONLY_PREFIXES = [
   '/curso',
   '/perfil',
   '/cuaderno',
+  '/logros',
   '/login',
   '/register',
   '/onboarding',
@@ -66,6 +67,15 @@ export function proxy(request: NextRequest) {
 
     // Reescribir rutas de cuaderno para que apunten a /app/cuaderno de forma limpia
     if (pathname === '/cuaderno' || pathname.startsWith('/cuaderno/')) {
+      const url = request.nextUrl.clone();
+      url.pathname = `/app${pathname}`;
+      const res = NextResponse.rewrite(url);
+      res.headers.set('Cache-Control', 'private, no-cache, no-store, max-age=0, must-revalidate');
+      return res;
+    }
+
+    // Reescribir rutas de logros para que apunten a /app/logros de forma limpia
+    if (pathname === '/logros' || pathname.startsWith('/logros/')) {
       const url = request.nextUrl.clone();
       url.pathname = `/app${pathname}`;
       const res = NextResponse.rewrite(url);
