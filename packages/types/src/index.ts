@@ -433,15 +433,47 @@ export interface UserStreak {
   is_active_today: boolean;
 }
 
+export type AchievementCategory = 'streak' | 'xp' | 'curriculum' | 'mastery' | 'speed';
+
+export interface AchievementItem {
+  id: string;
+  code: string;
+  title: string;
+  description: string;
+  icon_name: string;
+  category: AchievementCategory;
+  xp_reward: number;
+  condition_type?: string;
+  condition_value?: number;
+  is_unlocked: boolean;
+  unlocked_at?: string;
+  progress_percentage?: number;
+  current_value?: number;
+  target_value?: number;
+}
+
 export interface Achievement {
   id: string;
   code: string;
   title: string;
   description: string;
-  icon: string;
+  icon?: string;
+  icon_name?: string;
+  category?: AchievementCategory;
   xp_reward: number;
   is_unlocked: boolean;
   unlocked_at?: string;
+  progress_percentage?: number;
+}
+
+export interface UserAchievementsResponse {
+  achievements: AchievementItem[];
+  newly_unlocked: AchievementItem[];
+  stats: {
+    total: number;
+    unlocked_count: number;
+    total_xp_earned: number;
+  };
 }
 
 // ==========================================

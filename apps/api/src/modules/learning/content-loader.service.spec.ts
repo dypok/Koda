@@ -1,4 +1,4 @@
-import { ContentLoaderService } from './content-loader.service';
+﻿import { ContentLoaderService } from './content-loader.service';
 import * as fs from 'fs';
 
 describe('ContentLoaderService', () => {

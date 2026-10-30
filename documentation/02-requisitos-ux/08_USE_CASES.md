@@ -1,7 +1,8 @@
 # 08 — Casos de Uso
 
-> **Estado:** En planificación · **Versión del documento:** 1.0.0 · **Fecha:** 2026-08-29
-> Complementa a `01_PROJECT_OVERVIEW.md`, `02_PROBLEM_STATEMENT.md`, `03_OBJECTIVES.md`, `04_SCOPE.md`, `05_FUNCTIONAL_REQUIREMENTS.md`, `06_NON_FUNCTIONAL_REQUIREMENTS.md` y `07_USER_STORIES.md`. No duplica su contenido; lo formaliza en contratos verificables. Cada caso de uso mapea a ≥1 `RF-*` (`05`) y a ≥1 `US-*` (`07`). Los flujos navegables se visualizan en `09_USER_FLOWS.md`.
+> **Estado:** Aprobado · **Versión del documento:** 2.0.0 · **Fecha:** 2026-10-29
+> Complementa a `01_PROJECT_OVERVIEW.md`, `05_FUNCTIONAL_REQUIREMENTS.md`, `06_NON_FUNCTIONAL_REQUIREMENTS.md`, `07_USER_STORIES.md`, `11_SYSTEM_ARCHITECTURE.md` (v3.0.0), `ADR-007` (Grafo DAG), `ADR-010` (Hexagonal + Eventos de Dominio), `ADR-012` (Arquitectura Híbrida GraphQL/REST), `ADR-016` (Autenticación Dual OTP/OAuth y Onboarding Mandatorio) y `ADR-017` (Realineación Quirúrgica MVP).
+> Formaliza los contratos de interacción y traza directamente hacia los 19 casos de uso puros implementados en `apps/api/src/application/use-cases/`.
 
 ---
 
@@ -66,33 +67,154 @@ Este documento especifica **cómo interactúan los actores con el sistema** para
 
 ---
 
-## 4. Mapa de casos de uso
+## 4. Mapa y Diagramas Formales de Casos de Uso
 
-### 4.1 Diagrama general (Mermaid)
+### 4.1 Diagrama General por Actores (Mermaid)
 
 ```mermaid
 flowchart LR
-  UN --- UC001[UC-001 Registrar usuario]
-  UN --- UC003[UC-003 Seleccionar lenguaje]
-  UN --- UC004[UC-004 Realizar diagnóstico]
-  UR --- UC002[UC-002 Iniciar sesión]
-  UR --- UC005[UC-005 Iniciar módulo]
-  UR --- UC006[UC-006 Completar sección]
-  UR --- UC007[UC-007 Realizar Quiz]
-  UR --- UC008[UC-008 Realizar examen]
-  UR --- UC009[UC-009 Consultar progreso]
-  UR --- UC010[UC-010 Mantener racha]
-  UR --- UC011[UC-011 Obtener logro]
-  UC --- UC012[UC-012 Obtener certificado]
-  UCert --- UC013[UC-013 Exportar certificado]
-  UR --- UC014[UC-014 Activar premium]
-  UR --- UC015[UC-015 Realizar repaso]
-  ADM --- UC016[UC-016 Gestionar contenido]
-  ADM --- UC017[UC-017 Gestionar banco de preguntas]
+  UN[Usuario Nuevo] --- UC001[UC-001 Registrar usuario con OTP]
+  UN --- UC003[UC-003 Seleccionar lenguaje y track]
+  UN --- UC004[UC-004 Realizar diagnóstico adaptativo]
+  UR[Usuario Recurrente] --- UC002[UC-002 Iniciar sesión JWT/OAuth]
+  UR --- UC005[UC-005 Iniciar módulo en Roadmap DAG]
+  UR --- UC006[UC-006 Completar sección y ganar estrellas]
+  UR --- UC007[UC-007 Realizar Quiz formativo]
+  UR --- UC008[UC-008 Realizar examen final apex]
+  UR --- UC009[UC-009 Consultar progreso y estadísticas]
+  UR --- UC010[UC-010 Mantener racha diaria Bogotá UTC-5]
+  UR --- UC011[UC-011 Obtener logros y XP]
+  UR --- UC015[UC-015 Remediar errores en Cuaderno SM-2]
+  UC[Usuario que Completa Curso] --- UC012[UC-012 Generar certificado con QR]
+  UCert[Usuario Certificado] --- UC013[UC-013 Verificar y exportar certificado]
+  ADM[Administrador] --- UC016[UC-016 Gestionar contenido y tracks]
+  ADM --- UC017[UC-017 Administrar banco de reactivos]
   ADM --- UC018[UC-018 Configurar reglas del sistema]
-  UG --- UC019[UC-019 Visualizar publicidad]
   ADM --- UC020[UC-020 Administrar usuarios y auditoría]
 ```
+
+### 4.2 Diagrama de Casos de Uso: Dominio Autenticación & Onboarding (ADR-016)
+
+```mermaid
+flowchart LR
+    Usuario((Usuario))
+
+    subgraph AuthOnboarding["Dominio de Autenticación & Onboarding"]
+        UC_OTP["UC-AUTH-01 Registrarse con Email y OTP"]
+        UC_VERIFY["UC-AUTH-02 Validar Código OTP y Aprovisionar"]
+        UC_OAUTH["UC-AUTH-03 Iniciar Sesión con Google OAuth2"]
+        UC_PWD["UC-AUTH-04 Recuperar/Restablecer Contraseña"]
+        UC_DIAG["UC-AUTH-05 Presentar Evaluación Diagnóstica"]
+        UC_ONB["UC-AUTH-06 Culminar Onboarding Mandatorio"]
+    end
+
+    Usuario --> UC_OTP
+    Usuario --> UC_OAUTH
+    Usuario --> UC_PWD
+    Usuario --> UC_DIAG
+    Usuario --> UC_ONB
+
+    UC_OTP -.->|«include»| UC_VERIFY
+    UC_VERIFY -.->|«extend» si nuevo| UC_ONB
+    UC_OAUTH -.->|«extend» si incompleto| UC_ONB
+    UC_ONB -.->|«extend» opcional| UC_DIAG
+```
+
+### 4.3 Diagrama de Casos de Uso: Dominio Aprendizaje, Ejecución Sandboxed & Grafo DAG (ADR-006, ADR-007, ADR-010)
+
+```mermaid
+flowchart LR
+    Estudiante((Estudiante))
+
+    subgraph LearningCore["Dominio de Aprendizaje & Ejecución"]
+        UC_ROAD["UC-LRN-01 Explorar Roadmap DAG Multi-Rama"]
+        UC_KAHN["UC-LRN-02 Validar Prerrequisitos (Algoritmo Kahn)"]
+        UC_WS["UC-LRN-03 Cargar Espacio de Lección 50/50"]
+        UC_WASM["UC-LRN-04 Ejecutar Código en Pyodide WASM"]
+        UC_SUBMIT["UC-LRN-05 Enviar Respuesta de Lección"]
+        UC_EVENT["UC-LRN-06 Despachar LessonAnsweredEvent"]
+        UC_SEC["UC-LRN-07 Completar Sección y Asignar Estrellas (1-3⭐)"]
+    end
+
+    Estudiante --> UC_ROAD
+    Estudiante --> UC_WS
+    Estudiante --> UC_WASM
+    Estudiante --> UC_SUBMIT
+
+    UC_ROAD -.->|«include»| UC_KAHN
+    UC_SUBMIT -.->|«include»| UC_EVENT
+    UC_SUBMIT -.->|«extend» al responder última| UC_SEC
+```
+
+### 4.4 Diagrama de Casos de Uso: Dominio Evaluación & Cuaderno de Errores SM-2 (ADR-012, Épica 7)
+
+```mermaid
+flowchart LR
+    Estudiante((Estudiante))
+
+    subgraph EvaluationNotebook["Dominio de Evaluación & Repaso Adaptativo"]
+        UC_GEN_EVAL["UC-EVAL-01 Generar Examen/Quiz sin Spoilers"]
+        UC_SUB_EVAL["UC-EVAL-02 Entregar Intento & Persistir Bulk"]
+        UC_SUM_EVAL["UC-EVAL-03 Consultar Resumen y Feedback Pedagógico"]
+        UC_NOTE_LOG["UC-NOTE-01 Encolar Fallos en user_mistakes_notebook"]
+        UC_NOTE_REV["UC-NOTE-02 Consultar Cuaderno con Filtros"]
+        UC_NOTE_REM["UC-NOTE-03 Remediar Error con Algoritmo SM-2 (+5 XP)"]
+    end
+
+    Estudiante --> UC_GEN_EVAL
+    Estudiante --> UC_SUB_EVAL
+    Estudiante --> UC_SUM_EVAL
+    Estudiante --> UC_NOTE_REV
+    Estudiante --> UC_NOTE_REM
+
+    UC_SUB_EVAL -.->|«extend» si hay fallos| UC_NOTE_LOG
+    UC_SUB_EVAL -.->|«include»| UC_SUM_EVAL
+    UC_NOTE_REM -.->|«include» recálculo| UC_NOTE_LOG
+```
+
+### 4.5 Diagrama de Casos de Uso: Dominio Certificación Oficial & Verificación Pública (ADR-003)
+
+```mermaid
+flowchart LR
+    Estudiante((Estudiante))
+    Visitante((Visitante / Empleador))
+
+    subgraph CertificationCore["Dominio de Certificación"]
+        UC_REQ_CERT["UC-CERT-01 Solicitar Certificado Oficial"]
+        UC_GEN_PDF["UC-CERT-02 Renderizar PDF Vectorial + QR + Hash SHA-256"]
+        UC_CDN_PUB["UC-CERT-03 Publicar en Supabase Storage CDN"]
+        UC_PUB_VERIF["UC-CERT-04 Verificar Autenticidad en /verificar/:code"]
+    end
+
+    Estudiante --> UC_REQ_CERT
+    Visitante --> UC_PUB_VERIF
+
+    UC_REQ_CERT -.->|«include»| UC_GEN_PDF
+    UC_GEN_PDF -.->|«include»| UC_CDN_PUB
+    UC_PUB_VERIF -.->|«extend» descarga| UC_CDN_PUB
+```
+
+### 4.6 Matriz de Trazabilidad: Casos de Uso Formales vs. Capa de Aplicación Hexagonal
+
+| ID Formal | Caso de Uso de Negocio | Use Case Implementado (`apps/api/src/application/use-cases/`) | Transporte Oficial |
+|:---:|---|---|:---:|
+| **UC-001** | Registro con OTP | `RegisterWithOtpUseCase` (`auth/`) | REST `/api/v1/auth/register-otp` |
+| **UC-001B**| Verificación de OTP | `VerifyOtpUseCase` (`auth/`) | REST `/api/v1/auth/verify-otp` |
+| **UC-002** | Validación de Sesión JWT | `ValidateUserSessionUseCase` (`auth/`) | REST `/api/v1/auth/verify-session` |
+| **UC-003** | Selección de Tracks & Cursos | `GetTracksUseCase`, `GetTrackCoursesUseCase` (`curriculum/`) | GraphQL `tracks`, `trackCourses` |
+| **UC-004** | Diagnóstico Inicial Adaptativo | `GetDiagnosticQuestionsUseCase`, `EvaluateDiagnosticUseCase` | REST `/api/v1/learning/diagnostic/*` |
+| **UC-004B**| Culminación de Onboarding | `CompleteOnboardingUseCase` (`auth/`) | REST `/api/v1/auth/complete-onboarding` |
+| **UC-005** | Navegación de Roadmap DAG | `GetRoadmapGraphUseCase` (`curriculum/`) | GraphQL `roadmapGraph` |
+| **UC-005B**| Validación de Prerrequisitos | `ValidateDagPrerequisitesUseCase` (`learning/`) | Dominio / Guard |
+| **UC-006** | Completar Sección (1-3 ⭐) | `CompleteSectionUseCase` (`learning/`) | GraphQL `completeSection` |
+| **UC-007** | Generación de Evaluación | `GenerateEvaluationUseCase` (`evaluation/`) | GraphQL / REST `generateEvaluation` |
+| **UC-008** | Evaluación de Intento | `EvaluateAttemptUseCase` (`evaluation/`) | GraphQL / REST `evaluateAttempt` |
+| **UC-008B**| Resumen de Intento | `GetAttemptSummaryUseCase` (`evaluation/`) | GraphQL / REST `attemptSummary` |
+| **UC-009** | Gestión de Perfil de Usuario | `GetUserProfileUseCase`, `UpdateUserProfileUseCase` (`users/`) | REST `/api/v1/users/profile` |
+| **UC-009B**| Carga de Avatar en Storage | `UploadUserAvatarUseCase` (`users/`) | REST `/api/v1/users/avatar` |
+| **UC-012** | Emisión de Certificado PDF | `CertificationService.generateCertificate()` | REST `/api/v1/certification/issue` |
+| **UC-013** | Verificación Pública de Diploma| `CertificationService.verifyCertificate()` | REST `/api/v1/certification/verify/:code` |
+| **UC-015** | Remediación Cuaderno SM-2 | `NotebookService.remediateMistake()` | GraphQL `remediateMistake` |
 
 ### 4.2 Resumen por entrega
 

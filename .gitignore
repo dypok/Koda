@@ -85,3 +85,5 @@ jira-subtasks-only.csv
 graphify-out/
 audit_load_tests/results/
 
+# Graphify
+!graphify-out/GRAPH_REPORT.md

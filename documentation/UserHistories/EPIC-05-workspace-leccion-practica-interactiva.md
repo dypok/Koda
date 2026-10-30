@@ -51,10 +51,10 @@
 - Los atajos se deshabilitan automáticamente si el foco está sobre un input de texto para evitar conflictos.
 
 **Subtasks:**
-- [ ] [FRONTEND] Implementar hook personalizado `useLessonKeyboardShortcuts.ts` con `useEffect` y listeners de `keydown`.
-- [ ] [FRONTEND] Mostrar etiquetas discretas de teclas sobre las tarjetas de opción en escritorio.
-- [ ] [FRONTEND] Añadir indicador visual de tecla presionada con feedback táctil sutil.
-- [ ] [TEST] Tests unitarios con `@testing-library/react` simulando eventos de teclado y transiciones de estado.
+- [x] [FRONTEND] Implementar hook personalizado `useLessonKeyboardShortcuts.ts` con `useEffect` y listeners de `keydown`.
+- [x] [FRONTEND] Mostrar etiquetas discretas de teclas sobre las tarjetas de opción en escritorio.
+- [x] [FRONTEND] Añadir indicador visual de tecla presionada con feedback táctil sutil.
+- [x] [TEST] Tests unitarios con `@testing-library/react` simulando eventos de teclado y transiciones de estado.
 
 **DoD adicional para esta US:**
 - Cero retraso perceptivo (latencia de respuesta de tecla < 16 ms).
@@ -110,10 +110,10 @@
 - Una vez superada la ronda de repaso, se calcula el balance final de estrellas de la sección (⭐ 1 a 3) y se otorga el bono de sección (+10 XP).
 
 **Subtasks:**
-- [ ] [FRONTEND] Implementar cola de repaso local en Zustand `reviewQueue: string[]`.
-- [ ] [FRONTEND] Algoritmo de barajado aleatorio para preguntas y opciones en la ronda de remediación.
-- [ ] [FRONTEND] Transición animada hacia la vista de resumen final de sección con Koda ondeando bandera de meta 🏁.
-- [ ] [BACKEND] Endpoint `POST /api/v1/learning/sections/:id/complete` que cierre formalmente la sección y consolide el progreso.
+- [x] [FRONTEND] Implementar cola de repaso local en Zustand / estado local (`failedExercises`).
+- [x] [FRONTEND] Algoritmo de barajado aleatorio para preguntas y opciones en la ronda de remediación (`LessonReviewMode.tsx`).
+- [x] [FRONTEND] Transición animada hacia la vista de resumen final de sección (`LessonDoneScreen.tsx`).
+- [x] [BACKEND] Endpoint `POST /api/v1/learning/sections/:id/complete` que cierre formalmente la sección y consolide el progreso.
 
 **DoD adicional para esta US:**
 - El estudiante no puede cerrar la sección sin haber intentado remediar sus preguntas falladas.

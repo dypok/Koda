@@ -16,7 +16,8 @@
     "db:down": "docker compose down",
     "db:seed": "pnpm --filter api db:seed",
     "validate:content": "node scripts/validate-content.js",
-    "generate:roadmap": "node scripts/generate-lua-roadmap.js"
+    "generate:roadmap": "node scripts/generate-lua-roadmap.js",
+    "graphify:update": "graphify update ."
   },
   "keywords": [
     "koda",

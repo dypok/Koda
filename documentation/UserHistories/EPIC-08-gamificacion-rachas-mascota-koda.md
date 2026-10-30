@@ -90,10 +90,10 @@
 - Pantalla `/app/logros` con vitrina de medallas doradas, plateadas y de bronce.
 
 **Subtasks:**
-- [ ] [BD] Tablas `achievements` y `user_achievements` en Supabase con metadata, icono y XP bono.
-- [ ] [BACKEND] Event listener en NestJS (`EventEmitter2`) que escuche eventos de lección/examen y evalúe condiciones de logro.
-- [ ] [FRONTEND] Pantalla `apps/web/src/app/logros/page.tsx` con vitrina de medallas y filtros (Obtenidos / Por desbloquear).
-- [ ] [FRONTEND] Componente de notificación emergente `AchievementToast.tsx` con sonido de fanfarria suave.
+- [x] [BD] Tablas `achievements` y `user_achievements` en Supabase con metadata, icono y XP bono (18 logros MVP sembrados).
+- [x] [BACKEND] Módulo y servicio `AchievementsService` con conciliación en tiempo real (`GET /api/v1/users/me/achievements` y `POST /api/v1/users/me/achievements/check`), evaluación de condiciones, acreditación de XP e idempotencia absoluta.
+- [x] [FRONTEND] Pantalla `apps/web/src/app/app/logros/page.tsx` (`/app/logros`) con vitrina de medallas, filtros por categoría (Rachas, XP, Currículo, Maestría, Velocidad) y estado, y banner en `/app/perfil`.
+- [x] [FRONTEND] Componente de notificación emergente `AchievementToast.tsx` con animación framer-motion, indicador de XP y acceso directo a la vitrina.
 
 **DoD adicional para esta US:**
 - Cada logro solo puede ser otorgado una única vez por usuario.
