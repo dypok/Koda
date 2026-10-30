@@ -64,12 +64,19 @@ const SUPABASE_ANON_KEY =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNlcnRmYmR1cWl2dmpybWVibHZoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODkzNDY3MjcsImV4cCI6MjEwNDkyMjcyN30.jC5gwZVgxqsA_VFbS6OAHOFKsmVdcpNhuH175KZ3Q3E';
 
+const DEFAULT_FETCH_TIMEOUT_MS = 8000;
+
+function fetchWithTimeout(url: string, init: RequestInit = {}, timeoutMs = DEFAULT_FETCH_TIMEOUT_MS): Promise<Response> {
+  const signal = init.signal || (typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal ? AbortSignal.timeout(timeoutMs) : undefined);
+  return fetch(url, { ...init, signal });
+}
+
 export class AuthService {
   /**
    * Inicia sesión con correo y contraseña contra el servicio de autenticación y sincroniza la sesión con el backend.
    */
   public static async loginWithPassword(email: string, password: string): Promise<VerifyOtpResult> {
-    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+    const res = await fetchWithTimeout(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -117,7 +124,7 @@ export class AuthService {
       throw new Error('No se encontró token de renovación.');
     }
 
-    const res = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+    const res = await fetchWithTimeout(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -176,7 +183,7 @@ export class AuthService {
     },
     token: string
   ): Promise<BackendUserSession> {
-    const res = await fetch(`${API_BASE_URL}/auth/onboarding`, {
+    const res = await fetchWithTimeout(`${API_BASE_URL}/auth/onboarding`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -198,7 +205,7 @@ export class AuthService {
    * Solicita el restablecimiento de contraseña llamando a NestJS (POST /api/v1/auth/forgot-password).
    */
   public static async requestPasswordReset(email: string): Promise<{ message: string }> {
-    const res = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+    const res = await fetchWithTimeout(`${API_BASE_URL}/auth/forgot-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -223,7 +230,7 @@ export class AuthService {
     newPassword: string;
     email?: string;
   }): Promise<{ message: string; success: boolean }> {
-    const res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+    const res = await fetchWithTimeout(`${API_BASE_URL}/auth/reset-password`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -243,7 +250,7 @@ export class AuthService {
    * Registra al estudiante en el backend con envío de código OTP vía correo.
    */
   public static async registerWithOtp(payload: RegisterOtpPayload): Promise<RegisterOtpResult> {
-    const res = await fetch(`${API_BASE_URL}/auth/register-otp`, {
+    const res = await fetchWithTimeout(`${API_BASE_URL}/auth/register-otp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -268,7 +275,7 @@ export class AuthService {
    * Retorna la sesión provisionada del usuario y el JWT Bearer token.
    */
   public static async verifyOtp(payload: VerifyOtpPayload): Promise<VerifyOtpResult> {
-    const res = await fetch(`${API_BASE_URL}/auth/verify-otp`, {
+    const res = await fetchWithTimeout(`${API_BASE_URL}/auth/verify-otp`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -296,7 +303,7 @@ export class AuthService {
    * Valida la autenticidad de un token JWT existente en el backend.
    */
   public static async verifySession(token: string): Promise<BackendUserSession> {
-    const res = await fetch(`${API_BASE_URL}/auth/verify-session`, {
+    const res = await fetchWithTimeout(`${API_BASE_URL}/auth/verify-session`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -326,7 +333,7 @@ export class AuthService {
       headers.set('Authorization', `Bearer ${token}`);
     }
 
-    let res = await fetch(url, { ...init, headers });
+    let res = await fetchWithTimeout(url, { ...init, headers });
 
     // Si responde 401 y tenemos refresh_token, renovar en caliente y reintentar
     if (res.status === 401 && typeof window !== 'undefined') {
@@ -335,7 +342,7 @@ export class AuthService {
         try {
           const renewed = await this.refreshSession(refreshToken);
           headers.set('Authorization', `Bearer ${renewed.accessToken}`);
-          res = await fetch(url, { ...init, headers });
+          res = await fetchWithTimeout(url, { ...init, headers });
         } catch {
           // Si el refresh falla, devolver la respuesta original 401
         }

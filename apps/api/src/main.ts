@@ -9,6 +9,7 @@ import { SecurityExceptionFilter } from './common/filters/security-exception.fil
 import { PiiMaskingLoggerInterceptor } from './common/interceptors/pii-masking-logger.interceptor';
 
 async function bootstrap() {
+  const isProduction = process.env.NODE_ENV === 'production';
   const app = await NestFactory.create(AppModule);
 
   // 1. Headers de seguridad HTTP con Helmet
@@ -101,7 +102,7 @@ async function bootstrap() {
     },
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'X-Forwarded-For', 'x-request-id'],
   });
 
   // 4. Validación declarativa estricta con sanitización
@@ -115,7 +116,6 @@ async function bootstrap() {
   );
 
   // 5. Configuración de OpenAPI Swagger (solo en entornos de desarrollo)
-  const isProduction = process.env.NODE_ENV === 'production';
   if (!isProduction) {
     const config = new DocumentBuilder()
       .setTitle('Koda API (REST v2.0 - Superficie Transaccional)')

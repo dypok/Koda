@@ -231,6 +231,21 @@ export class MongoCurriculumRepository implements ICurriculumRepository {
     return docs.map((d) => this.mapSection(d));
   }
 
+  isConnected(): boolean {
+    return this.trackModel.db.readyState === 1;
+  }
+
+  async findSectionsByModuleSlugs(moduleSlugs: string[]): Promise<SectionEntity[]> {
+    if (!moduleSlugs || moduleSlugs.length === 0) {
+      return [];
+    }
+    const docs = await this.sectionModel
+      .find({ module_slug: { $in: moduleSlugs }, is_active: true })
+      .sort({ position: 1 })
+      .lean();
+    return docs.map((d) => this.mapSection(d));
+  }
+
   async findSectionBySlug(slug: string): Promise<SectionEntity | null> {
     const doc = await this.sectionModel.findOne({ slug, is_active: true }).lean();
     return doc ? this.mapSection(doc) : null;

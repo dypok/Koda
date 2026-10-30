@@ -30,12 +30,30 @@ export class GetCourseDetailUseCase {
 
     const modules = await this.curriculumRepository.findModulesByCourse(courseSlug);
 
-    const modulesWithSections: ModuleWithSections[] = await Promise.all(
-      modules.map(async (mod) => {
-        const sections = await this.curriculumRepository.findSectionsByModule(mod.slug);
-        return { module: mod, sections };
-      }),
-    );
+    const moduleSlugs = modules.map((m) => m.slug);
+    const sectionsByModule = new Map<string, SectionEntity[]>();
+
+    if (typeof this.curriculumRepository.findSectionsByModuleSlugs === 'function') {
+      const allSections = await this.curriculumRepository.findSectionsByModuleSlugs(moduleSlugs);
+      for (const sec of allSections) {
+        const mSlug = sec.moduleSlug;
+        const list = sectionsByModule.get(mSlug) || [];
+        list.push(sec);
+        sectionsByModule.set(mSlug, list);
+      }
+    } else {
+      const nested = await Promise.all(
+        modules.map((m) => this.curriculumRepository.findSectionsByModule(m.slug)),
+      );
+      modules.forEach((mod, idx) => {
+        sectionsByModule.set(mod.slug, nested[idx] || []);
+      });
+    }
+
+    const modulesWithSections: ModuleWithSections[] = modules.map((mod) => ({
+      module: mod,
+      sections: sectionsByModule.get(mod.slug) || [],
+    }));
 
     return {
       course,

@@ -24,7 +24,13 @@ import { SupabaseService } from './supabase.service';
         const uri = configService.get<string>('MONGODB_URI') || 'mongodb://localhost:27017/koda';
         return {
           uri,
-          serverSelectionTimeoutMS: 5000,
+          serverSelectionTimeoutMS: 2000,
+          maxPoolSize: 50,
+          minPoolSize: 5,
+          socketTimeoutMS: 30000,
+          connectTimeoutMS: 5000,
+          lazyConnection: true,
+          retryAttempts: 2,
           connectionFactory: (connection) => {
             connection.on('connected', () => logger.log(`MongoDB conectado (${uri})`));
             connection.on('error', (err: Error) =>

@@ -37,6 +37,16 @@ export class LearningService {
   async getRoadmap(languageSlug: string, userId?: string): Promise<RoadmapResponse> {
     const slug = languageSlug.toLowerCase();
 
+    // SRE Failover: Si MongoDB no está listo, servir inmediatamente desde ContentLoaderService en memoria (<2ms)
+    if (
+      this.contentLoaderService &&
+      typeof (this.curriculumRepository as any).isConnected === 'function' &&
+      !(this.curriculumRepository as any).isConnected()
+    ) {
+      const fallback = this.contentLoaderService.getCourseRoadmap(slug);
+      if (fallback) return fallback;
+    }
+
     try {
       const track = await this.curriculumRepository.findTrackBySlug(slug);
       const targetCourseSlug = slug === 'python' ? 'python-1' : `${slug}-core`;
@@ -71,10 +81,30 @@ export class LearningService {
       let foundCurrentModule = false;
       let prevModuleCompleted = true;
 
-      const mappedModules = await Promise.all(
-        modules.map(async (mod, modIndex) => {
-          const sections = await this.curriculumRepository.findSectionsByModule(mod.slug);
-          const moduleProgress = modulesProgressMap.get(mod.slug);
+      // Batch fetch all sections across all modules in 1 single MongoDB query ($in)
+      const moduleSlugs = modules.map((m) => m.slug);
+      const sectionsByModule = new Map<string, any[]>();
+
+      if (typeof this.curriculumRepository.findSectionsByModuleSlugs === 'function') {
+        const allSections = await this.curriculumRepository.findSectionsByModuleSlugs(moduleSlugs);
+        for (const sec of allSections) {
+          const mSlug = sec.moduleSlug || (sec as any).module_slug;
+          const list = sectionsByModule.get(mSlug) || [];
+          list.push(sec);
+          sectionsByModule.set(mSlug, list);
+        }
+      } else {
+        const sectionsNested = await Promise.all(
+          modules.map((mod) => this.curriculumRepository.findSectionsByModule(mod.slug)),
+        );
+        modules.forEach((mod, idx) => {
+          sectionsByModule.set(mod.slug, sectionsNested[idx] || []);
+        });
+      }
+
+      const mappedModules = modules.map((mod, modIndex) => {
+        const sections = sectionsByModule.get(mod.slug) || [];
+        const moduleProgress = modulesProgressMap.get(mod.slug);
 
           const isModuleUnlocked =
             modIndex === 0 ||
@@ -142,8 +172,7 @@ export class LearningService {
             mastery_percentage: masteryPercentage,
             sections: mappedSections,
           };
-        }),
-      );
+        });
 
       const maxPossibleStars = totalSectionsAcrossAll * 3;
       const overallProgressPercentage =
@@ -178,6 +207,15 @@ export class LearningService {
   }
 
   async getLesson(lessonId: string): Promise<LessonDetail> {
+    if (
+      this.contentLoaderService &&
+      typeof (this.curriculumRepository as any).isConnected === 'function' &&
+      !(this.curriculumRepository as any).isConnected()
+    ) {
+      const fallback = this.contentLoaderService.getLesson(lessonId);
+      if (fallback) return fallback;
+    }
+
     try {
       const lesson = await this.curriculumRepository.findLessonBySlug(lessonId);
       if (lesson) {
@@ -244,6 +282,41 @@ export class LearningService {
   }
 
   async evaluateAnswer(userId: string, submission: LessonAnswerSubmission): Promise<LessonAnswerFeedback> {
+    if (
+      this.contentLoaderService &&
+      typeof (this.curriculumRepository as any).isConnected === 'function' &&
+      !(this.curriculumRepository as any).isConnected()
+    ) {
+      const fallbackFeedback = this.contentLoaderService.evaluateAnswer(submission);
+      const finalFallbackXp = fallbackFeedback.is_correct
+        ? (typeof submission.xp_earned === 'number' && submission.xp_earned > 0
+            ? submission.xp_earned
+            : fallbackFeedback.xp_earned)
+        : 0;
+
+      if (this.eventEmitter) {
+        this.eventEmitter.emit(
+          'lesson.answered',
+          new LessonAnsweredEvent({
+            userId,
+            lessonId: submission.lesson_id,
+            sectionSlug: '',
+            moduleSlug: '',
+            courseSlug: '',
+            languageSlug: '',
+            prompt: 'Ejercicio de leccin',
+            selectedOptionIds: submission.selected_option_ids,
+            correctOptionId: fallbackFeedback.correct_option_ids?.[0],
+            isCorrect: fallbackFeedback.is_correct,
+            xpEarned: finalFallbackXp,
+            timeSpentSeconds: submission.time_spent_seconds ?? 0,
+            feedbackText: fallbackFeedback.feedback_message,
+          }),
+        );
+      }
+      return fallbackFeedback;
+    }
+
     try {
       const lesson = await this.curriculumRepository.findLessonBySlug(submission.lesson_id);
       if (lesson) {

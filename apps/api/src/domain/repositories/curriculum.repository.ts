@@ -18,6 +18,7 @@ export interface ICurriculumRepository {
   findModulesByCourse(courseSlug: string): Promise<ModuleEntity[]>;
   findModuleBySlug(slug: string): Promise<ModuleEntity | null>;
   findSectionsByModule(moduleSlug: string): Promise<SectionEntity[]>;
+  findSectionsByModuleSlugs?(moduleSlugs: string[]): Promise<SectionEntity[]>;
   findSectionBySlug(slug: string): Promise<SectionEntity | null>;
   findLessonsBySection(sectionSlug: string): Promise<LessonEntity[]>;
   findLessonBySlug(slug: string): Promise<LessonEntity | null>;

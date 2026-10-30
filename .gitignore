@@ -81,6 +81,9 @@ jira-subtasks-only.csv
 *jira-backlog-with-subtasks.csv
 *jira-subtasks-only.csv
 
-# Graphify
+# Audit load tests and tools output
 graphify-out/
+audit_load_tests/results/
+
+# Graphify
 !graphify-out/GRAPH_REPORT.md

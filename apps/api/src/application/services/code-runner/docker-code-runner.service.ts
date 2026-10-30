@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { exec } from 'child_process';
 import { promisify } from 'util';
 import * as fs from 'fs';
@@ -13,14 +13,38 @@ import {
 const execAsync = promisify(exec);
 
 @Injectable()
-export class DockerCodeRunnerService implements ICodeRunner {
+export class DockerCodeRunnerService implements ICodeRunner, OnModuleInit {
   private readonly logger = new Logger(DockerCodeRunnerService.name);
   private readonly tempDir = path.join(process.cwd(), '.tmp', 'code-runner');
+  private hasDocker: boolean = false;
+  private dockerChecked: boolean = false;
 
   constructor() {
     if (!fs.existsSync(this.tempDir)) {
       fs.mkdirSync(this.tempDir, { recursive: true });
     }
+  }
+
+  async onModuleInit(): Promise<void> {
+    await this.checkDockerAvailability();
+  }
+
+  private async checkDockerAvailability(): Promise<boolean> {
+    if (this.dockerChecked) {
+      return this.hasDocker;
+    }
+    try {
+      await execAsync('docker --version');
+      this.hasDocker = true;
+      this.logger.log('Docker CLI verified: Containerized code execution available');
+    } catch {
+      this.hasDocker = false;
+      this.logger.warn(
+        'Docker daemon not available: Delegating to safe Pyodide client execution (ADR-006)',
+      );
+    }
+    this.dockerChecked = true;
+    return this.hasDocker;
   }
 
   async execute(request: ExecuteCodeRequest): Promise<ExecuteCodeResponse> {
@@ -56,7 +80,7 @@ export class DockerCodeRunnerService implements ICodeRunner {
       let stdout = '';
       let stderr: string | undefined;
 
-      const hasDocker = await execAsync('docker --version').then(() => true).catch(() => false);
+      const hasDocker = this.dockerChecked ? this.hasDocker : await this.checkDockerAvailability();
 
       if (hasDocker) {
         const command = `docker run --rm -i --cpus="0.5" --memory="64m" --net=none -v "${scriptPath}:/app/script.py:ro" python:3.12-alpine timeout ${Math.min(timeoutMs, 2500) / 1000} python /app/script.py`;
