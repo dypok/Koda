@@ -1,7 +1,7 @@
 # 13 — Especificación de API (API Specification)
 
-> **Estado:** Aprobado · **Versión del documento:** 2.2.0 · **Fecha:** 2026-09-14  
-> **Complementa a:** `documentation/01-producto-negocio/`, `documentation/02-requisitos-ux/`, `11_SYSTEM_ARCHITECTURE.md`, `12_DATABASE_DESIGN.md` (v3.0.0), `ADR-007` (Roadmap DAG), `ADR-008` (NestJS Oficial), `ADR-009` (Persistencia Híbrida), `ADR-010` (Hexagonal + Eventos) y `ADR-012` (Arquitectura Híbrida GraphQL y REST).  
+> **Estado:** Aprobado · **Versión del documento:** 2.3.0 · **Fecha:** 2026-10-29  
+> **Complementa a:** `documentation/01-producto-negocio/`, `documentation/02-requisitos-ux/`, `11_SYSTEM_ARCHITECTURE.md` (v3.0.0), `12_DATABASE_DESIGN.md` (v3.0.0), `ADR-003` (Supabase Storage CDN), `ADR-007` (Roadmap DAG), `ADR-008` (NestJS Oficial), `ADR-009` (Persistencia Híbrida), `ADR-010` (Hexagonal + Eventos), `ADR-012` (Arquitectura Híbrida GraphQL y REST), `ADR-016` (Auth Dual OTP/OAuth) y `ADR-017` (Realineación Quirúrgica MVP).  
 > **Zona horaria de timestamps de API:** `America/Bogota` (UTC-5).
 
 ---
@@ -19,7 +19,7 @@ Define qué expone el sistema vía REST, los modelos de datos de entrada/salida,
 - Endpoints de contenido curricular servidos desde MongoDB: `GET /api/v1/content/tracks/:slug`, `GET /api/v1/content/courses/:slug`, `GET /api/v1/content/lessons/:id`.
 - Sistema de Roadmap DAG y Candados Progresivos (`ADR-007`) con prerrequisitos `RQ` validados en PostgreSQL.
 - Calificación formativa en estrellas (1–3 ⭐) y cuaderno de errores persistente (`user_mistakes_notebook`).
-- Emisión atómica de certificados oficiales `CQ-*` respaldados en Google Drive Storage (`ADR-003`).
+- Emisión atómica de certificados oficiales `KODA-*` respaldados en Supabase Storage CDN y MinIO S3 (`ADR-003`).
 - Tabla completa de endpoints REST, schemas JSON canónicos y catálogo de errores RFC 7807.
 
 **No incluye:**
@@ -195,6 +195,9 @@ Conforme a la **Arquitectura Híbrida Inteligente** formalizada en `ADR-012`, la
 | `Query` | `language` | `slug: String!` | `LanguageType!` | Detalle de un lenguaje por su slug |
 | `Mutation` | `seedRoadmapDataset` | `input: SeedRoadmapInput!` | `Boolean!` | Sembrado de dataset de grafo desde frontend/admin |
 | `Mutation` | `evaluateLessonAnswer` | `input: LessonAnswerInput!` | `LessonAnswerFeedbackType!` | Evaluación de ejercicio con feedback anti-spoilers |
+| `Query` | `attemptSummary` | `attemptId: String!` | `AttemptSummaryType!` | Resumen y revisión formativa de intento de examen (ADR-012/017) |
+| `Mutation` | `generateEvaluation` | `input: GenerateEvaluationInput!` | `GeneratedEvaluationType!` | Generación de examen/quiz sin filtrado de respuestas correctas |
+| `Mutation` | `evaluateAttempt` | `input: EvaluateAttemptInput!` | `EvaluationResultType!` | Evaluación en bloque (bulk insert anti-N+1) y encolado de errores |
 | `Mutation` | `resolveMistake` | `questionId: String!` | `ResolveMistakeResponseType!` | Remediación de error en cuaderno (+5 XP) |
 
 ---

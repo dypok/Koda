@@ -63,92 +63,54 @@ Este documento define **cómo está estructurado el sistema**, no qué hace (ver
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### 2.3 Diagrama de arquitectura (Mermaid)
+### 2.3 Diagrama de arquitectura C4 (Mermaid)
 
 ```mermaid
 flowchart TB
-    subgraph Client["Cliente"]
-        WEB["Frontend Web\n(Responsive, WCAG AA)"]
-        ADMIN_UI["Admin Console"]
-        VERIF["Verificación QR/PDF"]
+    subgraph ClientLayer["Capa de Presentación Externa (Cliente)"]
+        WEB["Next.js 15 Web App\n(React 19, Phosphor Icons, PixiJS Mascota Koda)"]
+        WASM["Pyodide WASM Client Sandbox\n(Ejecución local en navegador sin latencia)"]
+        PUBLIC_VERIF["Verificación Pública de Certificados\n(/verificar/:code con QR y Hash)"]
     end
 
-    subgraph Edge["Edge / API"]
-        GW["API Gateway / Transport\nGraphQL (/graphql) + REST (/api/v1)"]
-        AUTH_MW["Auth Middleware\nJWT + Refresh + RBAC"]
-        RL["Rate Limit\n+ Idempotency"]
+    subgraph APILayer["Capa de Transporte Híbrido (NestJS Gateway - ADR-012)"]
+        GQL["GraphQL Gateway (/graphql)\nCurriculum, Evaluation, Notebook SM-2, Roadmap"]
+        REST["REST Gateway (/api/v1)\nAuth OTP/OAuth, Certification, Storage, Health"]
+        MW["Security Middleware & Guards\nAppThrottler, SupabaseAuthGuard, PiiMasking"]
     end
 
-    subgraph Domain["Dominio — Motores desacoplados"]
-        AUTH_SVC["Auth\nRF-AUTH/USR"]
-        LEARNING["Learning Engine\nRF-RUTA/MOD/SEC/LEC/DIAG"]
-        QUESTION["Question Engine\nRF-PREG — Banco tipificado"]
-        EVAL["Evaluation Engine\nRF-EVAL/QUIZ/EXAM"]
-        PROGRESS["Progress Engine\nRF-PROG + Sesión reanudable"]
-        GAMIF["Gamification Engine\nRF-XP/RACHA/LOGRO"]
-        CERT["Certification Engine\nRF-CERT/PDF"]
-        CONTENT["Content Engine\nRF-ADM · RNF-031"]
-        MONET["Monetization\nAds + Premium\nRF-ADS/PREM"]
+    subgraph ApplicationLayer["Capa de Aplicación (19 Use Cases Hexagonales)"]
+        UC_AUTH["Auth Use Cases\n(RegisterOTP, VerifyOTP, Onboarding, ResetPassword)"]
+        UC_LEARN["Learning & Curriculum Use Cases\n(GetRoadmapGraph, CompleteSection, DAG Kahn)"]
+        UC_EVAL["Evaluation Use Cases\n(GenerateEvaluation, EvaluateAttempt, AttemptSummary)"]
+        UC_NOTEBOOK["Notebook Use Cases\n(MistakeIngestion, SM-2 Remediation)"]
+        UC_CERT["Certification Use Cases\n(GeneratePdf, VerifyHash, CDN Publish)"]
     end
 
-    subgraph Infra["Infraestructura"]
-        DB[("BD Relacional\nMigrada · FKs · Índices")]
-        OBJ[("Object Storage\nS3-compatible\nPDFs/Avatars")]
-        CACHE[("Cache / KV\nSesiones, rate limit")]
-        EMAIL["Email Service\nVerificación/Recuperación"]
-        ADS_PROV["Ads Provider\nInterfaz abstracta"]
-        PAY_PROV["Payment Provider\nInterfaz abstracta"]
-        OBS["Observabilidad\nLogs · Métricas · Trazas"]
+    subgraph DomainLayer["Capa de Dominio Puro (Cero dependencias de framework)"]
+        ENTITIES["Entities & Value Objects\nUser, Course, Module, Section, Lesson, Diagnostic"]
+        PORTS["Domain Ports / Interfaces\nICurriculumRepository, IUserRepository, IObjectStorage, ICodeRunner"]
+        EVENTS["Domain Events\nLessonAnsweredEvent, SectionCompletedEvent"]
     end
 
-    WEB --> GW
-    ADMIN_UI --> GW
-    VERIF --> GW
-    GW --> AUTH_MW --> RL
+    subgraph InfraLayer["Capa de Infraestructura (Adaptadores Secundarios)"]
+        LISTENERS["Event Listeners (@nestjs/event-emitter)\nLessonAnsweredListener (XP, Telemetría)"]
+        PRISMA_REPO["Prisma PostgreSQL Adapters\n(User, Progress, SectionStars, Attempts, Notebook)"]
+        MONGO_REPO["Mongo Curriculum Adapters\n(Tracks, Courses, Modules, Lessons, DAG Topology)"]
+        STORAGE_SVC["Object Storage Adapters\n(SupabaseStorageService / MinioStorageService)"]
+        CONTENT_BUNDLE["ContentBundleService\n(Precalentamiento en memoria sin 'fs' síncrono)"]
+        DOCKER_RUNNER["Docker Sandboxed Runner\n(Cuotas CPU/RAM, --net=none)"]
+    end
 
-    RL --> AUTH_SVC
-    RL --> LEARNING
-    RL --> QUESTION
-    RL --> EVAL
-    RL --> PROGRESS
-    RL --> GAMIF
-    RL --> CERT
-    RL --> CONTENT
-    RL --> MONET
-
-    AUTH_SVC <--> DB
-    LEARNING <--> QUESTION
-    LEARNING <--> EVAL
-    LEARNING <--> PROGRESS
-    EVAL --> PROGRESS
-    EVAL --> GAMIF
-    GAMIF --> PROGRESS
-    PROGRESS --> CERT
-    CONTENT --> DB
-    CONTENT -.->|contenido versionado| LEARNING
-    CONTENT -.->|contenido versionado| QUESTION
-    CONTENT -.->|contenido versionado| EVAL
-    MONET --> DB
-    MONET -.->|isPremium?| GW
-
-    AUTH_SVC --> CACHE
-    AUTH_SVC --> EMAIL
-    CERT --> OBJ
-    MONET --> ADS_PROV
-    MONET --> PAY_PROV
-
-    GW -.-> OBS
-    Domain -.-> OBS
-    Infra -.-> OBS
-
-    classDef client fill:#e3f2fd,stroke:#1565c0
-    classDef edge fill:#fff3e0,stroke:#ef6c00
-    classDef domain fill:#e8f5e9,stroke:#2e7d32
-    classDef infra fill:#fce4ec,stroke:#ad1457
-    class WEB,ADMIN_UI,VERIF client
-    class GW,AUTH_MW,RL edge
-    class AUTH_SVC,LEARNING,QUESTION,EVAL,PROGRESS,GAMIF,CERT,CONTENT,MONET domain
-    class DB,OBJ,CACHE,EMAIL,ADS_PROV,PAY_PROV,OBS infra
+    WEB -->|GraphQL Queries / Mutations| GQL
+    WEB -->|REST Endpoints / Uploads| REST
+    PUBLIC_VERIF -->|REST Verificación| REST
+    GQL --> ApplicationLayer
+    REST --> ApplicationLayer
+    ApplicationLayer --> DomainLayer
+    ApplicationLayer --> InfraLayer
+    InfraLayer --> DomainLayer
+    InfraLayer --> LISTENERS
 ```
 
 ### 2.4 Diagrama de flujo de datos — sesión de aprendizaje (Event-Driven & Cache-Aside)
@@ -270,57 +232,53 @@ Exponer la API REST `/api/v1`, orquestar los Bounded Contexts modulares, aplicar
 3. **Patrón Strategy & Factory (`ICodeRunner` y Evaluadores):** `CodeExecutionFactory` resuelve la estrategia de ejecución (Wasm vs. Docker sandbox); `QuestionEvaluatorFactory` despacha la evaluación determinista según el tipo de reactivo (`SingleChoice`, `PredictOutput`, `FillBlank`).
 4. **Patrón Cache-Aside Inmutable Versionado (Redis L2):** Consultas de lecciones y grafo DAG consultan primero Redis con clave `koda:lesson:{slug}:v{version}`; si hay *Cache Miss*, recuperan de MongoDB, pueblan la caché y retornan en $O(1)$.
 5. **Algoritmo de Repetición Espaciada (SuperMemo SM-2):** El Cuaderno de Errores recalcula adaptativamente `interval_days`, `ease_factor` y `next_review_at` en cada intento remediado (`ADR-011`).
-6. **Patrón Outbox / Job Queue (Worker Asíncrono para Diplomas):** La subida a Google Drive API v3 (`ADR-003`) se encola como tarea diferida con reintentos exponenciales, evitando bloqueos de red en el cliente.
+6. **Patrón Outbox / Almacenamiento en CDN (Supabase Storage & MinIO - ADR-003):** La persistencia de diplomas oficiales en PDF con código QR y hash criptográfico SHA-256 se realiza a través de `IObjectStorageService` en buckets CDN de Supabase Storage o MinIO S3, eliminando dependencias de Google Drive y permitiendo descargas inmediatas en < 150 ms.
 7. **Patrón Idempotency Key con Redis:** Bloqueo de claves concurrentes (`SET NX`) en endpoints de mutación (`POST /intentos`) para evitar duplicación de XP ante reintentos de red.
 
-### 4.4 Estructura de carpetas (Backend NestJS Monolito Modular)
+### 4.4 Estructura de carpetas (Backend NestJS Hexagonal — ADR-014)
 
 ```
 apps/api/src/
-├── common/                         # Kernel transversal
-│   ├── decorators/                 # @CurrentUser(), @Idempotent(), @Cacheable()
-│   ├── filters/                    # GlobalExceptionFilter (RFC 7807)
-│   ├── guards/                     # JwtAuthGuard, RolesGuard, RateLimitGuard
-│   ├── interceptors/               # RequestIdInterceptor, IdempotencyInterceptor
-│   └── pipes/                      # ZodValidationPipe
+├── domain/                         # Capa de Dominio Puro (Cero dependencias de framework)
+│   ├── entities/                   # UserEntity, CourseEntity, ModuleEntity, SectionStarsEntity...
+│   ├── events/                     # LessonAnsweredEvent, SectionCompletedEvent...
+│   └── repositories/               # ICurriculumRepository, IUserRepository, IProgressRepository...
 │
-├── core/                           # Contratos y abstracciones de dominio
-│   ├── events/                     # LessonCompletedEvent, CoursePublishedEvent
-│   └── interfaces/                 # ICodeRunner, ICourseRepository, IXpRepository
+├── application/                    # Capa de Aplicación (19 Use Cases Hexagonales)
+│   ├── use-cases/
+│   │   ├── auth/                   # RegisterWithOtp, VerifyOtp, CompleteOnboarding, ValidateSession...
+│   │   ├── curriculum/             # GetTracks, GetTrackCourses, GetCourseDetail, GetRoadmapGraph...
+│   │   ├── diagnostic/             # GetDiagnosticQuestions, EvaluateDiagnostic...
+│   │   ├── evaluation/             # GenerateEvaluation, EvaluateAttempt, GetAttemptSummary...
+│   │   ├── learning/               # CompleteSection, ValidateDagPrerequisites...
+│   │   └── users/                  # GetUserProfile, UpdateUserProfile, UploadUserAvatar...
+│   ├── dto/                        # DTOs de entrada y salida fuertemente tipados
+│   └── services/                   # ICodeRunner y servicios de aplicación
 │
-├── modules/                        # Bounded Contexts modulares
-│   ├── auth/                       # Supabase Auth, JWT rotativo HttpOnly
-│   ├── users/                      # Perfiles, avatares, configuración
-│   ├── content/                    # MongoDB: Tracks, Cursos DAG, Módulos, Lecciones
-│   │   ├── domain/                 # Entidades y reglas de negocio puras
-│   │   ├── infrastructure/         # Mongoose schemas, MongoCourseRepository
-│   │   ├── content.controller.ts   # Endpoints REST /api/v1/content/*
-│   │   └── content.module.ts
-│   │
-│   ├── learning/                   # Progreso del alumno, candados RQ, estrellas
-│   │   ├── application/            # Casos de uso (CompleteLessonUseCase)
-│   │   ├── infrastructure/         # PostgresProgressRepository (Supabase)
-│   │   ├── learning.controller.ts
-│   │   └── learning.module.ts
-│   │
-│   ├── gamification/               # XP Ledger, Rachas, Logros (Reactivo a eventos)
-│   │   ├── listeners/              # OnLessonCompletedListener (Asíncrono)
-│   │   ├── gamification.service.ts
-│   │   └── gamification.module.ts
-│   │
-│   ├── certification/              # Generación PDF vectorial + Google Drive API v3
-│   ├── runner/                     # ICodeRunner (Pyodide Wasm + Docker sandbox)
-│   └── notebook/                   # Cuaderno de errores persistente
-│
-├── infra/                          # Adaptadores de infraestructura externa
+├── infra/                          # Capa de Infraestructura (Adaptadores y Persistencia)
 │   ├── database/
-│   │   ├── postgres/               # Prisma ORM para Supabase PostgreSQL (ADR-013)
-│   │   └── mongo/                  # Conexión Mongoose (@nestjs/mongoose, ADR-009)
-│   ├── cache/                      # RedisModule (Cache-Aside, Rate Limit, ADR-010)
-│   └── storage/                    # SupabaseStorageAdapter (Bucket público 'certificates', ADR-003)
+│   │   ├── postgres/               # Prisma ORM (PrismaService, PrismaUserRepository, mappers)
+│   │   └── mongo/                  # MongoCurriculumRepository (Mongoose BSON schemas)
+│   ├── content/                    # ContentBundleService (Caché en memoria sin 'fs' en runtime)
+│   └── events/listeners/           # LessonAnsweredListener (Suscripción asíncrona a eventos)
 │
-├── app.module.ts                   # Orquestador raíz con EventEmitterModule
-└── main.ts                         # Bootstrap con Helmet, Swagger y Pipes globales
+├── infrastructure/                 # Servicios de Infraestructura Externa
+│   └── storage/                    # IObjectStorageService (SupabaseStorageService, MinioStorageService)
+│
+├── presentation/                   # Capa de Presentación (Adaptadores Primarios de Transporte)
+│   ├── graphql/                    # Resolvers GraphQL (ADR-012): Curriculum, Evaluation, Learning...
+│   └── rest/                       # Controladores REST: Auth, Content, Users, Certification...
+│
+├── modules/                        # Módulos NestJS y orquestación
+│   ├── certification/              # Generación de PDF vectorial + QR + CDN Storage
+│   ├── evaluation/                 # Controladores y servicios delegativos de evaluación
+│   ├── learning/                   # Controladores, ContentLoaderService y learning engine
+│   ├── notebook/                   # Cuaderno de errores con algoritmo SM-2
+│   └── roadmap/                    # Mapeo y serialización de topología DAG
+│
+├── common/                         # Kernel transversal (Filtros, Guards, Interceptors)
+├── app.module.ts                   # Orquestador raíz con EventEmitterModule y GraphQLModule
+└── main.ts                         # Bootstrap con Helmet, Swagger, Cookies y Pipes
 ```
 
 > **Regla de Gobernanza de Dependencias (`RNF-030`):** La comunicación inter-módulos para efectos secundarios (XP, rachas, estadísticas) se realiza **únicamente** mediante publicación y suscripción de Eventos de Dominio (`@nestjs/event-emitter`). Los módulos de dominio nunca importan servicios internos de otros módulos de forma cruzada, previniendo dependencias circulares y habilitando la extracción a microservicios independientes en el futuro.

@@ -79,7 +79,7 @@ Para optimizar el tiempo de incorporación al proyecto (*onboarding*), consulta 
 3. [`12_DATABASE_DESIGN.md`](04-arquitectura-backend/12_DATABASE_DESIGN.md) — Persistencia híbrida (`ADR-009`): Supabase PostgreSQL (transacciones) + MongoDB (contenido).
 4. [`13_API_SPECIFICATION.md`](04-arquitectura-backend/13_API_SPECIFICATION.md) — Contratos REST OpenAPI 3.0.3, límites híbridos con GraphQL (`ADR-012`) y DTOs.
 5. [`17_CERTIFICATION.md`](04-arquitectura-backend/17_CERTIFICATION.md) — Emisión de certificados con Supabase Storage (`ADR-003`).
-6. [`documentation/adr/`](adr/README.md) — Decisiones de arquitectura formalizadas (ADR-001 a ADR-016).
+6. [`documentation/adr/`](adr/README.md) — Decisiones de arquitectura formalizadas (ADR-001 a ADR-018).
 7. [`apps/api/README.md`](../apps/api/README.md) — Estructura NestJS, controladores y Swagger.
 
 ### ✍️ Diseñador Instruccional / Creador de Contenido (Python & Tracks)
@@ -115,7 +115,7 @@ Para optimizar el tiempo de incorporación al proyecto (*onboarding*), consulta 
 | **05** | [`05_FUNCTIONAL_REQUIREMENTS.md`](02-requisitos-ux/05_FUNCTIONAL_REQUIREMENTS.md) | 1.1.0 | ✅ Aprobado | Matriz de 128 requisitos funcionales (`RF-*`) con trazabilidad a UC. |
 | **06** | [`06_NON_FUNCTIONAL_REQUIREMENTS.md`](02-requisitos-ux/06_NON_FUNCTIONAL_REQUIREMENTS.md) | 1.0.0 | ✅ Aprobado | 45 requisitos no funcionales (`RNF-*`): rendimiento, seguridad y accesibilidad. |
 | **07** | [`07_USER_STORIES.md`](02-requisitos-ux/07_USER_STORIES.md) | 1.0.0 | ✅ Aprobado | Historias de usuario maestras vinculadas al backlog en `documentation/UserHistories/`. |
-| **08** | [`08_USE_CASES.md`](02-requisitos-ux/08_USE_CASES.md) | 1.0.0 | ✅ Aprobado | Casos de uso formales con precondiciones, flujos principal y alternativos. |
+| **08** | [`08_USE_CASES.md`](02-requisitos-ux/08_USE_CASES.md) | 2.0.0 | ✅ Aprobado | Casos de uso formales con precondiciones, flujos principal y alternativos. |
 | **09** | [`09_USER_FLOWS.md`](02-requisitos-ux/09_USER_FLOWS.md) | 1.0.0 | ✅ Aprobado | 15 diagramas de flujo completos (F-01 a F-15) en Mermaid. |
 | **10** | [`10_INFORMATION_ARCHITECTURE.md`](02-requisitos-ux/10_INFORMATION_ARCHITECTURE.md) | 1.0.0 | ✅ Aprobado | Mapa de sitio (pantallas S-01 a S-32) y jerarquía de navegación. |
 | **27** | [`27_UI_UX_SPECIFICATION.md`](02-requisitos-ux/27_UI_UX_SPECIFICATION.md) | 1.1.0 | ✅ Aprobado | Design System, split-screen 50/50, animaciones PixiJS Koda y atajos de teclado. |
@@ -132,12 +132,12 @@ Para optimizar el tiempo de incorporación al proyecto (*onboarding*), consulta 
 ### ⚙️ [Dominio 4 — Arquitectura & Backend](04-arquitectura-backend/README.md)
 | Código | Documento | Versión | Estado | Descripción Principal |
 |:---:|---|:---:|:---:|---|
-| **11** | [`11_SYSTEM_ARCHITECTURE.md`](04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md) | 2.3.0 | ✅ Aprobado | Arquitectura técnica: Monolito Hexagonal EDD, híbrido GraphQL/REST (`ADR-012`), Supabase + MongoDB. |
+| **11** | [`11_SYSTEM_ARCHITECTURE.md`](04-arquitectura-backend/11_SYSTEM_ARCHITECTURE.md) | 3.0.0 | ✅ Aprobado | Arquitectura técnica: Monolito Hexagonal EDD, híbrido GraphQL/REST (`ADR-012`), Supabase + MongoDB. |
 | **12** | [`12_DATABASE_DESIGN.md`](04-arquitectura-backend/12_DATABASE_DESIGN.md) | 3.0.0 | ✅ Aprobado | Persistencia híbrida políglota: Supabase (PostgreSQL 15+) transaccional + MongoDB para contenido. |
 | **13** | [`13_API_SPECIFICATION.md`](04-arquitectura-backend/13_API_SPECIFICATION.md) | 2.2.0 | ✅ Aprobado | Especificación de contratos REST OpenAPI 3.0.3 y fronteras con GraphQL (`ADR-012`). |
 | **17** | [`17_CERTIFICATION.md`](04-arquitectura-backend/17_CERTIFICATION.md) | 2.0.0 | ✅ Aprobado | Pipeline backend de generación de PDF, QR ISO 18004 y Supabase Storage (`ADR-003`). |
 | **25** | [`25_ADMIN_SYSTEM.md`](04-arquitectura-backend/25_ADMIN_SYSTEM.md) | 1.0.0 | ✅ Aprobado | Consola de administración, publicación sin despliegue y auditoría inmutable. |
-| **ADR** | [`documentation/adr/`](adr/README.md) | — | 🟢 Activo | Registro formal de Decisiones de Arquitectura (ADR-001 a ADR-016). |
+| **ADR** | [`documentation/adr/`](adr/README.md) | — | 🟢 Activo | Registro formal de Decisiones de Arquitectura (ADR-001 a ADR-018). |
 
 ### 🛡️ [Dominio 5 — Seguridad & DevOps](05-devops-seguridad/README.md)
 | Código | Documento | Versión | Estado | Descripción Principal |

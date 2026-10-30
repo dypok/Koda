@@ -11,7 +11,7 @@
 | [**11_SYSTEM_ARCHITECTURE.md**](11_SYSTEM_ARCHITECTURE.md) | Arquitectura del Sistema | Monolito modular en NestJS (`ADR-008`), 9 motores de dominio desacoplados, flujo de datos y escalabilidad. |
 | [**12_DATABASE_DESIGN.md**](12_DATABASE_DESIGN.md) | Diseño de Base de Datos | Persistencia híbrida políglota (`ADR-009`): Supabase (PostgreSQL 15+) transaccional + MongoDB para contenido. |
 | [**13_API_SPECIFICATION.md**](13_API_SPECIFICATION.md) | Especificación de API (REST & GraphQL) | Contratos OpenAPI 3.0.3, límites híbridos con GraphQL (`ADR-012`), autenticación JWT stateless y endpoints. |
-| [**17_CERTIFICATION.md**](17_CERTIFICATION.md) | Pipeline de Certificación | Emisión de diplomas en backend con código correlativo `CQ-*`, código QR ISO 18004 y Google Drive API v3 (`ADR-003`). |
+| [**17_CERTIFICATION.md**](17_CERTIFICATION.md) | Pipeline de Certificación | Emisión de diplomas en backend con código correlativo `CQ-*`, código QR ISO 18004 y Supabase Storage / MinIO (`ADR-003`). |
 | [**25_ADMIN_SYSTEM.md**](25_ADMIN_SYSTEM.md) | Sistema de Administración | Consola de administración, gestión RBAC (USER vs. ADMIN), auditoría de cambios y publicación sin despliegue. |
 | [**COMPARATIVA_ARQUITECTURA_MODULAR_VS_HEXAGONAL_EDD.md**](COMPARATIVA_ARQUITECTURA_MODULAR_VS_HEXAGONAL_EDD.md) | Comparativa de Arquitectura Backend | Estudio comparativo y veredicto: Arquitectura Modular Nativa de NestJS vs. Monolito Hexagonal basado en EDD. |
 
