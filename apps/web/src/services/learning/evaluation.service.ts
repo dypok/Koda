@@ -106,16 +106,21 @@ async function requestWithAuth<T>(path: string, options: RequestInit = {}): Prom
   const directUrl = `${DIRECT_BASE_URL}${cleanPath}`;
   const proxyUrl = `/api/v1${cleanPath}`;
 
-  const headers: Record<string, string> = {
-    'Content-Type': 'application/json',
-    ...(options.headers as Record<string, string>),
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  const timeoutSignal = options.signal || (typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal ? AbortSignal.timeout(8000) : undefined);
+  const fetchOptions: RequestInit = {
+    ...options,
+    signal: timeoutSignal,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options.headers as Record<string, string>),
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
   };
 
   // 1. Probar ruta relativa con proxy
   if (typeof window !== 'undefined') {
     try {
-      const res = await fetch(proxyUrl, { ...options, headers });
+      const res = await fetch(proxyUrl, fetchOptions);
       if (res.ok) {
         return (await res.json()) as T;
       }
@@ -125,7 +130,7 @@ async function requestWithAuth<T>(path: string, options: RequestInit = {}): Prom
   }
 
   // 2. Conexión directa al backend
-  const res = await fetch(directUrl, { ...options, headers });
+  const res = await fetch(directUrl, fetchOptions);
   if (!res.ok) {
     const errorText = await res.text();
     throw new Error(`Error en API (${res.status}): ${errorText}`);
@@ -212,7 +217,8 @@ export class EvaluationService {
     // 1. Probar ruta relativa con proxy
     if (typeof window !== 'undefined') {
       try {
-        const res = await fetch(proxyUrl);
+        const signal = typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal ? AbortSignal.timeout(8000) : undefined;
+      const res = await fetch(proxyUrl, { signal });
         if (res.ok) {
           return (await res.json()) as CertificateVerificationResponse;
         }
@@ -220,7 +226,8 @@ export class EvaluationService {
     }
 
     // 2. Conexión directa
-    const res = await fetch(directUrl);
+    const signal = typeof AbortSignal !== 'undefined' && 'timeout' in AbortSignal ? AbortSignal.timeout(8000) : undefined;
+    const res = await fetch(directUrl, { signal });
     if (!res.ok) {
       const errorText = await res.text();
       throw new Error(`Error (${res.status}): ${errorText}`);
